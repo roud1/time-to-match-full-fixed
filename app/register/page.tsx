@@ -1,4 +1,5 @@
 import { AuthShell } from "@/components/auth-shell"
+import { OnboardingGate } from "@/components/onboarding-gate"
 import { RegisterForm } from "@/components/register-form"
 
 export const metadata = {
@@ -9,7 +10,9 @@ export const metadata = {
 export default function RegisterPage() {
   return (
     <AuthShell>
-      <RegisterForm />
+      <OnboardingGate>
+        <RegisterForm />
+      </OnboardingGate>
     </AuthShell>
   )
 }

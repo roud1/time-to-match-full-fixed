@@ -114,6 +114,93 @@
                0 0 80px rgba(236, 72, 153, 0.4);
 }
 
+.cinematic-headline-glow {
+  filter: drop-shadow(0 0 32px rgba(236, 72, 153, 0.35));
+}
+
+.premium-timer-cell {
+  background: rgba(12, 12, 18, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 0 0 1px rgba(236, 72, 153, 0.08),
+    0 12px 40px -12px rgba(236, 72, 153, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.premium-nav-scrolled {
+  background: rgba(8, 8, 12, 0.82);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+}
+
+.premium-profile-card {
+  background: rgba(18, 18, 26, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.premium-profile-card:hover {
+  border-color: rgba(236, 72, 153, 0.25);
+  box-shadow:
+    0 24px 60px -20px rgba(0, 0, 0, 0.7),
+    0 0 48px -16px rgba(236, 72, 153, 0.35);
+}
+
+.premium-btn-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: premium-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes premium-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.nav-link-underline {
+  position: relative;
+}
+
+.nav-link-underline::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.9), transparent);
+  transition: width 0.35s ease, left 0.35s ease;
+}
+
+.nav-link-underline:hover::after {
+  width: 70%;
+  left: 15%;
+}
+
+.chat-bubble-me {
+  background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+  box-shadow: 0 4px 20px -4px rgba(236, 72, 153, 0.45);
+}
+
+.chat-bubble-them {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
@@ -175,9 +262,18 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
   .site-bg-aurora,
-  .site-bg-stars {
+  .site-bg-stars,
+  .premium-btn-shimmer {
     animation: none;
   }
+}
+
+.pb-safe {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.safe-area-pb {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
 }
 
 /* Leaflet map pins */

@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useMotionValue, useTransform, animate, PanInfo } from "motion/react"
+import { motion, AnimatePresence, useMotionValue, useTransform, animate, PanInfo } from "motion/react"
 import Image from "next/image"
 import { useState } from "react"
 import { useI18n } from "@/lib/i18n"
@@ -11,16 +11,20 @@ function SwipeCard({
   profile,
   onSwipe,
   isTop,
+  stackIndex,
   likeText,
   nopeText,
-  remainingText,
+  expiresLabel,
+  onlineLabel,
 }: {
   profile: SwipeProfile
   onSwipe: (direction: "left" | "right") => void
   isTop: boolean
+  stackIndex: number
   likeText: string
   nopeText: string
-  remainingText: string
+  expiresLabel: string
+  onlineLabel: string
 }) {
   const x = useMotionValue(0)
   const rotate = useTransform(x, [-200, 200], [-15, 15])
@@ -41,13 +45,17 @@ function SwipeCard({
 
   return (
     <motion.div
-      style={{ x, rotate }}
+      style={{ x, rotate, zIndex: isTop ? 20 : 10 - stackIndex }}
       drag={isTop ? "x" : false}
       dragConstraints={{ left: 0, right: 0 }}
       onDragEnd={handleDragEnd}
-      className="absolute inset-0 cursor-grab active:cursor-grabbing"
+      animate={{
+        scale: isTop ? 1 : 1 - stackIndex * 0.04,
+        y: isTop ? 0 : stackIndex * 8,
+      }}
+      className="absolute inset-0 cursor-grab active:cursor-grabbing touch-pan-y"
     >
-      <div className="glass-card rounded-3xl overflow-hidden h-full relative">
+      <div className="premium-profile-card rounded-[1.75rem] overflow-hidden h-full relative shadow-xl border border-white/10">
         <div className="relative h-full">
           <Image
             src={profile.image}
@@ -60,22 +68,27 @@ function SwipeCard({
 
           <motion.div
             style={{ opacity: likeOpacity }}
-            className="absolute top-8 left-8 px-4 py-2 rounded-xl border-4 border-green-500 rotate-[-20deg]"
+            className="absolute top-10 left-6 px-4 py-2 rounded-2xl border-2 border-emerald-400/90 bg-emerald-500/10 backdrop-blur-md -rotate-12"
           >
-            <span className="text-green-500 text-2xl font-bold tracking-wider">{likeText}</span>
+            <span className="text-emerald-300 text-lg font-semibold tracking-[0.15em] uppercase">{likeText}</span>
           </motion.div>
 
           <motion.div
             style={{ opacity: nopeOpacity }}
-            className="absolute top-8 right-8 px-4 py-2 rounded-xl border-4 border-red-500 rotate-[20deg]"
+            className="absolute top-10 right-6 px-4 py-2 rounded-2xl border-2 border-rose-400/90 bg-rose-500/10 backdrop-blur-md rotate-12"
           >
-            <span className="text-red-500 text-2xl font-bold tracking-wider">{nopeText}</span>
+            <span className="text-rose-300 text-lg font-semibold tracking-[0.15em] uppercase">{nopeText}</span>
           </motion.div>
 
-          <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-black/50 backdrop-blur-sm">
-            <span className="text-xs text-white/80 font-light">
-              {remainingText} {profile.timeLeft}
+          <div className="absolute top-4 left-4 right-4 flex justify-between items-start gap-2">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] text-emerald-300 bg-black/40 border border-emerald-500/30 backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              {onlineLabel}
             </span>
+            <div className="px-2 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-right">
+              <p className="text-[9px] uppercase text-white/50">{expiresLabel}</p>
+              <p className="text-xs text-pink-300 tabular-nums">{profile.timeLeft}</p>
+            </div>
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 p-6">
@@ -127,15 +140,19 @@ export function SwipeDeck({ profiles, onProfilesChange }: SwipeDeckProps) {
 
   return (
     <div className="flex flex-col items-center gap-6 w-full max-w-[380px] mx-auto">
-      {matchFlash && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full rounded-2xl border border-pink-500/40 bg-pink-500/15 px-4 py-3 text-center text-sm font-light text-pink-200"
-        >
-          {t("matchFlash")} {matchFlash}!
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {matchFlash && (
+          <motion.div
+            key="match"
+            initial={{ opacity: 0, y: -12, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="w-full rounded-2xl border border-pink-500/40 bg-gradient-to-r from-pink-500/20 to-purple-600/15 px-4 py-3 text-center text-sm font-light text-pink-200 shadow-lg shadow-pink-500/10"
+          >
+            {t("matchFlash")} {matchFlash}!
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="relative w-full aspect-[3/4]">
         {profiles.length > 0 ? (
@@ -146,9 +163,11 @@ export function SwipeDeck({ profiles, onProfilesChange }: SwipeDeckProps) {
                 profile={profile}
                 onSwipe={handleSwipe}
                 isTop={index === 0}
+                stackIndex={index}
                 likeText={t("like")}
                 nopeText={t("nope")}
-                remainingText={t("remaining")}
+                expiresLabel={t("profileExpiresIn")}
+                onlineLabel={t("profileOnline")}
               />
             ))
             .reverse()
@@ -159,11 +178,11 @@ export function SwipeDeck({ profiles, onProfilesChange }: SwipeDeckProps) {
         )}
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex gap-8">
         <button
           type="button"
           onClick={() => profiles[0] && handleSwipe("left")}
-          className="w-14 h-14 rounded-full glass flex items-center justify-center text-red-400 hover:bg-red-500/10 transition-colors"
+          className="w-16 h-16 rounded-full glass flex items-center justify-center text-red-400 hover:bg-red-500/15 border border-red-500/20 transition-colors touch-manipulation active:scale-95"
           aria-label={t("nope")}
         >
           <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -173,7 +192,7 @@ export function SwipeDeck({ profiles, onProfilesChange }: SwipeDeckProps) {
         <button
           type="button"
           onClick={() => profiles[0] && handleSwipe("right")}
-          className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/25"
+          className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/30 border border-pink-400/30 touch-manipulation active:scale-95"
           aria-label={t("like")}
         >
           <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">

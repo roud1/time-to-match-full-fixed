@@ -1,17 +1,33 @@
 "use client"
 
-import { motion } from "motion/react"
-import Link from "next/link"
+import { motion, useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
+import { CinematicParticles } from "@/components/ui/cinematic-particles"
+import { PremiumButton } from "@/components/ui/premium-button"
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+  },
+}
+
+const item = {
+  hidden: { opacity: 0, y: 28 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+}
 
 export function HeroSection() {
   const { t } = useI18n()
+  const reduceMotion = useReducedMotion()
   const [timeLeft, setTimeLeft] = useState({ hours: 71, minutes: 59, seconds: 59 })
+  const [pulse, setPulse] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         let { hours, minutes, seconds } = prev
         seconds--
         if (seconds < 0) {
@@ -27,104 +43,127 @@ export function HeroSection() {
           minutes = 59
           seconds = 59
         }
+        if (seconds % 10 === 0) setPulse(true)
         return { hours, minutes, seconds }
       })
     }, 1000)
     return () => clearInterval(timer)
   }, [])
 
-  return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 pt-24 overflow-hidden">
+  useEffect(() => {
+    if (!pulse) return
+    const id = setTimeout(() => setPulse(false), 400)
+    return () => clearTimeout(id)
+  }, [pulse])
 
-      <div className="relative z-10 text-center max-w-4xl mx-auto">
-        {/* Small label */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full text-xs font-light tracking-widest uppercase text-muted-foreground border border-foreground/10 bg-foreground/5">
-            {t("badge")}
+  return (
+    <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-4 pt-28 pb-20 overflow-hidden">
+      <CinematicParticles count={28} />
+
+      <motion.div
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,720px)] h-[400px] rounded-full opacity-60"
+        style={{
+          background:
+            "radial-gradient(ellipse, rgba(236,72,153,0.35) 0%, rgba(168,85,247,0.15) 45%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+        animate={reduceMotion ? undefined : { scale: [1, 1.08, 1], opacity: [0.5, 0.75, 0.5] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="relative z-10 text-center max-w-5xl mx-auto"
+      >
+        <motion.div variants={item} className="mb-6 md:mb-8">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] md:text-xs font-light tracking-[0.2em] uppercase text-pink-300/90 border border-pink-500/25 bg-pink-500/10 backdrop-blur-md">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-500" />
+            </span>
+            {t("heroUrgent")}
           </span>
         </motion.div>
 
-        {/* Main headline */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-extralight tracking-tight leading-[1.1] mb-6 text-balance"
+          variants={item}
+          className="text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] font-semibold md:font-bold tracking-[-0.03em] leading-[1.05] mb-5 md:mb-6 text-balance"
         >
-          {t("heroTitle")}{" "}
-          <span className="text-glow bg-gradient-to-r from-pink-400 via-pink-500 to-purple-500 bg-clip-text text-transparent">
+          <span className="block text-foreground/95">{t("heroTitle")}</span>
+          <span className="block mt-1 md:mt-2 bg-gradient-to-r from-pink-300 via-rose-400 to-purple-400 bg-clip-text text-transparent cinematic-headline-glow">
             {t("heroHighlight")}
           </span>
         </motion.h1>
 
-        {/* Subheadline */}
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-lg md:text-xl text-muted-foreground font-light max-w-2xl mx-auto mb-12 leading-relaxed"
+          variants={item}
+          className="text-base sm:text-lg md:text-xl text-muted-foreground/90 font-extralight max-w-2xl mx-auto mb-3 leading-relaxed tracking-wide"
         >
           {t("heroSubtitle")}
         </motion.p>
 
-        {/* Countdown timer */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex items-center justify-center gap-4 md:gap-6 mb-12"
-        >
-          {[
-            { value: timeLeft.hours, label: t("hours") },
-            { value: timeLeft.minutes, label: t("minutes") },
-            { value: timeLeft.seconds, label: t("seconds") },
-          ].map((item, index) => (
-            <div key={index} className="text-center">
-              <div className="glass-card rounded-2xl px-4 py-3 md:px-6 md:py-4 min-w-[70px] md:min-w-[90px]">
-                <span className="text-2xl md:text-4xl font-light tabular-nums text-foreground">
-                  {String(item.value).padStart(2, '0')}
-                </span>
-              </div>
-              <span className="text-xs text-muted-foreground mt-2 block font-light">{item.label}</span>
-            </div>
-          ))}
-        </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="text-sm text-muted-foreground font-light mb-12"
-        >
-          {t("untilDisappear") as string}
+        <motion.p variants={item} className="text-xs md:text-sm text-pink-400/80 font-light mb-10 md:mb-14 tracking-wide">
+          {t("heroTimeRunning")}
         </motion.p>
 
-        {/* CTA Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <Link
-            href="/register"
-            className="px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-light text-base tracking-wide shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-shadow duration-300 hover:opacity-95"
+        <motion.div variants={item} className="mb-4">
+          <motion.div
+            animate={pulse && !reduceMotion ? { scale: [1, 1.02, 1] } : {}}
+            className="inline-flex items-center justify-center gap-3 sm:gap-5 md:gap-6"
           >
-            {t("startSearch")}
-          </Link>
-          <Link
-            href="/#how"
-            className="px-8 py-4 rounded-full border border-foreground/10 text-foreground/80 font-light text-base hover:bg-foreground/5 transition-all duration-300"
-          >
-            {t("learnMore")}
-          </Link>
+            {[
+              { value: timeLeft.hours, label: t("hours") },
+              { value: timeLeft.minutes, label: t("minutes") },
+              { value: timeLeft.seconds, label: t("seconds") },
+            ].map((unit, index) => (
+              <motion.div
+                key={unit.label}
+                className="text-center"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.9 + index * 0.08 }}
+              >
+                <div className="premium-timer-cell rounded-2xl md:rounded-3xl px-4 py-3 md:px-7 md:py-5 min-w-[72px] sm:min-w-[88px] md:min-w-[108px]">
+                  <span className="text-3xl sm:text-4xl md:text-5xl font-extralight tabular-nums text-foreground tracking-tight">
+                    {String(unit.value).padStart(2, "0")}
+                  </span>
+                </div>
+                <span className="text-[10px] md:text-xs text-muted-foreground mt-2 md:mt-3 block font-light uppercase tracking-widest">
+                  {unit.label}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
-      </div>
+
+        <motion.p variants={item} className="text-sm text-muted-foreground/80 font-light mb-10 md:mb-14">
+          {t("untilDisappear")}
+        </motion.p>
+
+        <motion.div
+          variants={item}
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 px-2"
+        >
+          <PremiumButton href="/register" className="w-full sm:w-auto min-h-[52px]">
+            {t("startSearch")}
+          </PremiumButton>
+          <PremiumButton href="/#how" variant="ghost" className="w-full sm:w-auto min-h-[52px]">
+            {t("learnMore")}
+          </PremiumButton>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block"
+        animate={reduceMotion ? undefined : { y: [0, 8, 0] }}
+        transition={{ duration: 2.5, repeat: Infinity }}
+      >
+        <div className="w-5 h-8 rounded-full border border-foreground/20 flex justify-center pt-1.5">
+          <div className="w-1 h-2 rounded-full bg-foreground/40" />
+        </div>
+      </motion.div>
     </section>
   )
 }

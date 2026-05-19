@@ -16,7 +16,9 @@ export function DiscoverPanel() {
   return (
     <div className="px-4 pt-4 pb-6">
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-extralight tracking-tight">{t("tabDiscover")}</h1>
+        <h1 className="text-2xl md:text-3xl font-extralight tracking-tight bg-gradient-to-r from-white via-pink-100 to-purple-200 bg-clip-text text-transparent">
+          {t("tabDiscover")}
+        </h1>
         <p className="text-sm text-muted-foreground font-light mt-1">{t("swipeSubtitle")}</p>
       </div>
       <SwipeDeck profiles={profiles} onProfilesChange={setProfiles} />

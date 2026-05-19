@@ -34,6 +34,7 @@ import { BottomNavBar } from "@/components/app/bottom-nav-bar"
 import { ProfileTabs, type ProfileSection } from "@/components/profile-tabs"
 import { ProfilePremiumPanel } from "@/components/profile-premium-panel"
 import { isPremiumActive } from "@/lib/user-profile"
+import { PremiumButton } from "@/components/ui/premium-button"
 
 type Gender = StoredUserProfile["gender"]
 type LookingFor = StoredUserProfile["lookingFor"]
@@ -203,7 +204,7 @@ export function ProfileScreen() {
       ) : (
         <>
       {/* Hero card */}
-      <div className="glass-card rounded-3xl overflow-hidden mb-4 p-4 md:p-5">
+      <div className="premium-profile-card rounded-[1.75rem] overflow-hidden mb-4 p-4 md:p-5 border border-white/10">
         <div className="flex items-start justify-between gap-3 mb-4">
           <div className="flex flex-wrap gap-2 shrink-0 justify-end">
             {isPremiumActive(profile) && (
@@ -259,18 +260,25 @@ export function ProfileScreen() {
       </div>
 
       {/* Timer */}
-      <div className="glass rounded-2xl p-5 mb-4 border border-foreground/10">
-        <div className="flex items-center justify-between mb-3">
-          <p className="text-xs text-muted-foreground font-light uppercase tracking-widest">
-            {t("profileTimerLabel")}
-          </p>
-          <div className="flex gap-2 text-sm font-light tabular-nums text-foreground/90">
-            <span>{String(timeLeft.hours).padStart(2, "0")}</span>
-            <span className="text-muted-foreground">:</span>
-            <span>{String(timeLeft.minutes).padStart(2, "0")}</span>
-            <span className="text-muted-foreground">:</span>
-            <span>{String(timeLeft.seconds).padStart(2, "0")}</span>
-          </div>
+      <div className="rounded-2xl p-5 mb-4 border border-white/10 bg-black/25 backdrop-blur-md">
+        <p className="text-[10px] text-white/50 font-light uppercase tracking-[0.2em] text-center mb-4">
+          {t("profileTimerLabel")}
+        </p>
+        <div className="flex justify-center gap-3 mb-4">
+          {[
+            { value: timeLeft.hours, label: t("hours") },
+            { value: timeLeft.minutes, label: t("minutes") },
+            { value: timeLeft.seconds, label: t("seconds") },
+          ].map((item, i) => (
+            <div key={i} className="text-center">
+              <div className="premium-timer-cell rounded-xl px-3 py-2 min-w-[56px]">
+                <span className="text-xl font-extralight tabular-nums text-white">
+                  {String(item.value).padStart(2, "0")}
+                </span>
+              </div>
+              <span className="text-[9px] text-white/45 mt-1 block uppercase tracking-wider">{item.label}</span>
+            </div>
+          ))}
         </div>
         <p className="text-[10px] text-muted-foreground font-light mb-2">{t("profileProgress")}</p>
         <div className="h-1.5 rounded-full bg-foreground/10 overflow-hidden">
@@ -455,20 +463,18 @@ export function ProfileScreen() {
       )}
 
       <div className="mt-4 space-y-3">
-        <Link
-          href="/app"
-          onClick={() => enableDemoSwipeDeck()}
-          className="block w-full py-4 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-light text-center tracking-wide shadow-lg shadow-pink-500/25 hover:opacity-90 transition-opacity"
+        <PremiumButton
+          className="w-full min-h-[52px]"
+          onClick={() => {
+            enableDemoSwipeDeck()
+            router.push("/app")
+          }}
         >
           {t("profileStartSwipe")}
-        </Link>
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="block w-full py-3 rounded-full border border-foreground/10 text-muted-foreground font-light text-sm hover:bg-foreground/5 hover:text-foreground transition-colors"
-        >
+        </PremiumButton>
+        <PremiumButton variant="ghost" className="w-full min-h-[48px]" onClick={handleLogout}>
           {t("profileLogout")}
-        </button>
+        </PremiumButton>
       </div>
 
       <BottomNavBar active="profile" />

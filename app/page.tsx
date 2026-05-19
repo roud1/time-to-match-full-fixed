@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/navbar"
 import { HeroSection } from "@/components/hero-section"
+import { OnboardingSection } from "@/components/onboarding-section"
 import { ProfileCards } from "@/components/profile-cards"
 import { SwipeUI } from "@/components/swipe-ui"
 import { HowItWorks } from "@/components/how-it-works"
@@ -11,6 +12,7 @@ export default function Home() {
     <main className="min-h-screen">
       <Navbar />
       <HeroSection />
+      <OnboardingSection />
       <HowItWorks />
       <ProfileCards />
       <SwipeUI />

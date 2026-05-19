@@ -97,7 +97,7 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 sm:px-4 pb-4 pt-2 pointer-events-none">
-      <div className="glass rounded-2xl mx-auto max-w-lg flex items-stretch pointer-events-auto border border-foreground/10 shadow-xl">
+      <div className="premium-nav-scrolled rounded-2xl mx-auto max-w-lg flex items-stretch pointer-events-auto border border-foreground/10 shadow-xl backdrop-blur-xl">
         {NAV_ITEMS.map((item) => {
           const isActive =
             activeOverride !== undefined
@@ -108,8 +108,8 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
               key={item.id}
               href={item.href}
               className={cn(
-                "flex-1 flex flex-col items-center justify-center gap-0.5 py-2 relative transition-colors min-w-0",
-                isActive ? "text-pink-400" : "text-muted-foreground hover:text-foreground"
+                "flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 relative transition-all min-w-0 min-h-[52px] touch-manipulation",
+                isActive ? "text-pink-400 scale-105" : "text-muted-foreground hover:text-foreground active:scale-95"
               )}
             >
               {item.icon(isActive)}
