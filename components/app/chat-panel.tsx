@@ -76,15 +76,15 @@ export function ChatPanel() {
           </p>
         </div>
 
-        <motion.div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 chat-panel-backdrop relative">
           <AnimatePresence initial={false}>
             {activeThread.messages.map((msg, i) => (
               <motion.div
                 key={msg.id}
-                initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                initial={{ opacity: 0, y: 10, scale: 0.94 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.35, delay: i * 0.02 }}
-                className={`flex ${msg.from === "me" ? "justify-end" : "justify-start"}`}
+                transition={{ duration: 0.4, delay: Math.min(i * 0.04, 0.3), ease: [0.22, 1, 0.36, 1] }}
+                className={`flex flex-col gap-1 ${msg.from === "me" ? "items-end" : "items-start"}`}
               >
                 <motion.div
                   className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm font-light ${
@@ -95,6 +95,20 @@ export function ChatPanel() {
                 >
                   {msg.text}
                 </motion.div>
+                {msg.from === "them" && i === activeThread.messages.length - 1 && (
+                  <div className="flex gap-1 px-1">
+                    {["❤️", "🔥", "✨"].map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        className="text-sm opacity-60 hover:opacity-100 hover:scale-110 transition-all touch-manipulation min-w-[36px] min-h-[36px] flex items-center justify-center"
+                        aria-label={t("chatReact")}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </motion.div>
             ))}
           </AnimatePresence>
@@ -116,7 +130,7 @@ export function ChatPanel() {
               </div>
             </motion.div>
           )}
-        </motion.div>
+        </div>
 
         <div className="p-3 md:p-4 border-t border-foreground/10 glass safe-area-pb">
           <motion.div className="flex gap-2 items-end">

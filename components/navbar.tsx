@@ -50,8 +50,8 @@ export function Navbar() {
         className={cn(
           "mx-auto max-w-6xl flex items-center justify-between rounded-2xl px-3 py-2.5 md:px-6 md:py-3 transition-all duration-500",
           scrolled
-            ? "premium-nav-scrolled border border-foreground/10 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.6)]"
-            : "glass border border-foreground/5"
+            ? "premium-nav-scrolled nav-glow-ring border border-foreground/10"
+            : "glass border border-foreground/5 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.4)]"
         )}
         aria-label="Main"
       >

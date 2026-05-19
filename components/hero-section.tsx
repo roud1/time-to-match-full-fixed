@@ -1,27 +1,44 @@
 "use client"
 
-import { motion, useReducedMotion } from "motion/react"
-import { useEffect, useState } from "react"
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
+import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { CinematicParticles } from "@/components/ui/cinematic-particles"
 import { PremiumButton } from "@/components/ui/premium-button"
+import { useHeroParallax } from "@/hooks/use-hero-parallax"
+import { cn } from "@/lib/utils"
 
 const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: { staggerChildren: 0.12, delayChildren: 0.15 },
+    transition: { staggerChildren: 0.14, delayChildren: 0.2 },
   },
 }
 
 const item = {
-  hidden: { opacity: 0, y: 28 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 32, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1] },
+  },
 }
 
 export function HeroSection() {
   const { t } = useI18n()
   const reduceMotion = useReducedMotion()
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  })
+  const headlineY = useTransform(scrollYProgress, [0, 1], [0, 80])
+  const headlineOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.15])
+  const glowScale = useTransform(scrollYProgress, [0, 1], [1, 1.2])
+  const { x: parallaxX, y: parallaxY } = useHeroParallax()
+  const parallaxXNeg = useTransform(parallaxX, (v) => v * -0.6)
   const [timeLeft, setTimeLeft] = useState({ hours: 71, minutes: 59, seconds: 59 })
   const [pulse, setPulse] = useState(false)
 
@@ -57,30 +74,48 @@ export function HeroSection() {
   }, [pulse])
 
   return (
-    <section className="relative min-h-[100dvh] flex flex-col items-center justify-center px-4 pt-28 pb-20 overflow-hidden">
-      <CinematicParticles count={28} />
+    <section
+      ref={sectionRef}
+      className="relative min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-6 pt-[5.5rem] sm:pt-28 pb-24 sm:pb-20 overflow-hidden"
+    >
+      <CinematicParticles count={36} />
 
+      {/* Ambient layers */}
       <motion.div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,720px)] h-[400px] rounded-full opacity-60"
+        className="absolute top-[28%] left-1/2 w-[min(110vw,880px)] h-[min(70vh,520px)] rounded-full opacity-50 pointer-events-none"
         style={{
+          x: reduceMotion ? 0 : parallaxX,
+          y: reduceMotion ? 0 : parallaxY,
+          scale: reduceMotion ? 1 : glowScale,
+          translateX: "-50%",
+          translateY: "-50%",
           background:
-            "radial-gradient(ellipse, rgba(236,72,153,0.35) 0%, rgba(168,85,247,0.15) 45%, transparent 70%)",
-          filter: "blur(60px)",
+            "radial-gradient(ellipse, rgba(236,72,153,0.4) 0%, rgba(168,85,247,0.18) 42%, transparent 68%)",
+          filter: "blur(72px)",
         }}
-        animate={reduceMotion ? undefined : { scale: [1, 1.08, 1], opacity: [0.5, 0.75, 0.5] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        animate={reduceMotion ? undefined : { opacity: [0.45, 0.7, 0.45] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-[15%] right-[5%] w-[min(60vw,400px)] h-[280px] rounded-full opacity-30 pointer-events-none hidden sm:block"
+        style={{
+          background: "radial-gradient(circle, rgba(168,85,247,0.35) 0%, transparent 70%)",
+          filter: "blur(60px)",
+          x: reduceMotion ? 0 : parallaxXNeg,
+        }}
       />
 
       <motion.div
         variants={container}
         initial="hidden"
         animate="show"
-        className="relative z-10 text-center max-w-5xl mx-auto"
+        style={reduceMotion ? undefined : { y: headlineY, opacity: headlineOpacity }}
+        className="relative z-10 text-center max-w-6xl mx-auto w-full"
       >
-        <motion.div variants={item} className="mb-6 md:mb-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-[10px] md:text-xs font-light tracking-[0.2em] uppercase text-pink-300/90 border border-pink-500/25 bg-pink-500/10 backdrop-blur-md">
+        <motion.div variants={item} className="mb-8 md:mb-10">
+          <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-[10px] md:text-xs font-light tracking-[0.22em] uppercase text-pink-200/90 border border-pink-500/30 bg-pink-500/10 backdrop-blur-xl shadow-[0_0_24px_-8px_rgba(236,72,153,0.4)]">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-60" />
+              <span className="live-dot-pulse absolute inline-flex h-full w-full rounded-full bg-pink-400" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-500" />
             </span>
             {t("heroUrgent")}
@@ -89,29 +124,43 @@ export function HeroSection() {
 
         <motion.h1
           variants={item}
-          className="text-[2.75rem] sm:text-6xl md:text-7xl lg:text-[5.5rem] font-semibold md:font-bold tracking-[-0.03em] leading-[1.05] mb-5 md:mb-6 text-balance"
+          className="text-[3rem] sm:text-7xl md:text-8xl lg:text-[6.75rem] font-semibold tracking-[-0.04em] leading-[0.98] mb-6 md:mb-8 text-balance px-1"
         >
-          <span className="block text-foreground/95">{t("heroTitle")}</span>
-          <span className="block mt-1 md:mt-2 bg-gradient-to-r from-pink-300 via-rose-400 to-purple-400 bg-clip-text text-transparent cinematic-headline-glow">
-            {t("heroHighlight")}
+          <span className="block text-foreground/92 mb-1 md:mb-2">{t("heroTitle")}</span>
+          <span className="relative inline-block">
+            <span
+              className="absolute -inset-x-8 -inset-y-4 rounded-full opacity-60 blur-3xl pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse, rgba(236,72,153,0.35) 0%, rgba(168,85,247,0.2) 50%, transparent 70%)",
+              }}
+              aria-hidden
+            />
+            <span className="relative block bg-gradient-to-r from-pink-200 via-rose-400 to-purple-400 bg-clip-text text-transparent hero-text-glow cinematic-headline-glow">
+              {t("heroHighlight")}
+            </span>
           </span>
         </motion.h1>
 
         <motion.p
           variants={item}
-          className="text-base sm:text-lg md:text-xl text-muted-foreground/90 font-extralight max-w-2xl mx-auto mb-3 leading-relaxed tracking-wide"
+          className="text-lg sm:text-xl md:text-2xl text-muted-foreground/85 font-extralight max-w-2xl mx-auto mb-4 leading-relaxed tracking-wide px-2"
         >
           {t("heroSubtitle")}
         </motion.p>
 
-        <motion.p variants={item} className="text-xs md:text-sm text-pink-400/80 font-light mb-10 md:mb-14 tracking-wide">
+        <motion.p
+          variants={item}
+          className="text-xs md:text-sm text-pink-400/75 font-light mb-12 md:mb-16 tracking-[0.15em] uppercase"
+        >
           {t("heroTimeRunning")}
         </motion.p>
 
-        <motion.div variants={item} className="mb-4">
+        <motion.div variants={item} className="mb-5">
           <motion.div
-            animate={pulse && !reduceMotion ? { scale: [1, 1.02, 1] } : {}}
-            className="inline-flex items-center justify-center gap-3 sm:gap-5 md:gap-6"
+            animate={pulse && !reduceMotion ? { scale: [1, 1.015, 1] } : {}}
+            transition={{ duration: 0.35 }}
+            className="inline-flex items-center justify-center gap-3 sm:gap-5 md:gap-7"
           >
             {[
               { value: timeLeft.hours, label: t("hours") },
@@ -121,16 +170,21 @@ export function HeroSection() {
               <motion.div
                 key={unit.label}
                 className="text-center"
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 + index * 0.08 }}
+                transition={{ delay: 1 + index * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="premium-timer-cell rounded-2xl md:rounded-3xl px-4 py-3 md:px-7 md:py-5 min-w-[72px] sm:min-w-[88px] md:min-w-[108px]">
-                  <span className="text-3xl sm:text-4xl md:text-5xl font-extralight tabular-nums text-foreground tracking-tight">
+                <motion.div
+                  className={cn(
+                    "premium-timer-cell rounded-2xl md:rounded-3xl px-4 py-3.5 md:px-8 md:py-6 min-w-[76px] sm:min-w-[92px] md:min-w-[116px]",
+                    index === 2 && pulse && "ring-1 ring-pink-500/40"
+                  )}
+                >
+                  <span className="text-3xl sm:text-5xl md:text-6xl font-extralight tabular-nums text-foreground tracking-tight">
                     {String(unit.value).padStart(2, "0")}
                   </span>
-                </div>
-                <span className="text-[10px] md:text-xs text-muted-foreground mt-2 md:mt-3 block font-light uppercase tracking-widest">
+                </motion.div>
+                <span className="text-[10px] md:text-xs text-muted-foreground/80 mt-2.5 md:mt-4 block font-light uppercase tracking-[0.2em]">
                   {unit.label}
                 </span>
               </motion.div>
@@ -138,31 +192,21 @@ export function HeroSection() {
           </motion.div>
         </motion.div>
 
-        <motion.p variants={item} className="text-sm text-muted-foreground/80 font-light mb-10 md:mb-14">
+        <motion.p variants={item} className="text-sm text-muted-foreground/75 font-light mb-12 md:mb-16 tracking-wide">
           {t("untilDisappear")}
         </motion.p>
 
         <motion.div
           variants={item}
-          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 px-2"
+          className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 px-2 max-w-md sm:max-w-none mx-auto"
         >
-          <PremiumButton href="/register" className="w-full sm:w-auto min-h-[52px]">
+          <PremiumButton href="/register" className="w-full sm:w-auto min-h-[54px] text-base">
             {t("startSearch")}
           </PremiumButton>
-          <PremiumButton href="/#how" variant="ghost" className="w-full sm:w-auto min-h-[52px]">
+          <PremiumButton href="/#how" variant="ghost" className="w-full sm:w-auto min-h-[54px]">
             {t("learnMore")}
           </PremiumButton>
         </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block"
-        animate={reduceMotion ? undefined : { y: [0, 8, 0] }}
-        transition={{ duration: 2.5, repeat: Infinity }}
-      >
-        <div className="w-5 h-8 rounded-full border border-foreground/20 flex justify-center pt-1.5">
-          <div className="w-1 h-2 rounded-full bg-foreground/40" />
-        </div>
       </motion.div>
     </section>
   )

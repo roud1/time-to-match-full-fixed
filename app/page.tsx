@@ -1,3 +1,5 @@
+import { CinematicEntrance } from "@/components/cinematic-entrance"
+import { LiveActivityFeed } from "@/components/live-activity-feed"
 import { Navbar } from "@/components/navbar"
 import { HeroSection } from "@/components/hero-section"
 import { OnboardingSection } from "@/components/onboarding-section"
@@ -10,7 +12,9 @@ import { Footer } from "@/components/footer"
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <CinematicEntrance />
       <Navbar />
+      <LiveActivityFeed />
       <HeroSection />
       <OnboardingSection />
       <HowItWorks />

@@ -260,10 +260,110 @@ html {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+.nav-glow-ring {
+  box-shadow:
+    0 0 0 1px rgba(236, 72, 153, 0.14),
+    0 0 32px -8px rgba(236, 72, 153, 0.2),
+    0 8px 40px -12px rgba(0, 0, 0, 0.55);
+}
+
+.profile-expire-pulse {
+  animation: profile-expire-pulse 2.8s ease-in-out infinite;
+}
+
+@keyframes profile-expire-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(236, 72, 153, 0);
+  }
+  50% {
+    box-shadow: 0 0 24px 2px rgba(236, 72, 153, 0.35);
+  }
+}
+
+.profile-vanish-edge {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(236, 72, 153, 0.12) 45%,
+    rgba(168, 85, 247, 0.08) 55%,
+    transparent 100%
+  );
+  animation: profile-vanish-sweep 5s ease-in-out infinite;
+}
+
+@keyframes profile-vanish-sweep {
+  0% {
+    transform: translateX(-120%) skewX(-8deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%) skewX(-8deg);
+    opacity: 0;
+  }
+}
+
+.live-dot-pulse {
+  animation: live-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes live-dot-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.2;
+  }
+}
+
+.cinematic-float {
+  animation: cinematic-float 7s ease-in-out infinite;
+}
+
+@keyframes cinematic-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.hero-text-glow {
+  text-shadow:
+    0 0 48px rgba(236, 72, 153, 0.45),
+    0 0 96px rgba(168, 85, 247, 0.25);
+}
+
+.chat-panel-backdrop {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(236, 72, 153, 0.06) 0%, transparent 55%),
+    rgba(8, 8, 12, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .site-bg-aurora,
   .site-bg-stars,
-  .premium-btn-shimmer {
+  .premium-btn-shimmer,
+  .profile-expire-pulse,
+  .profile-vanish-edge,
+  .live-dot-pulse,
+  .cinematic-float {
     animation: none;
   }
 }

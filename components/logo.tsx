@@ -3,7 +3,7 @@
 import { useId } from "react"
 
 type LogoProps = {
-  size?: "sm" | "md"
+  size?: "sm" | "md" | "lg"
 }
 
 export function Logo({ size = "md" }: LogoProps) {
@@ -11,8 +11,8 @@ export function Logo({ size = "md" }: LogoProps) {
   const heartGrad = `heartGrad-${id}`
   const heartGrad2 = `heartGrad2-${id}`
 
-  const box = size === "sm" ? "w-8 h-8" : "w-9 h-9"
-  const icon = size === "sm" ? 16 : 18
+  const box = size === "sm" ? "w-8 h-8" : size === "lg" ? "w-16 h-16" : "w-9 h-9"
+  const icon = size === "sm" ? 16 : size === "lg" ? 32 : 18
 
   return (
     <div className={`relative ${box}`}>
