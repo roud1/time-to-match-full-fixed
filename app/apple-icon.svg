@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
+  <rect width="180" height="180" rx="40" fill="#0a0a0f"/>
+  <circle cx="90" cy="90" r="72" stroke="url(#ring)" stroke-width="8" fill="#12121a"/>
+  <path
+    d="M90 50c0 0-16 13-16 27a16 16 0 0 0 32 0c0-14-16-27-16-27zm0 66c0 0-26-20-26-36a18 18 0 0 1 36 0c0 16-26 36-26 36z"
+    fill="url(#heart)"
+    opacity="0.95"
+  />
+  <path
+    d="M90 50c0 0-16 13-16 27a16 16 0 0 0 32 0c0-14-16-27-16-27zm0 66c0 0-26-20-26-36a18 18 0 0 1 36 0c0 16-26 36-26 36z"
+    fill="url(#heart2)"
+    opacity="0.55"
+  />
+  <defs>
+    <linearGradient id="ring" x1="20" y1="20" x2="160" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ec4899"/>
+      <stop offset="1" stop-color="#9333ea"/>
+    </linearGradient>
+    <linearGradient id="heart" x1="55" y1="50" x2="125" y2="125" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ec4899"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="heart2" x1="55" y1="80" x2="125" y2="140" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ec4899"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+</svg>
