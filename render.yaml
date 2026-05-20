@@ -1,0 +1,21 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Adjust region/plan and wire a managed PostgreSQL instance; set DATABASE_URL + AUTH_SECRET in the dashboard.
+
+services:
+  - type: web
+    name: time-to-match-web
+    runtime: node
+    region: frankfurt
+    plan: starter
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      # Set in dashboard (secrets):
+      # DATABASE_URL, AUTH_SECRET, NEXT_PUBLIC_APP_URL, CORS_ORIGINS

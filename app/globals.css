@@ -1,11 +1,14 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import './design-system.css';
+@import './sync-design.css';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Dark luxury theme - default */
-  --background: oklch(0.08 0.005 285);
+  /* SYNC — dark premium minimal */
+  --background: #070707;
+  --background: oklch(0.07 0.004 285);
   --foreground: oklch(0.95 0.01 285);
   --card: oklch(0.12 0.008 285);
   --card-foreground: oklch(0.95 0.01 285);
@@ -207,6 +210,61 @@ html {
 }
 
 /* Site-wide ambient background */
+.site-bg-orb-a {
+  top: -8%;
+  left: 6%;
+  width: min(85vw, 480px);
+  height: min(85vw, 480px);
+  animation: site-orb-a 24s ease-in-out infinite;
+}
+
+.site-bg-orb-b {
+  bottom: -10%;
+  right: 0;
+  width: min(80vw, 440px);
+  height: min(80vw, 440px);
+  animation: site-orb-b 28s ease-in-out infinite;
+}
+
+.site-bg-orb-blur {
+  filter: blur(80px);
+}
+
+@media (max-width: 768px) {
+  .site-bg-orb-blur {
+    filter: blur(44px);
+  }
+}
+
+@keyframes site-orb-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(24px, 32px) scale(1.06);
+  }
+}
+
+@keyframes site-orb-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1.02);
+  }
+  50% {
+    transform: translate(-28px, -20px) scale(0.96);
+  }
+}
+
+.site-bg-vignette {
+  background: radial-gradient(
+    ellipse 85% 75% at 50% 45%,
+    transparent 0%,
+    rgba(5, 5, 8, 0.35) 65%,
+    rgba(5, 5, 8, 0.9) 100%
+  );
+}
+
 .site-bg-aurora {
   animation: site-aurora-spin 60s linear infinite;
 }
@@ -350,15 +408,47 @@ html {
 
 .chat-panel-backdrop {
   background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(236, 72, 153, 0.06) 0%, transparent 55%),
-    rgba(8, 8, 12, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+    radial-gradient(ellipse 90% 45% at 50% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(236, 72, 153, 0.04) 0%, transparent 55%),
+    linear-gradient(180deg, #050508 0%, #08080e 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Lightweight floating specks (replaces Framer per-particle) */
+@keyframes ttm-particle-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.5);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translate3d(0, -56px, 0) scale(0.28);
+    opacity: 0;
+  }
+}
+
+.ttm-cinematic-particle {
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+  animation-name: ttm-particle-rise;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-cinematic-particle {
+    animation: none !important;
+    opacity: 0 !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .site-bg-aurora,
   .site-bg-stars,
+  .site-bg-orb-a,
+  .site-bg-orb-b,
   .premium-btn-shimmer,
   .profile-expire-pulse,
   .profile-vanish-edge,
@@ -421,4 +511,168 @@ html {
   background: #3b82f6;
   border: 3px solid white;
   box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.35);
+}
+
+.ttm-chat-scroll {
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-chat-scroll {
+    scroll-behavior: auto;
+  }
+}
+
+/* Discover / swipe deck — subtle depth & urgency (respects prefers-reduced-motion in TS where needed) */
+@keyframes ttm-swipe-stack-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.008);
+  }
+}
+
+.ttm-swipe-stack-breathe {
+  animation: ttm-swipe-stack-breathe 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+.ttm-swipe-stack-delay-a {
+  animation-delay: 0.4s;
+}
+
+.ttm-swipe-stack-delay-b {
+  animation-delay: 0.9s;
+}
+
+@keyframes ttm-swipe-urgency-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 18px -2px rgba(251, 191, 36, 0.35);
+    border-color: rgba(251, 191, 36, 0.55);
+  }
+}
+
+.ttm-swipe-urgency-pulse {
+  animation: ttm-swipe-urgency-pulse 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-swipe-stack-breathe,
+  .ttm-swipe-urgency-pulse {
+    animation: none;
+  }
+}
+
+/* Presence / notification micro-glow (dots & badges) */
+@keyframes ttm-presence-dot-breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px currentColor);
+    opacity: 1;
+  }
+  50% {
+    filter: drop-shadow(0 0 10px currentColor);
+    opacity: 0.92;
+  }
+}
+
+.ttm-presence-glow-emerald {
+  color: rgb(52 211 153);
+  animation: ttm-presence-dot-breathe 2.6s ease-in-out infinite;
+}
+
+.ttm-presence-glow-sky {
+  color: rgb(56 189 248);
+  animation: ttm-presence-dot-breathe 2.8s ease-in-out infinite;
+}
+
+.ttm-presence-glow-amber {
+  color: rgb(252 211 77);
+  animation: ttm-presence-dot-breathe 3s ease-in-out infinite;
+}
+
+.ttm-presence-glow-violet {
+  color: rgb(167 139 250);
+  animation: ttm-presence-dot-breathe 2.7s ease-in-out infinite;
+}
+
+.ttm-presence-glow-pink {
+  color: rgb(244 114 182);
+  animation: ttm-presence-dot-breathe 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-presence-glow-emerald,
+  .ttm-presence-glow-sky,
+  .ttm-presence-glow-amber,
+  .ttm-presence-glow-violet,
+  .ttm-presence-glow-pink {
+    animation: none;
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+}
+
+.ttm-trust-check-glow {
+  box-shadow: 0 0 24px -6px rgba(52, 211, 153, 0.45);
+}
+
+@keyframes ttm-trust-copy-fade {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.ttm-trust-copy-fade {
+  animation: ttm-trust-copy-fade 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-trust-copy-fade {
+    animation: none;
+    opacity: 0.9;
+  }
+}
+
+/* Premium membership — soft gold / cinematic glow */
+@keyframes ttm-premium-orb-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.55;
+  }
+}
+
+.ttm-premium-orb {
+  animation: ttm-premium-orb-pulse 5s ease-in-out infinite;
+}
+
+.ttm-premium-badge-glow {
+  box-shadow: 0 0 20px -8px rgba(251, 191, 36, 0.35);
+}
+
+.ttm-premium-cta-glow {
+  box-shadow: 0 16px 48px -16px rgba(251, 191, 36, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-premium-orb {
+    animation: none;
+    opacity: 0.45;
+  }
 }

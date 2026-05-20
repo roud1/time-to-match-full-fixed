@@ -9,6 +9,7 @@ import {
   consumeDemoSwipeDeck,
   type SwipeProfile,
 } from "@/lib/demo-profiles"
+import { filterProfilesForUser } from "@/lib/swipe-gender-filter"
 import { isLoggedIn } from "@/lib/user-profile"
 
 function SwipeCard({ 
@@ -129,21 +130,15 @@ function SwipeCard({
 }
 
 export function SwipeUI() {
-  const { t, locale, profileCards, location } = useI18n()
+  const { t, locale, location } = useI18n()
   const demoMode = useRef(false)
 
-  const [profiles, setProfiles] = useState<SwipeProfile[]>(profileCards)
+  const [profiles, setProfiles] = useState<SwipeProfile[]>([])
 
   useEffect(() => {
-    const startDemo = consumeDemoSwipeDeck() || isLoggedIn()
-    if (startDemo) {
-      demoMode.current = true
-      setProfiles(buildDemoSwipeProfiles(locale, location.position))
-      return
-    }
-    demoMode.current = false
-    setProfiles(profileCards)
-  }, [locale, profileCards, location.position])
+    demoMode.current = consumeDemoSwipeDeck() || isLoggedIn()
+    setProfiles(filterProfilesForUser(buildDemoSwipeProfiles(locale, location.position)))
+  }, [locale, location.position])
 
   const handleSwipe = (direction: "left" | "right") => {
     console.log(`Swiped ${direction}`)

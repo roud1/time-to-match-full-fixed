@@ -1,62 +1,53 @@
 "use client"
 
-import Link from "next/link"
-import { motion } from "motion/react"
-import { cn } from "@/lib/utils"
-import type { ComponentProps } from "react"
+import type { MouseEventHandler, ReactNode } from "react"
 
-type PremiumButtonProps = {
+import { CinematicButton, type CinematicButtonProps } from "@/components/ui/cinematic-button"
+
+export type PremiumButtonProps = {
   href?: string
-  variant?: "primary" | "ghost"
+  variant?: "primary" | "ghost" | "secondary" | "glow"
+  size?: CinematicButtonProps["size"]
   className?: string
-  children: React.ReactNode
-} & Omit<ComponentProps<"button">, "children">
+  children: ReactNode
+  onClick?: MouseEventHandler<HTMLButtonElement>
+  disabled?: boolean
+  type?: "button" | "submit" | "reset"
+}
 
+/** Wraps `CinematicButton` with touch-friendly defaults used across marketing & profile CTAs */
 export function PremiumButton({
   href,
   variant = "primary",
+  size = "mobile",
   className,
   children,
-  ...props
+  onClick,
+  disabled,
+  type = "button",
 }: PremiumButtonProps) {
-  const base = cn(
-    "relative inline-flex items-center justify-center px-8 py-4 rounded-full font-light text-base tracking-wide transition-all duration-300",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-    variant === "primary" &&
-      "text-white bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 shadow-lg shadow-pink-500/30",
-    variant === "ghost" &&
-      "text-foreground/85 border border-foreground/15 bg-foreground/[0.04] hover:bg-foreground/[0.08]",
-    className
-  )
-
-  const inner = (
-  <>
-      {variant === "primary" && (
-        <span className="absolute inset-0 rounded-full premium-btn-shimmer opacity-0 hover:opacity-100 transition-opacity duration-500" />
-      )}
-      <span className="relative z-10">{children}</span>
-    </>
-  )
-
-  if (href) {
-    return (
-      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-        <Link href={href} className={base}>
-          {inner}
-        </Link>
-      </motion.div>
-    )
-  }
+  const v =
+    variant === "ghost"
+      ? "ghost"
+      : variant === "secondary"
+        ? "secondary"
+        : variant === "glow"
+          ? "glow"
+          : "primary"
 
   return (
-    <motion.button
-      type="button"
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={base}
-      {...props}
+    <CinematicButton
+      href={href}
+      variant={v}
+      size={size}
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
     >
-      {inner}
-    </motion.button>
+      {children}
+    </CinematicButton>
   )
 }
+
+export { cinematicButtonVariants } from "./cinematic-button"

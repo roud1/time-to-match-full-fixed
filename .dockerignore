@@ -1,0 +1,16 @@
+.git
+.github
+.next
+node_modules
+npm-debug.log*
+.DS_Store
+.env
+.env.*
+!.env.example
+*.md
+!README.md
+.cursor
+coverage
+tsconfig.tsbuildinfo
+v0-trash
+.snowflake

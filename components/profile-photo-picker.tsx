@@ -71,7 +71,7 @@ export function ProfilePhotoPicker({
               key={`${url.slice(0, 32)}-${index}`}
               className="relative group aspect-[3/4] rounded-xl overflow-hidden border border-foreground/10 bg-foreground/5"
             >
-              <Image src={url} alt="" fill className="object-cover" unoptimized />
+              <Image src={url} alt="" fill className="object-cover" sizes="(max-width: 640px) 33vw, 200px" unoptimized />
               {index === 0 && (
                 <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-light bg-pink-500/90 text-white">
                   {t("profilePhotoPrimary")}

@@ -20,8 +20,18 @@ export type StoredUserProfile = {
   photoUrl?: string
   photoUrls?: string[]
   registeredAt: number
+  /** Optional personality layer (saved with profile). */
+  vibeIds?: string[]
+  intention?: string
+  mood?: string
+  /** Short answer to a “favorite” prompt. */
+  promptFavorite?: string
+  /** Demo flag: user engaged with voice intro UI. */
+  voiceIntroRecorded?: boolean
   /** Unix ms — demo premium expiry */
   premiumUntil?: number
+  /** Purchased +24h extensions (demo), added to base 72h window */
+  profileExtraTimeMs?: number
 }
 
 type StoredCredentials = {
@@ -152,14 +162,29 @@ export function clearSession() {
 }
 
 export const PROFILE_DURATION_MS = 72 * 60 * 60 * 1000
-export const PREMIUM_DURATION_MS = 7 * 24 * 60 * 60 * 1000
+export const PROFILE_EXTENSION_MS = 24 * 60 * 60 * 1000
+export const PREMIUM_DURATION_MS = 14 * 24 * 60 * 60 * 1000
+
+export type ProfileTimerSource = Pick<StoredUserProfile, "registeredAt" | "profileExtraTimeMs">
+
+export function getProfileEndsAt(source: ProfileTimerSource) {
+  return source.registeredAt + PROFILE_DURATION_MS + (source.profileExtraTimeMs ?? 0)
+}
+
+export function getProfileTotalDurationMs(source: ProfileTimerSource) {
+  return PROFILE_DURATION_MS + (source.profileExtraTimeMs ?? 0)
+}
 
 export function isPremiumActive(profile: StoredUserProfile): boolean {
   return typeof profile.premiumUntil === "number" && profile.premiumUntil > Date.now()
 }
 
 export function activatePremium(profile: StoredUserProfile, durationMs = PREMIUM_DURATION_MS) {
-  return updateUserProfile({ premiumUntil: Date.now() + durationMs })
+  const next = updateUserProfile({ premiumUntil: Date.now() + durationMs })
+  if (typeof window !== "undefined" && next) {
+    window.dispatchEvent(new CustomEvent("ttm-user-profile-changed"))
+  }
+  return next
 }
 
 export function getPremiumTimeLeft(premiumUntil: number) {
@@ -169,11 +194,30 @@ export function getPremiumTimeLeft(premiumUntil: number) {
   return { days, hours, remaining }
 }
 
-export function getProfileTimeLeft(registeredAt: number) {
-  const endsAt = registeredAt + PROFILE_DURATION_MS
+export function getProfileTimeLeft(source: ProfileTimerSource) {
+  const endsAt = getProfileEndsAt(source)
   const remaining = Math.max(0, endsAt - Date.now())
   const hours = Math.floor(remaining / (1000 * 60 * 60))
   const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((remaining % (1000 * 60)) / 1000)
   return { hours, minutes, seconds, remaining, endsAt }
+}
+
+/** Demo purchase: extend profile visibility by 24 hours (stackable). */
+export function extendProfile24Hours() {
+  const current = getUserProfile()
+  if (!current) return null
+  const next = updateUserProfile({
+    profileExtraTimeMs: (current.profileExtraTimeMs ?? 0) + PROFILE_EXTENSION_MS,
+  })
+  if (typeof window !== "undefined" && next) {
+    window.dispatchEvent(new CustomEvent("ttm-user-profile-changed"))
+  }
+  return next
+}
+
+export function getProfileExtensionCount(profile: StoredUserProfile) {
+  const extra = profile.profileExtraTimeMs ?? 0
+  if (extra <= 0) return 0
+  return Math.round(extra / PROFILE_EXTENSION_MS)
 }

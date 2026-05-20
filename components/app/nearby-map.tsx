@@ -73,7 +73,7 @@ export function NearbyMap({ userPosition, profiles, userLabel }: NearbyMapProps)
           <Popup>
             <div className="flex gap-3 items-center min-w-[180px]">
               <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0">
-                <Image src={profile.image} alt="" width={48} height={48} className="object-cover" unoptimized />
+                <Image src={profile.image} alt="" width={48} height={48} className="object-cover" sizes="48px" />
               </div>
               <div>
                 <p className="font-semibold text-sm text-gray-900">

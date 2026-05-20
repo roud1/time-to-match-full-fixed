@@ -1,0 +1,6 @@
+Contact: mailto:security@example.com
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en, ru
+Canonical: https://example.com/.well-known/security.txt
+
+# Replace security@example.com and the Canonical URL before launch.

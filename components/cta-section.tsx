@@ -8,7 +8,7 @@ export function CTASection() {
   const { t } = useI18n()
 
   return (
-    <section className="relative py-32 px-4 overflow-hidden">
+    <section id="premium" className="relative py-32 px-4 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <motion.div 
           animate={{ 

@@ -10,12 +10,19 @@ import { LikesPanel } from "@/components/app/likes-panel"
 import { ChatPanel } from "@/components/app/chat-panel"
 import { MapPanel } from "@/components/app/map-panel"
 import { Logo } from "@/components/logo"
+import { ActivityPulseProvider } from "@/components/activity/activity-pulse-context"
+import { ActivityAppChrome } from "@/components/activity/activity-app-chrome"
+import { PremiumUpgradeProvider } from "@/components/premium/premium-upgrade-context"
+import { ConnectionExtensionToastStack } from "@/components/connection/connection-extension-toast"
+import { PremiumUpgradeSheet } from "@/components/premium/premium-upgrade-sheet"
+import { PremiumBadgeLink } from "@/components/premium/premium-badge"
 import { useI18n } from "@/lib/i18n"
-import { getUserProfile, isLoggedIn } from "@/lib/user-profile"
+import { getUserProfile, isLoggedIn, isPremiumActive } from "@/lib/user-profile"
 import { cn } from "@/lib/utils"
+import { recordProfileActivity } from "@/lib/profile-life-store"
 
 export function AppShell() {
-  const { t } = useI18n()
+  const { t, location } = useI18n()
   const router = useRouter()
   const searchParams = useSearchParams()
   const tabParam = searchParams.get("tab")
@@ -41,7 +48,21 @@ export function AppShell() {
       return
     }
     setReady(true)
+    recordProfileActivity()
   }, [router])
+
+  useEffect(() => {
+    if (!ready || location.status !== "idle") return
+    location.requestLocation()
+  }, [ready, location.status, location.requestLocation])
+
+  const [premiumTick, setPremiumTick] = useState(0)
+
+  useEffect(() => {
+    const bump = () => setPremiumTick((x) => x + 1)
+    window.addEventListener("ttm-user-profile-changed", bump)
+    return () => window.removeEventListener("ttm-user-profile-changed", bump)
+  }, [])
 
   if (!ready) {
     return (
@@ -51,40 +72,75 @@ export function AppShell() {
     )
   }
 
+  const headerProfile = getUserProfile()
+  const showPremiumBadge = Boolean(headerProfile && isPremiumActive(headerProfile))
+  void premiumTick
+
+  const chatWith = searchParams.get("with")
+  const chatThreadOpen = tab === "chat" && Boolean(chatWith)
+  const immersiveLayout = tab === "discover" || chatThreadOpen
+
   return (
-    <div className="min-h-screen pb-24">
-      <header
-        className={cn(
-          "sticky top-0 z-40 px-4 py-3 transition-all duration-500",
-          scrolled
-            ? "premium-nav-scrolled border-b border-foreground/10 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.5)]"
-            : "glass border-b border-foreground/5"
-        )}
-      >
-        <div className="max-w-lg mx-auto flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
+    <ActivityPulseProvider>
+      <PremiumUpgradeProvider>
+        <div
+          className={cn(
+            "min-h-screen",
+            immersiveLayout && "h-dvh overflow-hidden flex flex-col",
+            tab === "discover" && "pb-[5.5rem]",
+            !immersiveLayout && "pb-24"
+          )}
+        >
+        {!chatThreadOpen && (
+        <header
+          className={cn(
+            "sticky top-0 z-40 ttm-page py-3 transition-all duration-500",
+            scrolled
+              ? "premium-nav-scrolled ttm-surface-nav--solid border-b border-foreground/10 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.5)]"
+              : "glass border-b border-foreground/5"
+          )}
+        >
+        <div
+          className={cn(
+            "mx-auto flex items-center justify-between gap-2 w-full",
+            tab === "discover" ? "max-w-4xl" : "max-w-lg"
+          )}
+        >
+          <Link href="/" className="flex items-center gap-2 group min-w-0">
             <Logo size="sm" />
-            <span className="text-sm font-light text-foreground/90 hidden sm:inline group-hover:text-pink-300 transition-colors">
+            <span className="text-sm font-light text-foreground/90 hidden sm:inline group-hover:text-pink-300 transition-colors truncate">
               Time to Match
             </span>
           </Link>
-          <Link
-            href="/profile"
-            className="text-xs font-light text-muted-foreground hover:text-foreground px-3 py-1.5 rounded-full border border-foreground/10 hover:border-pink-500/30 transition-colors"
-          >
-            {t("navProfile")}
-          </Link>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <ActivityAppChrome />
+            {showPremiumBadge && <PremiumBadgeLink label={t("premiumTierPlus")} href="/profile?tab=premium" />}
+          </div>
         </div>
       </header>
+        )}
 
-      <main className="max-w-lg mx-auto">
+      <main
+        className={cn(
+          "mx-auto ttm-page w-full",
+          tab === "discover"
+            ? "max-w-4xl flex-1 min-h-0 flex flex-col overflow-hidden"
+            : chatThreadOpen
+              ? "flex-1 min-h-0 max-w-none p-0 overflow-hidden"
+              : "max-w-lg"
+        )}
+      >
         {tab === "discover" && <DiscoverPanel />}
-        {tab === "likes" && <LikesPanel onMatch={() => router.push("/app?tab=chat")} />}
+        {tab === "likes" && <LikesPanel />}
         {tab === "chat" && <ChatPanel />}
         {tab === "map" && <MapPanel />}
       </main>
 
       <BottomNavBar />
-    </div>
+        </div>
+        <ConnectionExtensionToastStack />
+        <PremiumUpgradeSheet />
+      </PremiumUpgradeProvider>
+    </ActivityPulseProvider>
   )
 }

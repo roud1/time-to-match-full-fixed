@@ -1,6 +1,21 @@
 import type { Locale } from "@/lib/i18n"
 import { buildDemoSwipeProfiles, type SwipeProfile } from "@/lib/demo-profiles"
+import { filterProfilesForUser } from "@/lib/swipe-gender-filter"
 import type { GeoPosition } from "@/lib/geo"
+import { getUserProfile } from "@/lib/user-profile"
+import { recordProfileActivity } from "@/lib/profile-life-store"
+import {
+  ensureConnectionForMatch,
+  migrateConnectionsFromMatches,
+  recordConnectionMessage,
+  setMemoryProfileName,
+} from "@/lib/connection-store"
+import {
+  getPulseGreeting,
+  getPulseProfile,
+  isPulseProfile,
+  PULSE_PROFILE_ID,
+} from "@/lib/pulse-companion"
 
 const SOCIAL_KEY = "ttm-social"
 
@@ -71,11 +86,9 @@ const GREETINGS: Record<Locale, string[]> = {
 
 function ensureSeeded(state: SocialState, locale: Locale, position: GeoPosition | null): SocialState {
   if (state.seeded) return state
-  const all = buildDemoSwipeProfiles(locale, position)
-  const pick = all
-    .filter((p) => p.id % 2 === 1)
-    .slice(0, 4)
-    .map((p) => p.id)
+  const user = getUserProfile()
+  const all = filterProfilesForUser(buildDemoSwipeProfiles(locale, position), user)
+  const pick = all.slice(0, 4).map((p) => p.id)
   return {
     ...state,
     likedYou: pick,
@@ -83,12 +96,51 @@ function ensureSeeded(state: SocialState, locale: Locale, position: GeoPosition 
   }
 }
 
+function syncConnections(state: SocialState) {
+  const chatTimes = new Map(state.chats.map((c) => [c.profileId, c.updatedAt]))
+  const matchIds = [...state.matches]
+  if (!matchIds.includes(PULSE_PROFILE_ID)) matchIds.push(PULSE_PROFILE_ID)
+  migrateConnectionsFromMatches(matchIds, chatTimes)
+}
+
+function ensurePulseCompanion(state: SocialState, locale: Locale): SocialState {
+  let next = state
+  if (!next.matches.includes(PULSE_PROFILE_ID)) {
+    next = { ...next, matches: [PULSE_PROFILE_ID, ...next.matches] }
+  }
+
+  let thread = next.chats.find((c) => c.profileId === PULSE_PROFILE_ID)
+  if (!thread) {
+    const now = Date.now()
+    thread = {
+      profileId: PULSE_PROFILE_ID,
+      updatedAt: now,
+      messages: [
+        {
+          id: `pulse-greet-${now}`,
+          from: "them",
+          text: getPulseGreeting(locale),
+          at: now,
+        },
+      ],
+    }
+    next = { ...next, chats: [thread, ...next.chats] }
+    ensureConnectionForMatch(PULSE_PROFILE_ID)
+    recordConnectionMessage(PULSE_PROFILE_ID, "them")
+    setMemoryProfileName(PULSE_PROFILE_ID, getPulseProfile(locale).name)
+  }
+
+  return next
+}
+
 export function getSocialState(locale: Locale, position: GeoPosition | null) {
   let state = load()
   if (!state.seeded) {
     state = ensureSeeded(state, locale, position)
-    save(state)
   }
+  state = ensurePulseCompanion(state, locale)
+  save(state)
+  syncConnections(state)
   return state
 }
 
@@ -97,12 +149,13 @@ export function getProfileById(
   locale: Locale,
   position: GeoPosition | null
 ): SwipeProfile | undefined {
+  if (isPulseProfile(id)) return getPulseProfile(locale)
   return buildDemoSwipeProfiles(locale, position).find((p) => p.id === id)
 }
 
 export function getLikedYouProfiles(locale: Locale, position: GeoPosition | null): SwipeProfile[] {
   const { likedYou } = getSocialState(locale, position)
-  const all = buildDemoSwipeProfiles(locale, position)
+  const all = filterProfilesForUser(buildDemoSwipeProfiles(locale, position))
   return likedYou
     .map((id) => all.find((p) => p.id === id))
     .filter((p): p is SwipeProfile => Boolean(p))
@@ -110,7 +163,7 @@ export function getLikedYouProfiles(locale: Locale, position: GeoPosition | null
 
 export function getMatchProfiles(locale: Locale, position: GeoPosition | null): SwipeProfile[] {
   const { matches } = getSocialState(locale, position)
-  const all = buildDemoSwipeProfiles(locale, position)
+  const all = filterProfilesForUser(buildDemoSwipeProfiles(locale, position))
   return matches
     .map((id) => all.find((p) => p.id === id))
     .filter((p): p is SwipeProfile => Boolean(p))
@@ -118,7 +171,11 @@ export function getMatchProfiles(locale: Locale, position: GeoPosition | null): 
 
 export function getChats(locale: Locale, position: GeoPosition | null): ChatThread[] {
   const state = getSocialState(locale, position)
-  return [...state.chats].sort((a, b) => b.updatedAt - a.updatedAt)
+  const pulse = state.chats.filter((c) => c.profileId === PULSE_PROFILE_ID)
+  const rest = state.chats
+    .filter((c) => c.profileId !== PULSE_PROFILE_ID)
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+  return [...pulse, ...rest]
 }
 
 export function recordSwipe(
@@ -132,6 +189,10 @@ export function recordSwipe(
   if (direction === "left") {
     if (!state.passed.includes(profile.id)) state.passed.push(profile.id)
     save(state)
+    recordProfileActivity()
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+    }
     return { matched: false }
   }
 
@@ -140,8 +201,7 @@ export function recordSwipe(
   const alreadyLikedYou = state.likedYou.includes(profile.id)
   let matched = false
 
-  if (alreadyLikedYou || profile.id % 3 === 0) {
-    if (!state.likedYou.includes(profile.id)) state.likedYou.push(profile.id)
+  if (alreadyLikedYou) {
     if (!state.matches.includes(profile.id)) {
       state.matches.push(profile.id)
       matched = true
@@ -162,12 +222,19 @@ export function recordSwipe(
           ],
         })
       }
+      ensureConnectionForMatch(profile.id)
+      setMemoryProfileName(profile.id, profile.name)
+      recordConnectionMessage(profile.id, "them")
     }
   } else if (Math.random() < 0.35 && !state.likedYou.includes(profile.id)) {
     state.likedYou.push(profile.id)
   }
 
   save(state)
+  recordProfileActivity()
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+  }
   return { matched }
 }
 
@@ -182,28 +249,68 @@ export function likeBack(
   return result.matched || getSocialState(locale, position).matches.includes(profileId)
 }
 
+function pushMessage(
+  state: SocialState,
+  profileId: number,
+  from: "me" | "them",
+  text: string,
+  locale: Locale,
+  position: GeoPosition | null
+): SocialState {
+  const trimmed = text.trim()
+  if (!trimmed) return state
+
+  const now = Date.now()
+  let next = ensurePulseCompanion(ensureSeeded(state, locale, position), locale)
+  let thread = next.chats.find((c) => c.profileId === profileId)
+
+  if (!thread) {
+    thread = { profileId, messages: [], updatedAt: now }
+    next = { ...next, chats: [...next.chats, thread] }
+  }
+
+  const updatedThread: ChatThread = {
+    ...thread,
+    messages: [...thread.messages, { id: `m-${now}-${from}`, from, text: trimmed, at: now }],
+    updatedAt: now,
+  }
+
+  next = {
+    ...next,
+    chats: next.chats.map((c) => (c.profileId === profileId ? updatedThread : c)),
+  }
+
+  save(next)
+  recordConnectionMessage(profileId, from === "me" ? "me" : "them")
+  if (from === "me") recordProfileActivity()
+  const profile = getProfileById(profileId, locale, position)
+  if (profile) setMemoryProfileName(profileId, profile.name)
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+  }
+  return next
+}
+
 export function sendMessage(
   profileId: number,
   text: string,
   locale: Locale,
   position: GeoPosition | null
 ) {
-  const trimmed = text.trim()
-  if (!trimmed) return
-
-  let state = ensureSeeded(load(), locale, position)
-  let thread = state.chats.find((c) => c.profileId === profileId)
-  const now = Date.now()
-
-  if (!thread) {
-    thread = { profileId, messages: [], updatedAt: now }
-    state.chats.push(thread)
-  }
-
-  thread.messages.push({ id: `m-${now}`, from: "me", text: trimmed, at: now })
-  thread.updatedAt = now
-  save(state)
+  pushMessage(load(), profileId, "me", text, locale, position)
 }
+
+/** AI / bot reply (Pulse). */
+export function receiveMessage(
+  profileId: number,
+  text: string,
+  locale: Locale,
+  position: GeoPosition | null
+) {
+  pushMessage(load(), profileId, "them", text, locale, position)
+}
+
+export { isPulseProfile, PULSE_PROFILE_ID }
 
 export function getUnreadLikesCount(locale: Locale, position: GeoPosition | null): number {
   const { likedYou, yourLikes, matches } = getSocialState(locale, position)

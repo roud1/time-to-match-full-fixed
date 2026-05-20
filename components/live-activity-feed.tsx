@@ -6,7 +6,12 @@ import { useI18n } from "@/lib/i18n"
 
 const MESSAGE_KEYS = ["liveSomeoneLiked", "liveSomeoneOnline", "liveNewMatch"] as const
 
-export function LiveActivityFeed() {
+type LiveActivityFeedProps = {
+  /** Delay before first toast (ms). */
+  appearDelayMs?: number
+}
+
+export function LiveActivityFeed({ appearDelayMs = 1200 }: LiveActivityFeedProps) {
   const { t } = useI18n()
   const reduceMotion = useReducedMotion()
   const [index, setIndex] = useState(0)
@@ -14,9 +19,9 @@ export function LiveActivityFeed() {
 
   useEffect(() => {
     if (reduceMotion) return
-    const appear = setTimeout(() => setShow(true), 3200)
+    const appear = setTimeout(() => setShow(true), appearDelayMs)
     return () => clearTimeout(appear)
-  }, [reduceMotion])
+  }, [reduceMotion, appearDelayMs])
 
   useEffect(() => {
     if (!show || reduceMotion) return
@@ -28,9 +33,16 @@ export function LiveActivityFeed() {
 
   const key = MESSAGE_KEYS[index]
 
+  const openActivityHub = () => {
+    window.dispatchEvent(new CustomEvent("ttm-open-activity-hub"))
+  }
+
   return (
-    <motion.div
-      className="fixed z-40 left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm top-[5.5rem] sm:top-auto sm:bottom-28 pointer-events-none"
+    <motion.button
+      type="button"
+      aria-label={t("activityHubTitle")}
+      onClick={openActivityHub}
+      className="fixed z-40 left-3 right-3 sm:left-auto sm:right-6 sm:max-w-sm top-[5.5rem] sm:top-auto sm:bottom-28 touch-manipulation text-left cursor-pointer"
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -51,6 +63,6 @@ export function LiveActivityFeed() {
           <p className="text-xs font-light text-foreground/90 leading-snug">{t(key)}</p>
         </motion.div>
       </AnimatePresence>
-    </motion.div>
+    </motion.button>
   )
 }

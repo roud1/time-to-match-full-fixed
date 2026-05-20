@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n"
+import { demoProfileGenderFromIndex } from "@/lib/swipe-gender-filter"
 import { distanceKm, formatDistance, type GeoPosition } from "@/lib/geo"
 import { getCityCoords, getCityLabel, type CityId } from "@/lib/cities"
 
@@ -8,9 +9,12 @@ export type SwipeProfile = {
   id: number
   name: string
   age: number
+  gender: "male" | "female"
   location: string
   distance: string
   image: string
+  /** Gallery photos (first item matches `image`). */
+  images: string[]
   timeLeft: string
   bio: string
   interests: string[]
@@ -110,13 +114,22 @@ export function buildDemoSwipeProfiles(
       ? offsetPosition(userPosition, index)
       : offsetPosition(cityCoords, index)
 
+    const slot = (index % 4) + 1
+    const images = [
+      `/images/profile-${slot}.jpg`,
+      `/images/profile-${(slot % 4) + 1}.jpg`,
+      `/images/profile-${((slot + 1) % 4) + 1}.jpg`,
+    ]
+
     return {
       id: index + 1,
       name: profile.name,
       age: profile.age,
+      gender: demoProfileGenderFromIndex(index),
       location: getCityLabel(cityId, locale),
       distance,
-      image: `/images/profile-${(index % 4) + 1}.jpg`,
+      image: images[0],
+      images,
       timeLeft: profile.timeLeft,
       bio: profile.bio,
       interests: profile.interests,

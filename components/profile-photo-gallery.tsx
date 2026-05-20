@@ -27,16 +27,20 @@ export function ProfilePhotoGallery({ photos, name, className }: ProfilePhotoGal
   }
 
   const index = Math.min(active, photos.length - 1)
+  const activeSrc = photos[index]
+  const needsUnoptimized = (src: string) =>
+    src.startsWith("data:") || src.startsWith("blob:")
 
   return (
     <div className={cn("space-y-3", className)}>
       <div className="relative aspect-[4/5] max-h-80 w-full rounded-2xl overflow-hidden border border-foreground/10 bg-foreground/5">
         <Image
-          src={photos[index]}
+          src={activeSrc}
           alt={name}
           fill
           className="object-cover"
-          unoptimized
+          sizes="(max-width: 768px) 100vw, 480px"
+          unoptimized={needsUnoptimized(activeSrc)}
           priority
         />
         {photos.length > 1 && (
@@ -91,7 +95,14 @@ export function ProfilePhotoGallery({ photos, name, className }: ProfilePhotoGal
                 i === index ? "border-pink-500" : "border-transparent opacity-60 hover:opacity-100"
               )}
             >
-              <Image src={url} alt="" fill className="object-cover" unoptimized />
+              <Image
+                src={url}
+                alt=""
+                fill
+                className="object-cover"
+                sizes="56px"
+                unoptimized={needsUnoptimized(url)}
+              />
             </button>
           ))}
         </div>

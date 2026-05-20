@@ -33,6 +33,8 @@ function storeCountryCode(code: string | null) {
 type UseUserLocationOptions = {
   locale: Locale
   onLocaleSuggestion?: (locale: Locale) => void
+  /** If false, only restores cached coords — no GPS prompt on load. */
+  autoRequest?: boolean
 }
 
 async function reverseGeocode(
@@ -88,6 +90,7 @@ async function reverseGeocode(
 export function useUserLocation({
   locale,
   onLocaleSuggestion,
+  autoRequest = false,
 }: UseUserLocationOptions) {
   const [status, setStatus] = useState<LocationStatus>("idle")
   const [position, setPosition] = useState<GeoPosition | null>(null)
@@ -180,8 +183,12 @@ export function useUserLocation({
       return
     }
 
-    requestLocation()
-  }, [applyPosition, requestLocation])
+    if (autoRequest) {
+      requestLocation()
+    } else {
+      setStatus("idle")
+    }
+  }, [applyPosition, requestLocation, autoRequest])
 
   useEffect(() => {
     if (!position) return

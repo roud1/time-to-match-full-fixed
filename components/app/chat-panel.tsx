@@ -1,219 +1,222 @@
 "use client"
 
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "motion/react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useI18n } from "@/lib/i18n"
 import {
   getChats,
   getProfileById,
+  receiveMessage,
   sendMessage,
   type ChatThread,
 } from "@/lib/social-store"
+import { isPulseProfile } from "@/lib/pulse-companion"
+import { fetchPulseReply } from "@/lib/pulse-ai-client"
+import { markThreadSeen } from "@/lib/chat-thread-seen"
 import type { SwipeProfile } from "@/lib/demo-profiles"
+import { ChatInboxScreen } from "@/components/chat/chat-inbox-screen"
+import { ChatRoomScreen } from "@/components/chat/chat-room-screen"
+import { useTrustSafetyVersion } from "@/hooks/use-trust-safety-version"
+import { isProfileBlocked, isProfileMuted } from "@/lib/trust-safety-store"
+import { getUserProfile, isPremiumActive } from "@/lib/user-profile"
+import { getConnectionMemories } from "@/lib/connection-store"
+import { useProfileLife } from "@/hooks/use-profile-life"
+import { cn } from "@/lib/utils"
+
+function parseWithParam(withParam: string | null): number | null {
+  if (!withParam) return null
+  const id = Number.parseInt(withParam, 10)
+  return Number.isFinite(id) ? id : null
+}
 
 export function ChatPanel() {
   const { t, locale, location } = useI18n()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const withParam = searchParams.get("with")
+  const trustV = useTrustSafetyVersion()
   const [threads, setThreads] = useState<ChatThread[]>([])
-  const [activeId, setActiveId] = useState<number | null>(null)
+  const [listReady, setListReady] = useState(false)
   const [draft, setDraft] = useState("")
-  const [typing, setTyping] = useState(false)
+  const [pulseThinking, setPulseThinking] = useState(false)
+
+  const activeId = useMemo(() => parseWithParam(withParam), [withParam])
+
+  const setActiveChat = useCallback(
+    (id: number | null) => {
+      if (id == null) {
+        router.replace("/app?tab=chat")
+        return
+      }
+      router.replace(`/app?tab=chat&with=${id}`)
+    },
+    [router]
+  )
 
   const refresh = () => setThreads(getChats(locale, location.position))
 
   useEffect(() => {
+    setListReady(false)
     refresh()
+    const id = requestAnimationFrame(() => setListReady(true))
+    return () => cancelAnimationFrame(id)
   }, [locale, location.position])
 
   useEffect(() => {
-    if (activeId == null) return
-    setTyping(true)
-    const id = setTimeout(() => setTyping(false), 2200)
-    return () => clearTimeout(id)
-  }, [activeId])
+    const onSocial = () => refresh()
+    window.addEventListener("ttm-social-updated", onSocial)
+    return () => window.removeEventListener("ttm-social-updated", onSocial)
+  }, [locale, location.position])
 
-  const activeProfile: SwipeProfile | undefined =
+  const visibleThreads = useMemo(
+    () => threads.filter((th) => !isProfileBlocked(th.profileId) || isPulseProfile(th.profileId)),
+    [threads, trustV]
+  )
+
+  useEffect(() => {
+    if (activeId != null && isProfileBlocked(activeId) && !isPulseProfile(activeId)) {
+      setActiveChat(null)
+    }
+  }, [activeId, trustV, setActiveChat])
+
+  const profileMap = useMemo(() => {
+    const m = new Map<number, SwipeProfile>()
+    for (const th of visibleThreads) {
+      const p = getProfileById(th.profileId, locale, location.position)
+      if (p) m.set(th.profileId, p)
+    }
+    return m
+  }, [visibleThreads, locale, location.position])
+
+  const activeProfile =
     activeId != null ? getProfileById(activeId, locale, location.position) : undefined
-
   const activeThread = threads.find((th) => th.profileId === activeId)
+
+  const requestPulseResponse = useCallback(
+    async (threadAfterSend: ChatThread) => {
+      setPulseThinking(true)
+      try {
+        const userName = getUserProfile()?.name
+        const { reply } = await fetchPulseReply(locale, threadAfterSend.messages, userName)
+        receiveMessage(activeId!, reply, locale, location.position)
+        refresh()
+      } catch {
+        receiveMessage(
+          activeId!,
+          t("pulseAiError"),
+          locale,
+          location.position
+        )
+        refresh()
+      } finally {
+        setPulseThinking(false)
+      }
+    },
+    [activeId, locale, location.position, t]
+  )
 
   const handleSend = () => {
     if (activeId == null || !draft.trim()) return
-    sendMessage(activeId, draft, locale, location.position)
+    const text = draft.trim()
     setDraft("")
+    sendMessage(activeId, text, locale, location.position)
     refresh()
+
+    if (isPulseProfile(activeId)) {
+      const thread = getChats(locale, location.position).find((c) => c.profileId === activeId)
+      if (thread) void requestPulseResponse(thread)
+    }
   }
+
+  const me = getUserProfile()
+  const chatPremium = Boolean(me && isPremiumActive(me))
+  const profileLife = useProfileLife()
+  const connectionsPaused =
+    profileLife?.state === "sleeping" || profileLife?.state === "archived"
 
   if (activeId != null && activeProfile && activeThread) {
     return (
-      <div className="flex flex-col h-[calc(100dvh-8rem)] max-w-lg mx-auto w-full">
-        <div className="px-4 py-3 flex items-center gap-3 border-b border-foreground/10 glass sticky top-0 z-10">
-          <button
-            type="button"
-            onClick={() => setActiveId(null)}
-            className="w-10 h-10 min-h-[44px] min-w-[44px] rounded-full glass flex items-center justify-center touch-manipulation"
-            aria-label={t("profileCancel")}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 ring-2 ring-pink-500/30">
-            <Image src={activeProfile.image} alt="" fill className="object-cover" unoptimized />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-light truncate">{activeProfile.name}</p>
-            <p className="text-xs text-emerald-400/90 font-light flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              {typing ? t("chatTyping") : t("chatOnline")}
-            </p>
-          </div>
-        </div>
-
-        <div className="px-4 py-2 border-b border-amber-500/15 bg-amber-500/5">
-          <p className="text-[10px] text-center text-amber-200/80 font-light uppercase tracking-widest">
-            {t("chatExpires")} {activeProfile.timeLeft}
-          </p>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 chat-panel-backdrop relative">
-          <AnimatePresence initial={false}>
-            {activeThread.messages.map((msg, i) => (
-              <motion.div
-                key={msg.id}
-                initial={{ opacity: 0, y: 10, scale: 0.94 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.4, delay: Math.min(i * 0.04, 0.3), ease: [0.22, 1, 0.36, 1] }}
-                className={`flex flex-col gap-1 ${msg.from === "me" ? "items-end" : "items-start"}`}
-              >
-                <motion.div
-                  className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm font-light ${
-                    msg.from === "me"
-                      ? "chat-bubble-me text-white rounded-br-md"
-                      : "chat-bubble-them rounded-bl-md"
-                  }`}
-                >
-                  {msg.text}
-                </motion.div>
-                {msg.from === "them" && i === activeThread.messages.length - 1 && (
-                  <div className="flex gap-1 px-1">
-                    {["❤️", "🔥", "✨"].map((emoji) => (
-                      <button
-                        key={emoji}
-                        type="button"
-                        className="text-sm opacity-60 hover:opacity-100 hover:scale-110 transition-all touch-manipulation min-w-[36px] min-h-[36px] flex items-center justify-center"
-                        aria-label={t("chatReact")}
-                      >
-                        {emoji}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          {typing && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="flex justify-start"
-            >
-              <div className="chat-bubble-them px-4 py-3 rounded-2xl rounded-bl-md flex gap-1">
-                {[0, 1, 2].map((d) => (
-                  <motion.span
-                    key={d}
-                    className="w-1.5 h-1.5 rounded-full bg-foreground/40"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1, repeat: Infinity, delay: d * 0.2 }}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </div>
-
-        <div className="p-3 md:p-4 border-t border-foreground/10 glass safe-area-pb">
-          <motion.div className="flex gap-2 items-end">
-            <button
-              type="button"
-              aria-label={t("chatVoiceHint")}
-              className="shrink-0 w-10 h-10 rounded-full glass border border-foreground/10 flex items-center justify-center text-muted-foreground touch-manipulation"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 013-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-            </button>
-            <input
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder={t("chatPlaceholder")}
-              className="flex-1 rounded-2xl bg-foreground/5 border border-foreground/10 px-4 py-3 text-sm font-light outline-none focus:border-pink-500/40 min-h-[44px]"
-            />
-            <button
-              type="button"
-              onClick={handleSend}
-              className="shrink-0 px-4 py-3 min-h-[44px] rounded-2xl bg-gradient-to-r from-pink-500 to-purple-600 text-white text-sm font-light touch-manipulation"
-            >
-              {t("chatSend")}
-            </button>
-          </motion.div>
-          <p className="text-[9px] text-center text-muted-foreground/50 mt-2 font-light">
-            {t("chatReact")} · demo
-          </p>
-        </div>
-      </div>
+      <>
+        <ChatRoomScreen
+          profile={activeProfile}
+          thread={activeThread}
+          onBack={() => setActiveChat(null)}
+          draft={draft}
+          onDraftChange={setDraft}
+          onSend={handleSend}
+          composerMuted={isProfileMuted(activeId) && !isPulseProfile(activeId)}
+          forceTyping={pulseThinking}
+          isAiCompanion={isPulseProfile(activeId)}
+          labels={{
+            back: t("chatBack"),
+            typing: pulseThinking ? t("pulseAiTyping") : t("chatTyping"),
+            online: isPulseProfile(activeId) ? t("pulseAiOnline") : t("chatOnline"),
+            lastSeen: t("chatLastSeen"),
+            reconnect: t("chatReconnectHint"),
+            premiumPlusStrip: chatPremium ? t("premiumChatPlusStrip") : undefined,
+            safetyAria: t("trustSafetyOpenAria"),
+            composerMutedHint: t("trustComposerMutedHint"),
+            bubble: {
+              chatDelivered: t("chatDelivered"),
+              chatRead: t("chatRead"),
+              chatReply: t("chatReply"),
+              chatReact: t("chatReact"),
+            },
+            composer: {
+              placeholder: isPulseProfile(activeId)
+                ? t("pulseChatPlaceholder")
+                : t("chatPlaceholder"),
+              send: t("chatSend"),
+              voiceHint: t("chatVoiceHint"),
+              voiceDemo: t("chatVoiceDemo"),
+              attach: t("chatAttach"),
+              mediaDemo: t("chatMediaDemo"),
+              voiceDuration: t("chatVoiceDuration"),
+              replyingTo: t("chatReplyingTo"),
+              cancelReply: t("chatCancelReply"),
+            },
+          }}
+        />
+      </>
     )
   }
 
   return (
-    <div className="px-4 pt-4 pb-6 max-w-lg mx-auto w-full">
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-6"
-      >
-        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">{t("tabChat")}</h1>
-        <p className="text-sm text-muted-foreground font-extralight mt-1">{t("chatSubtitle")}</p>
-      </motion.div>
-
-      {threads.length === 0 ? (
-        <div className="glass-card rounded-3xl p-10 text-center border border-foreground/10">
-          <p className="text-muted-foreground font-extralight">{t("chatEmpty")}</p>
+    <div className={cn(connectionsPaused && "ttm-chat-life-sleeping")}>
+      {connectionsPaused && profileLife && (
+        <div className="mt-3 mb-1 max-w-lg mx-auto w-full px-3 sm:px-4 rounded-2xl border border-white/10 bg-white/[0.03] py-3">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-white/35 mb-1">{t("syncLabel")}</p>
+          <p className="text-[11px] sm:text-xs text-white/70 font-extralight leading-relaxed">
+            {profileLife.state === "sleeping" ? t("lifeSleepingBody") : t("lifeArchivedBody")}
+          </p>
         </div>
-      ) : (
-        <ul className="space-y-2">
-          {threads.map((thread, index) => {
-            const profile = getProfileById(thread.profileId, locale, location.position)
-            if (!profile) return null
-            const last = thread.messages[thread.messages.length - 1]
-            return (
-              <motion.li
-                key={thread.profileId}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <button
-                  type="button"
-                  onClick={() => setActiveId(thread.profileId)}
-                  className="w-full premium-profile-card rounded-2xl p-3 flex items-center gap-3 text-left hover:border-pink-500/20 transition-colors touch-manipulation min-h-[72px]"
-                >
-                  <div className="relative w-14 h-14 rounded-full overflow-hidden shrink-0 ring-2 ring-pink-500/20">
-                    <Image src={profile.image} alt="" fill className="object-cover" unoptimized />
-                    <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 border-2 border-background" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-light truncate">{profile.name}</p>
-                    <p className="text-xs text-muted-foreground font-extralight truncate">{last?.text}</p>
-                  </div>
-                  <span className="text-[10px] text-pink-400/80 tabular-nums shrink-0">{profile.timeLeft}</span>
-                </button>
-              </motion.li>
-            )
-          })}
-        </ul>
       )}
+      <ChatInboxScreen
+        threads={visibleThreads}
+        connectionsPaused={connectionsPaused}
+        locale={locale}
+        profilesByThread={profileMap}
+        loading={!listReady}
+        memories={getConnectionMemories()}
+        onOpen={(id) => {
+          const th = visibleThreads.find((x) => x.profileId === id)
+          if (th) markThreadSeen(id, th.updatedAt)
+          setActiveChat(id)
+          setDraft("")
+        }}
+        labels={{
+          title: t("tabChat"),
+          subtitle: t("chatSubtitle"),
+          empty: t("chatEmpty"),
+          urgency: t("chatUrgencyLine"),
+          reconnect: t("chatReconnectHint"),
+          unread: t("chatUnread"),
+          memoryTitle: t("connectionMemoryTitle"),
+          memoryDays: (days) => t("connectionMemoryDays").replace("{days}", String(days)),
+          memoryFaded: t("connectionMemoryFaded"),
+          memoryExpired: t("connectionMemoryExpired"),
+        }}
+      />
     </div>
   )
 }

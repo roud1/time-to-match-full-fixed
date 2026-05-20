@@ -4,6 +4,7 @@ import dynamic from "next/dynamic"
 import { useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { buildDemoSwipeProfiles } from "@/lib/demo-profiles"
+import { filterProfilesForUser } from "@/lib/swipe-gender-filter"
 import { getCityCoords } from "@/lib/cities"
 import type { GeoPosition } from "@/lib/geo"
 
@@ -24,7 +25,7 @@ export function MapPanel() {
     setPosition(location.position ?? getCityCoords("kyiv"))
   }, [location.position])
 
-  const profiles = buildDemoSwipeProfiles(locale, position)
+  const profiles = filterProfilesForUser(buildDemoSwipeProfiles(locale, position))
 
   return (
     <div className="px-4 pt-4 pb-6 max-w-lg mx-auto w-full">

@@ -42,16 +42,16 @@ export function AuthShell({ children }: { children: ReactNode }) {
   return (
     <motion.div className="relative min-h-screen flex flex-col">
       <header className="relative z-50 px-4 py-4 md:px-6">
-        <div className="glass rounded-2xl px-4 md:px-6 py-3 mx-auto max-w-lg flex items-center justify-between">
+        <div className="ttm-surface-nav ttm-surface-nav--glass mx-auto max-w-lg flex items-center justify-between px-4 md:px-6 py-3 rounded-[var(--ttm-radius-xl)]">
           <Link href="/" className="flex items-center gap-2.5">
             <Logo />
-            <span className="text-foreground/90 font-light tracking-wide text-sm">Time to Match</span>
+            <span className="text-foreground/90 font-light tracking-wide text-sm ttm-type-body">Time to Match</span>
           </Link>
           <LocationControl />
         </div>
       </header>
 
-      <main className="relative z-10 flex-1 flex items-start justify-center px-4 py-6 md:py-8 pb-4">
+      <main className="relative z-10 flex-1 flex items-start justify-center ttm-page py-6 md:py-8 pb-4">
         {children}
       </main>
     </motion.div>

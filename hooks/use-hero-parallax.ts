@@ -13,14 +13,25 @@ export function useHeroParallax(strength = 18) {
   const y = useTransform(sy, (v) => v * strength)
 
   useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+      return
+    }
+    let frame = 0
     const onMove = (e: MouseEvent) => {
-      const nx = (e.clientX / window.innerWidth - 0.5) * 2
-      const ny = (e.clientY / window.innerHeight - 0.5) * 2
-      mx.set(nx)
-      my.set(ny)
+      if (frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        const nx = (e.clientX / window.innerWidth - 0.5) * 2
+        const ny = (e.clientY / window.innerHeight - 0.5) * 2
+        mx.set(nx)
+        my.set(ny)
+      })
     }
     window.addEventListener("mousemove", onMove, { passive: true })
-    return () => window.removeEventListener("mousemove", onMove)
+    return () => {
+      window.removeEventListener("mousemove", onMove)
+      if (frame) cancelAnimationFrame(frame)
+    }
   }, [mx, my])
 
   return { x, y }

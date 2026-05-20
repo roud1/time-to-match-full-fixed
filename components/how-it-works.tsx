@@ -31,7 +31,7 @@ export function HowItWorks() {
   ]
 
   return (
-    <section id="how" className="relative py-24 px-4 overflow-hidden">
+    <section id="how" className="relative py-24 px-4 overflow-hidden bg-[#070707]">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
@@ -50,7 +50,7 @@ export function HowItWorks() {
           </span>
           <h2 className="text-3xl md:text-5xl font-extralight tracking-tight mb-4 text-balance">
             {t("howTitle")}{" "}
-            <span className="bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white/90 to-white/50 bg-clip-text text-transparent">
               {t("howTitleHighlight")}
             </span>
           </h2>
@@ -74,7 +74,7 @@ export function HowItWorks() {
               )}
 
               <div className="glass-card rounded-2xl p-6 text-center relative">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-xs font-light text-white">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full border border-white/15 bg-white/[0.06] text-xs font-extralight text-white/80">
                   {step.number}
                 </div>
 

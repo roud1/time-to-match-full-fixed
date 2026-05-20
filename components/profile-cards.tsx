@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react"
 import Image from "next/image"
 import { useI18n } from "@/lib/i18n"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { cn } from "@/lib/utils"
 
 const STATUS_KEYS = [
@@ -14,13 +15,15 @@ const STATUS_KEYS = [
 
 export function ProfileCards() {
   const { t, profileCards: profiles } = useI18n()
+  const hydrated = useHydrated()
   const reduceMotion = useReducedMotion()
+  const allowMotion = hydrated && !reduceMotion
 
   return (
     <section id="profiles" className="relative py-20 md:py-36 px-4 sm:px-6 overflow-hidden">
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,900px)] h-[500px] rounded-full bg-purple-600/10 blur-[140px] pointer-events-none"
-        animate={reduceMotion ? undefined : { scale: [1, 1.05, 1], opacity: [0.6, 0.85, 0.6] }}
+        animate={allowMotion ? { scale: [1, 1.05, 1], opacity: [0.6, 0.85, 0.6] } : undefined}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
 
@@ -72,14 +75,14 @@ export function ProfileCards() {
                     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
                   },
                 }}
-                whileHover={reduceMotion ? undefined : { y: -12, transition: { duration: 0.4 } }}
-                className={cn("group", !reduceMotion && index % 2 === 1 && "cinematic-float")}
-                style={!reduceMotion ? { animationDelay: `${index * 0.4}s` } : undefined}
+                whileHover={allowMotion ? { y: -12, transition: { duration: 0.4 } } : undefined}
+                className={cn("group", allowMotion && index % 2 === 1 && "cinematic-float")}
+                style={allowMotion ? { animationDelay: `${index * 0.4}s` } : undefined}
               >
                 <div
                   className={cn(
                     "premium-profile-card rounded-[1.85rem] overflow-hidden shadow-2xl shadow-black/50",
-                    urgent && "profile-expire-pulse"
+                    urgent && "ring-1 ring-pink-500/20"
                   )}
                 >
                   <div className="relative aspect-[3/4.15] overflow-hidden">
@@ -88,11 +91,12 @@ export function ProfileCards() {
                       alt={profile.name}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+                      loading="lazy"
                       className="object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.08]"
                     />
                     <motion.div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/20" />
                     <div className="absolute inset-0 bg-gradient-to-br from-pink-500/15 via-transparent to-purple-600/20 opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
-                    {urgent && !reduceMotion && <div className="profile-vanish-edge" aria-hidden />}
+                    {urgent && allowMotion && <div className="profile-vanish-edge" aria-hidden />}
 
                     <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2 z-10">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium text-emerald-200 bg-emerald-500/15 border border-emerald-500/30 backdrop-blur-xl">
@@ -114,22 +118,12 @@ export function ProfileCards() {
                     </div>
 
                     <div className="absolute top-14 right-3 z-10">
-                      <div
-                        className={cn(
-                          "px-2.5 py-1.5 rounded-xl glass border flex flex-col items-end",
-                          urgent ? "border-amber-500/30 bg-amber-500/10" : "border-white/10"
-                        )}
-                      >
+                      <div className="px-2.5 py-1.5 rounded-xl glass border border-white/10 flex flex-col items-end">
                         <span className="text-[9px] uppercase tracking-wider text-white/50 font-light">
-                          {t("profileExpiresIn")}
+                          {t("connectionTimerTogether")}
                         </span>
-                        <span
-                          className={cn(
-                            "text-xs font-medium tabular-nums",
-                            urgent ? "text-amber-200" : "text-pink-300"
-                          )}
-                        >
-                          {profile.timeLeft}
+                        <span className="text-xs font-medium tabular-nums text-pink-300">
+                          24:00:00
                         </span>
                       </div>
                     </div>

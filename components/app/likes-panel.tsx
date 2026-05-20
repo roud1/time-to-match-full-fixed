@@ -1,33 +1,37 @@
 "use client"
 
 import Image from "next/image"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { getLikedYouProfiles, getSocialState, likeBack } from "@/lib/social-store"
 import type { SwipeProfile } from "@/lib/demo-profiles"
+import { PresenceBadge, presenceFromProfileId } from "@/components/activity/presence-badge"
+import { MatchCelebrationScreen } from "@/components/app/match-celebration-screen"
 
-export function LikesPanel({ onMatch }: { onMatch?: () => void }) {
+export function LikesPanel() {
   const { t, locale, location } = useI18n()
   const [likes, setLikes] = useState<SwipeProfile[]>([])
-  const [flash, setFlash] = useState<string | null>(null)
+  const [matchedProfile, setMatchedProfile] = useState<SwipeProfile | null>(null)
 
-  const refresh = () => {
+  const refresh = useCallback(() => {
     const state = getSocialState(locale, location.position)
     const all = getLikedYouProfiles(locale, location.position)
     setLikes(all.filter((p) => !state.matches.includes(p.id)))
-  }
+  }, [locale, location.position])
 
   useEffect(() => {
     refresh()
-  }, [locale, location.position])
+  }, [refresh])
+
+  useEffect(() => {
+    const onSocial = () => refresh()
+    window.addEventListener("ttm-social-updated", onSocial)
+    return () => window.removeEventListener("ttm-social-updated", onSocial)
+  }, [refresh])
 
   const handleLikeBack = (profile: SwipeProfile) => {
     const matched = likeBack(profile.id, locale, location.position)
-    if (matched) {
-      setFlash(profile.name)
-      setTimeout(() => setFlash(null), 2500)
-      onMatch?.()
-    }
+    if (matched) setMatchedProfile(profile)
     refresh()
   }
 
@@ -38,11 +42,7 @@ export function LikesPanel({ onMatch }: { onMatch?: () => void }) {
         <p className="text-sm text-muted-foreground font-light mt-1">{t("likesSubtitle")}</p>
       </div>
 
-      {flash && (
-        <div className="mb-4 rounded-2xl border border-pink-500/40 bg-pink-500/15 px-4 py-3 text-center text-sm font-light text-pink-200">
-          {t("matchFlash")} {flash}!
-        </div>
-      )}
+      <MatchCelebrationScreen profile={matchedProfile} onClose={() => setMatchedProfile(null)} />
 
       {likes.length === 0 ? (
         <div className="glass-card rounded-3xl p-10 text-center">
@@ -56,12 +56,21 @@ export function LikesPanel({ onMatch }: { onMatch?: () => void }) {
               className="glass-card rounded-2xl p-3 flex items-center gap-3 border border-foreground/10"
             >
               <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                <Image src={profile.image} alt={profile.name} fill className="object-cover" unoptimized />
+                <Image src={profile.image} alt={profile.name} fill className="object-cover" sizes="72px" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-light text-foreground truncate">
-                  {profile.name}, {profile.age}
-                </p>
+                <div className="flex items-center gap-2 flex-wrap min-w-0">
+                  <p className="font-light text-foreground truncate">
+                    {profile.name}, {profile.age}
+                  </p>
+                  <PresenceBadge
+                    variant={presenceFromProfileId(profile.id)}
+                    labelOnline={t("presenceOnline")}
+                    labelRecent={t("presenceRecent")}
+                    labelToday={t("presenceToday")}
+                    className="shrink-0"
+                  />
+                </div>
                 <p className="text-xs text-muted-foreground font-light truncate">
                   {profile.location} · {profile.distance}
                 </p>

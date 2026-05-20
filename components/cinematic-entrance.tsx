@@ -20,7 +20,7 @@ export function CinematicEntrance() {
       return
     }
     setVisible(true)
-    const done = setTimeout(() => dismiss(), 2800)
+    const done = setTimeout(() => dismiss(), 1600)
     return () => clearTimeout(done)
   }, [reduceMotion])
 

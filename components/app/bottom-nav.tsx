@@ -5,8 +5,8 @@ import { usePathname, useSearchParams } from "next/navigation"
 import type { ReactNode } from "react"
 import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
-import { useI18n } from "@/lib/i18n"
-import { getUnreadLikesCount } from "@/lib/social-store"
+import { useI18n, type TranslationKey } from "@/lib/i18n"
+import { getActivityCounts } from "@/lib/activity-metrics"
 
 export type AppTab = "discover" | "likes" | "chat" | "map"
 export type BottomNavId = AppTab | "profile"
@@ -14,7 +14,7 @@ export type BottomNavId = AppTab | "profile"
 type NavItem = {
   id: BottomNavId
   href: string
-  labelKey: string
+  labelKey: TranslationKey
   icon: (active: boolean) => ReactNode
   badge?: boolean
 }
@@ -90,14 +90,17 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
   const searchParams = useSearchParams()
   const tabParam = searchParams.get("tab")
   const [likesBadge, setLikesBadge] = useState(0)
+  const [chatBadge, setChatBadge] = useState(0)
 
   useEffect(() => {
-    setLikesBadge(getUnreadLikesCount(locale, location.position))
+    const c = getActivityCounts(locale, location.position)
+    setLikesBadge(c.likesUnread)
+    setChatBadge(c.chatsUnread)
   }, [locale, location.position, pathname, tabParam])
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 px-2 sm:px-4 pb-4 pt-2 pointer-events-none">
-      <div className="premium-nav-scrolled rounded-2xl mx-auto max-w-lg flex items-stretch pointer-events-auto border border-foreground/10 shadow-xl backdrop-blur-xl">
+      <div className="premium-nav-scrolled ttm-bottom-nav-shell rounded-2xl mx-auto max-w-lg flex items-stretch pointer-events-auto border border-foreground/10 backdrop-blur-xl">
         {NAV_ITEMS.map((item) => {
           const isActive =
             activeOverride !== undefined
@@ -109,16 +112,33 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
               href={item.href}
               className={cn(
                 "flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 relative transition-all min-w-0 min-h-[52px] touch-manipulation",
-                isActive ? "text-pink-400 scale-105" : "text-muted-foreground hover:text-foreground active:scale-95"
+                item.id === "profile" && "mx-0.5 rounded-xl",
+                item.id === "profile" && isActive
+                  ? "text-pink-300 scale-105 bg-gradient-to-b from-pink-500/22 via-purple-500/12 to-transparent border border-pink-500/35 shadow-[0_0_18px_-6px_rgba(236,72,153,0.5)]"
+                  : item.id === "profile"
+                    ? "text-foreground/75 hover:text-pink-300/90 hover:bg-pink-500/8 border border-transparent hover:border-pink-500/20"
+                    : isActive
+                      ? "text-pink-400 scale-105"
+                      : "text-muted-foreground hover:text-foreground active:scale-95"
               )}
             >
               {item.icon(isActive)}
-              <span className="text-[9px] sm:text-[10px] font-light tracking-wide truncate max-w-full px-0.5">
+              <span
+                className={cn(
+                  "text-[9px] sm:text-[10px] tracking-wide truncate max-w-full px-0.5",
+                  item.id === "profile" ? "font-medium" : "font-light"
+                )}
+              >
                 {t(item.labelKey)}
               </span>
-              {item.badge && likesBadge > 0 && (
+              {item.id === "likes" && item.badge && likesBadge > 0 && (
                 <span className="absolute top-1 right-1 sm:right-2 min-w-[16px] h-4 px-1 rounded-full bg-pink-500 text-[9px] text-white flex items-center justify-center">
                   {likesBadge > 9 ? "9+" : likesBadge}
+                </span>
+              )}
+              {item.id === "chat" && chatBadge > 0 && (
+                <span className="absolute top-1 right-1 sm:right-2 min-w-[16px] h-4 px-1 rounded-full bg-sky-500 text-[9px] text-white flex items-center justify-center shadow-[0_0_12px_-2px_rgba(56,189,248,0.6)]">
+                  {chatBadge > 9 ? "9+" : chatBadge}
                 </span>
               )}
             </Link>
