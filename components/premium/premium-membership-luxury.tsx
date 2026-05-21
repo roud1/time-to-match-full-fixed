@@ -103,7 +103,7 @@ export function PremiumMembershipLuxury({
         <div className="relative p-6 md:p-8">
           <p className="text-[10px] uppercase tracking-[0.28em] text-amber-200/75 font-light mb-2">{t("premiumLuxEyebrow")}</p>
           <div className="flex flex-wrap items-end gap-3 mb-4">
-            <h2 className="text-2xl md:text-[1.75rem] font-extralight tracking-tight bg-gradient-to-r from-amber-100 via-white to-pink-100 bg-clip-text text-transparent">
+            <h2 className="text-2xl md:text-[1.75rem] font-extralight tracking-tight bg-gradient-to-r from-amber-100 via-white to-white/50 bg-clip-text text-transparent">
               {t("premiumLuxTitle")}
             </h2>
             <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/35 bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-light text-amber-100/90 ttm-premium-badge-glow">
@@ -206,7 +206,7 @@ export function PremiumMembershipLuxury({
             onClick={handleActivate}
             className={cn(
               "w-full rounded-2xl py-4 text-center text-[15px] font-light tracking-wide text-white",
-              "bg-gradient-to-r from-amber-500/95 via-pink-500 to-purple-600 shadow-[0_20px_50px_-20px_rgba(251,191,36,0.45)]",
+              "cin-btn-primary shadow-[0_20px_50px_-20px_rgba(251,191,36,0.25)]",
               "border border-amber-300/25 hover:brightness-105 active:scale-[0.99] transition-all touch-manipulation ttm-premium-cta-glow"
             )}
           >

@@ -60,7 +60,6 @@ export type ConnectionView = {
   showTimer: boolean
   bothParticipated: boolean
   /** @deprecated Use sync metrics from lib/sync-system */
-  pulseEvolution?: 0 | 1 | 2 | 3 | 4
 }
 
 export const CONNECTION_INITIAL_MS = 24 * 60 * 60 * 1000

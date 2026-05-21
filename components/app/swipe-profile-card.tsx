@@ -10,6 +10,12 @@ import { getSwipeProfilePhotos } from "@/lib/swipe-profile-photos"
 import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 import { demoPeerPresence } from "@/lib/profile-life"
+import {
+  getTimerMoodCardClass,
+  getTimerMoodFromMs,
+  parseTimeLeftToMs,
+} from "@/lib/profile-timer-mood"
+import { ProfileTimerMood } from "@/components/ui/profile-timer-mood"
 
 function useDragGuard() {
   const wasDragging = useRef(false)
@@ -75,6 +81,7 @@ export function SwipeProfileCard({
   const { t } = useI18n()
   const matchPct = demoMatchPercent(profile)
   const peerPresence = demoPeerPresence(profile.id)
+  const timerMood = getTimerMoodFromMs(parseTimeLeftToMs(profile.timeLeft))
   const photos = getSwipeProfilePhotos(profile)
   const [photoIndex, setPhotoIndex] = useState(0)
   const dragGuard = useDragGuard()
@@ -228,11 +235,21 @@ export function SwipeProfileCard({
               : t("lifePeerFading")}
         </span>
 
+        {isTop && (
+          <ProfileTimerMood
+            profileId={profile.id}
+            timeLeft={profile.timeLeft}
+            live
+            size="sm"
+            className="shrink-0"
+          />
+        )}
+
         <span
           className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] bg-black/40 border border-white/10 backdrop-blur-md shrink-0 tabular-nums"
           title={`${labels.matchWord} ${matchPct}%`}
         >
-          <span className="text-white">{matchPct}%</span>
+          <span className="text-white/80">{matchPct}%</span>
         </span>
 
         {onOpenSafety && (
@@ -243,7 +260,7 @@ export function SwipeProfileCard({
               e.stopPropagation()
               onOpenSafety()
             }}
-            className="w-7 h-7 shrink-0 ml-auto rounded-lg border border-white/12 bg-black/40 backdrop-blur-md flex items-center justify-center text-white/85 hover:text-white touch-manipulation"
+            className="w-7 h-7 shrink-0 ml-auto rounded-lg border border-white/10 bg-black/40 backdrop-blur-md flex items-center justify-center text-white/75 hover:text-white touch-manipulation"
             aria-label={labels.safetyAria}
           >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -282,7 +299,7 @@ export function SwipeProfileCard({
             <span
               className={cn(
                 "shrink-0 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wide border backdrop-blur-md",
-                "border-pink-500/30 bg-black/35 text-pink-100/90",
+                "border-white/15 bg-black/35 text-white/85/90",
                 !reduceMotion && peerPresence === "active" && "ttm-swipe-urgency-pulse"
               )}
             >
@@ -298,7 +315,7 @@ export function SwipeProfileCard({
         <div className="flex items-center gap-2 mt-2 min-w-0 overflow-hidden">
           {trust && (
             <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-white/12 bg-black/40 px-2.5 py-1 text-[10px] text-white/80 backdrop-blur-md">
-              <span className="tabular-nums text-pink-200/95">{trust.score}</span>
+              <span className="tabular-nums text-white/80/95">{trust.score}</span>
               {trust.photoVerified && (
                 <svg className="w-3.5 h-3.5 text-emerald-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
@@ -325,9 +342,8 @@ export function SwipeProfileCard({
   ) : null
 
   const shellClass = cn(
-    "rounded-[1.85rem] overflow-hidden relative w-full h-full",
-    "border border-white/[0.12] shadow-[0_24px_80px_-24px_rgba(0,0,0,0.85),0_0_0_1px_rgba(255,255,255,0.04)_inset]",
-    "bg-neutral-950/80",
+    "cin-card overflow-hidden relative w-full h-full",
+    getTimerMoodCardClass(timerMood),
     isTop && peerPresence === "active" && "ttm-swipe-card-active",
     isTop && peerPresence === "fading" && "ttm-swipe-card-fading",
     stackClass

@@ -53,7 +53,7 @@ export function VibeCloudPicker({
               className={cn(
                 "rounded-full px-3.5 py-2 text-sm font-light border transition-all duration-300 touch-manipulation",
                 on
-                  ? "border-pink-400/50 bg-gradient-to-r from-pink-500/25 to-purple-600/20 text-pink-100 shadow-[0_0_24px_-8px_rgba(236,72,153,0.45)]"
+                  ? "border-white/18 bg-gradient-to-r from-white/25 to-white/20 text-white/85 shadow-[0_0_24px_-8px_rgba(255,255,255,0.45)]"
                   : "border-white/10 bg-white/[0.04] text-foreground/75 hover:border-white/20"
               )}
               style={{ transitionDelay: reduce ? "0ms" : `${i * 15}ms` }}

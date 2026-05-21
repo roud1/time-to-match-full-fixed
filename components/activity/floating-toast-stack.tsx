@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "motion/react"
 import { useReducedMotion } from "motion/react"
-import type { ActivityToast } from "@/components/activity/activity-pulse-context"
+import type { ActivityToast } from "@/components/activity/activity-feed-context"
 import { cn } from "@/lib/utils"
 
 export function FloatingToastStack({
@@ -28,12 +28,12 @@ export function FloatingToastStack({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 420, damping: 32 }}
-            className="pointer-events-auto rounded-2xl border border-white/12 bg-black/55 backdrop-blur-2xl px-4 py-3 shadow-[0_20px_60px_-24px_rgba(236,72,153,0.45)] flex gap-3 items-start"
+            className="pointer-events-auto rounded-2xl border border-white/12 bg-black/55 backdrop-blur-2xl px-4 py-3 shadow-[0_20px_60px_-24px_rgba(255,255,255,0.45)] flex gap-3 items-start"
           >
             <span
               className={cn(
                 "mt-0.5 h-2.5 w-2.5 shrink-0 rounded-full",
-                toast.variant === "match" && "bg-pink-400 ttm-presence-glow-pink",
+                toast.variant === "match" && "bg-white/20 ttm-presence-glow-pink",
                 toast.variant === "message" && "bg-sky-400 ttm-presence-glow-sky",
                 toast.variant === "like" && "bg-amber-300 ttm-presence-glow-amber"
               )}

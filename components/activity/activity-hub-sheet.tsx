@@ -68,7 +68,7 @@ export function ActivityHubSheet({
 
               {reconnectThreads.length > 0 && (
                 <section>
-                  <h3 className="text-[10px] uppercase tracking-[0.18em] text-pink-200/80 font-light mb-2">{t("activitySectionUrgent")}</h3>
+                  <h3 className="text-[10px] uppercase tracking-[0.18em] text-white/80/80 font-light mb-2">{t("activitySectionUrgent")}</h3>
                   <ul className="space-y-2">
                     {reconnectThreads.map((th) => {
                       const p = getProfileById(th.profileId, locale, location.position)
@@ -78,16 +78,16 @@ export function ActivityHubSheet({
                           <button
                             type="button"
                             onClick={() => go(`/app?tab=chat`)}
-                            className="w-full flex items-center gap-3 rounded-2xl border border-pink-500/25 bg-pink-500/10 px-3 py-2.5 text-left touch-manipulation"
+                            className="w-full flex items-center gap-3 rounded-2xl border border-white/14 bg-white/06 px-3 py-2.5 text-left touch-manipulation"
                           >
-                            <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 ring-2 ring-pink-500/30">
+                            <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0 ring-2 ring-white/15">
                               <Image src={p.image} alt="" fill className="object-cover" sizes="40px" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-light truncate">{p.name}</p>
-                              <p className="text-[11px] text-pink-200/80 font-light">{t("activityReconnectChat")}</p>
+                              <p className="text-[11px] text-white/80/80 font-light">{t("activityReconnectChat")}</p>
                             </div>
-                            <span className="text-[10px] text-pink-300 tabular-nums shrink-0">{p.timeLeft}</span>
+                            <span className="text-[10px] text-white/75 tabular-nums shrink-0">{p.timeLeft}</span>
                           </button>
                         </li>
                       )
@@ -105,7 +105,7 @@ export function ActivityHubSheet({
                 >
                   <span className="text-sm font-light">{t("tabLikes")}</span>
                   {counts.likesUnread > 0 ? (
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-pink-500/25 text-pink-200 border border-pink-400/30">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-white/12 text-white/80 border border-white/14">
                       {counts.likesUnread > 9 ? "9+" : counts.likesUnread}
                     </span>
                   ) : (

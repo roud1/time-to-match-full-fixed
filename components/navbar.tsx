@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 
 const NAV_LINKS = [
   { href: "/#how", labelKey: "howItWorks" },
-  { href: "/profile?tab=premium", labelKey: "navPremium" },
+  { href: "/#discover", labelKey: "navDiscover" },
 ] as const
 
 export function Navbar() {
@@ -33,7 +33,7 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12)
+    const onScroll = () => setScrolled(window.scrollY > 16)
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
@@ -41,29 +41,29 @@ export function Navbar() {
 
   return (
     <motion.header
-      initial={{ opacity: 0, y: -16 }}
+      initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 px-3 py-3 md:px-6 md:py-4 transition-all duration-500",
-        scrolled && "py-2 md:py-3"
+        "fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-8 transition-all duration-700",
+        scrolled && "py-3"
       )}
     >
       <nav
         className={cn(
-          "mx-auto max-w-6xl flex items-center justify-between ttm-surface-nav px-3 py-2.5 md:px-6 md:py-3",
-          scrolled ? "ttm-surface-nav--solid nav-glow-ring" : "ttm-surface-nav--glass"
+          "mx-auto max-w-6xl flex items-center justify-between rounded-2xl px-4 py-3 md:px-6 md:py-3.5 transition-all duration-700",
+          scrolled ? "cin-nav-minimal cin-nav-minimal--scrolled" : "cin-nav-minimal"
         )}
         aria-label="Main"
       >
         <Link
           href="/"
-          className="group flex items-center gap-2.5 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500/50"
+          className="group flex items-center gap-3 rounded-lg focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/25"
         >
-          <span className="transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_12px_rgba(236,72,153,0.5)]">
+          <span className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]">
             <Logo />
           </span>
-          <span className="text-foreground/90 font-light tracking-wide text-sm hidden sm:inline">
+          <span className="text-white/80 font-light tracking-[0.12em] text-xs uppercase hidden sm:inline">
             Time to Match
           </span>
         </Link>
@@ -73,7 +73,7 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="nav-link-underline px-4 py-2 text-sm font-extralight text-muted-foreground hover:text-foreground transition-colors"
+              className="px-4 py-2 text-sm font-light text-white/45 hover:text-white/90 transition-colors duration-500"
             >
               {t(link.labelKey)}
             </Link>
@@ -83,32 +83,29 @@ export function Navbar() {
         <div className="flex items-center gap-2 md:gap-3 shrink-0">
           {loggedIn ? (
             <>
-              <Link href="/app" className="ttm-nav-pill-primary hidden md:inline-flex">
+              <Link
+                href="/app"
+                className="hidden md:inline-flex items-center min-h-[40px] px-4 rounded-full text-sm font-light text-white/90 cin-btn-ghost transition-all duration-500"
+              >
                 {t("navApp")}
               </Link>
-              <Link href="/profile" className="ttm-nav-pill-secondary">
-                <span className="ttm-nav-avatar">{(userName ?? "?").charAt(0).toUpperCase()}</span>
-                {t("navProfile")}
+              <Link
+                href="/profile"
+                className="inline-flex items-center gap-2 min-h-[40px] px-3 rounded-full text-sm font-light text-white/85 cin-glass hover:border-white/18 transition-all duration-500"
+              >
+                <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] text-white/90">
+                  {(userName ?? "?").charAt(0).toUpperCase()}
+                </span>
+                <span className="hidden sm:inline">{t("navProfile")}</span>
               </Link>
             </>
           ) : (
-            <div
-              className={cn(
-                "flex items-center gap-2",
-                isHome &&
-                  "rounded-full bg-black/35 p-1 ring-1 ring-pink-500/25 shadow-lg shadow-black/40 backdrop-blur-md"
-              )}
-            >
+            <div className="flex items-center gap-2">
               <Link
                 href="/login"
                 className={cn(
-                  "relative inline-flex items-center justify-center min-h-[44px] rounded-full px-3 sm:px-4 text-xs sm:text-sm font-light tracking-wide text-white no-underline",
-                  "bg-gradient-to-br from-[#2d243c] via-[#453059] to-[#1a1524]",
-                  "border border-white/25 shadow-md shadow-black/50",
-                  "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
-                  "hover:scale-[1.06] hover:border-pink-400/55 hover:shadow-[0_0_28px_-2px_rgba(236,72,153,0.55),0_8px_28px_-10px_rgba(0,0,0,0.45)] hover:brightness-110",
-                  "active:scale-[0.96]",
-                  isHome && "ring-1 ring-pink-400/30"
+                  "inline-flex items-center justify-center min-h-[44px] rounded-full px-4 text-sm font-light text-white/75 cin-btn-ghost transition-all duration-500 hover:text-white",
+                  isHome && "border-white/14"
                 )}
               >
                 {t("login")}
@@ -116,17 +113,11 @@ export function Navbar() {
               <Link
                 href="/register"
                 className={cn(
-                  "relative inline-flex min-h-[44px] items-center justify-center overflow-hidden rounded-full px-3 sm:px-5 text-xs sm:text-sm font-light tracking-wide text-white no-underline",
-                  "bg-gradient-to-r from-pink-500 via-fuchsia-600 to-violet-700",
-                  "border border-white/25 shadow-lg shadow-pink-500/45",
-                  "transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform",
-                  "hover:scale-[1.06] hover:shadow-[0_0_40px_-4px_rgba(236,72,153,0.65),0_0_48px_-8px_rgba(168,85,247,0.45)] hover:brightness-110",
-                  "active:scale-[0.96]",
-                  "after:pointer-events-none after:absolute after:inset-0 after:rounded-full after:bg-gradient-to-r after:from-transparent after:via-white/35 after:to-transparent after:opacity-0 after:transition-opacity after:duration-500 hover:after:opacity-100 after:content-['']",
-                  isHome && "ring-1 ring-fuchsia-400/35"
+                  "inline-flex min-h-[44px] items-center justify-center rounded-full px-5 text-sm font-light text-white cin-btn-primary transition-all duration-500",
+                  isHome && "shadow-[0_0_32px_-8px_rgba(255,255,255,0.12)]"
                 )}
               >
-                <span className="relative z-10">{t("register")}</span>
+                {t("register")}
               </Link>
             </div>
           )}

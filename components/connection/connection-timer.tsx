@@ -33,7 +33,7 @@ export function ConnectionTimer({ view, className, compact, stableLabel }: Conne
       className={cn(
         "tabular-nums font-light",
         compact ? "text-[10px]" : "text-xs",
-        view.isFading ? "text-amber-200/90" : "text-pink-200",
+        view.isFading ? "text-amber-200/90" : "text-white/80",
         view.urgency === "critical" && "ttm-connection-timer-critical",
         className
       )}

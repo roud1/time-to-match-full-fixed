@@ -74,12 +74,12 @@ export function LikesPanel() {
                 <p className="text-xs text-muted-foreground font-light truncate">
                   {profile.location} · {profile.distance}
                 </p>
-                <p className="text-xs text-pink-400/90 font-light mt-0.5">{t("likesLikedYou")}</p>
+                <p className="text-xs text-white/60/90 font-light mt-0.5">{t("likesLikedYou")}</p>
               </div>
               <button
                 type="button"
                 onClick={() => handleLikeBack(profile)}
-                className="shrink-0 w-11 h-11 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-md"
+                className="shrink-0 w-11 h-11 rounded-full bg-gradient-to-br cin-btn-primary flex items-center justify-center text-white shadow-md"
                 aria-label={t("likesLikeBack")}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

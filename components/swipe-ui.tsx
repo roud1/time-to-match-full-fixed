@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useMotionValue, useTransform, animate, PanInfo } from "motion/react"
+import { motion, useMotionValue, useTransform, animate, type PanInfo } from "motion/react"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/lib/i18n"
@@ -11,120 +11,130 @@ import {
 } from "@/lib/demo-profiles"
 import { filterProfilesForUser } from "@/lib/swipe-gender-filter"
 import { isLoggedIn } from "@/lib/user-profile"
+import {
+  getTimerMoodCardClass,
+  getTimerMoodFromMs,
+  parseTimeLeftToMs,
+} from "@/lib/profile-timer-mood"
+import { ProfileTimerMood } from "@/components/ui/profile-timer-mood"
+import { cn } from "@/lib/utils"
 
-function SwipeCard({ 
-  profile, 
-  onSwipe, 
+const STACK_VISIBLE = 3
+
+function SwipeCard({
+  profile,
+  stackIndex,
   isTop,
+  onSwipe,
   likeText,
   nopeText,
-  remainingText,
-}: { 
-  profile: {
-    id: number
-    name: string
-    age: number
-    location: string
-    distance: string
-    image: string
-    timeLeft: string
-    bio: string
-    interests: string[]
-  }
-  onSwipe: (direction: "left" | "right") => void
+}: {
+  profile: SwipeProfile
+  stackIndex: number
   isTop: boolean
+  onSwipe: (direction: "left" | "right") => void
   likeText: string
   nopeText: string
-  remainingText: string
 }) {
   const x = useMotionValue(0)
-  const rotate = useTransform(x, [-200, 200], [-15, 15])
+  const rotate = useTransform(x, [-200, 200], [-8, 8])
   const likeOpacity = useTransform(x, [0, 100], [0, 1])
   const nopeOpacity = useTransform(x, [-100, 0], [1, 0])
+  const mood = getTimerMoodFromMs(parseTimeLeftToMs(profile.timeLeft))
+  const depth = stackIndex
 
   const handleDragEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (!isTop) return
     if (info.offset.x > 100) {
-      animate(x, 300, { duration: 0.3 })
-      setTimeout(() => onSwipe("right"), 200)
+      animate(x, 280, { duration: 0.45, ease: [0.22, 1, 0.36, 1] })
+      setTimeout(() => onSwipe("right"), 220)
     } else if (info.offset.x < -100) {
-      animate(x, -300, { duration: 0.3 })
-      setTimeout(() => onSwipe("left"), 200)
+      animate(x, -280, { duration: 0.45, ease: [0.22, 1, 0.36, 1] })
+      setTimeout(() => onSwipe("left"), 220)
     } else {
-      animate(x, 0, { duration: 0.3 })
+      animate(x, 0, { duration: 0.5, ease: [0.22, 1, 0.36, 1] })
     }
+  }
+
+  const cardInner = (
+    <div className={cn("cin-card h-full relative overflow-hidden rounded-[1.75rem]", getTimerMoodCardClass(mood))}>
+      <div className="relative h-full min-h-[420px]">
+        <Image
+          src={profile.image}
+          alt={isTop ? profile.name : ""}
+          fill
+          className="object-cover object-[center_10%]"
+          draggable={false}
+          sizes="340px"
+          priority={isTop}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050506] via-[#050506]/30 to-transparent" />
+
+        {isTop && (
+          <>
+            <motion.div
+              style={{ opacity: likeOpacity }}
+              className="absolute top-10 left-5 px-3 py-1.5 rounded-lg border border-white/25 bg-black/30 backdrop-blur-md -rotate-6 z-20"
+            >
+              <span className="text-white/90 text-sm font-light tracking-[0.2em] uppercase">{likeText}</span>
+            </motion.div>
+
+            <motion.div
+              style={{ opacity: nopeOpacity }}
+              className="absolute top-10 right-5 px-3 py-1.5 rounded-lg border border-white/15 bg-black/30 backdrop-blur-md rotate-6 z-20"
+            >
+              <span className="text-white/55 text-sm font-light tracking-[0.2em] uppercase">{nopeText}</span>
+            </motion.div>
+
+            <div className="absolute top-5 left-1/2 -translate-x-1/2 z-10">
+              <ProfileTimerMood profileId={profile.id} timeLeft={profile.timeLeft} live />
+            </div>
+
+            <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
+              <h3 className="text-3xl font-extralight text-white tracking-tight">
+                {profile.name}
+                <span className="text-white/45 text-2xl">, {profile.age}</span>
+              </h3>
+              <p className="text-white/40 text-xs font-light mt-2 tracking-wide">
+                {profile.location} · {profile.distance}
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  )
+
+  if (isTop) {
+    return (
+      <motion.div
+        style={{ x, rotate, zIndex: 30 - depth }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        onDragEnd={handleDragEnd}
+        className="absolute inset-0 cursor-grab active:cursor-grabbing touch-pan-y"
+      >
+        {cardInner}
+      </motion.div>
+    )
   }
 
   return (
     <motion.div
-      style={{ x, rotate }}
-      drag={isTop ? "x" : false}
-      dragConstraints={{ left: 0, right: 0 }}
-      onDragEnd={handleDragEnd}
-      className="absolute inset-0 cursor-grab active:cursor-grabbing"
+      initial={false}
+      animate={{
+        scale: 1 - depth * 0.045,
+        y: depth * 10,
+      }}
+      transition={{ type: "spring", stiffness: 420, damping: 38 }}
+      style={{ zIndex: 20 - depth }}
+      className={cn(
+        "absolute inset-0 pointer-events-none overflow-hidden rounded-[1.75rem]",
+        depth === 1 && "ttm-swipe-stack-breathe ttm-swipe-stack-delay-a",
+        depth === 2 && "ttm-swipe-stack-breathe ttm-swipe-stack-delay-b"
+      )}
     >
-      <motion.div className="glass-card rounded-3xl overflow-hidden h-full relative">
-        <div className="relative h-full">
-          <Image
-            src={profile.image}
-            alt={profile.name}
-            fill
-            className="object-cover"
-            draggable={false}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-
-          <motion.div 
-            style={{ opacity: likeOpacity }}
-            className="absolute top-8 left-8 px-4 py-2 rounded-xl border-4 border-green-500 rotate-[-20deg]"
-          >
-            <span className="text-green-500 text-2xl font-bold tracking-wider">{likeText}</span>
-          </motion.div>
-
-          <motion.div 
-            style={{ opacity: nopeOpacity }}
-            className="absolute top-8 right-8 px-4 py-2 rounded-xl border-4 border-red-500 rotate-[20deg]"
-          >
-            <span className="text-red-500 text-2xl font-bold tracking-wider">{nopeText}</span>
-          </motion.div>
-
-          <div className="absolute top-4 left-1/2 -translate-x-1/2">
-            <div className="glass px-4 py-2 rounded-full flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-              <span className="text-sm font-light tabular-nums text-foreground/90">
-                {remainingText} {profile.timeLeft}
-              </span>
-            </div>
-          </div>
-
-          <div className="absolute bottom-0 left-0 right-0 p-6">
-            <div className="mb-4">
-              <h3 className="text-2xl font-light text-white mb-1">
-                {profile.name}, {profile.age}
-              </h3>
-              <p className="text-sm text-white/60 font-light flex items-center gap-1">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                {profile.location} · {profile.distance}
-              </p>
-            </div>
-            
-            <p className="text-white/80 font-light mb-4">{profile.bio}</p>
-            
-            <div className="flex flex-wrap gap-2">
-              {profile.interests.map((interest, i) => (
-                <span 
-                  key={i}
-                  className="px-3 py-1 rounded-full text-xs font-light bg-white/10 text-white/80"
-                >
-                  {interest}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </motion.div>
+      {cardInner}
     </motion.div>
   )
 }
@@ -132,7 +142,6 @@ function SwipeCard({
 export function SwipeUI() {
   const { t, locale, location } = useI18n()
   const demoMode = useRef(false)
-
   const [profiles, setProfiles] = useState<SwipeProfile[]>([])
 
   useEffect(() => {
@@ -140,101 +149,110 @@ export function SwipeUI() {
     setProfiles(filterProfilesForUser(buildDemoSwipeProfiles(locale, location.position)))
   }, [locale, location.position])
 
-  const handleSwipe = (direction: "left" | "right") => {
-    console.log(`Swiped ${direction}`)
+  const handleSwipe = () => {
     setProfiles((prev) => prev.slice(1))
   }
 
   const handleButtonSwipe = (direction: "left" | "right") => {
     if (profiles.length === 0) return
-    handleSwipe(direction)
+    handleSwipe()
   }
 
+  const stack = profiles.slice(0, STACK_VISIBLE)
+  const remaining = profiles.length
+
   return (
-    <section id="discover" className="relative py-24 px-4 overflow-hidden scroll-mt-24">
+    <section id="discover" className="relative py-20 md:py-32 px-5 sm:px-8 overflow-hidden scroll-mt-24">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/3 w-[500px] h-[500px] rounded-full bg-pink-500/10 blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/3 w-[400px] h-[400px] rounded-full bg-purple-600/10 blur-[100px]" />
+        <div className="absolute top-1/2 left-1/3 w-[480px] h-[480px] rounded-full bg-white/[0.03] blur-[100px]" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-14 md:mb-20"
         >
-          <h2 className="text-3xl md:text-5xl font-extralight tracking-tight mb-4 text-balance">
-            {t("swipeTitle")}
-          </h2>
-          <p className="text-muted-foreground font-light max-w-xl mx-auto">
-            {t("swipeSubtitle")}
-          </p>
+          <h2 className="ttm-cin-headline text-balance mb-5">{t("swipeTitle")}</h2>
+          <p className="ttm-cin-sub max-w-md mx-auto">{t("swipeSubtitle")}</p>
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-12">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.96 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative w-full max-w-[340px] aspect-[3/4]"
+            transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="relative w-full max-w-[min(100%,340px)] aspect-[3/4.05]"
           >
-            {profiles.length > 0 ? (
-              profiles.map((profile, index) => (
-                <SwipeCard
-                  key={`${locale}-${profile.id}`}
-                  profile={profile}
-                  onSwipe={handleSwipe}
-                  isTop={index === 0}
-                  likeText={t("like")}
-                  nopeText={t("nope")}
-                  remainingText={t("remaining")}
-                />
-              )).reverse()
-            ) : (
-              <div className="glass-card rounded-3xl h-full flex items-center justify-center">
-                <div className="text-center p-6">
-                  <motion.div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-600/20 flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                  </motion.div>
-                  <p className="text-muted-foreground font-light">
-                    {t("noMoreProfiles")}
-                  </p>
+            {stack.length > 0 ? (
+              <>
+                <div className="relative w-full h-full">
+                  {[...stack].reverse().map((profile, reversedIdx) => {
+                    const index = stack.length - 1 - reversedIdx
+                    return (
+                      <SwipeCard
+                        key={`${locale}-${profile.id}-${profiles.length}`}
+                        profile={profile}
+                        stackIndex={index}
+                        isTop={index === 0}
+                        onSwipe={handleSwipe}
+                        likeText={t("like")}
+                        nopeText={t("nope")}
+                      />
+                    )
+                  })}
                 </div>
+                {remaining > 1 && (
+                  <p className="mt-4 text-center text-[10px] uppercase tracking-[0.2em] text-white/35 font-extralight">
+                    {t("remaining")} {remaining - 1}+
+                  </p>
+                )}
+              </>
+            ) : (
+              <div className="cin-card h-full flex items-center justify-center min-h-[420px] rounded-[1.75rem]">
+                <p className="ttm-cin-sub text-center px-6">{t("noMoreProfiles")}</p>
               </div>
             )}
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 16 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.85, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="flex lg:flex-col gap-4"
           >
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               onClick={() => handleButtonSwipe("left")}
-              className="w-16 h-16 rounded-full glass flex items-center justify-center text-red-400 hover:bg-red-500/10 transition-colors"
+              className="w-14 h-14 rounded-full cin-glass flex items-center justify-center text-white/50 hover:text-white/80 transition-colors duration-500"
+              aria-label={t("nope")}
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </motion.button>
 
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               onClick={() => handleButtonSwipe("right")}
-              className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/25"
+              className="w-16 h-16 rounded-full cin-btn-primary flex items-center justify-center text-white"
+              aria-label={t("like")}
             >
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
               </svg>
             </motion.button>
           </motion.div>

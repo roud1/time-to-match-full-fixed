@@ -91,7 +91,7 @@ export function ChatMessageBubble({
         {!isMe && (
           <motion.span
             aria-hidden
-            className="shrink-0 text-pink-300/80"
+            className="shrink-0 text-white/75"
             animate={{ opacity: replyArmed ? 1 : 0, scale: replyArmed ? 1 : 0.85 }}
             transition={{ duration: 0.12 }}
           >
@@ -121,7 +121,7 @@ export function ChatMessageBubble({
           className={cn(
             "relative px-3.5 py-2.5 rounded-[1.35rem] text-[15px] leading-snug font-light tracking-wide shadow-lg touch-pan-y cursor-grab active:cursor-grabbing",
             isMe
-              ? "rounded-br-md text-white border border-white/10 bg-gradient-to-br from-pink-500/95 via-pink-600/90 to-purple-700/95 shadow-[0_16px_48px_-16px_rgba(236,72,153,0.55)]"
+              ? "rounded-br-md text-white border border-white/10 cin-bubble-me"
               : "rounded-bl-md border border-white/12 bg-white/[0.07] backdrop-blur-2xl text-foreground/95 shadow-[0_12px_40px_-24px_rgba(0,0,0,0.85)]"
           )}
         >
@@ -136,7 +136,7 @@ export function ChatMessageBubble({
         {isMe && (
           <motion.span
             aria-hidden
-            className="shrink-0 text-pink-300/80"
+            className="shrink-0 text-white/75"
             animate={{ opacity: replyArmed ? 1 : 0, scale: replyArmed ? 1 : 0.85 }}
             transition={{ duration: 0.12 }}
           >

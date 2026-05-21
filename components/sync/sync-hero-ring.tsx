@@ -35,7 +35,7 @@ export function SyncHeroRing({ className }: { className?: string }) {
         <span className="sync-ring__halo" aria-hidden />
         <span className="sync-ring__track" aria-hidden />
         <span className="sync-ring__pulse" aria-hidden />
-        <div className="sync-ring__inner flex h-full w-full items-center justify-center rounded-full bg-[#070707]">
+        <div className="sync-ring__inner flex h-full w-full items-center justify-center rounded-full bg-[#050506]">
           <div
             className="w-[72%] h-[72%] rounded-full border border-white/[0.08]"
             style={{

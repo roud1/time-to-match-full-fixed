@@ -34,7 +34,7 @@ export function ProfileTabs({ active, onChange, premiumActive }: ProfileTabsProp
             )}
           >
             {isActive && (
-              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-pink-500/20 to-purple-600/20 border border-pink-500/20" />
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/20 to-white/20 border border-white/12" />
             )}
             <span className="relative flex items-center justify-center gap-1.5">
               {tab.id === "premium" && (

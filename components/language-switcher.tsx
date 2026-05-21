@@ -62,7 +62,7 @@ export function LanguageSwitcher() {
                   }}
                   className={`w-full px-4 py-2 text-sm font-light text-left transition-colors ${
                     locale === loc
-                      ? "text-pink-400 bg-pink-500/10"
+                      ? "text-white/60 bg-white/06"
                       : "text-foreground/70 hover:text-foreground hover:bg-foreground/5"
                   }`}
                 >

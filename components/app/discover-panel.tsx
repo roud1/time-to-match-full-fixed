@@ -27,7 +27,7 @@ function DiscoverContextStrip({
   return (
     <div className="shrink-0 w-full text-left pb-2 sm:pb-3 border-b border-white/[0.06] mb-2 sm:mb-3">
       <div className="flex items-center justify-between gap-2 min-h-[1.75rem]">
-        <h1 className="text-base sm:text-lg font-extralight tracking-tight bg-gradient-to-r from-white via-pink-100 to-purple-200 bg-clip-text text-transparent truncate">
+        <h1 className="text-base sm:text-lg font-extralight tracking-tight bg-gradient-to-r from-white via-white/70 to-white/40 bg-clip-text text-transparent truncate">
           {t("tabDiscover")}
         </h1>
         {premium ? (
@@ -52,7 +52,7 @@ function DiscoverContextStrip({
       <p className="mt-1 text-[10px] sm:text-[11px] text-muted-foreground font-light leading-snug line-clamp-1">
         {t("swipeSubtitle")}
       </p>
-      <p className="mt-0.5 text-[9px] sm:text-[10px] text-pink-100/75 font-light leading-snug line-clamp-1">
+      <p className="mt-0.5 text-[9px] sm:text-[10px] text-white/85/75 font-light leading-snug line-clamp-1">
         {t("swipeUrgencyStrip")}
       </p>
     </div>

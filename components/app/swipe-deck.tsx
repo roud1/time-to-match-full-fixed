@@ -235,8 +235,8 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         aria-label={t("like")}
         className={cn(
           "h-[58px] w-[58px] sm:h-[64px] sm:w-[64px] rounded-full flex items-center justify-center touch-manipulation text-white",
-          "bg-gradient-to-br from-pink-500 via-pink-600 to-purple-700 border border-pink-300/30",
-          "shadow-[0_16px_48px_-8px_rgba(236,72,153,0.55)] active:scale-95 transition-transform",
+          "bg-gradient-to-br cin-action-like border border-white/14",
+          "shadow-[0_16px_48px_-8px_rgba(255,255,255,0.55)] active:scale-95 transition-transform",
           !current && "opacity-40 pointer-events-none"
         )}
       >
@@ -249,18 +249,18 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
 
   const cardShellClass = cn(
     "relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.05] max-h-full rounded-[2rem] overflow-hidden",
-    "bg-gradient-to-b from-pink-500/[0.07] via-transparent to-violet-600/[0.06]",
+    "bg-gradient-to-b from-white/[0.07] via-transparent to-white/[0.06]",
     "ring-1 ring-white/[0.06] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]"
   )
 
   const cardColumn = (
     <div className={cn(centered ? "col-start-2 row-start-1 justify-self-center self-center max-h-full" : "flex-1 min-w-0 flex flex-col min-h-0 items-center justify-center max-h-full")}>
       <div className={cn(!centered && "flex-1 flex items-center justify-center max-h-full", cardShellClass)}>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(236,72,153,0.18),transparent)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(255,255,255,0.18),transparent)]" />
         <CinematicParticles count={8} className="opacity-55" />
         {superRipple && (
           <motion.div
-            className="pointer-events-none absolute inset-0 z-[25] rounded-[2rem] bg-gradient-to-br from-amber-400/25 via-transparent to-pink-500/20"
+            className="pointer-events-none absolute inset-0 z-[25] rounded-[2rem] bg-gradient-to-br from-amber-400/20 via-transparent to-white/08"
             initial={{ opacity: 0 }}
             animate={{ opacity: [0, 1, 0] }}
             transition={{ duration: 0.55 }}

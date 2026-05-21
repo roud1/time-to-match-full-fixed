@@ -73,7 +73,7 @@ export function ProfilePhotoPicker({
             >
               <Image src={url} alt="" fill className="object-cover" sizes="(max-width: 640px) 33vw, 200px" unoptimized />
               {index === 0 && (
-                <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-light bg-pink-500/90 text-white">
+                <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-light bg-white/20 text-white">
                   {t("profilePhotoPrimary")}
                 </span>
               )}
@@ -108,7 +108,7 @@ export function ProfilePhotoPicker({
           "block cursor-pointer rounded-2xl border border-dashed border-foreground/15 p-5 text-center transition-colors",
           atMax
             ? "opacity-40 cursor-not-allowed"
-            : "hover:border-pink-500/30 hover:bg-pink-500/5"
+            : "hover:border-white/15 hover:bg-white/5"
         )}
       >
         <input

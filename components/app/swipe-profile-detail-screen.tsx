@@ -68,7 +68,7 @@ export function SwipeProfileDetailScreen({
           exit={{ opacity: 0 }}
           transition={{ duration: reduce ? 0.12 : 0.28 }}
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(236,72,153,0.2),transparent_60%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(255,255,255,0.2),transparent_60%)]" />
 
           <div className="relative z-[1] flex flex-1 flex-col min-h-0 pt-[max(0.75rem,env(safe-area-inset-top))] pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <div className="shrink-0 flex items-center justify-between gap-3 px-4 py-2">
@@ -213,7 +213,7 @@ export function SwipeProfileDetailScreen({
                   onLike()
                 }}
                 aria-label={t("like")}
-                className="h-16 w-16 rounded-full flex items-center justify-center touch-manipulation text-white bg-gradient-to-br from-pink-500 via-pink-600 to-purple-700 border border-pink-300/30 shadow-[0_16px_48px_-8px_rgba(236,72,153,0.55)]"
+                className="h-16 w-16 rounded-full flex items-center justify-center touch-manipulation text-white bg-gradient-to-br cin-action-like border border-white/14 shadow-[0_16px_48px_-8px_rgba(255,255,255,0.55)]"
               >
                 <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />

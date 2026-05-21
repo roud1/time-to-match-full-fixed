@@ -31,7 +31,7 @@ export function LocationControl() {
     >
       <svg
         className={`w-3.5 h-3.5 shrink-0 ${
-          location.status === "loading" ? "animate-pulse text-pink-400" : "text-pink-400"
+          location.status === "loading" ? "animate-pulse text-white/60" : "text-white/60"
         }`}
         fill="none"
         stroke="currentColor"
@@ -75,7 +75,7 @@ export function LocationBanner() {
         <button
           type="button"
           onClick={location.requestLocation}
-          className="shrink-0 px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-light whitespace-nowrap"
+          className="shrink-0 px-3 py-1.5 rounded-full bg-gradient-to-r cin-btn-primary text-white text-xs font-light whitespace-nowrap"
         >
           {t("locationEnable")}
         </button>

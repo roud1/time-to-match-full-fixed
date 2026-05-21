@@ -82,7 +82,7 @@ export function SafetyHubDialog({
         showCloseButton
         className="max-w-[min(100%-1.5rem,420px)] rounded-[1.35rem] border border-white/12 bg-[#0a0a10]/95 backdrop-blur-2xl shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)] gap-0 p-0 overflow-hidden"
       >
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-pink-500/40 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
         <AnimatePresence mode="wait">
           <motion.div
             key={view}
@@ -110,7 +110,7 @@ export function SafetyHubDialog({
                   <button
                     type="button"
                     onClick={() => setView("report")}
-                    className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-left text-sm font-light hover:bg-white/[0.07] hover:border-pink-500/25 transition-colors touch-manipulation"
+                    className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-left text-sm font-light hover:bg-white/[0.07] hover:border-white/14 transition-colors touch-manipulation"
                   >
                     <span className="block text-foreground/95">{t("trustActionReport")}</span>
                     <span className="block text-xs text-muted-foreground mt-0.5">{t("trustActionReportHint")}</span>
@@ -152,7 +152,7 @@ export function SafetyHubDialog({
                       className={cn(
                         "rounded-xl border px-3 py-2.5 text-left text-sm font-light transition-colors touch-manipulation",
                         reason === key
-                          ? "border-pink-500/45 bg-pink-500/15 text-pink-50"
+                          ? "border-white/20 bg-white/08 text-white/90"
                           : "border-white/10 bg-white/[0.03] text-foreground/90 hover:border-white/18"
                       )}
                     >

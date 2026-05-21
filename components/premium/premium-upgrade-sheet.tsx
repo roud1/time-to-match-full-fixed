@@ -60,7 +60,7 @@ export function PremiumUpgradeSheet() {
     >
       <SheetContent
         side="bottom"
-        className="z-[90] max-h-[min(92dvh,720px)] rounded-t-[1.85rem] border border-amber-500/20 border-b-0 bg-[#07060c]/98 backdrop-blur-2xl p-0 shadow-[0_-40px_120px_-30px_rgba(0,0,0,0.85)] overflow-hidden"
+        className="z-[90] max-h-[min(92dvh,720px)] rounded-t-[1.85rem] border border-amber-500/20 border-b-0 bg-[#050506]/98 backdrop-blur-2xl p-0 shadow-[0_-40px_120px_-30px_rgba(0,0,0,0.85)] overflow-hidden"
       >
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent pointer-events-none" />
         <div className="mx-auto w-12 h-1 rounded-full bg-white/15 mt-3 mb-1 shrink-0" aria-hidden />

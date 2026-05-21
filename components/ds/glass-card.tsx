@@ -19,7 +19,10 @@ export function GlassCard({ children, className, hover = true, onClick }: GlassC
     <Comp
       type={onClick ? "button" : undefined}
       onClick={onClick}
-      className={cn("pulse-glass pulse-feature-card text-left w-full", className)}
+      className={cn(
+        "rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl text-left w-full",
+        className
+      )}
       whileHover={
         hover && !reduce
           ? { y: -2, boxShadow: "0 0 48px -12px rgba(221,230,255,0.12)" }

@@ -54,11 +54,11 @@ export function LiveActivityFeed({ appearDelayMs = 1200 }: LiveActivityFeedProps
           animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
           exit={{ opacity: 0, x: 8, filter: "blur(4px)" }}
           transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="premium-nav-scrolled rounded-2xl px-4 py-3 border border-pink-500/20 shadow-lg shadow-pink-500/10 flex items-center gap-3"
+          className="cin-nav-minimal rounded-2xl px-4 py-3 flex items-center gap-3"
         >
           <span className="relative flex h-2.5 w-2.5 shrink-0">
-            <span className="live-dot-pulse absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-50" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-pink-500" />
+            <span className="live-dot-pulse absolute inline-flex h-full w-full rounded-full bg-white/20 opacity-50" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white/18" />
           </span>
           <p className="text-xs font-light text-foreground/90 leading-snug">{t(key)}</p>
         </motion.div>

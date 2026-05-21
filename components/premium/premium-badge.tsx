@@ -8,7 +8,7 @@ export function PremiumBadgeLink({ label, href }: { label: string; href: string 
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-gradient-to-r from-amber-500/18 to-pink-500/12",
+        "inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-gradient-to-r from-amber-500/18 to-white/06",
         "min-h-11 px-4 py-2 text-sm font-light tracking-wide text-amber-100/95 shadow-sm ttm-premium-badge-glow",
         "hover:border-amber-400/55 hover:from-amber-500/25 active:scale-[0.98] transition-all touch-manipulation"
       )}

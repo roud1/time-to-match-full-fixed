@@ -79,7 +79,7 @@ export function ProfileLifePresence({ life, onRevive, compact }: ProfileLifePres
             <button
               type="button"
               onClick={onRevive}
-              className="mt-3 w-full sm:w-auto rounded-2xl border border-pink-500/30 bg-pink-500/10 px-4 py-2.5 text-sm font-light text-pink-100/95 hover:bg-pink-500/15 transition-colors touch-manipulation"
+              className="mt-3 w-full sm:w-auto rounded-2xl border border-white/15 bg-white/06 px-4 py-2.5 text-sm font-light text-white/85/95 hover:bg-white/08 transition-colors touch-manipulation"
             >
               {t("lifeReviveCta")}
             </button>
@@ -124,7 +124,7 @@ export function ProfileLifeDiscoverGate({
       <button
         type="button"
         onClick={onRevive}
-        className="mt-6 rounded-2xl border border-pink-500/35 bg-gradient-to-r from-pink-500/15 to-violet-500/10 px-6 py-3 text-sm font-light text-pink-50 touch-manipulation hover:border-pink-400/45 transition-colors"
+        className="mt-6 rounded-2xl border border-white/16 bg-gradient-to-r from-white/08 to-white/10 px-6 py-3 text-sm font-light text-white/90 touch-manipulation hover:border-white/18 transition-colors"
       >
         {t("lifeReviveCta")}
       </button>

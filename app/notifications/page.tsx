@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 
 const DEMO = [
-  { icon: Heart, title: "Новый матч", body: "Аня откликнулась на ваш Pulse", time: "2 мин" },
+  { icon: Heart, title: "Новый матч", body: "Аня — взаимная симпатия, связь растёт", time: "2 мин" },
   { icon: MessageCircle, title: "Сообщение", body: "«Привет! Как настроение?»", time: "12 мин" },
-  { icon: Zap, title: "Pulse +6", body: "Активность в чате повысила уровень", time: "1 ч" },
+  { icon: Zap, title: "Sync +6", body: "Активность в чате усилила синхронизацию", time: "1 ч" },
   { icon: Bell, title: "Таймер", body: "До исчезновения анкеты осталось 18 часов", time: "3 ч" },
 ]
 
@@ -27,7 +27,7 @@ export default function NotificationsPage() {
   ]
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-[#050506]">
       <Navbar />
       <div className="max-w-xl mx-auto px-6 pt-28 pb-20">
         <h1 className="ttm-h1 mb-8">{t("notificationsTitle")}</h1>

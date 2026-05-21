@@ -10,7 +10,7 @@ import { LikesPanel } from "@/components/app/likes-panel"
 import { ChatPanel } from "@/components/app/chat-panel"
 import { MapPanel } from "@/components/app/map-panel"
 import { Logo } from "@/components/logo"
-import { ActivityPulseProvider } from "@/components/activity/activity-pulse-context"
+import { ActivityFeedProvider } from "@/components/activity/activity-feed-context"
 import { ActivityAppChrome } from "@/components/activity/activity-app-chrome"
 import { PremiumUpgradeProvider } from "@/components/premium/premium-upgrade-context"
 import { ConnectionExtensionToastStack } from "@/components/connection/connection-extension-toast"
@@ -81,11 +81,11 @@ export function AppShell() {
   const immersiveLayout = tab === "discover" || chatThreadOpen
 
   return (
-    <ActivityPulseProvider>
+    <ActivityFeedProvider>
       <PremiumUpgradeProvider>
         <div
           className={cn(
-            "min-h-screen",
+            "min-h-screen bg-[#050506]",
             immersiveLayout && "h-dvh overflow-hidden flex flex-col",
             tab === "discover" && "pb-[5.5rem]",
             !immersiveLayout && "pb-24"
@@ -96,8 +96,8 @@ export function AppShell() {
           className={cn(
             "sticky top-0 z-40 ttm-page py-3 transition-all duration-500",
             scrolled
-              ? "premium-nav-scrolled ttm-surface-nav--solid border-b border-foreground/10 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.5)]"
-              : "glass border-b border-foreground/5"
+              ? "premium-nav-scrolled cin-nav-minimal--scrolled border-b border-white/[0.08]"
+              : "cin-nav-minimal border-b border-white/[0.05]"
           )}
         >
         <div
@@ -108,7 +108,7 @@ export function AppShell() {
         >
           <Link href="/" className="flex items-center gap-2 group min-w-0">
             <Logo size="sm" />
-            <span className="text-sm font-light text-foreground/90 hidden sm:inline group-hover:text-pink-300 transition-colors truncate">
+            <span className="text-sm font-light text-foreground/90 hidden sm:inline group-hover:text-white/75 transition-colors truncate">
               Time to Match
             </span>
           </Link>
@@ -141,6 +141,6 @@ export function AppShell() {
         <ConnectionExtensionToastStack />
         <PremiumUpgradeSheet />
       </PremiumUpgradeProvider>
-    </ActivityPulseProvider>
+    </ActivityFeedProvider>
   )
 }

@@ -227,7 +227,7 @@ export function ProfileScreen() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="mb-4 rounded-2xl border border-pink-500/35 bg-gradient-to-r from-pink-500/15 to-purple-600/10 px-4 py-3 text-center text-sm font-light text-pink-200 shadow-[0_12px_40px_-20px_rgba(236,72,153,0.35)]"
+            className="mb-4 rounded-2xl border border-white/16 bg-gradient-to-r from-white/08 to-white/10 px-4 py-3 text-center text-sm font-light text-white/80 shadow-[0_12px_40px_-20px_rgba(255,255,255,0.35)]"
           >
             {t("profileSaved")}
           </motion.div>
@@ -245,7 +245,7 @@ export function ProfileScreen() {
       ) : (
         <>
           <div className="relative rounded-[1.85rem] overflow-hidden mb-5 border border-white/10 shadow-[0_32px_100px_-40px_rgba(0,0,0,0.85)]">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_0%,rgba(236,72,153,0.15),transparent_55%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_0%,rgba(255,255,255,0.15),transparent_55%)] pointer-events-none" />
             <CinematicParticles count={8} className="opacity-40 pointer-events-none" />
             <div className="relative p-4 md:p-5">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -267,12 +267,12 @@ export function ProfileScreen() {
               <ProfilePhotoGallery photos={photos} name={profile.name} className="mb-5 rounded-2xl overflow-hidden ring-1 ring-white/10" />
 
               <div className="text-center space-y-2 mb-5">
-                <h1 className="text-3xl md:text-[2.1rem] font-extralight tracking-tight bg-gradient-to-r from-white via-pink-100 to-purple-200 bg-clip-text text-transparent">
+                <h1 className="text-3xl md:text-[2.1rem] font-extralight tracking-tight bg-gradient-to-r from-white via-white/70 to-white/40 bg-clip-text text-transparent">
                   {profile.name}
                   {age != null && <span className="text-white/45 font-light">, {age}</span>}
                 </h1>
                 <p className="text-sm text-white/55 font-light flex items-center justify-center gap-2">
-                  <svg className="w-4 h-4 text-pink-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <svg className="w-4 h-4 text-white/60 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -283,11 +283,11 @@ export function ProfileScreen() {
               <div className="rounded-2xl border border-white/10 bg-black/30 backdrop-blur-xl p-4 mb-2">
                 <div className="flex justify-between items-end gap-3 mb-2">
                   <p className="text-[10px] uppercase tracking-[0.2em] text-white/45 font-light">{t("profileStrengthLabel")}</p>
-                  <p className="text-xs text-pink-200/90 font-light">{t(hintKey)}</p>
+                  <p className="text-xs text-white/80/90 font-light">{t(hintKey)}</p>
                 </div>
                 <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                   <motion.div
-                    className="h-full rounded-full bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-500"
+                    className="h-full rounded-full bg-gradient-to-r cin-progress"
                     initial={false}
                     animate={{ width: `${strength}%` }}
                     transition={{ type: "spring", stiffness: 120, damping: 20 }}
@@ -313,7 +313,7 @@ export function ProfileScreen() {
           {!editing && (
             <div className="space-y-4 mb-5">
               <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.04] backdrop-blur-2xl p-5">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-pink-200/70 font-light mb-3">{t("profileSectionIdentity")}</p>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-white/80/70 font-light mb-3">{t("profileSectionIdentity")}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {(profile.vibeIds ?? []).length === 0 ? (
                     <p className="text-xs text-muted-foreground font-light">—</p>
@@ -321,7 +321,7 @@ export function ProfileScreen() {
                     profile.vibeIds!.map((id) => (
                       <span
                         key={id}
-                        className="px-3 py-1.5 rounded-full text-xs font-light border border-pink-500/25 bg-pink-500/10 text-pink-100"
+                        className="px-3 py-1.5 rounded-full text-xs font-light border border-white/14 bg-white/06 text-white/85"
                       >
                         {getVibeLabel(id, locale)}
                       </span>
@@ -394,7 +394,7 @@ export function ProfileScreen() {
                   type="button"
                   whileTap={reduce ? undefined : { scale: 0.97 }}
                   onClick={() => setEditing(true)}
-                  className="shrink-0 px-4 py-2.5 rounded-full border border-pink-500/30 bg-pink-500/10 text-sm font-light text-pink-100 hover:bg-pink-500/15 transition-colors touch-manipulation"
+                  className="shrink-0 px-4 py-2.5 rounded-full border border-white/15 bg-white/06 text-sm font-light text-white/85 hover:bg-white/08 transition-colors touch-manipulation"
                 >
                   {t("profileEdit")}
                 </motion.button>
@@ -536,7 +536,7 @@ export function ProfileScreen() {
                     type="button"
                     onClick={handleSave}
                     disabled={saveDisabled}
-                    className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-light disabled:opacity-40 transition-opacity touch-manipulation shadow-[0_16px_40px_-16px_rgba(236,72,153,0.5)]"
+                    className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r cin-btn-primary text-white font-light disabled:opacity-40 transition-opacity touch-manipulation shadow-[0_16px_40px_-16px_rgba(255,255,255,0.5)]"
                   >
                     {t("profileSave")}
                   </button>

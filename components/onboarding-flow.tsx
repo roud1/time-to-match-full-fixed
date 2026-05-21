@@ -29,11 +29,11 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
     <div
       className={cn(
         "relative w-full max-w-lg mx-auto overflow-hidden rounded-[1.75rem]",
-        "border border-white/12 bg-black/35 backdrop-blur-xl shadow-[0_32px_100px_-36px_rgba(236,72,153,0.35)]",
+        "border border-white/12 bg-black/35 backdrop-blur-xl shadow-[0_32px_100px_-36px_rgba(255,255,255,0.35)]",
         className
       )}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_-10%,rgba(236,72,153,0.22),transparent_55%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_55%_at_50%_-10%,rgba(255,255,255,0.22),transparent_55%)]" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-violet-600/[0.08] via-transparent to-transparent" />
       <CinematicParticles count={10} className="opacity-50" />
 
@@ -42,7 +42,7 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
           {SLIDE_KEYS.map((_, i) => (
             <div key={i} className="flex-1 h-1 rounded-full bg-white/[0.08] overflow-hidden">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-500"
+                className="h-full rounded-full bg-gradient-to-r cin-progress"
                 initial={false}
                 animate={{ width: i <= step ? "100%" : "0%" }}
                 transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -61,7 +61,7 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
             className="flex-1 flex flex-col items-center text-center"
           >
             <motion.span
-              className="text-[10px] uppercase tracking-[0.35em] text-pink-200/75 font-light mb-5"
+              className="text-[10px] uppercase tracking-[0.35em] text-white/80/75 font-light mb-5"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.05 }}

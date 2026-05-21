@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import type { SyncMetrics } from "@/lib/sync-system"
 import { isPulseProfile } from "@/lib/pulse-companion"
+import { PulseAvatar } from "@/components/chat/pulse-avatar"
 import { SyncRing } from "@/components/sync/sync-ring"
 import { cn } from "@/lib/utils"
 
@@ -14,6 +15,7 @@ type ChatProfileAvatarProps = {
   size?: "sm" | "md"
   showOnline?: boolean
   syncMetrics?: SyncMetrics | null
+  aiBoost?: boolean
   className?: string
 }
 
@@ -32,11 +34,26 @@ export function ChatProfileAvatar({
   size = "md",
   showOnline = true,
   syncMetrics = null,
+  aiBoost = false,
   className,
 }: ChatProfileAvatarProps) {
   const px = SIZE_PX[size]
   const [failed, setFailed] = useState(false)
   const isPulse = profileId != null && isPulseProfile(profileId)
+
+  if (isPulse) {
+    return (
+      <div className={cn("relative shrink-0", SIZE_CLASS[size], className)}>
+        <PulseAvatar size={size} />
+        {showOnline && (
+          <span
+            className="absolute -bottom-0.5 -right-0.5 z-10 h-3.5 w-3.5 rounded-full border-2 border-[#050506] bg-violet-400/90 shadow-[0_0_8px_rgba(167,139,250,0.55)]"
+            aria-hidden
+          />
+        )}
+      </div>
+    )
+  }
 
   const avatar = (
     <div className="relative h-full w-full overflow-hidden rounded-full bg-[#0c0c0c]">
@@ -54,23 +71,10 @@ export function ChatProfileAvatar({
           width={px}
           height={px}
           unoptimized
-          className={cn(
-            "h-full w-full object-cover",
-            isPulse && "object-[center_18%]"
-          )}
+          className="h-full w-full object-cover"
           sizes={`${px}px`}
           draggable={false}
           onError={() => setFailed(true)}
-        />
-      )}
-      {isPulse && !failed && src && (
-        <span
-          className="pointer-events-none absolute inset-0 rounded-full"
-          style={{
-            background:
-              "linear-gradient(180deg, transparent 55%, rgba(7,7,7,0.3) 100%)",
-          }}
-          aria-hidden
         />
       )}
     </div>
@@ -79,27 +83,15 @@ export function ChatProfileAvatar({
   return (
     <div className={cn("relative shrink-0", SIZE_CLASS[size], className)}>
       {syncMetrics ? (
-        <SyncRing metrics={syncMetrics} size={RING_SIZE[size]}>
+        <SyncRing metrics={syncMetrics} size={RING_SIZE[size]} aiBoost={aiBoost}>
           {avatar}
         </SyncRing>
       ) : (
-        <div
-          className={cn(
-            "h-full w-full rounded-full ring-1",
-            isPulse ? "ring-white/20" : "ring-white/15"
-          )}
-        >
-          {avatar}
-        </div>
+        <div className="h-full w-full rounded-full ring-1 ring-white/15">{avatar}</div>
       )}
       {showOnline && (
         <span
-          className={cn(
-            "absolute -bottom-0.5 -right-0.5 z-10 h-3.5 w-3.5 rounded-full border-2 border-[#070707]",
-            isPulse
-              ? "bg-violet-400/90 shadow-[0_0_8px_rgba(167,139,250,0.55)]"
-              : "bg-emerald-400/90 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
-          )}
+          className="absolute -bottom-0.5 -right-0.5 z-10 h-3.5 w-3.5 rounded-full border-2 border-[#050506] bg-emerald-400/90 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
           aria-hidden
         />
       )}

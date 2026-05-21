@@ -33,7 +33,7 @@ export function ProfileVoiceIntro({
     <div className="rounded-[1.35rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent backdrop-blur-2xl p-4 md:p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.85)]">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.22em] text-pink-200/80 font-light mb-1">{voiceHint}</p>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-white/80/80 font-light mb-1">{voiceHint}</p>
           <h3 className="text-lg font-extralight text-foreground/95">{title}</h3>
           <p className="text-xs text-muted-foreground font-light mt-1 leading-relaxed">{subtitle}</p>
         </div>
@@ -49,7 +49,7 @@ export function ProfileVoiceIntro({
           type="button"
           whileTap={reduce ? undefined : { scale: 0.98 }}
           onClick={() => onRecordedChange(true)}
-          className="mt-4 w-full py-3 rounded-2xl border border-pink-500/30 bg-pink-500/10 text-sm font-light text-pink-100 hover:bg-pink-500/15 touch-manipulation transition-colors"
+          className="mt-4 w-full py-3 rounded-2xl border border-white/15 bg-white/06 text-sm font-light text-white/85 hover:bg-white/08 touch-manipulation transition-colors"
         >
           {markReady}
         </motion.button>

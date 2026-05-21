@@ -80,9 +80,9 @@ export function ConnectionExtensionToastStack() {
             exit={reduce ? undefined : { opacity: 0, y: -8, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 420, damping: 32 }}
             className={cn(
-              "pointer-events-auto rounded-2xl border border-pink-400/30 px-4 py-2.5 text-sm font-light",
-              "bg-black/75 backdrop-blur-xl shadow-[0_16px_48px_-20px_rgba(236,72,153,0.45)]",
-              "text-pink-50/95 max-w-sm text-center"
+              "pointer-events-auto rounded-2xl border border-white/14 px-4 py-2.5 text-sm font-light",
+              "bg-black/75 backdrop-blur-xl shadow-[0_16px_48px_-20px_rgba(255,255,255,0.45)]",
+              "text-white/90/95 max-w-sm text-center"
             )}
           >
             {label(item)}

@@ -1,25 +1,14 @@
 import { NextResponse } from "next/server"
-import { z } from "zod"
-import type { Locale } from "@/lib/i18n"
-import { generatePulseReply } from "@/lib/server/pulse-ai"
-import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/lib/server/http"
+import { generatePulseReply } from "@/lib/server/pulse-chat-service"
+import { jsonError, jsonOk, jsonFromZodError, withCors } from "@/lib/server/http"
 import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit"
+import { pulseChatBodySchema } from "@/lib/server/validation/pulse-chat"
+import { isOpenRouterConfigured } from "@/lib/server/openrouter"
 
 export const runtime = "nodejs"
 
-const bodySchema = z.object({
-  locale: z.enum(["ru", "uk", "en"]).default("ru"),
-  userName: z.string().min(1).max(64).optional(),
-  messages: z
-    .array(
-      z.object({
-        role: z.enum(["user", "assistant"]),
-        content: z.string().min(1).max(2000),
-      })
-    )
-    .min(1)
-    .max(40),
-})
+const RATE_MAX = 40
+const RATE_WINDOW_MS = 60 * 60 * 1000
 
 export async function OPTIONS(request: Request) {
   return withCors(request, new NextResponse(null, { status: 204 }))
@@ -27,11 +16,14 @@ export async function OPTIONS(request: Request) {
 
 export async function POST(request: Request) {
   const ip = getClientIp(request)
-  const rl = checkRateLimit(`pulse-chat:${ip}`, 40, 60 * 60 * 1000)
-  if (!rl.ok) {
+  const limit = checkRateLimit(`pulse-chat:${ip}`, RATE_MAX, RATE_WINDOW_MS)
+  if (!limit.ok) {
     return withCors(
       request,
-      jsonError(429, { error: "rate_limited", message: "Too many messages" }, { headers: { "Retry-After": String(rl.retryAfterSec) } })
+      jsonError(429, {
+        error: "rate_limited",
+        message: `Too many messages. Retry in ${limit.retryAfterSec}s.`,
+      })
     )
   }
 
@@ -42,13 +34,27 @@ export async function POST(request: Request) {
     return withCors(request, jsonError(400, { error: "invalid_json" }))
   }
 
-  const parsed = bodySchema.safeParse(body)
-  if (!parsed.success) {
-    return withCors(request, jsonFromZodError(parsed.error))
+  const preview = pulseChatBodySchema.safeParse(body)
+  if (!preview.success) {
+    return withCors(request, jsonFromZodError(preview.error))
   }
 
-  const { locale, messages, userName } = parsed.data
-  const { text, source } = await generatePulseReply(locale as Locale, messages, userName)
-
-  return withCors(request, jsonOk({ reply: text, source }))
+  try {
+    const { reply, source, configured, billingBlocked } = await generatePulseReply(body)
+    return withCors(
+      request,
+      jsonOk({
+        reply,
+        source,
+        configured: configured ?? isOpenRouterConfigured(),
+        provider: isOpenRouterConfigured() ? "openrouter" : "local",
+        billingBlocked: billingBlocked ?? false,
+      })
+    )
+  } catch (e) {
+    if (e instanceof Error && e.message === "validation_error") {
+      return withCors(request, jsonError(400, { error: "validation_error" }))
+    }
+    return withCors(request, jsonError(500, { error: "pulse_unavailable" }))
+  }
 }

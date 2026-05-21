@@ -21,7 +21,7 @@ export default function SettingsPage() {
   ]
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-[#050506]">
       <Navbar />
       <div className="ttm-dashboard pt-28">
         <nav className="ttm-dashboard-nav" aria-label="Settings">

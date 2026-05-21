@@ -16,7 +16,7 @@ export type ActivityToast = {
   body?: string
 }
 
-type ActivityPulseContextValue = {
+type ActivityFeedContextValue = {
   hubOpen: boolean
   setHubOpen: (v: boolean) => void
   toasts: ActivityToast[]
@@ -27,9 +27,9 @@ type ActivityPulseContextValue = {
   reconnectThreads: ChatThread[]
 }
 
-const ActivityPulseContext = createContext<ActivityPulseContextValue | null>(null)
+const ActivityFeedContext = createContext<ActivityFeedContextValue | null>(null)
 
-export function ActivityPulseProvider({ children }: { children: React.ReactNode }) {
+export function ActivityFeedProvider({ children }: { children: React.ReactNode }) {
   const { t, locale, location } = useI18n()
   const pathname = usePathname()
   const [hubOpen, setHubOpen] = useState(false)
@@ -150,15 +150,15 @@ export function ActivityPulseProvider({ children }: { children: React.ReactNode 
     [hubOpen, toasts, dismissToast, counts, refresh, threads, reconnectThreads]
   )
 
-  return <ActivityPulseContext.Provider value={value}>{children}</ActivityPulseContext.Provider>
+  return <ActivityFeedContext.Provider value={value}>{children}</ActivityFeedContext.Provider>
 }
 
-export function useActivityPulse() {
-  const ctx = useContext(ActivityPulseContext)
-  if (!ctx) throw new Error("useActivityPulse must be used within ActivityPulseProvider")
+export function useActivityFeed() {
+  const ctx = useContext(ActivityFeedContext)
+  if (!ctx) throw new Error("useActivityFeed must be used within ActivityFeedProvider")
   return ctx
 }
 
-export function useActivityPulseOptional() {
-  return useContext(ActivityPulseContext)
+export function useActivityFeedOptional() {
+  return useContext(ActivityFeedContext)
 }

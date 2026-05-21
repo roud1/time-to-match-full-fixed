@@ -41,14 +41,14 @@ export function OwnTrustCenter({
   const blocked = state.blockedIds
 
   return (
-    <div className="rounded-[1.35rem] border border-white/10 bg-gradient-to-br from-slate-500/[0.07] via-transparent to-pink-500/[0.06] backdrop-blur-xl p-5 mb-5 space-y-5">
+    <div className="rounded-[1.35rem] border border-white/10 bg-gradient-to-br from-slate-500/[0.07] via-transparent to-white/[0.04] backdrop-blur-xl p-5 mb-5 space-y-5">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-light mb-1">{t("trustOwnHubTitle")}</p>
           <p className="text-sm font-light text-foreground/90 leading-snug">{t("trustOwnHubSubtitle")}</p>
         </div>
-        <div className="relative shrink-0 w-16 h-16 rounded-2xl border border-pink-500/25 bg-black/30 flex items-center justify-center">
-          <span className="text-2xl font-extralight tabular-nums text-pink-100">{trustScore}</span>
+        <div className="relative shrink-0 w-16 h-16 rounded-2xl border border-white/14 bg-black/30 flex items-center justify-center">
+          <span className="text-2xl font-extralight tabular-nums text-white/85">{trustScore}</span>
           <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[9px] font-light text-muted-foreground whitespace-nowrap">
             {t("trustOwnScoreLabel")}
           </span>
@@ -108,7 +108,7 @@ export function OwnTrustCenter({
                   onClick={() => {
                     unblockProfile(id)
                   }}
-                  className="text-xs text-pink-300/90 hover:text-pink-200 touch-manipulation"
+                  className="text-xs text-white/75/90 hover:text-white/80 touch-manipulation"
                 >
                   {t("trustUnblock")}
                 </button>

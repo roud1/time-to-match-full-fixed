@@ -17,9 +17,12 @@ import { isChatPeerOnline } from "@/lib/chat-presence"
 import { buildConnectionCopy } from "@/lib/connection-copy"
 import { buildSyncCopy } from "@/lib/sync-copy"
 import { useConnectionLive } from "@/hooks/use-connection-live"
-import { deriveSyncMetrics } from "@/lib/sync-system"
 import { SyncChatHeader } from "@/components/sync/sync-chat-header"
+import { PulseChatHeader } from "@/components/chat/pulse-chat-header"
+import { AnimatedConnectionBackground } from "@/components/sync/animated-connection-background"
 import { SyncAmbientField } from "@/components/sync/sync-ambient-field"
+import { isPulseProfile } from "@/lib/pulse-companion"
+import { useConnectionAnalysis } from "@/hooks/use-connection-analysis"
 import { hasUnreadThread } from "@/lib/chat-thread-seen"
 import { SafetyHubDialog } from "@/components/trust/safety-hub-dialog"
 import { cn } from "@/lib/utils"
@@ -32,8 +35,8 @@ type ChatRoomScreenProps = {
   onDraftChange: (v: string) => void
   onSend: () => void
   composerMuted?: boolean
+  isPulseGuide?: boolean
   forceTyping?: boolean
-  isAiCompanion?: boolean
   labels: {
     back: string
     typing: string
@@ -71,13 +74,14 @@ export function ChatRoomScreen({
   onDraftChange,
   onSend,
   composerMuted = false,
+  isPulseGuide = false,
   forceTyping = false,
-  isAiCompanion = false,
   labels,
 }: ChatRoomScreenProps) {
   const { locale, t } = useI18n()
   const reduce = useReducedMotion()
-  const [typing, setTyping] = useState(true)
+  const pulseModeEarly = isPulseGuide || isPulseProfile(profile.id)
+  const [typing, setTyping] = useState(!pulseModeEarly)
   const [replySnippet, setReplySnippet] = useState<string | null>(null)
   const [safetyOpen, setSafetyOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -86,15 +90,29 @@ export function ChatRoomScreen({
   const { ref: scrollRef } = useChatScrollEnd(thread.messages.length, thread.profileId)
   const trust = getPeerTrustSignals(profile.id)
   const isOnline = isChatPeerOnline(profile.id, thread)
-  const showTyping = forceTyping || (typing && isOnline)
-  const statusLine = showTyping ? labels.typing : isOnline ? labels.online : labels.lastSeen
+  const pulseMode = isPulseGuide || isPulseProfile(profile.id)
+  const showTyping = pulseMode
+    ? forceTyping
+    : forceTyping || (typing && isOnline)
+  const statusLine = showTyping
+    ? labels.typing
+    : pulseMode
+      ? labels.online
+      : isOnline
+        ? labels.online
+        : labels.lastSeen
   const connectionView = useConnectionLive(profile.id)
   const connectionCopy = buildConnectionCopy(t)
   const syncCopy = buildSyncCopy(t)
   const lastMsg = thread.messages[thread.messages.length - 1]
   const hasUnread = hasUnreadThread(thread.profileId, thread.updatedAt, lastMsg?.from === "them")
   const recentActivity = Boolean(justSent || showTyping || hasUnread)
-  const syncMetrics = deriveSyncMetrics(connectionView ?? null, { recentActivity })
+  const connectionAnalysis = useConnectionAnalysis(
+    pulseMode ? null : connectionView ?? null,
+    thread.messages,
+    { recentActivity, enableAI: !pulseMode }
+  )
+  const { metrics: syncMetrics, aiEnhanced } = connectionAnalysis
 
   useEffect(() => {
     markThreadSeen(thread.profileId, thread.updatedAt)
@@ -116,16 +134,25 @@ export function ChatRoomScreen({
   }, [justSent])
 
   useEffect(() => {
-    if (forceTyping || isAiCompanion) return
+    if (pulseMode) {
+      setTyping(false)
+      return
+    }
+    if (forceTyping) return
+    const last = thread.messages[thread.messages.length - 1]
+    if (last?.from === "them") {
+      setTyping(false)
+      return
+    }
     setTyping(true)
     const id = window.setTimeout(() => setTyping(false), 2000)
     return () => clearTimeout(id)
-  }, [thread.profileId, thread.messages.length, forceTyping, isAiCompanion])
+  }, [thread.profileId, thread.messages.length, forceTyping, pulseMode, thread.messages])
 
   return (
     <div
       className={cn(
-        "fixed inset-x-0 top-0 z-40 flex flex-col w-full bg-[#070707]",
+        "fixed inset-x-0 top-0 z-40 flex flex-col w-full bg-[#050506]",
         "bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))]",
         "pt-[env(safe-area-inset-top,0px)]"
       )}
@@ -152,7 +179,7 @@ export function ChatRoomScreen({
         }}
       />
 
-      <header className="shrink-0 z-20 flex items-center gap-2 px-3 py-2 border-b border-white/[0.08] bg-[#070707]/92 backdrop-blur-2xl">
+      <header className="shrink-0 z-20 flex items-center gap-2 px-3 py-2 border-b border-white/[0.08] bg-[#050506]/92 backdrop-blur-2xl">
         <button
           type="button"
           onClick={onBack}
@@ -166,9 +193,13 @@ export function ChatRoomScreen({
 
         <button
           type="button"
-          onClick={() => setProfileOpen(true)}
-          className="flex flex-1 min-w-0 items-center gap-3 rounded-2xl px-1 py-1 text-left touch-manipulation transition-all hover:bg-white/[0.04] active:scale-[0.99]"
-          aria-label={t("swipeProfileOpenAria")}
+          onClick={() => !pulseMode && setProfileOpen(true)}
+          disabled={pulseMode}
+          className={cn(
+            "flex flex-1 min-w-0 items-center gap-3 rounded-2xl px-1 py-1 text-left touch-manipulation transition-all",
+            !pulseMode && "hover:bg-white/[0.04] active:scale-[0.99]"
+          )}
+          aria-label={pulseMode ? profile.name : t("swipeProfileOpenAria")}
         >
           <ChatProfileAvatar
             src={profile.image}
@@ -176,12 +207,15 @@ export function ChatRoomScreen({
             profileId={profile.id}
             size="sm"
             showOnline={isOnline}
-            syncMetrics={syncMetrics}
+            syncMetrics={pulseMode ? null : syncMetrics}
+            aiBoost={aiEnhanced}
           />
           <div className="min-w-0 flex-1">
             <p className="font-extralight text-[16px] leading-tight truncate text-white/95">
               {profile.name}
-              <span className="text-white/45">, {profile.age}</span>
+              {!pulseMode && profile.age > 0 && (
+                <span className="text-white/45">, {profile.age}</span>
+              )}
             </p>
             <p
               className={cn(
@@ -198,14 +232,14 @@ export function ChatRoomScreen({
                 </span>
               )}
               <span className="truncate">{statusLine}</span>
-              {syncMetrics && (
+              {!pulseMode && syncMetrics && (
                 <span className="text-white/35 tabular-nums">· SYNC {syncMetrics.syncPercent}%</span>
               )}
             </p>
           </div>
         </button>
 
-        {!isAiCompanion && (
+        {!pulseMode && (
           <button
             type="button"
             onClick={() => setSafetyOpen(true)}
@@ -224,7 +258,9 @@ export function ChatRoomScreen({
         )}
       </header>
 
-      {connectionView ? (
+      {pulseMode ? (
+        <PulseChatHeader showTyping={showTyping} />
+      ) : connectionView ? (
         <SyncChatHeader
           view={connectionView}
           messages={thread.messages}
@@ -233,25 +269,51 @@ export function ChatRoomScreen({
           hasUnread={hasUnread}
           justSent={justSent}
           premiumStrip={labels.premiumPlusStrip}
+          analysisBundle={connectionAnalysis}
         />
       ) : (
-        <div className="shrink-0 px-4 py-3 border-b border-white/10 bg-[#070707]">
+        <div className="shrink-0 px-4 py-3 border-b border-white/10 bg-[#050506]">
           <p className="text-[10px] text-center text-white/40 font-extralight">{labels.reconnect}</p>
         </div>
       )}
 
       <div
         ref={scrollRef}
-        className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 ttm-chat-scroll relative"
+        className={cn(
+          "flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 ttm-chat-scroll relative",
+          !pulseMode && syncMetrics && "ttm-chat-emotional-space"
+        )}
         style={{ WebkitOverflowScrolling: "touch" }}
       >
-        {syncMetrics && (
-          <SyncAmbientField
-            tier={syncMetrics.tier}
-            intensity={
-              syncMetrics.isFading ? 0.2 : syncMetrics.tier === "synced" ? 0.55 : 0.35
-            }
-          />
+        {!pulseMode && syncMetrics && (
+          <>
+            <SyncAmbientField
+              tier={syncMetrics.tier}
+              intensity={
+                syncMetrics.isFading
+                  ? 0.15
+                  : aiEnhanced
+                    ? Math.min(1, 0.45 + syncMetrics.syncPercent / 200)
+                    : 0.32
+              }
+              layered
+              heartbeat={syncMetrics.syncPercent >= 50 && !syncMetrics.isFading}
+              className="z-0"
+            />
+            <AnimatedConnectionBackground
+              tier={syncMetrics.tier}
+              intensity={
+                syncMetrics.isFading
+                  ? 0.18
+                  : aiEnhanced
+                    ? Math.min(0.72, 0.35 + syncMetrics.syncPercent / 180)
+                    : syncMetrics.tier === "synced"
+                      ? 0.58
+                      : 0.38
+              }
+              emotionalGlow={!syncMetrics.isFading}
+            />
+          </>
         )}
         <div className="relative z-[1] mx-auto w-full max-w-lg pb-4 pt-2">
           <ChatMessageList
@@ -260,7 +322,7 @@ export function ChatRoomScreen({
             labels={labels.bubble}
             onReplyTo={(snippet) => setReplySnippet(snippet)}
           />
-          {showTyping && (
+          {showTyping && (pulseMode ? forceTyping : true) && (
             <div className="mt-3">
               <ChatTypingIndicator />
             </div>
@@ -273,13 +335,12 @@ export function ChatRoomScreen({
         onDraftChange={onDraftChange}
         onSend={() => {
           onSend()
-          if (!isAiCompanion) setJustSent(true)
+          setJustSent(true)
         }}
-        disabled={composerMuted || forceTyping}
         replySnippet={replySnippet}
         onClearReply={() => setReplySnippet(null)}
         voiceSeed={thread.profileId * 7919}
-        disabled={composerMuted}
+        disabled={composerMuted || forceTyping}
         disabledHint={labels.composerMutedHint}
         labels={labels.composer}
       />

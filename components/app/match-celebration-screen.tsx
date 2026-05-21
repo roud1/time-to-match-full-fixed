@@ -47,7 +47,7 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
           exit={{ opacity: 0 }}
           transition={{ duration: reduce ? 0.15 : 0.35 }}
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_0%,rgba(236,72,153,0.35),transparent_55%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_0%,rgba(255,255,255,0.35),transparent_55%)]" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_100%,rgba(139,92,246,0.22),transparent)]" />
           <CinematicParticles count={14} className="opacity-70" />
 
@@ -67,11 +67,11 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
                 transition={{ type: "spring", stiffness: 320, damping: 28, delay: 0.05 }}
                 className="relative flex items-center justify-center gap-0 mb-8"
               >
-                <div className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-[1.35rem] overflow-hidden ring-2 ring-pink-500/50 shadow-[0_24px_80px_-20px_rgba(236,72,153,0.55)] -rotate-6 z-[1]">
+                <div className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-[1.35rem] overflow-hidden ring-2 ring-white/18 shadow-[0_24px_80px_-20px_rgba(255,255,255,0.55)] -rotate-6 z-[1]">
                   {myPhoto ? (
                     <Image src={myPhoto} alt="" fill className="object-cover" sizes="128px" priority />
                   ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-pink-500/30 to-purple-700/40" />
+                    <div className="h-full w-full bg-gradient-to-br from-white/12 to-white/40" />
                   )}
                 </div>
                 <div className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-[1.35rem] overflow-hidden ring-2 ring-violet-400/45 shadow-[0_24px_80px_-20px_rgba(139,92,246,0.45)] rotate-6 -ml-8 z-[2]">
@@ -93,7 +93,7 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
                 initial={reduce ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.12 }}
-                className="text-3xl sm:text-4xl font-extralight tracking-tight text-center bg-gradient-to-r from-white via-pink-100 to-purple-200 bg-clip-text text-transparent"
+                className="text-3xl sm:text-4xl font-extralight tracking-tight text-center bg-gradient-to-r from-white via-white/70 to-white/40 bg-clip-text text-transparent"
               >
                 {t("matchModalTitle")}
               </motion.h1>
@@ -109,7 +109,7 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
                 initial={reduce ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.22 }}
-                className="mt-1 text-center text-xl font-light text-pink-100/95"
+                className="mt-1 text-center text-xl font-light text-white/85/95"
               >
                 {profile.name}
               </motion.p>
@@ -124,7 +124,7 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
               transition={{ delay: 0.22 }}
               className="shrink-0 w-full max-w-md mx-auto space-y-4"
             >
-              <p className="text-[10px] uppercase tracking-[0.2em] text-pink-200/80 font-light text-center">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-white/80/80 font-light text-center">
                 {t("matchModalStartersTitle")}
               </p>
               <ul className="space-y-2 max-h-[min(28dvh,220px)] overflow-y-auto ttm-chat-scroll pr-0.5">
@@ -135,7 +135,7 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
                       onClick={() => goToChat(text)}
                       className={cn(
                         "w-full rounded-2xl border border-white/12 bg-white/[0.05] px-4 py-3 text-left text-sm font-light",
-                        "text-foreground/90 hover:border-pink-500/35 hover:bg-pink-500/[0.08] transition-colors touch-manipulation"
+                        "text-foreground/90 hover:border-white/16 hover:bg-white/[0.08] transition-colors touch-manipulation"
                       )}
                     >
                       {text}
@@ -149,8 +149,8 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
                 onClick={() => goToChat()}
                 className={cn(
                   "w-full rounded-2xl py-4 text-sm font-light text-white touch-manipulation",
-                  "bg-gradient-to-r from-pink-500 via-pink-600 to-purple-700",
-                  "shadow-[0_20px_50px_-16px_rgba(236,72,153,0.55)] border border-pink-300/25",
+                  "bg-gradient-to-r cin-action-like",
+                  "shadow-[0_20px_50px_-16px_rgba(255,255,255,0.55)] border border-white/15",
                   "hover:brightness-110 active:scale-[0.98] transition-all"
                 )}
               >

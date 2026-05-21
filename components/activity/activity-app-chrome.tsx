@@ -1,6 +1,6 @@
 "use client"
 
-import { useActivityPulse } from "@/components/activity/activity-pulse-context"
+import { useActivityFeed } from "@/components/activity/activity-feed-context"
 import { FloatingToastStack } from "@/components/activity/floating-toast-stack"
 import { ActivityHubSheet } from "@/components/activity/activity-hub-sheet"
 import { useI18n } from "@/lib/i18n"
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 export function ActivityAppChrome() {
   const { t } = useI18n()
-  const { hubOpen, setHubOpen, toasts, dismissToast, counts, threads, reconnectThreads } = useActivityPulse()
+  const { hubOpen, setHubOpen, toasts, dismissToast, counts, threads, reconnectThreads } = useActivityFeed()
   const total = counts.likesUnread + counts.chatsUnread
 
   return (
@@ -18,7 +18,7 @@ export function ActivityAppChrome() {
         onClick={() => setHubOpen(true)}
         className={cn(
           "relative flex h-11 w-11 items-center justify-center rounded-2xl border transition-colors touch-manipulation",
-          "border-white/12 bg-white/[0.06] hover:border-pink-500/35 hover:bg-pink-500/10"
+          "border-white/12 bg-white/[0.06] hover:border-white/16 hover:bg-white/06"
         )}
         aria-label={t("activityHubTitle")}
       >
@@ -31,7 +31,7 @@ export function ActivityAppChrome() {
           />
         </svg>
         {total > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 text-[10px] text-white flex items-center justify-center font-medium shadow-lg shadow-pink-500/30">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-gradient-to-br cin-btn-primary text-[10px] text-white flex items-center justify-center font-medium shadow-lg shadow-black/30">
             {total > 9 ? "9+" : total}
           </span>
         )}

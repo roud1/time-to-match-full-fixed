@@ -1,6 +1,18 @@
-import type { ConnectionView, ConnectionStage } from "@/lib/connection-system"
+import type { ConnectionRecord, ConnectionView } from "@/lib/connection-system"
+import type { ChatMessage } from "@/lib/social-store"
+import {
+  analyzeConnection,
+  analysisToSyncMetrics,
+  tierFromPercent,
+  type ConnectionAnalysis,
+  type EmotionalState,
+  type ChemistryLevel,
+  type BondLevel,
+} from "@/lib/connection-engine"
 
-/** Visual tier for sync ring glow intensity. */
+export type { ConnectionAnalysis, EmotionalState, ChemistryLevel, BondLevel }
+
+/** Visual tier for sync ring glow intensity (maps to % bands). */
 export type SyncTier = "cold" | "soft" | "active" | "vibrant" | "synced"
 
 export type SyncMetrics = {
@@ -8,14 +20,22 @@ export type SyncMetrics = {
   connectionPercent: number
   chemistryPercent: number
   energyPercent: number
+  bondPercent: number
   tier: SyncTier
   isActive: boolean
   isFading: boolean
   isSynced: boolean
   recentActivity: boolean
+  emotionalState?: EmotionalState
+  chemistryLevel?: ChemistryLevel
+  bondLevel?: BondLevel
+  /** OpenRouter-refined layer active */
+  aiEnhanced?: boolean
+  /** Short atmospheric insight from AI engine */
+  insight?: string
 }
 
-const STAGE_BASE: Record<ConnectionStage, number> = {
+const STAGE_BASE: Record<ConnectionView["stage"], number> = {
   spark: 12,
   active: 38,
   strong: 58,
@@ -27,23 +47,11 @@ function clamp(n: number, min = 0, max = 100) {
   return Math.min(max, Math.max(min, Math.round(n)))
 }
 
-function tierFromPercent(p: number, fading: boolean): SyncTier {
-  if (fading && p < 30) return "cold"
-  if (p >= 100) return "synced"
-  if (p >= 78) return "vibrant"
-  if (p >= 45) return "active"
-  if (p >= 22) return "soft"
-  return "cold"
-}
-
-export function deriveSyncMetrics(
-  view: ConnectionView | null,
-  opts?: { recentActivity?: boolean; now?: number }
-): SyncMetrics | null {
-  if (!view) return null
-
-  const recentActivity = opts?.recentActivity ?? false
-
+/** Legacy fallback when messages/record unavailable. */
+function deriveLegacyMetrics(
+  view: ConnectionView,
+  recentActivity: boolean
+): SyncMetrics {
   const stageBase = STAGE_BASE[view.stage]
   const scoreBoost = clamp(view.streakScore * 0.35, 0, 28)
   const streakBoost = clamp(view.streakDays * 4, 0, 16)
@@ -74,12 +82,47 @@ export function deriveSyncMetrics(
     connectionPercent,
     chemistryPercent,
     energyPercent,
+    bondPercent: clamp(syncPercent * 0.85 + view.streakDays * 3),
     tier,
     isActive: recentActivity || view.urgency === "calm" || view.urgency === "aware",
     isFading: view.isFading,
     isSynced: syncPercent >= 98 && view.bothParticipated && !view.isFading,
     recentActivity,
   }
+}
+
+/**
+ * Derive sync metrics — uses connection engine when messages + record provided.
+ */
+export function deriveSyncMetrics(
+  view: ConnectionView | null,
+  opts?: {
+    recentActivity?: boolean
+    messages?: ChatMessage[]
+    record?: ConnectionRecord
+    now?: number
+  }
+): SyncMetrics | null {
+  if (!view) return null
+
+  const recentActivity = opts?.recentActivity ?? false
+
+  if (opts?.messages && opts?.record) {
+    const analysis = analyzeConnection(view, opts.messages, opts.record, {
+      recentActivity,
+      now: opts?.now,
+    })
+    const metrics = analysisToSyncMetrics(analysis, view, recentActivity)
+    return {
+      ...metrics,
+      bondPercent: analysis.bondPercent,
+      emotionalState: analysis.emotionalState,
+      chemistryLevel: analysis.chemistryLevel,
+      bondLevel: analysis.bondLevel,
+    }
+  }
+
+  return deriveLegacyMetrics(view, recentActivity)
 }
 
 export type SyncStatusKey =
@@ -94,7 +137,7 @@ export function syncStatusKey(metrics: SyncMetrics, view: ConnectionView): SyncS
   if (metrics.isSynced) return "syncStatusSynced"
   if (view.isFading) return "syncStatusFading"
   if (!view.bothParticipated) return "syncStatusWaiting"
-  if (view.isStable) return "syncStatusStable"
+  if (view.isStable || metrics.bondLevel === "deep") return "syncStatusStable"
   if (metrics.recentActivity) return "syncStatusActive"
   return "syncStatusGrowing"
 }

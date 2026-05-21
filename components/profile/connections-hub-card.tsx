@@ -26,7 +26,7 @@ export function ConnectionsHubCard() {
   }, [])
 
   return (
-    <div className="rounded-[1.35rem] p-5 mb-5 border border-white/10 bg-gradient-to-br from-white/[0.04] via-transparent to-violet-500/[0.06] backdrop-blur-xl">
+    <div className="rounded-[1.35rem] p-5 mb-5 border border-white/10 bg-gradient-to-br from-white/[0.04] via-transparent to-white/[0.06] backdrop-blur-xl">
       <div className="flex items-start gap-4">
         <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/45 font-light mb-1">
@@ -39,7 +39,7 @@ export function ConnectionsHubCard() {
               : t("profileConnectionsActive").replace("{count}", String(summary.activeCount))}
           </p>
           {summary.nearestRemainingMs != null && summary.activeCount > 0 && (
-            <p className="mt-2 text-xs font-light tabular-nums text-pink-200/90">
+            <p className="mt-2 text-xs font-light tabular-nums text-white/80/90">
               {t("profileConnectionsNearest")}{" "}
               <span className={cn(summary.urgentCount > 0 && "text-amber-300")}>
                 {formatConnectionTime(summary.nearestRemainingMs)}

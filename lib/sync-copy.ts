@@ -5,6 +5,7 @@ export type SyncCopyKeys = {
   connectionLabel: string
   chemistryLabel: string
   energyLabel: string
+  bondLabel: string
   timelineTitle: string
   interactionHint: string
   syncStatusGrowing: string
@@ -21,6 +22,7 @@ export function buildSyncCopy(t: (key: TranslationKey) => string): SyncCopyKeys 
     connectionLabel: t("syncConnectionLabel"),
     chemistryLabel: t("syncChemistryLabel"),
     energyLabel: t("syncEnergyLabel"),
+    bondLabel: t("bondLabel"),
     timelineTitle: t("syncTimelineTitle"),
     interactionHint: t("syncInteractionHint"),
     syncStatusGrowing: t("syncStatusGrowing"),

@@ -33,8 +33,8 @@ export function ConnectionBanner({ view, copy, premiumStrip }: ConnectionBannerP
         view.isFading
           ? "border-amber-500/25 bg-gradient-to-r from-amber-500/[0.1] via-amber-950/20 to-transparent ttm-connection-fading"
           : view.isStable
-            ? "border-emerald-500/20 bg-gradient-to-r from-emerald-500/[0.08] via-transparent to-violet-500/[0.06]"
-            : "border-pink-500/20 bg-gradient-to-r from-pink-500/[0.08] via-transparent to-violet-500/[0.07]"
+            ? "border-emerald-500/20 bg-gradient-to-r from-emerald-500/[0.08] via-transparent to-white/[0.06]"
+            : "border-white/12 bg-gradient-to-r from-white/[0.08] via-transparent to-white/[0.07]"
       )}
       style={view.isFading ? { ["--ttm-fade" as string]: view.fadeIntensity } : undefined}
     >
@@ -55,7 +55,7 @@ export function ConnectionBanner({ view, copy, premiumStrip }: ConnectionBannerP
                   ? "border-emerald-400/35 bg-emerald-500/15 text-emerald-100/95"
                   : view.stage === "rare"
                     ? "border-violet-400/35 bg-violet-500/15 text-violet-100/95"
-                    : "border-pink-400/30 bg-pink-500/12 text-pink-100/90"
+                    : "border-white/14 bg-white/06 text-white/85/90"
               )}
             >
               {stage}

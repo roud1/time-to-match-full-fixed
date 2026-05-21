@@ -207,9 +207,9 @@ export function RegisterForm() {
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       className="w-full max-w-md"
     >
-      <CinematicCard variant="glass" className="p-6 md:p-8 border border-white/10 shadow-[0_28px_90px_-40px_rgba(236,72,153,0.35)]">
+      <CinematicCard variant="glass" className="p-6 md:p-8 border border-white/10 shadow-[0_28px_90px_-40px_rgba(255,255,255,0.35)]">
         <div className="text-center mb-8">
-          <span className="ttm-badge-soft mb-4 block mx-auto w-fit">Pulse</span>
+          <span className="ttm-badge-soft mb-4 block mx-auto w-fit">SYNC</span>
           <h1 className="ttm-type-h1 text-foreground mb-2">{t("regPageTitle")}</h1>
           <p className="ttm-type-muted">{t("regPageSubtitle")}</p>
         </div>
@@ -220,7 +220,7 @@ export function RegisterForm() {
               <motion.div
                 className={cn(
                   "h-1 flex-1 rounded-full transition-colors duration-300",
-                  step >= s ? "bg-gradient-to-r from-pink-500 to-purple-600" : "bg-foreground/10"
+                  step >= s ? "bg-gradient-to-r cin-btn-primary" : "bg-foreground/10"
                 )}
                 layout={!reduce}
               />
@@ -297,7 +297,7 @@ export function RegisterForm() {
                         className={cn(
                           "ttm-choice py-2.5 border",
                           form.gender === value
-                            ? "border-pink-500/50 bg-pink-500/10 text-pink-300"
+                            ? "border-white/22 bg-white/06 text-white/75"
                             : "border-foreground/10 bg-foreground/5 text-foreground/70 hover:bg-foreground/10"
                         )}
                       >
@@ -410,8 +410,8 @@ export function RegisterForm() {
                   />
                   <label htmlFor="terms" className="ttm-type-muted leading-relaxed cursor-pointer">
                     {t("regAgreeTerms")}{" "}
-                    <span className="text-pink-400 hover:underline">{t("regTerms")}</span> {t("regAnd")}{" "}
-                    <span className="text-pink-400 hover:underline">{t("regPrivacy")}</span>
+                    <span className="text-white/60 hover:underline">{t("regTerms")}</span> {t("regAnd")}{" "}
+                    <span className="text-white/60 hover:underline">{t("regPrivacy")}</span>
                   </label>
                 </div>
                 {errors.agreeTerms && (
@@ -447,7 +447,7 @@ export function RegisterForm() {
 
         <p className="text-center ttm-type-muted mt-6">
           {t("regHasAccount")}{" "}
-          <Link href="/login" className="text-pink-400 hover:underline">
+          <Link href="/login" className="text-white/60 hover:underline">
             {t("regSignIn")}
           </Link>
         </p>

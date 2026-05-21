@@ -42,8 +42,8 @@ export function ProfileExtensionCard({ profile, onProfileUpdate, expired }: Prof
       className={cn(
         "rounded-[1.35rem] p-5 mb-5 border backdrop-blur-xl",
         expired
-          ? "border-rose-500/30 bg-gradient-to-br from-rose-500/[0.1] via-transparent to-pink-500/[0.06]"
-          : "border-sky-500/25 bg-gradient-to-br from-sky-500/[0.08] via-transparent to-violet-500/[0.05]"
+          ? "border-rose-500/30 bg-gradient-to-br from-rose-500/[0.1] via-transparent to-white/[0.04]"
+          : "border-sky-500/25 bg-gradient-to-br from-sky-500/[0.08] via-transparent to-white/[0.05]"
       )}
     >
       <p className="text-[10px] uppercase tracking-[0.22em] text-sky-200/80 font-light mb-2">

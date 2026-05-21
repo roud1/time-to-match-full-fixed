@@ -8,22 +8,19 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export const cinematicButtonVariants = cva(
-  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-light tracking-wide transition-all duration-300 outline-none focus-visible:ring-2 focus-visible:ring-pink-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-45 touch-manipulation",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-light tracking-[0.04em] transition-all duration-500 outline-none focus-visible:ring-1 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050506] disabled:pointer-events-none disabled:opacity-40 touch-manipulation",
   {
     variants: {
       variant: {
-        primary:
-          "text-white bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 shadow-lg shadow-pink-500/30 hover:opacity-95",
+        primary: "text-white cin-btn-primary",
         secondary:
-          "text-foreground/90 bg-foreground/[0.08] border border-foreground/12 hover:bg-foreground/[0.12] hover:border-foreground/18",
-        ghost:
-          "text-foreground/85 border border-foreground/15 bg-foreground/[0.04] hover:bg-foreground/[0.09]",
-        glow:
-          "text-white bg-gradient-to-r from-pink-500 via-rose-500 to-purple-600 border border-pink-500/25 shadow-[0_0_36px_-6px_rgba(236,72,153,0.55)] hover:shadow-[0_0_48px_-4px_rgba(236,72,153,0.65)] hover:opacity-95",
+          "text-white/85 bg-white/[0.06] border border-white/12 hover:bg-white/[0.09] hover:border-white/18",
+        ghost: "text-white/75 cin-btn-ghost",
+        glow: "text-white cin-btn-primary shadow-[0_0_48px_-12px_rgba(255,255,255,0.15)]",
       },
       size: {
-        default: "px-8 py-4 min-h-[48px] text-base",
-        mobile: "px-8 py-4 min-h-[52px] text-base",
+        default: "px-9 py-4 min-h-[48px] text-base",
+        mobile: "px-9 py-4 min-h-[52px] text-[15px]",
         compact: "px-5 py-2.5 min-h-[40px] text-sm",
       },
     },
@@ -66,20 +63,17 @@ export function CinematicButton({
   tabIndex,
 }: CinematicButtonProps) {
   const classes = cn(cinematicButtonVariants({ variant, size }), className)
-  const showShimmer = variant === "primary" || variant === "glow"
-  const inner = (
-    <>
-      {showShimmer && (
-        <span className="absolute inset-0 rounded-full premium-btn-shimmer opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-500" />
-      )}
-      <span className="relative z-10">{children}</span>
-    </>
-  )
+  const inner = <span className="relative z-10">{children}</span>
 
   if (href) {
     return (
-      <motion.span className="inline-flex max-w-full" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-        <Link href={href} className={cn(classes, "group")}>
+      <motion.span
+        className="inline-flex max-w-full"
+        whileHover={{ scale: 1.015 }}
+        whileTap={{ scale: 0.985 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <Link href={href} className={classes}>
           {inner}
         </Link>
       </motion.span>
@@ -90,9 +84,10 @@ export function CinematicButton({
     <motion.button
       type={type}
       disabled={disabled}
-      className={cn(classes, "group")}
-      whileHover={{ scale: disabled ? 1 : 1.02 }}
-      whileTap={{ scale: disabled ? 1 : 0.98 }}
+      className={classes}
+      whileHover={{ scale: disabled ? 1 : 1.015 }}
+      whileTap={{ scale: disabled ? 1 : 0.985 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
       onClick={onClick}
       form={form}
       name={name}

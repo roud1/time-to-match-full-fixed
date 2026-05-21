@@ -48,7 +48,7 @@ export function InterestPicker({ value, onChange, error }: InterestPickerProps) 
               className={cn(
                 "px-3 py-1.5 rounded-full text-xs font-light border transition-all",
                 selected
-                  ? "border-pink-500/50 bg-pink-500/15 text-pink-300"
+                  ? "cin-pill-selected"
                   : "border-foreground/10 bg-foreground/5 text-foreground/70 hover:bg-foreground/10",
                 disabled && "opacity-40 cursor-not-allowed hover:bg-foreground/5"
               )}

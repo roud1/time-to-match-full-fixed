@@ -19,7 +19,7 @@ export function ChatTypingIndicator() {
         {[0, 1, 2].map((i) => (
           <motion.span
             key={i}
-            className="h-2 w-2 rounded-full bg-pink-300/70"
+            className="h-2 w-2 rounded-full bg-white/35"
             animate={reduce ? { opacity: 0.5 } : { opacity: [0.25, 1, 0.25], scale: [0.85, 1, 0.85] }}
             transition={reduce ? {} : { duration: 1.1, repeat: Infinity, delay: i * 0.18, ease: "easeInOut" }}
           />

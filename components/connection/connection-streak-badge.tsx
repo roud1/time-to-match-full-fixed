@@ -7,7 +7,7 @@ export function ConnectionStreakBadge({ days, compact }: { days: number; compact
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border border-orange-400/30 bg-gradient-to-r from-orange-500/15 to-pink-500/10 text-orange-100/95",
+        "inline-flex items-center gap-1 rounded-full border border-orange-400/30 bg-gradient-to-r from-orange-500/15 to-white/06 text-orange-100/95",
         compact ? "px-1.5 py-0.5 text-[8px]" : "px-2 py-0.5 text-[9px]",
         "font-light tracking-wide"
       )}

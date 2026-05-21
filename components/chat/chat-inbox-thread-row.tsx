@@ -11,8 +11,9 @@ import { ChatProfileAvatar } from "@/components/chat/chat-profile-avatar"
 import { useConnectionLive } from "@/hooks/use-connection-live"
 import { buildConnectionCopy } from "@/lib/connection-copy"
 import { stageLabel } from "@/lib/connection-system"
-import { deriveSyncMetrics } from "@/lib/sync-system"
 import { isPulseProfile } from "@/lib/pulse-companion"
+import { deriveSyncMetrics } from "@/lib/sync-system"
+import { getConnection } from "@/lib/connection-store"
 import { ConnectionTimer } from "@/components/connection/connection-timer"
 import { cn } from "@/lib/utils"
 
@@ -39,8 +40,15 @@ export function ChatInboxThreadRow({
   const previewTime = formatChatThreadPreviewTime(last?.at ?? thread.updatedAt, locale)
   const connectionView = useConnectionLive(thread.profileId)
   const copy = buildConnectionCopy(t)
-  const syncMetrics = deriveSyncMetrics(connectionView ?? null, { recentActivity: unread })
+  const record = connectionView ? getConnection(connectionView.profileId) : undefined
   const isPulse = isPulseProfile(thread.profileId)
+  const syncMetrics = isPulse
+    ? null
+    : deriveSyncMetrics(connectionView ?? null, {
+        recentActivity: unread,
+        messages: thread.messages,
+        record,
+      })
 
   return (
     <motion.li
@@ -54,7 +62,7 @@ export function ChatInboxThreadRow({
         className={cn(
           "w-full rounded-[1.35rem] p-3 flex items-center gap-3 text-left touch-manipulation min-h-[80px] transition-all duration-300",
           "border border-white/[0.08] bg-white/[0.03] backdrop-blur-xl",
-          isPulse && "border-white/15 bg-white/[0.05]",
+          isPulse && "border-violet-500/20 bg-violet-500/[0.04]",
           paused && "opacity-75 saturate-[0.85]",
           connectionView?.isFading && "border-amber-500/20 bg-amber-500/[0.03] ttm-connection-fading",
           connectionView?.urgency === "critical" && "border-amber-500/25",
@@ -77,8 +85,8 @@ export function ChatInboxThreadRow({
           <div className="flex items-center gap-2">
             <p className="font-extralight text-[15px] truncate text-white/95">{profile.name}</p>
             {isPulse && (
-              <span className="shrink-0 text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-white/15 text-white/50">
-                AI
+              <span className="shrink-0 text-[8px] uppercase tracking-wider px-1.5 py-0.5 rounded border border-violet-400/25 text-violet-200/70">
+                {t("pulseInboxBadge")}
               </span>
             )}
             {syncMetrics && (
@@ -93,15 +101,21 @@ export function ChatInboxThreadRow({
             )}
           </div>
           <p className="text-xs text-white/45 font-extralight truncate mt-0.5">{last?.text}</p>
-          {connectionView && (
-            <p className="text-[10px] text-white/35 font-extralight mt-1 truncate">
-              {stageLabel(connectionView.stage, copy)}
+          {isPulse ? (
+            <p className="text-[10px] text-violet-200/50 font-extralight mt-1 truncate">
+              {t("pulseAiOnline")}
             </p>
+          ) : (
+            connectionView && (
+              <p className="text-[10px] text-white/35 font-extralight mt-1 truncate">
+                {stageLabel(connectionView.stage, copy)}
+              </p>
+            )
           )}
         </div>
         <div className="flex flex-col items-end gap-1.5 shrink-0">
           <span className="text-[10px] text-white/35 tabular-nums font-extralight">{previewTime}</span>
-          {connectionView && (
+          {!isPulse && connectionView && (
             <ConnectionTimer view={connectionView} compact stableLabel={copy.stableLabel} />
           )}
         </div>

@@ -27,7 +27,7 @@ export function PeerTrustChip({
         className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/40 px-2.5 py-1 text-white/85 backdrop-blur-md"
         aria-label={`${labels.trustShort} ${signals.score}`}
       >
-        <span className="tabular-nums text-pink-200/95">{signals.score}</span>
+        <span className="tabular-nums text-white/80/95">{signals.score}</span>
         <span className="text-white/40">·</span>
         <span className="text-white/70">{labels.trustShort}</span>
       </span>

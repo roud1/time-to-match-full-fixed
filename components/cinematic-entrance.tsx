@@ -37,7 +37,7 @@ export function CinematicEntrance() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#030306]"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050506]"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -52,7 +52,7 @@ export function CinematicEntrance() {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,600px)] h-[400px] rounded-full opacity-70"
             style={{
               background:
-                "radial-gradient(ellipse, rgba(236,72,153,0.4) 0%, rgba(168,85,247,0.2) 40%, transparent 70%)",
+                "radial-gradient(ellipse, rgba(255,255,255,0.08) 0%, rgba(160,170,200,0.05) 40%, transparent 70%)",
               filter: "blur(80px)",
             }}
             initial={{ scale: 0.8, opacity: 0 }}
@@ -72,11 +72,11 @@ export function CinematicEntrance() {
               animate={{ scale: 1 }}
               transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="drop-shadow-[0_0_24px_rgba(236,72,153,0.5)]">
+              <span className="drop-shadow-[0_0_24px_rgba(255,255,255,0.5)]">
                 <Logo size="lg" />
               </span>
             </motion.div>
-            <p className="text-[10px] uppercase tracking-[0.35em] text-pink-300/80 font-light mb-3">
+            <p className="ttm-cin-overline mb-3">
               {t("entranceTagline")}
             </p>
             <h2 className="text-3xl sm:text-4xl font-extralight tracking-tight text-white/95">

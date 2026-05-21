@@ -11,7 +11,7 @@ const shells: Record<"glass" | "profile" | "info" | "floating", string> = {
   ),
   floating: cn(
     "glass-card ttm-card-shell rounded-[var(--ttm-radius-2xl)]",
-    "hover:border-pink-500/20 hover:shadow-[var(--ttm-shadow-float)] hover:-translate-y-px transition-all duration-300"
+    "hover:border-white/12 hover:shadow-[var(--ttm-shadow-float)] hover:-translate-y-px transition-all duration-300"
   ),
 }
 

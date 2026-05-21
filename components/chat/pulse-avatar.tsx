@@ -1,46 +1,40 @@
 "use client"
 
 import Image from "next/image"
-import { PULSE_AVATAR_SRC } from "@/lib/pulse-companion"
 import { cn } from "@/lib/utils"
 
 type PulseAvatarProps = {
-  size?: "sm" | "md"
-  src?: string
+  size?: "sm" | "md" | "lg"
   className?: string
+  showRing?: boolean
 }
 
-const SIZE_PX = { sm: 48, md: 56 } as const
-const SIZE_CLASS = { sm: "w-12 h-12", md: "w-14 h-14" } as const
+const SIZE = {
+  sm: { box: "w-12 h-12", px: 40 },
+  md: { box: "w-14 h-14", px: 48 },
+  lg: { box: "w-16 h-16", px: 56 },
+} as const
 
-export function PulseAvatar({ size = "md", src = PULSE_AVATAR_SRC, className }: PulseAvatarProps) {
-  const px = SIZE_PX[size]
+/** Site logo avatar for Pulse AI guide. */
+export function PulseAvatar({ size = "md", className, showRing = true }: PulseAvatarProps) {
+  const s = SIZE[size]
   return (
     <div
       className={cn(
-        "relative shrink-0 overflow-hidden rounded-full",
-        "ring-2 ring-white/20 shadow-[0_0_22px_-6px_rgba(255,255,255,0.4)]",
-        SIZE_CLASS[size],
+        "relative shrink-0 rounded-full overflow-hidden bg-[#0a0a0f]",
+        s.box,
+        showRing && "ring-1 ring-white/20 shadow-[0_0_20px_-6px_rgba(236,72,153,0.35)]",
         className
       )}
     >
       <Image
-        src={src}
+        src="/icon.svg"
         alt="Pulse"
-        width={px}
-        height={px}
+        width={s.px}
+        height={s.px}
+        className="h-full w-full object-cover"
         unoptimized
-        className="h-full w-full object-cover object-[center_18%]"
-        sizes={`${px}px`}
         draggable={false}
-      />
-      <span
-        className="pointer-events-none absolute inset-0 rounded-full"
-        style={{
-          background:
-            "linear-gradient(180deg, transparent 55%, rgba(7,7,7,0.35) 100%)",
-        }}
-        aria-hidden
       />
     </div>
   )

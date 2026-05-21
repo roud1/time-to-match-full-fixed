@@ -93,7 +93,7 @@ export function LoginForm() {
     >
       <CinematicCard variant="glass" className="p-6 md:p-8">
         <div className="text-center mb-8">
-          <span className="ttm-badge-soft block mx-auto w-fit mb-4">Pulse</span>
+          <span className="ttm-badge-soft block mx-auto w-fit mb-4">SYNC</span>
           <h1 className="ttm-type-h1 text-foreground mb-2">{t("loginPageTitle")}</h1>
           <p className="ttm-type-muted">{t("loginPageSubtitle")}</p>
         </div>
@@ -105,7 +105,7 @@ export function LoginForm() {
               {!hasRegisteredAccount() && (
                 <>
                   {" "}
-                  <Link href="/register" className="text-pink-400 hover:underline">
+                  <Link href="/register" className="text-white/60 hover:underline">
                     {t("loginSignUp")}
                   </Link>
                 </>
@@ -144,7 +144,7 @@ export function LoginForm() {
                 {t("loginRemember")}
               </label>
             </div>
-            <button type="button" className="ttm-type-muted text-pink-400 hover:underline">
+            <button type="button" className="ttm-type-muted text-white/60 hover:underline">
               {t("loginForgotPassword")}
             </button>
           </div>
@@ -162,7 +162,7 @@ export function LoginForm() {
 
         <p className="text-center ttm-type-muted mt-6">
           {t("loginNoAccount")}{" "}
-          <Link href="/register" className="text-pink-400 hover:underline">
+          <Link href="/register" className="text-white/60 hover:underline">
             {t("loginSignUp")}
           </Link>
         </p>

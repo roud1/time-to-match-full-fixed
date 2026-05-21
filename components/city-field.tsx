@@ -37,7 +37,7 @@ export function CityField({
         onChange={(e) => onCityIdChange(e.target.value as CitySelectValue)}
         className={cn(
           "h-11 w-full rounded-xl border bg-foreground/5 px-3 text-sm font-light outline-none transition-[color,box-shadow]",
-          "border-foreground/10 focus:border-pink-500/40 focus:ring-[3px] focus:ring-pink-500/20",
+          "border-foreground/10 focus:border-white/18 focus:ring-[3px] focus:ring-white/10",
           !cityId && "text-muted-foreground",
           error && !isManual && "border-red-500/50"
         )}
@@ -77,7 +77,7 @@ export function CityField({
             onCityIdChange(CUSTOM_CITY_ID)
           }
         }}
-        className="text-xs text-pink-400 font-light hover:underline"
+        className="text-xs text-white/60 font-light hover:underline"
       >
         {isManual ? t("regCityFromList") : t("regCityManual")}
       </button>

@@ -79,10 +79,10 @@ export function ChatComposer({
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 4 }}
-              className="flex items-start gap-2 rounded-2xl border border-pink-500/25 bg-pink-500/[0.08] px-3 py-2"
+              className="flex items-start gap-2 rounded-2xl border border-white/14 bg-white/[0.08] px-3 py-2"
             >
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] uppercase tracking-wider text-pink-200/70">{labels.replyingTo}</p>
+                <p className="text-[10px] uppercase tracking-wider text-white/80/70">{labels.replyingTo}</p>
                 <p className="text-xs text-foreground/85 font-light line-clamp-2">{replySnippet}</p>
               </div>
               <button type="button" onClick={onClearReply} className="text-[11px] text-muted-foreground shrink-0 touch-manipulation py-1">
@@ -171,7 +171,7 @@ export function ChatComposer({
             placeholder={labels.placeholder}
             className={cn(
               "flex-1 min-w-0 max-h-32 min-h-[44px] rounded-2xl resize-none bg-white/[0.06] border border-white/12",
-              "px-4 py-3 text-[15px] font-light outline-none focus:border-pink-500/40 focus:ring-1 focus:ring-pink-500/25",
+              "px-4 py-3 text-[15px] font-light outline-none focus:border-white/18 focus:ring-1 focus:ring-white/10",
               "placeholder:text-muted-foreground/55"
             )}
           />
@@ -182,7 +182,7 @@ export function ChatComposer({
             disabled={!draft.trim()}
             className={cn(
               "shrink-0 min-h-[44px] px-4 rounded-2xl text-sm font-light text-white touch-manipulation",
-              "bg-gradient-to-br from-pink-500 to-purple-600 border border-pink-400/30 shadow-[0_12px_36px_-12px_rgba(236,72,153,0.55)]",
+              "cin-btn-primary rounded-2xl",
               !draft.trim() && "opacity-40 pointer-events-none"
             )}
           >

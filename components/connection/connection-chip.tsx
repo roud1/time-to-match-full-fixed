@@ -22,7 +22,7 @@ export function ConnectionChip({ view, stageLabel, stableLabel, className }: Con
             ? "border-amber-400/30 text-amber-200/90 bg-amber-500/10"
             : view.stage === "stable"
               ? "border-emerald-400/30 text-emerald-200/90 bg-emerald-500/10"
-              : "border-pink-400/25 text-pink-200/85 bg-pink-500/8"
+              : "border-white/14 text-white/80 bg-white/05"
         )}
       >
         {stageLabel}

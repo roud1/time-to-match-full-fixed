@@ -17,11 +17,11 @@ export function ProfilePhotoGallery({ photos, name, className }: ProfilePhotoGal
     return (
       <div
         className={cn(
-          "flex items-center justify-center rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-600/20 border border-foreground/10",
+          "flex items-center justify-center rounded-2xl bg-gradient-to-br from-white/20 to-white/20 border border-foreground/10",
           className
         )}
       >
-        <span className="text-4xl font-light text-pink-400">{name.charAt(0).toUpperCase()}</span>
+        <span className="text-4xl font-light text-white/60">{name.charAt(0).toUpperCase()}</span>
       </div>
     )
   }
@@ -92,7 +92,7 @@ export function ProfilePhotoGallery({ photos, name, className }: ProfilePhotoGal
               onClick={() => setActive(i)}
               className={cn(
                 "relative shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-colors",
-                i === index ? "border-pink-500" : "border-transparent opacity-60 hover:opacity-100"
+                i === index ? "border-white/25" : "border-transparent opacity-60 hover:opacity-100"
               )}
             >
               <Image

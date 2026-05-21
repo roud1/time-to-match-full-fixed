@@ -11,8 +11,8 @@ import {
   setMemoryProfileName,
 } from "@/lib/connection-store"
 import {
-  getPulseGreeting,
   getPulseProfile,
+  getPulseWelcomeMessage,
   isPulseProfile,
   PULSE_PROFILE_ID,
 } from "@/lib/pulse-companion"
@@ -98,48 +98,46 @@ function ensureSeeded(state: SocialState, locale: Locale, position: GeoPosition 
 
 function syncConnections(state: SocialState) {
   const chatTimes = new Map(state.chats.map((c) => [c.profileId, c.updatedAt]))
-  const matchIds = [...state.matches]
-  if (!matchIds.includes(PULSE_PROFILE_ID)) matchIds.push(PULSE_PROFILE_ID)
-  migrateConnectionsFromMatches(matchIds, chatTimes)
+  migrateConnectionsFromMatches(state.matches, chatTimes)
 }
 
 function ensurePulseCompanion(state: SocialState, locale: Locale): SocialState {
-  let next = state
-  if (!next.matches.includes(PULSE_PROFILE_ID)) {
-    next = { ...next, matches: [PULSE_PROFILE_ID, ...next.matches] }
+  const existing = state.chats.find((c) => c.profileId === PULSE_PROFILE_ID)
+  if (existing) return state
+  const now = Date.now()
+  return {
+    ...state,
+    chats: [
+      {
+        profileId: PULSE_PROFILE_ID,
+        updatedAt: now,
+        messages: [
+          {
+            id: `pulse-welcome-${now}`,
+            from: "them",
+            text: getPulseWelcomeMessage(locale),
+            at: now,
+          },
+        ],
+      },
+      ...state.chats,
+    ],
   }
-
-  let thread = next.chats.find((c) => c.profileId === PULSE_PROFILE_ID)
-  if (!thread) {
-    const now = Date.now()
-    thread = {
-      profileId: PULSE_PROFILE_ID,
-      updatedAt: now,
-      messages: [
-        {
-          id: `pulse-greet-${now}`,
-          from: "them",
-          text: getPulseGreeting(locale),
-          at: now,
-        },
-      ],
-    }
-    next = { ...next, chats: [thread, ...next.chats] }
-    ensureConnectionForMatch(PULSE_PROFILE_ID)
-    recordConnectionMessage(PULSE_PROFILE_ID, "them")
-    setMemoryProfileName(PULSE_PROFILE_ID, getPulseProfile(locale).name)
-  }
-
-  return next
 }
 
 export function getSocialState(locale: Locale, position: GeoPosition | null) {
   let state = load()
   if (!state.seeded) {
     state = ensureSeeded(state, locale, position)
+    save(state)
   }
-  state = ensurePulseCompanion(state, locale)
-  save(state)
+  const withPulse = ensurePulseCompanion(state, locale)
+  if (withPulse.chats.length !== state.chats.length) {
+    save(withPulse)
+    state = withPulse
+  } else {
+    state = withPulse
+  }
   syncConnections(state)
   return state
 }
@@ -171,11 +169,11 @@ export function getMatchProfiles(locale: Locale, position: GeoPosition | null): 
 
 export function getChats(locale: Locale, position: GeoPosition | null): ChatThread[] {
   const state = getSocialState(locale, position)
-  const pulse = state.chats.filter((c) => c.profileId === PULSE_PROFILE_ID)
-  const rest = state.chats
-    .filter((c) => c.profileId !== PULSE_PROFILE_ID)
-    .sort((a, b) => b.updatedAt - a.updatedAt)
-  return [...pulse, ...rest]
+  return [...state.chats].sort((a, b) => {
+    if (a.profileId === PULSE_PROFILE_ID) return -1
+    if (b.profileId === PULSE_PROFILE_ID) return 1
+    return b.updatedAt - a.updatedAt
+  })
 }
 
 export function recordSwipe(
@@ -261,7 +259,7 @@ function pushMessage(
   if (!trimmed) return state
 
   const now = Date.now()
-  let next = ensurePulseCompanion(ensureSeeded(state, locale, position), locale)
+  let next = ensureSeeded(state, locale, position)
   let thread = next.chats.find((c) => c.profileId === profileId)
 
   if (!thread) {
@@ -281,7 +279,9 @@ function pushMessage(
   }
 
   save(next)
-  recordConnectionMessage(profileId, from === "me" ? "me" : "them")
+  if (!isPulseProfile(profileId)) {
+    recordConnectionMessage(profileId, from === "me" ? "me" : "them")
+  }
   if (from === "me") recordProfileActivity()
   const profile = getProfileById(profileId, locale, position)
   if (profile) setMemoryProfileName(profileId, profile.name)
@@ -300,7 +300,6 @@ export function sendMessage(
   pushMessage(load(), profileId, "me", text, locale, position)
 }
 
-/** AI / bot reply (Pulse). */
 export function receiveMessage(
   profileId: number,
   text: string,
@@ -309,8 +308,6 @@ export function receiveMessage(
 ) {
   pushMessage(load(), profileId, "them", text, locale, position)
 }
-
-export { isPulseProfile, PULSE_PROFILE_ID }
 
 export function getUnreadLikesCount(locale: Locale, position: GeoPosition | null): number {
   const { likedYou, yourLikes, matches } = getSocialState(locale, position)

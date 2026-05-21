@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
+import { Inter_Tight } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
@@ -7,11 +7,12 @@ import { I18nProvider } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { SiteBackground } from "@/components/site-background"
 
-const inter = Inter({
+const interTight = Inter_Tight({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
+  variable: "--font-inter-tight",
   display: "swap",
   preload: true,
+  weight: ["300", "400", "500"],
 })
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
@@ -81,7 +82,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0f",
+  themeColor: "#050506",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -94,8 +95,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" suppressHydrationWarning className="bg-[#06060a]">
-      <body className={`${inter.variable} font-sans antialiased ttm-root`}>
+    <html lang="ru" suppressHydrationWarning className="bg-[#050506]">
+      <body className={`${interTight.variable} font-sans antialiased ttm-root`}>
         <I18nProvider>
           <SiteBackground />
           <div className="relative z-0 min-h-screen">

@@ -1,4 +1,4 @@
-/** Static ambient background — CSS-only animations (no Framer on every route). */
+/** Static ambient background — graphite cinematic, CSS-only motion. */
 export function SiteBackground() {
   return (
     <div className="site-bg-root fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden>
@@ -6,18 +6,18 @@ export function SiteBackground() {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(ellipse 100% 70% at 50% -15%, rgba(236, 72, 153, 0.22) 0%, transparent 55%),
-            radial-gradient(ellipse 60% 50% at 95% 40%, rgba(168, 85, 247, 0.16) 0%, transparent 50%),
-            radial-gradient(ellipse 55% 45% at 5% 75%, rgba(244, 114, 182, 0.12) 0%, transparent 45%),
-            linear-gradient(165deg, #050508 0%, #0a0a10 35%, #08080e 65%, #06060a 100%)
+            radial-gradient(ellipse 90% 55% at 50% -8%, rgba(255, 255, 255, 0.05) 0%, transparent 52%),
+            radial-gradient(ellipse 50% 40% at 92% 35%, rgba(120, 130, 160, 0.06) 0%, transparent 50%),
+            radial-gradient(ellipse 45% 38% at 4% 70%, rgba(90, 95, 115, 0.05) 0%, transparent 48%),
+            linear-gradient(180deg, #050506 0%, #08080a 42%, #050506 100%)
           `,
         }}
       />
-      <div className="site-bg-aurora absolute inset-[-50%] opacity-40" />
-      <div className="site-bg-orb site-bg-orb-a absolute rounded-full site-bg-orb-blur bg-pink-500/20" />
-      <div className="site-bg-orb site-bg-orb-b absolute rounded-full site-bg-orb-blur bg-purple-600/18" />
-      <div className="absolute inset-0 site-bg-grid" />
-      <div className="absolute inset-0 site-bg-stars" />
+      <div className="site-bg-aurora absolute inset-[-50%] opacity-25 cin-gradient-shift" />
+      <div className="site-bg-orb site-bg-orb-a absolute rounded-full site-bg-orb-blur bg-white/[0.04]" />
+      <div className="site-bg-orb site-bg-orb-b absolute rounded-full site-bg-orb-blur bg-slate-400/[0.05]" />
+      <div className="absolute inset-0 site-bg-grid opacity-30" />
+      <div className="absolute inset-0 site-bg-stars opacity-50" />
       <div className="absolute inset-0 site-bg-vignette" />
       <div className="absolute inset-0 site-bg-noise" />
     </div>
