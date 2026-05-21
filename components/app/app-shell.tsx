@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BottomNavBar } from "@/components/app/bottom-nav-bar"
@@ -26,17 +26,15 @@ import { DailyReturnBanner } from "@/components/growth/daily-return-banner"
 import { useGrowthSession } from "@/hooks/use-growth-session"
 import { useConnectionCloudSync } from "@/hooks/use-connection-cloud-sync"
 import { EmotionalWorldRoot } from "@/components/world/emotional-world-root"
-import { EnergyFeedWhisper } from "@/components/network/energy-feed-whisper"
 import { EmotionalRetentionStrip } from "@/components/network/emotional-retention-strip"
 import { EvolutionEventCelebration } from "@/components/network/evolution-event-celebration"
 import { useEvolutionEventScanner } from "@/hooks/use-evolution-event-scanner"
-import { CompanionPlatformWhisper } from "@/components/companion/companion-platform-whisper"
 import { PresencePlatformAmbient } from "@/components/presence/presence-platform-ambient"
-import { EmotionalOsWhisper } from "@/components/emotional-os/emotional-os-whisper"
 import { useEmotionalRealityExpansion } from "@/hooks/use-emotional-reality-expansion"
+import { useEnergyFeed } from "@/hooks/use-energy-feed"
 import { PlatformSoulField } from "@/components/reality-expansion/platform-soul-field"
-import { RelationshipNarrativeWhisper } from "@/components/reality-expansion/relationship-narrative-whisper"
-import { ReflectionV2Whisper } from "@/components/emotional-consciousness/reflection-v2-whisper"
+import { PlatformInsightWhisper } from "@/components/product/platform-insight-whisper"
+import { pickPlatformInsight } from "@/lib/product-platform-insight"
 
 export function AppShell() {
   const { t, locale, location } = useI18n()
@@ -96,6 +94,25 @@ export function AppShell() {
     return () => window.removeEventListener("ttm-user-profile-changed", bump)
   }, [])
 
+  const reality = useEmotionalRealityExpansion({ locale, position: location.position })
+  const energyWhisper = useEnergyFeed()
+  const platformInsight = useMemo(
+    () =>
+      pickPlatformInsight({
+        reflection: reality.consciousness.reflection,
+        narrative: reality.narrative,
+        orchestration: reality.os.orchestration,
+        energy: energyWhisper,
+      }),
+    [
+      reality.consciousness.reflection,
+      reality.narrative,
+      reality.os.orchestration,
+      energyWhisper,
+    ]
+  )
+  void premiumTick
+
   if (!ready) {
     return (
       <div className="ttm-native-app items-center justify-center">
@@ -106,8 +123,6 @@ export function AppShell() {
 
   const headerProfile = getUserProfile()
   const showPremiumBadge = Boolean(headerProfile && isPremiumActive(headerProfile))
-  const reality = useEmotionalRealityExpansion({ locale, position: location.position })
-  void premiumTick
 
   const chatWith = searchParams.get("with")
   const chatThreadOpen = tab === "chat" && Boolean(chatWith)
@@ -155,29 +170,17 @@ export function AppShell() {
 
           {showHeader && (
             <>
-              <EnergyFeedWhisper className="mx-auto max-w-lg w-full px-4 pt-1" />
-              <CompanionPlatformWhisper className="mx-auto max-w-lg w-full px-4 -mt-0.5 mb-1" />
-              <PresencePlatformAmbient className="mx-auto max-w-lg w-full px-4 -mt-0.5 mb-1" />
-              <EmotionalOsWhisper
-                orchestration={reality.os.orchestration}
-                className="mx-auto max-w-lg w-full px-4 mb-1"
+              <PlatformInsightWhisper
+                insight={platformInsight}
+                className="mx-auto max-w-lg w-full px-4 pt-1 mb-1"
               />
+              {!platformInsight && (
+                <PresencePlatformAmbient className="mx-auto max-w-lg w-full px-4 -mt-0.5 mb-1" />
+              )}
               <PlatformSoulField
                 soul={reality.soul}
                 className="mx-auto max-w-lg w-full px-4 mb-1 hidden sm:block"
               />
-              {reality.consciousness.reflection?.scope === "platform" && (
-                <ReflectionV2Whisper
-                  reflection={reality.consciousness.reflection}
-                  className="mx-auto max-w-lg w-full px-4 mb-2"
-                />
-              )}
-              {reality.narrative?.scope === "platform" && (
-                <RelationshipNarrativeWhisper
-                  narrative={reality.narrative}
-                  className="mx-auto max-w-lg w-full px-4 mb-2"
-                />
-              )}
               <EmotionalRetentionStrip className="mx-auto max-w-lg w-full px-3 mb-2" />
               <DailyReturnBanner
                 insights={insights}

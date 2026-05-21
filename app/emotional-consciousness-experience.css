@@ -193,6 +193,36 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* Unified platform insight (shell) — one line max */
+.p22-platform-insight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 200;
+  letter-spacing: 0.06em;
+  line-height: 1.45;
+  color: rgba(199, 210, 254, 0.42);
+}
+
+.p22-platform-insight__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(129, 140, 248, 0.55);
+  flex-shrink: 0;
+}
+
+.p22-platform-insight__dismiss {
+  margin-left: 0.15rem;
+  color: rgba(255, 255, 255, 0.22);
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ec-silence-field,
   .ec-tension-veil,

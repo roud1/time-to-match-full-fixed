@@ -542,19 +542,20 @@ export function ChatRoomScreen({
             />
           )}
           <PresenceProximityLayer immersion={realityExpansion.presence} />
-          {realityExpansion.consciousness.reflection?.scope === "connection" && (
+          {realityExpansion.consciousness.reflection?.scope === "connection" ? (
             <ReflectionV2Whisper
               reflection={realityExpansion.consciousness.reflection}
               profileId={profile.id}
               className="shrink-0 px-4 py-2"
             />
-          )}
-          {realityExpansion.narrative?.scope === "connection" && (
-            <RelationshipNarrativeWhisper
-              narrative={realityExpansion.narrative}
-              profileId={profile.id}
-              className="shrink-0 px-4 py-2"
-            />
+          ) : (
+            realityExpansion.narrative?.scope === "connection" && (
+              <RelationshipNarrativeWhisper
+                narrative={realityExpansion.narrative}
+                profileId={profile.id}
+                className="shrink-0 px-4 py-2"
+              />
+            )
           )}
           <div
             ref={scrollRef}
