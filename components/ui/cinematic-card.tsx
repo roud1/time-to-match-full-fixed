@@ -3,8 +3,8 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 const shells: Record<"glass" | "profile" | "info" | "floating", string> = {
-  glass: cn("glass-card ttm-card-shell rounded-[var(--ttm-radius-2xl)]"),
-  profile: cn("premium-profile-card ttm-card-shell rounded-[var(--ttm-radius-2xl)]"),
+  glass: cn("ttm-brand-glass ttm-card-shell rounded-[var(--ttm-radius-2xl)]"),
+  profile: cn("premium-profile-card ttm-brand-card rounded-[var(--ttm-radius-2xl)]"),
   info: cn(
     "rounded-2xl border border-white/10 bg-black/25 backdrop-blur-md",
     "shadow-[var(--ttm-shadow-card)]"

@@ -1,24 +1,22 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useI18n } from "@/lib/i18n"
 import {
   getChats,
   getProfileById,
-  receiveMessage,
   sendMessage,
   type ChatThread,
 } from "@/lib/social-store"
-import { isPulseProfile } from "@/lib/pulse-companion"
-import { fetchPulseReply } from "@/lib/pulse-chat-client"
 import { markThreadSeen } from "@/lib/chat-thread-seen"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { ChatInboxScreen } from "@/components/chat/chat-inbox-screen"
 import { ChatRoomScreen } from "@/components/chat/chat-room-screen"
+import { ChatThreadTransition } from "@/components/mobile/app-tab-transition"
 import { useTrustSafetyVersion } from "@/hooks/use-trust-safety-version"
 import { isProfileBlocked, isProfileMuted } from "@/lib/trust-safety-store"
-import { getUserProfile, isPremiumActive } from "@/lib/user-profile"
+import { getUserProfile } from "@/lib/user-profile"
 import { getConnectionMemories } from "@/lib/connection-store"
 import { useProfileLife } from "@/hooks/use-profile-life"
 import { cn } from "@/lib/utils"
@@ -26,7 +24,7 @@ import { cn } from "@/lib/utils"
 function parseWithParam(withParam: string | null): number | null {
   if (!withParam) return null
   const id = Number.parseInt(withParam, 10)
-  return Number.isFinite(id) ? id : null
+  return Number.isFinite(id) && id > 0 ? id : null
 }
 
 export function ChatPanel() {
@@ -38,9 +36,6 @@ export function ChatPanel() {
   const [threads, setThreads] = useState<ChatThread[]>([])
   const [listReady, setListReady] = useState(false)
   const [draft, setDraft] = useState("")
-  const [pulseThinking, setPulseThinking] = useState(false)
-  const pulseInflight = useRef(false)
-  const pulseSeq = useRef(0)
 
   const activeId = useMemo(() => parseWithParam(withParam), [withParam])
 
@@ -71,21 +66,15 @@ export function ChatPanel() {
   }, [locale, location.position])
 
   const visibleThreads = useMemo(
-    () => threads.filter((th) => !isProfileBlocked(th.profileId) || isPulseProfile(th.profileId)),
+    () => threads.filter((th) => !isProfileBlocked(th.profileId)),
     [threads, trustV]
   )
 
   useEffect(() => {
-    if (activeId != null && isProfileBlocked(activeId) && !isPulseProfile(activeId)) {
+    if (activeId != null && isProfileBlocked(activeId)) {
       setActiveChat(null)
     }
   }, [activeId, trustV, setActiveChat])
-
-  useEffect(() => {
-    pulseSeq.current += 1
-    pulseInflight.current = false
-    setPulseThinking(false)
-  }, [activeId])
 
   const profileMap = useMemo(() => {
     const m = new Map<number, SwipeProfile>()
@@ -99,67 +88,37 @@ export function ChatPanel() {
   const activeProfile =
     activeId != null ? getProfileById(activeId, locale, location.position) : undefined
   const activeThread = threads.find((th) => th.profileId === activeId)
-  const isPulseChat = activeId != null && isPulseProfile(activeId)
-
-  const requestPulseResponse = useCallback(
-    async (threadAfterSend: ChatThread) => {
-      const last = threadAfterSend.messages[threadAfterSend.messages.length - 1]
-      if (last?.from !== "me" || !last.text.trim()) return
-      if (pulseInflight.current) return
-
-      pulseInflight.current = true
-      const seq = ++pulseSeq.current
-      setPulseThinking(true)
-      try {
-        const userName = getUserProfile()?.name
-        const { reply } = await fetchPulseReply(locale, threadAfterSend.messages, userName)
-        if (seq !== pulseSeq.current) return
-
-        const trimmed = reply.trim()
-        if (!trimmed) return
-
-        const current = getChats(locale, location.position).find((c) => c.profileId === activeId)
-        const lastNow = current?.messages[current.messages.length - 1]
-        if (lastNow?.from === "them" && lastNow.text === trimmed) return
-
-        receiveMessage(activeId!, trimmed, locale, location.position)
-        refresh()
-      } catch {
-        if (seq === pulseSeq.current) {
-          receiveMessage(activeId!, t("pulseAiError"), locale, location.position)
-          refresh()
-        }
-      } finally {
-        if (seq === pulseSeq.current) {
-          pulseInflight.current = false
-          setPulseThinking(false)
-        }
-      }
-    },
-    [activeId, locale, location.position, t]
-  )
 
   const handleSend = () => {
-    if (activeId == null || !draft.trim() || pulseThinking) return
+    if (activeId == null || !draft.trim()) return
     const text = draft.trim()
     setDraft("")
     sendMessage(activeId, text, locale, location.position)
     refresh()
-
-    if (isPulseProfile(activeId)) {
-      const thread = getChats(locale, location.position).find((c) => c.profileId === activeId)
-      if (thread) void requestPulseResponse(thread)
-    }
   }
 
-  const me = getUserProfile()
-  const chatPremium = Boolean(me && isPremiumActive(me))
   const profileLife = useProfileLife()
   const connectionsPaused =
     profileLife?.state === "sleeping" || profileLife?.state === "archived"
 
+  if (activeId != null && activeProfile && !activeThread) {
+    return (
+      <div className="ttm-page ttm-page--app max-w-lg mx-auto px-6 py-16 text-center">
+        <p className="text-sm text-white/70 font-extralight">{t("chatEmpty")}</p>
+        <button
+          type="button"
+          className="mt-4 text-sm text-indigo-200/80"
+          onClick={() => setActiveChat(null)}
+        >
+          {t("chatBack")}
+        </button>
+      </div>
+    )
+  }
+
   if (activeId != null && activeProfile && activeThread) {
     return (
+      <ChatThreadTransition open>
       <ChatRoomScreen
         profile={activeProfile}
         thread={activeThread}
@@ -167,16 +126,13 @@ export function ChatPanel() {
         draft={draft}
         onDraftChange={setDraft}
         onSend={handleSend}
-        composerMuted={isProfileMuted(activeId) && !isPulseChat}
-        isPulseGuide={isPulseChat}
-        forceTyping={pulseThinking}
+        composerMuted={isProfileMuted(activeId)}
         labels={{
           back: t("chatBack"),
-          typing: isPulseChat && pulseThinking ? t("pulseAiTyping") : isPulseChat ? t("pulseAiOnline") : t("chatTyping"),
-          online: isPulseChat ? t("pulseAiOnline") : t("chatOnline"),
+          typing: t("chatTyping"),
+          online: t("chatOnline"),
           lastSeen: t("chatLastSeen"),
           reconnect: t("chatReconnectHint"),
-          premiumPlusStrip: chatPremium ? t("premiumChatPlusStrip") : undefined,
           safetyAria: t("trustSafetyOpenAria"),
           composerMutedHint: t("trustComposerMutedHint"),
           bubble: {
@@ -186,7 +142,7 @@ export function ChatPanel() {
             chatReact: t("chatReact"),
           },
           composer: {
-            placeholder: isPulseChat ? t("pulseChatPlaceholder") : t("chatPlaceholder"),
+            placeholder: t("chatPlaceholder"),
             send: t("chatSend"),
             voiceHint: t("chatVoiceHint"),
             voiceDemo: t("chatVoiceDemo"),
@@ -198,6 +154,7 @@ export function ChatPanel() {
           },
         }}
       />
+      </ChatThreadTransition>
     )
   }
 
@@ -228,6 +185,8 @@ export function ChatPanel() {
           title: t("tabChat"),
           subtitle: t("chatSubtitle"),
           empty: t("chatEmpty"),
+          emptyTitle: t("chatEmptyTitle"),
+          emptyBody: t("chatEmptyBody"),
           urgency: t("chatUrgencyLine"),
           reconnect: t("chatReconnectHint"),
           unread: t("chatUnread"),

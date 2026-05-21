@@ -1,0 +1,241 @@
+/* PHASE 4 — Relationship Identity: aura, evolution, memory cards */
+
+.ttm-chat-room[data-rel-personality] {
+  --rel-aura-glow: rgba(180, 195, 255, 0.15);
+  --rel-aura-from: rgba(120, 140, 200, 0.08);
+  --rel-aura-to: transparent;
+  --rel-aura-ring: 230 45% 72%;
+  --rel-aura-intensity: 0.5;
+  --rel-aura-chaos: 0;
+}
+
+/* Personalities */
+[data-rel-personality="slow_burn"] {
+  --rel-aura-glow: rgba(220, 170, 120, 0.22);
+  --rel-aura-from: rgba(180, 130, 90, 0.14);
+  --rel-aura-to: rgba(30, 28, 35, 0.05);
+}
+
+[data-rel-personality="deep_sync"] {
+  --rel-aura-glow: rgba(180, 200, 255, 0.28);
+  --rel-aura-from: rgba(140, 160, 230, 0.16);
+  --rel-aura-to: rgba(50, 45, 90, 0.08);
+}
+
+[data-rel-personality="emotional_chaos"] {
+  --rel-aura-glow: rgba(200, 140, 160, 0.22);
+  --rel-aura-from: rgba(160, 90, 120, 0.12);
+  --rel-aura-to: rgba(60, 30, 45, 0.1);
+}
+
+[data-rel-personality="calm_connection"] {
+  --rel-aura-glow: rgba(160, 190, 210, 0.18);
+  --rel-aura-from: rgba(120, 150, 180, 0.1);
+}
+
+[data-rel-personality="magnetic_chemistry"],
+[data-rel-personality="intense_attraction"] {
+  --rel-aura-glow: rgba(200, 170, 255, 0.34);
+  --rel-aura-from: rgba(160, 120, 255, 0.2);
+  --rel-aura-to: rgba(70, 50, 120, 0.1);
+}
+
+[data-rel-personality="night_energy"] {
+  --rel-aura-glow: rgba(90, 120, 220, 0.32);
+  --rel-aura-from: rgba(50, 70, 160, 0.18);
+  --rel-aura-to: rgba(15, 20, 50, 0.12);
+}
+
+[data-rel-personality="stable_bond"] {
+  --rel-aura-glow: rgba(170, 210, 190, 0.22);
+  --rel-aura-from: rgba(130, 180, 160, 0.12);
+}
+
+/* Connection aura layer */
+.connection-aura {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.connection-aura__veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 110% 70% at 50% 0%,
+    var(--rel-aura-from),
+    var(--rel-aura-to) 65%
+  );
+  opacity: calc(0.35 + var(--rel-aura-intensity, 0.5) * 0.45);
+}
+
+.connection-aura__glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+    circle at 50% 30%,
+    var(--rel-aura-glow),
+    transparent 55%
+  );
+  filter: blur(48px);
+}
+
+[data-rel-motion="flicker"] .connection-aura__glow {
+  animation: rel-aura-flicker 4s ease-in-out infinite;
+}
+
+[data-rel-motion="pulse"] .connection-aura__glow {
+  animation: rel-aura-pulse 5s ease-in-out infinite;
+}
+
+[data-rel-motion="breathe"] .connection-aura__glow,
+[data-rel-motion="flow"] .connection-aura__glow {
+  animation: rel-aura-breathe 7s ease-in-out infinite;
+}
+
+@keyframes rel-aura-breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes rel-aura-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes rel-aura-flicker {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  25% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.35;
+  }
+  75% {
+    opacity: 0.65;
+  }
+}
+
+/* Sync ring — relationship hue */
+.sync-ring[data-rel-personality] .sync-ring__halo,
+.sync-ring[data-rel-personality] .sync-ring__track {
+  --sync-glow: hsl(var(--rel-aura-ring) / 0.55);
+}
+
+.sync-ring[data-rel-evolution="90"] .sync-ring__halo,
+.sync-ring[data-rel-evolution="100"] .sync-ring__track {
+  filter: brightness(1.08);
+}
+
+/* Memory card */
+.rel-memory-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.02) 45%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 40px -16px var(--rel-aura-glow);
+}
+
+.rel-memory-card__shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 65%
+  );
+  background-size: 200% 100%;
+  animation: rel-memory-shimmer 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes rel-memory-shimmer {
+  0%,
+  100% {
+    background-position: 200% 0;
+  }
+  50% {
+    background-position: -200% 0;
+  }
+}
+
+/* Living story timeline */
+.rel-story-timeline {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.rel-story-timeline::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(
+    180deg,
+    var(--rel-aura-glow),
+    rgba(255, 255, 255, 0.06)
+  );
+}
+
+.rel-story-timeline__item {
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.rel-story-timeline__item:last-child {
+  padding-bottom: 0;
+}
+
+.rel-story-timeline__dot {
+  position: absolute;
+  left: -1.25rem;
+  top: 0.35rem;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 12px var(--rel-aura-glow);
+}
+
+.rel-story-timeline__item--reached .rel-story-timeline__dot {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.rel-story-timeline__item--peak .rel-story-timeline__dot {
+  box-shadow: 0 0 18px var(--rel-aura-glow);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .connection-aura__glow,
+  .rel-memory-card__shimmer,
+  [data-rel-motion="flicker"] .connection-aura__glow {
+    animation: none !important;
+  }
+}

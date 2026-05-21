@@ -343,10 +343,12 @@
   justify-content: center;
 }
 
-.cin-progress {
+.cin-progress,
+.ttm-brand-progress {
   height: 100%;
   border-radius: 9999px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.12));
+  background: var(--ttm-brand-gradient-sync);
+  box-shadow: 0 0 10px var(--ttm-glow-sync-soft);
 }
 
 .cin-pill-selected {

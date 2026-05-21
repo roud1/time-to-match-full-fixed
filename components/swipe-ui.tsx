@@ -243,7 +243,7 @@ export function SwipeUI() {
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               onClick={() => handleButtonSwipe("right")}
-              className="w-16 h-16 rounded-full cin-btn-primary flex items-center justify-center text-white"
+              className="ttm-brand-cta w-16 h-16 rounded-full flex items-center justify-center p-0 min-h-0"
               aria-label={t("like")}
             >
               <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">

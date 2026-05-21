@@ -7,7 +7,7 @@ const serverEnvSchema = z.object({
   AUTH_SECRET: z.string().min(16).optional(),
   /** Optional: comma-separated origins for CORS on /api/v1 (default same-origin). */
   CORS_ORIGINS: z.string().optional(),
-  /** OpenRouter — all server AI (connection + Pulse). Never expose to client. */
+  /** OpenRouter — server AI for connection analysis. Never expose to client. */
   OPENROUTER_API_KEY: z.string().min(8).optional(),
   OPENROUTER_MODEL: z.string().optional(),
   OPENROUTER_BASE_URL: z.string().optional(),

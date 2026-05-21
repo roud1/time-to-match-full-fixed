@@ -11,6 +11,9 @@ const routes = [
   { path: "/register", priority: 0.8, changeFrequency: "monthly" as const },
   { path: "/app", priority: 0.6, changeFrequency: "weekly" as const },
   { path: "/profile", priority: 0.6, changeFrequency: "weekly" as const },
+  { path: "/notifications", priority: 0.5, changeFrequency: "weekly" as const },
+  { path: "/memories", priority: 0.5, changeFrequency: "weekly" as const },
+  { path: "/settings", priority: 0.4, changeFrequency: "monthly" as const },
 ]
 
 export default function sitemap(): MetadataRoute.Sitemap {

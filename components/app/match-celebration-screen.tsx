@@ -9,21 +9,59 @@ import { MATCH_CONVERSATION_STARTERS } from "@/lib/match-conversation-starters"
 import { sendMessage } from "@/lib/social-store"
 import { getProfilePhotos } from "@/lib/profile-photos"
 import { getUserProfile } from "@/lib/user-profile"
+import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
+import { getCompatibilityHintLabel } from "@/lib/discover-compatibility"
+import { SyncRing } from "@/components/sync/sync-ring"
+import type { SyncMetrics } from "@/lib/sync-system"
+import { CinematicParticles } from "@/components/ui/cinematic-particles"
+import { markFirstMatchCelebrated } from "@/lib/product-experience"
 import { cn } from "@/lib/utils"
+import { useEffect } from "react"
 
 type MatchCelebrationScreenProps = {
   profile: SwipeProfile | null
   onClose: () => void
+  isFirstMatch?: boolean
 }
 
-export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScreenProps) {
+const PARTICLE_OFFSETS = [
+  { x: -72, y: -28, delay: 0.35 },
+  { x: 68, y: -22, delay: 0.42 },
+  { x: -48, y: 18, delay: 0.5 },
+  { x: 52, y: 24, delay: 0.48 },
+  { x: 0, y: -40, delay: 0.38 },
+  { x: -88, y: 8, delay: 0.55 },
+  { x: 84, y: 12, delay: 0.52 },
+]
+
+export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false }: MatchCelebrationScreenProps) {
   const { t, locale, location } = useI18n()
   const router = useRouter()
   const reduce = useReducedMotion()
   const open = profile != null
+
+  useEffect(() => {
+    if (open && isFirstMatch) markFirstMatchCelebrated()
+  }, [open, isFirstMatch])
   const starters = MATCH_CONVERSATION_STARTERS[locale]
   const me = getUserProfile()
   const myPhoto = me ? getProfilePhotos(me)[0] : null
+  const compatibility = profile ? computeDiscoverCompatibility(profile) : null
+  const resonance = compatibility?.resonancePercent ?? 72
+  const syncMetrics: SyncMetrics = {
+    syncPercent: resonance,
+    connectionPercent: resonance,
+    chemistryPercent: compatibility?.conversationPotential ?? 68,
+    energyPercent: compatibility?.energyLevel ?? 70,
+    bondPercent: Math.round(resonance * 0.88),
+    tier: resonance >= 80 ? "synced" : "vibrant",
+    isActive: true,
+    isFading: false,
+    isSynced: resonance >= 90,
+    recentActivity: true,
+    aiEnhanced: true,
+  }
+
   const goToChat = (starterText?: string) => {
     if (!profile) return
     if (starterText?.trim()) {
@@ -41,90 +79,170 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
           role="dialog"
           aria-modal
           aria-labelledby="match-celebration-title"
-          className="fixed inset-0 z-[80] flex flex-col bg-[#050508]"
+          className="match-moment fixed inset-0 z-[80] flex flex-col"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduce ? 0.15 : 0.35 }}
+          transition={{ duration: reduce ? 0.15 : 0.4 }}
         >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_70%_at_50%_0%,rgba(255,255,255,0.35),transparent_55%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_100%,rgba(139,92,246,0.22),transparent)]" />
-          <CinematicParticles count={14} className="opacity-70" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_55%_at_50%_15%,rgba(220,225,255,0.14),transparent_60%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_20%_90%,rgba(160,140,220,0.08),transparent)]" />
+          {isFirstMatch && !reduce && <div className="p9-first-match-burst" aria-hidden />}
+          <CinematicParticles count={isFirstMatch ? 12 : 8} className="opacity-50" />
+
+          <motion.div
+            className="match-moment__sync-line pointer-events-none"
+            initial={reduce ? false : { height: 0, opacity: 0 }}
+            animate={{ height: "28%", opacity: 1 }}
+            transition={{ delay: 0.55, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            aria-hidden
+          />
+
+          {!reduce &&
+            PARTICLE_OFFSETS.map((p, i) => (
+              <motion.span
+                key={i}
+                className="match-moment__particle pointer-events-none"
+                style={{ left: "50%", top: "42%" }}
+                initial={{ x: 0, y: 0, opacity: 0, scale: 0 }}
+                animate={{
+                  x: p.x,
+                  y: p.y,
+                  opacity: [0, 1, 0.4],
+                  scale: [0, 1.2, 0.6],
+                }}
+                transition={{ delay: p.delay, duration: 1.1, ease: "easeOut" }}
+                aria-hidden
+              />
+            ))}
 
           <div className="relative z-[1] flex flex-1 flex-col min-h-0 px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))]">
             <button
               type="button"
               onClick={onClose}
-              className="self-end text-sm font-light text-muted-foreground hover:text-foreground px-3 py-2 touch-manipulation"
+              className="self-end text-sm font-extralight text-white/45 hover:text-white/80 px-3 py-2 touch-manipulation transition-colors"
             >
               {t("matchModalContinue")}
             </button>
 
             <div className="flex-1 flex flex-col items-center justify-center min-h-0 py-4">
               <motion.div
-                initial={reduce ? false : { scale: 0.88, opacity: 0 }}
+                initial={reduce ? false : { scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 320, damping: 28, delay: 0.05 }}
-                className="relative flex items-center justify-center gap-0 mb-8"
+                transition={{ type: "spring", stiffness: 280, damping: 26, delay: 0.08 }}
+                className="relative flex items-center justify-center mb-10"
               >
-                <div className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-[1.35rem] overflow-hidden ring-2 ring-white/18 shadow-[0_24px_80px_-20px_rgba(255,255,255,0.55)] -rotate-6 z-[1]">
-                  {myPhoto ? (
-                    <Image src={myPhoto} alt="" fill className="object-cover" sizes="128px" priority />
-                  ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-white/12 to-white/40" />
-                  )}
-                </div>
-                <div className="relative h-28 w-28 sm:h-32 sm:w-32 rounded-[1.35rem] overflow-hidden ring-2 ring-violet-400/45 shadow-[0_24px_80px_-20px_rgba(139,92,246,0.45)] rotate-6 -ml-8 z-[2]">
-                  <Image src={profile.image} alt={profile.name} fill className="object-cover" sizes="128px" priority />
-                </div>
-                <motion.span
-                  className="absolute -bottom-3 left-1/2 -translate-x-1/2 text-3xl"
-                  initial={reduce ? false : { scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: "spring", stiffness: 500, damping: 18 }}
+                <motion.div
+                  className="match-moment__ring match-moment__ring--merge -mr-4 z-[1]"
+                  style={{ ["--match-ring-glow" as string]: "rgba(200, 210, 255, 0.45)" }}
+                  initial={reduce ? false : { x: -20, opacity: 0.5 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.15, duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <SyncRing metrics={syncMetrics} size="lg" aiBoost syncSurge>
+                    <div className="relative h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 rounded-[1.15rem] overflow-hidden ring-1 ring-white/20">
+                      {myPhoto ? (
+                        <Image src={myPhoto} alt="" fill className="object-cover" sizes="80px" priority />
+                      ) : (
+                        <div className="h-full w-full bg-gradient-to-br from-white/10 to-white/30" />
+                      )}
+                    </div>
+                  </SyncRing>
+                </motion.div>
+
+                <motion.div
+                  className="match-moment__ring z-[2]"
+                  style={{ ["--match-ring-glow" as string]: "rgba(220, 200, 255, 0.5)" }}
+                  initial={reduce ? false : { x: 24, opacity: 0.5 }}
+                  animate={{ x: -8, opacity: 1 }}
+                  transition={{ delay: 0.28, duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <SyncRing
+                    metrics={syncMetrics}
+                    size="lg"
+                    relationshipPersonality={compatibility?.previewPersonality}
+                  >
+                    <div className="relative h-[4.5rem] w-[4.5rem] sm:h-20 sm:w-20 rounded-[1.15rem] overflow-hidden ring-1 ring-white/25">
+                      <Image
+                        src={profile.image}
+                        alt={profile.name}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                        priority
+                      />
+                    </div>
+                  </SyncRing>
+                </motion.div>
+
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  initial={reduce ? false : { scale: 0, opacity: 0 }}
+                  animate={{ scale: [0, 1.15, 1], opacity: [0, 0.7, 0.35] }}
+                  transition={{ delay: 0.5, duration: 1 }}
                   aria-hidden
                 >
-                  ✨
-                </motion.span>
+                  <span className="h-24 w-24 rounded-full bg-white/[0.06] blur-2xl" />
+                </motion.div>
               </motion.div>
 
               <motion.h1
                 id="match-celebration-title"
-                initial={reduce ? false : { opacity: 0, y: 12 }}
+                initial={reduce ? false : { opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12 }}
-                className="text-3xl sm:text-4xl font-extralight tracking-tight text-center bg-gradient-to-r from-white via-white/70 to-white/40 bg-clip-text text-transparent"
+                transition={{ delay: 0.2 }}
+                className="text-2xl sm:text-[1.65rem] font-extralight tracking-tight text-center text-white/95"
               >
-                {t("matchModalTitle")}
+                {isFirstMatch ? t("matchFirstTitle") : t("matchModalTitle")}
               </motion.h1>
+              {isFirstMatch && (
+                <motion.p
+                  initial={reduce ? false : { opacity: 0, scale: 0.92 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.22 }}
+                  className="mt-3 text-[10px] uppercase tracking-[0.28em] text-indigo-200/80 font-extralight text-center"
+                >
+                  {t("matchFirstBurst")}
+                </motion.p>
+              )}
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.18 }}
-                className="mt-2 text-center text-sm font-light text-muted-foreground"
+                transition={{ delay: 0.26 }}
+                className="mt-2 text-center text-sm font-extralight text-white/55"
               >
-                {t("matchModalSubtitle")}
+                {isFirstMatch ? t("matchFirstSubtitle") : t("matchModalSubtitle")}
               </motion.p>
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.22 }}
-                className="mt-1 text-center text-xl font-light text-white/85/95"
+                transition={{ delay: 0.32 }}
+                className="mt-3 text-center text-lg font-extralight text-white/80"
               >
                 {profile.name}
               </motion.p>
-              <p className="mt-5 text-xs font-light text-white/50 tracking-wide text-center max-w-[260px]">
-                {t("connectionMatchStarted")}
+              {compatibility && (
+                <motion.p
+                  initial={reduce ? false : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.38 }}
+                  className="mt-4 text-[10px] uppercase tracking-[0.18em] text-white/40 font-extralight text-center max-w-[280px]"
+                >
+                  {getCompatibilityHintLabel(compatibility.chemistryHint, t)}
+                </motion.p>
+              )}
+              <p className="mt-3 text-xs font-extralight text-white/35 tracking-wide text-center max-w-[260px]">
+                {t("matchModalBody")}
               </p>
             </div>
 
             <motion.div
               initial={reduce ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.22 }}
+              transition={{ delay: 0.28 }}
               className="shrink-0 w-full max-w-md mx-auto space-y-4"
             >
-              <p className="text-[10px] uppercase tracking-[0.2em] text-white/80/80 font-light text-center">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-extralight text-center">
                 {t("matchModalStartersTitle")}
               </p>
               <ul className="space-y-2 max-h-[min(28dvh,220px)] overflow-y-auto ttm-chat-scroll pr-0.5">
@@ -134,8 +252,8 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
                       type="button"
                       onClick={() => goToChat(text)}
                       className={cn(
-                        "w-full rounded-2xl border border-white/12 bg-white/[0.05] px-4 py-3 text-left text-sm font-light",
-                        "text-foreground/90 hover:border-white/16 hover:bg-white/[0.08] transition-colors touch-manipulation"
+                        "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm font-extralight",
+                        "text-white/80 hover:border-white/14 hover:bg-white/[0.07] transition-colors touch-manipulation"
                       )}
                     >
                       {text}
@@ -148,9 +266,9 @@ export function MatchCelebrationScreen({ profile, onClose }: MatchCelebrationScr
                 type="button"
                 onClick={() => goToChat()}
                 className={cn(
-                  "w-full rounded-2xl py-4 text-sm font-light text-white touch-manipulation",
-                  "bg-gradient-to-r cin-action-like",
-                  "shadow-[0_20px_50px_-16px_rgba(255,255,255,0.55)] border border-white/15",
+                  "w-full rounded-2xl py-4 text-sm font-extralight text-white touch-manipulation",
+                  "bg-gradient-to-r from-white/20 via-white/12 to-white/8",
+                  "shadow-[0_20px_50px_-20px_rgba(220,225,255,0.35)] border border-white/12",
                   "hover:brightness-110 active:scale-[0.98] transition-all"
                 )}
               >

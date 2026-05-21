@@ -49,5 +49,55 @@ export function getMoodLabel(id: string, locale: Locale): string {
   return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
 }
 
+export const ENERGY_TAG_OPTIONS = [
+  { id: "radiant", ru: "Сияние", uk: "Сяйво", en: "Radiant" },
+  { id: "grounded", ru: "Заземлённость", uk: "Заземленість", en: "Grounded" },
+  { id: "magnetic", ru: "Магнетизм", uk: "Магнетизм", en: "Magnetic" },
+  { id: "tender", ru: "Нежность", uk: "Ніжність", en: "Tender" },
+  { id: "electric", ru: "Искра", uk: "Іскра", en: "Electric" },
+  { id: "serene", ru: "Покой", uk: "Спокій", en: "Serene" },
+] as const
+
+export const COMMUNICATION_STYLE_OPTIONS = [
+  { id: "direct", ru: "Прямо и честно", uk: "Прямо й чесно", en: "Direct & honest" },
+  { id: "playful", ru: "С юмором", uk: "З гумором", en: "Playful banter" },
+  { id: "deep", ru: "Глубокие разговоры", uk: "Глибокі розмови", en: "Deep talks" },
+  { id: "slow", ru: "Медленный ритм", uk: "Повільний ритм", en: "Slow burn" },
+  { id: "voice", ru: "Голос важнее текста", uk: "Голос важливіший за текст", en: "Voice-first" },
+] as const
+
+export const CONNECTION_PREF_OPTIONS = [
+  { id: "quality", ru: "Качество, не количество", uk: "Якість, не кількість", en: "Quality over quantity" },
+  { id: "spontaneous", ru: "Спонтанные встречи", uk: "Спонтанні зустрічі", en: "Spontaneous meetups" },
+  { id: "digital", ru: "Сначала переписка", uk: "Спочатку листування", en: "Text-first connection" },
+  { id: "local", ru: "Рядом, в одном городе", uk: "Поруч, в одному місті", en: "Same city energy" },
+  { id: "open", ru: "Открыт к сюрпризам", uk: "Відкритий до сюрпризів", en: "Open to surprises" },
+] as const
+
+export type EnergyTagId = (typeof ENERGY_TAG_OPTIONS)[number]["id"]
+export type CommunicationStyleId = (typeof COMMUNICATION_STYLE_OPTIONS)[number]["id"]
+export type ConnectionPrefId = (typeof CONNECTION_PREF_OPTIONS)[number]["id"]
+
+export const MIN_ENERGY_TAGS = 1
+export const MAX_ENERGY_TAGS = 3
+
+export function getEnergyTagLabel(id: string, locale: Locale): string {
+  const row = ENERGY_TAG_OPTIONS.find((v) => v.id === id)
+  if (!row) return id
+  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+}
+
+export function getCommunicationStyleLabel(id: string, locale: Locale): string {
+  const row = COMMUNICATION_STYLE_OPTIONS.find((v) => v.id === id)
+  if (!row) return id
+  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+}
+
+export function getConnectionPrefLabel(id: string, locale: Locale): string {
+  const row = CONNECTION_PREF_OPTIONS.find((v) => v.id === id)
+  if (!row) return id
+  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+}
+
 export const MIN_VIBES = 2
 export const MAX_VIBES = 5

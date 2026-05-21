@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import { motion, AnimatePresence, animate, useMotionValue, useReducedMotion } from "motion/react"
 import type { ChatMessage } from "@/lib/social-store"
+import type { SyncTier } from "@/lib/sync-system"
 import { cn } from "@/lib/utils"
 
 const QUICK_REACTIONS = ["❤️", "🔥", "✨", "🙌"]
@@ -31,6 +32,9 @@ function ReadReceipt({ state, labels }: { state: "delivered" | "read"; labels: L
 export function ChatMessageBubble({
   msg,
   isMe,
+  index = 0,
+  syncTier,
+  arriveSurge,
   showOwnReceipt,
   receiptState,
   time,
@@ -41,6 +45,9 @@ export function ChatMessageBubble({
 }: {
   msg: ChatMessage
   isMe: boolean
+  index?: number
+  syncTier?: SyncTier
+  arriveSurge?: boolean
   showOwnReceipt: boolean
   receiptState: "delivered" | "read"
   time: string
@@ -74,14 +81,21 @@ export function ChatMessageBubble({
     void animate(x, 0, { type: "spring", stiffness: 520, damping: 34 })
   }
 
+  const highSync = syncTier === "vibrant" || syncTier === "synced" || syncTier === "active"
+
   return (
     <motion.div
       layout={!reduce}
-      initial={{ opacity: 0, y: 10, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: "spring", stiffness: 420, damping: 32 }}
+      initial={{ opacity: 0, y: 16, scale: 0.96, filter: "blur(6px)" }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+      transition={{
+        type: "spring",
+        stiffness: 380,
+        damping: 30,
+        delay: reduce ? 0 : Math.min(index * 0.04, 0.2),
+      }}
       className={cn(
-        "flex flex-col gap-1 max-w-[min(92%,18rem)] group",
+        "flex flex-col gap-1.5 max-w-[min(88%,20rem)] group",
         isMe ? "ml-auto items-end" : "mr-auto items-start"
       )}
       onPointerEnter={() => setHover(true)}
@@ -119,10 +133,10 @@ export function ChatMessageBubble({
           }}
           onDragEnd={handleDragEnd}
           className={cn(
-            "relative px-3.5 py-2.5 rounded-[1.35rem] text-[15px] leading-snug font-light tracking-wide shadow-lg touch-pan-y cursor-grab active:cursor-grabbing",
-            isMe
-              ? "rounded-br-md text-white border border-white/10 cin-bubble-me"
-              : "rounded-bl-md border border-white/12 bg-white/[0.07] backdrop-blur-2xl text-foreground/95 shadow-[0_12px_40px_-24px_rgba(0,0,0,0.85)]"
+            "ttm-chat-bubble relative px-4 py-3 rounded-[1.4rem] text-[15px] leading-relaxed touch-pan-y cursor-grab active:cursor-grabbing",
+            isMe ? "ttm-chat-bubble--me rounded-br-md text-white/95" : "ttm-chat-bubble--them rounded-bl-md text-white/90",
+            arriveSurge && "ttm-chat-bubble--surge",
+            highSync && !isMe && "shadow-[0_16px_48px_-28px_rgba(180,195,255,0.25)]"
           )}
         >
           <p className="whitespace-pre-wrap break-words select-none">{msg.text}</p>

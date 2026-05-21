@@ -1,7 +1,18 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import './brand-system.css';
 @import './design-system.css';
 @import './sync-design.css';
+@import './chat-experience.css';
+@import './discover-experience.css';
+@import './landing-experience.css';
+@import './mobile-experience.css';
+@import './relationship-identity.css';
+@import './product-experience.css';
+@import './emotional-os-experience.css';
+@import './reality-expansion-experience.css';
+@import './emotional-consciousness-experience.css';
+@import './growth-experience.css';
 @import './cinematic.css';
 
 @custom-variant dark (&:is(.dark *));
@@ -94,42 +105,28 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.glass-card {
-  background: rgba(25, 25, 35, 0.7);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+/* glass-card — see brand-system.css */
 
-/* Ambient glow effects */
-.glow-pink {
-  box-shadow: 0 0 60px 20px rgba(236, 72, 153, 0.15),
-              0 0 100px 40px rgba(236, 72, 153, 0.1);
-}
-
+.glow-pink,
 .glow-purple {
-  box-shadow: 0 0 60px 20px rgba(168, 85, 247, 0.15),
-              0 0 100px 40px rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 60px 20px var(--ttm-glow-chemistry),
+    0 0 100px 40px var(--ttm-glow-sync-soft);
 }
 
 .text-glow {
-  text-shadow: 0 0 40px rgba(236, 72, 153, 0.6),
-               0 0 80px rgba(236, 72, 153, 0.4);
+  text-shadow: 0 0 40px var(--ttm-glow-chemistry), 0 0 80px var(--ttm-glow-sync-soft);
 }
 
 .cinematic-headline-glow {
-  filter: drop-shadow(0 0 32px rgba(236, 72, 153, 0.35));
+  filter: drop-shadow(0 0 32px var(--ttm-glow-cinematic));
 }
 
 .premium-timer-cell {
-  background: rgba(12, 12, 18, 0.75);
+  background: var(--ttm-glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 0 0 1px rgba(236, 72, 153, 0.08),
-    0 12px 40px -12px rgba(236, 72, 153, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--ttm-brand-line);
+  box-shadow: var(--ttm-depth-1), inset 0 0 20px -8px var(--ttm-glow-sync-soft);
 }
 
 .premium-nav-scrolled {
@@ -138,20 +135,7 @@
   -webkit-backdrop-filter: blur(32px) saturate(1.15);
 }
 
-.premium-profile-card {
-  background: rgba(8, 8, 10, 0.55);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.premium-profile-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
-  box-shadow:
-    0 24px 60px -20px rgba(0, 0, 0, 0.75),
-    0 0 40px -16px rgba(255, 255, 255, 0.06);
-}
+/* premium-profile-card — see brand-system.css */
 
 .premium-btn-shimmer {
   background: linear-gradient(

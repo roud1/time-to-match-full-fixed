@@ -7,11 +7,15 @@ import { getLikedYouProfiles, getSocialState, likeBack } from "@/lib/social-stor
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { PresenceBadge, presenceFromProfileId } from "@/components/activity/presence-badge"
 import { MatchCelebrationScreen } from "@/components/app/match-celebration-screen"
+import { EmotionalEmptyState } from "@/components/product/emotional-empty-state"
+import { isFirstMatchPending } from "@/lib/product-experience"
+import { Heart } from "lucide-react"
 
 export function LikesPanel() {
   const { t, locale, location } = useI18n()
   const [likes, setLikes] = useState<SwipeProfile[]>([])
   const [matchedProfile, setMatchedProfile] = useState<SwipeProfile | null>(null)
+  const [firstMatchMode, setFirstMatchMode] = useState(false)
 
   const refresh = useCallback(() => {
     const state = getSocialState(locale, location.position)
@@ -31,7 +35,10 @@ export function LikesPanel() {
 
   const handleLikeBack = (profile: SwipeProfile) => {
     const matched = likeBack(profile.id, locale, location.position)
-    if (matched) setMatchedProfile(profile)
+    if (matched) {
+      setFirstMatchMode(isFirstMatchPending())
+      setMatchedProfile(profile)
+    }
     refresh()
   }
 
@@ -42,18 +49,27 @@ export function LikesPanel() {
         <p className="text-sm text-muted-foreground font-light mt-1">{t("likesSubtitle")}</p>
       </div>
 
-      <MatchCelebrationScreen profile={matchedProfile} onClose={() => setMatchedProfile(null)} />
+      <MatchCelebrationScreen
+        profile={matchedProfile}
+        isFirstMatch={firstMatchMode}
+        onClose={() => {
+          setMatchedProfile(null)
+          setFirstMatchMode(false)
+        }}
+      />
 
       {likes.length === 0 ? (
-        <div className="glass-card rounded-3xl p-10 text-center">
-          <p className="text-muted-foreground font-light">{t("likesEmpty")}</p>
-        </div>
+        <EmotionalEmptyState
+          title={t("likesEmptyTitle")}
+          body={t("likesEmptyBody")}
+          icon={Heart}
+        />
       ) : (
         <ul className="space-y-3">
           {likes.map((profile) => (
             <li
               key={profile.id}
-              className="glass-card rounded-2xl p-3 flex items-center gap-3 border border-foreground/10"
+              className="ttm-brand-glass ttm-brand-interactive rounded-2xl p-3 flex items-center gap-3"
             >
               <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
                 <Image src={profile.image} alt={profile.name} fill className="object-cover" sizes="72px" />
@@ -79,7 +95,7 @@ export function LikesPanel() {
               <button
                 type="button"
                 onClick={() => handleLikeBack(profile)}
-                className="shrink-0 w-11 h-11 rounded-full bg-gradient-to-br cin-btn-primary flex items-center justify-center text-white shadow-md"
+                className="ttm-brand-cta shrink-0 w-11 h-11 rounded-full flex items-center justify-center p-0 min-h-0"
                 aria-label={t("likesLikeBack")}
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

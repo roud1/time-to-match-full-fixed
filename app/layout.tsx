@@ -6,6 +6,8 @@ import "./globals.css"
 import { I18nProvider } from "@/lib/i18n"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { SiteBackground } from "@/components/site-background"
+import { MobileScreenTransition } from "@/components/mobile/mobile-screen-transition"
+import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register"
 
 const interTight = Inter_Tight({
   subsets: ["latin", "cyrillic"],
@@ -96,12 +98,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" suppressHydrationWarning className="bg-[#050506]">
-      <body className={`${interTight.variable} font-sans antialiased ttm-root`}>
+      <body className={`${interTight.variable} font-sans antialiased ttm-root ttm-brand-universe`}>
         <I18nProvider>
+          <ServiceWorkerRegister />
           <SiteBackground />
-          <div className="relative z-0 min-h-screen">
-            {children}
-          </div>
+          <MobileScreenTransition>
+            <div className="relative z-0 min-h-screen">{children}</div>
+          </MobileScreenTransition>
           <LanguageSwitcher />
         </I18nProvider>
         {process.env.NODE_ENV === "production" && (

@@ -44,7 +44,7 @@ export function HowItWorks() {
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-16 md:mb-24"
         >
-          <span className="ttm-cin-overline inline-block px-4 py-2 rounded-full cin-glass mb-8">
+          <span className="ttm-brand-overline inline-block px-4 py-2 rounded-full ttm-brand-glass mb-8">
             {t("howBadge")}
           </span>
           <h2 className="ttm-cin-headline text-balance mb-6">
@@ -64,7 +64,7 @@ export function HowItWorks() {
               transition={{ duration: 0.8, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              <div className="cin-glass rounded-2xl p-8 pt-10 text-center h-full">
+              <div className="ttm-brand-glass rounded-2xl p-8 pt-10 text-center h-full ttm-brand-interactive">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full border border-white/10 bg-[#050506] text-[10px] font-light tracking-[0.2em] text-white/50">
                   {step.number}
                 </div>

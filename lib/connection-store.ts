@@ -6,6 +6,7 @@ import {
   type ConnectionMemory,
   type ConnectionRecord,
 } from "@/lib/connection-system"
+import { broadcastPresenceUpdate } from "@/lib/presence/realtime-presence"
 
 const STORE_KEY = "ttm-connections"
 const STORE_VERSION = 1
@@ -46,16 +47,59 @@ function load(): ConnectionStoreState {
 function save(state: ConnectionStoreState) {
   if (typeof window === "undefined") return
   localStorage.setItem(STORE_KEY, JSON.stringify(state))
+  void import("@/lib/connection-sync-client").then((m) => m.scheduleConnectionSyncPush())
 }
 
 function dispatch(events: ConnectionEvent[]) {
   if (typeof window === "undefined" || events.length === 0) return
   window.dispatchEvent(new CustomEvent("ttm-connection-updated", { detail: { events } }))
   window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+  broadcastPresenceUpdate({ source: "connection" })
 }
 
 export function getConnectionStore(): ConnectionStoreState {
   return load()
+}
+
+/** Export full store for server sync / backup. */
+export function exportConnectionStore(): ConnectionStoreState {
+  return load()
+}
+
+/** Merge remote snapshot (keeps newer lastInteractionAt per profile). */
+export function importConnectionStore(remote: Partial<ConnectionStoreState>): boolean {
+  if (typeof window === "undefined") return false
+  const local = load()
+  const remoteConns = remote.connections ?? []
+  if (remoteConns.length === 0) return false
+
+  const byId = new Map(local.connections.map((c) => [c.profileId, c]))
+  for (const rc of remoteConns) {
+    const r = rc as ConnectionRecord
+    if (typeof r.profileId !== "number") continue
+    const existing = byId.get(r.profileId)
+    if (!existing || r.lastInteractionAt > existing.lastInteractionAt) {
+      byId.set(r.profileId, r)
+    }
+  }
+
+  const mergedMemories = [...(remote.memories ?? []), ...local.memories]
+  const memSeen = new Set<string>()
+  const memories = mergedMemories.filter((m) => {
+    const key = `${m.profileId}-${m.endedAt}`
+    if (memSeen.has(key)) return false
+    memSeen.add(key)
+    return true
+  })
+
+  save({
+    ...local,
+    connections: [...byId.values()],
+    memories,
+    recentEvents: remote.recentEvents ?? local.recentEvents,
+  })
+  dispatch([])
+  return true
 }
 
 export function getConnection(profileId: number): ConnectionRecord | undefined {

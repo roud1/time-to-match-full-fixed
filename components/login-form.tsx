@@ -93,9 +93,9 @@ export function LoginForm() {
     >
       <CinematicCard variant="glass" className="p-6 md:p-8">
         <div className="text-center mb-8">
-          <span className="ttm-badge-soft block mx-auto w-fit mb-4">SYNC</span>
-          <h1 className="ttm-type-h1 text-foreground mb-2">{t("loginPageTitle")}</h1>
-          <p className="ttm-type-muted">{t("loginPageSubtitle")}</p>
+          <span className="ttm-badge-brand block mx-auto w-fit mb-4">SYNC</span>
+          <h1 className="ttm-brand-title text-foreground mb-2">{t("loginPageTitle")}</h1>
+          <p className="ttm-brand-caption">{t("loginPageSubtitle")}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

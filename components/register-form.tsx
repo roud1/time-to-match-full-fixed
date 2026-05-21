@@ -30,6 +30,12 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
 import { ProfilePhotoPicker } from "@/components/profile-photo-picker"
 import { VibeCloudPicker, IntentionDeck, MoodOrbit } from "@/components/profile/identity-pickers"
+import {
+  EnergyTagPicker,
+  CommunicationStylePicker,
+  ConnectionPrefPicker,
+} from "@/components/product/identity-product-pickers"
+import { MIN_ENERGY_TAGS } from "@/lib/profile-identity"
 
 type Gender = "male" | "female" | "other"
 type LookingFor = "men" | "women" | "all"
@@ -46,15 +52,18 @@ type FormData = {
   customCity: string
   interests: InterestId[]
   vibeIds: string[]
+  energyTagIds: string[]
   intention: string
   mood: string
+  communicationStyle: string
+  connectionPref: string
   promptFavorite: string
   bio: string
   agreeTerms: boolean
 }
 
 type FormErrors = Partial<
-  Record<keyof FormData | "photo" | "city" | "vibes" | "intention", string>
+  Record<keyof FormData | "photo" | "city" | "vibes" | "energy" | "intention" | "communication" | "connectionPref", string>
 >
 
 const STEPS = [1, 2, 3, 4] as const
@@ -79,8 +88,11 @@ export function RegisterForm() {
     customCity: "",
     interests: [],
     vibeIds: [],
+    energyTagIds: [],
     intention: "",
     mood: "",
+    communicationStyle: "",
+    connectionPref: "",
     promptFavorite: "",
     bio: "",
     agreeTerms: false,
@@ -141,7 +153,10 @@ export function RegisterForm() {
 
     if (s === 3) {
       if (form.vibeIds.length < MIN_VIBES) next.vibes = t("regErrorVibes")
+      if (form.energyTagIds.length < MIN_ENERGY_TAGS) next.energy = t("regErrorEnergy")
       if (!form.intention.trim()) next.intention = t("regErrorIntention")
+      if (!form.communicationStyle.trim()) next.communication = t("regErrorCommunication")
+      if (!form.connectionPref.trim()) next.connectionPref = t("regErrorConnectionPref")
     }
 
     if (s === 4) {
@@ -172,7 +187,10 @@ export function RegisterForm() {
       lookingFor: form.lookingFor,
       birthdate: form.birthdate,
       vibeIds: form.vibeIds,
+      energyTagIds: form.energyTagIds,
       intention: form.intention,
+      communicationStyle: form.communicationStyle,
+      connectionPref: form.connectionPref,
       ...(form.mood ? { mood: form.mood } : {}),
       ...(form.promptFavorite.trim() ? { promptFavorite: form.promptFavorite.trim() } : {}),
       ...(photos.length > 0 ? { photoUrls: photos } : {}),
@@ -209,8 +227,8 @@ export function RegisterForm() {
     >
       <CinematicCard variant="glass" className="p-6 md:p-8 border border-white/10 shadow-[0_28px_90px_-40px_rgba(255,255,255,0.35)]">
         <div className="text-center mb-8">
-          <span className="ttm-badge-soft mb-4 block mx-auto w-fit">SYNC</span>
-          <h1 className="ttm-type-h1 text-foreground mb-2">{t("regPageTitle")}</h1>
+          <span className="ttm-badge-brand mb-4 block mx-auto w-fit">SYNC</span>
+          <h1 className="ttm-brand-title text-foreground mb-2">{t("regPageTitle")}</h1>
           <p className="ttm-type-muted">{t("regPageSubtitle")}</p>
         </div>
 
@@ -220,7 +238,7 @@ export function RegisterForm() {
               <motion.div
                 className={cn(
                   "h-1 flex-1 rounded-full transition-colors duration-300",
-                  step >= s ? "bg-gradient-to-r cin-btn-primary" : "bg-foreground/10"
+                  step >= s ? "bg-[linear-gradient(90deg,rgba(99,102,241,0.7),rgba(139,92,246,0.6))]" : "bg-foreground/10"
                 )}
                 layout={!reduce}
               />
@@ -357,7 +375,7 @@ export function RegisterForm() {
 
             {step === 3 && (
               <>
-                <p className="text-sm text-muted-foreground font-light leading-relaxed">{t("regIdentityLead")}</p>
+                <p className="text-sm text-white/55 font-light leading-relaxed">{t("regSoulPremiumLead")}</p>
                 <div>
                   <Label className="ttm-type-label font-normal mb-2 block">{t("regStepSoul")}</Label>
                   <VibeCloudPicker
@@ -375,6 +393,37 @@ export function RegisterForm() {
                 <div>
                   <Label className="ttm-type-label font-normal mb-2 block">{t("regMoodLabel")}</Label>
                   <MoodOrbit value={form.mood} onChange={(id) => update("mood", id)} locale={locale} />
+                </div>
+                <div>
+                  <Label className="ttm-type-label font-normal mb-2 block">{t("regEnergyLabel")}</Label>
+                  <EnergyTagPicker
+                    value={form.energyTagIds}
+                    onChange={(ids) => update("energyTagIds", ids)}
+                    locale={locale}
+                    error={errors.energy}
+                  />
+                </div>
+                <div>
+                  <Label className="ttm-type-label font-normal mb-2 block">{t("regCommunicationLabel")}</Label>
+                  <CommunicationStylePicker
+                    value={form.communicationStyle}
+                    onChange={(id) => update("communicationStyle", id)}
+                    locale={locale}
+                  />
+                  {errors.communication && (
+                    <p className="text-xs text-red-400/90 font-light mt-2">{errors.communication}</p>
+                  )}
+                </div>
+                <div>
+                  <Label className="ttm-type-label font-normal mb-2 block">{t("regConnectionPrefLabel")}</Label>
+                  <ConnectionPrefPicker
+                    value={form.connectionPref}
+                    onChange={(id) => update("connectionPref", id)}
+                    locale={locale}
+                  />
+                  {errors.connectionPref && (
+                    <p className="text-xs text-red-400/90 font-light mt-2">{errors.connectionPref}</p>
+                  )}
                 </div>
                 <CinematicField label={t("regPromptFavorite")}>
                   <Textarea

@@ -6,6 +6,7 @@ import { useI18n } from "@/lib/i18n"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { getDiscoverDeckProfiles } from "@/lib/discover-deck"
 import { SwipeDeck } from "@/components/app/swipe-deck"
+import { DiscoverAmbient } from "@/components/discover/discover-ambient"
 import { useTrustSafetyVersion } from "@/hooks/use-trust-safety-version"
 import { useHydrated } from "@/hooks/use-hydrated"
 import { getUserProfile, isPremiumActive } from "@/lib/user-profile"
@@ -49,11 +50,11 @@ function DiscoverContextStrip({
           </motion.button>
         )}
       </div>
-      <p className="mt-1 text-[10px] sm:text-[11px] text-muted-foreground font-light leading-snug line-clamp-1">
-        {t("swipeSubtitle")}
+      <p className="mt-1 text-[10px] sm:text-[11px] text-white/45 font-extralight leading-snug line-clamp-2">
+        {t("discoverPanelSubtitle")}
       </p>
-      <p className="mt-0.5 text-[9px] sm:text-[10px] text-white/85/75 font-light leading-snug line-clamp-1">
-        {t("swipeUrgencyStrip")}
+      <p className="mt-0.5 text-[9px] sm:text-[10px] text-white/30 font-extralight leading-snug line-clamp-1">
+        {t("discoverPanelHint")}
       </p>
     </div>
   )
@@ -122,13 +123,14 @@ export function DiscoverPanel() {
   }
 
   const deck = (
-    <div className="grid grid-cols-[1fr_auto_1fr] flex-1 min-h-0 w-full items-center overflow-hidden">
+    <div className="relative z-[1] grid grid-cols-[1fr_auto_1fr] flex-1 min-h-0 w-full items-center overflow-hidden">
       <SwipeDeck booted={deckBooted} profiles={profiles} onProfilesChange={handleProfilesChange} centered />
     </div>
   )
 
   return (
-    <div className="flex flex-col h-full min-h-0 overflow-hidden pt-2">
+    <div className="discover-panel-root flex flex-col h-full min-h-0 overflow-hidden pt-2">
+      <DiscoverAmbient />
       <DiscoverContextStrip premium={premium} onBoost={() => openUpgrade("boost")} />
       {profileLife ? (
         <ProfileLifeDiscoverGate life={profileLife} onRevive={handleRevive}>

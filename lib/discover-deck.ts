@@ -3,9 +3,9 @@ import type { GeoPosition } from "@/lib/geo"
 import { buildDemoSwipeProfiles, type SwipeProfile } from "@/lib/demo-profiles"
 import { filterProfilesForUser } from "@/lib/swipe-gender-filter"
 import { getSocialState } from "@/lib/social-store"
-import { demoPeerPresenceWeight } from "@/lib/profile-life"
 import { getProfileLifeView } from "@/lib/profile-life-store"
 import { isProfileBlocked } from "@/lib/trust-safety-store"
+import { smartSortDiscoverProfiles } from "@/lib/discover-compatibility"
 
 /** Profiles available in Discover — skips blocked and already swiped; recycles when exhausted (demo). */
 export function getDiscoverDeckProfiles(
@@ -23,12 +23,5 @@ export function getDiscoverDeckProfiles(
   const remaining = pool.filter((p) => !seen.has(p.id))
   const list = remaining.length > 0 ? remaining : pool
 
-  const ownLife = typeof window !== "undefined" ? getProfileLifeView() : null
-  const ownWeight = ownLife?.presenceWeight ?? 1
-
-  return [...list].sort((a, b) => {
-    const wa = demoPeerPresenceWeight(a.id) * ownWeight
-    const wb = demoPeerPresenceWeight(b.id) * ownWeight
-    return wb - wa
-  })
+  return smartSortDiscoverProfiles(list)
 }

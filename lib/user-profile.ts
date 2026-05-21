@@ -26,6 +26,12 @@ export type StoredUserProfile = {
   mood?: string
   /** Short answer to a “favorite” prompt. */
   promptFavorite?: string
+  /** Emotional energy tags (Phase 9). */
+  energyTagIds?: string[]
+  /** How user prefers to communicate. */
+  communicationStyle?: string
+  /** Connection rhythm preference. */
+  connectionPref?: string
   /** Demo flag: user engaged with voice intro UI. */
   voiceIntroRecorded?: boolean
   /** Unix ms — demo premium expiry */

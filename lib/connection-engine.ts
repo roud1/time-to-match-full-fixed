@@ -161,8 +161,10 @@ function scoreFromSignals(
   sync += Math.min(14, Math.floor(signals.longestSessionMessages / 2) * 2)
   sync += Math.min(10, signals.nightMessageCount * 2)
   sync += Math.min(8, signals.voiceLikeCount * 4)
-  sync += Math.min(12, signals.dailyStreak * 2)
+  sync += Math.min(14, signals.dailyStreak * 3)
+  if (signals.dailyStreak >= 3) sync += 8
   sync += Math.min(10, Math.floor(signals.sessionMinutes / 15) * 2)
+  if (signals.messageCount >= 8 && signals.myCount >= 2 && signals.theirCount >= 2) sync += 6
 
   if (signals.avgReplyMs != null && signals.avgReplyMs < FAST_REPLY_MS) sync += 8
 
@@ -292,6 +294,7 @@ export function analysisToSyncMetrics(
     connectionPercent: analysis.connectionPercent,
     chemistryPercent: analysis.chemistryPercent,
     energyPercent: analysis.energyPercent,
+    bondPercent: analysis.bondPercent,
     tier: analysis.tier,
     isActive: recentActivity || view.urgency === "calm" || view.urgency === "aware",
     isFading: view.isFading || analysis.isDecaying,

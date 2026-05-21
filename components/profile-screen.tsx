@@ -11,7 +11,13 @@ import {
   type CitySelectValue,
 } from "@/lib/cities"
 import { getInterestLabel, MIN_INTERESTS, type InterestId } from "@/lib/interests"
-import { getVibeLabel, getIntentionLabel, getMoodLabel, MIN_VIBES } from "@/lib/profile-identity"
+import { MIN_VIBES, MIN_ENERGY_TAGS } from "@/lib/profile-identity"
+import {
+  EnergyTagPicker,
+  CommunicationStylePicker,
+  ConnectionPrefPicker,
+} from "@/components/product/identity-product-pickers"
+import { ProfileIdentitySummary } from "@/components/product/profile-identity-summary"
 import { computeProfileStrength } from "@/lib/profile-completion"
 import { enableDemoSwipeDeck } from "@/lib/demo-profiles"
 import { getProfilePhotos } from "@/lib/profile-photos"
@@ -39,6 +45,7 @@ import { CinematicParticles } from "@/components/ui/cinematic-particles"
 import { VibeCloudPicker, IntentionDeck, MoodOrbit } from "@/components/profile/identity-pickers"
 import { ProfileVoiceIntro } from "@/components/profile/profile-voice-intro"
 import { OwnTrustCenter } from "@/components/trust/own-trust-center"
+import { ProfileAura } from "@/components/product/profile-aura"
 import { ConnectionsHubCard } from "@/components/profile/connections-hub-card"
 import { ProfileLifePresence } from "@/components/profile/profile-life-presence"
 import { useProfileLife } from "@/hooks/use-profile-life"
@@ -56,8 +63,11 @@ type EditForm = {
   gender: Gender
   photoUrls: string[]
   vibeIds: string[]
+  energyTagIds: string[]
   intention: string
   mood: string
+  communicationStyle: string
+  connectionPref: string
   promptFavorite: string
   voiceIntroRecorded: boolean
 }
@@ -92,8 +102,11 @@ function profileToForm(p: StoredUserProfile): EditForm {
     gender: p.gender,
     photoUrls: getProfilePhotos(p),
     vibeIds: p.vibeIds ?? [],
+    energyTagIds: p.energyTagIds ?? [],
     intention: p.intention ?? "",
     mood: p.mood ?? "",
+    communicationStyle: p.communicationStyle ?? "",
+    connectionPref: p.connectionPref ?? "",
     promptFavorite: p.promptFavorite ?? "",
     voiceIntroRecorded: p.voiceIntroRecorded ?? false,
   }
@@ -160,6 +173,7 @@ export function ProfileScreen() {
     if (!profile || !form) return
     if (form.interests.length < MIN_INTERESTS) return
     if (form.vibeIds.length > 0 && form.vibeIds.length < MIN_VIBES) return
+    if (form.energyTagIds.length > 0 && form.energyTagIds.length < MIN_ENERGY_TAGS) return
 
     const isManual = form.cityId === CUSTOM_CITY_ID
     const patch = {
@@ -169,8 +183,11 @@ export function ProfileScreen() {
       gender: form.gender,
       photoUrls: form.photoUrls,
       vibeIds: form.vibeIds,
+      energyTagIds: form.energyTagIds,
       intention: form.intention.trim() || undefined,
       mood: form.mood.trim() || undefined,
+      communicationStyle: form.communicationStyle.trim() || undefined,
+      connectionPref: form.connectionPref.trim() || undefined,
       promptFavorite: form.promptFavorite.trim() || undefined,
       voiceIntroRecorded: form.voiceIntroRecorded,
       ...(isManual
@@ -199,7 +216,7 @@ export function ProfileScreen() {
 
   if (!profile || !form) {
     return (
-      <div className="glass-card rounded-3xl p-8 max-w-md w-full text-center">
+      <div className="ttm-brand-glass rounded-3xl p-8 max-w-md w-full text-center">
         <p className="text-muted-foreground font-light">{t("locationLoading")}</p>
       </div>
     )
@@ -213,7 +230,8 @@ export function ProfileScreen() {
   const saveDisabled =
     form.interests.length < MIN_INTERESTS ||
     !form.bio.trim() ||
-    (form.vibeIds.length > 0 && form.vibeIds.length < MIN_VIBES)
+    (form.vibeIds.length > 0 && form.vibeIds.length < MIN_VIBES) ||
+    (form.energyTagIds.length > 0 && form.energyTagIds.length < MIN_ENERGY_TAGS)
 
   return (
     <motion.div
@@ -244,8 +262,9 @@ export function ProfileScreen() {
         <ProfilePremiumPanel profile={profile} onProfileUpdate={setProfile} />
       ) : (
         <>
-          <div className="relative rounded-[1.85rem] overflow-hidden mb-5 border border-white/10 shadow-[0_32px_100px_-40px_rgba(0,0,0,0.85)]">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_0%,rgba(255,255,255,0.15),transparent_55%)] pointer-events-none" />
+          <div className="ttm-brand-glass relative rounded-[1.85rem] overflow-hidden mb-5 ttm-brand-glow-aura">
+            <ProfileAura profile={profile} />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_0%,var(--ttm-glow-cinematic),transparent_55%)] pointer-events-none" />
             <CinematicParticles count={8} className="opacity-40 pointer-events-none" />
             <div className="relative p-4 md:p-5">
               <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
@@ -264,10 +283,12 @@ export function ProfileScreen() {
                 </span>
               </div>
 
-              <ProfilePhotoGallery photos={photos} name={profile.name} className="mb-5 rounded-2xl overflow-hidden ring-1 ring-white/10" />
+              <div className="p9-profile-avatar-ring mb-5 rounded-2xl overflow-hidden">
+                <ProfilePhotoGallery photos={photos} name={profile.name} className="rounded-2xl overflow-hidden ring-1 ring-white/10" />
+              </div>
 
               <div className="text-center space-y-2 mb-5">
-                <h1 className="text-3xl md:text-[2.1rem] font-extralight tracking-tight bg-gradient-to-r from-white via-white/70 to-white/40 bg-clip-text text-transparent">
+                <h1 className="ttm-brand-gradient-text text-3xl md:text-[2.1rem] font-extralight tracking-tight">
                   {profile.name}
                   {age != null && <span className="text-white/45 font-light">, {age}</span>}
                 </h1>
@@ -287,7 +308,8 @@ export function ProfileScreen() {
                 </div>
                 <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                   <motion.div
-                    className="h-full rounded-full bg-gradient-to-r cin-progress"
+                    className="h-full rounded-full"
+                    style={{ background: "var(--ttm-brand-gradient-sync)" }}
                     initial={false}
                     animate={{ width: `${strength}%` }}
                     transition={{ type: "spring", stiffness: 120, damping: 20 }}
@@ -312,37 +334,14 @@ export function ProfileScreen() {
 
           {!editing && (
             <div className="space-y-4 mb-5">
-              <div className="rounded-[1.35rem] border border-white/10 bg-white/[0.04] backdrop-blur-2xl p-5">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/80/70 font-light mb-3">{t("profileSectionIdentity")}</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {(profile.vibeIds ?? []).length === 0 ? (
-                    <p className="text-xs text-muted-foreground font-light">—</p>
-                  ) : (
-                    profile.vibeIds!.map((id) => (
-                      <span
-                        key={id}
-                        className="px-3 py-1.5 rounded-full text-xs font-light border border-white/14 bg-white/06 text-white/85"
-                      >
-                        {getVibeLabel(id, locale)}
-                      </span>
-                    ))
-                  )}
-                </div>
-                <div className="grid sm:grid-cols-2 gap-3 text-sm font-light">
-                  <div className="rounded-xl border border-white/8 bg-black/20 px-3 py-3">
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{t("regIntentionLabel")}</p>
-                    <p className="text-foreground/90">{profile.intention ? getIntentionLabel(profile.intention, locale) : "—"}</p>
-                  </div>
-                  <div className="rounded-xl border border-white/8 bg-black/20 px-3 py-3">
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{t("regMoodLabel")}</p>
-                    <p className="text-foreground/90">{profile.mood ? getMoodLabel(profile.mood, locale) : "—"}</p>
-                  </div>
-                </div>
-                {profile.promptFavorite && (
-                  <div className="mt-4 rounded-xl border border-sky-500/20 bg-sky-500/5 px-3 py-3">
-                    <p className="text-[10px] text-sky-200/80 uppercase tracking-wider mb-1">{t("regPromptFavorite")}</p>
-                    <p className="text-sm text-foreground/85 font-light leading-relaxed">{profile.promptFavorite}</p>
-                  </div>
+              <div className="ttm-brand-glass rounded-[1.35rem] p-5">
+                <p className="p9-register-step-label mb-3">{t("profileAtmosphereTitle")}</p>
+                {(profile.vibeIds?.length ?? 0) > 0 ||
+                (profile.energyTagIds?.length ?? 0) > 0 ||
+                profile.intention ? (
+                  <ProfileIdentitySummary profile={profile} locale={locale} />
+                ) : (
+                  <p className="text-xs text-muted-foreground font-light">{t("profileAtmosphereEmpty")}</p>
                 )}
               </div>
 
@@ -442,12 +441,20 @@ export function ProfileScreen() {
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-4">
-                  <p className="text-xs text-muted-foreground font-light">{t("regIdentityLead")}</p>
+                  <p className="text-xs text-white/50 font-light">{t("regSoulPremiumLead")}</p>
                   <div>
                     <Label className="text-foreground/80 font-light mb-2 block">{t("profileSectionIdentity")}</Label>
                     <VibeCloudPicker
                       value={form.vibeIds}
                       onChange={(ids) => setForm((prev) => (prev ? { ...prev, vibeIds: ids } : prev))}
+                      locale={locale}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-foreground/80 font-light mb-2 block">{t("regEnergyLabel")}</Label>
+                    <EnergyTagPicker
+                      value={form.energyTagIds}
+                      onChange={(ids) => setForm((prev) => (prev ? { ...prev, energyTagIds: ids } : prev))}
                       locale={locale}
                     />
                   </div>
@@ -464,6 +471,22 @@ export function ProfileScreen() {
                     <MoodOrbit
                       value={form.mood}
                       onChange={(id) => setForm((prev) => (prev ? { ...prev, mood: id } : prev))}
+                      locale={locale}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-foreground/80 font-light mb-2 block">{t("regCommunicationLabel")}</Label>
+                    <CommunicationStylePicker
+                      value={form.communicationStyle}
+                      onChange={(id) => setForm((prev) => (prev ? { ...prev, communicationStyle: id } : prev))}
+                      locale={locale}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-foreground/80 font-light mb-2 block">{t("regConnectionPrefLabel")}</Label>
+                    <ConnectionPrefPicker
+                      value={form.connectionPref}
+                      onChange={(id) => setForm((prev) => (prev ? { ...prev, connectionPref: id } : prev))}
                       locale={locale}
                     />
                   </div>
@@ -536,7 +559,7 @@ export function ProfileScreen() {
                     type="button"
                     onClick={handleSave}
                     disabled={saveDisabled}
-                    className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r cin-btn-primary text-white font-light disabled:opacity-40 transition-opacity touch-manipulation shadow-[0_16px_40px_-16px_rgba(255,255,255,0.5)]"
+                    className="ttm-brand-cta flex-1 py-3.5 rounded-2xl font-extralight disabled:opacity-40 touch-manipulation"
                   >
                     {t("profileSave")}
                   </button>

@@ -9,4 +9,20 @@
  * Store authoritative message state in PostgreSQL (`messages` table); use Redis/pub-sub only for ephemeral
  * typing indicators and connection fan-out. Always reconcile delivery with DB writes + idempotent message IDs.
  */
+
+/** Phase 18 — presence channel (client: `lib/presence/realtime-presence.ts`). */
+export type PresenceRealtimeFrame = {
+  type: "presence_update"
+  profileId: number
+  kind: string
+  proximity?: number
+  shared?: boolean
+  at: number
+}
+
+export type ConnectionRealtimeFrame =
+  | PresenceRealtimeFrame
+  | { type: "message"; connectionId: string; at: number }
+  | { type: "sync_surge"; profileId: number; at: number }
+
 export const REALTIME_ARCHITECTURE_NOTES = true as const

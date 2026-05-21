@@ -1,15 +1,16 @@
-import type { BondLevel, ChemistryLevel } from "@/lib/connection-engine"
+import type {
+  AIConnectionAnalysis,
+  AIConnectionSignals,
+  AIMemoryMoment,
+  AIConnectionState,
+  AIEmotionalState,
+  ConnectionPersonality,
+  AIChemistryLevel,
+} from "@/lib/ai-connection-engine/types"
+import type { BondLevel } from "@/lib/connection-engine"
 
-/** Public API response — safe to use on client. */
-export type ConnectionAIAnalysisResponse = {
-  sync: number
-  chemistry: ChemistryLevel
-  bond: BondLevel
-  energy: "growing" | "steady" | "cooling" | "fading"
-  insight: string
-  source: "openrouter" | "local"
-  analyzedAt: number
-}
+/** @deprecated use AIConnectionAnalysis */
+export type ConnectionAIAnalysisResponse = AIConnectionAnalysis
 
 export type AnalyzeConnectionMessage = {
   from: "me" | "them"
@@ -20,7 +21,7 @@ export type AnalyzeConnectionMessage = {
 /** Request body for POST /api/analyze-connection */
 export type AnalyzeConnectionRequest = {
   profileId: number
-  locale?: string
+  locale?: "ru" | "uk" | "en"
   messages: AnalyzeConnectionMessage[]
   responseTimes: number[]
   activityLevel: "low" | "medium" | "high"
@@ -29,4 +30,15 @@ export type AnalyzeConnectionRequest = {
   lateNightActivity: boolean
   stage?: string
   streakDays?: number
+  signals?: AIConnectionSignals
+}
+
+export type {
+  AIConnectionAnalysis,
+  AIConnectionSignals,
+  AIMemoryMoment,
+  AIConnectionState,
+  AIEmotionalState,
+  ConnectionPersonality,
+  AIChemistryLevel,
 }

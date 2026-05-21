@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import type { ChatMessage } from "@/lib/social-store"
 import type { Locale } from "@/lib/i18n"
+import type { SyncTier } from "@/lib/sync-system"
 import { formatChatMessageTime } from "@/lib/format-chat-time"
 import { ChatMessageBubble } from "@/components/chat/chat-message-bubble"
 
@@ -17,11 +18,15 @@ export function ChatMessageList({
   messages,
   locale,
   labels,
+  syncTier,
+  highlightLatest,
   onReplyTo,
 }: {
   messages: ChatMessage[]
   locale: Locale
   labels: Labels
+  syncTier?: SyncTier
+  highlightLatest?: boolean
   onReplyTo: (snippet: string) => void
 }) {
   const [reactions, setReactions] = useState<Record<string, string>>({})
@@ -41,16 +46,22 @@ export function ChatMessageList({
     return () => clearTimeout(t)
   }, [lastOwnId])
 
+  const lastId = messages[messages.length - 1]?.id
+
   return (
-    <div className="flex flex-col gap-4 py-2">
-      {messages.map((msg) => {
+    <div className="ttm-chat-messages flex flex-col py-1">
+      {messages.map((msg, index) => {
         const isMe = msg.from === "me"
         const time = formatChatMessageTime(msg.at, locale)
+        const isLatest = msg.id === lastId
         return (
           <ChatMessageBubble
             key={msg.id}
             msg={msg}
             isMe={isMe}
+            index={index}
+            syncTier={syncTier}
+            arriveSurge={highlightLatest && isLatest}
             showOwnReceipt={isMe && msg.id === lastOwnId}
             receiptState={receipt}
             time={time}

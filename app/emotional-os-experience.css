@@ -1,0 +1,236 @@
+/* Phase 20 — Emotional Operating System */
+
+.eo-root {
+  isolation: isolate;
+  transition:
+    filter calc(var(--eo-transition-ms, 900ms)) ease,
+    background-color calc(var(--eo-transition-ms, 900ms)) ease;
+}
+
+.eo-root__surface {
+  position: relative;
+  z-index: 1;
+}
+
+/* Global atmosphere network */
+.eo-network-layer {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.eo-network-layer__wave {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  height: 40%;
+  opacity: calc(var(--eo-wave-amp, 0.3) * 0.5);
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 100%,
+    rgba(99, 102, 241, 0.14) 0%,
+    rgba(5, 5, 6, 0) 70%
+  );
+}
+
+.eo-network-layer__wave--a {
+  bottom: 0;
+  animation: eo-network-wave 22s ease-in-out infinite;
+}
+
+.eo-network-layer__wave--b {
+  top: 0;
+  transform: rotate(180deg);
+  animation: eo-network-wave 28s ease-in-out infinite reverse;
+  opacity: calc(var(--eo-wave-amp, 0.3) * 0.35);
+}
+
+.eo-network-layer__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 5, 8, 0.35) 0%,
+    rgba(5, 5, 6, 0) 40%,
+    rgba(5, 5, 8, 0.2) 100%
+  );
+  opacity: var(--eo-sync-ambience, 0.4);
+}
+
+@keyframes eo-network-wave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4%);
+  }
+}
+
+[data-eo-cinematic-night="true"] .eo-network-layer__veil {
+  opacity: calc(var(--eo-sync-ambience, 0.4) * 1.15);
+  background: linear-gradient(
+    180deg,
+    rgba(8, 8, 18, 0.55) 0%,
+    rgba(5, 5, 6, 0) 45%,
+    rgba(12, 10, 22, 0.35) 100%
+  );
+}
+
+[data-eo-network="intimate"] .eo-network-layer__wave--a {
+  opacity: calc(var(--eo-wave-amp, 0.3) * 0.75);
+}
+
+[data-eo-network="softening"] .eo-root {
+  filter: saturate(0.88) brightness(0.94);
+}
+
+/* Orchestrator veil */
+.eo-orchestrator-veil {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 100% 80% at 50% 20%,
+    rgba(129, 140, 248, calc(var(--eo-atmo-shift, 0.2) * 0.08)) 0%,
+    rgba(5, 5, 6, 0) 65%
+  );
+  transition:
+    opacity calc(var(--eo-transition-ms, 900ms)) ease,
+    filter calc(var(--eo-transition-ms, 900ms)) ease;
+}
+
+[data-eo-lighting="intimate"] .eo-orchestrator-veil {
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 30%,
+    rgba(165, 180, 252, 0.1) 0%,
+    rgba(5, 5, 6, 0) 68%
+  );
+}
+
+[data-eo-pacing="still"] .eo-orchestrator-veil {
+  opacity: 0.85;
+}
+
+/* Continuity breath */
+.eo-continuity-breath {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    circle at 50% 80%,
+    rgba(99, 102, 241, calc(var(--eo-presence-remain, 0.4) * 0.06)) 0%,
+    transparent 55%
+  );
+  animation: eo-continuity-pulse calc(8s / var(--eo-continuity-breath, 0.5)) ease-in-out infinite;
+}
+
+@keyframes eo-continuity-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Immersion frame */
+.eo-immersion-frame {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-emotional-os="true"] .ttm-chat-room {
+  transition:
+    filter calc(var(--eo-transition-ms, 900ms)) ease,
+    box-shadow calc(var(--eo-transition-ms, 900ms)) ease;
+}
+
+[data-eo-resonance-tier="high"] .ttm-chat-room {
+  box-shadow: inset 0 0 80px -40px rgba(129, 140, 248, 0.12);
+}
+
+[data-eo-pacing="surge"] .ttm-native-app__tab-panel {
+  animation: eo-surge-breathe 6s ease-in-out infinite;
+}
+
+@keyframes eo-surge-breathe {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.03);
+  }
+}
+
+/* Memory atmosphere */
+.eo-memory-atmo {
+  position: relative;
+  padding: 0.75rem 0;
+  margin-bottom: 1.5rem;
+  border-left: 1px solid rgba(129, 140, 248, 0.25);
+  padding-left: 0.75rem;
+  opacity: calc(0.5 + var(--eo-memory-recall, 0.5) * 0.5);
+}
+
+.eo-memory-atmo--live .eo-memory-atmo__line {
+  animation: eo-memory-fade 8s ease-in-out infinite;
+}
+
+.eo-memory-atmo__line {
+  font-size: 0.68rem;
+  font-weight: 200;
+  font-style: italic;
+  color: rgba(199, 210, 254, 0.65);
+  line-height: 1.5;
+}
+
+@keyframes eo-memory-fade {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.eo-whisper {
+  animation: eo-whisper-in 1.4s ease-out;
+}
+
+@keyframes eo-whisper-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Invisible UI — adaptive transparency on app chrome */
+[data-emotional-os="true"] .ttm-floating-header {
+  background: rgba(5, 5, 6, calc(0.55 + var(--eo-ui-density, 0.5) * 0.15));
+  backdrop-filter: blur(calc(12px + var(--eo-blur-depth, 1px) * 4px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eo-network-layer__wave,
+  .eo-continuity-breath,
+  .eo-memory-atmo--live .eo-memory-atmo__line,
+  [data-eo-pacing="surge"] .ttm-native-app__tab-panel {
+    animation: none !important;
+  }
+
+  .eo-root,
+  [data-emotional-os="true"] .ttm-chat-room {
+    transition: none;
+  }
+}

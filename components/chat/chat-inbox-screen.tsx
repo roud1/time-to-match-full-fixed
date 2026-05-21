@@ -7,6 +7,8 @@ import type { ConnectionMemory } from "@/lib/connection-system"
 import type { Locale } from "@/lib/i18n"
 import { ChatInboxThreadRow } from "@/components/chat/chat-inbox-thread-row"
 import { ConnectionMemories } from "@/components/connection/connection-memories"
+import { EmotionalEmptyState } from "@/components/product/emotional-empty-state"
+import { MessageCircle } from "lucide-react"
 
 export function ChatThreadSkeleton({ rows = 5 }: { rows?: number }) {
   return (
@@ -43,6 +45,8 @@ export function ChatInboxScreen({
     title: string
     subtitle: string
     empty: string
+    emptyTitle: string
+    emptyBody: string
     urgency: string
     reconnect: string
     unread: string
@@ -95,13 +99,14 @@ export function ChatInboxScreen({
       {loading ? (
         <ChatThreadSkeleton />
       ) : threads.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex-1 flex items-center justify-center rounded-[1.75rem] border border-white/10 bg-white/[0.04] backdrop-blur-xl px-8 py-16 text-center shadow-[0_24px_80px_-40px_rgba(0,0,0,0.75)]"
-        >
-          <p className="text-muted-foreground font-light text-sm leading-relaxed max-w-xs">{labels.empty}</p>
-        </motion.div>
+        <div className="flex-1 flex items-center justify-center">
+          <EmotionalEmptyState
+            title={labels.emptyTitle}
+            body={labels.emptyBody}
+            icon={MessageCircle}
+            className="w-full max-w-sm"
+          />
+        </div>
       ) : (
         <ul className="space-y-2.5 flex-1 min-h-0">
           {threads.map((thread, index) => {

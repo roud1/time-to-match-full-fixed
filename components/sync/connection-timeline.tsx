@@ -17,6 +17,7 @@ const MILESTONE_KEY: Record<TimelineMilestoneId, TranslationKey> = {
   first_night_talk: "milestoneFirstNight",
   connection_24h: "milestone24h",
   deep_conversation: "milestoneDeep",
+  consistent_replies: "milestoneConsistentReplies",
   sync_increased: "milestoneSyncIncreased",
   strong_sync: "milestoneStrongSync",
 }

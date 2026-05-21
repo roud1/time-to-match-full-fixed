@@ -7,6 +7,7 @@ export type TimelineMilestoneId =
   | "first_night_talk"
   | "connection_24h"
   | "deep_conversation"
+  | "consistent_replies"
   | "sync_increased"
   | "strong_sync"
 
@@ -83,6 +84,18 @@ export function buildConnectionMilestones(
       id: "deep_conversation",
       at: deepAt,
       reached: sessionMessagePeak(messages) >= 12,
+    },
+    {
+      id: "consistent_replies",
+      at:
+        record.bothParticipated && sorted.length >= 6
+          ? sorted[Math.min(sorted.length - 1, 5)]?.at
+          : undefined,
+      reached:
+        record.bothParticipated &&
+        sorted.length >= 6 &&
+        sorted.filter((m) => m.from === "me").length >= 2 &&
+        sorted.filter((m) => m.from === "them").length >= 2,
     },
     {
       id: "sync_increased",

@@ -232,16 +232,16 @@
   background: linear-gradient(180deg, rgba(220, 220, 255, 0.5), rgba(255, 255, 255, 0.15));
 }
 
-/* —— Chat sanctuary —— */
-.sync-chat-sanctuary {
+/* —— Connection header (chat) —— */
+.connection-header {
   background: var(--sync-bg);
 }
 
-.sync-chat-sanctuary__panel {
+.connection-header__panel {
   box-shadow: 0 0 48px -24px rgba(180, 190, 255, 0.12);
 }
 
-.sync-chat-sanctuary__glow {
+.connection-header__glow {
   background: radial-gradient(
     ellipse 90% 60% at 50% 0%,
     rgba(200, 210, 255, calc(0.06 + var(--sync-glow-intensity, 0.25) * 0.12)),
@@ -249,7 +249,7 @@
   );
 }
 
-.sync-chat-sanctuary--ai-live .sync-chat-sanctuary__panel {
+.connection-header--ai-live .connection-header__panel {
   box-shadow:
     0 0 56px -20px rgba(180, 190, 255, calc(0.15 + var(--sync-glow-intensity, 0.3) * 0.2)),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -377,10 +377,77 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
+/* Pulse waves & energy trails (Phase 7) */
+.sync-ring--waves .sync-ring__wave {
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  border: 1px solid var(--sync-glow);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sync-ring--waves .sync-ring__wave--a {
+  animation: sync-wave-expand 4.2s ease-out infinite;
+}
+
+.sync-ring--waves .sync-ring__wave--b {
+  animation: sync-wave-expand 4.2s ease-out infinite 2.1s;
+}
+
+.sync-ring__trail {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--sync-glow) 40deg,
+    transparent 80deg,
+    transparent 360deg
+  );
+  opacity: 0.35;
+  animation: sync-trail-spin 12s linear infinite;
+  pointer-events: none;
+  filter: blur(1px);
+}
+
+.sync-ring--surge .sync-ring__trail {
+  opacity: 0.65;
+  animation-duration: 6s;
+}
+
+.sync-ring--surge .sync-ring__wave--a,
+.sync-ring--surge .sync-ring__wave--b {
+  animation-duration: 2.8s;
+}
+
+@keyframes sync-wave-expand {
+  0% {
+    transform: scale(0.88);
+    opacity: 0.45;
+  }
+  70% {
+    opacity: 0.08;
+  }
+  100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+@keyframes sync-trail-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .sync-ring__halo,
   .sync-ring__track,
   .sync-ring__pulse,
+  .sync-ring__wave,
+  .sync-ring__trail,
   .sync-ambient__blob,
   .sync-ambient__heartbeat {
     animation: none !important;

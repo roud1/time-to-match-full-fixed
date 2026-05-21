@@ -1,10 +1,31 @@
 import type { ChatThread } from "@/lib/social-store"
-import { demoPeerPresence } from "@/lib/profile-life"
-import { isPulseProfile } from "@/lib/pulse-companion"
+import type { ConnectionView } from "@/lib/connection-system"
+import type { SyncMetrics } from "@/lib/sync-system"
+import {
+  resolveEmotionalPresence,
+  isEmotionallyReachable,
+  type EmotionalPresence,
+} from "@/lib/world"
 
-/** Whether the peer appears online in chat header. */
-export function isChatPeerOnline(profileId: number, _thread: ChatThread): boolean {
-  if (isPulseProfile(profileId)) return true
-  const presence = demoPeerPresence(profileId)
-  return presence === "active" || presence === "recent"
+export { resolveEmotionalPresence, isEmotionallyReachable, type EmotionalPresence }
+
+/** Legacy helper — true when peer feels emotionally reachable (not binary online). */
+export function isChatPeerOnline(
+  profileId: number,
+  thread: ChatThread,
+  view?: ConnectionView | null,
+  syncMetrics?: SyncMetrics | null
+): boolean {
+  return isEmotionallyReachable(
+    resolveEmotionalPresence(profileId, { thread, view, syncMetrics })
+  )
+}
+
+export function getChatEmotionalPresence(
+  profileId: number,
+  thread: ChatThread,
+  view?: ConnectionView | null,
+  syncMetrics?: SyncMetrics | null
+): EmotionalPresence {
+  return resolveEmotionalPresence(profileId, { thread, view, syncMetrics })
 }

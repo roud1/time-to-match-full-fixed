@@ -1,0 +1,202 @@
+/* Phase 22 — Emotional Consciousness Layer */
+
+.ec-consciousness-root {
+  transition:
+    filter calc(1.2s + var(--ec-emotional-pacing, 0.55) * 0.8s) ease,
+    background-color 1.4s ease;
+}
+
+/* Silence understanding */
+.ec-silence-field {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: calc(0.06 + var(--ec-silence-depth, 0.3) * 0.22);
+  background: radial-gradient(
+    ellipse 80% 55% at 50% 55%,
+    rgba(12, 12, 20, 0.5) 0%,
+    transparent 72%
+  );
+}
+
+[data-ec-silence="calm_silence"] .ec-silence-field,
+[data-ec-silence="stable_quietness"] .ec-silence-field {
+  animation: ec-silence-breath calc(6s / var(--ec-silence-still, 0.55)) ease-in-out infinite;
+}
+
+[data-ec-silence="distant_silence"] .ec-consciousness-root,
+[data-ec-silence="fading_silence"] .ec-consciousness-root {
+  filter: saturate(0.88) brightness(0.94);
+}
+
+[data-ec-silence="emotional_pause"] .ec-silence-field {
+  opacity: calc(0.1 + var(--ec-silence-depth, 0.3) * 0.28);
+}
+
+@keyframes ec-silence-breath {
+  0%,
+  100% {
+    opacity: calc(0.08 + var(--ec-silence-depth, 0.3) * 0.2);
+  }
+  50% {
+    opacity: calc(0.12 + var(--ec-silence-depth, 0.3) * 0.3);
+  }
+}
+
+.ec-silence-field--chat {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Relationship tension */
+.ec-tension-veil {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: calc(var(--ec-tension-level, 0.4) * 0.18);
+  background: radial-gradient(
+    ellipse 65% 45% at 50% 38%,
+    rgba(129, 140, 248, calc(0.08 * var(--ec-tension-glow, 0.8))) 0%,
+    transparent 68%
+  );
+  animation: ec-tension-drift calc(14s / var(--ec-tension-motion, 1)) ease-in-out infinite;
+}
+
+[data-ec-tension="strong_attraction"] .ec-tension-veil {
+  background: radial-gradient(
+    ellipse 70% 50% at 50% 42%,
+    rgba(167, 139, 250, calc(0.14 * var(--ec-tension-glow, 1))) 0%,
+    transparent 65%
+  );
+}
+
+[data-ec-tension="emotional_drift"] .ec-tension-veil {
+  opacity: calc(var(--ec-tension-level, 0.5) * 0.12);
+  filter: saturate(0.75);
+}
+
+[data-ec-tension="deep_orbit"] .ec-tension-veil {
+  background: radial-gradient(
+    ellipse 90% 60% at 50% 50%,
+    rgba(99, 102, 241, calc(0.1 * var(--ec-tension-glow, 0.9))) 0%,
+    transparent 70%
+  );
+}
+
+@keyframes ec-tension-drift {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(calc(-2% * var(--ec-tension-gradient, 0.5))) scale(1.01);
+  }
+}
+
+.ec-tension-veil--chat {
+  position: absolute;
+  inset: 0;
+}
+
+/* Atmospheric consciousness */
+.ec-atmosphere-veil {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  mix-blend-mode: soft-light;
+  opacity: calc(0.05 + var(--ec-atmosphere-weight, 0.5) * 0.12);
+  transition: opacity 1.6s ease;
+}
+
+/* Digital emotional realism */
+.ec-realism-veil {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: calc(0.04 + var(--ec-realism-emptiness, 0.4) * 0.1);
+  animation: ec-realism-breath calc(4.8s / var(--ec-realism-breath, 0.5)) ease-in-out infinite;
+}
+
+@keyframes ec-realism-breath {
+  0%,
+  100% {
+    opacity: calc(0.03 + var(--ec-realism-emptiness, 0.4) * 0.08);
+  }
+  50% {
+    opacity: calc(0.06 + var(--ec-realism-emptiness, 0.4) * 0.14);
+  }
+}
+
+/* Space evolution (chat) */
+.ec-space-evolution {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: calc(0.08 + var(--ec-space-maturity, 0.4) * 0.2);
+  background: radial-gradient(
+    ellipse 100% 80% at 50% 100%,
+    rgba(79, 70, 229, calc(0.06 * var(--ec-space-aura, 0.5))) 0%,
+    transparent 55%
+  );
+  filter: brightness(calc(0.92 + var(--ec-space-light, 0.5) * 0.08));
+}
+
+/* Memory echoes */
+.ec-memory-echo-layer {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: calc(var(--ec-echo-trace, 0.2) * 0.35);
+  background: radial-gradient(
+    circle at 30% 20%,
+    rgba(129, 140, 248, calc(0.1 * var(--ec-echo-glow, 0.5))) 0%,
+    transparent 45%
+  ),
+  radial-gradient(
+    circle at 70% 75%,
+    rgba(167, 139, 250, calc(0.08 * var(--ec-echo-aura, 0.4))) 0%,
+    transparent 40%
+  );
+}
+
+.ec-memory-echo-layer--archive {
+  opacity: calc(var(--ec-echo-trace, 0.2) * 0.5);
+}
+
+/* Reflections v2 */
+.ec-reflection-whisper {
+  font-size: 11px;
+  font-weight: 200;
+  letter-spacing: 0.02em;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.42);
+  text-align: center;
+}
+
+.ec-reflection-whisper__dismiss {
+  margin-left: 0.35rem;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  touch-action: manipulation;
+}
+
+.ec-reflection-whisper__dismiss:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ec-silence-field,
+  .ec-tension-veil,
+  .ec-realism-veil {
+    animation: none !important;
+  }
+}

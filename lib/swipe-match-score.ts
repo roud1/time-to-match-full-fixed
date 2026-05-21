@@ -1,7 +1,7 @@
 import type { SwipeProfile } from "@/lib/demo-profiles"
+import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
 
-/** Deterministic demo “match %” for UI — does not affect `recordSwipe` logic. */
+/** Resonance % for UI — smart demo scoring; does not affect `recordSwipe` logic. */
 export function demoMatchPercent(profile: SwipeProfile): number {
-  const base = 58 + ((profile.id * 17) % 42)
-  return Math.min(99, Math.max(61, base))
+  return computeDiscoverCompatibility(profile).resonancePercent
 }

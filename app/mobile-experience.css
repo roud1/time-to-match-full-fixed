@@ -1,0 +1,220 @@
+/* PHASE 7 — Native mobile app feeling */
+
+:root {
+  --ttm-dock-height: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+  --ttm-header-height: calc(3rem + env(safe-area-inset-top, 0px));
+  --ttm-spring-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.ttm-native-scroll-lock,
+html.ttm-native-scroll-lock body {
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+.ttm-native-app {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #030304;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ttm-native-app__main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ttm-native-app__main--scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ttm-native-app__tab-panel {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  will-change: transform, opacity;
+}
+
+/* Floating header */
+.ttm-floating-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  flex-shrink: 0;
+  padding-top: env(safe-area-inset-top, 0px);
+  margin: 0 calc(-1 * var(--ttm-page-gutter));
+  padding-left: var(--ttm-page-gutter);
+  padding-right: var(--ttm-page-gutter);
+  background: var(--ttm-glass-bg);
+  backdrop-filter: blur(var(--ttm-glass-blur)) saturate(1.2);
+  -webkit-backdrop-filter: blur(var(--ttm-glass-blur)) saturate(1.2);
+  border-bottom: 1px solid var(--ttm-brand-line);
+  transition:
+    background var(--ttm-brand-duration) var(--ttm-brand-ease),
+    border-color var(--ttm-brand-duration) var(--ttm-brand-ease),
+    box-shadow var(--ttm-brand-duration) var(--ttm-brand-ease);
+}
+
+.ttm-floating-header--scrolled {
+  background: var(--ttm-glass-bg-strong);
+  border-bottom-color: var(--ttm-brand-line-strong);
+  box-shadow: var(--ttm-depth-1);
+}
+
+/* Glass floating dock */
+.ttm-floating-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  padding: 0.5rem 0.75rem calc(0.65rem + env(safe-area-inset-bottom, 0px));
+  pointer-events: none;
+}
+
+.ttm-floating-dock__inner {
+  pointer-events: auto;
+  margin: 0 auto;
+  max-width: 26rem;
+  display: flex;
+  align-items: stretch;
+  border-radius: 1.35rem;
+  padding: 0.35rem 0.25rem;
+}
+
+.ttm-dock-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  min-height: 3.25rem;
+  min-width: 0;
+  border-radius: 1rem;
+  touch-action: manipulation;
+  transition:
+    background 0.45s var(--ttm-spring-ease),
+    color 0.45s var(--ttm-spring-ease);
+}
+
+.ttm-dock-tab--idle {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.ttm-dock-tab--active {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 0 24px -8px rgba(200, 210, 255, 0.2);
+}
+
+.ttm-dock-tab__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ttm-dock-tab__label {
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  max-width: 100%;
+  padding: 0 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Screen transitions (route level) */
+.ttm-screen-transition {
+  min-height: 100%;
+  will-change: opacity, transform, filter;
+}
+
+/* Immersive fullscreen chat — absolute fill (not fixed: avoids 0-height flex + transform traps) */
+.ttm-chat-immersive {
+  position: absolute;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: #030304;
+  overflow: hidden;
+}
+
+.ttm-chat-immersive .ttm-chat-room {
+  position: relative !important;
+  inset: auto !important;
+  flex: 1;
+  min-height: 0;
+  bottom: auto !important;
+  width: 100%;
+}
+
+.ttm-chat-immersive__ambient {
+  opacity: 1;
+}
+
+/* Tactile press utility */
+.ttm-tactile {
+  touch-action: manipulation;
+  transition: transform 0.35s var(--ttm-spring-ease), opacity 0.35s var(--ttm-spring-ease);
+}
+
+.ttm-tactile:active {
+  transform: scale(0.97);
+  opacity: 0.92;
+}
+
+/* GPU-friendly motion layers */
+.ttm-gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Edge-to-edge mobile panels */
+@media (max-width: 639px) {
+  .ttm-native-edge {
+    margin-left: calc(-1 * var(--ttm-page-gutter));
+    margin-right: calc(-1 * var(--ttm-page-gutter));
+    padding-left: var(--ttm-page-gutter);
+    padding-right: var(--ttm-page-gutter);
+  }
+
+  .ttm-page--app {
+    --ttm-page-gutter: clamp(0.75rem, 3.5vw, 1rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-screen-transition,
+  .ttm-native-app__tab-panel {
+    will-change: auto;
+  }
+
+  .sync-ring__wave,
+  .sync-ring__trail {
+    animation: none !important;
+  }
+}

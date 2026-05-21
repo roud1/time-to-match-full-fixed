@@ -1,0 +1,26 @@
+"use client"
+
+import { useMemo } from "react"
+import type { EmotionalTimelineEntry } from "@/lib/time"
+import { buildEmotionalTimeline, resolveRelationshipTimeState } from "@/lib/time"
+import { analyzeConnection } from "@/lib/connection-engine"
+import { buildConnectionView } from "@/lib/connection-system"
+import { getActiveConnections, getConnection } from "@/lib/connection-store"
+import { getChatMessagesForProfile } from "@/lib/social-store"
+import { deriveSyncMetrics } from "@/lib/sync-system"
+
+export function useEmotionalTimeline(profileId?: number): EmotionalTimelineEntry[] {
+  return useMemo(() => {
+    const record = profileId
+      ? getConnection(profileId)
+      : getActiveConnections().sort((a, b) => b.lastInteractionAt - a.lastInteractionAt)[0]
+    if (!record) return []
+
+    const view = buildConnectionView(record)
+    const messages = getChatMessagesForProfile(record.profileId)
+    const analysis = analyzeConnection(view, messages, record)
+    const sync = deriveSyncMetrics(view, messages, analysis)
+    const timeState = resolveRelationshipTimeState(record, analysis, messages)
+    return buildEmotionalTimeline(messages, record, sync.syncPercent, timeState)
+  }, [profileId])
+}

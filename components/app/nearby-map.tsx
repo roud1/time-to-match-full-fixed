@@ -61,7 +61,7 @@ export function NearbyMap({ userPosition, profiles, userLabel }: NearbyMapProps)
       <Circle
         center={center}
         radius={8000}
-        pathOptions={{ color: "#ec4899", fillColor: "#ec4899", fillOpacity: 0.08, weight: 1 }}
+        pathOptions={{ color: "#8b5cf6", fillColor: "#6366f1", fillOpacity: 0.1, weight: 1 }}
       />
       <Marker position={center} icon={userIcon}>
         <Popup>

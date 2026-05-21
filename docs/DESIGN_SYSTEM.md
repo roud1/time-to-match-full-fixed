@@ -2,8 +2,9 @@
 
 This project uses a **single cinematic / dark-luxury** language defined in:
 
-- `app/design-system.css` — CSS variables (spacing, radii, motion, shadows), typography utilities (`.ttm-type-*`), layout (`.ttm-page`), surfaces (`.ttm-surface-nav-*`), form controls (`.ttm-input`, `.ttm-choice`), nav pills (`.ttm-nav-pill-*`).
-- `app/globals.css` — imports `design-system.css` after Tailwind; keeps theme tokens and legacy utilities (`glass-card`, `premium-profile-card`, etc.).
+- **`app/brand-system.css`** (Phase 8) — brand tokens: colors, glow, glass, depth, typography, motion, relationship UI. See **`docs/BRAND_SYSTEM.md`**.
+- `app/design-system.css` — spacing, forms, layout, nav pills, connection life utilities.
+- `app/globals.css` — imports `brand-system.css` first, then layer CSS (sync, chat, discover, landing, mobile).
 
 ## React primitives
 

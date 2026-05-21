@@ -31,7 +31,7 @@ export function ActivityAppChrome() {
           />
         </svg>
         {total > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-gradient-to-br cin-btn-primary text-[10px] text-white flex items-center justify-center font-medium shadow-lg shadow-black/30">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full ttm-brand-cta text-[10px] flex items-center justify-center font-medium p-0 min-h-0 border-0">
             {total > 9 ? "9+" : total}
           </span>
         )}

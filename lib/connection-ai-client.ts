@@ -1,13 +1,13 @@
 import type {
   AnalyzeConnectionRequest,
-  ConnectionAIAnalysisResponse,
+  AIConnectionAnalysis,
 } from "@/lib/connection-ai-types"
 import type { ChatMessage } from "@/lib/social-store"
 import type { ConnectionRecord, ConnectionView } from "@/lib/connection-system"
-import { extractSignals } from "@/lib/connection-engine"
+import { extractAIConnectionSignals, activityLevelFromSignals } from "@/lib/ai-connection-engine"
 
-const CACHE_MS = 45_000
-const cache = new Map<string, { at: number; data: ConnectionAIAnalysisResponse }>()
+const CACHE_MS = 40_000
+const cache = new Map<string, { at: number; data: AIConnectionAnalysis }>()
 
 function cacheKey(profileId: number, messageCount: number, lastAt: number) {
   return `${profileId}:${messageCount}:${lastAt}`
@@ -24,14 +24,6 @@ function replyTimes(messages: ChatMessage[]): number[] {
   return times
 }
 
-function activityLevel(
-  signals: ReturnType<typeof extractSignals>
-): AnalyzeConnectionRequest["activityLevel"] {
-  if (signals.messageCount >= 12 && signals.mutualSessions >= 1) return "high"
-  if (signals.messageCount >= 4) return "medium"
-  return "low"
-}
-
 export function buildAnalyzeConnectionRequest(
   profileId: number,
   locale: string,
@@ -39,7 +31,7 @@ export function buildAnalyzeConnectionRequest(
   record: ConnectionRecord,
   view: ConnectionView
 ): AnalyzeConnectionRequest {
-  const signals = extractSignals(messages, record)
+  const signals = extractAIConnectionSignals(messages, record)
   return {
     profileId,
     locale: locale as AnalyzeConnectionRequest["locale"],
@@ -49,22 +41,23 @@ export function buildAnalyzeConnectionRequest(
       at: m.at,
     })),
     responseTimes: replyTimes(messages),
-    activityLevel: activityLevel(signals),
+    activityLevel: activityLevelFromSignals(signals),
     conversationLength: messages.length,
     mutualInteraction: view.bothParticipated,
-    lateNightActivity: signals.nightMessageCount >= 2,
+    lateNightActivity: signals.lateNightRatio >= 0.2 && signals.messageCount >= 3,
     stage: view.stage,
     streakDays: view.streakDays,
+    signals,
   }
 }
 
 /**
- * Calls server-side /api/analyze-connection — never touches API keys.
+ * Invisible AI analysis — POST /api/analyze-connection (no API keys on client).
  */
 export async function fetchConnectionAIAnalysis(
   body: AnalyzeConnectionRequest,
   opts?: { signal?: AbortSignal }
-): Promise<ConnectionAIAnalysisResponse | null> {
+): Promise<AIConnectionAnalysis | null> {
   const last = body.messages[body.messages.length - 1]?.at ?? 0
   const key = cacheKey(body.profileId, body.messages.length, last)
   const hit = cache.get(key)
@@ -78,14 +71,22 @@ export async function fetchConnectionAIAnalysis(
       signal: opts?.signal,
     })
     if (!res.ok) return null
-    const data = (await res.json()) as ConnectionAIAnalysisResponse & { configured?: boolean }
-    const result: ConnectionAIAnalysisResponse = {
+    const data = (await res.json()) as AIConnectionAnalysis & {
+      configured?: boolean
+      provider?: string
+    }
+    const result: AIConnectionAnalysis = {
       sync: data.sync,
       chemistry: data.chemistry,
       bond: data.bond,
       energy: data.energy,
+      emotionalState: data.emotionalState ?? "curious",
+      connectionState: data.connectionState ?? "growing_connection",
+      personality: data.personality ?? "slow_burn",
       insight: data.insight,
-      source: data.source,
+      atmosphereLevel: data.atmosphereLevel ?? data.sync,
+      memories: data.memories ?? [],
+      source: data.source ?? "local",
       analyzedAt: data.analyzedAt ?? Date.now(),
     }
     cache.set(key, { at: Date.now(), data: result })

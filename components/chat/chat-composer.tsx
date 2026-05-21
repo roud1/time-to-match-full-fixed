@@ -182,7 +182,7 @@ export function ChatComposer({
             disabled={!draft.trim()}
             className={cn(
               "shrink-0 min-h-[44px] px-4 rounded-2xl text-sm font-light text-white touch-manipulation",
-              "cin-btn-primary rounded-2xl",
+              "ttm-brand-cta rounded-2xl min-h-0 border-0",
               !draft.trim() && "opacity-40 pointer-events-none"
             )}
           >

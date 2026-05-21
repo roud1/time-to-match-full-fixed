@@ -5,11 +5,14 @@ import { motion, AnimatePresence, type MotionValue } from "motion/react"
 import Image from "next/image"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import type { PeerTrustSignals } from "@/lib/demo-trust-signals"
-import { demoMatchPercent } from "@/lib/swipe-match-score"
+import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
+import { CompatibilityPreview } from "@/components/discover/compatibility-preview"
 import { getSwipeProfilePhotos } from "@/lib/swipe-profile-photos"
 import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 import { demoPeerPresence } from "@/lib/profile-life"
+import { resolveEmotionalPresence } from "@/lib/world"
+import { PresenceEmotionalPill } from "@/components/presence/presence-emotional-pill"
 import {
   getTimerMoodCardClass,
   getTimerMoodFromMs,
@@ -79,7 +82,9 @@ export function SwipeProfileCard({
   onDragEnd,
 }: SwipeProfileCardProps) {
   const { t } = useI18n()
-  const matchPct = demoMatchPercent(profile)
+  const compatibility = computeDiscoverCompatibility(profile)
+  const matchPct = compatibility.resonancePercent
+  const emotionalPresence = resolveEmotionalPresence(profile.id)
   const peerPresence = demoPeerPresence(profile.id)
   const timerMood = getTimerMoodFromMs(parseTimeLeftToMs(profile.timeLeft))
   const photos = getSwipeProfilePhotos(profile)
@@ -149,15 +154,15 @@ export function SwipeProfileCard({
         <>
           <motion.div
             style={{ opacity: likeOpacity }}
-            className="absolute top-[4.5rem] left-3 px-3 py-2 rounded-xl border-2 border-emerald-400/85 bg-emerald-500/[0.12] backdrop-blur-md -rotate-10 z-20"
+            className="absolute top-[4.5rem] left-3 px-3 py-2 rounded-xl border border-white/25 bg-white/[0.08] backdrop-blur-md -rotate-6 z-20"
           >
-            <span className="text-emerald-200 text-sm font-medium tracking-[0.15em] uppercase">{labels.like}</span>
+            <span className="text-white/90 text-xs font-extralight tracking-[0.14em] uppercase">{labels.like}</span>
           </motion.div>
           <motion.div
             style={{ opacity: nopeOpacity }}
-            className="absolute top-[4.5rem] right-3 px-3 py-2 rounded-xl border-2 border-rose-400/85 bg-rose-500/[0.12] backdrop-blur-md rotate-10 z-20"
+            className="absolute top-[4.5rem] right-3 px-3 py-2 rounded-xl border border-white/12 bg-black/30 backdrop-blur-md rotate-6 z-20"
           >
-            <span className="text-rose-200 text-sm font-medium tracking-[0.15em] uppercase">{labels.nope}</span>
+            <span className="text-white/45 text-xs font-extralight tracking-[0.14em] uppercase">{labels.nope}</span>
           </motion.div>
         </>
       )}
@@ -203,37 +208,7 @@ export function SwipeProfileCard({
       )}
 
       <div className="absolute top-[1.65rem] left-2 right-2 z-10 flex items-center gap-1 pointer-events-auto min-w-0">
-        <span
-          className={cn(
-            "inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[9px] backdrop-blur-md shrink-0 border",
-            peerPresence === "active"
-              ? "text-emerald-200/95 bg-black/40 border-emerald-500/30"
-              : peerPresence === "recent"
-                ? "text-emerald-100/75 bg-black/35 border-emerald-500/15"
-                : "text-slate-300/80 bg-black/35 border-slate-500/20"
-          )}
-        >
-          <span className="relative flex h-1.5 w-1.5">
-            {peerPresence === "active" && !reduceMotion && (
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-40" />
-            )}
-            <span
-              className={cn(
-                "relative inline-flex rounded-full h-1.5 w-1.5",
-                peerPresence === "active"
-                  ? "bg-emerald-400"
-                  : peerPresence === "recent"
-                    ? "bg-emerald-400/60"
-                    : "bg-slate-400/70"
-              )}
-            />
-          </span>
-          {peerPresence === "active"
-            ? t("lifePeerActiveNow")
-            : peerPresence === "recent"
-              ? t("lifePeerOnlineRecent")
-              : t("lifePeerFading")}
-        </span>
+        <PresenceEmotionalPill presence={emotionalPresence} compact className="shrink-0" />
 
         {isTop && (
           <ProfileTimerMood
@@ -249,7 +224,7 @@ export function SwipeProfileCard({
           className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] bg-black/40 border border-white/10 backdrop-blur-md shrink-0 tabular-nums"
           title={`${labels.matchWord} ${matchPct}%`}
         >
-          <span className="text-white/80">{matchPct}%</span>
+          <span className="text-white/70 font-extralight">{matchPct}%</span>
         </span>
 
         {onOpenSafety && (
@@ -295,22 +270,31 @@ export function SwipeProfileCard({
               {profile.location} · {profile.distance}
             </p>
           </div>
-          {peerPresence === "active" && (
+          {emotionalPresence.kind === "energy_active" ||
+          emotionalPresence.kind === "emotionally_present" ||
+          emotionalPresence.kind === "sync_active_tonight" ? (
             <span
               className={cn(
                 "shrink-0 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wide border backdrop-blur-md",
                 "border-white/15 bg-black/35 text-white/85/90",
-                !reduceMotion && peerPresence === "active" && "ttm-swipe-urgency-pulse"
+                !reduceMotion && "ttm-swipe-urgency-pulse"
               )}
             >
               {labels.matchWord} ✦
             </span>
-          )}
+          ) : null}
         </div>
 
         <p className="text-white/85 text-[11px] font-light leading-snug line-clamp-1 drop-shadow mt-1">
           {profile.bio}
         </p>
+
+        {isTop && (
+          <CompatibilityPreview
+            compatibility={compatibility}
+            className="mt-2"
+          />
+        )}
 
         <div className="flex items-center gap-2 mt-2 min-w-0 overflow-hidden">
           {trust && (
@@ -342,8 +326,9 @@ export function SwipeProfileCard({
   ) : null
 
   const shellClass = cn(
-    "cin-card overflow-hidden relative w-full h-full",
+    "discover-card cin-card overflow-hidden relative w-full h-full",
     getTimerMoodCardClass(timerMood),
+    isTop && "discover-card--top",
     isTop && peerPresence === "active" && "ttm-swipe-card-active",
     isTop && peerPresence === "fading" && "ttm-swipe-card-fading",
     stackClass
@@ -352,9 +337,18 @@ export function SwipeProfileCard({
   const depthOpacity = depth === 0 ? 1 : depth === 1 ? 0.88 : 0.72
 
   const cardBody = (
-    <div className={shellClass} style={{ opacity: depthOpacity }}>
+    <div
+      className={shellClass}
+      data-atmosphere={compatibility.atmosphere}
+      style={{
+        opacity: depthOpacity,
+        ["--discover-resonance" as string]: matchPct / 100,
+      }}
+    >
+      <span className="discover-card__aura" aria-hidden />
       <div className="relative w-full h-full aspect-[3/4.05] max-h-full">
         {photoLayer}
+        <div className="discover-card__veil" aria-hidden />
         {chromeLayer}
       </div>
     </div>
@@ -365,7 +359,8 @@ export function SwipeProfileCard({
       <motion.div
         style={{ x, rotate, zIndex: 30 - depth, willChange: "transform" }}
         drag={onDragEnd ? "x" : false}
-        dragElastic={0.14}
+        dragElastic={0.22}
+        dragTransition={{ bounceStiffness: 380, bounceDamping: 28, power: 0.28 }}
         dragConstraints={{ left: 0, right: 0 }}
         onDragStart={dragGuard.onDragStart}
         onDrag={dragGuard.onDrag}

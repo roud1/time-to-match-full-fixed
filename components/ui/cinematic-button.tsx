@@ -12,11 +12,11 @@ export const cinematicButtonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "text-white cin-btn-primary",
+        primary: "ttm-brand-cta text-white border-0",
         secondary:
-          "text-white/85 bg-white/[0.06] border border-white/12 hover:bg-white/[0.09] hover:border-white/18",
-        ghost: "text-white/75 cin-btn-ghost",
-        glow: "text-white cin-btn-primary shadow-[0_0_48px_-12px_rgba(255,255,255,0.15)]",
+          "ttm-brand-interactive text-white/85 bg-white/[0.06] border border-white/12 hover:bg-white/[0.09] hover:border-white/18 rounded-full",
+        ghost: "ttm-brand-interactive text-white/75 cin-btn-ghost rounded-full",
+        glow: "ttm-brand-cta text-white ttm-brand-glow-chemistry",
       },
       size: {
         default: "px-9 py-4 min-h-[48px] text-base",

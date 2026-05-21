@@ -10,12 +10,7 @@ import {
   recordConnectionMessage,
   setMemoryProfileName,
 } from "@/lib/connection-store"
-import {
-  getPulseProfile,
-  getPulseWelcomeMessage,
-  isPulseProfile,
-  PULSE_PROFILE_ID,
-} from "@/lib/pulse-companion"
+import { broadcastPresenceUpdate } from "@/lib/presence/realtime-presence"
 
 const SOCIAL_KEY = "ttm-social"
 
@@ -55,7 +50,9 @@ function load(): SocialState {
   try {
     const raw = localStorage.getItem(SOCIAL_KEY)
     if (!raw) return { ...DEFAULT }
-    return { ...DEFAULT, ...JSON.parse(raw) }
+    const parsed = { ...DEFAULT, ...JSON.parse(raw) } as SocialState
+    parsed.chats = parsed.chats.filter((c) => c.profileId > 0)
+    return parsed
   } catch {
     return { ...DEFAULT }
   }
@@ -101,42 +98,11 @@ function syncConnections(state: SocialState) {
   migrateConnectionsFromMatches(state.matches, chatTimes)
 }
 
-function ensurePulseCompanion(state: SocialState, locale: Locale): SocialState {
-  const existing = state.chats.find((c) => c.profileId === PULSE_PROFILE_ID)
-  if (existing) return state
-  const now = Date.now()
-  return {
-    ...state,
-    chats: [
-      {
-        profileId: PULSE_PROFILE_ID,
-        updatedAt: now,
-        messages: [
-          {
-            id: `pulse-welcome-${now}`,
-            from: "them",
-            text: getPulseWelcomeMessage(locale),
-            at: now,
-          },
-        ],
-      },
-      ...state.chats,
-    ],
-  }
-}
-
 export function getSocialState(locale: Locale, position: GeoPosition | null) {
   let state = load()
   if (!state.seeded) {
     state = ensureSeeded(state, locale, position)
     save(state)
-  }
-  const withPulse = ensurePulseCompanion(state, locale)
-  if (withPulse.chats.length !== state.chats.length) {
-    save(withPulse)
-    state = withPulse
-  } else {
-    state = withPulse
   }
   syncConnections(state)
   return state
@@ -147,7 +113,7 @@ export function getProfileById(
   locale: Locale,
   position: GeoPosition | null
 ): SwipeProfile | undefined {
-  if (isPulseProfile(id)) return getPulseProfile(locale)
+  if (id <= 0) return undefined
   return buildDemoSwipeProfiles(locale, position).find((p) => p.id === id)
 }
 
@@ -167,13 +133,14 @@ export function getMatchProfiles(locale: Locale, position: GeoPosition | null): 
     .filter((p): p is SwipeProfile => Boolean(p))
 }
 
+export function getChatMessagesForProfile(profileId: number): ChatMessage[] {
+  const thread = load().chats.find((c) => c.profileId === profileId)
+  return thread?.messages ?? []
+}
+
 export function getChats(locale: Locale, position: GeoPosition | null): ChatThread[] {
   const state = getSocialState(locale, position)
-  return [...state.chats].sort((a, b) => {
-    if (a.profileId === PULSE_PROFILE_ID) return -1
-    if (b.profileId === PULSE_PROFILE_ID) return 1
-    return b.updatedAt - a.updatedAt
-  })
+  return [...state.chats].sort((a, b) => b.updatedAt - a.updatedAt)
 }
 
 export function recordSwipe(
@@ -182,15 +149,12 @@ export function recordSwipe(
   locale: Locale,
   position: GeoPosition | null
 ): { matched: boolean } {
-  let state = ensureSeeded(load(), locale, position)
+  let state = load()
+  state = ensureSeeded(state, locale, position)
 
   if (direction === "left") {
     if (!state.passed.includes(profile.id)) state.passed.push(profile.id)
     save(state)
-    recordProfileActivity()
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new CustomEvent("ttm-social-updated"))
-    }
     return { matched: false }
   }
 
@@ -256,7 +220,7 @@ function pushMessage(
   position: GeoPosition | null
 ): SocialState {
   const trimmed = text.trim()
-  if (!trimmed) return state
+  if (!trimmed || profileId <= 0) return state
 
   const now = Date.now()
   let next = ensureSeeded(state, locale, position)
@@ -279,14 +243,13 @@ function pushMessage(
   }
 
   save(next)
-  if (!isPulseProfile(profileId)) {
-    recordConnectionMessage(profileId, from === "me" ? "me" : "them")
-  }
+  recordConnectionMessage(profileId, from === "me" ? "me" : "them")
   if (from === "me") recordProfileActivity()
   const profile = getProfileById(profileId, locale, position)
   if (profile) setMemoryProfileName(profileId, profile.name)
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+    broadcastPresenceUpdate({ profileId, source: "social" })
   }
   return next
 }

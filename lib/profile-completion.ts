@@ -16,9 +16,12 @@ export function computeProfileStrength(p: StoredUserProfile): number {
   else score += Math.min(14, (p.interests?.length ?? 0) * 3)
   if ((p.vibeIds?.length ?? 0) >= MIN_VIBES) score += 12
   else score += Math.min(12, (p.vibeIds?.length ?? 0) * 4)
-  if (p.intention) score += 10
-  if (p.mood) score += 6
-  if ((p.promptFavorite?.length ?? 0) >= 8) score += 6
-  if (p.voiceIntroRecorded) score += 10
+  if (p.intention) score += 8
+  if (p.mood) score += 4
+  if ((p.energyTagIds?.length ?? 0) >= 1) score += 8
+  if (p.communicationStyle) score += 6
+  if (p.connectionPref) score += 6
+  if ((p.promptFavorite?.length ?? 0) >= 8) score += 4
+  if (p.voiceIntroRecorded) score += 8
   return Math.min(100, Math.round(score))
 }

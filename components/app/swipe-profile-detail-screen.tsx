@@ -6,7 +6,8 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { useI18n } from "@/lib/i18n"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { getSwipeProfilePhotos } from "@/lib/swipe-profile-photos"
-import { demoMatchPercent } from "@/lib/swipe-match-score"
+import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
+import { CompatibilityPreview } from "@/components/discover/compatibility-preview"
 import type { PeerTrustSignals } from "@/lib/demo-trust-signals"
 import { PeerTrustChip } from "@/components/trust/peer-trust-chip"
 import { cn } from "@/lib/utils"
@@ -49,7 +50,8 @@ export function SwipeProfileDetailScreen({
 
   const heroPhoto = photos[0]
   const otherPhotos = photos.slice(1)
-  const matchPct = profile ? demoMatchPercent(profile) : 0
+  const compatibility = profile ? computeDiscoverCompatibility(profile) : null
+  const matchPct = compatibility?.resonancePercent ?? 0
 
   return (
     <AnimatePresence>
@@ -142,6 +144,8 @@ export function SwipeProfileDetailScreen({
 
                 <p className="text-white/90 text-sm font-light leading-relaxed">{profile.bio}</p>
 
+                {compatibility && <CompatibilityPreview compatibility={compatibility} />}
+
                 <div className="flex flex-wrap items-center gap-2">
                   {trust && (
                     <PeerTrustChip
@@ -198,8 +202,8 @@ export function SwipeProfileDetailScreen({
                   onClose()
                   onNope()
                 }}
-                aria-label={t("nope")}
-                className="h-14 w-14 rounded-full flex items-center justify-center touch-manipulation border border-rose-500/35 bg-rose-500/[0.12] text-rose-300 shadow-[0_12px_40px_-12px_rgba(244,63,94,0.45)]"
+                aria-label={t("discoverPassLabel")}
+                className="h-14 w-14 rounded-full flex items-center justify-center touch-manipulation border border-white/12 bg-white/[0.04] text-white/50"
               >
                 <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -212,8 +216,8 @@ export function SwipeProfileDetailScreen({
                   onClose()
                   onLike()
                 }}
-                aria-label={t("like")}
-                className="h-16 w-16 rounded-full flex items-center justify-center touch-manipulation text-white bg-gradient-to-br cin-action-like border border-white/14 shadow-[0_16px_48px_-8px_rgba(255,255,255,0.55)]"
+                aria-label={t("discoverConnectLabel")}
+                className="h-16 w-16 rounded-full flex items-center justify-center touch-manipulation text-white bg-gradient-to-br from-white/18 to-white/8 border border-white/14 shadow-[0_16px_48px_-8px_rgba(220,225,255,0.35)]"
               >
                 <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                   <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />

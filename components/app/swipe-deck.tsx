@@ -14,6 +14,9 @@ import { CinematicParticles } from "@/components/ui/cinematic-particles"
 import { SwipeProfileCard, type SwipeCardLabels } from "@/components/app/swipe-profile-card"
 import { SwipeProfileDetailScreen } from "@/components/app/swipe-profile-detail-screen"
 import { MatchCelebrationScreen } from "@/components/app/match-celebration-screen"
+import { EmotionalEmptyState } from "@/components/product/emotional-empty-state"
+import { isFirstMatchPending } from "@/lib/product-experience"
+import { Sparkles } from "lucide-react"
 import { useTopCardSwipe } from "@/hooks/use-top-card-swipe"
 import { cn } from "@/lib/utils"
 
@@ -76,6 +79,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   const { openUpgrade } = usePremiumUpgrade()
   const reduceMotion = useReducedMotion()
   const [matchedProfile, setMatchedProfile] = useState<SwipeProfile | null>(null)
+  const [firstMatchMode, setFirstMatchMode] = useState(false)
   const [detailProfile, setDetailProfile] = useState<SwipeProfile | null>(null)
   const [detailPhotoIndex, setDetailPhotoIndex] = useState(0)
   const [superRipple, setSuperRipple] = useState(false)
@@ -104,6 +108,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
 
         const { matched } = recordSwipe(top, direction, locale, location.position)
         if (matched && direction === "right") {
+          setFirstMatchMode(isFirstMatchPending())
           setMatchedProfile(top)
         }
 
@@ -127,7 +132,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
       } else if (offset.x < -threshold || velocity.x < -380) {
         void flyOff("left")
       } else {
-        void animate(x, 0, { type: "spring", stiffness: 520, damping: 34 })
+        void animate(x, 0, { type: "spring", stiffness: 480, damping: 32, mass: 0.85 })
       }
     },
     [flyOff, x]
@@ -153,8 +158,8 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   }, [flyOff])
 
   const labels: SwipeCardLabels = {
-    like: t("like"),
-    nope: t("nope"),
+    like: t("discoverConnectLabel"),
+    nope: t("discoverPassLabel"),
     expiresLabel: t("profileExpiresIn"),
     onlineLabel: t("profileOnline"),
     matchWord: t("swipeMatchWord"),
@@ -167,6 +172,19 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
 
   if (!booted) {
     return <SwipeDeckSkeleton centered={centered} />
+  }
+
+  if (profiles.length === 0) {
+    return (
+      <div className="flex flex-1 items-center justify-center px-4 py-8">
+        <EmotionalEmptyState
+          title={t("discoverEmptyTitle")}
+          body={t("discoverEmptyBody")}
+          icon={Sparkles}
+          className="max-w-sm w-full"
+        />
+      </div>
+    )
   }
 
   const stack = profiles.slice(0, STACK_VISIBLE)
@@ -338,7 +356,14 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
           setSafetyOpen(true)
         }}
       />
-      <MatchCelebrationScreen profile={matchedProfile} onClose={() => setMatchedProfile(null)} />
+      <MatchCelebrationScreen
+        profile={matchedProfile}
+        isFirstMatch={firstMatchMode}
+        onClose={() => {
+          setMatchedProfile(null)
+          setFirstMatchMode(false)
+        }}
+      />
     </>
   )
 

@@ -33,6 +33,14 @@ export type SyncMetrics = {
   aiEnhanced?: boolean
   /** Short atmospheric insight from AI engine */
   insight?: string
+  /** Invisible AI layer */
+  aiEmotionalState?: import("@/lib/ai-connection-engine/types").AIEmotionalState
+  aiConnectionState?: import("@/lib/ai-connection-engine/types").AIConnectionState
+  connectionPersonality?: import("@/lib/relationship-identity/types").RelationshipPersonality
+  atmosphereLevel?: number
+  atmosphereGlow?: number
+  atmosphereMotion?: number
+  atmosphereParticles?: number
 }
 
 const STAGE_BASE: Record<ConnectionView["stage"], number> = {

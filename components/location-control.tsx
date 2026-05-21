@@ -75,7 +75,7 @@ export function LocationBanner() {
         <button
           type="button"
           onClick={location.requestLocation}
-          className="shrink-0 px-3 py-1.5 rounded-full bg-gradient-to-r cin-btn-primary text-white text-xs font-light whitespace-nowrap"
+          className="ttm-brand-cta shrink-0 px-3 py-1.5 text-xs font-extralight whitespace-nowrap min-h-0"
         >
           {t("locationEnable")}
         </button>

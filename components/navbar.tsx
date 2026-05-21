@@ -10,11 +10,15 @@ import { getUserProfile, isLoggedIn } from "@/lib/user-profile"
 import { cn } from "@/lib/utils"
 
 const NAV_LINKS = [
+  { href: "/#evolution", labelKey: "landingNavEvolution" },
   { href: "/#how", labelKey: "howItWorks" },
-  { href: "/#discover", labelKey: "navDiscover" },
 ] as const
 
-export function Navbar() {
+type NavbarProps = {
+  variant?: "default" | "landing"
+}
+
+export function Navbar({ variant = "default" }: NavbarProps) {
   const { t } = useI18n()
   const pathname = usePathname()
   const isHome = pathname === "/"
@@ -51,8 +55,14 @@ export function Navbar() {
     >
       <nav
         className={cn(
-          "mx-auto max-w-6xl flex items-center justify-between rounded-2xl px-4 py-3 md:px-6 md:py-3.5 transition-all duration-700",
-          scrolled ? "cin-nav-minimal cin-nav-minimal--scrolled" : "cin-nav-minimal"
+          "mx-auto max-w-6xl flex items-center justify-between rounded-2xl px-4 py-3 md:px-6 md:py-3 transition-all duration-700",
+          variant === "landing"
+            ? scrolled
+              ? "landing-nav landing-nav--scrolled ttm-brand-glass-float"
+              : "landing-nav ttm-brand-glass"
+            : scrolled
+              ? "cin-nav-minimal cin-nav-minimal--scrolled"
+              : "cin-nav-minimal"
         )}
         aria-label="Main"
       >
@@ -73,7 +83,10 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="px-4 py-2 text-sm font-light text-white/45 hover:text-white/90 transition-colors duration-500"
+              className={cn(
+                "landing-nav__link px-4 py-2 text-sm text-white/40 hover:text-white/88 transition-colors duration-500",
+                variant !== "landing" && "font-light"
+              )}
             >
               {t(link.labelKey)}
             </Link>
@@ -104,7 +117,7 @@ export function Navbar() {
               <Link
                 href="/login"
                 className={cn(
-                  "inline-flex items-center justify-center min-h-[44px] rounded-full px-4 text-sm font-light text-white/75 cin-btn-ghost transition-all duration-500 hover:text-white",
+                  "ttm-brand-interactive inline-flex items-center justify-center min-h-[44px] rounded-full px-4 text-sm font-extralight text-white/70 cin-btn-ghost hover:text-white/95",
                   isHome && "border-white/14"
                 )}
               >
@@ -113,8 +126,8 @@ export function Navbar() {
               <Link
                 href="/register"
                 className={cn(
-                  "inline-flex min-h-[44px] items-center justify-center rounded-full px-5 text-sm font-light text-white cin-btn-primary transition-all duration-500",
-                  isHome && "shadow-[0_0_32px_-8px_rgba(255,255,255,0.12)]"
+                  "ttm-brand-cta inline-flex min-h-[44px] items-center justify-center text-sm",
+                  isHome && variant === "landing" && "landing-nav__cta"
                 )}
               >
                 {t("register")}
