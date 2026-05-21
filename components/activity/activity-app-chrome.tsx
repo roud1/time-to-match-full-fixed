@@ -4,6 +4,7 @@ import { useActivityFeed } from "@/components/activity/activity-feed-context"
 import { FloatingToastStack } from "@/components/activity/floating-toast-stack"
 import { ActivityHubSheet } from "@/components/activity/activity-hub-sheet"
 import { useI18n } from "@/lib/i18n"
+import { NotifyBadge } from "@/components/ui/notify-badge"
 import { cn } from "@/lib/utils"
 
 export function ActivityAppChrome() {
@@ -30,11 +31,7 @@ export function ActivityAppChrome() {
             d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
           />
         </svg>
-        {total > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full ttm-brand-cta text-[10px] flex items-center justify-center font-medium p-0 min-h-0 border-0">
-            {total > 9 ? "9+" : total}
-          </span>
-        )}
+        <NotifyBadge count={total} className="ttm-notify-badge--header" />
       </button>
       <FloatingToastStack toasts={toasts} onDismiss={dismissToast} />
       <ActivityHubSheet

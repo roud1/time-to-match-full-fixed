@@ -9,6 +9,7 @@ import { useI18n, type TranslationKey } from "@/lib/i18n"
 import { getActivityCounts } from "@/lib/activity-metrics"
 import { tapScaleSoft } from "@/lib/motion-system"
 import { BrandIcon, type BrandIconName } from "@/components/brand/brand-icon"
+import { NotifyBadge } from "@/components/ui/notify-badge"
 
 export type AppTab = "discover" | "likes" | "chat" | "map"
 export type BottomNavId = AppTab | "profile"
@@ -72,18 +73,14 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
                   isActive ? "ttm-dock-tab--active" : "ttm-dock-tab--idle"
                 )}
               >
-                <BrandIcon name={item.icon} active={isActive} size="md" />
+                <span className="ttm-dock-tab__icon-wrap">
+                  <BrandIcon name={item.icon} active={isActive} size="md" />
+                  {item.id === "likes" && item.badge && (
+                    <NotifyBadge count={likesBadge} />
+                  )}
+                  {item.id === "chat" && <NotifyBadge count={chatBadge} />}
+                </span>
                 <span className="ttm-dock-tab__label">{t(item.labelKey)}</span>
-                {item.id === "likes" && item.badge && likesBadge > 0 && (
-                  <span className="absolute top-0.5 right-1 sm:right-2 cin-badge">
-                    {likesBadge > 9 ? "9+" : likesBadge}
-                  </span>
-                )}
-                {item.id === "chat" && chatBadge > 0 && (
-                  <span className="absolute top-0.5 right-1 sm:right-2 min-w-[16px] h-4 px-1 rounded-full bg-white/20 border border-white/25 text-[9px] text-white flex items-center justify-center">
-                    {chatBadge > 9 ? "9+" : chatBadge}
-                  </span>
-                )}
               </Link>
             </motion.div>
           )
