@@ -24,8 +24,8 @@ export function AuthShell({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      <main className="relative z-10 flex-1 flex items-start justify-center ttm-page py-8 md:py-12 pb-8">
-        {children}
+      <main className="relative z-10 flex-1 flex items-start justify-center ttm-page py-8 md:py-12 pb-8 w-full min-h-0">
+        <div className="w-full flex justify-center px-4 md:px-6">{children}</div>
       </main>
     </motion.div>
   )

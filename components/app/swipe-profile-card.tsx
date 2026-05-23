@@ -346,7 +346,7 @@ export function SwipeProfileCard({
       }}
     >
       <span className="discover-card__aura" aria-hidden />
-      <div className="relative w-full h-full aspect-[3/4.05] max-h-full">
+      <div className="relative w-full h-full aspect-[3/4.55] max-h-full">
         {photoLayer}
         <div className="discover-card__veil" aria-hidden />
         {chromeLayer}
@@ -361,7 +361,7 @@ export function SwipeProfileCard({
         drag={onDragEnd ? "x" : false}
         dragElastic={0.22}
         dragTransition={{ bounceStiffness: 380, bounceDamping: 28, power: 0.28 }}
-        dragConstraints={{ left: 0, right: 0 }}
+        dragConstraints={false}
         onDragStart={dragGuard.onDragStart}
         onDrag={dragGuard.onDrag}
         onDragEnd={onDragEnd}

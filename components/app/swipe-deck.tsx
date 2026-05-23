@@ -24,7 +24,7 @@ const STACK_VISIBLE = 3
 
 function SwipeDeckSkeleton({ centered }: { centered?: boolean }) {
   const card = (
-    <div className="relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.05] max-h-full rounded-[1.85rem] overflow-hidden bg-white/[0.04] border border-white/10">
+    <div className="relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[1.85rem] overflow-hidden bg-white/[0.04] border border-white/10">
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-white/5 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
         <div className="h-6 w-2/3 rounded-lg bg-white/10" />
@@ -96,6 +96,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
       const top = profiles[0]
       if (!top || exitLockRef.current) return
       exitLockRef.current = true
+      x.stopAnimation()
       const w = typeof window !== "undefined" ? window.innerWidth : 390
       const target = direction === "right" ? w * 1.35 : -w * 1.35
 
@@ -190,11 +191,12 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   const stack = profiles.slice(0, STACK_VISIBLE)
 
   const actionButtons = (
-    <div className="shrink-0 flex flex-col items-center justify-center gap-3 sm:gap-4 py-2 safe-area-pb">
+    <div className="shrink-0 flex flex-col items-center justify-center gap-3 sm:gap-4 py-2 safe-area-pb relative z-40 pointer-events-auto">
       <motion.button
         type="button"
         whileTap={{ scale: 0.92 }}
         disabled={!canRewind}
+        onPointerDown={(e) => e.stopPropagation()}
         onClick={rewind}
         aria-label={t("swipeRewindAria")}
         className={cn(
@@ -231,6 +233,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         type="button"
         whileTap={{ scale: 0.9 }}
         disabled={!current}
+        onPointerDown={(e) => e.stopPropagation()}
         onClick={superLike}
         aria-label={t("swipeSuperLikeAria")}
         className={cn(
@@ -249,6 +252,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         type="button"
         whileTap={{ scale: 0.9 }}
         disabled={!current}
+        onPointerDown={(e) => e.stopPropagation()}
         onClick={() => void flyOff("right")}
         aria-label={t("like")}
         className={cn(
@@ -266,13 +270,19 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   )
 
   const cardShellClass = cn(
-    "relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.05] max-h-full rounded-[2rem] overflow-hidden",
+    "relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[2rem] overflow-hidden",
     "bg-gradient-to-b from-white/[0.07] via-transparent to-white/[0.06]",
     "ring-1 ring-white/[0.06] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]"
   )
 
   const cardColumn = (
-    <div className={cn(centered ? "col-start-2 row-start-1 justify-self-center self-center max-h-full" : "flex-1 min-w-0 flex flex-col min-h-0 items-center justify-center max-h-full")}>
+    <div
+      className={cn(
+        centered
+          ? "justify-self-center self-center max-h-full min-w-0"
+          : "flex-1 min-w-0 flex flex-col min-h-0 items-center justify-center max-h-full"
+      )}
+    >
       <div className={cn(!centered && "flex-1 flex items-center justify-center max-h-full", cardShellClass)}>
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(255,255,255,0.18),transparent)]" />
         <CinematicParticles count={8} className="opacity-55" />
@@ -287,7 +297,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
 
         <div className="relative z-[1] h-full w-full p-1 flex items-center justify-center">
           {stack.length > 0 ? (
-            <div className="relative w-full h-full max-h-full aspect-[3/4.05] mx-auto">
+            <div className="relative w-full h-full max-h-full aspect-[3/4.55] mx-auto">
               {[...stack].reverse().map((profile, reversedIdx) => {
                 const index = stack.length - 1 - reversedIdx
                 const isTop = index === 0
@@ -329,7 +339,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   )
 
   const actionsWrapClass = centered
-    ? "col-start-3 row-start-1 justify-self-start self-center pl-1 sm:pl-2"
+    ? "justify-self-start self-center pl-1 sm:pl-2"
     : "shrink-0"
 
   const dialogs = (
@@ -371,8 +381,11 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
     return (
       <>
         {dialogs}
-        {cardColumn}
-        <div className={actionsWrapClass}>{actionButtons}</div>
+        <div className="col-span-3 w-full min-h-0 flex-1 grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-1 sm:gap-2 pointer-events-none">
+          <div className="min-w-0" aria-hidden />
+          <div className="pointer-events-auto min-w-0">{cardColumn}</div>
+          <div className={cn(actionsWrapClass, "pointer-events-auto")}>{actionButtons}</div>
+        </div>
       </>
     )
   }
