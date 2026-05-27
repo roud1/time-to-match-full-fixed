@@ -17,13 +17,14 @@ const NAV_LINKS = [
 ] as const
 
 type NavbarProps = {
-  variant?: "default" | "landing"
+  variant?: "default" | "landing" | "landing-minimal"
 }
 
 export function Navbar({ variant = "default" }: NavbarProps) {
   const { t } = useI18n()
   const pathname = usePathname()
   const isHome = pathname === "/"
+  const isMinimalLanding = variant === "landing-minimal"
   const [loggedIn, setLoggedIn] = useState(false)
   const [userName, setUserName] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
@@ -71,7 +72,7 @@ export function Navbar({ variant = "default" }: NavbarProps) {
       <nav
         className={cn(
           "mx-auto max-w-6xl flex items-center justify-between gap-2 rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 md:px-6 md:py-3 transition-all duration-700",
-          variant === "landing"
+          variant === "landing" || isMinimalLanding
             ? scrolled
               ? "landing-nav landing-nav--scrolled ttm-brand-glass-float"
               : "landing-nav ttm-brand-glass"
@@ -93,8 +94,9 @@ export function Navbar({ variant = "default" }: NavbarProps) {
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map((link) => (
+        <div className={cn("hidden md:flex items-center gap-1", isMinimalLanding && "md:hidden")}>
+          {!isMinimalLanding &&
+            NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -143,15 +145,17 @@ export function Navbar({ variant = "default" }: NavbarProps) {
               >
                 {t("login")}
               </Link>
-              <Link
-                href="/register"
-                className={cn(
-                  "ttm-brand-cta inline-flex min-h-[44px] items-center justify-center text-xs sm:text-sm px-3 sm:px-4",
-                  isHome && variant === "landing" && "landing-nav__cta"
-                )}
-              >
-                {t("register")}
-              </Link>
+              {!isMinimalLanding && (
+                <Link
+                  href="/register"
+                  className={cn(
+                    "ttm-brand-cta inline-flex min-h-[44px] items-center justify-center text-xs sm:text-sm px-3 sm:px-4",
+                    isHome && variant === "landing" && "landing-nav__cta"
+                  )}
+                >
+                  {t("register")}
+                </Link>
+              )}
             </div>
             </>
           )}
@@ -179,16 +183,17 @@ export function Navbar({ variant = "default" }: NavbarProps) {
             transition={{ duration: 0.2 }}
             className="md:hidden mx-auto mt-2 max-w-6xl rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] backdrop-blur-xl px-2 py-2 shadow-[var(--shadow-lg)]"
           >
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="flex min-h-[48px] items-center rounded-xl px-4 text-sm font-light text-[var(--text-secondary)] hover:bg-[var(--accent-soft-bg)] hover:text-[var(--text-primary)] transition-colors"
-              >
-                {t(link.labelKey)}
-              </Link>
-            ))}
+            {!isMinimalLanding &&
+              NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex min-h-[48px] items-center rounded-xl px-4 text-sm font-light text-[var(--text-secondary)] hover:bg-[var(--accent-soft-bg)] hover:text-[var(--text-primary)] transition-colors"
+                >
+                  {t(link.labelKey)}
+                </Link>
+              ))}
             {loggedIn && (
               <Link
                 href="/app"
