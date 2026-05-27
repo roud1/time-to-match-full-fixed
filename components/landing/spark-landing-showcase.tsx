@@ -10,14 +10,15 @@ import {
 } from "@/components/landing/spark-demo-profile-card"
 import { isLoggedIn } from "@/lib/user-profile"
 
+/** Unsplash portraits (demo only, not real app users). */
 const DEMO_PROFILES: SparkDemoProfile[] = [
   {
     name: "Анна",
     age: 24,
     compatibility: 82,
     timerLabel: "Осталось 7 часов",
-    initials: "А",
-    photoGradient: "linear-gradient(145deg, #fda4af 0%, #f9a8d4 45%, #c4b5fd 100%)",
+    imageUrl:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=480&h=600&fit=crop&q=85",
     urgent: true,
   },
   {
@@ -25,8 +26,8 @@ const DEMO_PROFILES: SparkDemoProfile[] = [
     age: 27,
     compatibility: 65,
     timerLabel: "Осталось 4 часа",
-    initials: "М",
-    photoGradient: "linear-gradient(160deg, #7dd3fc 0%, #38bdf8 50%, #6366f1 100%)",
+    imageUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=480&h=600&fit=crop&q=85",
     urgent: true,
   },
   {
@@ -35,16 +36,16 @@ const DEMO_PROFILES: SparkDemoProfile[] = [
     compatibility: 91,
     timerLabel: "Осталось 48 часов",
     verified: true,
-    initials: "Е",
-    photoGradient: "linear-gradient(155deg, #fcd34d 0%, #fb923c 40%, #f472b6 100%)",
+    imageUrl:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=480&h=600&fit=crop&q=85",
   },
   {
     name: "Дмитрий",
     age: 29,
     compatibility: 58,
     timerLabel: "Осталось 22 часа",
-    initials: "Д",
-    photoGradient: "linear-gradient(150deg, #6ee7b7 0%, #2dd4bf 55%, #0d9488 100%)",
+    imageUrl:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=480&h=600&fit=crop&q=85",
   },
   {
     name: "София",
@@ -52,16 +53,16 @@ const DEMO_PROFILES: SparkDemoProfile[] = [
     compatibility: 76,
     timerLabel: "Осталось 15 часов",
     verified: true,
-    initials: "С",
-    photoGradient: "linear-gradient(140deg, #e9d5ff 0%, #a78bfa 50%, #ec4899 100%)",
+    imageUrl:
+      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=480&h=600&fit=crop&q=85",
   },
   {
     name: "Артём",
     age: 26,
     compatibility: 43,
     timerLabel: "Осталось 3 часа",
-    initials: "А",
-    photoGradient: "linear-gradient(165deg, #94a3b8 0%, #64748b 45%, #334155 100%)",
+    imageUrl:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=480&h=600&fit=crop&q=85",
     urgent: true,
   },
 ]

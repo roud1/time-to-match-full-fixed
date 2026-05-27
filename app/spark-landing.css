@@ -505,17 +505,25 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   position: relative;
   flex: 0 0 68%;
   min-height: 11.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-secondary);
 }
 
-.spark-demo-card__initials {
-  font-size: 2.75rem;
-  font-weight: 300;
-  letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+.spark-demo-card__image {
+  object-fit: cover;
+  object-position: center 15%;
+}
+
+.spark-demo-card__photo-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.08) 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
 }
 
 .spark-demo-card__verified {

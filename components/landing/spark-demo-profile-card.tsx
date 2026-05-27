@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react"
+import Image from "next/image"
 import { VerifiedBadge } from "@/components/ui/verified-badge"
 import { getCompatibilityTier } from "@/lib/discover/compatibility-tier"
 import { cn } from "@/lib/utils"
@@ -8,9 +10,9 @@ export type SparkDemoProfile = {
   compatibility: number
   timerLabel: string
   verified?: boolean
-  /** CSS gradient for photo area */
-  photoGradient: string
-  initials: string
+  imageUrl: string
+  /** Fallback under image while loading */
+  photoGradient?: string
   urgent?: boolean
 }
 
@@ -30,9 +32,21 @@ export function SparkDemoProfileCard({ profile, className }: SparkDemoProfileCar
     >
       <div
         className="spark-demo-card__photo"
-        style={{ background: profile.photoGradient }}
+        style={
+          profile.photoGradient
+            ? ({ background: profile.photoGradient } satisfies CSSProperties)
+            : undefined
+        }
       >
-        <span className="spark-demo-card__initials">{profile.initials}</span>
+        <Image
+          src={profile.imageUrl}
+          alt=""
+          fill
+          className="spark-demo-card__image"
+          sizes="(max-width: 768px) 78vw, 320px"
+          draggable={false}
+        />
+        <div className="spark-demo-card__photo-shade" aria-hidden />
         {profile.verified && (
           <span className="spark-demo-card__verified">
             <VerifiedBadge size={18} title="Верифицирован" />
