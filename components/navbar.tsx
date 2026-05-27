@@ -71,14 +71,22 @@ export function Navbar({ variant = "default" }: NavbarProps) {
     >
       <nav
         className={cn(
-          "mx-auto max-w-6xl flex items-center justify-between gap-2 rounded-2xl px-3 py-2.5 sm:px-4 sm:py-3 md:px-6 md:py-3 transition-all duration-700",
-          variant === "landing" || isMinimalLanding
-            ? scrolled
-              ? "landing-nav landing-nav--scrolled ttm-brand-glass-float"
-              : "landing-nav ttm-brand-glass"
-            : scrolled
-              ? "cin-nav-minimal cin-nav-minimal--scrolled"
-              : "cin-nav-minimal"
+          "mx-auto max-w-6xl flex items-center justify-between gap-2 px-3 py-2.5 sm:px-4 sm:py-3 md:px-6 md:py-3 transition-all duration-500",
+          isMinimalLanding
+            ? cn(
+                "spark-nav rounded-2xl",
+                scrolled ? "spark-nav--solid" : "spark-nav--transparent"
+              )
+            : cn(
+                "rounded-2xl transition-all duration-700",
+                variant === "landing"
+                  ? scrolled
+                    ? "landing-nav landing-nav--scrolled ttm-brand-glass-float"
+                    : "landing-nav ttm-brand-glass"
+                  : scrolled
+                    ? "cin-nav-minimal cin-nav-minimal--scrolled"
+                    : "cin-nav-minimal"
+              )
         )}
         aria-label="Main"
       >
