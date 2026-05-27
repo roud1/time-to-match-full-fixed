@@ -7,8 +7,8 @@ import Image from "next/image"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import type { PeerTrustSignals } from "@/lib/demo-trust-signals"
 import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
-import { CompatibilityPreview } from "@/components/discover/compatibility-preview"
 import { InterestCompatibilityStrip } from "@/components/discover/interest-compatibility-strip"
+import { SwipeProfileExpiryChip } from "@/components/discover/swipe-profile-expiry-chip"
 import { VerifiedBadge } from "@/components/ui/verified-badge"
 import { getSwipeProfilePhotos } from "@/lib/swipe-profile-photos"
 import { useI18n } from "@/lib/i18n"
@@ -16,12 +16,7 @@ import { cn } from "@/lib/utils"
 import { demoPeerPresence } from "@/lib/profile-life"
 import { resolveEmotionalPresence } from "@/lib/world"
 import { PresenceEmotionalPill } from "@/components/presence/presence-emotional-pill"
-import {
-  getTimerMoodCardClass,
-  getTimerMoodFromMs,
-  parseTimeLeftToMs,
-} from "@/lib/profile-timer-mood"
-import { ProfileTimerMood } from "@/components/ui/profile-timer-mood"
+import { getTimerMoodCardClass, getTimerMoodFromMs, parseTimeLeftToMs } from "@/lib/profile-timer-mood"
 
 function useDragGuard() {
   const wasDragging = useRef(false)
@@ -156,17 +151,13 @@ export function SwipeProfileCard({
         </motion.div>
       </AnimatePresence>
       <div
-        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/80 via-transparent to-black/15"
-        aria-hidden
-      />
-      <div
-        className="absolute inset-x-0 bottom-0 h-[30%] pointer-events-none bg-gradient-to-t from-black/90 via-black/40 to-transparent"
+        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/50 via-transparent to-black/10"
         aria-hidden
       />
     </>
   )
 
-  const chromeLayer = isTop ? (
+  const photoChrome = isTop ? (
     <>
       {likeOpacity && nopeOpacity && (
         <>
@@ -215,7 +206,7 @@ export function SwipeProfileCard({
               e.stopPropagation()
               if (!dragGuard.wasDragging()) goPrevPhoto()
             }}
-            className="absolute left-0 top-0 bottom-[36%] w-[30%] z-[6] touch-manipulation"
+            className="absolute left-0 top-0 bottom-0 w-[30%] z-[6] touch-manipulation"
             aria-label={t("swipePhotoPrev")}
           />
           <button
@@ -225,31 +216,23 @@ export function SwipeProfileCard({
               e.stopPropagation()
               if (!dragGuard.wasDragging()) goNextPhoto()
             }}
-            className="absolute right-0 top-0 bottom-[36%] w-[30%] z-[6] touch-manipulation"
+            className="absolute right-0 top-0 bottom-0 w-[30%] z-[6] touch-manipulation"
             aria-label={t("swipePhotoNext")}
           />
         </>
       )}
 
-      <div className="absolute top-[1.65rem] left-2 right-2 z-10 flex items-center gap-1 pointer-events-auto min-w-0">
+      <div className="absolute top-2 left-2 right-2 z-10 flex items-center gap-1.5 pointer-events-auto min-w-0">
         <PresenceEmotionalPill presence={emotionalPresence} compact className="shrink-0" />
 
         {isTop && (
-          <ProfileTimerMood
+          <SwipeProfileExpiryChip
             profileId={profile.id}
             timeLeft={profile.timeLeft}
             live
-            size="sm"
             className="shrink-0"
           />
         )}
-
-        <span
-          className="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] bg-black/40 border border-white/10 backdrop-blur-md shrink-0 tabular-nums"
-          title={`${labels.matchWord} ${matchPct}%`}
-        >
-          <span className="text-white/70 font-extralight">{matchPct}%</span>
-        </span>
 
         {onOpenSafety && (
           <button
@@ -273,7 +256,11 @@ export function SwipeProfileCard({
           </button>
         )}
       </div>
+    </>
+  ) : null
 
+  const infoPanel = isTop ? (
+    <div className="discover-card__info">
       <button
         type="button"
         onPointerDown={(e) => e.stopPropagation()}
@@ -281,32 +268,30 @@ export function SwipeProfileCard({
           e.stopPropagation()
           openProfileIfAllowed()
         }}
-        className="absolute bottom-0 left-0 right-0 px-2.5 pb-2.5 pt-16 z-10 text-left touch-manipulation"
+        className="w-full text-left touch-manipulation"
         aria-label={t("swipeProfileOpenAria")}
       >
-        <div className="flex items-end justify-between gap-1.5">
+        <div className="flex items-start justify-between gap-1.5">
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg leading-tight font-extralight tracking-tight text-white drop-shadow-md truncate flex items-center gap-1.5">
+            <h3 className="text-base sm:text-lg leading-tight font-extralight tracking-tight text-white truncate flex items-center gap-1.5">
               <span className="truncate">{profile.name}</span>
               {photoVerified && (
                 <VerifiedBadge size={16} title={t("photoVerifiedLabel")} className="shrink-0" />
               )}
-              <span className="text-white/60 font-light text-base shrink-0">, {profile.age}</span>
+              <span className="text-white/60 font-light text-sm shrink-0">, {profile.age}</span>
             </h3>
-            <p className="text-white/70 text-[10px] font-light mt-0.5 drop-shadow truncate">
+            <p className="text-white/65 text-[10px] font-light mt-0.5 truncate">
               {profile.location} · {profile.distance}
             </p>
-            {isTop && (
-              <InterestCompatibilityStrip profile={profile} compact className="mt-1" />
-            )}
+            <InterestCompatibilityStrip profile={profile} compact className="mt-1.5" />
           </div>
           {emotionalPresence.kind === "energy_active" ||
           emotionalPresence.kind === "emotionally_present" ||
           emotionalPresence.kind === "sync_active_tonight" ? (
             <span
               className={cn(
-                "shrink-0 px-2.5 py-1 rounded-full text-[10px] uppercase tracking-wide border backdrop-blur-md",
-                "border-white/15 bg-black/35 text-white/85/90",
+                "shrink-0 px-2 py-0.5 rounded-full text-[9px] uppercase tracking-wide border",
+                "border-white/15 bg-white/10 text-white/90",
                 !reduceMotion && "ttm-swipe-urgency-pulse"
               )}
             >
@@ -315,44 +300,24 @@ export function SwipeProfileCard({
           ) : null}
         </div>
 
-        <p className="text-white/85 text-[11px] font-light leading-snug line-clamp-1 drop-shadow mt-1">
+        <p className="text-white/80 text-[10px] sm:text-[11px] font-light leading-snug line-clamp-2 mt-1.5">
           {profile.bio}
         </p>
 
-        {isTop && (
-          <CompatibilityPreview
-            compatibility={compatibility}
-            className="mt-2"
-          />
-        )}
-
-        <div className="flex items-center gap-2 mt-2 min-w-0 overflow-hidden">
-          {trust && (
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-white/12 bg-black/40 px-2.5 py-1 text-[10px] text-white/80 backdrop-blur-md">
-              <span className="tabular-nums text-white/80/95">{trust.score}</span>
+        {trust && (
+          <div className="flex items-center gap-2 mt-2 min-w-0 overflow-hidden">
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-white/12 bg-white/[0.06] px-2 py-0.5 text-[9px] text-white/75">
+              <span className="tabular-nums">{trust.score}</span>
               {trust.photoVerified && (
-                <svg className="w-3.5 h-3.5 text-emerald-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <svg className="w-3 h-3 text-emerald-400" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
                 </svg>
               )}
             </span>
-          )}
-          {profile.interests.slice(0, 2).map((interest) => (
-            <span
-              key={interest}
-              className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-light bg-black/35 text-white/85 border border-white/12 backdrop-blur-sm truncate max-w-[6rem]"
-            >
-              {interest}
-            </span>
-          ))}
-          {profile.interests.length > 2 && (
-            <span className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-light text-white/55 border border-white/8">
-              +{profile.interests.length - 2}
-            </span>
-          )}
-        </div>
+          </div>
+        )}
       </button>
-    </>
+    </div>
   ) : null
 
   const shellClass = cn(
@@ -376,10 +341,12 @@ export function SwipeProfileCard({
       }}
     >
       <span className="discover-card__aura" aria-hidden />
-      <div className="relative w-full h-full aspect-[3/4.55] max-h-full">
-        {photoLayer}
-        <div className="discover-card__veil" aria-hidden />
-        {chromeLayer}
+      <div className="discover-card__layout">
+        <div className={cn("discover-card__photo", !isTop && "!flex-[1]")}>
+          {photoLayer}
+          {photoChrome}
+        </div>
+        {infoPanel}
       </div>
     </div>
   )
@@ -415,7 +382,7 @@ export function SwipeProfileCard({
       }}
       transition={{ type: "spring", stiffness: 420, damping: 38 }}
       style={{ zIndex: 20 - depth, willChange: "transform" }}
-      className="absolute inset-0 pointer-events-none overflow-hidden rounded-[1.85rem]"
+      className="absolute inset-0 pointer-events-none overflow-hidden rounded-[var(--radius-lg)]"
     >
       {cardBody}
     </motion.div>

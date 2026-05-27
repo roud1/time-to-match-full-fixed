@@ -1,6 +1,7 @@
 "use client"
 
 import { computeInterestOverlapForProfile } from "@/lib/discover/interest-overlap"
+import { getCompatibilityTier } from "@/lib/discover/compatibility-tier"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -18,36 +19,35 @@ export function InterestCompatibilityStrip({
 }: InterestCompatibilityStripProps) {
   const { t } = useI18n()
   const { compatibility, commonInterests } = computeInterestOverlapForProfile(profile)
-  const high = compatibility > 70
-  const tags = commonInterests.slice(0, compact ? 2 : 3)
+  const tags = commonInterests.slice(0, 3)
 
-  if (compatibility <= 0 && tags.length === 0) return null
+  if (tags.length === 0) return null
+
+  const tier = getCompatibilityTier(compatibility)
+  const showPct = compatibility > 0
 
   return (
-    <div className={cn("space-y-1", className)}>
-      {compatibility > 0 && (
+    <div className={cn("ttm-interest-compat", compact && "ttm-interest-compat--compact", className)}>
+      {showPct && (
         <p
           className={cn(
-            "text-[10px] font-light tabular-nums",
-            high ? "text-emerald-300" : "text-white/75"
+            "ttm-interest-compat__pct",
+            tier === "high" && "ttm-interest-compat__pct--high",
+            tier === "mid" && "ttm-interest-compat__pct--mid",
+            tier === "low" && "ttm-interest-compat__pct--low"
           )}
         >
           {t("discoverCompatibilityLabel")} {compatibility}%
         </p>
       )}
-      {tags.length > 0 && (
-        <div className="flex flex-wrap gap-1">
-          {tags.map((tag) => (
-            <span
-              key={`${tag.id}-${tag.name}`}
-              className="px-2 py-0.5 rounded-full text-[9px] font-light border border-white/12 bg-black/35 text-white/80 backdrop-blur-sm"
-            >
-              {tag.emoji ? `${tag.emoji} ` : ""}
-              {tag.name}
-            </span>
-          ))}
-        </div>
-      )}
+      <div className="ttm-interest-compat__tags">
+        {tags.map((tag) => (
+          <span key={`${tag.id}-${tag.name}`} className="ttm-interest-compat__chip">
+            {tag.emoji ? `${tag.emoji} ` : ""}
+            {tag.name}
+          </span>
+        ))}
+      </div>
     </div>
   )
 }

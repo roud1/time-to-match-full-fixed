@@ -50,13 +50,60 @@
   }
 }
 
+/* Time limits info banner (under discover header) */
+.ttm-discover-limits-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--accent-soft-border);
+  background: color-mix(in srgb, var(--bg-secondary) 72%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-align: center;
+}
+
+.ttm-discover-limits-banner__icon {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+.ttm-discover-limits-banner__text {
+  margin: 0;
+  font-size: var(--text-small);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.ttm-discover-limits-banner__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -2px -4px 0 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.ttm-discover-limits-banner__close:hover {
+  color: var(--text-primary);
+  background: var(--accent-soft-bg);
+}
+
 /* Discover profile card */
 .discover-card {
   --discover-glow: rgba(180, 195, 255, 0.18);
   --discover-accent: rgba(220, 225, 255, 0.35);
   position: relative;
-  border-radius: 2rem;
+  border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: var(--shadow-lg), 0 20px 40px -18px rgba(0, 0, 0, 0.35);
 }
 
 .discover-card[data-atmosphere="warm"] {
@@ -115,17 +162,127 @@
   }
 }
 
-.discover-card__veil {
+.discover-card__layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.discover-card__photo {
+  position: relative;
+  flex: 0 0 70%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.discover-card__photo::after {
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    transparent 45%,
-    rgba(0, 0, 0, 0.55) 72%,
-    rgba(0, 0, 0, 0.88) 100%
-  );
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, transparent 35%, transparent 100%);
+}
+
+.discover-card__info {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  background: linear-gradient(180deg, rgba(8, 8, 12, 0.92) 0%, rgba(5, 5, 8, 0.98) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.discover-card__veil {
+  display: none;
+}
+
+/* Interest compatibility on card */
+.ttm-interest-compat__pct {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+.ttm-interest-compat__pct--high {
+  color: var(--success);
+}
+
+.ttm-interest-compat__pct--mid {
+  color: var(--warning);
+}
+
+.ttm-interest-compat__pct--low {
+  color: var(--text-secondary);
+}
+
+.ttm-interest-compat__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.ttm-interest-compat--compact .ttm-interest-compat__tags {
+  margin-top: 4px;
+}
+
+.ttm-interest-compat__chip {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 9px;
+  font-weight: 300;
+  line-height: 1.3;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ttm-swipe-expiry-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-size: 9px;
+  font-weight: 300;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.ttm-swipe-expiry-chip--urgent {
+  color: #fdba74;
+  border-color: rgba(251, 146, 60, 0.45);
+  background: rgba(234, 88, 12, 0.22);
+  box-shadow: 0 0 12px -4px rgba(251, 146, 60, 0.5);
+}
+
+/* Swipe action buttons */
+.ttm-swipe-action-btn {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease,
+    border-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .ttm-swipe-action-btn:not(:disabled):hover {
+    transform: scale(1.06);
+  }
 }
 
 .discover-compat {

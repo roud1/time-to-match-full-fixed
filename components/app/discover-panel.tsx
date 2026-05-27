@@ -11,6 +11,7 @@ import type { DiscoverFilters } from "@/lib/discover/types"
 import { loadDiscoverFilters, saveDiscoverFilters } from "@/lib/discover/filters-storage"
 import { SwipeDeck } from "@/components/app/swipe-deck"
 import { DiscoverAmbient } from "@/components/discover/discover-ambient"
+import { DiscoverTimeLimitsBanner } from "@/components/discover/discover-time-limits-banner"
 import { DiscoverFiltersModal } from "@/components/discover/discover-filters-modal"
 import { useTrustSafetyVersion } from "@/hooks/use-trust-safety-version"
 import { useHydrated } from "@/hooks/use-hydrated"
@@ -180,6 +181,7 @@ export function DiscoverPanel() {
         onBoost={() => openUpgrade("boost")}
         onOpenFilters={() => setFiltersOpen(true)}
       />
+      <DiscoverTimeLimitsBanner className="relative z-[1] shrink-0 mb-2 sm:mb-3" />
       <DiscoverFiltersModal
         open={filtersOpen}
         filters={filters}

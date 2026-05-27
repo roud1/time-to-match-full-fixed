@@ -14,9 +14,11 @@ import { CinematicParticles } from "@/components/ui/cinematic-particles"
 import { SwipeProfileCard, type SwipeCardLabels } from "@/components/app/swipe-profile-card"
 import { SwipeProfileDetailScreen } from "@/components/app/swipe-profile-detail-screen"
 import { MatchCelebrationScreen } from "@/components/app/match-celebration-screen"
-import { EmotionalEmptyState } from "@/components/product/emotional-empty-state"
+import { EmptyState } from "@/components/ui/empty-state"
 import { isFirstMatchPending } from "@/lib/product-experience"
 import { Sparkles } from "lucide-react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 import { useTopCardSwipe } from "@/hooks/use-top-card-swipe"
 import { cn } from "@/lib/utils"
 
@@ -24,7 +26,7 @@ const STACK_VISIBLE = 3
 
 function SwipeDeckSkeleton({ centered }: { centered?: boolean }) {
   const card = (
-    <div className="relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[1.85rem] overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border)] shadow-[var(--shadow-md)]">
+    <div className="relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[var(--radius-lg)] overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border)] shadow-[var(--shadow-md)]">
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--border)] via-transparent to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
         <div className="h-6 w-2/3 rounded-lg bg-[var(--border)]" />
@@ -177,12 +179,17 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
 
   if (profiles.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center px-4 py-8">
-        <EmotionalEmptyState
-          title={t("discoverEmptyTitle")}
-          body={t("discoverEmptyBody")}
+      <div className="flex flex-1 items-center justify-center px-4 py-8 col-span-3">
+        <EmptyState
           icon={Sparkles}
+          title={t("discoverEmptyAllSwipedTitle")}
+          description={t("discoverEmptyAllSwipedBody")}
           className="max-w-sm w-full"
+          action={
+            <Button asChild variant="default" className="rounded-full px-6">
+              <Link href="/profile">{t("discoverEmptyCreateProfile")}</Link>
+            </Button>
+          }
         />
       </div>
     )
@@ -200,7 +207,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={rewind}
         aria-label={t("swipeRewindAria")}
         className={cn(
-          "relative h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] rounded-full flex items-center justify-center touch-manipulation transition-colors",
+          "ttm-swipe-action-btn relative h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] rounded-full flex items-center justify-center touch-manipulation",
           "border border-white/15 bg-white/[0.06] backdrop-blur-xl text-amber-200/90",
           "shadow-[0_0_28px_-8px_rgba(251,191,36,0.25)]",
           !canRewind && "opacity-35 pointer-events-none"
@@ -218,9 +225,9 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={() => void flyOff("left")}
         aria-label={t("nope")}
         className={cn(
-          "h-[54px] w-[54px] sm:h-[58px] sm:w-[58px] rounded-full flex items-center justify-center touch-manipulation",
+          "ttm-swipe-action-btn h-[54px] w-[54px] sm:h-[58px] sm:w-[58px] rounded-full flex items-center justify-center touch-manipulation",
           "border border-rose-500/35 bg-rose-500/[0.12] backdrop-blur-xl text-rose-300",
-          "shadow-[0_12px_40px_-12px_rgba(244,63,94,0.45)] active:scale-95 transition-transform",
+          "shadow-[0_12px_40px_-12px_rgba(244,63,94,0.45)]",
           !current && "opacity-40 pointer-events-none"
         )}
       >
@@ -237,9 +244,9 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={superLike}
         aria-label={t("swipeSuperLikeAria")}
         className={cn(
-          "h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] rounded-full flex items-center justify-center touch-manipulation",
+          "ttm-swipe-action-btn h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] rounded-full flex items-center justify-center touch-manipulation",
           "border border-sky-400/40 bg-sky-500/15 backdrop-blur-xl text-sky-200",
-          "shadow-[0_0_32px_-6px_rgba(56,189,248,0.4)] active:scale-95 transition-transform",
+          "shadow-[0_0_32px_-6px_rgba(56,189,248,0.4)]",
           !current && "opacity-40 pointer-events-none"
         )}
       >
@@ -256,9 +263,9 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={() => void flyOff("right")}
         aria-label={t("like")}
         className={cn(
-          "h-[58px] w-[58px] sm:h-[64px] sm:w-[64px] rounded-full flex items-center justify-center touch-manipulation text-white",
+          "ttm-swipe-action-btn h-[58px] w-[58px] sm:h-[64px] sm:w-[64px] rounded-full flex items-center justify-center touch-manipulation text-white",
           "bg-gradient-to-br cin-action-like border border-white/14",
-          "shadow-[0_16px_48px_-8px_rgba(255,255,255,0.55)] active:scale-95 transition-transform",
+          "shadow-[0_16px_48px_-8px_rgba(255,255,255,0.55)]",
           !current && "opacity-40 pointer-events-none"
         )}
       >
@@ -270,7 +277,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   )
 
   const cardShellClass = cn(
-    "relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[2rem] overflow-hidden",
+    "relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[var(--radius-lg)] overflow-hidden",
     "bg-gradient-to-b from-white/[0.07] via-transparent to-white/[0.06]",
     "ring-1 ring-white/[0.06] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]"
   )
