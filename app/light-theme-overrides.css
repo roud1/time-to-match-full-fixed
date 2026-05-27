@@ -1,0 +1,758 @@
+/**
+ * Light theme — component overrides (colors, surfaces, shadows only)
+ */
+
+/* —— Base —— */
+html {
+  background: var(--bg-primary);
+  transition: var(--theme-transition);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: var(--text-body);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  transition: var(--theme-transition);
+}
+
+/* Headings stay readable (brand used weight 200 — too thin on light backgrounds) */
+h1,
+h2,
+h3,
+.ttm-type-h1,
+.ttm-type-h2,
+.ttm-brand-title {
+  font-size: var(--text-heading);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.ttm-brand-headline,
+.ttm-brand-display {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.ttm-type-body,
+.ttm-brand-body {
+  font-size: var(--text-body);
+  color: var(--text-primary);
+  font-weight: 400;
+}
+
+.ttm-type-muted,
+.ttm-brand-caption,
+.ttm-type-subtitle {
+  font-size: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+small,
+.text-small {
+  font-size: var(--text-small);
+}
+
+/* —— Surfaces —— */
+.glass,
+.cin-glass,
+.ttm-brand-glass,
+.ttm-brand-glass-strong,
+.glass-card,
+.premium-profile-card,
+.ttm-brand-glass-float {
+  transition: var(--theme-transition);
+}
+
+.glass {
+  background: var(--bg-header);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.glass-card,
+.premium-profile-card {
+  background: var(--tile-surface);
+  border: 1px solid var(--tile-border);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+}
+
+/* List rows / inbox / likes — add class ttm-surface-tile in markup */
+.ttm-surface-tile {
+  background: var(--tile-surface);
+  border: 1px solid var(--tile-border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--theme-transition);
+}
+
+.ttm-surface-tile:hover {
+  border-color: var(--tile-border-strong);
+  background: var(--tile-surface-elevated);
+}
+
+.ttm-brand-glass-float {
+  background: var(--bg-header);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.cin-nav-minimal,
+.ttm-surface-nav--glass {
+  background: var(--bg-header);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--theme-transition);
+}
+
+.cin-nav-minimal--scrolled,
+.ttm-surface-nav--solid,
+.premium-nav-scrolled {
+  background: var(--ttm-glass-bg-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.landing-nav {
+  background: var(--bg-header);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.landing-nav--scrolled {
+  background: var(--ttm-glass-bg-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.landing-nav__link {
+  color: var(--text-secondary);
+}
+
+.landing-nav__link:hover {
+  color: var(--text-primary);
+}
+
+.landing-nav__cta {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 32px -8px rgba(20, 184, 166, 0.35);
+}
+
+.landing-nav__cta:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 0 44px -6px rgba(13, 148, 136, 0.42);
+}
+
+/* —— Buttons —— */
+.ttm-btn-accent,
+.cin-btn-primary,
+.ttm-nav-pill-primary,
+.ttm-brand-cta,
+.ttm-nav-pill-register-cta,
+[data-slot="button"].bg-primary {
+  background: var(--accent-gradient);
+  background-size: 140% 140%;
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 6px 28px -10px rgba(20, 184, 166, 0.4);
+  transition: var(--theme-transition), opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+.ttm-btn-accent:hover,
+.cin-btn-primary:hover,
+.ttm-nav-pill-primary:hover,
+.ttm-brand-cta:hover,
+.ttm-nav-pill-register-cta:hover,
+[data-slot="button"].bg-primary:hover {
+  opacity: 0.96;
+  filter: brightness(1.03);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 36px -8px rgba(13, 148, 136, 0.45);
+}
+
+.cin-btn-ghost {
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  transition: var(--theme-transition);
+}
+
+.cin-btn-ghost:hover {
+  background: var(--accent-soft-bg);
+  border-color: var(--accent-soft-border);
+  color: var(--text-primary);
+}
+
+.ttm-nav-pill-login {
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  background-image: none;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* —— Inputs —— */
+.ttm-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea {
+  transition: var(--theme-transition);
+}
+
+.ttm-input {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+}
+
+.ttm-input:focus-visible {
+  border-color: rgba(13, 148, 136, 0.45);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.18);
+}
+
+.ttm-input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* —— Accent plaques / hints —— (turquoise tiles) */
+.ttm-accent-plaque {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  border: 1px solid var(--tile-border);
+  border-radius: var(--radius-md);
+  color: var(--tile-text);
+  transition: var(--theme-transition);
+}
+
+.ttm-onboarding-hint {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  border: 1px solid var(--tile-border);
+  border-radius: var(--radius-md);
+  color: var(--tile-text);
+  transition: var(--theme-transition);
+}
+
+.ttm-onboarding-hint p {
+  color: var(--tile-text);
+}
+
+.ttm-onboarding-hint button {
+  color: var(--tile-text-muted);
+}
+
+.ttm-onboarding-hint button:hover {
+  color: var(--tile-text);
+  background: rgba(45, 212, 191, 0.12);
+}
+
+.ttm-match-expiry-bar {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  border: 1px solid var(--tile-border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--theme-transition);
+}
+
+.ttm-match-expiry-bar .ttm-match-expiry-label {
+  color: var(--tile-text-muted);
+}
+
+/* —— Countdown timer —— */
+.ttm-countdown-timer {
+  transition: var(--theme-transition);
+}
+
+.ttm-countdown-timer--normal,
+.ttm-countdown-timer[data-urgency="normal"] {
+  color: var(--text-secondary);
+}
+
+.ttm-countdown-timer--warning,
+.ttm-countdown-timer[data-urgency="warning"] {
+  color: var(--warning);
+}
+
+.ttm-countdown-timer--critical,
+.ttm-countdown-timer[data-urgency="critical"] {
+  color: var(--error);
+  animation: ttm-countdown-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ttm-countdown-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.03);
+  }
+}
+
+.ttm-countdown-timer--flash .ttm-countdown-timer__digits {
+  animation: ttm-countdown-flash 0.65s ease-out;
+}
+
+@keyframes ttm-countdown-flash {
+  0% {
+    opacity: 0.4;
+    transform: scale(0.96);
+    filter: brightness(1.4);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.06);
+    filter: brightness(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* —— Freeze button —— */
+.ttm-freeze-btn {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  transition: var(--theme-transition), opacity 0.2s ease;
+}
+
+.ttm-freeze-btn:hover:not(:disabled) {
+  opacity: 0.92;
+  box-shadow: var(--shadow-md);
+}
+
+.ttm-freeze-btn:disabled {
+  opacity: 0.5;
+}
+
+.ttm-freeze-btn svg {
+  color: #ffffff;
+}
+
+.ttm-freeze-btn--frozen {
+  background: var(--accent-soft-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.ttm-freeze-btn--frozen svg {
+  color: var(--text-secondary);
+}
+
+.ttm-freeze-btn--buy {
+  background: rgba(245, 158, 11, 0.08);
+  color: var(--warning);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.ttm-freeze-btn--buy svg {
+  color: var(--warning);
+}
+
+.ttm-freeze-btn--flash {
+  animation: ttm-freeze-flash 0.7s ease-out;
+}
+
+@keyframes ttm-freeze-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 24px 4px rgba(20, 184, 166, 0.35);
+  }
+  100% {
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+/* —— Chat —— */
+.ttm-chat-room {
+  background: var(--bg-primary);
+  transition: var(--theme-transition);
+}
+
+.chat-bubble-me,
+.ttm-chat-bubble--me {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+  border: none;
+}
+
+.chat-bubble-them,
+.ttm-chat-bubble--them {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  backdrop-filter: none;
+}
+
+.ttm-chat-composer-wrap {
+  border-top: 1px solid var(--border);
+  background: linear-gradient(180deg, transparent, var(--bg-primary) 24%);
+}
+
+.chat-panel-backdrop {
+  background: var(--bg-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.ttm-chat-immersive {
+  background: var(--bg-primary);
+}
+
+/* —— Site background (light) —— */
+.site-bg-root {
+  background: var(--bg-primary);
+}
+
+.site-bg-base {
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(45, 212, 191, 0.08) 0%, transparent 52%),
+    radial-gradient(ellipse 50% 40% at 92% 35%, rgba(20, 184, 166, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 45% 38% at 4% 70%, rgba(6, 182, 212, 0.05) 0%, transparent 48%),
+    linear-gradient(180deg, #f8f9fc 0%, #f0fdfa 42%, #f8f9fc 100%);
+}
+
+.site-bg-orb-a {
+  background: rgba(45, 212, 191, 0.1);
+}
+
+.site-bg-orb-b {
+  background: rgba(20, 184, 166, 0.08);
+}
+
+.site-bg-vignette {
+  background: radial-gradient(
+    ellipse 85% 75% at 50% 45%,
+    transparent 0%,
+    rgba(248, 249, 252, 0.2) 65%,
+    rgba(248, 249, 252, 0.6) 100%
+  );
+}
+
+.site-bg-grid {
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.06) 1px, transparent 1px);
+  opacity: 0.35;
+}
+
+.site-bg-stars {
+  opacity: 0.15;
+}
+
+.site-bg-noise {
+  opacity: 0.025;
+}
+
+/* —— Brand typography (light) —— */
+.ttm-brand-display,
+.ttm-cin-display {
+  color: var(--text-primary);
+}
+
+.ttm-brand-subtitle,
+.ttm-cin-sub {
+  color: var(--text-secondary);
+}
+
+.ttm-brand-body {
+  color: color-mix(in srgb, var(--text-primary) 88%, transparent);
+}
+
+.ttm-badge-brand,
+.ttm-badge-soft {
+  border: 1px solid var(--accent-soft-border);
+  background: var(--accent-soft-bg);
+  color: var(--accent);
+  box-shadow: none;
+}
+
+.nav-glow-ring {
+  box-shadow: var(--shadow-md);
+}
+
+.nav-link-underline::after {
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.premium-timer-cell {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* —— Empty state —— */
+.ttm-empty-state {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  border: 1px solid var(--tile-border);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  color: var(--tile-text);
+  transition: var(--theme-transition);
+}
+
+.ttm-empty-state__icon {
+  border: 1px solid var(--tile-border);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.ttm-empty-state__icon svg {
+  color: var(--tile-text-muted);
+}
+
+.ttm-empty-state__title {
+  color: var(--tile-text);
+  font-weight: 500;
+}
+
+.ttm-empty-state__desc {
+  color: var(--tile-text-muted);
+}
+
+/* —— Discover strip —— */
+.ttm-discover-strip {
+  border-color: var(--border);
+}
+
+.ttm-discover-title {
+  background: linear-gradient(to right, var(--text-primary), color-mix(in srgb, var(--text-primary) 70%, transparent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ttm-discover-subtitle {
+  color: var(--text-secondary);
+}
+
+/* Likes row: glass + tile */
+.ttm-surface-tile.ttm-brand-glass,
+.ttm-surface-tile.ttm-brand-glass-strong {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  border-color: var(--tile-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Bottom dock — readable on light */
+.ttm-floating-dock__inner {
+  border: 1px solid var(--tile-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, var(--tile-surface) 100%);
+  box-shadow: var(--shadow-md);
+}
+
+.ttm-dock-tab--idle {
+  color: var(--tile-text-muted);
+}
+
+.ttm-dock-tab--active {
+  color: var(--tile-text);
+  background: rgba(45, 212, 191, 0.2);
+  box-shadow:
+    0 0 0 1px var(--tile-border) inset,
+    0 4px 14px -6px rgba(20, 184, 166, 0.35);
+}
+
+.ttm-dock-tab__label {
+  font-weight: 500;
+  font-size: 10px;
+}
+
+/* —— Icons default —— */
+.ttm-icon-muted {
+  color: var(--text-secondary);
+}
+
+.leaflet-container {
+  background: var(--bg-primary);
+}
+
+/* ========== Landing (главная /) — светлая тема ========== */
+html:not([data-theme="dark"]) .landing-experience {
+  background: transparent;
+  color: var(--text-primary);
+}
+
+html:not([data-theme="dark"]) .landing-experience .ttm-cin-display,
+html:not([data-theme="dark"]) .landing-experience .ttm-cin-headline {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+html:not([data-theme="dark"]) .landing-experience .ttm-cin-sub {
+  color: var(--text-secondary);
+}
+
+/* Стекло на лендинге — не тёмная «капсула» из cinematic.css */
+html:not([data-theme="dark"]) .landing-experience .cin-glass {
+  background: var(--bg-header);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Оверлай-бейджи (hero, CTA): бирюзовая плитка + контрастный текст */
+html:not([data-theme="dark"]) .landing-experience .ttm-cin-overline.cin-glass {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  border: 1px solid var(--tile-border);
+  color: var(--tile-text);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  box-shadow: var(--shadow-sm);
+}
+
+html:not([data-theme="dark"]) .landing-experience .opacity-50.ttm-cin-overline {
+  color: var(--text-secondary);
+}
+
+.landing-ambient__blob--1 {
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.14), transparent 68%);
+}
+
+.landing-ambient__blob--2 {
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.11), transparent 70%);
+}
+
+.landing-ambient__blob--3 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.09), transparent 72%);
+}
+
+.landing-ambient__grid {
+  opacity: 0.4;
+  background-image:
+    linear-gradient(rgba(45, 212, 191, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(45, 212, 191, 0.07) 1px, transparent 1px);
+}
+
+.landing-hero__glow-core {
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.16), transparent 62%);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo {
+  --landing-glow: var(--accent-soft-bg);
+  border-color: var(--tile-border);
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--bg-secondary) 100%);
+  box-shadow: var(--shadow-md);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__avatar {
+  border-color: var(--tile-border-strong);
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__sync-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__sync-core {
+  background: color-mix(in srgb, var(--bg-secondary) 88%, var(--tile-surface-elevated));
+  box-shadow: inset 0 0 22px rgba(45, 212, 191, 0.1);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__orbit--outer {
+  border-color: rgba(45, 212, 191, 0.2);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__orbit--inner {
+  border-color: rgba(6, 182, 212, 0.2);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__metric-bar {
+  background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__metric-fill {
+  box-shadow: 0 0 12px var(--accent-soft-bg);
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__insight {
+  border-top-color: var(--tile-border);
+  background: color-mix(in srgb, var(--tile-surface-elevated) 80%, var(--bg-secondary));
+}
+
+html:not([data-theme="dark"]) .live-connection-demo__particle {
+  background: rgba(45, 212, 191, 0.45);
+}
+
+.landing-evolution__node {
+  border-color: var(--tile-border);
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.landing-evolution__node[data-intensity="1"] {
+  box-shadow: 0 2px 16px -10px rgba(45, 212, 191, 0.15);
+}
+
+.landing-evolution__node[data-intensity="2"] {
+  box-shadow: 0 4px 22px -10px rgba(45, 212, 191, 0.22);
+  border-color: color-mix(in srgb, var(--tile-border-strong) 70%, var(--tile-border));
+}
+
+.landing-evolution__node[data-intensity="3"] {
+  box-shadow: 0 6px 28px -8px rgba(13, 148, 136, 0.22);
+  border-color: var(--tile-border-strong);
+}
+
+.landing-evolution__node[data-intensity="4"] {
+  box-shadow: 0 8px 32px -6px rgba(13, 148, 136, 0.28);
+  border-color: var(--tile-border-strong);
+}
+
+.landing-evolution__line {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--tile-border-strong) 80%, transparent),
+    transparent
+  );
+}
+
+.landing-evolution__orb {
+  background: var(--tile-border-strong);
+  box-shadow: 0 0 14px rgba(45, 212, 191, 0.4);
+}
+
+.landing-nav__link::after {
+  background: linear-gradient(90deg, transparent, var(--tile-border-strong), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-countdown-timer--critical,
+  .ttm-countdown-timer--flash .ttm-countdown-timer__digits,
+  .ttm-freeze-btn--flash {
+    animation: none;
+  }
+}
+

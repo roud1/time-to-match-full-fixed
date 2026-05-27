@@ -11,6 +11,12 @@ const serverEnvSchema = z.object({
   OPENROUTER_API_KEY: z.string().min(8).optional(),
   OPENROUTER_MODEL: z.string().optional(),
   OPENROUTER_BASE_URL: z.string().optional(),
+  VAPID_PUBLIC_KEY: z.string().optional(),
+  VAPID_PRIVATE_KEY: z.string().optional(),
+  VAPID_SUBJECT: z.string().optional(),
+  RESEND_API_KEY: z.string().optional(),
+  RESEND_FROM_EMAIL: z.string().optional(),
+  CRON_SECRET: z.string().optional(),
 })
 
 export type ServerEnv = z.infer<typeof serverEnvSchema> & {

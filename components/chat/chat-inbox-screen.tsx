@@ -7,8 +7,9 @@ import type { ConnectionMemory } from "@/lib/connection-system"
 import type { Locale } from "@/lib/i18n"
 import { ChatInboxThreadRow } from "@/components/chat/chat-inbox-thread-row"
 import { ConnectionMemories } from "@/components/connection/connection-memories"
-import { EmotionalEmptyState } from "@/components/product/emotional-empty-state"
+import { EmptyState } from "@/components/ui/empty-state"
 import { MessageCircle } from "lucide-react"
+import { PremiumButton } from "@/components/ui/premium-button"
 
 export function ChatThreadSkeleton({ rows = 5 }: { rows?: number }) {
   return (
@@ -47,6 +48,7 @@ export function ChatInboxScreen({
     empty: string
     emptyTitle: string
     emptyBody: string
+    emptyCta: string
     urgency: string
     reconnect: string
     unread: string
@@ -99,12 +101,17 @@ export function ChatInboxScreen({
       {loading ? (
         <ChatThreadSkeleton />
       ) : threads.length === 0 ? (
-        <div className="flex-1 flex items-center justify-center">
-          <EmotionalEmptyState
-            title={labels.emptyTitle}
-            body={labels.emptyBody}
+        <div className="flex-1 flex items-center justify-center px-1">
+          <EmptyState
             icon={MessageCircle}
+            title={labels.emptyTitle}
+            description={labels.emptyBody}
             className="w-full max-w-sm"
+            action={
+              <PremiumButton href="/app?tab=discover" className="min-h-[44px] px-6">
+                {labels.emptyCta}
+              </PremiumButton>
+            }
           />
         </div>
       ) : (

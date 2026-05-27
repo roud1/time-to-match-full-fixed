@@ -1,0 +1,147 @@
+/**
+ * Dark theme — component overrides (colors only)
+ */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html[data-theme="light"],
+html:not([data-theme="dark"]) {
+  color-scheme: light;
+}
+
+/* Landing */
+html[data-theme="dark"] .landing-experience {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .landing-experience .cin-glass {
+  background: var(--ttm-glass-bg);
+  border-color: var(--ttm-glass-border);
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .landing-experience .ttm-cin-overline.cin-glass {
+  background: var(--tile-surface);
+  border-color: var(--tile-border);
+  color: var(--tile-text);
+}
+
+html[data-theme="dark"] .landing-nav {
+  color: var(--text-primary);
+}
+
+/* Site ambient background */
+html[data-theme="dark"] .site-bg-base {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(155, 93, 229, 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 50%, rgba(240, 98, 146, 0.08), transparent 50%),
+    var(--bg-primary);
+}
+
+/* Chat bubbles */
+html[data-theme="dark"] .ttm-chat-bubble--them,
+html[data-theme="dark"] .chat-bubble-them {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+html[data-theme="dark"] .ttm-chat-bubble--me,
+html[data-theme="dark"] .chat-bubble-me {
+  background: var(--accent-gradient);
+  color: #fff;
+  border: none;
+}
+
+/* Floating dock */
+html[data-theme="dark"] .ttm-floating-dock__inner {
+  background: var(--tile-surface);
+  border-color: var(--tile-border);
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme="dark"] .ttm-dock-tab--idle {
+  color: var(--text-secondary);
+}
+
+html[data-theme="dark"] .ttm-dock-tab--active {
+  color: var(--text-primary);
+  background: var(--accent-soft-bg);
+}
+
+/* Brand CTA — purple gradient in dark */
+html[data-theme="dark"] .ttm-brand-cta,
+html[data-theme="dark"] .landing-nav__cta {
+  background: var(--accent-gradient) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+/* App header glass */
+html[data-theme="dark"] .ttm-floating-header {
+  background: var(--bg-header);
+  border-bottom-color: var(--border);
+}
+
+/* Live connection demo — dark */
+html[data-theme="dark"] .live-connection-demo {
+  --landing-glow: rgba(155, 93, 229, 0.14);
+  border-color: var(--border);
+  background: linear-gradient(165deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme="dark"] .live-connection-demo__label,
+html[data-theme="dark"] .live-connection-demo__metric-label,
+html[data-theme="dark"] .live-connection-demo__sync-label {
+  color: var(--text-secondary);
+}
+
+html[data-theme="dark"] .live-connection-demo__metric-value,
+html[data-theme="dark"] .live-connection-demo__sync-value,
+html[data-theme="dark"] .live-connection-demo__insight-text {
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .live-connection-demo__sync-core {
+  background: color-mix(in srgb, var(--bg-primary) 72%, var(--bg-secondary));
+  box-shadow: inset 0 0 22px rgba(155, 93, 229, 0.14);
+}
+
+html[data-theme="dark"] .live-connection-demo__orbit--outer {
+  border-color: rgba(155, 93, 229, 0.28);
+}
+
+html[data-theme="dark"] .live-connection-demo__orbit--inner {
+  border-color: rgba(240, 98, 146, 0.2);
+}
+
+html[data-theme="dark"] .live-connection-demo__metric-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .live-connection-demo__metric-fill {
+  background: var(--accent-gradient);
+  box-shadow: 0 0 14px rgba(155, 93, 229, 0.35);
+}
+
+html[data-theme="dark"] .live-connection-demo__insight {
+  border-top-color: var(--border);
+  background: rgba(15, 15, 26, 0.55);
+}
+
+html[data-theme="dark"] .live-connection-demo__sync-glow {
+  background: radial-gradient(
+    circle,
+    rgba(155, 93, 229, calc(0.32 + var(--sync-demo-p, 85) * 0.004)) 0%,
+    rgba(240, 98, 146, calc(0.16 + var(--sync-demo-p, 85) * 0.002)) 42%,
+    transparent 70%
+  );
+}
+
+html[data-theme="dark"] .live-connection-demo__particle {
+  background: rgba(167, 139, 250, 0.55);
+}

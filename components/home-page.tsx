@@ -23,7 +23,7 @@ const Footer = dynamic(() => import("@/components/footer").then((m) => m.Footer)
 function LandingDivider() {
   return (
     <div className="landing-divider relative z-[1] mx-auto max-w-6xl px-5 sm:px-8" aria-hidden>
-      <div className="h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-[var(--tile-border)] to-transparent" />
     </div>
   )
 }

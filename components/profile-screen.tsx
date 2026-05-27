@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import { useReducedMotion } from "motion/react"
 import { useI18n, type TranslationKey } from "@/lib/i18n"
+import { localeToBcp47 } from "@/lib/i18n/config"
 import {
   CUSTOM_CITY_ID,
   getProfileCityName,
@@ -41,6 +42,11 @@ import { BottomNavBar } from "@/components/app/bottom-nav-bar"
 import { ProfileTabs, type ProfileSection } from "@/components/profile-tabs"
 import { ProfilePremiumPanel } from "@/components/profile-premium-panel"
 import { PremiumButton } from "@/components/ui/premium-button"
+import { FreezeWalletStrip } from "@/components/matches/freeze-wallet-strip"
+import { LevelXpBar } from "@/components/gamification/level-xp-bar"
+import { AchievementList } from "@/components/gamification/achievement-list"
+import { useUser } from "@/hooks/use-user"
+import { useAchievements } from "@/hooks/use-achievements"
 import { CinematicParticles } from "@/components/ui/cinematic-particles"
 import { VibeCloudPicker, IntentionDeck, MoodOrbit } from "@/components/profile/identity-pickers"
 import { ProfileVoiceIntro } from "@/components/profile/profile-voice-intro"
@@ -48,8 +54,15 @@ import { OwnTrustCenter } from "@/components/trust/own-trust-center"
 import { ProfileAura } from "@/components/product/profile-aura"
 import { ConnectionsHubCard } from "@/components/profile/connections-hub-card"
 import { ProfileLifePresence } from "@/components/profile/profile-life-presence"
+import { ProfileExpiryPanel } from "@/components/profile/profile-expiry-panel"
+import { ProfileDatingFields, dispatchProfileDatingSync } from "@/components/profile/profile-dating-fields"
+import { PhotoVerificationBlock } from "@/components/profile/photo-verification-block"
+import { VerifiedBadge } from "@/components/ui/verified-badge"
+import { useVerificationStatus } from "@/hooks/use-verification-status"
 import { useProfileLife } from "@/hooks/use-profile-life"
 import { recordProfileActivity, reviveProfilePresence } from "@/lib/profile-life-store"
+import type { DatingPurpose } from "@/lib/interests/types"
+import { DEFAULT_MAX_DISTANCE_KM } from "@/lib/interests/types"
 
 type Gender = StoredUserProfile["gender"]
 type LookingFor = StoredUserProfile["lookingFor"]
@@ -70,6 +83,11 @@ type EditForm = {
   connectionPref: string
   promptFavorite: string
   voiceIntroRecorded: boolean
+  purpose?: DatingPurpose
+  maxDistance: number
+  latitude?: number | null
+  longitude?: number | null
+  dbInterestIds: number[]
 }
 
 function genderLabel(t: (k: TranslationKey) => string, gender: Gender) {
@@ -85,7 +103,7 @@ function lookingLabel(t: (k: TranslationKey) => string, looking: LookingFor) {
 }
 
 function formatMemberDate(ts: number, locale: string) {
-  return new Intl.DateTimeFormat(locale === "uk" ? "uk-UA" : locale === "en" ? "en-US" : "ru-RU", {
+  return new Intl.DateTimeFormat(localeToBcp47(locale), {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -109,6 +127,11 @@ function profileToForm(p: StoredUserProfile): EditForm {
     connectionPref: p.connectionPref ?? "",
     promptFavorite: p.promptFavorite ?? "",
     voiceIntroRecorded: p.voiceIntroRecorded ?? false,
+    purpose: p.purpose,
+    maxDistance: p.maxDistance ?? DEFAULT_MAX_DISTANCE_KM,
+    latitude: p.latitude,
+    longitude: p.longitude,
+    dbInterestIds: p.dbInterestIds ?? [],
   }
 }
 
@@ -119,6 +142,9 @@ function strengthHintKey(score: number): "profileStrengthStart" | "profileStreng
 }
 
 export function ProfileScreen() {
+  const { user: meUser } = useUser()
+  const { verified: photoVerified } = useVerificationStatus()
+  const { data: achievements = [] } = useAchievements(Boolean(meUser?.id && meUser.id !== "local"))
   const { t, locale } = useI18n()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -190,6 +216,11 @@ export function ProfileScreen() {
       connectionPref: form.connectionPref.trim() || undefined,
       promptFavorite: form.promptFavorite.trim() || undefined,
       voiceIntroRecorded: form.voiceIntroRecorded,
+      purpose: form.purpose,
+      maxDistance: form.maxDistance,
+      latitude: form.latitude,
+      longitude: form.longitude,
+      dbInterestIds: form.dbInterestIds,
       ...(isManual
         ? { customCity: form.customCity.trim(), cityId: undefined }
         : {
@@ -201,6 +232,7 @@ export function ProfileScreen() {
     const next = updateUserProfile(patch)
     if (next) {
       recordProfileActivity()
+      dispatchProfileDatingSync()
       setProfile(next)
       setForm(profileToForm(next))
       setEditing(false)
@@ -225,7 +257,7 @@ export function ProfileScreen() {
   const cityName = getProfileCityName(profile, locale)
   const photos = getProfilePhotos(profile)
   const age = getAgeFromBirthdate(profile.birthdate)
-  const localeTag = locale === "uk" ? "uk-UA" : locale === "en" ? "en-US" : "ru-RU"
+  const localeTag = localeToBcp47(locale)
   const hintKey = strengthHintKey(strength)
   const saveDisabled =
     form.interests.length < MIN_INTERESTS ||
@@ -262,6 +294,8 @@ export function ProfileScreen() {
         <ProfilePremiumPanel profile={profile} onProfileUpdate={setProfile} />
       ) : (
         <>
+          <ProfileExpiryPanel profile={profile} onProfileUpdate={setProfile} />
+          <PhotoVerificationBlock />
           <div className="ttm-brand-glass relative rounded-[1.85rem] overflow-hidden mb-5 ttm-brand-glow-aura">
             <ProfileAura profile={profile} />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_60%_at_50%_0%,var(--ttm-glow-cinematic),transparent_55%)] pointer-events-none" />
@@ -288,9 +322,14 @@ export function ProfileScreen() {
               </div>
 
               <div className="text-center space-y-2 mb-5">
-                <h1 className="ttm-brand-gradient-text text-3xl md:text-[2.1rem] font-extralight tracking-tight">
-                  {profile.name}
-                  {age != null && <span className="text-white/45 font-light">, {age}</span>}
+                <h1 className="ttm-brand-gradient-text text-3xl md:text-[2.1rem] font-extralight tracking-tight inline-flex items-center justify-center gap-2 flex-wrap">
+                  <span>
+                    {profile.name}
+                    {age != null && <span className="text-white/45 font-light">, {age}</span>}
+                  </span>
+                  {(photoVerified || meUser?.photo_verified) && (
+                    <VerifiedBadge size={18} title={t("photoVerifiedLabel")} />
+                  )}
                 </h1>
                 <p className="text-sm text-white/55 font-light flex items-center justify-center gap-2">
                   <svg className="w-4 h-4 text-white/60 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
@@ -439,6 +478,15 @@ export function ProfileScreen() {
                     onChange={(ids) => setForm((prev) => (prev ? { ...prev, interests: ids } : prev))}
                   />
                 </div>
+
+                <ProfileDatingFields
+                  purpose={form.purpose}
+                  maxDistance={form.maxDistance}
+                  latitude={form.latitude}
+                  longitude={form.longitude}
+                  dbInterestIds={form.dbInterestIds}
+                  onChange={(patch) => setForm((prev) => (prev ? { ...prev, ...patch } : prev))}
+                />
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-4">
                   <p className="text-xs text-white/50 font-light">{t("regSoulPremiumLead")}</p>
@@ -595,6 +643,23 @@ export function ProfileScreen() {
       )}
 
       <div className="mt-5 space-y-3">
+        {section === "profile" && <FreezeWalletStrip />}
+        {section === "profile" && meUser?.level != null && (
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4">
+            <LevelXpBar
+              level={meUser.level ?? 1}
+              xpInLevel={meUser.xpInLevel ?? 0}
+              xpForNextLevel={meUser.xpForNextLevel ?? 100}
+              progress={meUser.xpProgress ?? 0}
+            />
+          </div>
+        )}
+        {section === "profile" && achievements.length > 0 && (
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4">
+            <h2 className="text-sm font-medium text-[var(--text-primary)] mb-3">Достижения</h2>
+            <AchievementList items={achievements} />
+          </div>
+        )}
         <PremiumButton
           className="w-full min-h-[52px]"
           onClick={() => {

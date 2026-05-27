@@ -1,0 +1,76 @@
+import type { MessageSentResponse, MatchDto } from "@/lib/server/matches/types"
+import { fetchActiveMatches, isLocalMatchId, localMatchId } from "@/lib/match-freeze-client"
+import { recordLocalMessageSent } from "@/lib/match-bond-local"
+
+const serverMatchKey = (profileId: number) => `ttm-server-match:${profileId}`
+
+export type ReportMessageSentResult =
+  | { ok: true; payload: MessageSentResponse; matchId: string }
+  | { ok: false; reason: "skipped" | "network" | "not_found" }
+
+export async function reportMessageSent(profileId: number): Promise<ReportMessageSentResult> {
+  const storedId =
+    typeof window !== "undefined" ? sessionStorage.getItem(serverMatchKey(profileId)) : null
+
+  let matchId = storedId ?? localMatchId(profileId)
+
+  if (!storedId) {
+    const matches = await fetchActiveMatches()
+    const byPeer = matches.find((m) => m.peerUserId === String(profileId))
+    if (byPeer) {
+      matchId = byPeer.id
+      sessionStorage.setItem(serverMatchKey(profileId), matchId)
+    }
+  }
+
+  if (isLocalMatchId(matchId)) {
+    const payload = recordLocalMessageSent(profileId)
+    return { ok: true, payload, matchId }
+  }
+
+  try {
+    const res = await fetch(`/api/matches/${encodeURIComponent(matchId)}/message-sent`, {
+      method: "POST",
+      credentials: "include",
+    })
+    if (!res.ok) {
+      if (res.status === 404 || res.status === 410) {
+        const payload = recordLocalMessageSent(profileId)
+        return { ok: true, payload, matchId: localMatchId(profileId) }
+      }
+      return { ok: false, reason: "network" }
+    }
+    const payload = (await res.json()) as MessageSentResponse
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("ttm-bond-updated", { detail: { profileId, payload, matchId } })
+      )
+      if (payload.prolonged) {
+        window.dispatchEvent(new CustomEvent("ttm-connection-updated"))
+      }
+    }
+    return { ok: true, payload, matchId }
+  } catch {
+    const payload = recordLocalMessageSent(profileId)
+    return { ok: true, payload, matchId: localMatchId(profileId) }
+  }
+}
+
+export function patchMatchInCache(
+  matches: MatchDto[],
+  matchId: string,
+  patch: Partial<MatchDto> & { bond?: MatchDto["bond"] }
+): MatchDto[] {
+  return matches.map((m) => (m.id === matchId ? { ...m, ...patch, bond: patch.bond ?? m.bond } : m))
+}
+
+export function bondFromPayload(payload: MessageSentResponse): MatchDto["bond"] {
+  return {
+    totalMessages: payload.totalMessages,
+    prolongCount: payload.prolongCount,
+    bondLevel: payload.bondLevel,
+    bondProgress: payload.bondProgress,
+    messagesUntilNext: payload.messagesUntilNext,
+    lastProlongedAt: null,
+  }
+}

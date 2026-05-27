@@ -31,10 +31,10 @@ export function CTASection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.95, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="ttm-cin-display text-balance mb-8 cin-headline-glow"
+          className="ttm-cin-display text-balance mb-8"
         >
           {t("ctaTitle")}{" "}
-          <span className="text-white/55">{t("ctaTitleHighlight")}</span>
+          <span className="text-muted-foreground">{t("ctaTitleHighlight")}</span>
         </motion.h2>
 
         <motion.p

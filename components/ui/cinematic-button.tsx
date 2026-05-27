@@ -8,15 +8,15 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export const cinematicButtonVariants = cva(
-  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-light tracking-[0.04em] transition-all duration-500 outline-none focus-visible:ring-1 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050506] disabled:pointer-events-none disabled:opacity-40 touch-manipulation",
+  "relative inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium tracking-[0.04em] transition-all duration-500 outline-none focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-40 touch-manipulation",
   {
     variants: {
       variant: {
-        primary: "ttm-brand-cta text-white border-0",
+        primary: "ttm-brand-cta text-primary-foreground border-0",
         secondary:
-          "ttm-brand-interactive text-white/85 bg-white/[0.06] border border-white/12 hover:bg-white/[0.09] hover:border-white/18 rounded-full",
-        ghost: "ttm-brand-interactive text-white/75 cin-btn-ghost rounded-full",
-        glow: "ttm-brand-cta text-white ttm-brand-glow-chemistry",
+          "ttm-brand-interactive text-foreground bg-muted/80 border border-border hover:bg-muted hover:border-border rounded-full",
+        ghost: "ttm-brand-interactive text-foreground/85 cin-btn-ghost rounded-full",
+        glow: "ttm-brand-cta text-primary-foreground ttm-brand-glow-chemistry",
       },
       size: {
         default: "px-9 py-4 min-h-[48px] text-base",

@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { LOCALES } from "@/lib/i18n/config"
 
 const messageSchema = z.object({
   from: z.enum(["me", "them"]),
@@ -24,7 +25,7 @@ const signalsSchema = z.object({
 
 export const analyzeConnectionBodySchema = z.object({
   profileId: z.number().int().positive(),
-  locale: z.enum(["ru", "uk", "en"]).optional().default("en"),
+  locale: z.enum(LOCALES).optional().default("ru"),
   messages: z.array(messageSchema).max(40),
   responseTimes: z.array(z.number().min(0)).max(40),
   activityLevel: z.enum(["low", "medium", "high"]),

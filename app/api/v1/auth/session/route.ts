@@ -48,6 +48,10 @@ export async function GET(request: Request) {
         name: user.name,
         profile: user.profile,
         profileExpiresAt: user.profile_expires_at,
+        freeze_balance: user.freeze_balance ?? 0,
+        last_freeze_at: user.last_freeze_at?.toISOString() ?? null,
+        email_verified: user.email_verified ?? false,
+        has_push_subscription: Boolean(user.push_subscription?.endpoint),
       },
     })
   )

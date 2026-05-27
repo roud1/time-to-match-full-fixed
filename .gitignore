@@ -15,3 +15,10 @@ node_modules
 .DS_Store
 tsconfig.tsbuildinfo
 *.tsbuildinfo
+
+# i18n machine-translation cache
+lib/i18n/locales/.cache/
+
+# User-uploaded verification selfies (keep folder marker)
+public/uploads/verification/*
+!public/uploads/verification/.gitkeep

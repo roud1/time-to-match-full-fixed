@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n"
+import type { CommonInterest } from "@/lib/interests/types"
 import { demoProfileGenderFromIndex } from "@/lib/swipe-gender-filter"
 import { distanceKm, formatDistance, type GeoPosition } from "@/lib/geo"
 import { getCityCoords, getCityLabel, type CityId } from "@/lib/cities"
@@ -20,6 +21,13 @@ export type SwipeProfile = {
   interests: string[]
   lat: number
   lng: number
+  /** Interest overlap 0–100 (API or client). */
+  compatibility?: number
+  commonInterests?: CommonInterest[]
+  /** Source user id when loaded from API. */
+  userId?: string
+  /** Server photo verification badge. */
+  photoVerified?: boolean
 }
 
 const CITY_IDS: CityId[] = ["kyiv", "lviv", "odesa", "kharkiv", "dnipro", "lviv", "kyiv", "odesa"]

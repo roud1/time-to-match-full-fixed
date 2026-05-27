@@ -9,9 +9,12 @@ export function Footer() {
   const { t } = useI18n()
 
   return (
-    <footer className="relative py-16 px-5 sm:px-8 border-t border-white/[0.06]">
+    <footer
+      className="relative py-12 sm:py-16 px-4 sm:px-8 border-t border-[var(--border)]"
+      style={{ paddingBottom: "max(3rem, env(safe-area-inset-bottom, 0px))" }}
+    >
       <div className="max-w-6xl mx-auto">
-        <motion.div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <motion.div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-6">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -19,17 +22,17 @@ export function Footer() {
             className="flex items-center gap-2"
           >
             <Logo size="sm" />
-            <span className="text-white/60 font-light tracking-[0.12em] text-xs uppercase">Time to Match</span>
+            <span className="text-[var(--text-secondary)] font-light tracking-[0.12em] text-xs uppercase">Time to Match</span>
           </motion.div>
 
-          <motion.div className="flex items-center gap-8">
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+          <motion.div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light min-h-[44px] inline-flex items-center">
               {t("privacy")}
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light min-h-[44px] inline-flex items-center">
               {t("terms")}
             </Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light">
+            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light min-h-[44px] inline-flex items-center">
               {t("contacts")}
             </Link>
           </motion.div>
@@ -38,7 +41,7 @@ export function Footer() {
             <Link
               href="#"
               aria-label="X"
-              className="w-10 h-10 rounded-full cin-glass flex items-center justify-center text-white/45 hover:text-white/80 transition-colors duration-500"
+              className="w-10 h-10 rounded-full cin-glass flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-500"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />

@@ -23,10 +23,25 @@ export function setPushEnabled(on: boolean) {
   localStorage.setItem(PREFS_KEY, on ? "1" : "0")
 }
 
-export async function registerAppServiceWorker(): Promise<ServiceWorkerRegistration | null> {
-  if (!("serviceWorker" in navigator)) return null
+export async function unregisterAppServiceWorkers(): Promise<void> {
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return
   try {
-    return await navigator.serviceWorker.register("/sw.js", { scope: "/" })
+    const regs = await navigator.serviceWorker.getRegistrations()
+    await Promise.all(regs.map((r) => r.unregister()))
+    if ("caches" in window) {
+      const keys = await caches.keys()
+      await Promise.all(keys.map((k) => caches.delete(k)))
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
+export async function registerAppServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+  if (typeof window === "undefined" || !("serviceWorker" in navigator)) return null
+  if (process.env.NODE_ENV !== "production") return null
+  try {
+    return await navigator.serviceWorker.register("/service-worker.js", { scope: "/" })
   } catch {
     return null
   }

@@ -1,9 +1,8 @@
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n/config"
+import { localeToBcp47 } from "@/lib/i18n/config"
 
 function localeTag(locale: Locale): string {
-  if (locale === "uk") return "uk-UA"
-  if (locale === "ru") return "ru-RU"
-  return "en-US"
+  return localeToBcp47(locale)
 }
 
 export function formatChatMessageTime(at: number, locale: Locale): string {

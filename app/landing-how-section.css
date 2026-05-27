@@ -1,0 +1,124 @@
+/**
+ * Landing — «Как это работает» step cards
+ */
+
+.landing-how-step {
+  position: relative;
+  background: linear-gradient(165deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--theme-transition);
+}
+
+.landing-how-step:hover {
+  border-color: var(--accent-soft-border);
+  box-shadow: var(--shadow-md);
+}
+
+.landing-how-step__badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+}
+
+.landing-how-step__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--accent-soft-bg);
+  color: var(--accent);
+}
+
+.landing-how-step__title {
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.landing-how-step__desc {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.625;
+  color: var(--text-secondary);
+}
+
+.landing-how__title-muted {
+  color: var(--text-secondary);
+}
+
+/* Light */
+html:not([data-theme="dark"]) .landing-how-step {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  border-color: var(--tile-border);
+}
+
+html:not([data-theme="dark"]) .landing-how-step__badge {
+  border-color: var(--tile-border);
+  background: var(--bg-secondary);
+  color: var(--tile-text-muted);
+}
+
+html:not([data-theme="dark"]) .landing-how-step__icon {
+  border-color: var(--tile-border-strong);
+  background: var(--accent-soft-bg);
+  color: var(--accent);
+}
+
+html:not([data-theme="dark"]) .landing-how-step__title {
+  color: var(--tile-text);
+}
+
+html:not([data-theme="dark"]) .landing-how-step__desc {
+  color: var(--tile-text-muted);
+}
+
+/* Dark */
+html[data-theme="dark"] .landing-how-step {
+  background: linear-gradient(
+    165deg,
+    var(--bg-secondary) 0%,
+    color-mix(in srgb, var(--bg-primary) 92%, var(--bg-secondary)) 100%
+  );
+  border-color: var(--border);
+}
+
+html[data-theme="dark"] .landing-how-step:hover {
+  border-color: var(--accent-soft-border);
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme="dark"] .landing-how-step__badge {
+  border-color: var(--border);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+}
+
+html[data-theme="dark"] .landing-how-step__icon {
+  border-color: var(--accent-soft-border);
+  background: var(--accent-soft-bg);
+  color: var(--accent);
+}
+
+html[data-theme="dark"] .landing-how-step__title {
+  color: var(--text-primary);
+}
+
+html[data-theme="dark"] .landing-how-step__desc {
+  color: var(--text-secondary);
+}

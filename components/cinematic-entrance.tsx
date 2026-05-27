@@ -37,7 +37,7 @@ export function CinematicEntrance() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050506]"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-background/97 backdrop-blur-sm"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -52,7 +52,7 @@ export function CinematicEntrance() {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,600px)] h-[400px] rounded-full opacity-70"
             style={{
               background:
-                "radial-gradient(ellipse, rgba(255,255,255,0.08) 0%, rgba(160,170,200,0.05) 40%, transparent 70%)",
+                "radial-gradient(ellipse, rgba(45,212,191,0.12) 0%, rgba(167,139,250,0.08) 40%, transparent 70%)",
               filter: "blur(80px)",
             }}
             initial={{ scale: 0.8, opacity: 0 }}
@@ -72,20 +72,20 @@ export function CinematicEntrance() {
               animate={{ scale: 1 }}
               transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="drop-shadow-[0_0_24px_rgba(255,255,255,0.5)]">
+              <span className="drop-shadow-[0_0_20px_rgba(45,212,191,0.35)]">
                 <Logo size="lg" />
               </span>
             </motion.div>
-            <p className="ttm-cin-overline mb-3">
+            <p className="ttm-cin-overline mb-3 text-muted-foreground">
               {t("entranceTagline")}
             </p>
-            <h2 className="text-3xl sm:text-4xl font-extralight tracking-tight text-white/95">
+            <h2 className="text-3xl sm:text-4xl font-medium tracking-tight text-foreground">
               {t("entranceHeadline")}
             </h2>
           </motion.div>
 
           <motion.p
-            className="absolute bottom-10 text-[10px] text-white/30 font-light tracking-widest uppercase"
+            className="absolute bottom-10 text-[10px] text-muted-foreground font-medium tracking-widest uppercase"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2 }}

@@ -24,11 +24,11 @@ const STACK_VISIBLE = 3
 
 function SwipeDeckSkeleton({ centered }: { centered?: boolean }) {
   const card = (
-    <div className="relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[1.85rem] overflow-hidden bg-white/[0.04] border border-white/10">
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-white/5 to-transparent" />
+    <div className="relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[1.85rem] overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border)] shadow-[var(--shadow-md)]">
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--border)] via-transparent to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
-        <div className="h-6 w-2/3 rounded-lg bg-white/10" />
-        <div className="h-3 w-1/2 rounded bg-white/8" />
+        <div className="h-6 w-2/3 rounded-lg bg-[var(--border)]" />
+        <div className="h-3 w-1/2 rounded bg-[var(--border)] opacity-70" />
       </div>
     </div>
   )
@@ -37,7 +37,7 @@ function SwipeDeckSkeleton({ centered }: { centered?: boolean }) {
       {[48, 54, 48, 58].map((size, i) => (
         <div
           key={i}
-          className="rounded-full bg-white/[0.06] border border-white/10"
+          className="rounded-full bg-[var(--accent-soft-bg)] border border-[var(--border)]"
           style={{ width: size, height: size }}
         />
       ))}

@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n/config"
 
 export type PremiumMarket = "ua" | "ru" | "eu" | "intl"
 
@@ -18,9 +18,9 @@ export function resolvePremiumMarket(
   if (code && CIS_RUBLE_CODES.has(code)) return "ru"
   if (code && EU_COUNTRY_CODES.has(code)) return "eu"
   if (code) return "intl"
-
   if (locale === "uk") return "ua"
   if (locale === "ru") return "ru"
+  if (["de", "es", "pl", "fr", "it"].includes(locale)) return "eu"
   return "intl"
 }
 

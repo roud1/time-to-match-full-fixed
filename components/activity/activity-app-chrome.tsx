@@ -17,10 +17,7 @@ export function ActivityAppChrome() {
       <button
         type="button"
         onClick={() => setHubOpen(true)}
-        className={cn(
-          "relative flex h-11 w-11 items-center justify-center rounded-2xl border transition-colors touch-manipulation",
-          "border-white/12 bg-white/[0.06] hover:border-white/16 hover:bg-white/06"
-        )}
+        className={cn("ttm-header-icon-btn relative shrink-0")}
         aria-label={t("activityHubTitle")}
       >
         <svg className="w-5 h-5 text-foreground/85" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>

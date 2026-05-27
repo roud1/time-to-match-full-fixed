@@ -1,12 +1,15 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useSwipeable } from "react-swipeable"
 import { motion, AnimatePresence, type MotionValue } from "motion/react"
 import Image from "next/image"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import type { PeerTrustSignals } from "@/lib/demo-trust-signals"
 import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
 import { CompatibilityPreview } from "@/components/discover/compatibility-preview"
+import { InterestCompatibilityStrip } from "@/components/discover/interest-compatibility-strip"
+import { VerifiedBadge } from "@/components/ui/verified-badge"
 import { getSwipeProfilePhotos } from "@/lib/swipe-profile-photos"
 import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -64,6 +67,8 @@ type SwipeProfileCardProps = {
     e: MouseEvent | TouchEvent | PointerEvent,
     info: { offset: { x: number; y: number }; velocity: { x: number; y: number } }
   ) => void
+  onSwipeLeft?: () => void
+  onSwipeRight?: () => void
 }
 
 export function SwipeProfileCard({
@@ -80,8 +85,11 @@ export function SwipeProfileCard({
   onOpenSafety,
   onOpenProfile,
   onDragEnd,
+  onSwipeLeft,
+  onSwipeRight,
 }: SwipeProfileCardProps) {
   const { t } = useI18n()
+  const photoVerified = profile.photoVerified === true
   const compatibility = computeDiscoverCompatibility(profile)
   const matchPct = compatibility.resonancePercent
   const emotionalPresence = resolveEmotionalPresence(profile.id)
@@ -91,6 +99,16 @@ export function SwipeProfileCard({
   const [photoIndex, setPhotoIndex] = useState(0)
   const dragGuard = useDragGuard()
   const depth = stackIndex
+
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => onSwipeLeft?.(),
+    onSwipedRight: () => onSwipeRight?.(),
+    trackTouch: true,
+    trackMouse: false,
+    preventScrollOnSwipe: true,
+    delta: 50,
+    swipeDuration: 500,
+  })
 
   useEffect(() => {
     setPhotoIndex(0)
@@ -165,6 +183,12 @@ export function SwipeProfileCard({
             <span className="text-white/45 text-xs font-extralight tracking-[0.14em] uppercase">{labels.nope}</span>
           </motion.div>
         </>
+      )}
+
+      {photoVerified && (
+        <div className="absolute top-2 right-2.5 z-[12] pointer-events-none">
+          <VerifiedBadge size={16} title={t("photoVerifiedLabel")} />
+        </div>
       )}
 
       {photos.length > 1 && (
@@ -262,13 +286,19 @@ export function SwipeProfileCard({
       >
         <div className="flex items-end justify-between gap-1.5">
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg leading-tight font-extralight tracking-tight text-white drop-shadow-md truncate">
-              {profile.name}
-              <span className="text-white/60 font-light text-base">, {profile.age}</span>
+            <h3 className="text-lg leading-tight font-extralight tracking-tight text-white drop-shadow-md truncate flex items-center gap-1.5">
+              <span className="truncate">{profile.name}</span>
+              {photoVerified && (
+                <VerifiedBadge size={16} title={t("photoVerifiedLabel")} className="shrink-0" />
+              )}
+              <span className="text-white/60 font-light text-base shrink-0">, {profile.age}</span>
             </h3>
             <p className="text-white/70 text-[10px] font-light mt-0.5 drop-shadow truncate">
               {profile.location} · {profile.distance}
             </p>
+            {isTop && (
+              <InterestCompatibilityStrip profile={profile} compact className="mt-1" />
+            )}
           </div>
           {emotionalPresence.kind === "energy_active" ||
           emotionalPresence.kind === "emotionally_present" ||
@@ -357,6 +387,7 @@ export function SwipeProfileCard({
   if (isTop) {
     return (
       <motion.div
+        {...swipeHandlers}
         style={{ x, rotate, zIndex: 30 - depth, willChange: "transform" }}
         drag={onDragEnd ? "x" : false}
         dragElastic={0.22}

@@ -24,7 +24,7 @@ export function ConnectionEvolutionSection() {
         className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(100vw,640px)] h-[min(70vh,400px)] opacity-40"
         style={{
           background:
-            "radial-gradient(ellipse, rgba(200,210,255,0.08) 0%, transparent 65%)",
+            "radial-gradient(ellipse, rgba(45,212,191,0.12) 0%, rgba(167,139,250,0.06) 45%, transparent 65%)",
           filter: "blur(40px)",
         }}
         aria-hidden
@@ -41,9 +41,9 @@ export function ConnectionEvolutionSection() {
           <span className="ttm-brand-overline inline-block px-4 py-2 rounded-full ttm-brand-glass mb-6">
             {t("landingEvolutionBadge")}
           </span>
-          <h2 className="ttm-brand-headline text-balance mb-5 ttm-brand-headline-glow">
+          <h2 className="ttm-brand-headline text-balance mb-5">
             {t("landingEvolutionTitle")}{" "}
-            <span className="text-white/45">{t("landingEvolutionTitleHighlight")}</span>
+            <span className="text-muted-foreground">{t("landingEvolutionTitleHighlight")}</span>
           </h2>
           <p className="ttm-brand-subtitle max-w-md mx-auto">{t("landingEvolutionSubtitle")}</p>
         </motion.div>
@@ -79,13 +79,13 @@ export function ConnectionEvolutionSection() {
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[9px] uppercase tracking-[0.2em] text-white/30 font-extralight mb-1.5">
+                    <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground font-medium mb-1.5">
                       {String(step.intensity).padStart(2, "0")} · {t("landingEvolutionPhase")}
                     </p>
-                    <h3 className="text-base md:text-lg font-extralight text-white/90 tracking-tight mb-2">
+                    <h3 className="text-base md:text-lg font-medium text-foreground tracking-tight mb-2">
                       {t(step.titleKey)}
                     </h3>
-                    <p className="text-sm font-extralight text-white/45 leading-relaxed">
+                    <p className="text-sm font-normal text-muted-foreground leading-relaxed">
                       {t(step.descKey)}
                     </p>
                   </div>

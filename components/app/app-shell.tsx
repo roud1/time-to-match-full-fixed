@@ -12,6 +12,10 @@ import { MapPanel } from "@/components/app/map-panel"
 import { Logo } from "@/components/logo"
 import { ActivityFeedProvider } from "@/components/activity/activity-feed-context"
 import { ActivityAppChrome } from "@/components/activity/activity-app-chrome"
+import { HeaderProfileLink } from "@/components/app/header-profile-link"
+import { LevelBadge } from "@/components/gamification/level-badge"
+import { useUser } from "@/hooks/use-user"
+import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { LiveActivityFeed } from "@/components/live-activity-feed"
 import { PremiumUpgradeProvider } from "@/components/premium/premium-upgrade-context"
 import { ConnectionExtensionToastStack } from "@/components/connection/connection-extension-toast"
@@ -84,6 +88,7 @@ export function AppShell() {
   }, [ready, location.status, location.requestLocation])
 
   const [premiumTick, setPremiumTick] = useState(0)
+  const { user: meUser } = useUser()
   const { insights, showReturn, acknowledgeReturn } = useGrowthSession()
   useConnectionCloudSync(ready)
   useEvolutionEventScanner(ready)
@@ -154,12 +159,17 @@ export function AppShell() {
               >
                 <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile">
                   <Logo size="sm" />
-                  <span className="text-sm font-extralight text-foreground/85 hidden sm:inline group-hover:text-white/90 transition-colors truncate">
+                  <span className="text-sm font-normal text-foreground/90 hidden sm:inline group-hover:text-foreground transition-colors truncate">
                     Time to Match
                   </span>
                 </Link>
-                <div className="flex items-center gap-2.5 shrink-0">
+                <div className="flex items-center gap-2 shrink-0 min-w-0">
+                  {meUser?.level != null && meUser.id !== "local" && (
+                    <LevelBadge level={meUser.level} />
+                  )}
+                  <HeaderProfileLink className="shrink-0" />
                   <ActivityAppChrome />
+                  <ThemeToggle compact className="shrink-0" />
                   {showPremiumBadge && (
                     <PremiumBadgeLink label={t("premiumTierPlus")} href="/profile?tab=premium" />
                   )}

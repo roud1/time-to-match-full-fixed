@@ -1,5 +1,7 @@
 import type { CityId } from "@/lib/cities"
 import type { InterestId } from "@/lib/interests"
+import type { DatingPurpose } from "@/lib/interests/types"
+import { DEFAULT_MAX_DISTANCE_KM } from "@/lib/interests/types"
 import { getProfilePhotos } from "@/lib/profile-photos"
 
 const PROFILE_KEY = "ttm-user-profile"
@@ -38,6 +40,13 @@ export type StoredUserProfile = {
   premiumUntil?: number
   /** Purchased +24h extensions (demo), added to base 72h window */
   profileExtraTimeMs?: number
+  /** Dating goal synced with server */
+  purpose?: DatingPurpose
+  latitude?: number | null
+  longitude?: number | null
+  maxDistance?: number
+  /** DB interest ids (catalog) */
+  dbInterestIds?: number[]
 }
 
 type StoredCredentials = {
@@ -207,6 +216,10 @@ export function getProfileTimeLeft(source: ProfileTimerSource) {
   const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((remaining % (1000 * 60)) / 1000)
   return { hours, minutes, seconds, remaining, endsAt }
+}
+
+export function isProfileExpired(source: ProfileTimerSource): boolean {
+  return getProfileTimeLeft(source).remaining <= 0
 }
 
 /** Demo purchase: extend profile visibility by 24 hours (stackable). */

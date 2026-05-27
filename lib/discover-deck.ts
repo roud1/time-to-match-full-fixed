@@ -3,16 +3,30 @@ import type { GeoPosition } from "@/lib/geo"
 import { buildDemoSwipeProfiles, type SwipeProfile } from "@/lib/demo-profiles"
 import { filterProfilesForUser } from "@/lib/swipe-gender-filter"
 import { getSocialState } from "@/lib/social-store"
-import { getProfileLifeView } from "@/lib/profile-life-store"
 import { isProfileBlocked } from "@/lib/trust-safety-store"
 import { smartSortDiscoverProfiles } from "@/lib/discover-compatibility"
+import type { DiscoverFilters } from "@/lib/discover/types"
+import { applyDiscoverFilters } from "@/lib/discover/apply-filters"
+import { computeInterestOverlapForProfile } from "@/lib/discover/interest-overlap"
+
+function enrichCompatibility(profiles: SwipeProfile[]): SwipeProfile[] {
+  return profiles.map((p) => {
+    const { compatibility, commonInterests } = computeInterestOverlapForProfile(p)
+    return { ...p, compatibility, commonInterests }
+  })
+}
 
 /** Profiles available in Discover — skips blocked and already swiped; recycles when exhausted (demo). */
 export function getDiscoverDeckProfiles(
   locale: Locale,
-  position: GeoPosition | null
+  position: GeoPosition | null,
+  filters?: DiscoverFilters
 ): SwipeProfile[] {
-  const raw = filterProfilesForUser(buildDemoSwipeProfiles(locale, position))
+  let raw = filterProfilesForUser(buildDemoSwipeProfiles(locale, position))
+  if (filters && Object.keys(filters).length > 0) {
+    raw = applyDiscoverFilters(raw, filters, position)
+  }
+  raw = enrichCompatibility(raw)
   if (raw.length === 0) return raw
 
   const unblocked = raw.filter((p) => !isProfileBlocked(p.id))
@@ -23,5 +37,5 @@ export function getDiscoverDeckProfiles(
   const remaining = pool.filter((p) => !seen.has(p.id))
   const list = remaining.length > 0 ? remaining : pool
 
-  return smartSortDiscoverProfiles(list)
+  return smartSortDiscoverProfiles(enrichCompatibility(list))
 }

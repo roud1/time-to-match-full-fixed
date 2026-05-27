@@ -33,7 +33,7 @@ export function HowItWorks() {
   return (
     <section id="how" className="relative py-20 md:py-32 px-5 sm:px-8 overflow-hidden scroll-mt-24">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto">
@@ -49,7 +49,7 @@ export function HowItWorks() {
           </span>
           <h2 className="ttm-cin-headline text-balance mb-6">
             {t("howTitle")}{" "}
-            <span className="text-white/50">{t("howTitleHighlight")}</span>
+            <span className="landing-how__title-muted">{t("howTitleHighlight")}</span>
           </h2>
           <p className="ttm-cin-sub max-w-lg mx-auto">{t("howSubtitle")}</p>
         </motion.div>
@@ -64,17 +64,15 @@ export function HowItWorks() {
               transition={{ duration: 0.8, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              <div className="ttm-brand-glass rounded-2xl p-8 pt-10 text-center h-full ttm-brand-interactive">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full border border-white/10 bg-[#050506] text-[10px] font-light tracking-[0.2em] text-white/50">
-                  {step.number}
-                </div>
+              <div className="landing-how-step rounded-2xl p-8 pt-10 text-center h-full ttm-brand-interactive">
+                <div className="landing-how-step__badge">{step.number}</div>
 
-                <div className="w-12 h-12 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center mx-auto mb-6 text-white/70">
+                <div className="landing-how-step__icon" aria-hidden>
                   {step.icon}
                 </div>
 
-                <h3 className="text-lg font-light text-white/90 mb-3 tracking-tight">{step.title}</h3>
-                <p className="text-sm font-light text-white/45 leading-relaxed">{step.description}</p>
+                <h3 className="landing-how-step__title">{step.title}</h3>
+                <p className="landing-how-step__desc">{step.description}</p>
               </div>
             </motion.div>
           ))}

@@ -1,4 +1,5 @@
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n/config"
+import { pickLocalized } from "@/lib/i18n/pick-localized"
 
 export const INTERESTS = [
   { id: "travel", ru: "Путешествия", uk: "Подорожі", en: "Travel" },
@@ -31,7 +32,7 @@ export const MAX_INTERESTS = 8
 export function getInterestLabel(id: InterestId, locale: Locale): string {
   const item = INTERESTS.find((i) => i.id === id)
   if (!item) return id
-  return locale === "uk" ? item.uk : locale === "en" ? item.en : item.ru
+  return pickLocalized(locale, item)
 }
 
 export function getInterestsForLocale(locale: Locale) {

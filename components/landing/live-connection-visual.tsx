@@ -120,7 +120,7 @@ export function LiveConnectionVisual({ className }: { className?: string }) {
     >
       <span className="live-connection-demo__aura" aria-hidden />
 
-      <p className="relative z-[1] text-[9px] uppercase tracking-[0.22em] text-white/35 font-extralight mb-5 text-center">
+      <p className="live-connection-demo__label relative z-[1] mb-5 text-center">
         {t("landingLiveSystemLabel")}
       </p>
 
@@ -150,7 +150,7 @@ export function LiveConnectionVisual({ className }: { className?: string }) {
             className="live-connection-demo__sync-ring"
           >
             <div className="live-connection-demo__sync-core flex size-full items-center justify-center rounded-full">
-              <span className="text-xl sm:text-2xl font-extralight tabular-nums text-white/95 leading-none">
+              <span className="live-connection-demo__sync-value text-xl sm:text-2xl font-medium tabular-nums leading-none">
                 {syncPercent}
               </span>
             </div>
@@ -195,8 +195,8 @@ export function LiveConnectionVisual({ className }: { className?: string }) {
 
       <div className="relative z-[1] mt-6 space-y-3">
         <div className="flex items-center justify-between gap-3">
-          <span className="text-[10px] text-white/40 font-extralight">{t("chemistryLabel")}</span>
-          <span className="text-[10px] text-white/75 font-extralight">{t("landingChemistryHigh")}</span>
+          <span className="live-connection-demo__metric-label">{t("chemistryLabel")}</span>
+          <span className="live-connection-demo__metric-value">{t("landingChemistryHigh")}</span>
         </div>
         <div className="live-connection-demo__metric-bar">
           <motion.div
@@ -207,8 +207,8 @@ export function LiveConnectionVisual({ className }: { className?: string }) {
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <span className="text-[10px] text-white/40 font-extralight">{t("bondLabel")}</span>
-          <span className="text-[10px] text-white/75 font-extralight">{t("bondStableLabel")}</span>
+          <span className="live-connection-demo__metric-label">{t("bondLabel")}</span>
+          <span className="live-connection-demo__metric-value">{t("bondStableLabel")}</span>
         </div>
         <div className="live-connection-demo__metric-bar">
           <motion.div
@@ -220,9 +220,7 @@ export function LiveConnectionVisual({ className }: { className?: string }) {
       </div>
 
       <div className="live-connection-demo__insight relative z-[1] mt-5 -mx-5 sm:-mx-6 px-5 sm:px-6 py-3.5 rounded-b-[1.65rem]">
-        <p className="text-[9px] uppercase tracking-[0.18em] text-white/30 font-extralight mb-1">
-          {t("chatInsightLabel")}
-        </p>
+        <p className="live-connection-demo__label mb-1">{t("chatInsightLabel")}</p>
         <AnimatePresence mode="wait">
           <motion.p
             key={insightKey}
@@ -230,7 +228,7 @@ export function LiveConnectionVisual({ className }: { className?: string }) {
             animate={{ opacity: 1, y: 0 }}
             exit={reduce ? undefined : { opacity: 0, y: -4 }}
             transition={{ duration: 0.45 }}
-            className="text-[11px] font-extralight text-white/65 leading-snug"
+            className="live-connection-demo__insight-text"
           >
             {t(insightKey)}
           </motion.p>

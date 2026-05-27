@@ -164,11 +164,11 @@
 .live-connection-demo {
   position: relative;
   border-radius: var(--ttm-radius-2xl, 1.75rem);
-  border: 1px solid var(--ttm-brand-line);
-  background: var(--ttm-glass-bg);
+  border: 1px solid var(--border);
+  background: linear-gradient(165deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
   backdrop-filter: blur(var(--ttm-glass-blur)) saturate(1.15);
   -webkit-backdrop-filter: blur(var(--ttm-glass-blur)) saturate(1.15);
-  box-shadow: var(--ttm-depth-float);
+  box-shadow: var(--shadow-md);
 }
 
 .live-connection-demo__aura {
@@ -254,10 +254,41 @@
   margin: 0;
   text-align: center;
   font-size: 9px;
-  font-weight: 200;
+  font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.42);
+  color: var(--text-secondary);
+}
+
+.live-connection-demo__label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.live-connection-demo__metric-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.live-connection-demo__metric-value {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.live-connection-demo__sync-value {
+  color: var(--text-primary);
+}
+
+.live-connection-demo__insight-text {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-primary);
 }
 
 .live-connection-demo__particle {
@@ -314,8 +345,8 @@
 }
 
 .live-connection-demo__sync-core {
-  background: rgba(5, 5, 8, 0.88);
-  box-shadow: inset 0 0 24px rgba(160, 150, 220, 0.08);
+  background: color-mix(in srgb, var(--bg-primary) 88%, var(--bg-secondary));
+  box-shadow: inset 0 0 24px var(--accent-soft-bg);
 }
 
 .live-connection-demo__orbit {
@@ -357,21 +388,21 @@
 .live-connection-demo__metric-bar {
   height: 2px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--text-primary) 8%, transparent);
   overflow: hidden;
 }
 
 .live-connection-demo__metric-fill {
   height: 100%;
   border-radius: inherit;
-  background: var(--ttm-brand-gradient-sync);
-  box-shadow: 0 0 14px var(--ttm-glow-chemistry);
+  background: var(--accent-gradient);
+  box-shadow: 0 0 14px var(--accent-soft-bg);
   transition: width var(--ttm-brand-duration-slow) var(--ttm-brand-ease);
 }
 
 .live-connection-demo__insight {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg-primary) 35%, transparent);
 }
 
 /* Connection evolution */

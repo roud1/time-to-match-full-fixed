@@ -16,7 +16,7 @@ const SOCIAL_KEY = "ttm-social"
 
 export type ChatMessage = {
   id: string
-  from: "me" | "them"
+  from: "me" | "them" | "system"
   text: string
   at: number
 }
@@ -196,6 +196,13 @@ export function recordSwipe(
   recordProfileActivity()
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+    if (matched) {
+      void import("@/lib/gamification/api").then(({ reportAchievementEvent, dispatchGamificationUpdate }) =>
+        reportAchievementEvent({ event: "match_created" }).then((snap) =>
+          dispatchGamificationUpdate(snap ?? undefined)
+        )
+      )
+    }
   }
   return { matched }
 }
@@ -214,7 +221,7 @@ export function likeBack(
 function pushMessage(
   state: SocialState,
   profileId: number,
-  from: "me" | "them",
+  from: "me" | "them" | "system",
   text: string,
   locale: Locale,
   position: GeoPosition | null
@@ -243,8 +250,10 @@ function pushMessage(
   }
 
   save(next)
-  recordConnectionMessage(profileId, from === "me" ? "me" : "them")
-  if (from === "me") recordProfileActivity()
+  if (from !== "system") {
+    recordConnectionMessage(profileId, from === "me" ? "me" : "them")
+    if (from === "me") recordProfileActivity()
+  }
   const profile = getProfileById(profileId, locale, position)
   if (profile) setMemoryProfileName(profileId, profile.name)
   if (typeof window !== "undefined") {
@@ -261,6 +270,15 @@ export function sendMessage(
   position: GeoPosition | null
 ) {
   pushMessage(load(), profileId, "me", text, locale, position)
+}
+
+export function appendSystemMessage(
+  profileId: number,
+  text: string,
+  locale: Locale,
+  position: GeoPosition | null
+) {
+  pushMessage(load(), profileId, "system", text, locale, position)
 }
 
 export function receiveMessage(

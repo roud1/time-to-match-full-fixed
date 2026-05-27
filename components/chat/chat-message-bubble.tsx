@@ -20,7 +20,7 @@ function ReadReceipt({ state, labels }: { state: "delivered" | "read"; labels: L
   const read = state === "read"
   return (
     <span
-      className={read ? "text-sky-300/95" : "text-white/30"}
+      className={read ? "text-sky-600" : "text-muted-foreground"}
       title={read ? labels.chatRead : labels.chatDelivered}
       aria-label={read ? labels.chatRead : labels.chatDelivered}
     >
@@ -105,7 +105,7 @@ export function ChatMessageBubble({
         {!isMe && (
           <motion.span
             aria-hidden
-            className="shrink-0 text-white/75"
+            className="shrink-0 text-muted-foreground"
             animate={{ opacity: replyArmed ? 1 : 0, scale: replyArmed ? 1 : 0.85 }}
             transition={{ duration: 0.12 }}
           >
@@ -134,7 +134,7 @@ export function ChatMessageBubble({
           onDragEnd={handleDragEnd}
           className={cn(
             "ttm-chat-bubble relative px-4 py-3 rounded-[1.4rem] text-[15px] leading-relaxed touch-pan-y cursor-grab active:cursor-grabbing",
-            isMe ? "ttm-chat-bubble--me rounded-br-md text-white/95" : "ttm-chat-bubble--them rounded-bl-md text-white/90",
+            isMe ? "ttm-chat-bubble--me rounded-br-md text-white" : "ttm-chat-bubble--them rounded-bl-md",
             arriveSurge && "ttm-chat-bubble--surge",
             highSync && !isMe && "shadow-[0_16px_48px_-28px_rgba(180,195,255,0.25)]"
           )}
@@ -150,7 +150,7 @@ export function ChatMessageBubble({
         {isMe && (
           <motion.span
             aria-hidden
-            className="shrink-0 text-white/75"
+            className="shrink-0 text-muted-foreground"
             animate={{ opacity: replyArmed ? 1 : 0, scale: replyArmed ? 1 : 0.85 }}
             transition={{ duration: 0.12 }}
           >
@@ -184,7 +184,7 @@ export function ChatMessageBubble({
                 key={emoji}
                 type="button"
                 onClick={() => onPickReaction(emoji)}
-                className="min-h-[40px] min-w-[40px] rounded-full border border-white/10 bg-black/30 text-base backdrop-blur-md hover:scale-110 active:scale-95 transition-transform touch-manipulation"
+                className="min-h-[40px] min-w-[40px] rounded-full border border-border bg-background text-base backdrop-blur-md hover:scale-110 active:scale-95 transition-transform touch-manipulation"
                 aria-label={`${labels.chatReact} ${emoji}`}
               >
                 {emoji}

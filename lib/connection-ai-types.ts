@@ -8,6 +8,7 @@ import type {
   AIChemistryLevel,
 } from "@/lib/ai-connection-engine/types"
 import type { BondLevel } from "@/lib/connection-engine"
+import type { Locale } from "@/lib/i18n/config"
 
 /** @deprecated use AIConnectionAnalysis */
 export type ConnectionAIAnalysisResponse = AIConnectionAnalysis
@@ -21,7 +22,7 @@ export type AnalyzeConnectionMessage = {
 /** Request body for POST /api/analyze-connection */
 export type AnalyzeConnectionRequest = {
   profileId: number
-  locale?: "ru" | "uk" | "en"
+  locale?: Locale
   messages: AnalyzeConnectionMessage[]
   responseTimes: number[]
   activityLevel: "low" | "medium" | "high"

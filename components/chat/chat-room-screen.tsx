@@ -70,6 +70,12 @@ import {
   buildSyncShareMoment,
   deriveLiveRelationshipState,
 } from "@/lib/shared"
+import { ChatMatchExpiryBar } from "@/components/chat/chat-match-expiry-bar"
+import { MatchUrgencySnackbar } from "@/components/chat/match-urgency-snackbar"
+import { useChatMatchExpiry } from "@/hooks/use-chat-match-expiry"
+import { useMatchBond } from "@/hooks/use-match-bond"
+import { BondMeter } from "@/components/chat/bond-meter"
+import { IcebreakerPanel } from "@/components/chat/icebreaker-panel"
 import { cn } from "@/lib/utils"
 
 type ChatRoomScreenProps = {
@@ -79,6 +85,7 @@ type ChatRoomScreenProps = {
   draft: string
   onDraftChange: (v: string) => void
   onSend: () => void
+  onSendText?: (text: string) => void
   composerMuted?: boolean
   labels: {
     back: string
@@ -115,6 +122,7 @@ export function ChatRoomScreen({
   draft,
   onDraftChange,
   onSend,
+  onSendText,
   composerMuted = false,
   labels,
 }: ChatRoomScreenProps) {
@@ -133,7 +141,18 @@ export function ChatRoomScreen({
   const [justSent, setJustSent] = useState(false)
   const [syncSurge, setSyncSurge] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
+  const [icebreakerDismissed, setIcebreakerDismissed] = useState(false)
   const prevMsgCount = useRef(thread.messages.length)
+
+  const hasSentFromMe = thread.messages.some((m) => m.from === "me")
+  const showIcebreakers =
+    !composerMuted && !hasSentFromMe && !icebreakerDismissed && Boolean(onSendText)
+
+  const focusComposer = () => {
+    requestAnimationFrame(() => {
+      document.getElementById("chat-composer-input")?.focus()
+    })
+  }
   const { ref: scrollRef } = useChatScrollEnd(thread.messages.length, thread.profileId)
   const trust = getPeerTrustSignals(profile.id)
   const connectionView = useConnectionLive(profile.id)
@@ -260,6 +279,10 @@ export function ChatRoomScreen({
   }, [aiAnalysis, aiInsight, analysis, connectionView, thread.messages, recentActivity, t])
 
   useEffect(() => {
+    setIcebreakerDismissed(false)
+  }, [thread.profileId])
+
+  useEffect(() => {
     markThreadSeen(thread.profileId, thread.updatedAt)
   }, [thread.profileId, thread.updatedAt])
 
@@ -315,7 +338,14 @@ export function ChatRoomScreen({
     return () => clearTimeout(id)
   }, [thread.profileId, thread.messages.length, thread.messages])
 
+  const matchExpiry = useChatMatchExpiry(profile.id)
+  const bond = useMatchBond(profile.id, matchExpiry?.matchId ?? null)
+
   return (
+    <>
+    {matchExpiry && (
+      <MatchUrgencySnackbar expiresAt={matchExpiry.expiresAt} profileId={profile.id} />
+    )}
     <div
       className={cn(
         "ttm-chat-room p10-chat-atmosphere flex flex-col w-full h-full min-h-0 ttm-gpu-layer"
@@ -415,6 +445,7 @@ export function ChatRoomScreen({
               {profile.name}
               {profile.age > 0 && <span className="text-white/45">, {profile.age}</span>}
             </p>
+            <BondMeter bond={bond} className="mt-1 pr-1" />
             <p
               className={cn(
                 "text-[11px] font-extralight flex items-center gap-1.5 mt-0.5 truncate",
@@ -443,6 +474,8 @@ export function ChatRoomScreen({
         {connectionView && (
           <RelationshipStateBadge view={connectionView} analysis={analysis} className="hidden sm:inline-flex" />
         )}
+
+        <ChatMatchExpiryBar profileId={profile.id} compact className="max-w-[min(100%,11.5rem)] sm:max-w-none" />
 
         <button
           type="button"
@@ -670,6 +703,18 @@ export function ChatRoomScreen({
       </AnimatePresence>
 
       <div className="ttm-chat-composer-wrap shrink-0 relative z-10">
+        {showIcebreakers && onSendText && (
+          <IcebreakerPanel
+            onPick={(text) => {
+              onSendText(text)
+              setIcebreakerDismissed(true)
+            }}
+            onDismiss={() => {
+              setIcebreakerDismissed(true)
+              focusComposer()
+            }}
+          />
+        )}
         <ChatComposer
           draft={draft}
           onDraftChange={onDraftChange}
@@ -688,5 +733,6 @@ export function ChatRoomScreen({
         />
       </div>
     </div>
+    </>
   )
 }

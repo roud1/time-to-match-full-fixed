@@ -10,13 +10,13 @@ export function Logo({ size = "md" }: LogoProps) {
 
   return (
     <div className={`relative ${box} flex items-center justify-center`}>
-      <div className="absolute inset-0 rounded-full border border-white/12 bg-white/[0.04]" />
+      <div className="absolute inset-0 rounded-full border border-border bg-card/80" />
       <svg
         width={icon}
         height={icon}
         viewBox="0 0 24 24"
         fill="none"
-        className="relative z-[1] text-white/90"
+        className="relative z-[1] text-foreground"
         aria-hidden
       >
         <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="0.75" opacity="0.35" />

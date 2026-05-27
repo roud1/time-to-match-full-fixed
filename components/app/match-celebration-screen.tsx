@@ -79,7 +79,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
           role="dialog"
           aria-modal
           aria-labelledby="match-celebration-title"
-          className="match-moment fixed inset-0 z-[80] flex flex-col"
+          className="match-moment fixed inset-0 z-[80] flex flex-col bg-[var(--bg-primary)]/96 backdrop-blur-md"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -120,7 +120,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
             <button
               type="button"
               onClick={onClose}
-              className="self-end text-sm font-extralight text-white/45 hover:text-white/80 px-3 py-2 touch-manipulation transition-colors"
+              className="self-end text-sm font-normal text-muted-foreground hover:text-foreground px-3 py-2 touch-manipulation transition-colors"
             >
               {t("matchModalContinue")}
             </button>
@@ -191,7 +191,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                 initial={reduce ? false : { opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-2xl sm:text-[1.65rem] font-extralight tracking-tight text-center text-white/95"
+                className="text-2xl sm:text-[1.65rem] font-medium tracking-tight text-center text-foreground"
               >
                 {isFirstMatch ? t("matchFirstTitle") : t("matchModalTitle")}
               </motion.h1>
@@ -200,7 +200,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                   initial={reduce ? false : { opacity: 0, scale: 0.92 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.22 }}
-                  className="mt-3 text-[10px] uppercase tracking-[0.28em] text-indigo-200/80 font-extralight text-center"
+                  className="mt-3 text-[10px] uppercase tracking-[0.28em] text-primary font-medium text-center"
                 >
                   {t("matchFirstBurst")}
                 </motion.p>
@@ -209,7 +209,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                 initial={reduce ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.26 }}
-                className="mt-2 text-center text-sm font-extralight text-white/55"
+                className="mt-2 text-center text-sm font-normal text-muted-foreground"
               >
                 {isFirstMatch ? t("matchFirstSubtitle") : t("matchModalSubtitle")}
               </motion.p>
@@ -217,7 +217,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                 initial={reduce ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.32 }}
-                className="mt-3 text-center text-lg font-extralight text-white/80"
+                className="mt-3 text-center text-lg font-medium text-foreground"
               >
                 {profile.name}
               </motion.p>
@@ -226,12 +226,12 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                   initial={reduce ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.38 }}
-                  className="mt-4 text-[10px] uppercase tracking-[0.18em] text-white/40 font-extralight text-center max-w-[280px]"
+                  className="mt-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground font-medium text-center max-w-[280px]"
                 >
                   {getCompatibilityHintLabel(compatibility.chemistryHint, t)}
                 </motion.p>
               )}
-              <p className="mt-3 text-xs font-extralight text-white/35 tracking-wide text-center max-w-[260px]">
+              <p className="mt-3 text-xs font-normal text-muted-foreground tracking-wide text-center max-w-[260px]">
                 {t("matchModalBody")}
               </p>
             </div>
@@ -242,7 +242,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
               transition={{ delay: 0.28 }}
               className="shrink-0 w-full max-w-md mx-auto space-y-4"
             >
-              <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-extralight text-center">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-medium text-center">
                 {t("matchModalStartersTitle")}
               </p>
               <ul className="space-y-2 max-h-[min(28dvh,220px)] overflow-y-auto ttm-chat-scroll pr-0.5">
@@ -252,8 +252,8 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                       type="button"
                       onClick={() => goToChat(text)}
                       className={cn(
-                        "w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm font-extralight",
-                        "text-white/80 hover:border-white/14 hover:bg-white/[0.07] transition-colors touch-manipulation"
+                        "ttm-surface-tile w-full rounded-2xl px-4 py-3 text-left text-sm font-normal",
+                        "text-foreground hover:border-[var(--tile-border-strong)] transition-colors touch-manipulation"
                       )}
                     >
                       {text}
@@ -266,10 +266,8 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                 type="button"
                 onClick={() => goToChat()}
                 className={cn(
-                  "w-full rounded-2xl py-4 text-sm font-extralight text-white touch-manipulation",
-                  "bg-gradient-to-r from-white/20 via-white/12 to-white/8",
-                  "shadow-[0_20px_50px_-20px_rgba(220,225,255,0.35)] border border-white/12",
-                  "hover:brightness-110 active:scale-[0.98] transition-all"
+                  "ttm-btn-accent w-full rounded-2xl py-4 text-sm font-medium touch-manipulation",
+                  "hover:opacity-95 active:scale-[0.98] transition-all"
                 )}
               >
                 {t("matchModalOpenChat")}

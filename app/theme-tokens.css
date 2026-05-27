@@ -1,0 +1,221 @@
+/**
+ * Time to Match — theme tokens (light default, dark-ready)
+ */
+
+:root {
+  /* —— Core palette —— */
+  --bg-primary: #f8f9fc;
+  --bg-secondary: #ffffff;
+  --bg-header: rgba(255, 255, 255, 0.85);
+  --text-primary: #1e1e2e;
+  --text-secondary: #6b7280;
+  --accent: #0d9488;
+  --accent-gradient: linear-gradient(125deg, #ccfbf1 0%, #5eead4 22%, #14b8a6 52%, #0d9488 88%, #0f766e 100%);
+  --hero-highlight-gradient: linear-gradient(135deg, #0f766e 0%, #0d9488 42%, #14b8a6 100%);
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --success: #10b981;
+  --border: #e5e7eb;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 24px;
+
+  /* Accent tints */
+  --accent-soft-bg: rgba(45, 212, 191, 0.1);
+  --accent-soft-border: rgba(13, 148, 136, 0.22);
+
+  /* Turquoise tiles (cards, hints, dock) */
+  --tile-surface: #ecfeff;
+  --tile-surface-elevated: #cffafe;
+  --tile-border: #99f6e4;
+  --tile-border-strong: #2dd4bf;
+  --tile-text: #134e4a;
+  --tile-text-muted: #0d9488;
+
+  /* Typography scale */
+  --text-heading: 1.25rem;
+  --text-body: 1rem;
+  --text-caption: 0.875rem;
+  --text-small: 0.75rem;
+
+  /* Theme transitions (future dark mode) */
+  --theme-transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+
+  /* —— Shadcn / Tailwind bridge —— */
+  --background: var(--bg-primary);
+  --foreground: var(--text-primary);
+  --card: var(--bg-secondary);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-secondary);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--accent);
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: var(--text-primary);
+  --muted: #f3f4f6;
+  --muted-foreground: var(--text-secondary);
+  --accent-foreground: #ffffff;
+  --destructive: var(--error);
+  --destructive-foreground: #ffffff;
+  --input: var(--bg-secondary);
+  --ring: rgba(20, 184, 166, 0.4);
+  --radius: var(--radius-md);
+  --glow-pink: rgba(45, 212, 191, 0.22);
+  --glow-purple: rgba(20, 184, 166, 0.18);
+  --graphite: #e5e7eb;
+
+  --chart-1: #14b8a6;
+  --chart-2: #0d9488;
+  --chart-3: #2dd4bf;
+  --chart-4: #f59e0b;
+  --chart-5: #10b981;
+
+  /* —— Brand system bridge (light) —— */
+  --ttm-brand-void: var(--bg-primary);
+  --ttm-brand-deep: var(--bg-primary);
+  --ttm-brand-graphite: var(--bg-secondary);
+  --ttm-brand-surface: var(--bg-secondary);
+  --ttm-brand-elevated: var(--bg-secondary);
+  --ttm-brand-mist: var(--text-secondary);
+  --ttm-brand-fog: rgba(107, 114, 128, 0.55);
+  --ttm-brand-whisper: rgba(107, 114, 128, 0.35);
+  --ttm-brand-line: var(--border);
+  --ttm-brand-line-strong: #d1d5db;
+  --ttm-brand-accent: var(--accent);
+  --ttm-brand-accent-soft: #5eead4;
+  --ttm-brand-accent-muted: #0f766e;
+
+  --ttm-glow-sync: rgba(20, 184, 166, 0.22);
+  --ttm-glow-sync-soft: rgba(45, 212, 191, 0.14);
+  --ttm-glow-chemistry: rgba(13, 148, 136, 0.2);
+  --ttm-glow-chemistry-peak: rgba(20, 184, 166, 0.32);
+  --ttm-glow-bond: rgba(16, 185, 129, 0.18);
+  --ttm-glow-bond-deep: rgba(16, 185, 129, 0.28);
+  --ttm-glow-aura: rgba(45, 212, 191, 0.14);
+  --ttm-glow-cinematic: rgba(20, 184, 166, 0.1);
+  --ttm-glow-fade: rgba(245, 158, 11, 0.15);
+
+  --ttm-glass-bg: var(--bg-header);
+  --ttm-glass-bg-strong: rgba(255, 255, 255, 0.92);
+  --ttm-glass-blur: 12px;
+  --ttm-glass-blur-deep: 16px;
+  --ttm-glass-border: var(--border);
+  --ttm-glass-highlight: rgba(255, 255, 255, 0.6);
+
+  --ttm-depth-0: 0 0 0 1px var(--border);
+  --ttm-depth-1: var(--shadow-sm);
+  --ttm-depth-2: var(--shadow-md);
+  --ttm-depth-float: var(--shadow-lg);
+
+  --ttm-icon-color: var(--text-secondary);
+  --ttm-icon-color-active: var(--text-primary);
+
+  --cin-bg: var(--bg-primary);
+  --cin-bg-elevated: var(--bg-secondary);
+  --cin-graphite: var(--border);
+  --cin-muted: var(--text-secondary);
+  --cin-faint: rgba(107, 114, 128, 0.45);
+  --cin-border: var(--border);
+}
+
+.ttm-hero-accent-line {
+  background-image: var(--hero-highlight-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* —— Dark theme (data-theme on html) —— */
+[data-theme="dark"],
+.dark {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+  --bg-header: rgba(15, 15, 26, 0.85);
+  --text-primary: #f0f0f5;
+  --text-secondary: #9ca3af;
+  --accent: #9b5de5;
+  --accent-gradient: linear-gradient(135deg, #9b5de5 0%, #f06292 100%);
+  --hero-highlight-gradient: linear-gradient(135deg, #5eead4 0%, #9b5de5 50%, #f472b6 100%);
+  --warning: #fbbf24;
+  --error: #f87171;
+  --success: #34d399;
+  --border: #2e2e3e;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+  --accent-soft-bg: rgba(155, 93, 229, 0.14);
+  --accent-soft-border: rgba(155, 93, 229, 0.28);
+  --tile-surface: rgba(26, 26, 46, 0.95);
+  --tile-surface-elevated: rgba(36, 36, 58, 0.98);
+  --tile-border: #2e2e3e;
+  --tile-border-strong: rgba(155, 93, 229, 0.35);
+  --tile-text: #f0f0f5;
+  --tile-text-muted: #9ca3af;
+
+  --background: oklch(0.055 0.004 285);
+  --foreground: oklch(0.96 0.008 285);
+  --card: oklch(0.11 0.006 285);
+  --card-foreground: oklch(0.96 0.008 285);
+  --popover: oklch(0.09 0.005 285);
+  --popover-foreground: oklch(0.96 0.008 285);
+  --primary: oklch(0.92 0.01 285);
+  --primary-foreground: oklch(0.08 0.004 285);
+  --secondary: oklch(0.16 0.008 285);
+  --secondary-foreground: oklch(0.88 0.01 285);
+  --muted: oklch(0.18 0.008 285);
+  --muted-foreground: oklch(0.58 0.015 285);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.98 0.01 285);
+  --input: oklch(0.18 0.01 285);
+  --ring: oklch(0.7 0.15 330);
+  --glow-pink: oklch(0.75 0.06 285);
+  --glow-purple: oklch(0.65 0.05 285);
+  --graphite: oklch(0.22 0.008 285);
+
+  --ttm-brand-void: #0f0f1a;
+  --ttm-brand-deep: #0f0f1a;
+  --ttm-brand-graphite: #1a1a2e;
+  --ttm-brand-surface: #1a1a2e;
+  --ttm-brand-elevated: #24243a;
+  --ttm-brand-mist: rgba(255, 255, 255, 0.42);
+  --ttm-brand-fog: rgba(255, 255, 255, 0.22);
+  --ttm-brand-whisper: rgba(255, 255, 255, 0.12);
+  --ttm-brand-line: rgba(255, 255, 255, 0.08);
+  --ttm-brand-line-strong: rgba(255, 255, 255, 0.14);
+
+  --ttm-glass-bg: rgba(10, 10, 12, 0.58);
+  --ttm-glass-bg-strong: rgba(6, 6, 8, 0.78);
+  --ttm-glass-blur: 28px;
+  --ttm-glass-blur-deep: 36px;
+  --ttm-glass-border: rgba(255, 255, 255, 0.09);
+
+  --ttm-depth-0: 0 0 0 1px rgba(255, 255, 255, 0.04);
+  --ttm-depth-1:
+    var(--ttm-depth-0),
+    0 12px 40px -20px rgba(0, 0, 0, 0.75);
+  --ttm-depth-2:
+    var(--ttm-depth-0),
+    0 20px 56px -24px rgba(0, 0, 0, 0.82);
+  --ttm-depth-float:
+    var(--ttm-depth-0),
+    0 24px 64px -28px rgba(0, 0, 0, 0.88);
+
+  --ttm-icon-color: rgba(255, 255, 255, 0.55);
+  --ttm-icon-color-active: rgba(255, 255, 255, 0.92);
+
+  --cin-bg: var(--bg-primary);
+  --cin-bg-elevated: var(--bg-secondary);
+  --cin-graphite: var(--border);
+  --cin-muted: var(--text-secondary);
+  --cin-faint: rgba(156, 163, 175, 0.55);
+  --cin-border: var(--border);
+}

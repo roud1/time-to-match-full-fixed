@@ -1,4 +1,5 @@
 import type { AIConnectionAnalysis } from "@/lib/ai-connection-engine/types"
+import { aiMemoryLabel } from "@/lib/server/ai-memory-labels"
 import {
   getOpenRouterClient,
   getOpenRouterModel,
@@ -73,7 +74,7 @@ function localAnalysis(body: AnalyzeConnectionBody): AIConnectionAnalysis {
   else if (bond === "deep") personality = "calm_connection"
   else if (chemistry === "high") personality = "magnetic_chemistry"
 
-  const locale = body.locale ?? "en"
+  const locale = body.locale ?? "ru"
   const insights: Record<string, string> = {
     en: "Your connection became more stable — the rhythm feels intentional.",
     ru: "Связь стала стабильнее — ритм ощущается осознанным.",
@@ -85,7 +86,7 @@ function localAnalysis(body: AnalyzeConnectionBody): AIConnectionAnalysis {
     memories.push({
       id: "long_night",
       at: body.messages[body.messages.length - 1]?.at ?? Date.now(),
-      label: locale === "ru" ? "Долгий ночной разговор" : locale === "uk" ? "Довга нічна розмова" : "Long night conversation",
+      label: aiMemoryLabel(locale, "long_night"),
       importance: 0.8,
     })
   }
@@ -93,7 +94,7 @@ function localAnalysis(body: AnalyzeConnectionBody): AIConnectionAnalysis {
     memories.push({
       id: "first_deep_talk",
       at: body.messages[Math.min(11, n - 1)]?.at ?? Date.now(),
-      label: locale === "ru" ? "Первый глубокий разговор" : locale === "uk" ? "Перша глибока розмова" : "First deep talk",
+      label: aiMemoryLabel(locale, "first_deep_talk"),
       importance: 0.85,
     })
   }
@@ -106,7 +107,7 @@ function localAnalysis(body: AnalyzeConnectionBody): AIConnectionAnalysis {
     emotionalState,
     connectionState,
     personality,
-    insight: insights[locale] ?? insights.en,
+    insight: insights[locale] ?? insights.ru ?? insights.en,
     atmosphereLevel: clamp(sync * 0.92 + (energy === "growing" ? 8 : 0)),
     memories,
     source: "local",
@@ -170,7 +171,7 @@ Context: stage=${body.stage ?? "spark"}, messages=${body.conversationLength}, mu
 Transcript:
 ${transcript || "(empty)"}
 
-Return ONLY valid JSON (locale for insight: ${body.locale ?? "en"}):
+Return ONLY valid JSON (locale for insight: ${body.locale ?? "ru"}):
 {
   "sync": <0-100 integer>,
   "chemistry": "low"|"medium"|"high"|"peak"|"intense",

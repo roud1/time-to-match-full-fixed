@@ -145,7 +145,7 @@ export async function analyzeConnectionWithAI(
     try {
       const payload = buildConnectionAIPayload(
         view.profileId,
-        opts.locale ?? "en",
+        opts.locale ?? "ru",
         messages,
         record,
         view

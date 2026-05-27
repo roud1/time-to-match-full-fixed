@@ -66,7 +66,7 @@ export function HeroSection() {
         <div
           className="w-full h-full rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(200,210,255,0.12), transparent 70%)",
+            background: "radial-gradient(circle, rgba(45,212,191,0.18), transparent 70%)",
             filter: "blur(40px)",
           }}
         />
@@ -86,8 +86,8 @@ export function HeroSection() {
             <motion.div variants={item} className="mb-7 md:mb-8 flex justify-center lg:justify-start">
               <span className="ttm-cin-overline inline-flex items-center gap-2.5 px-4 py-2 rounded-full cin-glass">
                 <span className="relative flex h-1.5 w-1.5">
-                  <span className="live-dot-pulse absolute inline-flex h-full w-full rounded-full bg-white/30" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white/65" />
+                  <span className="live-dot-pulse absolute inline-flex h-full w-full rounded-full bg-primary/25" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
                 </span>
                 {t("heroSyncBadge")}
               </span>
@@ -95,24 +95,22 @@ export function HeroSection() {
 
             <motion.h1
               variants={item}
-              className="ttm-cin-display text-balance mb-5 md:mb-7 cin-headline-glow"
+              className="ttm-cin-display text-balance mb-5 md:mb-7 text-foreground"
             >
-              <span className="block text-white/88 mb-1 md:mb-2">{t("heroConnectionLine1")}</span>
-              <span className="block bg-gradient-to-b from-white via-white/90 to-white/50 bg-clip-text text-transparent">
-                {t("heroConnectionLine2")}
-              </span>
+              <span className="block text-foreground mb-1 md:mb-2">{t("heroConnectionLine1")}</span>
+              <span className="block ttm-hero-accent-line">{t("heroConnectionLine2")}</span>
             </motion.h1>
 
             <motion.p
               variants={item}
-              className="ttm-cin-sub max-w-md mx-auto lg:mx-0 mb-3 px-1 lg:px-0 text-white/50"
+              className="ttm-cin-sub max-w-md mx-auto lg:mx-0 mb-3 px-1 lg:px-0 text-muted-foreground"
             >
               {t("landingHeroTagline")}
             </motion.p>
 
             <motion.p
               variants={item}
-              className="text-sm font-extralight text-white/38 max-w-md mx-auto lg:mx-0 mb-9 md:mb-10 leading-relaxed px-1 lg:px-0"
+              className="text-sm font-normal text-muted-foreground max-w-md mx-auto lg:mx-0 mb-9 md:mb-10 leading-relaxed px-1 lg:px-0"
             >
               {t("heroConnectionSubtitle")}
             </motion.p>

@@ -9,6 +9,8 @@ export type ConnectionRecord = {
   profileId: number
   matchedAt: number
   expiresAt: number
+  /** One-time 24h freeze applied to this match (demo / client). */
+  isFrozen?: boolean
   stage: ConnectionStage
   status: ConnectionStatus
   streakDays: number
@@ -332,6 +334,9 @@ export function streakMessage(
 
 export function formatExtensionHours(ms: number, locale: Locale): string {
   const h = Math.round(ms / (60 * 60 * 1000))
-  if (locale === "en") return `+${h}h`
-  return `+${h}ч`
+  if (locale === "ru" || locale === "uk") return `+${h}ч`
+  if (locale === "tr") return `+${h}s`
+  if (locale === "de") return `+${h} Std.`
+  if (locale === "pl") return `+${h} godz.`
+  return `+${h}h`
 }

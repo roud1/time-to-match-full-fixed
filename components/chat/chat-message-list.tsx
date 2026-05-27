@@ -51,6 +51,17 @@ export function ChatMessageList({
   return (
     <div className="ttm-chat-messages flex flex-col py-1">
       {messages.map((msg, index) => {
+        if (msg.from === "system") {
+          return (
+            <p
+              key={msg.id}
+              className="mx-auto my-2 max-w-[min(92%,18rem)] rounded-xl border border-amber-500/20 bg-amber-500/[0.08] px-3 py-2 text-center text-[10px] sm:text-[11px] font-light text-amber-100/90 leading-snug"
+              role="status"
+            >
+              {msg.text}
+            </p>
+          )
+        }
         const isMe = msg.from === "me"
         const time = formatChatMessageTime(msg.at, locale)
         const isLatest = msg.id === lastId

@@ -7,9 +7,11 @@ import { useI18n } from "@/lib/i18n"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { getSwipeProfilePhotos } from "@/lib/swipe-profile-photos"
 import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
+import { computeInterestOverlapForProfile } from "@/lib/discover/interest-overlap"
 import { CompatibilityPreview } from "@/components/discover/compatibility-preview"
 import type { PeerTrustSignals } from "@/lib/demo-trust-signals"
 import { PeerTrustChip } from "@/components/trust/peer-trust-chip"
+import { VerifiedBadge } from "@/components/ui/verified-badge"
 import { cn } from "@/lib/utils"
 
 type SwipeProfileDetailScreenProps = {
@@ -51,7 +53,9 @@ export function SwipeProfileDetailScreen({
   const heroPhoto = photos[0]
   const otherPhotos = photos.slice(1)
   const compatibility = profile ? computeDiscoverCompatibility(profile) : null
-  const matchPct = compatibility?.resonancePercent ?? 0
+  const interestOverlap = profile ? computeInterestOverlapForProfile(profile) : null
+  const matchPct = interestOverlap?.compatibility ?? compatibility?.resonancePercent ?? 0
+  const highCompat = matchPct > 70
 
   return (
     <AnimatePresence>
@@ -132,10 +136,15 @@ export function SwipeProfileDetailScreen({
                 <div>
                   <h2
                     id="swipe-profile-detail-title"
-                    className="text-2xl font-extralight tracking-tight text-white"
+                    className="text-2xl font-extralight tracking-tight text-white flex items-center gap-2 flex-wrap"
                   >
-                    {profile.name}
-                    <span className="text-white/55 font-light text-xl">, {profile.age}</span>
+                    <span>
+                      {profile.name}
+                      <span className="text-white/55 font-light text-xl">, {profile.age}</span>
+                    </span>
+                    {photoVerified && (
+                      <VerifiedBadge size={18} title={t("photoVerifiedLabel")} />
+                    )}
                   </h2>
                   <p className="text-muted-foreground text-sm font-light mt-1">
                     {profile.location} · {profile.distance}
@@ -143,6 +152,33 @@ export function SwipeProfileDetailScreen({
                 </div>
 
                 <p className="text-white/90 text-sm font-light leading-relaxed">{profile.bio}</p>
+
+                {interestOverlap && interestOverlap.compatibility > 0 && (
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-center">
+                    <p
+                      className={cn(
+                        "text-4xl font-extralight tabular-nums",
+                        highCompat ? "text-emerald-300" : "text-white/90"
+                      )}
+                    >
+                      {interestOverlap.compatibility}%
+                    </p>
+                    <p className="text-xs text-muted-foreground font-light mt-1">{t("discoverCompatibilityLabel")}</p>
+                    {interestOverlap.commonInterests.length > 0 && (
+                      <div className="flex flex-wrap justify-center gap-1.5 mt-3">
+                        {interestOverlap.commonInterests.map((tag) => (
+                          <span
+                            key={`${tag.id}-${tag.name}`}
+                            className="px-2 py-0.5 rounded-full text-[10px] font-light border border-white/12 bg-black/30 text-white/85"
+                          >
+                            {tag.emoji ? `${tag.emoji} ` : ""}
+                            {tag.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {compatibility && <CompatibilityPreview compatibility={compatibility} />}
 

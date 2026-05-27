@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/server/db"
+import type { PushSubscriptionJson } from "@/lib/server/push/types"
 
 export type DbUserRow = {
   id: string
@@ -7,13 +8,24 @@ export type DbUserRow = {
   profile: Record<string, unknown>
   created_at: Date
   profile_expires_at: Date | null
+  last_freeze_at: Date | null
+  freeze_balance: number
+  email_verified: boolean
+  push_subscription: PushSubscriptionJson | null
+  purpose: string | null
+  latitude: number | null
+  longitude: number | null
+  max_distance: number
+  is_active: boolean
+  photo_verified: boolean
 }
 
 export async function findUserByEmail(email: string): Promise<DbUserRow | null> {
   const db = getDb()
   if (!db) return null
   const rows = await db<DbUserRow[]>`
-    SELECT id, email, name, profile, created_at, profile_expires_at
+    SELECT id, email, name, profile, created_at, profile_expires_at, last_freeze_at, freeze_balance, email_verified, push_subscription,
+      purpose, latitude, longitude, max_distance, is_active, photo_verified
     FROM users
     WHERE email_normalized = ${email.trim().toLowerCase()}
     LIMIT 1
@@ -25,7 +37,8 @@ export async function findUserById(id: string): Promise<DbUserRow | null> {
   const db = getDb()
   if (!db) return null
   const rows = await db<DbUserRow[]>`
-    SELECT id, email, name, profile, created_at, profile_expires_at
+    SELECT id, email, name, profile, created_at, profile_expires_at, last_freeze_at, freeze_balance, email_verified, push_subscription,
+      purpose, latitude, longitude, max_distance, is_active, photo_verified
     FROM users
     WHERE id = ${id}
     LIMIT 1
@@ -39,7 +52,8 @@ export async function findUserForAuthByEmail(email: string): Promise<DbUserWithP
   const db = getDb()
   if (!db) return null
   const rows = await db<DbUserWithPassword[]>`
-    SELECT id, email, name, profile, created_at, profile_expires_at, password_hash
+    SELECT id, email, name, profile, created_at, profile_expires_at, last_freeze_at, freeze_balance, email_verified, push_subscription,
+      purpose, latitude, longitude, max_distance, is_active, photo_verified, password_hash
     FROM users
     WHERE email_normalized = ${email.trim().toLowerCase()}
     LIMIT 1
@@ -68,4 +82,43 @@ export async function createUser(input: {
     RETURNING id
   `
   return rows[0]?.id
+}
+
+export async function addFreezeBalance(userId: string, amount: number): Promise<number | null> {
+  const db = getDb()
+  if (!db || amount <= 0) return null
+  const rows = await db<{ freeze_balance: number }[]>`
+    UPDATE users
+    SET freeze_balance = freeze_balance + ${amount}
+    WHERE id = ${userId}
+    RETURNING freeze_balance
+  `
+  return rows[0]?.freeze_balance ?? null
+}
+
+export async function savePushSubscription(
+  userId: string,
+  subscription: PushSubscriptionJson
+): Promise<boolean> {
+  const db = getDb()
+  if (!db) return false
+  await db`
+    UPDATE users
+    SET push_subscription = ${db.json(subscription)}
+    WHERE id = ${userId}
+  `
+  return true
+}
+
+export async function setUserEmail(userId: string, email: string): Promise<boolean> {
+  const db = getDb()
+  if (!db) return false
+  const normalized = email.trim().toLowerCase()
+  await db`
+    UPDATE users
+    SET email = ${email.trim()}, email_verified = true
+    WHERE id = ${userId}
+  `
+  void normalized
+  return true
 }

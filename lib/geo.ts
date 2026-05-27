@@ -1,4 +1,5 @@
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n/config"
+import { localeFromCountryCode as localeFromCountry } from "@/lib/i18n/config"
 
 import { getCityCoords } from "@/lib/cities"
 
@@ -27,15 +28,13 @@ export function distanceKm(from: GeoPosition, to: GeoPosition): number {
 
 export function formatDistance(locale: Locale, km: number): string {
   const value = km < 1 ? 1 : Math.round(km)
-  return locale === "en" ? `${value} km` : `${value} км`
+  return locale === "en" || locale === "de" || locale === "es" || locale === "pl" || locale === "fr" || locale === "it" || locale === "tr"
+    ? `${value} km`
+    : `${value} км`
 }
 
 export function localeFromCountryCode(code: string | undefined): Locale | null {
-  if (!code) return null
-  const upper = code.toUpperCase()
-  if (upper === "UA") return "uk"
-  if (["RU", "BY", "KZ"].includes(upper)) return "ru"
-  return "en"
+  return localeFromCountry(code)
 }
 
 export function parseStoredPosition(raw: string | null): GeoPosition | null {

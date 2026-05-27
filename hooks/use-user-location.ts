@@ -7,7 +7,8 @@ import {
   parseStoredPosition,
   storePosition,
 } from "@/lib/geo"
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n/config"
+import { localeToBcp47 } from "@/lib/i18n/config"
 
 export type LocationStatus =
   | "idle"
@@ -52,7 +53,7 @@ async function reverseGeocode(
     {
       headers: {
         Accept: "application/json",
-        "Accept-Language": locale === "uk" ? "uk" : locale === "ru" ? "ru" : "en",
+        "Accept-Language": localeToBcp47(locale),
       },
     }
   )

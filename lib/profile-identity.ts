@@ -1,4 +1,5 @@
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n/config"
+import { pickLocalized } from "@/lib/i18n/pick-localized"
 
 export const VIBE_OPTIONS = [
   { id: "warm", ru: "Тёплый ритм", uk: "Теплий ритм", en: "Warm energy" },
@@ -34,19 +35,19 @@ export type MoodId = (typeof MOOD_OPTIONS)[number]["id"]
 export function getVibeLabel(id: string, locale: Locale): string {
   const row = VIBE_OPTIONS.find((v) => v.id === id)
   if (!row) return id
-  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+  return pickLocalized(locale, row)
 }
 
 export function getIntentionLabel(id: string, locale: Locale): string {
   const row = INTENTION_OPTIONS.find((v) => v.id === id)
   if (!row) return id
-  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+  return pickLocalized(locale, row)
 }
 
 export function getMoodLabel(id: string, locale: Locale): string {
   const row = MOOD_OPTIONS.find((v) => v.id === id)
   if (!row) return id
-  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+  return pickLocalized(locale, row)
 }
 
 export const ENERGY_TAG_OPTIONS = [
@@ -84,19 +85,19 @@ export const MAX_ENERGY_TAGS = 3
 export function getEnergyTagLabel(id: string, locale: Locale): string {
   const row = ENERGY_TAG_OPTIONS.find((v) => v.id === id)
   if (!row) return id
-  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+  return pickLocalized(locale, row)
 }
 
 export function getCommunicationStyleLabel(id: string, locale: Locale): string {
   const row = COMMUNICATION_STYLE_OPTIONS.find((v) => v.id === id)
   if (!row) return id
-  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+  return pickLocalized(locale, row)
 }
 
 export function getConnectionPrefLabel(id: string, locale: Locale): string {
   const row = CONNECTION_PREF_OPTIONS.find((v) => v.id === id)
   if (!row) return id
-  return locale === "uk" ? row.uk : locale === "en" ? row.en : row.ru
+  return pickLocalized(locale, row)
 }
 
 export const MIN_VIBES = 2

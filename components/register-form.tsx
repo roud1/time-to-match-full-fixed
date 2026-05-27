@@ -68,6 +68,15 @@ type FormErrors = Partial<
 
 const STEPS = [1, 2, 3, 4] as const
 
+function regChoiceClass(selected: boolean) {
+  return cn(
+    "ttm-choice w-full min-w-0 py-2.5 px-2 border text-xs sm:text-sm transition-colors touch-manipulation",
+    selected
+      ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--text-primary)] shadow-sm"
+      : "border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:border-[var(--accent-soft-border)] hover:bg-[var(--accent-soft-bg)]/60"
+  )
+}
+
 export function RegisterForm() {
   const { t, locale, location } = useI18n()
   const router = useRouter()
@@ -219,12 +228,7 @@ export function RegisterForm() {
   const stepLabels = [t("regStepAccount"), t("regStepRoots"), t("regStepSoul"), t("regStepReveal")]
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className="w-full max-w-md"
-    >
+    <div className="w-full max-w-md">
       <CinematicCard variant="glass" className="p-6 md:p-8 border border-white/10 shadow-[0_28px_90px_-40px_rgba(255,255,255,0.35)]">
         <div className="text-center mb-8">
           <span className="ttm-badge-brand mb-4 block mx-auto w-fit">SYNC</span>
@@ -300,7 +304,7 @@ export function RegisterForm() {
                   <Input type="date" value={form.birthdate} onChange={(e) => update("birthdate", e.target.value)} />
                 </CinematicField>
                 <CinematicField label={t("regGender")}>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-2 w-full min-w-0">
                     {(
                       [
                         ["male", t("regGenderMale")],
@@ -312,12 +316,7 @@ export function RegisterForm() {
                         key={value}
                         type="button"
                         onClick={() => update("gender", value)}
-                        className={cn(
-                          "ttm-choice py-2.5 border",
-                          form.gender === value
-                            ? "border-white/22 bg-white/06 text-white/75"
-                            : "border-foreground/10 bg-foreground/5 text-foreground/70 hover:bg-foreground/10"
-                        )}
+                        className={regChoiceClass(form.gender === value)}
                       >
                         {label}
                       </button>
@@ -325,7 +324,7 @@ export function RegisterForm() {
                   </div>
                 </CinematicField>
                 <CinematicField label={t("regLookingFor")}>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-2 w-full min-w-0">
                     {(
                       [
                         ["men", t("regLookingMen")],
@@ -337,12 +336,7 @@ export function RegisterForm() {
                         key={value}
                         type="button"
                         onClick={() => update("lookingFor", value)}
-                        className={cn(
-                          "ttm-choice py-2.5 border",
-                          form.lookingFor === value
-                            ? "border-purple-500/50 bg-purple-500/10 text-purple-300"
-                            : "border-foreground/10 bg-foreground/5 text-foreground/70 hover:bg-foreground/10"
-                        )}
+                        className={regChoiceClass(form.lookingFor === value)}
                       >
                         {label}
                       </button>
@@ -501,6 +495,6 @@ export function RegisterForm() {
           </Link>
         </p>
       </CinematicCard>
-    </motion.div>
+    </div>
   )
 }

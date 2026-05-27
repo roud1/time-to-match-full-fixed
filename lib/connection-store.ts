@@ -164,6 +164,30 @@ export function migrateConnectionsFromMatches(
   if (changed) save(state)
 }
 
+/** Bond prolong: add hours to match expiry without using freeze. */
+export function extendConnectionExpiryByHours(
+  profileId: number,
+  hours: number
+): string | undefined {
+  let state = load()
+  const record = state.connections.find((c) => c.profileId === profileId && c.status !== "archived")
+  if (!record) return undefined
+
+  const addedMs = hours * 60 * 60 * 1000
+  const base = Math.max(record.expiresAt, Date.now())
+  const nextExpires = base + addedMs
+  const updated: ConnectionRecord = {
+    ...record,
+    expiresAt: nextExpires,
+    lastExtensionAt: Date.now(),
+    totalExtensionsMs: record.totalExtensionsMs + addedMs,
+  }
+  state.connections = state.connections.map((c) => (c.profileId === profileId ? updated : c))
+  save(state)
+  dispatch([{ type: "extended", profileId, addedMs, at: Date.now() }])
+  return new Date(nextExpires).toISOString()
+}
+
 export function recordConnectionMessage(
   profileId: number,
   from: "me" | "them" = "me"
@@ -228,6 +252,34 @@ export function setMemoryProfileName(profileId: number, name: string) {
   if (memories.some((m, i) => m !== state.memories[i])) {
     save({ ...state, memories })
   }
+}
+
+export function freezeConnection(
+  profileId: number,
+  extensionMs: number,
+  options?: { allowWhenFrozen?: boolean }
+): { ok: true; expiresAt: number } | { ok: false; reason: "frozen" | "not_found" | "expired" } {
+  let state = load()
+  const record = state.connections.find((c) => c.profileId === profileId && c.status !== "archived")
+  if (!record) return { ok: false, reason: "not_found" }
+  if (record.isFrozen && !options?.allowWhenFrozen) {
+    return { ok: false, reason: "frozen" }
+  }
+  const now = Date.now()
+  if (record.expiresAt <= now) return { ok: false, reason: "expired" }
+
+  const next: ConnectionRecord = {
+    ...record,
+    expiresAt: now + extensionMs,
+    isFrozen: true,
+    lastExtensionAt: now,
+    totalExtensionsMs: record.totalExtensionsMs + extensionMs,
+  }
+
+  state.connections = state.connections.map((c) => (c.profileId === profileId ? next : c))
+  save(state)
+  dispatch([{ type: "extended", profileId, addedMs: extensionMs, at: now }])
+  return { ok: true, expiresAt: next.expiresAt }
 }
 
 export function clearConnectionEvent(eventAt: number, type: ConnectionEvent["type"], profileId: number) {

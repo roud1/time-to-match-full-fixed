@@ -1,20 +1,26 @@
 import type { Metadata, Viewport } from "next"
-import { Inter_Tight } from "next/font/google"
+import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { I18nProvider } from "@/lib/i18n"
-import { LanguageSwitcher } from "@/components/language-switcher"
+import { QueryProvider } from "@/components/providers/query-provider"
 import { SiteBackground } from "@/components/site-background"
 import { MobileScreenTransition } from "@/components/mobile/mobile-screen-transition"
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register"
+import { PushSubscriptionBootstrap } from "@/components/pwa/push-subscription-bootstrap"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import { ThemeProvider } from "@/components/theme/theme-provider"
+import { ThemeScript } from "@/components/theme/theme-script"
+import { Toaster } from "@/components/ui/sonner"
+import { AchievementProvider } from "@/components/gamification/achievement-provider"
 
-const interTight = Inter_Tight({
+const inter = Inter({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-inter-tight",
+  variable: "--font-inter",
   display: "swap",
   preload: true,
-  weight: ["300", "400", "500"],
+  weight: ["400", "500", "600"],
 })
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
@@ -84,9 +90,10 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#050506",
+  themeColor: "#F8F9FC",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   maximumScale: 1,
   userScalable: false,
 }
@@ -97,16 +104,28 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" suppressHydrationWarning className="bg-[#050506]">
-      <body className={`${interTight.variable} font-sans antialiased ttm-root ttm-brand-universe`}>
-        <I18nProvider>
-          <ServiceWorkerRegister />
-          <SiteBackground />
-          <MobileScreenTransition>
-            <div className="relative z-0 min-h-screen">{children}</div>
-          </MobileScreenTransition>
-          <LanguageSwitcher />
-        </I18nProvider>
+    <html lang="ru" suppressHydrationWarning className="bg-[var(--bg-primary)]">
+      <head>
+        <meta name="color-scheme" content="light dark" />
+        <ThemeScript />
+      </head>
+      <body className={`${inter.variable} font-sans antialiased ttm-root ttm-brand-universe`}>
+        <ThemeProvider>
+          <I18nProvider>
+            <QueryProvider>
+              <AchievementProvider>
+                <ServiceWorkerRegister />
+                <PushSubscriptionBootstrap />
+                <SiteBackground />
+                <MobileScreenTransition>
+                  <div className="relative z-0 min-h-screen">{children}</div>
+                </MobileScreenTransition>
+                <LanguageSwitcher />
+                <Toaster position="top-center" richColors closeButton />
+              </AchievementProvider>
+            </QueryProvider>
+          </I18nProvider>
+        </ThemeProvider>
         {process.env.NODE_ENV === "production" && (
           <>
             <Analytics />

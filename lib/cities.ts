@@ -1,4 +1,6 @@
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@/lib/i18n/config"
+import { localeToBcp47 } from "@/lib/i18n/config"
+import { pickLocalized } from "@/lib/i18n/pick-localized"
 import type { GeoPosition } from "@/lib/geo"
 
 export const CITIES = [
@@ -36,7 +38,7 @@ export function getProfileCityName(
 export function getCityLabel(id: CityId, locale: Locale): string {
   const city = CITIES.find((c) => c.id === id)
   if (!city) return id
-  return locale === "uk" ? city.uk : locale === "en" ? city.en : city.ru
+  return pickLocalized(locale, city)
 }
 
 export function getCityCoords(id: CityId): GeoPosition {
@@ -60,5 +62,5 @@ export function getCitiesForLocale(locale: Locale) {
   return CITIES.map((city) => ({
     id: city.id,
     label: getCityLabel(city.id, locale),
-  })).sort((a, b) => a.label.localeCompare(b.label, locale === "uk" ? "uk" : locale === "ru" ? "ru" : "en"))
+  })).sort((a, b) => a.label.localeCompare(b.label, localeToBcp47(locale)))
 }

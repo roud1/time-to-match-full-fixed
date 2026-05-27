@@ -1,0 +1,51 @@
+import type { NotificationDeliveryContent, NotificationType } from "@/lib/server/notifications/types"
+
+export function buildNotificationContent(input: {
+  type: NotificationType
+  leadHours: number
+  peerName: string | null
+  referenceId: string | null
+  appOrigin: string
+}): NotificationDeliveryContent {
+  const { type, leadHours, peerName, referenceId, appOrigin } = input
+  const origin = appOrigin.replace(/\/$/, "")
+
+  if (type === "profile_expiring") {
+    const href = `${origin}/profile`
+    const title = "Твоя анкета скоро исчезнет — успей создать момент"
+    const body =
+      leadHours === 12
+        ? "Твоя анкета тает, как утренний туман. Осталось полдня — продли, пока тебя ещё видят."
+        : leadHours === 6
+          ? "Всего 6 часов, чтобы найти отклик. Время утекает — открой профиль."
+          : leadHours === 1
+            ? "Последний час. Потом анкета исчезнет, как сон. Успей перевернуть часы."
+            : `До конца срока анкеты осталось около ${leadHours} ч. Продли, чтобы оставаться в ленте.`
+    return {
+      title,
+      body,
+      href,
+      tag: `profile-expiry-${leadHours}`,
+      html: `<p>${body}</p><p><a href="${href}">Открыть профиль</a></p>`,
+    }
+  }
+
+  const name = peerName ?? "собеседником"
+  const href = referenceId
+    ? `${origin}/app?tab=chat&with=${referenceId}`
+    : `${origin}/app?tab=chat`
+  const title = `Мэтч с ${name === "собеседником" ? "собеседником" : name} догорает. Сохрани его`
+  const body =
+    leadHours === 6
+      ? `Мэтч с ${name} на грани. Шесть часов до темноты — загляни в чат.`
+      : leadHours === 1
+        ? `Остался час, чтобы не потерять ${name}. Заморозь мгновение или напиши прямо сейчас.`
+        : `Связь с ${name} закончится примерно через ${leadHours} ч. Загляните в чат, пока пламя живо.`
+  return {
+    title,
+    body,
+    href,
+    tag: `match-expiry-${referenceId ?? "unknown"}-${leadHours}`,
+    html: `<p>${body}</p><p><a href="${href}">Открыть чат</a></p>`,
+  }
+}

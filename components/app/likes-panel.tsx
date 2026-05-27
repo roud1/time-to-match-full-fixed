@@ -45,7 +45,7 @@ export function LikesPanel() {
   return (
     <div className="px-4 pt-4 pb-6 max-w-lg mx-auto w-full">
       <div className="mb-6">
-        <h1 className="text-2xl font-extralight tracking-tight">{t("tabLikes")}</h1>
+        <h1 className="text-2xl font-medium tracking-tight">{t("tabLikes")}</h1>
         <p className="text-sm text-muted-foreground font-light mt-1">{t("likesSubtitle")}</p>
       </div>
 
@@ -69,7 +69,7 @@ export function LikesPanel() {
           {likes.map((profile) => (
             <li
               key={profile.id}
-              className="ttm-brand-glass ttm-brand-interactive rounded-2xl p-3 flex items-center gap-3"
+              className="ttm-surface-tile ttm-brand-glass ttm-brand-interactive rounded-2xl p-3 flex items-center gap-3"
             >
               <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
                 <Image src={profile.image} alt={profile.name} fill className="object-cover" sizes="72px" />
@@ -90,7 +90,7 @@ export function LikesPanel() {
                 <p className="text-xs text-muted-foreground font-light truncate">
                   {profile.location} · {profile.distance}
                 </p>
-                <p className="text-xs text-white/60/90 font-light mt-0.5">{t("likesLikedYou")}</p>
+                <p className="text-xs text-muted-foreground font-normal mt-0.5">{t("likesLikedYou")}</p>
               </div>
               <button
                 type="button"

@@ -4,11 +4,19 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useI18n } from "@/lib/i18n"
 import {
+  appendSystemMessage,
   getChats,
   getProfileById,
   sendMessage,
   type ChatThread,
 } from "@/lib/social-store"
+import { reportMessageSent, bondFromPayload, patchMatchInCache } from "@/lib/match-bond-client"
+import { MATCHES_QUERY_KEY, useInvalidateMatches } from "@/hooks/use-matches"
+import { matchQueryKey, patchMatchQueryCache } from "@/hooks/use-match"
+import { applyGamificationSnapshot } from "@/lib/gamification/apply-snapshot"
+import { useChatMatchExpiry } from "@/hooks/use-chat-match-expiry"
+import { useQueryClient } from "@tanstack/react-query"
+import type { MatchDto } from "@/lib/server/matches/types"
 import { markThreadSeen } from "@/lib/chat-thread-seen"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { ChatInboxScreen } from "@/components/chat/chat-inbox-screen"
@@ -88,13 +96,61 @@ export function ChatPanel() {
   const activeProfile =
     activeId != null ? getProfileById(activeId, locale, location.position) : undefined
   const activeThread = threads.find((th) => th.profileId === activeId)
+  const matchExpiry = useChatMatchExpiry(activeId)
+  const queryClient = useQueryClient()
+  const invalidateMatches = useInvalidateMatches()
+
+  const sendText = (text: string) => {
+    if (activeId == null || !text.trim()) return
+    const body = text.trim()
+    sendMessage(activeId, body, locale, location.position)
+    refresh()
+
+    void reportMessageSent(activeId).then((result) => {
+      if (!result.ok) return
+      const { payload, matchId } = result
+
+      if (payload.prolonged && payload.newExpiresAt && matchExpiry) {
+        matchExpiry.applyFreeze({
+          expiresAt: payload.newExpiresAt,
+          isFrozen: matchExpiry.isFrozen,
+          matchId,
+        })
+      }
+
+      const systemText = payload.systemMessage ?? (payload.prolonged ? t("bondProlongToast").replace("{hours}", String(payload.addedHours ?? 6)) : null)
+      if (systemText) {
+        appendSystemMessage(activeId, systemText, locale, location.position)
+        refresh()
+      }
+
+      queryClient.setQueryData<MatchDto[]>(MATCHES_QUERY_KEY, (prev) => {
+        if (!prev?.length) return prev
+        const bond = bondFromPayload(payload)
+        return patchMatchInCache(prev, matchId, {
+          bond,
+          ...(payload.newExpiresAt ? { expiresAt: payload.newExpiresAt } : {}),
+        })
+      })
+      patchMatchQueryCache(queryClient, matchId, {
+        bond: bondFromPayload(payload),
+        ...(payload.newExpiresAt ? { expiresAt: payload.newExpiresAt } : {}),
+      })
+      void queryClient.invalidateQueries({ queryKey: matchQueryKey(matchId) })
+      void invalidateMatches()
+      applyGamificationSnapshot(queryClient, payload.gamification)
+    })
+  }
 
   const handleSend = () => {
-    if (activeId == null || !draft.trim()) return
+    if (!draft.trim()) return
     const text = draft.trim()
     setDraft("")
-    sendMessage(activeId, text, locale, location.position)
-    refresh()
+    sendText(text)
+  }
+
+  const handleSendIcebreaker = (text: string) => {
+    sendText(text)
   }
 
   const profileLife = useProfileLife()
@@ -104,10 +160,10 @@ export function ChatPanel() {
   if (activeId != null && activeProfile && !activeThread) {
     return (
       <div className="ttm-page ttm-page--app max-w-lg mx-auto px-6 py-16 text-center">
-        <p className="text-sm text-white/70 font-extralight">{t("chatEmpty")}</p>
+        <p className="text-sm text-muted-foreground font-normal">{t("chatEmpty")}</p>
         <button
           type="button"
-          className="mt-4 text-sm text-indigo-200/80"
+          className="mt-4 text-sm text-primary font-medium"
           onClick={() => setActiveChat(null)}
         >
           {t("chatBack")}
@@ -126,6 +182,7 @@ export function ChatPanel() {
         draft={draft}
         onDraftChange={setDraft}
         onSend={handleSend}
+        onSendText={handleSendIcebreaker}
         composerMuted={isProfileMuted(activeId)}
         labels={{
           back: t("chatBack"),
@@ -161,9 +218,11 @@ export function ChatPanel() {
   return (
     <div className={cn(connectionsPaused && "ttm-chat-life-sleeping")}>
       {connectionsPaused && profileLife && (
-        <div className="mt-3 mb-1 max-w-lg mx-auto w-full px-3 sm:px-4 rounded-2xl border border-white/10 bg-white/[0.03] py-3">
-          <p className="text-[10px] uppercase tracking-[0.2em] text-white/35 mb-1">{t("syncLabel")}</p>
-          <p className="text-[11px] sm:text-xs text-white/70 font-extralight leading-relaxed">
+        <div className="ttm-surface-tile mt-3 mb-1 max-w-lg mx-auto w-full px-3 sm:px-4 rounded-2xl py-3">
+          <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--tile-text-muted)] mb-1 font-medium">
+            {t("syncLabel")}
+          </p>
+          <p className="text-[11px] sm:text-xs text-[var(--tile-text)] font-normal leading-relaxed">
             {profileLife.state === "sleeping" ? t("lifeSleepingBody") : t("lifeArchivedBody")}
           </p>
         </div>
@@ -185,8 +244,9 @@ export function ChatPanel() {
           title: t("tabChat"),
           subtitle: t("chatSubtitle"),
           empty: t("chatEmpty"),
-          emptyTitle: t("chatEmptyTitle"),
-          emptyBody: t("chatEmptyBody"),
+          emptyTitle: t("chatEmptyNoMatchesTitle"),
+          emptyBody: t("chatEmptyNoMatchesBody"),
+          emptyCta: t("chatEmptyNoMatchesCta"),
           urgency: t("chatUrgencyLine"),
           reconnect: t("chatReconnectHint"),
           unread: t("chatUnread"),

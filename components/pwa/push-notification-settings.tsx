@@ -5,9 +5,10 @@ import { useI18n } from "@/lib/i18n"
 import {
   getPushEnabled,
   isPushSupported,
-  requestPushPermission,
   setPushEnabled,
 } from "@/lib/push-notifications"
+import { usePushSubscription } from "@/hooks/use-push-subscription"
+import { sendTestPush } from "@/lib/push-subscribe-client"
 import { trackProductEvent } from "@/lib/analytics-client"
 import { cn } from "@/lib/utils"
 
@@ -25,12 +26,14 @@ export function PushNotificationSettings() {
     }
   }, [])
 
+  const { enablePush } = usePushSubscription(enabled)
+
   const handleToggle = async () => {
     if (!supported) return
     if (!enabled) {
-      const perm = await requestPushPermission()
-      setPermission(perm)
-      if (perm !== "granted") return
+      const ok = await enablePush()
+      setPermission(typeof Notification !== "undefined" ? Notification.permission : "denied")
+      if (!ok) return
       setPushEnabled(true)
       setEnabled(true)
       trackProductEvent("push_enabled")
@@ -38,6 +41,13 @@ export function PushNotificationSettings() {
       setPushEnabled(false)
       setEnabled(false)
       trackProductEvent("push_disabled")
+    }
+  }
+
+  const handleTestPush = async () => {
+    const ok = await sendTestPush()
+    if (!ok && typeof window !== "undefined") {
+      window.alert(t("pushTestFailed"))
     }
   }
 
@@ -69,6 +79,15 @@ export function PushNotificationSettings() {
       >
         {permission === "granted" ? t("pushStatusOn") : t("pushStatusOff")}
       </p>
+      {permission === "granted" && (
+        <button
+          type="button"
+          onClick={() => void handleTestPush()}
+          className="text-xs text-indigo-200/80 hover:text-indigo-100 font-light"
+        >
+          {t("pushTestCta")}
+        </button>
+      )}
     </div>
   )
 }

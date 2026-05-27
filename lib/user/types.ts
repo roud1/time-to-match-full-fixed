@@ -1,0 +1,36 @@
+import type { AchievementListItem, UnlockedAchievement } from "@/lib/gamification/types"
+import type { Interest } from "@/lib/interests/types"
+
+export type User = {
+  id: string
+  email: string
+  name: string
+  freeze_balance: number
+  last_freeze_at: string | null
+  email_verified: boolean
+  photo_verified?: boolean
+  has_push_subscription: boolean
+  profileExpiresAt?: string | null
+  purpose?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  maxDistance?: number
+  interests?: Interest[]
+  interestIds?: number[]
+  xp?: number
+  level?: number
+  xpInLevel?: number
+  xpForNextLevel?: number
+  xpProgress?: number
+  achievements?: UnlockedAchievement[]
+  achievementCatalog?: AchievementListItem[]
+}
+
+export type MeResponse = {
+  user: User
+}
+
+export type BuyFreezesResponse = {
+  success: true
+  newBalance: number
+}

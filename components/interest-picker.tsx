@@ -46,11 +46,11 @@ export function InterestPicker({ value, onChange, error }: InterestPickerProps) 
               disabled={disabled}
               onClick={() => toggle(option.id)}
               className={cn(
-                "px-3 py-1.5 rounded-full text-xs font-light border transition-all",
+                "px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
                 selected
-                  ? "cin-pill-selected"
-                  : "border-foreground/10 bg-foreground/5 text-foreground/70 hover:bg-foreground/10",
-                disabled && "opacity-40 cursor-not-allowed hover:bg-foreground/5"
+                  ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--text-primary)] shadow-sm"
+                  : "border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:border-[var(--accent-soft-border)] hover:bg-[var(--accent-soft-bg)]/70",
+                disabled && "opacity-45 cursor-not-allowed hover:bg-[var(--bg-secondary)]"
               )}
             >
               {option.label}
