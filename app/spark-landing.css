@@ -470,7 +470,7 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   padding: clamp(3rem, 8vw, 5rem) 0;
 }
 
-.spark-landing__section--how {
+.spark-landing__section--rules {
   background: var(--bg-primary);
 }
 
@@ -479,7 +479,8 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   border-block: 1px solid var(--border);
 }
 
-.spark-landing__section--trust {
+.spark-landing__section--trust-strip {
+  padding: clamp(2rem, 5vw, 3rem) 0;
   background: var(--spark-section-muted);
   border-block: 1px solid var(--border);
 }
@@ -503,25 +504,22 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   color: var(--text-secondary);
 }
 
-/* —— How it works (steps) —— */
-.spark-landing__steps-grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+/* —— Rules (3 cards) —— */
+.spark-landing__rules-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-md);
+  margin-top: var(--space-xl);
 }
 
 @media (min-width: 768px) {
-  .spark-landing__steps-grid {
+  .spark-landing__rules-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-lg);
   }
 }
 
-.spark-landing__step-card {
-  position: relative;
+.spark-landing__rule-card {
   background: var(--spark-card-bg);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
@@ -533,23 +531,13 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
 }
 
 @media (hover: hover) {
-  .spark-landing__step-card:hover {
+  .spark-landing__rule-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--shadow-lg);
   }
 }
 
-.spark-landing__step-num {
-  position: absolute;
-  top: var(--space-md);
-  right: var(--space-md);
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  opacity: 0.5;
-}
-
-.spark-landing__step-icon {
+.spark-landing__rule-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -562,7 +550,7 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   margin-bottom: var(--space-md);
 }
 
-.spark-landing__step-title {
+.spark-landing__rule-title {
   margin: 0 0 var(--space-sm);
   font-size: 1.125rem;
   font-weight: 600;
@@ -570,7 +558,7 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   color: var(--text-primary);
 }
 
-.spark-landing__step-text {
+.spark-landing__rule-text {
   margin: 0;
   font-size: 0.9375rem;
   font-weight: 300;
@@ -773,63 +761,58 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* —— Trust section —— */
-.spark-landing__trust-grid {
+/* —— Trust strip —— */
+.spark-landing__trust-strip {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-sm);
 }
 
-@media (min-width: 768px) {
-  .spark-landing__trust-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-lg);
+@media (min-width: 640px) {
+  .spark-landing__trust-strip {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-md);
   }
 }
 
-.spark-landing__trust-card {
-  text-align: center;
-  padding: var(--space-lg);
+.spark-landing__trust-strip-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex: 1;
+  min-width: 0;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-full);
   background: var(--spark-card-bg);
-  border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-@media (hover: hover) {
-  .spark-landing__trust-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
-  }
-}
-
-.spark-landing__trust-icon {
-  display: block;
-  font-size: 1.75rem;
-  line-height: 1;
-  margin-bottom: var(--space-md);
-}
-
-.spark-landing__trust-title {
-  margin: 0 0 var(--space-sm);
-  font-size: 1.0625rem;
-  font-weight: 600;
-  line-height: 1.35;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.4;
   color: var(--text-primary);
 }
 
-.spark-landing__trust-text {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 300;
-  line-height: 1.55;
-  color: var(--text-secondary);
+@media (min-width: 640px) {
+  .spark-landing__trust-strip-item {
+    flex: 0 1 auto;
+  }
+}
+
+.spark-landing__trust-strip-icon {
+  font-size: 1.125rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.spark-landing__trust-strip-label {
+  text-align: center;
 }
 
 /* —— Footer —— */
@@ -901,8 +884,7 @@ html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   }
 
   .spark-landing__cta:hover,
-  .spark-landing__step-card:hover,
-  .spark-landing__trust-card:hover,
+  .spark-landing__rule-card:hover,
   .spark-landing__showcase-cta:hover {
     transform: none;
   }
