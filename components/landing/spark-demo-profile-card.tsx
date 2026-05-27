@@ -19,16 +19,18 @@ export type SparkDemoProfile = {
 type SparkDemoProfileCardProps = {
   profile: SparkDemoProfile
   className?: string
+  /** Allow hover effects in marquee (default: decorative only). */
+  interactive?: boolean
 }
 
-export function SparkDemoProfileCard({ profile, className }: SparkDemoProfileCardProps) {
+export function SparkDemoProfileCard({ profile, className, interactive }: SparkDemoProfileCardProps) {
   const tier = getCompatibilityTier(profile.compatibility)
 
   return (
     <article
-      className={cn("spark-demo-card", className)}
-      aria-hidden
-      tabIndex={-1}
+      className={cn("spark-demo-card", interactive && "spark-demo-card--interactive", className)}
+      aria-hidden={interactive ? undefined : true}
+      tabIndex={interactive ? undefined : -1}
     >
       <div
         className="spark-demo-card__photo"

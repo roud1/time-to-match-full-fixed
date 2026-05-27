@@ -23,7 +23,7 @@ export function SparkReveal({
   const motionProps = {
     id,
     className: cn("spark-reveal", className),
-    initial: reduce ? false : { opacity: 0, y: 28 },
+    initial: reduce ? false : { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: "-60px" as const },
     transition: {

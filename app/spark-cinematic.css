@@ -1,0 +1,423 @@
+/* Cinematic landing — motion, depth, atmosphere */
+
+.spark-landing--cinematic {
+  position: relative;
+}
+
+/* —— Floating particles (page-wide) —— */
+.spark-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.spark-particles__dot {
+  position: absolute;
+  bottom: -10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.95) 0%, rgba(236, 72, 153, 0.4) 55%, transparent 100%);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.45);
+  animation: spark-particle-rise linear infinite;
+}
+
+html[data-theme="dark"] .spark-particles__dot {
+  background: radial-gradient(circle, rgba(94, 234, 212, 0.9) 0%, rgba(167, 139, 250, 0.35) 55%, transparent 100%);
+  box-shadow: 0 0 10px rgba(94, 234, 212, 0.35);
+}
+
+@keyframes spark-particle-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-110vh) translateX(12px);
+    opacity: 0;
+  }
+}
+
+/* —— Hero cinematic background —— */
+.spark-landing__hero--cinematic {
+  isolation: isolate;
+}
+
+.spark-landing__hero--cinematic .spark-landing__hero-bg {
+  display: none;
+}
+
+.spark-hero-cinematic {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.spark-hero-cinematic__layer {
+  position: absolute;
+  inset: -20%;
+  will-change: transform;
+}
+
+.spark-hero-cinematic__mesh {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    125deg,
+    #4c1d95 0%,
+    #7c3aed 22%,
+    #ec4899 48%,
+    #fbbf24 72%,
+    #f3e8ff 100%
+  );
+  background-size: 240% 240%;
+  animation: spark-hero-mesh 14s ease-in-out infinite alternate;
+}
+
+html[data-theme="dark"] .spark-hero-cinematic__mesh {
+  background: linear-gradient(
+    125deg,
+    #0f0a1a 0%,
+    #312e81 25%,
+    #831843 50%,
+    #b45309 75%,
+    #1e1b4b 100%
+  );
+}
+
+.spark-hero-cinematic__wave {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: spark-hero-wave 18s ease-in-out infinite;
+}
+
+.spark-hero-cinematic__wave--1 {
+  width: 70%;
+  height: 55%;
+  top: 10%;
+  left: -15%;
+  background: rgba(236, 72, 153, 0.5);
+}
+
+.spark-hero-cinematic__wave--2 {
+  width: 55%;
+  height: 50%;
+  right: -10%;
+  top: 25%;
+  background: rgba(124, 58, 237, 0.45);
+  animation-delay: -6s;
+}
+
+.spark-hero-cinematic__wave--3 {
+  width: 45%;
+  height: 40%;
+  left: 25%;
+  bottom: 5%;
+  background: rgba(251, 191, 36, 0.4);
+  animation-delay: -11s;
+}
+
+@keyframes spark-hero-mesh {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes spark-hero-wave {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(4%, -6%) scale(1.08);
+  }
+}
+
+.spark-hero-cinematic__vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 75% 65% at 50% 45%, transparent 35%, rgba(8, 6, 14, 0.55) 100%);
+  pointer-events: none;
+}
+
+html[data-theme="dark"] .spark-hero-cinematic__vignette {
+  background: radial-gradient(ellipse 75% 65% at 50% 45%, transparent 30%, rgba(0, 0, 0, 0.72) 100%);
+}
+
+.spark-hero-cinematic__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.spark-landing__hero--cinematic .spark-landing__hero-inner {
+  position: relative;
+  z-index: 3;
+  will-change: transform, opacity;
+}
+
+.spark-landing__hero--cinematic .spark-landing__hero-title-line {
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .spark-landing__hero--cinematic .spark-landing__hero-title-line {
+  color: #fafafa;
+}
+
+.spark-landing__hero--cinematic .spark-landing__hero-sub {
+  color: color-mix(in srgb, #fff 75%, var(--text-secondary));
+}
+
+/* CTA glow + pulse */
+.spark-landing__cta--glow {
+  position: relative;
+  isolation: isolate;
+  animation: spark-cta-pulse 2.8s ease-in-out infinite;
+}
+
+.spark-landing__cta-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    120deg,
+    rgba(251, 191, 36, 0.9),
+    rgba(236, 72, 153, 0.9),
+    rgba(13, 148, 136, 0.9),
+    rgba(251, 191, 36, 0.9)
+  );
+  background-size: 300% 300%;
+  animation: spark-cta-ring 4s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+  opacity: 0.85;
+}
+
+@keyframes spark-cta-ring {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 300% 50%;
+  }
+}
+
+@keyframes spark-cta-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 6px 28px -6px var(--spark-cta-glow),
+      0 0 0 0 rgba(236, 72, 153, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 12px 40px -8px var(--spark-cta-glow),
+      0 0 28px 4px rgba(236, 72, 153, 0.25);
+  }
+}
+
+/* —— 3D tilt wrapper —— */
+.spark-tilt-card {
+  height: 100%;
+}
+
+.spark-tilt-card__inner {
+  height: 100%;
+  border-radius: inherit;
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  will-change: transform;
+}
+
+/* —— Rule cards with tilt —— */
+.spark-landing__rule-card--tilt {
+  height: 100%;
+  transition: border-color 0.3s ease;
+}
+
+@media (hover: hover) {
+  .spark-landing__rule-card:not(.spark-landing__rule-card--tilt):hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* —— Showcase marquee —— */
+.spark-landing__container--showcase {
+  overflow: hidden;
+}
+
+.spark-showcase-marquee__viewport {
+  overflow: hidden;
+  margin-inline: calc(-1 * var(--space-md));
+  padding-block: var(--space-md);
+}
+
+.spark-showcase-marquee__track {
+  display: flex;
+  width: max-content;
+  gap: var(--space-lg);
+  animation: spark-marquee 45s linear infinite;
+  will-change: transform;
+}
+
+.spark-showcase-marquee__item {
+  flex: 0 0 auto;
+  width: min(260px, 72vw);
+}
+
+.spark-showcase-marquee__fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(120px, 12vw);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.spark-showcase-marquee__fade--left {
+  left: 0;
+  background: linear-gradient(90deg, var(--bg-primary) 0%, transparent 100%);
+}
+
+.spark-showcase-marquee__fade--right {
+  right: 0;
+  background: linear-gradient(270deg, var(--bg-primary) 0%, transparent 100%);
+}
+
+.spark-showcase-marquee {
+  position: relative;
+}
+
+@keyframes spark-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.spark-demo-card--interactive {
+  pointer-events: auto;
+  user-select: none;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.group\/card:hover .spark-demo-card--interactive {
+  box-shadow: var(--shadow-lg);
+}
+
+.spark-landing__showcase-track--scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+/* —— Trust glass cards —— */
+.spark-landing__section--trust-glass {
+  padding: clamp(3rem, 8vw, 5rem) 0;
+  background: color-mix(in srgb, var(--spark-section-muted) 70%, transparent);
+  border-block: 1px solid var(--border);
+}
+
+.spark-trust-glass__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .spark-trust-glass__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+}
+
+.spark-trust-glass {
+  height: 100%;
+  padding: var(--space-lg);
+  text-align: center;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--spark-card-bg) 72%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--border) 90%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+.spark-trust-glass__icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: var(--space-md);
+  border-radius: 50%;
+  color: var(--spark-accent-line);
+  background: var(--accent-soft-bg);
+  border: 1px solid var(--accent-soft-border);
+}
+
+.spark-trust-svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.spark-trust-glass__label {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text-primary);
+}
+
+/* Global transitions on landing interactives */
+.spark-landing a,
+.spark-landing button {
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spark-particles,
+  .spark-hero-cinematic__mesh,
+  .spark-hero-cinematic__wave,
+  .spark-showcase-marquee__track,
+  .spark-landing__cta--glow,
+  .spark-landing__cta-ring {
+    animation: none !important;
+  }
+
+  .spark-tilt-card__inner {
+    transform: none !important;
+  }
+}
