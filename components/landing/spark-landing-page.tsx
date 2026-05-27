@@ -1,9 +1,9 @@
 import { Navbar } from "@/components/navbar"
 import { SparkLandingAmbient } from "@/components/landing/spark-landing-ambient"
 import { SparkLandingHero } from "@/components/landing/spark-landing-hero"
-import { SparkLandingRules } from "@/components/landing/spark-landing-rules"
+import { SparkLandingHow } from "@/components/landing/spark-landing-how"
 import { SparkLandingShowcase } from "@/components/landing/spark-landing-showcase"
-import { SparkLandingWhy } from "@/components/landing/spark-landing-why"
+import { SparkLandingTrust } from "@/components/landing/spark-landing-trust"
 import { SparkLandingFooter } from "@/components/landing/spark-landing-footer"
 
 export function SparkLandingPage() {
@@ -12,9 +12,9 @@ export function SparkLandingPage() {
       <SparkLandingAmbient />
       <Navbar variant="landing-minimal" />
       <SparkLandingHero />
-      <SparkLandingRules />
+      <SparkLandingHow />
       <SparkLandingShowcase />
-      <SparkLandingWhy />
+      <SparkLandingTrust />
       <SparkLandingFooter />
     </main>
   )

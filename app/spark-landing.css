@@ -181,39 +181,162 @@ html[data-theme="dark"] .spark-landing__gradient-mesh {
   justify-content: center;
   padding: calc(5rem + env(safe-area-inset-top, 0px)) var(--space-md) var(--space-xl);
   text-align: center;
+  overflow: hidden;
+}
+
+.spark-landing__hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    155deg,
+    #ffe4e6 0%,
+    #f3e8ff 42%,
+    #e0f2fe 78%,
+    color-mix(in srgb, var(--bg-primary) 40%, #f3e8ff) 100%
+  );
+}
+
+html[data-theme="dark"] .spark-landing__hero-bg {
+  background: linear-gradient(
+    160deg,
+    #1e1b4b 0%,
+    #312e81 45%,
+    #0f172a 85%,
+    var(--bg-primary) 100%
+  );
 }
 
 .spark-landing__hero-inner {
+  position: relative;
+  z-index: 2;
   width: 100%;
-  max-width: 40rem;
+  max-width: 42rem;
   margin: 0 auto;
 }
 
-.spark-landing__headline {
+.spark-landing__hero-title {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
   font-weight: 700;
-  font-size: 2rem;
-  line-height: 1.15;
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  line-height: 1.12;
   letter-spacing: -0.03em;
 }
 
-@media (min-width: 768px) {
-  .spark-landing__headline {
-    font-size: 3rem;
-  }
-}
-
-.spark-landing__headline--primary {
+.spark-landing__hero-title-line {
+  display: block;
   color: var(--text-primary);
 }
 
-.spark-landing__headline--accent {
-  margin-top: 0.15em;
+.spark-landing__hero-title-line--accent {
   color: var(--spark-accent-line);
 }
 
-html[data-theme="dark"] .spark-landing__headline--accent {
+html[data-theme="dark"] .spark-landing__hero-title-line--accent {
   color: #5eead4;
+}
+
+/* Floating profile cards in hero */
+.spark-hero-floats {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .spark-hero-floats {
+    display: block;
+  }
+}
+
+.spark-hero-float {
+  position: absolute;
+  width: 8.5rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--spark-card-bg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  opacity: 0.92;
+}
+
+.spark-hero-float--animate {
+  animation: spark-hero-float 5.5s ease-in-out infinite;
+}
+
+.spark-hero-float--left {
+  left: 4%;
+  top: 22%;
+  transform: rotate(-10deg);
+}
+
+.spark-hero-float--right {
+  right: 5%;
+  top: 18%;
+  transform: rotate(8deg);
+}
+
+.spark-hero-float--back {
+  right: 18%;
+  bottom: 16%;
+  width: 7rem;
+  transform: rotate(4deg);
+  opacity: 0.75;
+}
+
+.spark-hero-float__photo {
+  position: relative;
+  height: 6.5rem;
+  overflow: hidden;
+}
+
+.spark-hero-float__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+.spark-hero-float__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 6px 8px;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+.spark-hero-float__pct {
+  color: var(--success);
+  font-weight: 500;
+}
+
+@keyframes spark-hero-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--spark-float-rotate, -8deg));
+  }
+  50% {
+    transform: translateY(-12px) rotate(var(--spark-float-rotate, -8deg));
+  }
+}
+
+.spark-hero-float--left.spark-hero-float--animate {
+  --spark-float-rotate: -10deg;
+}
+
+.spark-hero-float--right.spark-hero-float--animate {
+  --spark-float-rotate: 8deg;
+}
+
+.spark-hero-float--back.spark-hero-float--animate {
+  --spark-float-rotate: 4deg;
 }
 
 .spark-landing__hero-sub {
@@ -347,8 +470,8 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   padding: clamp(3rem, 8vw, 5rem) 0;
 }
 
-.spark-landing__section--rules {
-  background: transparent;
+.spark-landing__section--how {
+  background: var(--bg-primary);
 }
 
 .spark-landing__section--showcase {
@@ -356,7 +479,7 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   border-block: 1px solid var(--border);
 }
 
-.spark-landing__section--why {
+.spark-landing__section--trust {
   background: var(--spark-section-muted);
   border-block: 1px solid var(--border);
 }
@@ -380,21 +503,25 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   color: var(--text-secondary);
 }
 
-/* —— Rule cards —— */
-.spark-landing__rules-grid {
+/* —— How it works (steps) —— */
+.spark-landing__steps-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-md);
 }
 
 @media (min-width: 768px) {
-  .spark-landing__rules-grid {
+  .spark-landing__steps-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: var(--space-lg);
   }
 }
 
-.spark-landing__rule-card {
+.spark-landing__step-card {
+  position: relative;
   background: var(--spark-card-bg);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
@@ -406,13 +533,23 @@ html[data-theme="dark"] .spark-landing__headline--accent {
 }
 
 @media (hover: hover) {
-  .spark-landing__rule-card:hover {
+  .spark-landing__step-card:hover {
     transform: translateY(-6px);
     box-shadow: var(--shadow-lg);
   }
 }
 
-.spark-landing__rule-icon {
+.spark-landing__step-num {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.spark-landing__step-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -425,7 +562,7 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   margin-bottom: var(--space-md);
 }
 
-.spark-landing__rule-title {
+.spark-landing__step-title {
   margin: 0 0 var(--space-sm);
   font-size: 1.125rem;
   font-weight: 600;
@@ -433,7 +570,7 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   color: var(--text-primary);
 }
 
-.spark-landing__rule-text {
+.spark-landing__step-text {
   margin: 0;
   font-size: 0.9375rem;
   font-weight: 300;
@@ -636,41 +773,50 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
-/* —— Why section —— */
-.spark-landing__why-grid {
+/* —— Trust section —— */
+.spark-landing__trust-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 @media (min-width: 768px) {
-  .spark-landing__why-grid {
+  .spark-landing__trust-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-xl);
+    gap: var(--space-lg);
   }
 }
 
-.spark-landing__why-item {
+.spark-landing__trust-card {
   text-align: center;
-  padding: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--spark-card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.spark-landing__why-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+@media (hover: hover) {
+  .spark-landing__trust-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.spark-landing__trust-icon {
+  display: block;
+  font-size: 1.75rem;
+  line-height: 1;
   margin-bottom: var(--space-md);
-  font-size: 1.25rem;
-  font-weight: 600;
-  border-radius: 50%;
-  color: var(--spark-accent-line);
-  background: var(--accent-soft-bg);
-  border: 1px solid var(--accent-soft-border);
 }
 
-.spark-landing__why-title {
+.spark-landing__trust-title {
   margin: 0 0 var(--space-sm);
   font-size: 1.0625rem;
   font-weight: 600;
@@ -678,14 +824,12 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   color: var(--text-primary);
 }
 
-.spark-landing__why-text {
+.spark-landing__trust-text {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 300;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--text-secondary);
-  max-width: 18rem;
-  margin-inline: auto;
 }
 
 /* —— Footer —— */
@@ -757,12 +901,14 @@ html[data-theme="dark"] .spark-landing__headline--accent {
   }
 
   .spark-landing__cta:hover,
-  .spark-landing__rule-card:hover,
+  .spark-landing__step-card:hover,
+  .spark-landing__trust-card:hover,
   .spark-landing__showcase-cta:hover {
     transform: none;
   }
 
-  .spark-landing__showcase-item:hover .spark-demo-card {
-    transform: none;
+  .spark-landing__showcase-item:hover .spark-demo-card,
+  .spark-hero-float--animate {
+    animation: none;
   }
 }
