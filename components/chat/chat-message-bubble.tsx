@@ -133,7 +133,7 @@ export function ChatMessageBubble({
           }}
           onDragEnd={handleDragEnd}
           className={cn(
-            "ttm-chat-bubble relative px-4 py-3 rounded-[1.4rem] text-[15px] leading-relaxed touch-pan-y cursor-grab active:cursor-grabbing",
+            "ttm-chat-bubble relative rounded-[1.4rem] text-[15px] leading-relaxed touch-pan-y cursor-grab active:cursor-grabbing",
             isMe ? "ttm-chat-bubble--me rounded-br-md text-white" : "ttm-chat-bubble--them rounded-bl-md",
             arriveSurge && "ttm-chat-bubble--surge",
             highSync && !isMe && "shadow-[0_16px_48px_-28px_rgba(180,195,255,0.25)]"

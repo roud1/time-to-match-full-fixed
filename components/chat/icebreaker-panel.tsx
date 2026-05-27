@@ -35,10 +35,7 @@ export function IcebreakerPanel({ onPick, onDismiss, className }: IcebreakerPane
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 6 }}
-        className={cn(
-          "mx-auto w-full max-w-lg px-4 pb-2",
-          className
-        )}
+        className={cn("w-full", className)}
       >
         <div
           className={cn(

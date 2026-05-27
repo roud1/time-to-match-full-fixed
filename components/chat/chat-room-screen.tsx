@@ -5,10 +5,8 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import type { ChatThread } from "@/lib/social-store"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { markThreadSeen } from "@/lib/chat-thread-seen"
-import { ChatProfileAvatar } from "@/components/chat/chat-profile-avatar"
 import { ChatTypingIndicator } from "@/components/chat/chat-typing-indicator"
 import { ChatMessageList } from "@/components/chat/chat-message-list"
-import { ChatComposer } from "@/components/chat/chat-composer"
 import { SwipeProfileDetailScreen } from "@/components/app/swipe-profile-detail-screen"
 import { useChatScrollEnd } from "@/hooks/use-chat-scroll-end"
 import { useI18n } from "@/lib/i18n"
@@ -22,7 +20,6 @@ import { TensionVeil } from "@/components/emotional-consciousness/tension-veil"
 import { getPeerTrustSignals } from "@/lib/demo-trust-signals"
 import { isEmotionallyReachable, resolveEmotionalPresence } from "@/lib/chat-presence"
 import { useEmotionalPresenceSystem } from "@/hooks/use-emotional-presence-system"
-import { EmotionalPresenceBadge } from "@/components/world/emotional-presence-badge"
 import { EmotionalPresenceShell } from "@/components/presence/emotional-presence-shell"
 import { SilentPresencePulse } from "@/components/presence/silent-presence-pulse"
 import { PresenceInsightWhisper } from "@/components/presence/presence-insight-whisper"
@@ -70,11 +67,13 @@ import {
   buildSyncShareMoment,
   deriveLiveRelationshipState,
 } from "@/lib/shared"
-import { ChatMatchExpiryBar } from "@/components/chat/chat-match-expiry-bar"
 import { MatchUrgencySnackbar } from "@/components/chat/match-urgency-snackbar"
 import { useChatMatchExpiry } from "@/hooks/use-chat-match-expiry"
 import { useMatchBond } from "@/hooks/use-match-bond"
-import { BondMeter } from "@/components/chat/bond-meter"
+import { ChatArea } from "@/components/chat/chat-area"
+import { ChatFooter } from "@/components/chat/chat-footer"
+import { ChatMessagesPane } from "@/components/chat/chat-messages-pane"
+import { ChatRoomHeader } from "@/components/chat/chat-room-header"
 import { IcebreakerPanel } from "@/components/chat/icebreaker-panel"
 import { cn } from "@/lib/utils"
 
@@ -341,6 +340,56 @@ export function ChatRoomScreen({
   const matchExpiry = useChatMatchExpiry(profile.id)
   const bond = useMatchBond(profile.id, matchExpiry?.matchId ?? null)
 
+  const messageList = (
+    <ChatMessageList
+      messages={thread.messages}
+      locale={locale}
+      labels={labels.bubble}
+      syncTier={syncMetrics?.tier}
+      highlightLatest={justSent}
+      onReplyTo={(snippet) => setReplySnippet(snippet)}
+    />
+  )
+
+  const typingBlock = showTyping ? (
+    <div className="mt-3">
+      <ChatTypingIndicator />
+    </div>
+  ) : null
+
+  const chatFooter = (
+    <ChatFooter
+      draft={draft}
+      onDraftChange={onDraftChange}
+      onSend={() => {
+        onSend()
+        setJustSent(true)
+        setSyncSurge(true)
+        emitWorldPulse("sync")
+      }}
+      replySnippet={replySnippet}
+      onClearReply={() => setReplySnippet(null)}
+      voiceSeed={thread.profileId * 7919}
+      disabled={composerMuted}
+      disabledHint={labels.composerMutedHint}
+      labels={labels.composer}
+      beforeComposer={
+        showIcebreakers && onSendText ? (
+          <IcebreakerPanel
+            onPick={(text) => {
+              onSendText(text)
+              setIcebreakerDismissed(true)
+            }}
+            onDismiss={() => {
+              setIcebreakerDismissed(true)
+              focusComposer()
+            }}
+          />
+        ) : null
+      }
+    />
+  )
+
   return (
     <>
     {matchExpiry && (
@@ -408,105 +457,34 @@ export function ChatRoomScreen({
         }}
       />
 
-      <header className="shrink-0 z-20 flex items-center gap-2 px-3 py-2 border-b border-white/[0.08] bg-[#050506]/88 backdrop-blur-2xl">
-        <button
-          type="button"
-          onClick={onBack}
-          className="w-10 h-10 shrink-0 rounded-xl border border-white/12 bg-white/[0.04] flex items-center justify-center touch-manipulation active:scale-95 transition-transform"
-          aria-label={labels.back}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setProfileOpen(true)}
-          className="flex flex-1 min-w-0 items-center gap-3 rounded-2xl px-1 py-1 text-left touch-manipulation transition-all hover:bg-white/[0.04] active:scale-[0.99]"
-          aria-label={t("swipeProfileOpenAria")}
-        >
-          <ChatProfileAvatar
-            src={profile.image}
-            name={profile.name}
-            size="sm"
-            showOnline={!presenceSystem}
+      <ChatArea
+        header={
+          <ChatRoomHeader
+            profile={profile}
+            labels={{ back: labels.back, safetyAria: labels.safetyAria }}
+            statusLine={statusLine}
+            showTyping={showTyping}
+            isReachable={isReachable}
             emotionalPresence={emotionalPresence}
-            resonance={presenceSystem?.resonance ?? null}
-            sharedPresence={presenceSystem?.shared.active}
+            presenceSystem={presenceSystem}
             syncMetrics={syncMetrics}
-            aiBoost={aiEnhanced}
+            aiEnhanced={aiEnhanced}
             syncSurge={syncSurge}
             relationshipPersonality={identity?.personality}
             evolutionProgress={identity?.evolutionProgress}
+            connectionView={connectionView}
+            analysis={analysis}
+            bond={bond}
+            shareMoment={shareMoment}
+            onBack={onBack}
+            onOpenProfile={() => setProfileOpen(true)}
+            onOpenSafety={() => setSafetyOpen(true)}
+            onOpenShare={() => setShareOpen(true)}
+            reduceMotion={reduce}
           />
-          <div className="min-w-0 flex-1">
-            <p className="font-extralight text-[16px] leading-tight truncate text-white/95">
-              {profile.name}
-              {profile.age > 0 && <span className="text-white/45">, {profile.age}</span>}
-            </p>
-            <BondMeter bond={bond} className="mt-1 pr-1" />
-            <p
-              className={cn(
-                "text-[11px] font-extralight flex items-center gap-1.5 mt-0.5 truncate",
-                isReachable ? "text-indigo-200/80" : "text-white/40"
-              )}
-            >
-              {!showTyping && emotionalPresence && (
-                <EmotionalPresenceBadge presence={emotionalPresence} compact className="shrink-0" />
-              )}
-              {showTyping && (
-                <span className="relative flex h-1.5 w-1.5 shrink-0">
-                  {!reduce && (
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-30" />
-                  )}
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-400/90" />
-                </span>
-              )}
-              <span className="truncate">{statusLine}</span>
-              {syncMetrics && (
-                <span className="text-white/35 tabular-nums">· SYNC {syncMetrics.syncPercent}%</span>
-              )}
-            </p>
-          </div>
-        </button>
-
-        {connectionView && (
-          <RelationshipStateBadge view={connectionView} analysis={analysis} className="hidden sm:inline-flex" />
-        )}
-
-        <ChatMatchExpiryBar profileId={profile.id} compact className="max-w-[min(100%,11.5rem)] sm:max-w-none" />
-
-        <button
-          type="button"
-          disabled={!shareMoment}
-          onClick={() => setShareOpen(true)}
-          className="w-10 h-10 shrink-0 rounded-xl border border-white/12 bg-white/[0.04] flex items-center justify-center touch-manipulation text-white/70 hover:border-indigo-400/30 disabled:opacity-30"
-          aria-label={t("shareMomentCta")}
-        >
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-          </svg>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setSafetyOpen(true)}
-          className="w-10 h-10 shrink-0 rounded-xl border border-white/12 bg-white/[0.04] flex items-center justify-center touch-manipulation active:scale-95 transition-transform text-white/80 hover:border-white/25"
-          aria-label={labels.safetyAria}
-        >
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-            />
-          </svg>
-        </button>
-      </header>
-
-      {connectionView ? (
+        }
+        body={
+          connectionView ? (
         <TemporalAtmosphereLayer time={emotionalTime} className="flex flex-col flex-1 min-h-0">
         <EmotionalPresenceShell system={presenceSystem} className="flex flex-col flex-1 min-h-0">
         <CompanionSilentLayer companion={companion} className="flex flex-col flex-1 min-h-0">
@@ -590,63 +568,55 @@ export function ChatRoomScreen({
               />
             )
           )}
-          <div
-            ref={scrollRef}
-            className={cn(
-              "flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 md:px-5 ttm-chat-scroll relative",
-              syncMetrics && "ttm-chat-emotional-space"
-            )}
-            style={{ WebkitOverflowScrolling: "touch", minHeight: "12rem" }}
-          >
-            {emotionalTime && <OfflinePresenceGlow presence={emotionalTime.offline} />}
-            <ConnectionPulseLayer syncMetrics={syncMetrics} surge={syncSurge} className="p16-pulse-bridge" />
-            {syncMetrics && aura && (
+          <ChatMessagesPane
+            scrollRef={scrollRef}
+            className={cn(syncMetrics && "ttm-chat-emotional-space")}
+            innerClassName="md:max-w-2xl lg:max-w-none"
+            overlay={
               <>
-                <ConnectionAura aura={aura} />
-                <AmbientChatBackground experience={experience} syncMetrics={syncMetrics} />
+                {emotionalTime && <OfflinePresenceGlow presence={emotionalTime.offline} />}
+                <ConnectionPulseLayer syncMetrics={syncMetrics} surge={syncSurge} className="p16-pulse-bridge" />
+                {syncMetrics && aura && (
+                  <>
+                    <ConnectionAura aura={aura} />
+                    <AmbientChatBackground experience={experience} syncMetrics={syncMetrics} />
+                  </>
+                )}
               </>
-            )}
-            <div className="relative z-[1] mx-auto w-full max-w-lg md:max-w-2xl lg:max-w-none pb-4 pt-3">
-              {presenceSystem && (
-                <SilentPresencePulse silent={presenceSystem.silent} className="mb-3" />
-              )}
-              {companion?.moment && (
-                <CompanionMomentHalo moment={companion.moment} className="mb-3" />
-              )}
-              {identity && moments.length > 0 && (
-                <div className="mb-4 grid gap-2">
-                  {moments
-                    .filter((m) => m.reached && m.importance >= 0.85)
-                    .slice(-1)
-                    .map((m) => (
-                      <MemoryCard key={m.id} moment={m} locale={locale} featured />
-                    ))}
-                </div>
-              )}
-              {(scrollInsight || (aiLoading && justSent)) && (
-                <div className="mb-4">
-                  <EmotionalInsightCard
-                    insight={scrollInsight ?? ""}
-                    loading={aiLoading && !scrollInsight}
-                  />
-                </div>
-              )}
-              <ChatMessageList
-                messages={thread.messages}
-                locale={locale}
-                labels={labels.bubble}
-                syncTier={syncMetrics?.tier}
-                highlightLatest={justSent}
-                onReplyTo={(snippet) => setReplySnippet(snippet)}
-              />
-              {showTyping && (
-                <div className="mt-4">
-                  <ChatTypingIndicator />
-                </div>
-              )}
-              <CinematicMemoryArchive profileId={profile.id} limit={3} className="mt-8" />
-            </div>
-          </div>
+            }
+            before={
+              <>
+                {presenceSystem && <SilentPresencePulse silent={presenceSystem.silent} className="mb-3" />}
+                {companion?.moment && <CompanionMomentHalo moment={companion.moment} className="mb-3" />}
+                {identity && moments.length > 0 && (
+                  <div className="mb-4 grid gap-2">
+                    {moments
+                      .filter((m) => m.reached && m.importance >= 0.85)
+                      .slice(-1)
+                      .map((m) => (
+                        <MemoryCard key={m.id} moment={m} locale={locale} featured />
+                      ))}
+                  </div>
+                )}
+                {(scrollInsight || (aiLoading && justSent)) && (
+                  <div className="mb-4">
+                    <EmotionalInsightCard
+                      insight={scrollInsight ?? ""}
+                      loading={aiLoading && !scrollInsight}
+                    />
+                  </div>
+                )}
+              </>
+            }
+            after={
+              <>
+                {typingBlock}
+                <CinematicMemoryArchive profileId={profile.id} limit={3} className="mt-6" />
+              </>
+            }
+          >
+            {messageList}
+          </ChatMessagesPane>
         </RelationshipRealitySpace>
         </SharedSyncSpace>
         </IntelligentSpaceLayer>
@@ -663,28 +633,14 @@ export function ChatRoomScreen({
               <RelationshipInsightPanel messages={thread.messages} record={connectionRecord} />
             </div>
           )}
-          <div
-            ref={scrollRef}
-            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden px-4 ttm-chat-scroll relative"
-            style={{ WebkitOverflowScrolling: "touch" }}
-          >
-            <div className="relative z-[1] mx-auto w-full max-w-lg pb-4 pt-3">
-              <ChatMessageList
-                messages={thread.messages}
-                locale={locale}
-                labels={labels.bubble}
-                highlightLatest={justSent}
-                onReplyTo={(snippet) => setReplySnippet(snippet)}
-              />
-              {showTyping && (
-                <div className="mt-4">
-                  <ChatTypingIndicator />
-                </div>
-              )}
-            </div>
-          </div>
+          <ChatMessagesPane scrollRef={scrollRef} after={typingBlock}>
+            {messageList}
+          </ChatMessagesPane>
         </>
-      )}
+      )
+        }
+        footer={chatFooter}
+      />
 
       <AnimatePresence>
         {shareOpen && shareMoment && (
@@ -702,36 +658,6 @@ export function ChatRoomScreen({
         )}
       </AnimatePresence>
 
-      <div className="ttm-chat-composer-wrap shrink-0 relative z-10">
-        {showIcebreakers && onSendText && (
-          <IcebreakerPanel
-            onPick={(text) => {
-              onSendText(text)
-              setIcebreakerDismissed(true)
-            }}
-            onDismiss={() => {
-              setIcebreakerDismissed(true)
-              focusComposer()
-            }}
-          />
-        )}
-        <ChatComposer
-          draft={draft}
-          onDraftChange={onDraftChange}
-          onSend={() => {
-            onSend()
-            setJustSent(true)
-            setSyncSurge(true)
-            emitWorldPulse("sync")
-          }}
-          replySnippet={replySnippet}
-          onClearReply={() => setReplySnippet(null)}
-          voiceSeed={thread.profileId * 7919}
-          disabled={composerMuted}
-          disabledHint={labels.composerMutedHint}
-          labels={labels.composer}
-        />
-      </div>
     </div>
     </>
   )

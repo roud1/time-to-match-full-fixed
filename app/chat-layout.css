@@ -1,0 +1,144 @@
+/**
+ * Chat layout shell — spacing and structure only.
+ * Emotional/atmosphere styles stay in chat-experience.css.
+ */
+
+.ttm-chat-area {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.ttm-chat-area__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+  z-index: 20;
+  padding: 12px var(--space-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(5, 5, 6, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.ttm-chat-area__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+
+.ttm-chat-area__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--space-md);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.ttm-chat-area__scroll-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+  padding-bottom: var(--space-sm);
+}
+
+.ttm-chat-area__footer {
+  flex-shrink: 0;
+  z-index: 10;
+  margin: 0;
+  padding: 0;
+}
+
+.ttm-chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.ttm-chat-system-message {
+  margin: var(--space-md) 0;
+  max-width: min(92%, 18rem);
+  margin-inline: auto;
+}
+
+.ttm-chat-bubble {
+  padding: var(--space-sm) 14px;
+  font-weight: 200;
+  letter-spacing: 0.01em;
+}
+
+.ttm-chat-composer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, transparent, rgba(5, 5, 6, 0.92) 24%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.ttm-chat-composer__inner {
+  width: 100%;
+  max-width: 32rem;
+  margin-inline: auto;
+  padding: 10px var(--space-md) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ttm-chat-composer__row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+
+.ttm-chat-composer__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  max-height: 8rem;
+  resize: none;
+  border-radius: var(--radius-md);
+  padding: 12px var(--space-md);
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 1.45;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: inherit;
+  outline: none;
+}
+
+.ttm-chat-composer__input:focus {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.ttm-chat-composer__input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.55;
+}
+
+.ttm-chat-icebreakers {
+  padding: 0 var(--space-md) var(--space-sm);
+  max-width: 32rem;
+  margin-inline: auto;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-chat-bubble--surge {
+    animation: none !important;
+  }
+}

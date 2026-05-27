@@ -65,8 +65,7 @@ export function ChatComposer({
   }
 
   return (
-    <div className="border-t border-white/10 bg-black/40 backdrop-blur-2xl safe-area-pb shadow-[0_-16px_48px_-24px_rgba(0,0,0,0.85)]">
-      <div className="mx-auto w-full max-w-lg px-4 pt-2.5 pb-3 space-y-2 relative">
+    <div className="ttm-chat-composer__inner safe-area-pb">
         {disabled && (
           <div className="rounded-2xl border border-sky-500/25 bg-sky-500/[0.08] px-4 py-3 text-center">
             <p className="text-sm font-light text-sky-100/90 leading-relaxed">{disabledHint}</p>
@@ -127,7 +126,7 @@ export function ChatComposer({
           )}
         </AnimatePresence>
 
-        <div className="flex gap-2 items-end">
+        <div className="ttm-chat-composer__row">
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onFile} />
           <button
             type="button"
@@ -169,11 +168,7 @@ export function ChatComposer({
               }
             }}
             placeholder={labels.placeholder}
-            className={cn(
-              "flex-1 min-w-0 max-h-32 min-h-[44px] rounded-2xl resize-none bg-white/[0.06] border border-white/12",
-              "px-4 py-3 text-[15px] font-light outline-none focus:border-white/18 focus:ring-1 focus:ring-white/10",
-              "placeholder:text-muted-foreground/55"
-            )}
+            className="ttm-chat-composer__input"
           />
           <motion.button
             type="button"
@@ -190,7 +185,6 @@ export function ChatComposer({
           </motion.button>
         </div>
         </div>
-      </div>
     </div>
   )
 }

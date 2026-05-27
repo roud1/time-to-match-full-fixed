@@ -24,6 +24,13 @@
   --radius-lg: 16px;
   --radius-full: 24px;
 
+  /* Spacing scale (layout, chat, forms) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
   /* Accent tints */
   --accent-soft-bg: rgba(45, 212, 191, 0.1);
   --accent-soft-border: rgba(13, 148, 136, 0.22);
