@@ -1,5 +1,5 @@
-import { DatingLandingPage } from "@/components/landing/dating/dating-landing-page"
+import { Homepage } from "@/components/homepage"
 
 export function HomePage() {
-  return <DatingLandingPage />
+  return <Homepage />
 }
