@@ -23,6 +23,7 @@ export function DatingLandingHero() {
   if (!profile) return null
 
   const titleFull = `${t("datingHeroTitleLine1")} ${t("datingHeroTitleLine2")}`
+  const heroChips = [t("datingHeroChip1"), t("datingHeroChip2")]
 
   return (
     <section className="ttm-dating-hero" aria-labelledby="dating-hero-title">
@@ -57,6 +58,13 @@ export function DatingLandingHero() {
 
             <p className="ttm-dating-hero__sub">{t("datingHeroSub")}</p>
             <p className="ttm-dating-hero__time">{t("datingHeroTime")}</p>
+            <ul className="ttm-dating-hero__chips" aria-label={t("datingHeroChipsAria")}>
+              {heroChips.map((chip) => (
+                <li key={chip} className="ttm-dating-hero__chip">
+                  {chip}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <motion.div

@@ -23,6 +23,7 @@ html:has(.ttm-dating-landing) {
   --dt-font: var(--font-inter-display), "Inter", system-ui, -apple-system, sans-serif;
   --dt-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dt-radius-card: 20px;
+  --dt-side-padding: 1.25rem;
 
   position: relative;
   min-height: 100dvh;
@@ -33,8 +34,20 @@ html:has(.ttm-dating-landing) {
 }
 
 .ttm-dating-container {
-  width: min(1100px, 100% - 2rem);
+  width: min(1100px, 100% - (var(--dt-side-padding) * 2));
   margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-landing {
+    --dt-side-padding: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .ttm-dating-landing {
+    --dt-side-padding: 3rem;
+  }
 }
 
 /* ─── Ambient parallax ─── */
@@ -115,7 +128,7 @@ html:has(.ttm-dating-landing) {
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
-  padding-inline: 1rem;
+  padding-inline: var(--dt-side-padding);
 }
 
 .ttm-dating-nav__inner {
@@ -424,6 +437,27 @@ html:has(.ttm-dating-landing) {
   margin: 0.45rem 0 0;
   font-size: 0.82rem;
   color: rgba(250, 249, 252, 0.38);
+}
+
+.ttm-dating-hero__chips {
+  list-style: none;
+  margin: 0.85rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.ttm-dating-hero__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(250, 249, 252, 0.72);
+  font-size: 0.73rem;
+  letter-spacing: 0.02em;
 }
 
 .ttm-dating-cta--hero {
