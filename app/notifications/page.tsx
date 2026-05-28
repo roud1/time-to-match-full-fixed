@@ -48,7 +48,7 @@ export default function NotificationsPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-[#050506] ttm-brand-universe">
+    <main className="min-h-screen bg-transparent ttm-brand-universe">
       <Navbar />
       <div className="max-w-xl mx-auto px-6 pt-28 pb-20">
         <h1 className="ttm-brand-gradient-text text-3xl font-extralight tracking-tight mb-2">

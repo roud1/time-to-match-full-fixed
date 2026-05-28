@@ -60,21 +60,47 @@ export function DiscoverFiltersModal({
 
             <div className="space-y-4 max-h-[min(70vh,520px)] overflow-y-auto pr-1">
               <div className="space-y-2">
-                <label className="text-xs text-[var(--text-secondary)] font-light">{t("profileGender")}</label>
-                <select
-                  value={draft.gender ?? ""}
-                  onChange={(e) =>
-                    setDraft((d) => ({
-                      ...d,
-                      gender: e.target.value === "male" || e.target.value === "female" ? e.target.value : undefined,
-                    }))
-                  }
-                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2.5 text-sm font-light"
-                >
-                  <option value="">{t("discoverFiltersAny")}</option>
-                  <option value="female">{t("regGenderFemale")}</option>
-                  <option value="male">{t("regGenderMale")}</option>
-                </select>
+                <span className="text-xs text-[var(--text-secondary)] font-light">{t("profileGender")}</span>
+                <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t("profileGender")}>
+                  {(
+                    [
+                      { value: "", label: t("discoverFiltersAny") },
+                      { value: "male", label: t("regGenderMale") },
+                      { value: "female", label: t("regGenderFemale") },
+                    ] as const
+                  ).map((opt) => {
+                    const selected = (draft.gender ?? "") === opt.value
+                    return (
+                      <label
+                        key={opt.value || "all"}
+                        className={cn(
+                          "inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-light cursor-pointer touch-manipulation transition-colors",
+                          selected
+                            ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--text-primary)]"
+                            : "border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)]"
+                        )}
+                      >
+                        <input
+                          type="radio"
+                          name="discover-filter-gender"
+                          value={opt.value}
+                          checked={selected}
+                          onChange={() =>
+                            setDraft((d) => ({
+                              ...d,
+                              gender:
+                                opt.value === "male" || opt.value === "female"
+                                  ? opt.value
+                                  : undefined,
+                            }))
+                          }
+                          className="sr-only"
+                        />
+                        {opt.label}
+                      </label>
+                    )
+                  })}
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -84,11 +110,12 @@ export function DiscoverFiltersModal({
                     type="number"
                     min={18}
                     max={99}
-                    value={draft.minAge ?? ""}
+                    value={draft.ageMin ?? draft.minAge ?? ""}
                     onChange={(e) =>
                       setDraft((d) => ({
                         ...d,
-                        minAge: e.target.value ? Number(e.target.value) : undefined,
+                        ageMin: e.target.value ? Number(e.target.value) : undefined,
+                        minAge: undefined,
                       }))
                     }
                     className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2.5 text-sm font-light"
@@ -100,11 +127,12 @@ export function DiscoverFiltersModal({
                     type="number"
                     min={18}
                     max={99}
-                    value={draft.maxAge ?? ""}
+                    value={draft.ageMax ?? draft.maxAge ?? ""}
                     onChange={(e) =>
                       setDraft((d) => ({
                         ...d,
-                        maxAge: e.target.value ? Number(e.target.value) : undefined,
+                        ageMax: e.target.value ? Number(e.target.value) : undefined,
+                        maxAge: undefined,
                       }))
                     }
                     className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2.5 text-sm font-light"
@@ -142,9 +170,9 @@ export function DiscoverFiltersModal({
                 </div>
                 <input
                   type="range"
-                  min={5}
-                  max={200}
-                  step={5}
+                  min={10}
+                  max={500}
+                  step={10}
                   disabled={!hasLocation}
                   value={draft.maxDistance ?? 50}
                   onChange={(e) =>

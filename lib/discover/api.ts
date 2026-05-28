@@ -13,13 +13,16 @@ export async function saveUserInterests(interestIds: number[]): Promise<boolean>
     method: "PUT",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ interestIds }),
+    body: JSON.stringify({ interestIds, interests: interestIds }),
   })
   return res.ok
 }
 
 export async function updateUserDiscoveryProfile(body: {
   purpose?: string
+  gender?: "male" | "female" | null
+  ageMin?: number | null
+  ageMax?: number | null
   latitude?: number | null
   longitude?: number | null
   maxDistance?: number
@@ -41,8 +44,10 @@ export async function fetchDiscoverProfiles(
   const params = new URLSearchParams()
   if (filters.purpose) params.set("purpose", filters.purpose)
   if (filters.gender) params.set("gender", filters.gender)
-  if (filters.minAge != null) params.set("minAge", String(filters.minAge))
-  if (filters.maxAge != null) params.set("maxAge", String(filters.maxAge))
+  const ageMin = filters.ageMin ?? filters.minAge
+  const ageMax = filters.ageMax ?? filters.maxAge
+  if (ageMin != null) params.set("ageMin", String(ageMin))
+  if (ageMax != null) params.set("ageMax", String(ageMax))
   if (filters.maxDistance != null) params.set("maxDistance", String(filters.maxDistance))
   if (coords) {
     params.set("lat", String(coords.lat))

@@ -12,12 +12,19 @@ import { toast } from "sonner"
 type ProfileDatingFieldsProps = {
   purpose?: DatingPurpose
   maxDistance?: number
+  ageMin?: number | null
+  ageMax?: number | null
+  /** Own gender — synced to server `users.gender` (male/female). */
+  gender?: "male" | "female" | "other"
   latitude?: number | null
   longitude?: number | null
   dbInterestIds: number[]
   onChange: (patch: {
     purpose?: DatingPurpose
     maxDistance?: number
+    ageMin?: number | null
+    ageMax?: number | null
+    gender?: "male" | "female" | "other"
     latitude?: number | null
     longitude?: number | null
     dbInterestIds?: number[]
@@ -27,6 +34,9 @@ type ProfileDatingFieldsProps = {
 export function ProfileDatingFields({
   purpose,
   maxDistance = DEFAULT_MAX_DISTANCE_KM,
+  ageMin,
+  ageMax,
+  gender,
   latitude,
   longitude,
   dbInterestIds,
@@ -72,13 +82,23 @@ export function ProfileDatingFields({
     )
   }, [onChange, t])
 
+  const serverGender =
+    gender === "male" || gender === "female" ? gender : null
+
   const persistServer = async () => {
     await Promise.all([
       updateUserDiscoveryProfile({
         purpose,
+        gender: serverGender,
+        ageMin: ageMin ?? null,
+        ageMax: ageMax ?? null,
         maxDistance,
         latitude: latitude ?? null,
         longitude: longitude ?? null,
+        profile:
+          gender != null
+            ? { gender: gender === "other" ? "other" : gender }
+            : undefined,
       }),
       dbInterestIds.length ? saveUserInterests(dbInterestIds) : saveUserInterests([]),
     ])
@@ -95,6 +115,35 @@ export function ProfileDatingFields({
   return (
     <div className="space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <p className="text-xs text-white/50 font-light">{t("profileDatingSectionLead")}</p>
+
+      <div className="space-y-2">
+        <Label className="text-foreground/80 font-light">{t("profileInterests")}</Label>
+        {catalog.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {catalog.map((item) => {
+              const selected = dbInterestIds.includes(item.id)
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => toggleInterest(item.id)}
+                  className={cn(
+                    "px-3 py-1.5 rounded-full text-xs font-medium border transition-all touch-manipulation",
+                    selected
+                      ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--text-primary)]"
+                      : "border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)]"
+                  )}
+                >
+                  {item.emoji ? `${item.emoji} ` : ""}
+                  {item.name}
+                </button>
+              )
+            })}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground font-light">{t("profileInterestsCatalogEmpty")}</p>
+        )}
+      </div>
 
       <div className="space-y-2">
         <Label className="text-foreground/80 font-light">{t("datingPurposeLabel")}</Label>
@@ -117,6 +166,77 @@ export function ProfileDatingFields({
       </div>
 
       <div className="space-y-2">
+        <span className="text-foreground/80 font-light text-sm">{t("profileGender")}</span>
+        <div className="flex flex-wrap gap-2" role="radiogroup">
+          {(
+            [
+              { value: "male" as const, label: t("regGenderMale") },
+              { value: "female" as const, label: t("regGenderFemale") },
+              { value: "other" as const, label: t("regGenderOther") },
+            ] as const
+          ).map((opt) => {
+            const selected = gender === opt.value
+            return (
+              <label
+                key={opt.value}
+                className={cn(
+                  "inline-flex cursor-pointer rounded-full border px-3 py-2 text-xs font-light touch-manipulation transition-colors",
+                  selected
+                    ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--text-primary)]"
+                    : "border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)]"
+                )}
+              >
+                <input
+                  type="radio"
+                  name="profile-gender"
+                  checked={selected}
+                  onChange={() => onChange({ gender: opt.value })}
+                  className="sr-only"
+                />
+                {opt.label}
+              </label>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-2">
+          <Label className="text-foreground/80 font-light">{t("discoverFiltersAgeFrom")}</Label>
+          <input
+            type="number"
+            min={18}
+            max={99}
+            placeholder="18"
+            value={ageMin ?? ""}
+            onChange={(e) =>
+              onChange({
+                ageMin: e.target.value ? Number(e.target.value) : null,
+              })
+            }
+            className="w-full rounded-xl border border-foreground/10 bg-foreground/5 px-3 py-2.5 text-sm font-light tabular-nums"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="text-foreground/80 font-light">{t("discoverFiltersAgeTo")}</Label>
+          <input
+            type="number"
+            min={18}
+            max={99}
+            placeholder="35"
+            value={ageMax ?? ""}
+            onChange={(e) =>
+              onChange({
+                ageMax: e.target.value ? Number(e.target.value) : null,
+              })
+            }
+            className="w-full rounded-xl border border-foreground/10 bg-foreground/5 px-3 py-2.5 text-sm font-light tabular-nums"
+          />
+        </div>
+      </div>
+      <p className="text-[10px] text-muted-foreground font-light -mt-2">{t("profileDiscoverAgeHint")}</p>
+
+      <div className="space-y-2">
         <div className="flex justify-between gap-2">
           <Label className="text-foreground/80 font-light">{t("profileMaxDistance")}</Label>
           <span className="text-xs tabular-nums text-muted-foreground">
@@ -125,42 +245,13 @@ export function ProfileDatingFields({
         </div>
         <input
           type="range"
-          min={5}
-          max={200}
-          step={5}
+          min={10}
+          max={500}
+          step={10}
           value={maxDistance}
           onChange={(e) => onChange({ maxDistance: Number(e.target.value) })}
           className="w-full accent-[var(--accent)]"
         />
-      </div>
-
-      <div className="space-y-2">
-        <Label className="text-foreground/80 font-light">{t("profileInterests")}</Label>
-        {catalog.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {catalog.map((item) => {
-              const selected = dbInterestIds.includes(item.id)
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => toggleInterest(item.id)}
-                  className={cn(
-                    "px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
-                    selected
-                      ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--text-primary)]"
-                      : "border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)]"
-                  )}
-                >
-                  {item.emoji ? `${item.emoji} ` : ""}
-                  {item.name}
-                </button>
-              )
-            })}
-          </div>
-        ) : (
-          <p className="text-xs text-muted-foreground font-light">{t("profileInterestsCatalogEmpty")}</p>
-        )}
       </div>
 
       <button

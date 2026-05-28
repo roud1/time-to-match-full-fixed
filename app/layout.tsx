@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
+import { interDisplay, manrope } from "@/lib/fonts"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
@@ -14,14 +14,6 @@ import { ThemeProvider } from "@/components/theme/theme-provider"
 import { ThemeScript } from "@/components/theme/theme-script"
 import { Toaster } from "@/components/ui/sonner"
 import { AchievementProvider } from "@/components/gamification/achievement-provider"
-
-const inter = Inter({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-inter",
-  display: "swap",
-  preload: true,
-  weight: ["400", "500", "600"],
-})
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
@@ -104,12 +96,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ru" suppressHydrationWarning className="bg-[var(--bg-primary)]">
+    <html lang="ru" suppressHydrationWarning className="bg-transparent">
       <head>
         <meta name="color-scheme" content="light dark" />
         <ThemeScript />
       </head>
-      <body className={`${inter.variable} font-sans antialiased ttm-root ttm-brand-universe`}>
+      <body
+        className={`${manrope.variable} ${interDisplay.variable} font-sans antialiased ttm-root ttm-brand-universe`}
+      >
         <ThemeProvider>
           <I18nProvider>
             <QueryProvider>

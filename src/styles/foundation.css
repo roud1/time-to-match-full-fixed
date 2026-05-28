@@ -1,0 +1,71 @@
+/**
+ * Time to Match — foundation layer (Tailwind v4 @theme)
+ * Import once from app/globals.css
+ */
+
+@theme {
+  /* Colors */
+  --color-ttm-bg: #0b0b10;
+  --color-ttm-surface: #12121a;
+  --color-ttm-card: #161622;
+  --color-ttm-stroke: #26263a;
+  --color-ttm-primary: #ff3d71;
+  --color-ttm-secondary: #7c5cff;
+  --color-ttm-text: #ffffff;
+  --color-ttm-muted: #a1a1b5;
+
+  /* Spacing (8pt strict) */
+  --spacing-ttm-1: 4px;
+  --spacing-ttm-2: 8px;
+  --spacing-ttm-3: 16px;
+  --spacing-ttm-4: 24px;
+  --spacing-ttm-5: 32px;
+  --spacing-ttm-6: 48px;
+  --spacing-ttm-7: 64px;
+  --spacing-ttm-8: 96px;
+
+  /* Radius */
+  --radius-ttm-sm: 12px;
+  --radius-ttm-md: 20px;
+  --radius-ttm-lg: 24px;
+  --radius-ttm-full: 999px;
+
+  /* Layout */
+  --width-ttm-container: 1200px;
+  --spacing-ttm-gutter: 24px;
+  --spacing-ttm-page: 120px;
+
+  /* Effects */
+  --shadow-ttm-glow: 0 0 40px rgba(255, 61, 113, 0.25);
+  --shadow-ttm-glow-strong: 0 0 48px rgba(255, 61, 113, 0.35);
+
+  /* Motion */
+  --ease-ttm: cubic-bezier(0.4, 0, 0.2, 1);
+  --default-transition-duration: 300ms;
+}
+
+@layer base {
+  .ttm-foundation {
+    --ttm-page-padding: 16px;
+    background-color: var(--color-ttm-bg);
+    color: var(--color-ttm-text);
+  }
+
+  @media (min-width: 768px) {
+    .ttm-foundation {
+      --ttm-page-padding: 32px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ttm-foundation {
+      --ttm-page-padding: 64px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .ttm-foundation {
+      --ttm-page-padding: 120px;
+    }
+  }
+}

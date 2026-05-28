@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import '../src/styles/foundation.css';
 @import './brand-system.css';
 @import './design-system.css';
 @import './sync-design.css';
@@ -8,7 +9,9 @@
 @import './discover-experience.css';
 @import './landing-experience.css';
 @import './spark-landing.css';
+@import './premium-landing.css';
 @import './spark-cinematic.css';
+@import './spark-landing-atmosphere.css';
 @import './landing-how-section.css';
 @import './mobile-experience.css';
 @import './relationship-identity.css';
@@ -25,7 +28,7 @@
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme inline {
-  --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-sans: var(--font-manrope), 'Manrope', system-ui, sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -68,10 +71,26 @@
     transition: var(--theme-transition);
   }
   body {
-    @apply text-foreground;
-    background: var(--bg-primary);
+    @apply text-foreground font-sans;
+    font-family: var(--font-sans);
+    font-weight: 300;
+    background: transparent;
     color: var(--text-primary);
     transition: var(--theme-transition);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  small,
+  .text-caption {
+    font-weight: 200;
   }
 }
 

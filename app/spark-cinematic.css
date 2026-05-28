@@ -4,12 +4,20 @@
   position: relative;
 }
 
-/* —— Floating particles (page-wide) —— */
+/* —— Floating particles (site-wide, inside .site-bg-root) —— */
 .spark-particles {
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 2;
+  overflow: hidden;
+}
+
+/* —— Cinematic atmosphere (site-wide) —— */
+.site-bg-root .spark-hero-cinematic {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
 }
 
@@ -172,14 +180,19 @@ html[data-theme="dark"] .spark-hero-cinematic__vignette {
 }
 
 .spark-landing__hero--cinematic .spark-landing__hero-title-line {
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
+  /* gradient text — no text-shadow override needed */
+  filter: drop-shadow(0 2px 12px rgba(139, 92, 246, 0.22));
 }
 
 html[data-theme="dark"] .spark-landing__hero--cinematic .spark-landing__hero-title-line {
-  color: #fafafa;
+  filter: drop-shadow(0 2px 16px rgba(196, 181, 253, 0.28));
 }
 
 .spark-landing__hero--cinematic .spark-landing__hero-sub {
+  color: var(--text-secondary);
+}
+
+html[data-theme="dark"] .spark-landing__hero--cinematic .spark-landing__hero-sub {
   color: color-mix(in srgb, #fff 75%, var(--text-secondary));
 }
 
@@ -408,6 +421,7 @@ html[data-theme="dark"] .spark-landing__hero--cinematic .spark-landing__hero-tit
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .spark-landing__gradient-mesh,
   .spark-particles,
   .spark-hero-cinematic__mesh,
   .spark-hero-cinematic__wave,

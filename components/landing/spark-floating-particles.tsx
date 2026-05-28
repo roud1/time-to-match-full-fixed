@@ -10,6 +10,10 @@ function seededRandom(seed: number) {
   return x - Math.floor(x)
 }
 
+function fixed(value: number, digits = 4) {
+  return value.toFixed(digits)
+}
+
 export function SparkFloatingParticles() {
   const reduce = useReducedMotion()
 
@@ -17,11 +21,11 @@ export function SparkFloatingParticles() {
     () =>
       Array.from({ length: COUNT }, (_, i) => ({
         id: i,
-        left: `${seededRandom(i + 1) * 100}%`,
-        size: 2 + seededRandom(i + 2) * 3,
-        delay: `${seededRandom(i + 3) * 12}s`,
-        duration: `${14 + seededRandom(i + 4) * 16}s`,
-        opacity: 0.25 + seededRandom(i + 5) * 0.55,
+        left: `${fixed(seededRandom(i + 1) * 100, 4)}%`,
+        size: `${fixed(2 + seededRandom(i + 2) * 3, 4)}px`,
+        delay: `${fixed(seededRandom(i + 3) * 12, 4)}s`,
+        duration: `${fixed(14 + seededRandom(i + 4) * 16, 4)}s`,
+        opacity: fixed(0.25 + seededRandom(i + 5) * 0.55, 6),
       })),
     []
   )

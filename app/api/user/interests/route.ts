@@ -7,9 +7,14 @@ import { syncUserInterests } from "@/lib/server/repositories/interests"
 
 export const runtime = "nodejs"
 
-const bodySchema = z.object({
-  interestIds: z.array(z.number().int().positive()),
-})
+const bodySchema = z
+  .object({
+    interestIds: z.array(z.number().int().positive()).optional(),
+    interests: z.array(z.number().int().positive()).optional(),
+  })
+  .transform((data) => ({
+    interestIds: data.interestIds ?? data.interests ?? [],
+  }))
 
 export async function OPTIONS(request: Request) {
   return withCors(request, new NextResponse(null, { status: 204 }))

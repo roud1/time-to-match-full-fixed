@@ -4,7 +4,7 @@ import dynamic from "next/dynamic"
 const AppShell = dynamic(() => import("@/components/app/app-shell").then((m) => m.AppShell), {
   ssr: true,
   loading: () => (
-    <div className="min-h-screen flex items-center justify-center bg-[#06060a]">
+    <div className="min-h-screen flex items-center justify-center bg-transparent">
       <p className="text-muted-foreground font-light text-sm">…</p>
     </div>
   ),
@@ -19,7 +19,7 @@ export default function AppPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[#06060a]">
+        <div className="min-h-screen flex items-center justify-center bg-transparent">
           <p className="text-muted-foreground font-light">…</p>
         </div>
       }

@@ -10,6 +10,7 @@ type DiscoverCandidateRow = {
   name: string
   profile: Record<string, unknown>
   purpose: string | null
+  gender: string | null
   latitude: number | null
   longitude: number | null
   photo_verified: boolean
@@ -19,7 +20,8 @@ function readString(v: unknown): string | undefined {
   return typeof v === "string" && v.trim() ? v.trim() : undefined
 }
 
-function readGender(profile: Record<string, unknown>): "male" | "female" {
+function readGender(profile: Record<string, unknown>, rowGender?: string | null): "male" | "female" {
+  if (rowGender === "male" || rowGender === "female") return rowGender
   const g = readString(profile.gender)
   if (g === "male" || g === "female") return g
   return "female"
@@ -80,10 +82,11 @@ export async function listDiscoverProfiles(input: {
   const viewerInterestRows = viewerInterestMap.get(input.viewerId) ?? []
 
   const rows = await db<DiscoverCandidateRow[]>`
-    SELECT id, name, profile, purpose, latitude, longitude, photo_verified
+    SELECT id, name, profile, purpose, gender, latitude, longitude, photo_verified
     FROM users
     WHERE id <> ${input.viewerId}
       AND is_active = true
+      AND COALESCE(is_blocked, false) = false
       AND profile_expires_at IS NOT NULL
       AND profile_expires_at > now()
     LIMIT 120
@@ -112,8 +115,10 @@ export async function listDiscoverProfiles(input: {
 
     if (input.filters.gender && gender !== input.filters.gender) continue
     if (input.filters.purpose && row.purpose !== input.filters.purpose) continue
-    if (input.filters.minAge != null && age < input.filters.minAge) continue
-    if (input.filters.maxAge != null && age > input.filters.maxAge) continue
+    const minAge = input.filters.ageMin ?? input.filters.minAge
+    const maxAge = input.filters.ageMax ?? input.filters.maxAge
+    if (minAge != null && age < minAge) continue
+    if (maxAge != null && age > maxAge) continue
 
     const candidateRows = interestByUser.get(row.id) ?? []
     const common = commonBetween(viewerInterestRows, candidateRows)
@@ -153,7 +158,7 @@ export async function listDiscoverProfiles(input: {
       lng: row.longitude,
       purpose: row.purpose,
       compatibility,
-      commonInterests: common,
+      commonInterests: common.slice(0, 5),
       photoVerified: row.photo_verified ?? false,
     })
   }
@@ -165,6 +170,9 @@ export async function updateUserDiscoveryFields(
   userId: string,
   patch: {
     purpose?: string | null
+    gender?: "male" | "female" | null
+    ageMin?: number | null
+    ageMax?: number | null
     latitude?: number | null
     longitude?: number | null
     maxDistance?: number
@@ -178,6 +186,21 @@ export async function updateUserDiscoveryFields(
   if (patch.purpose !== undefined) {
     await db`
       UPDATE users SET purpose = ${patch.purpose} WHERE id = ${userId}
+    `
+  }
+  if (patch.gender !== undefined) {
+    await db`
+      UPDATE users SET gender = ${patch.gender} WHERE id = ${userId}
+    `
+  }
+  if (patch.ageMin !== undefined) {
+    await db`
+      UPDATE users SET age_min = ${patch.ageMin} WHERE id = ${userId}
+    `
+  }
+  if (patch.ageMax !== undefined) {
+    await db`
+      UPDATE users SET age_max = ${patch.ageMax} WHERE id = ${userId}
     `
   }
   if (patch.latitude !== undefined || patch.longitude !== undefined) {
@@ -214,13 +237,16 @@ export async function getUserDiscoveryFields(userId: string) {
   const rows = await db<
     {
       purpose: string | null
+      gender: "male" | "female" | null
+      age_min: number | null
+      age_max: number | null
       latitude: number | null
       longitude: number | null
       max_distance: number
       profile: Record<string, unknown>
     }[]
   >`
-    SELECT purpose, latitude, longitude, max_distance, profile
+    SELECT purpose, gender, age_min, age_max, latitude, longitude, max_distance, profile
     FROM users
     WHERE id = ${userId}
     LIMIT 1

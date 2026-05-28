@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Sparkles } from "lucide-react"
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useState } from "react"
-import { SparkCinematicHeroBg } from "@/components/landing/spark-cinematic-hero-bg"
 import { SparkLandingHeroFloats } from "@/components/landing/spark-landing-hero-floats"
 import { isLoggedIn } from "@/lib/user-profile"
 
@@ -22,7 +21,11 @@ export function SparkLandingHero() {
 
   return (
     <section className="spark-landing__hero spark-landing__hero--cinematic" aria-labelledby="spark-hero-title">
-      <SparkCinematicHeroBg />
+      <div className="spark-landing__hero-accents" aria-hidden>
+        <div className="spark-landing__hero-accent spark-landing__hero-accent--1" />
+        <div className="spark-landing__hero-accent spark-landing__hero-accent--2" />
+        <div className="spark-landing__hero-accent spark-landing__hero-accent--3" />
+      </div>
       <SparkLandingHeroFloats />
       <motion.div className="spark-landing__hero-inner" style={{ y: titleY, opacity: contentOpacity }}>
         <motion.h1

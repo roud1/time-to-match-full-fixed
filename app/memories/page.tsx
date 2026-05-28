@@ -16,7 +16,7 @@ export default function MemoriesPage() {
   const reality = useEmotionalRealityExpansion({ locale })
 
   return (
-    <EmotionalWorldRoot ambient className="relative min-h-screen bg-[#050506] ttm-brand-universe overflow-hidden">
+    <EmotionalWorldRoot ambient className="relative min-h-screen bg-transparent ttm-brand-universe overflow-hidden">
       <MemoryEchoLayer echoes={reality.consciousness.echoes} className="ec-memory-echo-layer--archive" />
       <Navbar />
       <div className="max-w-lg mx-auto px-6 pt-28 pb-20">

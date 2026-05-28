@@ -603,7 +603,7 @@ a.ttm-nav-pill-login:hover,
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--ttm-brand-void);
+  background: transparent;
 }
 
 .ttm-connection-aura-1 {

@@ -1,0 +1,1112 @@
+/* ─── Premium dating landing (#0A0A0D) ─── */
+
+html:has(.ttm-dating-landing) .site-bg-root {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+html:has(.ttm-dating-landing) {
+  color-scheme: dark;
+}
+
+.ttm-dating-landing {
+  --dt-bg: #0a0a0d;
+  --dt-glass: rgba(255, 255, 255, 0.06);
+  --dt-border: rgba(255, 255, 255, 0.1);
+  --dt-text: #faf9fc;
+  --dt-muted: rgba(250, 249, 252, 0.52);
+  --dt-pink: #ec4899;
+  --dt-cyan: #22d3ee;
+  --dt-blue: #22d3ee;
+  --dt-violet: #a78bfa;
+  --dt-font: var(--font-inter-display), "Inter", system-ui, -apple-system, sans-serif;
+  --dt-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dt-radius-card: 20px;
+
+  position: relative;
+  min-height: 100dvh;
+  background: var(--dt-bg);
+  color: var(--dt-text);
+  font-family: var(--dt-font);
+  overflow-x: hidden;
+}
+
+.ttm-dating-container {
+  width: min(1100px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+/* ─── Ambient parallax ─── */
+
+.ttm-dating-landing__ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ttm-dating-parallax {
+  position: absolute;
+  inset: 0;
+}
+
+.ttm-dating-parallax__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.55;
+  transition: transform 0.35s var(--dt-ease);
+  will-change: transform;
+}
+
+.ttm-dating-parallax__blob--pink {
+  width: min(70vw, 520px);
+  height: min(70vw, 520px);
+  top: -8%;
+  right: -12%;
+  background: rgba(236, 72, 153, 0.4);
+  animation: ttm-dating-blob-drift 16s ease-in-out infinite alternate;
+}
+
+.ttm-dating-parallax__blob--blue {
+  width: min(60vw, 460px);
+  height: min(60vw, 460px);
+  bottom: 5%;
+  left: -15%;
+  background: rgba(34, 211, 238, 0.28);
+  animation: ttm-dating-blob-drift 20s ease-in-out infinite alternate-reverse;
+}
+
+.ttm-dating-parallax__blob--violet {
+  width: min(45vw, 360px);
+  height: min(45vw, 360px);
+  top: 40%;
+  left: 35%;
+  background: rgba(167, 139, 250, 0.22);
+  animation: ttm-dating-blob-drift 14s ease-in-out infinite alternate;
+  animation-delay: -4s;
+}
+
+.ttm-dating-parallax__mesh {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(236, 72, 153, 0.06), transparent 55%);
+}
+
+@keyframes ttm-dating-blob-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(3%, -2%) scale(1.06);
+  }
+}
+
+.ttm-dating-landing > *:not(.ttm-dating-landing__ambient) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Nav ─── */
+
+.ttm-dating-nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  padding-inline: 1rem;
+}
+
+.ttm-dating-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition:
+    background 0.4s var(--dt-ease),
+    border-color 0.4s,
+    box-shadow 0.4s,
+    backdrop-filter 0.4s;
+}
+
+.ttm-dating-nav__inner--scrolled {
+  background: rgba(10, 10, 13, 0.82);
+  border-color: var(--dt-border);
+  backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.ttm-dating-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dt-text);
+  text-decoration: none;
+}
+
+.ttm-dating-nav__brand span {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .ttm-dating-nav__brand span {
+    display: inline;
+  }
+}
+
+.ttm-dating-nav__links {
+  display: none;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-nav__links {
+    display: flex;
+  }
+}
+
+.ttm-dating-nav__link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--dt-muted);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.ttm-dating-nav__link:hover {
+  color: var(--dt-text);
+}
+
+.ttm-dating-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ttm-dating-nav__sign {
+  font-size: 0.8rem;
+  color: var(--dt-muted);
+  text-decoration: none;
+  padding: 0.45rem 0.5rem;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.ttm-dating-nav__sign:hover {
+  color: var(--dt-text);
+}
+
+/* ─── CTA buttons ─── */
+
+.ttm-dating-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.1rem;
+  padding: 0 1.65rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0a0a0d;
+  text-decoration: none;
+  background: linear-gradient(135deg, #7dd3fc 0%, #c4b5fd 45%, #f9a8d4 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+    0 0 48px rgba(236, 72, 153, 0.35),
+    0 0 64px rgba(56, 189, 248, 0.2),
+    0 12px 32px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.3s var(--dt-ease),
+    box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.ttm-dating-cta--sm {
+  min-height: 2.4rem;
+  padding: 0 1rem;
+  font-size: 0.8rem;
+}
+
+.ttm-dating-cta--ghost {
+  color: var(--dt-text);
+  background: var(--dt-glass);
+  border: 1px solid var(--dt-border);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.ttm-dating-cta__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 60%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.ttm-dating-cta:hover {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+    0 0 72px rgba(236, 72, 153, 0.55),
+    0 0 96px rgba(56, 189, 248, 0.35),
+    0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.ttm-dating-cta:hover .ttm-dating-cta__shine {
+  opacity: 1;
+}
+
+.ttm-dating-cta:active {
+  transform: scale(0.97);
+}
+
+.ttm-dating-cta--ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Hero (unified cinematic scene) ─── */
+
+.ttm-dating-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: calc(4.25rem + env(safe-area-inset-top, 0px)) 0 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-hero {
+    max-height: 80vh;
+    min-height: min(80vh, 560px);
+    padding-bottom: 1.5rem;
+    overflow: hidden;
+  }
+}
+
+.ttm-dating-hero__parallax {
+  position: absolute;
+  inset: 0;
+}
+
+.ttm-dating-hero__scene {
+  position: relative;
+  display: grid;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-hero__scene {
+    grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
+    gap: min(2.5rem, 40px);
+    min-height: min(72vh, 520px);
+  }
+}
+
+/* Ambient glow unifying both columns */
+.ttm-dating-hero__scene-glow {
+  position: absolute;
+  inset: 5% 8% 8% 12%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse 55% 70% at 38% 48%, rgba(236, 72, 153, 0.14), transparent 62%),
+    radial-gradient(ellipse 45% 55% at 72% 52%, rgba(34, 211, 238, 0.12), transparent 58%);
+  filter: blur(40px);
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Light bridge between copy and card */
+.ttm-dating-hero__bridge {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 58%;
+  width: clamp(48px, 8vw, 96px);
+  height: 3px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(236, 72, 153, 0.35) 28%,
+    rgba(34, 211, 238, 0.4) 72%,
+    transparent 100%
+  );
+  filter: blur(6px);
+  opacity: 0.32;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-hero__bridge {
+    display: block;
+  }
+
+  .ttm-dating-hero__bridge::after {
+    content: "";
+    position: absolute;
+    inset: -24px -40px;
+    background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.12), transparent 70%);
+    filter: blur(20px);
+  }
+}
+
+.ttm-dating-hero__copy,
+.ttm-dating-hero__visual {
+  position: relative;
+  z-index: 2;
+}
+
+.ttm-dating-hero__eyebrow {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dt-pink);
+  margin: 0 0 0.5rem;
+}
+
+.ttm-dating-hero__title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  font-size: clamp(1.85rem, 4.8vw, 2.85rem);
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: -0.04em;
+  margin: 0;
+  max-width: 14ch;
+}
+
+.ttm-dating-hero__title-line {
+  display: block;
+}
+
+.ttm-dating-hero__title-line--soft {
+  opacity: 0.8;
+  font-weight: 700;
+}
+
+.ttm-dating-hero__actions {
+  margin-top: 1.1rem;
+  margin-bottom: 0;
+}
+
+.ttm-dating-hero__sub {
+  margin: 1rem 0 0;
+  max-width: 22rem;
+  font-size: clamp(0.88rem, 1.8vw, 0.98rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(250, 249, 252, 0.48);
+}
+
+.ttm-dating-hero__time {
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+  color: rgba(250, 249, 252, 0.38);
+}
+
+.ttm-dating-cta--hero {
+  min-height: 3.2rem;
+  padding: 0 1.85rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.ttm-dating-cta--hero:hover {
+  transform: scale(1.06);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+    0 0 80px rgba(236, 72, 153, 0.55),
+    0 0 88px rgba(34, 211, 238, 0.35),
+    0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+.ttm-dating-cta--pulse {
+  animation: ttm-dating-cta-glow 3s ease-in-out infinite;
+}
+
+@keyframes ttm-dating-cta-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+      0 0 36px rgba(236, 72, 153, 0.28),
+      0 0 44px rgba(34, 211, 238, 0.14),
+      0 10px 28px rgba(0, 0, 0, 0.38);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.26) inset,
+      0 0 56px rgba(236, 72, 153, 0.45),
+      0 0 64px rgba(34, 211, 238, 0.28),
+      0 14px 36px rgba(0, 0, 0, 0.42);
+  }
+}
+
+.ttm-dating-hero__visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 900px;
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-hero__visual {
+    justify-content: center;
+    padding-left: 0;
+  }
+}
+
+.ttm-dating-hero__card-aura {
+  position: absolute;
+  width: min(100%, 320px);
+  aspect-ratio: 3 / 4;
+  background: radial-gradient(
+    ellipse 80% 70% at 40% 50%,
+    rgba(236, 72, 153, 0.22),
+    rgba(34, 211, 238, 0.1) 45%,
+    transparent 72%
+  );
+  filter: blur(28px);
+  opacity: 0.75;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ttm-dating-hero__card-float {
+  position: relative;
+  z-index: 1;
+  transition:
+    transform 0.35s var(--dt-ease),
+    filter 0.35s ease;
+}
+
+.ttm-dating-hero__card-float--active {
+  animation: ttm-dating-card-float 7s ease-in-out infinite;
+}
+
+@keyframes ttm-dating-card-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1deg);
+  }
+}
+
+.ttm-dating-hero__card-float:hover {
+  filter: drop-shadow(0 0 28px rgba(236, 72, 153, 0.35));
+}
+
+.ttm-dating-hero__card-float:hover .ttm-dating-card--scene {
+  transform: translateY(-6px) rotate(0deg) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 0 48px rgba(236, 72, 153, 0.25),
+    0 0 32px rgba(34, 211, 238, 0.15),
+    0 24px 48px rgba(0, 0, 0, 0.45);
+}
+
+/* ─── Glass profile cards (260×340) ─── */
+
+.ttm-dating-card {
+  width: 260px;
+  max-width: min(260px, 78vw);
+  height: 340px;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--dt-radius-card);
+  overflow: hidden;
+  background: var(--dt-glass);
+  border: 1px solid var(--dt-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.3s var(--dt-ease),
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.ttm-dating-card--featured {
+  border-color: rgba(236, 72, 153, 0.35);
+  box-shadow:
+    0 0 32px rgba(236, 72, 153, 0.18),
+    0 20px 48px rgba(0, 0, 0, 0.45);
+}
+
+/* Hero scene card — integrated glass, not banner */
+.ttm-dating-card--scene {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition:
+    transform 0.35s var(--dt-ease),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.ttm-dating-card--scene.ttm-dating-card--featured {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 24px rgba(236, 72, 153, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.ttm-dating-card:hover:not(.ttm-dating-card--scene) {
+  transform: translateY(-6px) scale(1.02);
+  border-color: rgba(236, 72, 153, 0.45);
+  box-shadow:
+    0 0 40px rgba(236, 72, 153, 0.28),
+    0 20px 48px rgba(0, 0, 0, 0.5);
+}
+
+.ttm-dating-card__photo {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.ttm-dating-card__image {
+  object-fit: cover;
+}
+
+.ttm-dating-card__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 10, 13, 0.92) 0%, transparent 48%);
+}
+
+.ttm-dating-card__verified {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+}
+
+.ttm-dating-card__score {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  background: rgba(10, 10, 13, 0.72);
+  border: 1px solid var(--dt-border);
+  backdrop-filter: blur(12px);
+}
+
+.ttm-dating-card__score--high {
+  color: #fda4af;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+}
+
+.ttm-dating-card__score--mid {
+  color: #e9d5ff;
+}
+
+.ttm-dating-card__score--low {
+  color: var(--dt-muted);
+}
+
+.ttm-dating-card__body {
+  flex-shrink: 0;
+  padding: 0.7rem 0.85rem 0.85rem;
+}
+
+.ttm-dating-card__name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.ttm-dating-card__age {
+  font-weight: 400;
+  color: var(--dt-muted);
+}
+
+.ttm-dating-card__distance {
+  margin: 0.25rem 0 0;
+  font-size: 0.82rem;
+  color: var(--dt-muted);
+}
+
+/* ─── Sections ─── */
+
+.ttm-dating-section {
+  padding: 4rem 0;
+}
+
+.ttm-dating-section--compact {
+  padding: 3.5rem 0;
+}
+
+.ttm-dating-section__eyebrow {
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dt-blue);
+  margin: 0 0 0.5rem;
+}
+
+.ttm-dating-section__eyebrow--left {
+  text-align: left;
+  margin: 0 0 0.35rem;
+}
+
+.ttm-dating-section__title {
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-align: center;
+  margin: 0 0 1.25rem;
+  max-width: 28ch;
+  margin-inline: auto;
+}
+
+.ttm-dating-section__title--dim {
+  color: var(--dt-muted);
+  font-weight: 600;
+}
+
+/* AI layer — compact */
+
+.ttm-dating-ai__panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.15rem 1.35rem;
+  border-radius: var(--dt-radius-card);
+  background: var(--dt-glass);
+  border: 1px solid var(--dt-border);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+@media (min-width: 640px) {
+  .ttm-dating-ai__panel {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+.ttm-dating-ai__label {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--dt-muted);
+}
+
+.ttm-dating-ai__list {
+  margin: 0;
+  padding: 0 0 0 1.1rem;
+  list-style: disc;
+  color: var(--dt-text);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.ttm-dating-ai__list li {
+  padding: 0.1rem 0;
+}
+
+.ttm-dating-ai__list li::marker {
+  color: var(--dt-cyan);
+}
+
+.ttm-dating-ai__output {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+  background: rgba(34, 211, 238, 0.06);
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .ttm-dating-ai__output {
+    min-width: 11rem;
+    text-align: right;
+  }
+}
+
+.ttm-dating-ai__output-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dt-cyan);
+  margin-bottom: 0.25rem;
+}
+
+.ttm-dating-ai__output-value {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--dt-cyan), var(--dt-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Connection score */
+
+.ttm-dating-connection__panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: 22rem;
+  margin-inline: auto;
+  padding: 1.5rem 1.35rem;
+  border-radius: var(--dt-radius-card);
+  background: var(--dt-glass);
+  border: 1px solid rgba(236, 72, 153, 0.22);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 40px rgba(236, 72, 153, 0.08),
+    0 12px 36px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.3s var(--dt-ease),
+    box-shadow 0.3s ease;
+}
+
+.ttm-dating-connection__panel:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 56px rgba(236, 72, 153, 0.14),
+    0 0 32px rgba(34, 211, 238, 0.08),
+    0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.ttm-dating-connection__avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.ttm-dating-connection__body {
+  text-align: center;
+}
+
+.ttm-dating-connection__avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--dt-border);
+}
+
+.ttm-dating-connection__avatar--you {
+  display: grid;
+  place-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(34, 211, 238, 0.12);
+  color: var(--dt-cyan);
+}
+
+.ttm-dating-connection__avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ttm-dating-connection__link-icon {
+  color: var(--dt-pink);
+  filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.7));
+  animation: ttm-dating-heart 2.2s ease-in-out infinite;
+}
+
+@keyframes ttm-dating-heart {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+.ttm-dating-connection__pair {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ttm-dating-connection__score {
+  margin: 0;
+  font-size: clamp(2.25rem, 7vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--dt-cyan), var(--dt-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* How it works — 3-column compact */
+
+.ttm-dating-how__label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--dt-muted);
+  margin: 0 0 1.5rem;
+}
+
+.ttm-dating-how__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-how__steps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.ttm-dating-how__step {
+  padding: 1rem 0.75rem;
+  text-align: center;
+  border-radius: 14px;
+  border: 1px solid var(--dt-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-how__step {
+    padding: 1.15rem 1rem;
+  }
+}
+
+.ttm-dating-how__num {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--dt-pink);
+  margin-bottom: 0.5rem;
+}
+
+.ttm-dating-how__step-title {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--dt-text);
+}
+
+/* Trust */
+
+.ttm-dating-trust__list {
+  list-style: none;
+  margin: 0 auto;
+  padding: 0;
+  max-width: 100%;
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .ttm-dating-trust__list {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.55rem;
+  }
+}
+
+.ttm-dating-trust__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  background: var(--dt-glass);
+  border: 1px solid var(--dt-border);
+  backdrop-filter: blur(20px);
+  transition:
+    transform 0.3s var(--dt-ease),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.ttm-dating-trust__item:hover {
+  transform: translateX(6px);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 32px rgba(56, 189, 248, 0.1);
+}
+
+.ttm-dating-trust__check {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  color: var(--dt-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+/* Emotional */
+
+.ttm-dating-emotional {
+  text-align: center;
+  overflow: hidden;
+}
+
+.ttm-dating-emotional__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(236, 72, 153, 0.1), transparent 70%);
+  pointer-events: none;
+}
+
+.ttm-dating-emotional__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.ttm-dating-emotional__quote {
+  margin: 0;
+  padding: 0;
+  border: none;
+  max-width: 32rem;
+}
+
+.ttm-dating-emotional__line {
+  font-size: clamp(1.15rem, 3.2vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  margin: 0 0 0.35rem;
+}
+
+.ttm-dating-emotional__line--dim {
+  color: var(--dt-muted);
+  font-weight: 500;
+}
+
+.ttm-dating-emotional__line--accent {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  background: linear-gradient(135deg, var(--dt-blue), var(--dt-pink), var(--dt-violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Footer */
+
+.ttm-dating-footer {
+  padding: 1.5rem 0 calc(1.75rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--dt-border);
+}
+
+.ttm-dating-footer__copy {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--dt-muted);
+  text-align: center;
+}
+
+/* Language switcher */
+html:has(.ttm-dating-landing) .ttm-lang-switcher {
+  display: none;
+}
+
+.ttm-dating-lang-portal {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  pointer-events: none;
+}
+
+.ttm-dating-lang-portal > .relative,
+.ttm-dating-lang-portal .ttm-lang-switcher > .relative {
+  pointer-events: auto;
+}
+
+html:has(.ttm-dating-landing) .ttm-dating-lang-portal .ttm-lang-switcher {
+  position: static;
+  display: block !important;
+}
+
+html:has(.ttm-dating-landing) .ttm-dating-lang-portal .ttm-lang-switcher button {
+  border-color: var(--dt-border);
+  background: rgba(10, 10, 13, 0.88);
+  color: var(--dt-text);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+html:has(.ttm-dating-landing) .ttm-dating-lang-portal .ttm-lang-switcher [role="listbox"] {
+  background: rgba(10, 10, 13, 0.96);
+  border-color: var(--dt-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-dating-parallax__blob,
+  .ttm-dating-connection__link-icon,
+  .ttm-dating-hero__card-float--active,
+  .ttm-dating-cta--pulse {
+    animation: none !important;
+  }
+
+  .ttm-dating-parallax__blob {
+    transition: none;
+  }
+}

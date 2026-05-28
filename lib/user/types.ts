@@ -12,6 +12,9 @@ export type User = {
   has_push_subscription: boolean
   profileExpiresAt?: string | null
   purpose?: string | null
+  gender?: "male" | "female" | null
+  ageMin?: number | null
+  ageMax?: number | null
   latitude?: number | null
   longitude?: number | null
   maxDistance?: number

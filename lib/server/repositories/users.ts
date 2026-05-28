@@ -16,8 +16,15 @@ export type DbUserRow = {
   latitude: number | null
   longitude: number | null
   max_distance: number
+  gender: "male" | "female" | null
+  age_min: number | null
+  age_max: number | null
   is_active: boolean
   photo_verified: boolean
+  is_blocked: boolean
+  blocked_at: Date | null
+  block_reason: string | null
+  role: "user" | "admin"
 }
 
 export async function findUserByEmail(email: string): Promise<DbUserRow | null> {
@@ -25,7 +32,7 @@ export async function findUserByEmail(email: string): Promise<DbUserRow | null> 
   if (!db) return null
   const rows = await db<DbUserRow[]>`
     SELECT id, email, name, profile, created_at, profile_expires_at, last_freeze_at, freeze_balance, email_verified, push_subscription,
-      purpose, latitude, longitude, max_distance, is_active, photo_verified
+      purpose, latitude, longitude, max_distance, gender, age_min, age_max, is_active, photo_verified, is_blocked, blocked_at, block_reason, role
     FROM users
     WHERE email_normalized = ${email.trim().toLowerCase()}
     LIMIT 1
@@ -38,7 +45,7 @@ export async function findUserById(id: string): Promise<DbUserRow | null> {
   if (!db) return null
   const rows = await db<DbUserRow[]>`
     SELECT id, email, name, profile, created_at, profile_expires_at, last_freeze_at, freeze_balance, email_verified, push_subscription,
-      purpose, latitude, longitude, max_distance, is_active, photo_verified
+      purpose, latitude, longitude, max_distance, gender, age_min, age_max, is_active, photo_verified, is_blocked, blocked_at, block_reason, role
     FROM users
     WHERE id = ${id}
     LIMIT 1
@@ -53,7 +60,7 @@ export async function findUserForAuthByEmail(email: string): Promise<DbUserWithP
   if (!db) return null
   const rows = await db<DbUserWithPassword[]>`
     SELECT id, email, name, profile, created_at, profile_expires_at, last_freeze_at, freeze_balance, email_verified, push_subscription,
-      purpose, latitude, longitude, max_distance, is_active, photo_verified, password_hash
+      purpose, latitude, longitude, max_distance, gender, age_min, age_max, is_active, photo_verified, is_blocked, blocked_at, block_reason, role, password_hash
     FROM users
     WHERE email_normalized = ${email.trim().toLowerCase()}
     LIMIT 1

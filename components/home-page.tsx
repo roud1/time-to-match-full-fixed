@@ -1,5 +1,5 @@
-import { SparkLandingPage } from "@/components/landing/spark-landing-page"
+import { DatingLandingPage } from "@/components/landing/dating/dating-landing-page"
 
 export function HomePage() {
-  return <SparkLandingPage />
+  return <DatingLandingPage />
 }

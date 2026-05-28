@@ -85,6 +85,8 @@ type EditForm = {
   voiceIntroRecorded: boolean
   purpose?: DatingPurpose
   maxDistance: number
+  ageMin?: number | null
+  ageMax?: number | null
   latitude?: number | null
   longitude?: number | null
   dbInterestIds: number[]
@@ -100,6 +102,18 @@ function lookingLabel(t: (k: TranslationKey) => string, looking: LookingFor) {
   if (looking === "men") return t("regLookingMen")
   if (looking === "women") return t("regLookingWomen")
   return t("regLookingAll")
+}
+
+function purposeLabel(t: (k: TranslationKey) => string, purpose?: DatingPurpose) {
+  if (!purpose) return "—"
+  return t(`datingPurpose_${purpose}` as "datingPurpose_serious")
+}
+
+function formatDiscoverAgeRange(ageMin?: number | null, ageMax?: number | null) {
+  if (ageMin == null && ageMax == null) return "—"
+  if (ageMin != null && ageMax != null) return `${ageMin}–${ageMax}`
+  if (ageMin != null) return `${ageMin}+`
+  return `≤${ageMax}`
 }
 
 function formatMemberDate(ts: number, locale: string) {
@@ -129,6 +143,8 @@ function profileToForm(p: StoredUserProfile): EditForm {
     voiceIntroRecorded: p.voiceIntroRecorded ?? false,
     purpose: p.purpose,
     maxDistance: p.maxDistance ?? DEFAULT_MAX_DISTANCE_KM,
+    ageMin: p.ageMin ?? null,
+    ageMax: p.ageMax ?? null,
     latitude: p.latitude,
     longitude: p.longitude,
     dbInterestIds: p.dbInterestIds ?? [],
@@ -183,6 +199,22 @@ export function ProfileScreen() {
     return () => window.removeEventListener("ttm-user-profile-changed", sync)
   }, [editing])
 
+  useEffect(() => {
+    if (!meUser || editing) return
+    const patch: Partial<StoredUserProfile> = {}
+    if (meUser.purpose != null) patch.purpose = meUser.purpose as DatingPurpose
+    if (meUser.maxDistance != null) patch.maxDistance = meUser.maxDistance
+    if (meUser.ageMin !== undefined) patch.ageMin = meUser.ageMin
+    if (meUser.ageMax !== undefined) patch.ageMax = meUser.ageMax
+    if (meUser.interestIds?.length) patch.dbInterestIds = meUser.interestIds
+    if (Object.keys(patch).length === 0) return
+    const next = updateUserProfile(patch)
+    if (next) {
+      setProfile(next)
+      setForm(profileToForm(next))
+    }
+  }, [meUser?.id, editing])
+
   const strength = useMemo(() => (profile ? computeProfileStrength(profile) : 0), [profile])
 
   const handleLogout = () => {
@@ -218,6 +250,8 @@ export function ProfileScreen() {
       voiceIntroRecorded: form.voiceIntroRecorded,
       purpose: form.purpose,
       maxDistance: form.maxDistance,
+      ageMin: form.ageMin,
+      ageMax: form.ageMax,
       latitude: form.latitude,
       longitude: form.longitude,
       dbInterestIds: form.dbInterestIds,
@@ -482,6 +516,9 @@ export function ProfileScreen() {
                 <ProfileDatingFields
                   purpose={form.purpose}
                   maxDistance={form.maxDistance}
+                  ageMin={form.ageMin}
+                  ageMax={form.ageMax}
+                  gender={form.gender}
                   latitude={form.latitude}
                   longitude={form.longitude}
                   dbInterestIds={form.dbInterestIds}
@@ -562,22 +599,8 @@ export function ProfileScreen() {
                   markReady={t("profileVoiceMarkReady")}
                 />
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-2">
-                    <Label className="text-foreground/80 font-light text-xs">{t("profileGender")}</Label>
-                    <select
-                      value={form.gender}
-                      onChange={(e) =>
-                        setForm((prev) => (prev ? { ...prev, gender: e.target.value as Gender } : prev))
-                      }
-                      className="w-full rounded-xl bg-foreground/5 border border-foreground/10 px-3 py-2 text-sm font-light"
-                    >
-                      <option value="male">{t("regGenderMale")}</option>
-                      <option value="female">{t("regGenderFemale")}</option>
-                      <option value="other">{t("regGenderOther")}</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-2 sm:col-span-2">
                     <Label className="text-foreground/80 font-light text-xs">{t("profileLookingFor")}</Label>
                     <select
                       value={form.lookingFor}
@@ -635,6 +658,44 @@ export function ProfileScreen() {
                       <p className="text-sm font-light text-foreground/90 truncate">{item.value}</p>
                     </div>
                   ))}
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-3">
+                  <p className="text-xs text-white/50 font-light">{t("profileDiscoverPrefsTitle")}</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      {
+                        label: t("datingPurposeLabel"),
+                        value: purposeLabel(t, profile.purpose),
+                      },
+                      {
+                        label: t("profileMaxDistance"),
+                        value: `${profile.maxDistance ?? DEFAULT_MAX_DISTANCE_KM} ${t("discoverFiltersKm")}`,
+                      },
+                      {
+                        label: `${t("discoverFiltersAgeFrom")} – ${t("discoverFiltersAgeTo")}`,
+                        value: formatDiscoverAgeRange(profile.ageMin, profile.ageMax),
+                      },
+                      {
+                        label: t("profileInterests"),
+                        value:
+                          profile.dbInterestIds && profile.dbInterestIds.length > 0
+                            ? `${profile.dbInterestIds.length}`
+                            : "—",
+                      },
+                    ].map((item) => (
+                      <div
+                        key={item.label}
+                        className="rounded-xl bg-foreground/[0.04] border border-white/10 px-3 py-3 backdrop-blur-md"
+                      >
+                        <p className="text-[10px] text-muted-foreground font-light uppercase tracking-wider mb-1">
+                          {item.label}
+                        </p>
+                        <p className="text-sm font-light text-foreground/90 truncate">{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-[10px] text-muted-foreground font-light">{t("profileDiscoverAgeHint")}</p>
                 </div>
               </div>
             )}

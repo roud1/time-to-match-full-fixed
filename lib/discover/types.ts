@@ -26,6 +26,8 @@ export type DiscoverProfile = {
 export type DiscoverFilters = {
   purpose?: string
   gender?: "male" | "female"
+  ageMin?: number
+  ageMax?: number
   minAge?: number
   maxAge?: number
   maxDistance?: number

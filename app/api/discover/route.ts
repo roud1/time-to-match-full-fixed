@@ -36,13 +36,21 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url)
   const filters: DiscoverFilters = {
-    purpose: searchParams.get("purpose") || undefined,
+    purpose: searchParams.get("purpose") || user.purpose || undefined,
     gender: searchParams.get("gender") === "male" || searchParams.get("gender") === "female"
       ? searchParams.get("gender") as "male" | "female"
       : undefined,
-    minAge: parseIntParam(searchParams.get("minAge")),
-    maxAge: parseIntParam(searchParams.get("maxAge")),
-    maxDistance: parseIntParam(searchParams.get("maxDistance")),
+    ageMin:
+      parseIntParam(searchParams.get("ageMin")) ??
+      parseIntParam(searchParams.get("minAge")) ??
+      user.age_min ??
+      undefined,
+    ageMax:
+      parseIntParam(searchParams.get("ageMax")) ??
+      parseIntParam(searchParams.get("maxAge")) ??
+      user.age_max ??
+      undefined,
+    maxDistance: parseIntParam(searchParams.get("maxDistance")) ?? user.max_distance,
   }
 
   const latParam = searchParams.get("lat")

@@ -19,7 +19,7 @@ export default function AboutPage() {
   const { t } = useI18n()
 
   return (
-    <main className="min-h-screen bg-[#050506]">
+    <main className="min-h-screen bg-transparent">
       <Navbar />
       <section className="pt-32 pb-20 px-6 max-w-3xl mx-auto text-center">
         <motion.p

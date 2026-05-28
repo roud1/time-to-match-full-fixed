@@ -42,6 +42,9 @@ export type StoredUserProfile = {
   profileExtraTimeMs?: number
   /** Dating goal synced with server */
   purpose?: DatingPurpose
+  /** Preferred age range for discover feed (stored on server). */
+  ageMin?: number | null
+  ageMax?: number | null
   latitude?: number | null
   longitude?: number | null
   maxDistance?: number
