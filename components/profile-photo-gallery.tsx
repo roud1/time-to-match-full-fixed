@@ -17,11 +17,11 @@ export function ProfilePhotoGallery({ photos, name, className }: ProfilePhotoGal
     return (
       <div
         className={cn(
-          "flex items-center justify-center rounded-2xl bg-gradient-to-br from-white/20 to-white/20 border border-foreground/10",
+          "flex items-center justify-center aspect-[4/5] min-h-[220px] w-full rounded-2xl bg-gradient-to-br from-[var(--accent)]/15 via-foreground/5 to-[var(--accent)]/10 border border-foreground/10",
           className
         )}
       >
-        <span className="text-4xl font-light text-white/60">{name.charAt(0).toUpperCase()}</span>
+        <span className="text-5xl font-extralight text-foreground/45">{name.charAt(0).toUpperCase()}</span>
       </div>
     )
   }

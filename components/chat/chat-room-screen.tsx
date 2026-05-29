@@ -75,6 +75,7 @@ import { ChatFooter } from "@/components/chat/chat-footer"
 import { ChatMessagesPane } from "@/components/chat/chat-messages-pane"
 import { ChatRoomHeader } from "@/components/chat/chat-room-header"
 import { IcebreakerPanel } from "@/components/chat/icebreaker-panel"
+import { SyncStatsSheet } from "@/components/chat/sync-stats-sheet"
 import { cn } from "@/lib/utils"
 
 type ChatRoomScreenProps = {
@@ -86,6 +87,9 @@ type ChatRoomScreenProps = {
   onSend: () => void
   onSendText?: (text: string) => void
   composerMuted?: boolean
+  showBack?: boolean
+  /** fullscreen = mobile; embedded = desktop column in messenger */
+  layout?: "fullscreen" | "embedded"
   labels: {
     back: string
     typing: string
@@ -123,8 +127,11 @@ export function ChatRoomScreen({
   onSend,
   onSendText,
   composerMuted = false,
+  showBack = true,
+  layout = "fullscreen",
   labels,
 }: ChatRoomScreenProps) {
+  const isEmbedded = layout === "embedded"
   const { locale, t, location } = useI18n()
   const realityExpansion = useEmotionalRealityExpansion({
     locale,
@@ -140,6 +147,7 @@ export function ChatRoomScreen({
   const [justSent, setJustSent] = useState(false)
   const [syncSurge, setSyncSurge] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
+  const [syncStatsOpen, setSyncStatsOpen] = useState(false)
   const [icebreakerDismissed, setIcebreakerDismissed] = useState(false)
   const prevMsgCount = useRef(thread.messages.length)
 
@@ -376,6 +384,7 @@ export function ChatRoomScreen({
       beforeComposer={
         showIcebreakers && onSendText ? (
           <IcebreakerPanel
+            variant={isEmbedded ? "compact" : "default"}
             onPick={(text) => {
               onSendText(text)
               setIcebreakerDismissed(true)
@@ -390,101 +399,37 @@ export function ChatRoomScreen({
     />
   )
 
-  return (
-    <>
-    {matchExpiry && (
-      <MatchUrgencySnackbar expiresAt={matchExpiry.expiresAt} profileId={profile.id} />
-    )}
-    <div
-      className={cn(
-        "ttm-chat-room p10-chat-atmosphere flex flex-col w-full h-full min-h-0 ttm-gpu-layer"
+  const embeddedChatBody = connectionView ? (
+    <div className="flex flex-col flex-1 min-h-0 overflow-hidden ttm-chat-room__messages">
+      {matchExpiry && (
+        <MatchUrgencySnackbar
+          placement="inline"
+          expiresAt={matchExpiry.expiresAt}
+          profileId={profile.id}
+          urgencySignal={matchExpiry.flashKey}
+        />
       )}
-      data-exp={experience.state}
-      data-rel-state={liveState}
-      data-ai-enhanced={aiEnhanced ? "true" : undefined}
-      {...ecosystemAttrs}
-      {...realityExpansion.attrs}
-      {...realityExpansion.os.attrs}
-      {...realityExpansion.consciousness.attrs}
-      {...(presenceSystem?.attrs ??
-        emotionalTime?.attrs ??
-        reality?.attrs ??
-        companion?.attrs ??
-        intelligence?.uiAttrs ??
-        {})}
-      style={
-        {
-          ...realityExpansion.style,
-          ...realityExpansion.os.style,
-          ...realityExpansion.consciousness.style,
-          ...(syncMetrics
-            ? {
-                ["--chat-atmosphere-glow" as string]:
-                  syncMetrics.atmosphereGlow ?? experience.intensity,
-                ["--chat-atmosphere-motion" as string]:
-                  syncMetrics.atmosphereMotion ?? experience.motionScale,
-              }
-            : {}),
-          ...ecosystemStyle,
-          ...(presenceSystem?.style ??
-            emotionalTime?.style ??
-            reality?.style ??
-            companion?.style ??
-            intelligence?.uiStyle ??
-            {}),
-        } as React.CSSProperties
-      }
-    >
-      <SafetyHubDialog
-        open={safetyOpen}
-        onOpenChange={setSafetyOpen}
-        profileId={profile.id}
-        profileName={profile.name}
-        context="chat"
-        onAfterBlock={onBack}
-      />
+      <ChatMessagesPane
+        scrollRef={scrollRef}
+        className="flex-1 min-h-0"
+        innerClassName="max-w-none"
+        after={typingBlock}
+      >
+        {messageList}
+      </ChatMessagesPane>
+    </div>
+  ) : (
+    <>
+      <div className="shrink-0 px-4 py-2 border-b border-white/10 bg-[#050506]">
+        <p className="text-[10px] text-center text-white/40 font-extralight">{labels.reconnect}</p>
+      </div>
+      <ChatMessagesPane scrollRef={scrollRef} className="flex-1 min-h-0" after={typingBlock}>
+        {messageList}
+      </ChatMessagesPane>
+    </>
+  )
 
-      <SwipeProfileDetailScreen
-        profile={profileOpen ? profile : null}
-        context="chat"
-        trust={trust}
-        onClose={() => setProfileOpen(false)}
-        onLike={() => setProfileOpen(false)}
-        onNope={() => setProfileOpen(false)}
-        onOpenSafety={() => {
-          setProfileOpen(false)
-          setSafetyOpen(true)
-        }}
-      />
-
-      <ChatArea
-        header={
-          <ChatRoomHeader
-            profile={profile}
-            labels={{ back: labels.back, safetyAria: labels.safetyAria }}
-            statusLine={statusLine}
-            showTyping={showTyping}
-            isReachable={isReachable}
-            emotionalPresence={emotionalPresence}
-            presenceSystem={presenceSystem}
-            syncMetrics={syncMetrics}
-            aiEnhanced={aiEnhanced}
-            syncSurge={syncSurge}
-            relationshipPersonality={identity?.personality}
-            evolutionProgress={identity?.evolutionProgress}
-            connectionView={connectionView}
-            analysis={analysis}
-            bond={bond}
-            shareMoment={shareMoment}
-            onBack={onBack}
-            onOpenProfile={() => setProfileOpen(true)}
-            onOpenSafety={() => setSafetyOpen(true)}
-            onOpenShare={() => setShareOpen(true)}
-            reduceMotion={reduce}
-          />
-        }
-        body={
-          connectionView ? (
+  const fullChatBody = connectionView ? (
         <TemporalAtmosphereLayer time={emotionalTime} className="flex flex-col flex-1 min-h-0">
         <EmotionalPresenceShell system={presenceSystem} className="flex flex-col flex-1 min-h-0">
         <CompanionSilentLayer companion={companion} className="flex flex-col flex-1 min-h-0">
@@ -638,7 +583,129 @@ export function ChatRoomScreen({
           </ChatMessagesPane>
         </>
       )
+
+  return (
+    <>
+    {matchExpiry && !isEmbedded && (
+      <MatchUrgencySnackbar
+        expiresAt={matchExpiry.expiresAt}
+        profileId={profile.id}
+        urgencySignal={matchExpiry.flashKey}
+      />
+    )}
+    <div
+      className={cn(
+        "ttm-chat-room p10-chat-atmosphere flex flex-col w-full h-full min-h-0 ttm-gpu-layer",
+        isEmbedded && "ttm-chat-room--embedded"
+      )}
+      data-exp={experience.state}
+      data-rel-state={liveState}
+      data-ai-enhanced={aiEnhanced ? "true" : undefined}
+      {...ecosystemAttrs}
+      {...realityExpansion.attrs}
+      {...realityExpansion.os.attrs}
+      {...realityExpansion.consciousness.attrs}
+      {...(presenceSystem?.attrs ??
+        emotionalTime?.attrs ??
+        reality?.attrs ??
+        companion?.attrs ??
+        intelligence?.uiAttrs ??
+        {})}
+      style={
+        {
+          ...realityExpansion.style,
+          ...realityExpansion.os.style,
+          ...realityExpansion.consciousness.style,
+          ...(syncMetrics
+            ? {
+                ["--chat-atmosphere-glow" as string]:
+                  syncMetrics.atmosphereGlow ?? experience.intensity,
+                ["--chat-atmosphere-motion" as string]:
+                  syncMetrics.atmosphereMotion ?? experience.motionScale,
+              }
+            : {}),
+          ...ecosystemStyle,
+          ...(presenceSystem?.style ??
+            emotionalTime?.style ??
+            reality?.style ??
+            companion?.style ??
+            intelligence?.uiStyle ??
+            {}),
+        } as React.CSSProperties
+      }
+    >
+      <SyncStatsSheet
+        open={syncStatsOpen}
+        onClose={() => setSyncStatsOpen(false)}
+        profileName={profile.name}
+        connectionView={connectionView}
+        messages={thread.messages}
+        copy={{ ...connectionCopy, ...syncCopy }}
+        analysis={analysis}
+        syncMetrics={syncMetrics}
+        analysisBundle={connectionAnalysis}
+        showTyping={showTyping}
+        hasUnread={hasUnread}
+        justSent={justSent}
+        syncSurge={syncSurge}
+        relationshipIdentity={identity}
+        relationshipAura={aura}
+        relationshipMoments={moments}
+      />
+
+      <SafetyHubDialog
+        open={safetyOpen}
+        onOpenChange={setSafetyOpen}
+        profileId={profile.id}
+        profileName={profile.name}
+        context="chat"
+        onAfterBlock={onBack}
+      />
+
+      <SwipeProfileDetailScreen
+        profile={profileOpen ? profile : null}
+        context="chat"
+        trust={trust}
+        onClose={() => setProfileOpen(false)}
+        onLike={() => setProfileOpen(false)}
+        onNope={() => setProfileOpen(false)}
+        onOpenSafety={() => {
+          setProfileOpen(false)
+          setSafetyOpen(true)
+        }}
+      />
+
+      <ChatArea
+        className={isEmbedded ? "ttm-chat-area--embedded" : undefined}
+        header={
+          <ChatRoomHeader
+            profile={profile}
+            labels={{ back: labels.back, safetyAria: labels.safetyAria }}
+            statusLine={statusLine}
+            showTyping={showTyping}
+            isReachable={isReachable}
+            emotionalPresence={emotionalPresence}
+            presenceSystem={presenceSystem}
+            syncMetrics={syncMetrics}
+            aiEnhanced={aiEnhanced}
+            syncSurge={syncSurge}
+            relationshipPersonality={identity?.personality}
+            evolutionProgress={identity?.evolutionProgress}
+            connectionView={connectionView}
+            analysis={analysis}
+            bond={bond}
+            shareMoment={shareMoment}
+            onBack={onBack}
+            showBack={showBack}
+            compact={isEmbedded}
+            onOpenProfile={() => setProfileOpen(true)}
+            onOpenSafety={() => setSafetyOpen(true)}
+            onOpenShare={() => setShareOpen(true)}
+            onOpenSyncStats={() => setSyncStatsOpen(true)}
+            reduceMotion={reduce}
+          />
         }
+        body={isEmbedded ? embeddedChatBody : fullChatBody}
         footer={chatFooter}
       />
 

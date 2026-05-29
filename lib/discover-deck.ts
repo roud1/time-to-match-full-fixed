@@ -7,6 +7,7 @@ import { isProfileBlocked } from "@/lib/trust-safety-store"
 import { smartSortDiscoverProfiles } from "@/lib/discover-compatibility"
 import type { DiscoverFilters } from "@/lib/discover/types"
 import { applyDiscoverFilters } from "@/lib/discover/apply-filters"
+import { hasActiveDiscoverFilters } from "@/lib/discover/filter-utils"
 import { computeInterestOverlapForProfile } from "@/lib/discover/interest-overlap"
 
 function enrichCompatibility(profiles: SwipeProfile[]): SwipeProfile[] {
@@ -35,7 +36,20 @@ export function getDiscoverDeckProfiles(
   const { passed, yourLikes, matches } = getSocialState(locale, position)
   const seen = new Set([...passed, ...yourLikes, ...matches])
   const remaining = pool.filter((p) => !seen.has(p.id))
-  const list = remaining.length > 0 ? remaining : pool
 
-  return smartSortDiscoverProfiles(enrichCompatibility(list))
+  return smartSortDiscoverProfiles(enrichCompatibility(remaining))
+}
+
+/** True when active filters remove every profile from the demo pool. */
+export function isDiscoverFilteredEmpty(
+  locale: Locale,
+  position: GeoPosition | null,
+  filters?: DiscoverFilters
+): boolean {
+  if (!filters || !hasActiveDiscoverFilters(filters)) return false
+
+  let raw = filterProfilesForUser(buildDemoSwipeProfiles(locale, position))
+  const beforeCount = raw.length
+  raw = applyDiscoverFilters(raw, filters, position)
+  return beforeCount > 0 && raw.length === 0
 }

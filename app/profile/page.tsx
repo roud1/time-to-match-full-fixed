@@ -1,18 +1,24 @@
 import { Suspense } from "react"
-import { AuthShell } from "@/components/auth-shell"
+import { ProfilePageShell } from "@/components/app/profile-page-shell"
 import { ProfileScreen } from "@/components/profile-screen"
 
 export const metadata = {
   title: "Мой профиль — Time to Match",
-  description: "Управление профилем и 72-часовым таймером.",
+  description: "Управление профилем, атмосферой и живыми связями.",
 }
 
 export default function ProfilePage() {
   return (
-    <AuthShell>
-      <Suspense fallback={<div className="w-full max-w-lg py-12 text-center text-muted-foreground font-light">…</div>}>
+    <ProfilePageShell>
+      <Suspense
+        fallback={
+          <div className="w-full py-16 text-center text-muted-foreground font-light text-sm">
+            …
+          </div>
+        }
+      >
         <ProfileScreen />
       </Suspense>
-    </AuthShell>
+    </ProfilePageShell>
   )
 }

@@ -13,6 +13,9 @@ type DatingProfileCardProps = {
   className?: string
   style?: CSSProperties
   featured?: boolean
+  bio?: string
+  interests?: string[]
+  maxInterests?: number
 }
 
 export function DatingProfileCard({
@@ -20,6 +23,9 @@ export function DatingProfileCard({
   className,
   style,
   featured,
+  bio,
+  interests,
+  maxInterests = 4,
 }: DatingProfileCardProps) {
   const { t } = useI18n()
   const scoreTier =
@@ -36,6 +42,7 @@ export function DatingProfileCard({
     >
       <div className="ttm-dating-card__photo">
         <Image
+          key={profile.imageUrl}
           src={profile.imageUrl}
           alt=""
           fill
@@ -60,6 +67,16 @@ export function DatingProfileCard({
           <span className="ttm-dating-card__age">, {profile.age}</span>
         </h3>
         <p className="ttm-dating-card__distance">{profile.distance}</p>
+        {bio ? <p className="ttm-dating-card__bio">{bio}</p> : null}
+        {interests && interests.length > 0 ? (
+          <div className="ttm-dating-card__tags">
+            {interests.slice(0, maxInterests).map((tag) => (
+              <span key={tag} className="ttm-dating-card__tag">
+                {tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
       </div>
     </article>
   )

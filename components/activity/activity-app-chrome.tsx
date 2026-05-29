@@ -19,6 +19,7 @@ export function ActivityAppChrome() {
         onClick={() => setHubOpen(true)}
         className={cn("ttm-header-icon-btn relative shrink-0")}
         aria-label={t("activityHubTitle")}
+        aria-expanded={hubOpen}
       >
         <svg className="w-5 h-5 text-foreground/85" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
           <path

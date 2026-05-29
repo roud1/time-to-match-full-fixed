@@ -1,0 +1,123 @@
+/* Discover tab — overrides on shared welcome ritual layout (welcome-page.css) */
+
+.ttm-native-app--discover .discover-panel-root {
+  padding-inline: clamp(0.35rem, 1.5vw, 0.75rem);
+  padding-top: 0;
+}
+
+.ttm-native-app--discover .ttm-welcome-page {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Swipe row sits flush under the profile card */
+.ttm-native-app--discover .ttm-welcome-page__card .ttm-swipe-deck-stack--welcome {
+  min-height: 0;
+  height: auto;
+}
+
+/* Horizontal row under the card: swipe actions (center) + filter/boost (right) */
+.ttm-native-app--discover .ttm-welcome-page__actions-bar {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 4.25rem;
+  margin-top: 0.65rem;
+  padding-inline: clamp(4.75rem, 12vw, 6rem) 5.75rem;
+  box-sizing: border-box;
+}
+
+.ttm-native-app--discover .ttm-welcome-page__actions-bar-swipe {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.ttm-native-app--discover .ttm-welcome-page__actions-bar-swipe .ttm-swipe-actions {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0.75rem;
+  width: auto;
+  max-width: 26rem;
+  margin-inline: auto;
+}
+
+.ttm-native-app--discover .ttm-welcome-page__actions-bar-tools {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-shrink: 0;
+}
+
+.ttm-native-app--discover .ttm-welcome-page__actions-bar-tools .ttm-discover-toolbar {
+  margin-bottom: 0;
+}
+
+.ttm-native-app--discover .ttm-welcome-page__actions-bar-tools .ttm-discover-toolbar__row {
+  justify-content: flex-end;
+}
+
+@media (min-width: 1024px) {
+  .ttm-native-app--discover .ttm-welcome-page__grid {
+    align-items: start;
+    max-height: calc(100dvh - var(--ttm-header-height, 3rem) - var(--ttm-dock-height) - 0.5rem);
+  }
+
+  /* Card + swipe actions stack from the top — no flex-grow gap above the buttons */
+  .ttm-native-app--discover .ttm-welcome-page__card-col {
+    min-height: 0;
+    justify-content: flex-start;
+    gap: 0.35rem;
+  }
+
+  .ttm-native-app--discover .ttm-welcome-page__card {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: min(
+      calc(100dvh - var(--ttm-header-height, 3rem) - var(--ttm-dock-height) - 11rem),
+      44rem
+    );
+  }
+
+  /* Tighter interior padding on discover — the peer card has more content
+     (gallery, trust) than onboarding, so the larger /welcome padding wastes
+     vertical space and pushes the gallery below the fold. */
+  .ttm-native-app--discover .ttm-welcome-page__card .p9-onboarding {
+    padding: clamp(1.25rem, 2.2vw, 1.85rem) clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+}
+
+@media (min-width: 1280px) {
+  .ttm-native-app--discover .p9-onboarding--wide.swipe-profile-presence .profile-presence__layout {
+    column-gap: 0.75rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .ttm-native-app--discover .ttm-welcome-page {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(var(--ttm-dock-height) + 1rem);
+  }
+
+  .ttm-native-app--discover .ttm-welcome-page__card-col {
+    min-height: min(22rem, calc(100dvh - var(--ttm-header-height, 3rem) - var(--ttm-dock-height) - 14rem));
+    gap: 0.35rem;
+  }
+
+  .ttm-native-app--discover .ttm-welcome-page__card {
+    flex: 1;
+    min-height: min(24rem, 52dvh);
+  }
+
+}

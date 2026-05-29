@@ -27,11 +27,11 @@ const NAV_ITEMS: NavItem[] = [
   { id: "likes", href: "/app?tab=likes", labelKey: "tabLikes", icon: "likes", badge: true },
   { id: "chat", href: "/app?tab=chat", labelKey: "tabChat", icon: "chat" },
   { id: "map", href: "/app?tab=map", labelKey: "tabMap", icon: "map" },
-  { id: "profile", href: "/profile", labelKey: "navProfile", icon: "profile" },
+  { id: "profile", href: "/profile", labelKey: "tabProfile", icon: "profile" },
 ]
 
 function isTabActive(id: BottomNavId, pathname: string, tabParam: string | null): boolean {
-  if (id === "profile") return pathname === "/profile"
+  if (id === "profile") return pathname === "/profile" || pathname.startsWith("/profile/")
   if (pathname !== "/app") return false
   if (id === "discover") return !tabParam || tabParam === "discover"
   return tabParam === id

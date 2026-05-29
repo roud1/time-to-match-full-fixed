@@ -11,9 +11,15 @@ type IcebreakerPanelProps = {
   onPick: (text: string) => void
   onDismiss: () => void
   className?: string
+  variant?: "default" | "compact"
 }
 
-export function IcebreakerPanel({ onPick, onDismiss, className }: IcebreakerPanelProps) {
+export function IcebreakerPanel({
+  onPick,
+  onDismiss,
+  className,
+  variant = "default",
+}: IcebreakerPanelProps) {
   const { t } = useI18n()
   const [items, setItems] = useState<Icebreaker[]>([])
   const [loading, setLoading] = useState(true)
@@ -28,6 +34,44 @@ export function IcebreakerPanel({ onPick, onDismiss, className }: IcebreakerPane
   useEffect(() => {
     void load()
   }, [load])
+
+  const suggestions = loading && items.length === 0 ? null : items
+
+  if (variant === "compact") {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 4 }}
+          className={cn("ttm-chat-icebreaker--compact w-full", className)}
+        >
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <p className="text-[11px] font-light text-[var(--text-secondary)]">{t("icebreakerTitle")}</p>
+            <button
+              type="button"
+              onClick={onDismiss}
+              className="text-[10px] uppercase tracking-wider text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+            >
+              {t("icebreakerWriteOwn")}
+            </button>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-0.5 ttm-chat-scroll">
+            {suggestions?.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => onPick(item.text)}
+                className="shrink-0 max-w-[14rem] rounded-full border border-[var(--border)] bg-[var(--bg-primary)] px-3 py-1.5 text-left text-[11px] font-light italic text-[var(--text-primary)] hover:border-[var(--accent-soft-border)] active:scale-[0.99]"
+              >
+                «{item.text}»
+              </button>
+            ))}
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    )
+  }
 
   return (
     <AnimatePresence>
@@ -47,12 +91,10 @@ export function IcebreakerPanel({ onPick, onDismiss, className }: IcebreakerPane
           <p className="text-sm font-light text-[var(--text-primary)]">{t("icebreakerTitle")}</p>
 
           <div className="space-y-2">
-            {loading && items.length === 0 ? (
-              <p className="text-xs text-[var(--text-secondary)] font-light py-2 text-center">
-                …
-              </p>
+            {!suggestions ? (
+              <p className="text-xs text-[var(--text-secondary)] font-light py-2 text-center">…</p>
             ) : (
-              items.map((item) => (
+              suggestions.map((item) => (
                 <button
                   key={item.id}
                   type="button"

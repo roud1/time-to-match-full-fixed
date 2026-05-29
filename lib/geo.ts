@@ -1,5 +1,6 @@
 import type { Locale } from "@/lib/i18n/config"
 import { localeFromCountryCode as localeFromCountry } from "@/lib/i18n/config"
+import { markLocationSettled } from "@/lib/location-settled"
 
 import { getCityCoords } from "@/lib/cities"
 
@@ -50,8 +51,10 @@ export function parseStoredPosition(raw: string | null): GeoPosition | null {
 }
 
 export function storePosition(position: GeoPosition) {
+  if (typeof window === "undefined") return
   localStorage.setItem(
     "user-position",
     JSON.stringify({ ...position, ts: Date.now() })
   )
+  markLocationSettled()
 }

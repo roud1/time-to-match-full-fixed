@@ -13,6 +13,7 @@ import {
   type CitySelectValue,
 } from "@/lib/cities"
 import { storePosition } from "@/lib/geo"
+import { markLocationSettled } from "@/lib/location-settled"
 import { trackProductEvent } from "@/lib/analytics-client"
 import { saveUserProfile, setSession } from "@/lib/user-profile"
 import { recordProfileActivity } from "@/lib/profile-life-store"
@@ -23,6 +24,7 @@ import { MIN_VIBES } from "@/lib/profile-identity"
 import { CinematicButton } from "@/components/ui/cinematic-button"
 import { CinematicCard } from "@/components/ui/cinematic-card"
 import { CinematicField } from "@/components/ui/cinematic-field"
+import { BirthdatePicker } from "@/components/ui/birthdate-picker"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
@@ -228,7 +230,7 @@ export function RegisterForm() {
   const stepLabels = [t("regStepAccount"), t("regStepRoots"), t("regStepSoul"), t("regStepReveal")]
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <CinematicCard variant="glass" className="p-6 md:p-8 border border-white/10 shadow-[0_28px_90px_-40px_rgba(255,255,255,0.35)]">
         <div className="text-center mb-8">
           <span className="ttm-badge-brand mb-4 block mx-auto w-fit">SYNC</span>
@@ -300,8 +302,16 @@ export function RegisterForm() {
 
             {step === 2 && (
               <>
-                <CinematicField label={t("regBirthdate")} error={errors.birthdate}>
-                  <Input type="date" value={form.birthdate} onChange={(e) => update("birthdate", e.target.value)} />
+                <CinematicField
+                  label={t("regBirthdate")}
+                  error={errors.birthdate}
+                  className="gap-1.5 [&_.ttm-type-label]:mb-0"
+                >
+                  <BirthdatePicker
+                    value={form.birthdate}
+                    onChange={(iso) => update("birthdate", iso)}
+                    aria-invalid={Boolean(errors.birthdate)}
+                  />
                 </CinematicField>
                 <CinematicField label={t("regGender")}>
                   <div className="grid grid-cols-3 gap-2 w-full min-w-0">
@@ -352,8 +362,15 @@ export function RegisterForm() {
                       update("cityId", id)
                       if (id !== CUSTOM_CITY_ID) update("customCity", "")
                       setErrors((prev) => ({ ...prev, city: undefined }))
+                      if (id) {
+                        markLocationSettled()
+                        if (id !== CUSTOM_CITY_ID) storePosition(getCityCoords(id))
+                      }
                     }}
-                    onCustomCityChange={(value) => update("customCity", value)}
+                    onCustomCityChange={(value) => {
+                      update("customCity", value)
+                      if (value.trim()) markLocationSettled()
+                    }}
                     error={errors.city}
                   />
                 </div>

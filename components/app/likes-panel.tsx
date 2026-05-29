@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { getLikedYouProfiles, getSocialState, likeBack } from "@/lib/social-store"
@@ -10,6 +11,63 @@ import { MatchCelebrationScreen } from "@/components/app/match-celebration-scree
 import { EmotionalEmptyState } from "@/components/product/emotional-empty-state"
 import { isFirstMatchPending } from "@/lib/product-experience"
 import { Heart } from "lucide-react"
+
+function LikesProfileCard({
+  profile,
+  onLikeBack,
+  likedYouLabel,
+  likeBackLabel,
+  presenceLabels,
+}: {
+  profile: SwipeProfile
+  onLikeBack: (profile: SwipeProfile) => void
+  likedYouLabel: string
+  likeBackLabel: string
+  presenceLabels: { online: string; recent: string; today: string }
+}) {
+  return (
+    <li className="ttm-likes-card ttm-surface-tile ttm-brand-glass ttm-brand-interactive">
+      <div className="ttm-likes-card__media">
+        <Image
+          src={profile.image}
+          alt={profile.name}
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 72px, (max-width: 1024px) 33vw, 20vw"
+        />
+        <PresenceBadge
+          variant={presenceFromProfileId(profile.id)}
+          labelOnline={presenceLabels.online}
+          labelRecent={presenceLabels.recent}
+          labelToday={presenceLabels.today}
+          className="ttm-likes-card__presence shrink-0"
+        />
+      </div>
+      <div className="ttm-likes-card__body">
+        <p className="ttm-likes-card__name">
+          {profile.name}, {profile.age}
+        </p>
+        <p className="ttm-likes-card__meta">
+          {profile.location} · {profile.distance}
+        </p>
+        <p className="ttm-likes-card__hint">{likedYouLabel}</p>
+      </div>
+      <div className="ttm-likes-card__actions">
+        <button
+          type="button"
+          onClick={() => onLikeBack(profile)}
+          className="ttm-likes-card__like-btn"
+          aria-label={likeBackLabel}
+        >
+          <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+          <span className="ttm-likes-card__like-label">{likeBackLabel}</span>
+        </button>
+      </div>
+    </li>
+  )
+}
 
 export function LikesPanel() {
   const { t, locale, location } = useI18n()
@@ -42,12 +100,20 @@ export function LikesPanel() {
     refresh()
   }
 
+  const presenceLabels = {
+    online: t("presenceOnline"),
+    recent: t("presenceRecent"),
+    today: t("presenceToday"),
+  }
+
+  const countLabel = t("likesCountLabel").replace("{count}", String(likes.length))
+
   return (
-    <div className="px-4 pt-4 pb-6 max-w-lg mx-auto w-full">
-      <div className="mb-6">
-        <h1 className="text-2xl font-medium tracking-tight">{t("tabLikes")}</h1>
-        <p className="text-sm text-muted-foreground font-light mt-1">{t("likesSubtitle")}</p>
-      </div>
+    <div className="ttm-likes-page">
+      <header className="ttm-likes-page__header">
+        <h1 className="ttm-likes-page__title">{t("tabLikes")}</h1>
+        <p className="ttm-likes-page__subtitle">{t("likesSubtitle")}</p>
+      </header>
 
       <MatchCelebrationScreen
         profile={matchedProfile}
@@ -59,52 +125,49 @@ export function LikesPanel() {
       />
 
       {likes.length === 0 ? (
-        <EmotionalEmptyState
-          title={t("likesEmptyTitle")}
-          body={t("likesEmptyBody")}
-          icon={Heart}
-        />
+        <div className="ttm-likes-page__empty">
+          <EmotionalEmptyState
+            title={t("likesEmptyTitle")}
+            body={t("likesEmptyBody")}
+            icon={Heart}
+            action={
+              <Link href="/app" className="ttm-likes-page__cta ttm-brand-cta">
+                {t("likesDiscoverCta")}
+              </Link>
+            }
+          />
+        </div>
       ) : (
-        <ul className="space-y-3">
-          {likes.map((profile) => (
-            <li
-              key={profile.id}
-              className="ttm-surface-tile ttm-brand-glass ttm-brand-interactive rounded-2xl p-3 flex items-center gap-3"
-            >
-              <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                <Image src={profile.image} alt={profile.name} fill className="object-cover" sizes="72px" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap min-w-0">
-                  <p className="font-light text-foreground truncate">
-                    {profile.name}, {profile.age}
-                  </p>
-                  <PresenceBadge
-                    variant={presenceFromProfileId(profile.id)}
-                    labelOnline={t("presenceOnline")}
-                    labelRecent={t("presenceRecent")}
-                    labelToday={t("presenceToday")}
-                    className="shrink-0"
-                  />
-                </div>
-                <p className="text-xs text-muted-foreground font-light truncate">
-                  {profile.location} · {profile.distance}
-                </p>
-                <p className="text-xs text-muted-foreground font-normal mt-0.5">{t("likesLikedYou")}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => handleLikeBack(profile)}
-                className="ttm-brand-cta shrink-0 w-11 h-11 rounded-full flex items-center justify-center p-0 min-h-0"
-                aria-label={t("likesLikeBack")}
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="ttm-likes-page__body">
+          <aside className="ttm-likes-page__aside" aria-label={t("likesAsideAria")}>
+            <div className="ttm-likes-page__stat ttm-brand-glass">
+              <p className="ttm-likes-page__stat-value">{likes.length}</p>
+              <p className="ttm-likes-page__stat-label">{countLabel}</p>
+            </div>
+            <ul className="ttm-likes-page__tips">
+              <li className="ttm-likes-page__tip">{t("likesAsideTip1")}</li>
+              <li className="ttm-likes-page__tip">{t("likesAsideTip2")}</li>
+            </ul>
+            <Link href="/app" className="ttm-likes-page__cta ttm-brand-cta">
+              {t("likesDiscoverCta")}
+            </Link>
+          </aside>
+
+          <div className="ttm-likes-page__main">
+            <ul className="ttm-likes-page__grid">
+              {likes.map((profile) => (
+                <LikesProfileCard
+                  key={profile.id}
+                  profile={profile}
+                  onLikeBack={handleLikeBack}
+                  likedYouLabel={t("likesLikedYou")}
+                  likeBackLabel={t("likesLikeBack")}
+                  presenceLabels={presenceLabels}
+                />
+              ))}
+            </ul>
+          </div>
+        </div>
       )}
     </div>
   )

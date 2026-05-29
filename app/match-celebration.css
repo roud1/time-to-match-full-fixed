@@ -1,0 +1,299 @@
+/* Match celebration — full-screen like / mutual match moment */
+
+.match-moment {
+  width: 100%;
+  min-height: 100dvh;
+  min-height: 100svh;
+  background:
+    radial-gradient(ellipse 120% 85% at 50% -15%, rgba(124, 58, 237, 0.22), transparent 52%),
+    radial-gradient(ellipse 90% 60% at 50% 105%, rgba(219, 39, 119, 0.16), transparent 50%),
+    linear-gradient(175deg, #0a0814 0%, #030304 42%, #06050a 100%);
+}
+
+.match-moment__glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 22%, rgba(168, 85, 247, 0.12), transparent 62%),
+    radial-gradient(ellipse 55% 40% at 50% 88%, rgba(236, 72, 153, 0.1), transparent 58%);
+}
+
+.match-moment__avatars {
+  position: relative;
+  width: 10.5rem;
+  height: 6.25rem;
+  margin-inline: auto;
+  margin-bottom: 2.25rem;
+  overflow: visible;
+  background: transparent;
+}
+
+.match-moment__avatar {
+  position: absolute;
+  top: 50%;
+  width: 5.25rem;
+  height: 5.25rem;
+  margin-top: -2.625rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 16px 40px -12px rgba(0, 0, 0, 0.65);
+}
+
+.match-moment__avatar--me {
+  left: 0;
+  z-index: 1;
+}
+
+.match-moment__avatar--them {
+  right: 0;
+  z-index: 2;
+}
+
+.match-moment__pulse-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  width: auto;
+  height: auto;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  overflow: visible;
+  background: transparent;
+}
+
+.match-moment__pulse-wrap .ttm-pulse,
+.match-moment__pulse-wrap .ttm-pulse--mini {
+  width: 4.25rem;
+  background: transparent;
+}
+
+.match-moment .ttm-pulse__blob {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.14) inset,
+    0 0 40px rgba(168, 85, 247, 0.55),
+    0 0 72px rgba(236, 72, 153, 0.28);
+}
+
+.match-moment .ttm-pulse__aura--far {
+  filter: blur(16px);
+  opacity: 0.85;
+}
+
+.match-moment .ttm-pulse__aura--near {
+  filter: blur(10px);
+  opacity: 0.9;
+}
+
+.match-moment__pulse-rings {
+  position: absolute;
+  inset: -18%;
+  border-radius: 50%;
+  border: 1px solid rgba(196, 181, 253, 0.22);
+  animation: match-pulse-ring 2.8s ease-in-out infinite;
+}
+
+.match-moment__pulse-rings::before,
+.match-moment__pulse-rings::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid rgba(236, 72, 153, 0.18);
+}
+
+.match-moment__pulse-rings::after {
+  inset: 24%;
+  border-color: rgba(168, 85, 247, 0.28);
+  animation: match-pulse-ring 2.8s ease-in-out infinite reverse;
+}
+
+@keyframes match-pulse-ring {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 0.9;
+  }
+}
+
+.match-moment__title {
+  margin: 0;
+  font-size: clamp(1.45rem, 4.5vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--foreground);
+}
+
+.match-moment__subtitle {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.match-moment__name {
+  margin: 0.85rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--foreground);
+}
+
+.match-moment__hint {
+  margin: 0.65rem auto 0;
+  max-width: 18rem;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  color: color-mix(in srgb, var(--ttm-brand-accent) 88%, var(--muted-foreground));
+}
+
+.match-moment__body {
+  margin: 0.5rem auto 0;
+  max-width: 17rem;
+  font-size: 0.75rem;
+  font-weight: 300;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.match-moment__starters-label {
+  margin: 0 0 0.65rem;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--muted-foreground);
+}
+
+.match-moment__starters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: min(28dvh, 220px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(192, 132, 252, 0.35) transparent;
+}
+
+.match-moment__starters::-webkit-scrollbar {
+  width: 4px;
+}
+
+.match-moment__starters::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(192, 132, 252, 0.35);
+}
+
+.match-moment__starters::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.match-moment__starter {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--foreground) 94%, transparent);
+  background: color-mix(in srgb, #a855f7 14%, rgba(255, 255, 255, 0.04));
+  border: 1px solid color-mix(in srgb, #c084fc 32%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+  touch-action: manipulation;
+}
+
+.match-moment__starter:hover {
+  border-color: color-mix(in srgb, #e879f9 45%, transparent);
+  background: color-mix(in srgb, #a855f7 20%, rgba(255, 255, 255, 0.06));
+}
+
+.match-moment__starter:active {
+  transform: scale(0.99);
+}
+
+.match-moment__cta {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.95rem 1.25rem;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(90deg, #7c3aed 0%, #c026d3 52%, #ec4899 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+    0 12px 36px -10px rgba(168, 85, 247, 0.55);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  touch-action: manipulation;
+}
+
+.match-moment__cta:hover {
+  opacity: 0.96;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.16) inset,
+    0 16px 44px -8px rgba(236, 72, 153, 0.5);
+}
+
+.match-moment__cta:active {
+  transform: scale(0.98);
+}
+
+.match-moment__continue {
+  align-self: flex-end;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  transition: color 0.2s ease;
+  touch-action: manipulation;
+}
+
+.match-moment__continue:hover {
+  color: var(--foreground);
+}
+
+.match-moment__burst {
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
+.match-moment__content,
+.match-moment__foot {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .match-moment__pulse-rings,
+  .match-moment__pulse-rings::after {
+    animation: none !important;
+  }
+}

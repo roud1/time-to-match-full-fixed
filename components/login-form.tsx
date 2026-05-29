@@ -13,6 +13,7 @@ import {
   verifyLogin,
 } from "@/lib/user-profile"
 import { recordProfileActivity } from "@/lib/profile-life-store"
+import { isWelcomeSeen } from "@/lib/welcome-seen"
 import { CinematicButton } from "@/components/ui/cinematic-button"
 import { CinematicCard } from "@/components/ui/cinematic-card"
 import { CinematicField } from "@/components/ui/cinematic-field"
@@ -39,9 +40,11 @@ export function LoginForm() {
     remember: false,
   })
 
+  const postAuthPath = () => (isWelcomeSeen() ? "/app" : "/welcome")
+
   useEffect(() => {
     if (isLoggedIn()) {
-      router.replace("/welcome")
+      router.replace(postAuthPath())
       return
     }
     const profile = getUserProfile()
@@ -81,7 +84,7 @@ export function LoginForm() {
     setLoading(true)
     setSession(form.email, form.remember)
     recordProfileActivity()
-    router.push("/welcome")
+    router.push(postAuthPath())
   }
 
   return (

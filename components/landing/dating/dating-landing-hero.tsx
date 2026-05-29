@@ -2,8 +2,7 @@
 
 import Link from "next/link"
 import { motion, useReducedMotion } from "motion/react"
-import { useEffect, useState } from "react"
-import { DatingParallaxBg } from "@/components/landing/dating/dating-parallax-bg"
+import { useEffect, useMemo, useState } from "react"
 import { DatingProfileCard } from "@/components/landing/dating/dating-profile-card"
 import { useDatingHeroProfiles } from "@/components/landing/dating/use-dating-profiles"
 import { useI18n } from "@/lib/i18n"
@@ -14,7 +13,8 @@ export function DatingLandingHero() {
   const { t } = useI18n()
   const reduce = useReducedMotion()
   const [ctaHref, setCtaHref] = useState("/register")
-  const profile = useDatingHeroProfiles()[0]
+  const profiles = useDatingHeroProfiles()
+  const profile = profiles[0]
 
   useEffect(() => {
     setCtaHref(isLoggedIn() ? "/app" : "/register")
@@ -24,11 +24,40 @@ export function DatingLandingHero() {
 
   const titleFull = `${t("datingHeroTitleLine1")} ${t("datingHeroTitleLine2")}`
   const heroChips = [t("datingHeroChip1"), t("datingHeroChip2")]
+  const supportProfiles = useMemo(
+    () =>
+      [
+        {
+          delta: 6,
+          km: 4,
+          imageUrl:
+            "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=420&h=520&fit=crop&q=85",
+        },
+        {
+          delta: 12,
+          km: 7,
+          imageUrl:
+            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=420&h=520&fit=crop&q=85",
+        },
+        {
+          delta: 18,
+          km: 11,
+          imageUrl:
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=420&h=520&fit=crop&q=85",
+        },
+      ].map(({ delta, km, imageUrl }, index) => ({
+        ...profile,
+        age: profile.age + index + 1,
+        connectionScore: Math.max(62, profile.connectionScore - delta),
+        distance: t("datingKmAway").replace("{km}", String(km)),
+        imageUrl,
+        verified: false,
+      })),
+    [profile, t]
+  )
 
   return (
     <section className="ttm-dating-hero" aria-labelledby="dating-hero-title">
-      <DatingParallaxBg className="ttm-dating-hero__parallax" />
-
       <div className="ttm-dating-container">
         <motion.div
           className="ttm-dating-hero__scene"
@@ -74,14 +103,33 @@ export function DatingLandingHero() {
             transition={{ duration: 0.85, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             aria-label={t("datingHeroCardsAria")}
           >
-            <div className="ttm-dating-hero__card-aura" aria-hidden />
-            <div
-              className={cn(
-                "ttm-dating-hero__card-float",
-                !reduce && "ttm-dating-hero__card-float--active"
-              )}
-            >
-              <DatingProfileCard profile={profile} featured className="ttm-dating-card--scene" />
+            <div className="ttm-dating-hero__card-cluster">
+              <div className="ttm-dating-hero__card-aura" aria-hidden />
+              <div className="ttm-dating-hero__cards-under" aria-hidden>
+                {supportProfiles.map((item, index) => (
+                  <div
+                    key={`${item.name}-${index}`}
+                    className={cn(
+                      "ttm-dating-hero__cards-under-item",
+                      index === 0 && "ttm-dating-hero__cards-under-item--left",
+                      index === 1 && "ttm-dating-hero__cards-under-item--center",
+                      index === 2 && "ttm-dating-hero__cards-under-item--right",
+                      !reduce && "ttm-dating-hero__cards-under-item--active"
+                    )}
+                    style={{ animationDelay: `${index * 0.18}s` }}
+                  >
+                    <DatingProfileCard profile={item} className="ttm-dating-card--mini" />
+                  </div>
+                ))}
+              </div>
+              <div
+                className={cn(
+                  "ttm-dating-hero__card-float",
+                  !reduce && "ttm-dating-hero__card-float--active"
+                )}
+              >
+                <DatingProfileCard profile={profile} featured className="ttm-dating-card--scene" />
+              </div>
             </div>
           </motion.div>
         </motion.div>

@@ -1,0 +1,241 @@
+/* Map tab — mobile stack + desktop list + map */
+
+.ttm-map-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: min(72rem, 100%);
+  margin-inline: auto;
+  padding: 1rem var(--ttm-page-gutter) 1.5rem;
+  min-height: 0;
+  flex: 1;
+}
+
+@media (min-width: 1024px) {
+  .ttm-native-app--map .ttm-native-app__main {
+    overflow: hidden;
+  }
+
+  .ttm-map-page {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    max-height: calc(100dvh - var(--ttm-header-height, 3rem) - 1rem);
+    padding-top: 1.25rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+.ttm-map-page__header {
+  flex-shrink: 0;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .ttm-map-page__header {
+    margin-bottom: 1.25rem;
+  }
+}
+
+.ttm-map-page__title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+@media (min-width: 1024px) {
+  .ttm-map-page__title {
+    font-size: 2rem;
+    font-weight: 400;
+  }
+}
+
+.ttm-map-page__subtitle {
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--muted-foreground, var(--ttm-text-muted));
+  line-height: 1.5;
+}
+
+.ttm-map-page__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .ttm-map-page__body {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 1rem;
+    min-height: 0;
+  }
+}
+
+.ttm-map-page__aside {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .ttm-map-page__aside {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 min(18rem, 32%);
+    min-width: 16rem;
+    max-width: 20rem;
+    min-height: 0;
+    gap: 0.75rem;
+  }
+}
+
+.ttm-map-page__stat {
+  flex-shrink: 0;
+  border-radius: 1.25rem;
+  padding: 1rem 1.15rem;
+}
+
+.ttm-map-page__stat-value {
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.ttm-map-page__stat-label {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: var(--muted-foreground, var(--ttm-text-muted));
+}
+
+.ttm-map-page__list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-right: 0.15rem;
+}
+
+.ttm-map-page__row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+  text-align: left;
+  touch-action: manipulation;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.ttm-map-page__row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ttm-map-page__row--active {
+  border-color: rgba(255, 154, 61, 0.45);
+  background: rgba(255, 154, 61, 0.08);
+}
+
+.ttm-map-page__row-media {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  border-radius: 0.65rem;
+  overflow: hidden;
+}
+
+.ttm-map-page__row-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ttm-map-page__row-name {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ttm-map-page__row-meta {
+  font-size: 0.6875rem;
+  font-weight: 300;
+  color: var(--muted-foreground, var(--ttm-text-muted));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ttm-map-page__map-wrap {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 10, 15, 0.6);
+}
+
+.ttm-map-page__map-wrap--mobile {
+  height: min(60vh, 520px);
+  flex: none;
+}
+
+@media (min-width: 1024px) {
+  .ttm-map-page__map-wrap--mobile {
+    height: auto;
+    flex: 1;
+  }
+}
+
+.ttm-map-page__hint {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  font-weight: 300;
+  color: var(--muted-foreground, var(--ttm-text-muted));
+  text-align: center;
+  opacity: 0.75;
+}
+
+@media (min-width: 1024px) {
+  .ttm-map-page__hint {
+    display: none;
+  }
+}
+
+.ttm-map-page__open-btn {
+  display: block;
+  flex-shrink: 0;
+  margin-top: 0.35rem;
+  padding: 0;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  color: rgba(255, 154, 61, 0.95);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ttm-map-page__open-btn:hover {
+  text-decoration: underline;
+}
+
+.ttm-map-pin-inner--selected img {
+  border-color: #ff9a3d;
+  box-shadow: 0 4px 18px rgba(255, 154, 61, 0.55);
+}

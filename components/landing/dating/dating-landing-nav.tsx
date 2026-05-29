@@ -4,6 +4,7 @@ import Link from "next/link"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { Logo } from "@/components/logo"
+import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
@@ -43,6 +44,7 @@ export function DatingLandingNav() {
           </a>
         </div>
         <div className="ttm-dating-nav__actions">
+          <ThemeToggle compact className="ttm-dating-nav__theme" />
           <Link href="/login" className="ttm-dating-nav__sign">
             {t("login")}
           </Link>

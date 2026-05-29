@@ -1,9 +1,12 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
+import { useCallback, useEffect, useState } from "react"
 import { User } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { getUserProfile } from "@/lib/user-profile"
+import { getProfilePhotos } from "@/lib/profile-photos"
 import { cn } from "@/lib/utils"
 
 type HeaderProfileLinkProps = {
@@ -12,18 +15,39 @@ type HeaderProfileLinkProps = {
 
 export function HeaderProfileLink({ className }: HeaderProfileLinkProps) {
   const { t } = useI18n()
-  const name = getUserProfile()?.name
-  const initial = (name ?? "?").charAt(0).toUpperCase()
+  const [photo, setPhoto] = useState<string | null>(null)
+  const [initial, setInitial] = useState("?")
+
+  const syncProfile = useCallback(() => {
+    const profile = getUserProfile()
+    const name = profile?.name?.trim()
+    setInitial(name ? name.charAt(0).toUpperCase() : "?")
+    setPhoto(profile ? getProfilePhotos(profile)[0] ?? null : null)
+  }, [])
+
+  useEffect(() => {
+    syncProfile()
+    window.addEventListener("ttm-user-profile-changed", syncProfile)
+    window.addEventListener("storage", syncProfile)
+    return () => {
+      window.removeEventListener("ttm-user-profile-changed", syncProfile)
+      window.removeEventListener("storage", syncProfile)
+    }
+  }, [syncProfile])
 
   return (
     <Link
       href="/profile"
-      className={cn("ttm-header-icon-btn shrink-0", className)}
+      className={cn("ttm-header-icon-btn shrink-0 overflow-hidden p-0", className)}
       aria-label={t("navProfile")}
       title={t("navProfile")}
     >
-      {name ? (
-        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--accent-soft-bg)] text-[10px] font-medium text-[var(--accent)]">
+      {photo ? (
+        <span className="relative block h-full w-full min-h-[2.75rem] min-w-[2.75rem]">
+          <Image src={photo} alt="" fill className="object-cover" sizes="44px" priority />
+        </span>
+      ) : initial !== "?" ? (
+        <span className="flex h-full w-full min-h-[2.75rem] min-w-[2.75rem] items-center justify-center text-sm font-medium text-[var(--accent)]">
           {initial}
         </span>
       ) : (

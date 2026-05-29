@@ -35,7 +35,7 @@ export function SparkLandingHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="spark-landing__hero-title-line">72 часа, чтобы засиять.</span>
+          <span className="spark-landing__hero-title-line">24 часа, чтобы зажечь искру.</span>
           <span className="spark-landing__hero-title-line spark-landing__hero-title-line--accent">
             24 часа, чтобы не потерять.
           </span>

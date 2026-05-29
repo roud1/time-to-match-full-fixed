@@ -1,17 +1,8 @@
 /* ─── Premium dating landing (#0A0A0D) ─── */
 
-html:has(.ttm-dating-landing) .site-bg-root {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-html:has(.ttm-dating-landing) {
-  color-scheme: dark;
-}
-
 .ttm-dating-landing {
   --dt-bg: #0a0a0d;
+  --dt-bg-soft: #0c0b10;
   --dt-glass: rgba(255, 255, 255, 0.06);
   --dt-border: rgba(255, 255, 255, 0.1);
   --dt-text: #faf9fc;
@@ -27,7 +18,7 @@ html:has(.ttm-dating-landing) {
 
   position: relative;
   min-height: 100dvh;
-  background: var(--dt-bg);
+  background: transparent;
   color: var(--dt-text);
   font-family: var(--dt-font);
   overflow-x: hidden;
@@ -50,74 +41,7 @@ html:has(.ttm-dating-landing) {
   }
 }
 
-/* ─── Ambient parallax ─── */
-
-.ttm-dating-landing__ambient {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.ttm-dating-parallax {
-  position: absolute;
-  inset: 0;
-}
-
-.ttm-dating-parallax__blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.55;
-  transition: transform 0.35s var(--dt-ease);
-  will-change: transform;
-}
-
-.ttm-dating-parallax__blob--pink {
-  width: min(70vw, 520px);
-  height: min(70vw, 520px);
-  top: -8%;
-  right: -12%;
-  background: rgba(236, 72, 153, 0.4);
-  animation: ttm-dating-blob-drift 16s ease-in-out infinite alternate;
-}
-
-.ttm-dating-parallax__blob--blue {
-  width: min(60vw, 460px);
-  height: min(60vw, 460px);
-  bottom: 5%;
-  left: -15%;
-  background: rgba(34, 211, 238, 0.28);
-  animation: ttm-dating-blob-drift 20s ease-in-out infinite alternate-reverse;
-}
-
-.ttm-dating-parallax__blob--violet {
-  width: min(45vw, 360px);
-  height: min(45vw, 360px);
-  top: 40%;
-  left: 35%;
-  background: rgba(167, 139, 250, 0.22);
-  animation: ttm-dating-blob-drift 14s ease-in-out infinite alternate;
-  animation-delay: -4s;
-}
-
-.ttm-dating-parallax__mesh {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(236, 72, 153, 0.06), transparent 55%);
-}
-
-@keyframes ttm-dating-blob-drift {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  100% {
-    transform: translate(3%, -2%) scale(1.06);
-  }
-}
-
-.ttm-dating-landing > *:not(.ttm-dating-landing__ambient) {
+.ttm-dating-landing > * {
   position: relative;
   z-index: 1;
 }
@@ -299,22 +223,15 @@ html:has(.ttm-dating-landing) {
 .ttm-dating-hero {
   position: relative;
   display: flex;
-  align-items: center;
-  padding: calc(4.25rem + env(safe-area-inset-top, 0px)) 0 1.75rem;
+  align-items: flex-start;
+  padding: calc(4.25rem + env(safe-area-inset-top, 0px)) 0 0.75rem;
+  background: transparent;
 }
 
 @media (min-width: 768px) {
   .ttm-dating-hero {
-    max-height: 80vh;
-    min-height: min(80vh, 560px);
-    padding-bottom: 1.5rem;
-    overflow: hidden;
+    padding-bottom: 0.5rem;
   }
-}
-
-.ttm-dating-hero__parallax {
-  position: absolute;
-  inset: 0;
 }
 
 .ttm-dating-hero__scene {
@@ -329,7 +246,7 @@ html:has(.ttm-dating-landing) {
   .ttm-dating-hero__scene {
     grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
     gap: min(2.5rem, 40px);
-    min-height: min(72vh, 520px);
+    align-items: center;
   }
 }
 
@@ -503,34 +420,50 @@ html:has(.ttm-dating-landing) {
   justify-content: center;
   align-items: center;
   perspective: 900px;
+  width: min(100%, 420px);
+  margin-left: -64px;
 }
 
 @media (min-width: 768px) {
   .ttm-dating-hero__visual {
     justify-content: center;
     padding-left: 0;
+    width: min(100%, 440px);
+    margin-left: -132px;
   }
+}
+
+.ttm-dating-hero__card-cluster {
+  position: relative;
+  width: min(100%, 420px);
+  height: 430px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ttm-dating-hero__card-aura {
   position: absolute;
-  width: min(100%, 320px);
+  width: min(100%, 360px);
   aspect-ratio: 3 / 4;
   background: radial-gradient(
     ellipse 80% 70% at 40% 50%,
-    rgba(236, 72, 153, 0.22),
-    rgba(34, 211, 238, 0.1) 45%,
+    rgba(236, 72, 153, 0.16),
+    rgba(34, 211, 238, 0.08) 45%,
     transparent 72%
   );
-  filter: blur(28px);
-  opacity: 0.75;
+  filter: blur(34px);
+  opacity: 0.5;
   pointer-events: none;
   z-index: 0;
 }
 
 .ttm-dating-hero__card-float {
   position: relative;
-  z-index: 1;
+  width: 260px;
+  display: flex;
+  justify-content: center;
+  z-index: 3;
   transition:
     transform 0.35s var(--dt-ease),
     filter 0.35s ease;
@@ -555,12 +488,81 @@ html:has(.ttm-dating-landing) {
 }
 
 .ttm-dating-hero__card-float:hover .ttm-dating-card--scene {
-  transform: translateY(-6px) rotate(0deg) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-5px) rotate(0deg) scale(1.012);
+  border-color: rgba(255, 255, 255, 0.28);
   box-shadow:
-    0 0 48px rgba(236, 72, 153, 0.25),
-    0 0 32px rgba(34, 211, 238, 0.15),
-    0 24px 48px rgba(0, 0, 0, 0.45);
+    0 22px 56px rgba(0, 0, 0, 0.48),
+    0 8px 34px rgba(255, 255, 255, 0.08);
+}
+
+.ttm-dating-hero__cards-under {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.35));
+}
+
+.ttm-dating-hero__cards-under-item {
+  --fan-rotate: 0deg;
+  --fan-offset-y: 0px;
+  --fan-offset-x: 0px;
+  position: relative;
+  z-index: 1;
+  margin-left: 0;
+  opacity: 0.88;
+  transform: translateX(var(--fan-offset-x)) translateY(var(--fan-offset-y)) rotate(var(--fan-rotate));
+  transform-origin: center top;
+  transition:
+    transform 0.35s var(--dt-ease),
+    opacity 0.35s ease;
+}
+
+.ttm-dating-hero__cards-under-item:first-child {
+  margin-left: 0;
+}
+
+.ttm-dating-hero__cards-under-item--left {
+  --fan-rotate: -8deg;
+  --fan-offset-x: -52px;
+  --fan-offset-y: 10px;
+}
+
+.ttm-dating-hero__cards-under-item--center {
+  --fan-rotate: -1deg;
+  --fan-offset-x: 0px;
+  --fan-offset-y: 14px;
+  z-index: 2;
+  opacity: 0.84;
+}
+
+.ttm-dating-hero__cards-under-item--right {
+  --fan-rotate: 8deg;
+  --fan-offset-x: 52px;
+  --fan-offset-y: 10px;
+}
+
+.ttm-dating-hero__cards-under-item--active {
+  animation: ttm-dating-under-card-float 5.8s ease-in-out infinite;
+}
+
+.ttm-dating-hero__cards-under:hover .ttm-dating-hero__cards-under-item {
+  opacity: 1;
+}
+
+@keyframes ttm-dating-under-card-float {
+  0%,
+  100% {
+    transform: translateX(var(--fan-offset-x)) translateY(var(--fan-offset-y)) rotate(var(--fan-rotate));
+  }
+  50% {
+    transform: translateX(var(--fan-offset-x)) translateY(calc(var(--fan-offset-y) - 5px)) rotate(var(--fan-rotate));
+  }
 }
 
 /* ─── Glass profile cards (260×340) ─── */
@@ -593,13 +595,14 @@ html:has(.ttm-dating-landing) {
 
 /* Hero scene card — integrated glass, not banner */
 .ttm-dating-card--scene {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
+  background: rgba(255, 255, 255, 0.065);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(30px) saturate(1.15);
+  -webkit-backdrop-filter: blur(30px) saturate(1.15);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 24px 52px rgba(0, 0, 0, 0.44),
+    0 8px 26px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transition:
     transform 0.35s var(--dt-ease),
     box-shadow 0.35s ease,
@@ -607,11 +610,82 @@ html:has(.ttm-dating-landing) {
 }
 
 .ttm-dating-card--scene.ttm-dating-card--featured {
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.22);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 0 24px rgba(236, 72, 153, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 24px 52px rgba(0, 0, 0, 0.44),
+    0 10px 30px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.ttm-dating-card--mini {
+  width: 122px;
+  max-width: none;
+  height: 146px;
+  opacity: 0.96;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.ttm-dating-card--mini .ttm-dating-card__body {
+  display: none;
+}
+
+.ttm-dating-card--mini .ttm-dating-card__name {
+  font-size: 0.8rem;
+}
+
+.ttm-dating-card--mini .ttm-dating-card__distance {
+  font-size: 0.72rem;
+}
+
+.ttm-dating-card--mini .ttm-dating-card__score {
+  top: 0.45rem;
+  right: 0.45rem;
+  padding: 0.24rem 0.45rem;
+  font-size: 0.64rem;
+}
+
+@media (max-width: 639px) {
+  .ttm-dating-hero__visual {
+    margin-left: -28px;
+  }
+
+  .ttm-dating-hero__card-cluster {
+    width: min(100%, 350px);
+    height: 360px;
+  }
+
+  .ttm-dating-card--mini {
+    width: 94px;
+    height: 116px;
+  }
+
+  .ttm-dating-hero__cards-under-item--left {
+    --fan-offset-x: -42px;
+    --fan-offset-y: 10px;
+  }
+
+  .ttm-dating-hero__cards-under-item--center {
+    --fan-offset-y: 14px;
+  }
+
+  .ttm-dating-hero__cards-under-item--right {
+    --fan-offset-x: 42px;
+    --fan-offset-y: 10px;
+  }
+}
+
+.ttm-dating-hero__cards-under-item:nth-child(1) .ttm-dating-card--mini {
+  border-color: rgba(236, 72, 153, 0.2);
+}
+
+.ttm-dating-hero__cards-under-item:nth-child(2) .ttm-dating-card--mini {
+  border-color: rgba(34, 211, 238, 0.2);
+}
+
+.ttm-dating-hero__cards-under-item:nth-child(3) .ttm-dating-card--mini {
+  border-color: rgba(167, 139, 250, 0.2);
 }
 
 .ttm-dating-card:hover:not(.ttm-dating-card--scene) {
@@ -699,11 +773,18 @@ html:has(.ttm-dating-landing) {
 /* ─── Sections ─── */
 
 .ttm-dating-section {
+  position: relative;
   padding: 4rem 0;
+  background: transparent;
 }
 
 .ttm-dating-section--compact {
-  padding: 3.5rem 0;
+  padding: 1.75rem 0 3rem;
+}
+
+.ttm-dating-ai {
+  margin-top: 0;
+  padding-top: 1.25rem;
 }
 
 .ttm-dating-section__eyebrow {
@@ -736,157 +817,237 @@ html:has(.ttm-dating-landing) {
   font-weight: 600;
 }
 
-/* AI layer — compact */
+/* AI layer — Apple product panel */
+
+.ttm-dating-ai__title {
+  margin: 0 0 1.1rem;
+  max-width: 22ch;
+  font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
 
 .ttm-dating-ai__panel {
   display: grid;
   gap: 1rem;
-  padding: 1.15rem 1.35rem;
-  border-radius: var(--dt-radius-card);
-  background: var(--dt-glass);
-  border: 1px solid var(--dt-border);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  padding: 1.1rem 1.15rem;
+  border-radius: calc(var(--dt-radius-card) + 4px);
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(28px) saturate(1.12);
+  -webkit-backdrop-filter: blur(28px) saturate(1.12);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 @media (min-width: 640px) {
   .ttm-dating-ai__panel {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
-    gap: 2rem;
+    gap: 1.25rem;
+    padding: 1.2rem 1.35rem;
   }
 }
 
-.ttm-dating-ai__label {
-  margin: 0 0 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--dt-muted);
+.ttm-dating-ai__main {
+  min-width: 0;
 }
 
-.ttm-dating-ai__list {
-  margin: 0;
-  padding: 0 0 0 1.1rem;
-  list-style: disc;
-  color: var(--dt-text);
+.ttm-dating-ai__scan {
+  position: relative;
+  height: 3px;
+  margin-bottom: 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.ttm-dating-ai__scan-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 42%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+}
+
+.ttm-dating-ai__status {
+  margin: 0 0 0.75rem;
   font-size: 0.92rem;
-  line-height: 1.5;
+  font-weight: 500;
+  color: rgba(250, 249, 252, 0.72);
+  letter-spacing: -0.01em;
 }
 
-.ttm-dating-ai__list li {
-  padding: 0.1rem 0;
+.ttm-dating-ai__chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
 }
 
-.ttm-dating-ai__list li::marker {
-  color: var(--dt-cyan);
+.ttm-dating-ai__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.32rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.74rem;
+  color: rgba(250, 249, 252, 0.78);
 }
 
-.ttm-dating-ai__output {
-  padding: 0.85rem 1rem;
-  border-radius: 14px;
-  border: 1px solid rgba(34, 211, 238, 0.25);
-  background: rgba(34, 211, 238, 0.06);
+.ttm-dating-ai__score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 9.5rem;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
   text-align: center;
 }
 
-@media (min-width: 640px) {
-  .ttm-dating-ai__output {
-    min-width: 11rem;
-    text-align: right;
-  }
+.ttm-dating-ai__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(250, 249, 252, 0.55);
 }
 
-.ttm-dating-ai__output-label {
-  display: block;
-  font-size: 0.65rem;
+.ttm-dating-ai__live-dot {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.65);
+}
+
+.ttm-dating-ai__score-label {
+  margin: 0;
+  font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--dt-cyan);
-  margin-bottom: 0.25rem;
+  color: rgba(250, 249, 252, 0.48);
 }
 
-.ttm-dating-ai__output-value {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--dt-cyan), var(--dt-pink));
+.ttm-dating-ai__score-value {
+  margin: 0.15rem 0 0;
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  background: linear-gradient(135deg, #f9fafb 0%, #e9d5ff 45%, #fda4af 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Connection score */
+.ttm-dating-ai__score-hint {
+  margin: 0.4rem 0 0;
+  font-size: 0.72rem;
+  color: rgba(250, 249, 252, 0.5);
+}
 
-.ttm-dating-connection__panel {
+.ttm-dating-ai__cta-wrap {
+  margin-top: 1rem;
+}
+
+.ttm-dating-ai__cta {
+  min-height: 2.65rem;
+  padding: 0 1.1rem;
+  font-size: 0.86rem;
+}
+
+/* Match flow — connection + steps (unified) */
+
+.ttm-dating-flow__title {
+  margin: 0 0 1.1rem;
+  max-width: 20ch;
+  font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+}
+
+.ttm-dating-flow__panel {
+  border-radius: calc(var(--dt-radius-card) + 6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(28px) saturate(1.1);
+  -webkit-backdrop-filter: blur(28px) saturate(1.1);
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.ttm-dating-flow__connection {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  max-width: 22rem;
-  margin-inline: auto;
-  padding: 1.5rem 1.35rem;
-  border-radius: var(--dt-radius-card);
-  background: var(--dt-glass);
-  border: 1px solid rgba(236, 72, 153, 0.22);
-  backdrop-filter: blur(20px);
-  box-shadow:
-    0 0 40px rgba(236, 72, 153, 0.08),
-    0 12px 36px rgba(0, 0, 0, 0.4);
-  transition:
-    transform 0.3s var(--dt-ease),
-    box-shadow 0.3s ease;
-}
-
-.ttm-dating-connection__panel:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 0 56px rgba(236, 72, 153, 0.14),
-    0 0 32px rgba(34, 211, 238, 0.08),
-    0 16px 40px rgba(0, 0, 0, 0.45);
-}
-
-.ttm-dating-connection__avatars {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.ttm-dating-connection__body {
+  gap: 0.85rem;
+  padding: 1.35rem 1.25rem 1.1rem;
   text-align: center;
 }
 
-.ttm-dating-connection__avatar {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2px solid var(--dt-border);
+@media (min-width: 640px) {
+  .ttm-dating-flow__connection {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+    text-align: left;
+  }
 }
 
-.ttm-dating-connection__avatar--you {
+.ttm-dating-flow__avatars {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.ttm-dating-flow__avatar {
+  width: 3.1rem;
+  height: 3.1rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.ttm-dating-flow__avatar--you {
   display: grid;
   place-items: center;
   font-size: 0.65rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: rgba(34, 211, 238, 0.12);
+  background: rgba(34, 211, 238, 0.1);
   color: var(--dt-cyan);
 }
 
-.ttm-dating-connection__avatar-img {
+.ttm-dating-flow__avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.ttm-dating-connection__link-icon {
+.ttm-dating-flow__heart {
   color: var(--dt-pink);
-  filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.7));
+  filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.55));
   animation: ttm-dating-heart 2.2s ease-in-out infinite;
 }
 
@@ -900,83 +1061,128 @@ html:has(.ttm-dating-landing) {
   }
 }
 
-.ttm-dating-connection__pair {
-  margin: 0 0 0.35rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+.ttm-dating-flow__pair {
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(250, 249, 252, 0.82);
 }
 
-.ttm-dating-connection__score {
+.ttm-dating-flow__score {
   margin: 0;
-  font-size: clamp(2.25rem, 7vw, 3rem);
-  font-weight: 800;
+  font-size: clamp(2rem, 5.5vw, 2.75rem);
+  font-weight: 700;
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  background: linear-gradient(135deg, var(--dt-cyan), var(--dt-pink));
+  background: linear-gradient(135deg, #f9fafb 0%, #a5f3fc 40%, #f9a8d4 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* How it works — 3-column compact */
-
-.ttm-dating-how__label {
+.ttm-dating-flow__score-caption {
+  margin: 0.35rem 0 0;
   font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-align: center;
-  color: var(--dt-muted);
-  margin: 0 0 1.5rem;
+  color: rgba(250, 249, 252, 0.45);
 }
 
-.ttm-dating-how__steps {
+.ttm-dating-flow__divider {
+  height: 1px;
+  margin: 0 1.25rem;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14) 20%,
+    rgba(255, 255, 255, 0.14) 80%,
+    transparent
+  );
+}
+
+.ttm-dating-flow__steps {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 1rem 1rem 1.15rem;
   display: grid;
-  gap: 1.25rem;
+  gap: 0.65rem;
 }
 
 @media (min-width: 768px) {
-  .ttm-dating-how__steps {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+  .ttm-dating-flow__steps {
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 1.1rem 1.15rem 1.25rem;
   }
 }
 
-.ttm-dating-how__step {
-  padding: 1rem 0.75rem;
-  text-align: center;
-  border-radius: 14px;
-  border: 1px solid var(--dt-border);
-  background: rgba(255, 255, 255, 0.02);
+.ttm-dating-flow__step-wrap {
+  display: contents;
+}
+
+@media (max-width: 767px) {
+  .ttm-dating-flow__step-wrap {
+    display: block;
+  }
+}
+
+.ttm-dating-flow__step {
+  height: 100%;
+  padding: 0.9rem 0.85rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.ttm-dating-flow__step:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ttm-dating-flow__arrow {
+  display: none;
+  align-self: center;
+  padding: 0 0.15rem;
+  font-size: 1.1rem;
+  color: rgba(250, 249, 252, 0.28);
 }
 
 @media (min-width: 768px) {
-  .ttm-dating-how__step {
-    padding: 1.15rem 1rem;
+  .ttm-dating-flow__arrow {
+    display: flex;
+    align-items: center;
   }
 }
 
-.ttm-dating-how__num {
-  display: block;
-  font-size: 0.65rem;
+.ttm-dating-flow__num {
+  display: inline-flex;
+  margin-bottom: 0.45rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(236, 72, 153, 0.25);
+  background: rgba(236, 72, 153, 0.08);
+  font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
-  color: var(--dt-pink);
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.14em;
+  color: #fda4af;
 }
 
-.ttm-dating-how__step-title {
+.ttm-dating-flow__step-title {
   margin: 0;
-  font-size: clamp(1.15rem, 2.8vw, 1.45rem);
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1.15;
-  color: var(--dt-text);
+}
+
+.ttm-dating-flow__step-text {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: rgba(250, 249, 252, 0.52);
 }
 
 /* Trust */
@@ -1096,30 +1302,17 @@ html:has(.ttm-dating-landing) {
   text-align: center;
 }
 
-/* Language switcher */
+/* Floating chrome (theme + language) */
 html:has(.ttm-dating-landing) .ttm-lang-switcher {
   display: none;
 }
 
-.ttm-dating-lang-portal {
-  position: fixed;
-  right: max(1rem, env(safe-area-inset-right, 0px));
-  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
-  z-index: 60;
-  pointer-events: none;
-}
-
-.ttm-dating-lang-portal > .relative,
-.ttm-dating-lang-portal .ttm-lang-switcher > .relative {
-  pointer-events: auto;
-}
-
-html:has(.ttm-dating-landing) .ttm-dating-lang-portal .ttm-lang-switcher {
-  position: static;
+html:has(.ttm-dating-landing) .ttm-dating-floating-chrome .ttm-lang-switcher {
   display: block !important;
 }
 
-html:has(.ttm-dating-landing) .ttm-dating-lang-portal .ttm-lang-switcher button {
+html:has(.ttm-dating-landing) .ttm-dating-floating-chrome .ttm-lang-switcher button,
+html:has(.ttm-dating-landing) .ttm-dating-floating-chrome__theme {
   border-color: var(--dt-border);
   background: rgba(10, 10, 13, 0.88);
   color: var(--dt-text);
@@ -1127,16 +1320,95 @@ html:has(.ttm-dating-landing) .ttm-dating-lang-portal .ttm-lang-switcher button 
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
 }
 
-html:has(.ttm-dating-landing) .ttm-dating-lang-portal .ttm-lang-switcher [role="listbox"] {
+html:has(.ttm-dating-landing) .ttm-dating-floating-chrome .ttm-lang-switcher [role="listbox"] {
   background: rgba(10, 10, 13, 0.96);
   border-color: var(--dt-border);
 }
 
+.ttm-dating-nav__theme {
+  width: 2.25rem;
+  height: 2.25rem;
+  min-height: 0;
+  border: 1px solid var(--dt-border);
+  background: var(--dt-glass);
+  color: var(--dt-text);
+  backdrop-filter: blur(16px);
+}
+
+.ttm-dating-nav__theme:hover {
+  border-color: rgba(236, 72, 153, 0.35);
+  color: var(--dt-text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ─── Light theme (dating landing) ─── */
+
+html[data-theme="light"] .ttm-dating-landing {
+  --dt-bg: #f8f9fc;
+  --dt-bg-soft: #faf8ff;
+  --dt-glass: rgba(255, 255, 255, 0.78);
+  --dt-border: rgba(18, 17, 26, 0.1);
+  --dt-text: #12111a;
+  --dt-muted: rgba(18, 17, 26, 0.55);
+}
+
+html[data-theme="light"] .ttm-dating-nav__inner--scrolled {
+  background: rgba(255, 255, 255, 0.86);
+  border-color: var(--dt-border);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+}
+
+html[data-theme="light"] .ttm-dating-nav__theme {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+html[data-theme="light"] .ttm-dating-nav__theme:hover {
+  background: #fff;
+}
+
+html[data-theme="light"] .ttm-dating-cta--ghost {
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.12);
+}
+
+html[data-theme="light"] .ttm-dating-card,
+html[data-theme="light"] .ttm-dating-ai__panel,
+html[data-theme="light"] .ttm-dating-flow__panel {
+  box-shadow:
+    0 0 0 1px rgba(18, 17, 26, 0.06),
+    0 16px 48px rgba(99, 102, 241, 0.1);
+}
+
+html[data-theme="light"] .ttm-dating-card__shade {
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.94) 0%, transparent 52%);
+}
+
+html[data-theme="light"] .ttm-dating-card__score {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--dt-text);
+}
+
+html[data-theme="light"] .ttm-dating-hero__chip {
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--dt-text);
+  border-color: var(--dt-border);
+}
+
+html[data-theme="light"] .ttm-dating-floating-chrome .ttm-lang-switcher button,
+html[data-theme="light"] .ttm-dating-floating-chrome__theme {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 28px rgba(99, 102, 241, 0.12);
+}
+
+html[data-theme="light"] .ttm-dating-floating-chrome .ttm-lang-switcher [role="listbox"] {
+  background: rgba(255, 255, 255, 0.98);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ttm-dating-parallax__blob,
-  .ttm-dating-connection__link-icon,
+  .ttm-dating-flow__heart,
   .ttm-dating-hero__card-float--active,
-  .ttm-dating-cta--pulse {
+  .ttm-dating-cta--pulse,
+  .ttm-dating-ai__scan-bar {
     animation: none !important;
   }
 

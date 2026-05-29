@@ -3,6 +3,12 @@ import type { InterestId } from "@/lib/interests"
 import type { DatingPurpose } from "@/lib/interests/types"
 import { DEFAULT_MAX_DISTANCE_KM } from "@/lib/interests/types"
 import { getProfilePhotos } from "@/lib/profile-photos"
+import { markLocationSettled } from "@/lib/location-settled"
+
+function profileHasCity(profile: StoredUserProfile): boolean {
+  if (profile.cityId) return true
+  return Boolean(profile.customCity?.trim())
+}
 
 const PROFILE_KEY = "ttm-user-profile"
 const CREDENTIALS_KEY = "ttm-user-credentials"
@@ -75,6 +81,7 @@ export function saveUserProfile(profile: StoredUserProfile, password: string) {
       password,
     } satisfies StoredCredentials)
   )
+  if (profileHasCity(profile)) markLocationSettled()
 }
 
 export function updateUserProfile(
@@ -89,6 +96,7 @@ export function updateUserProfile(
     delete next.photoUrl
   }
   localStorage.setItem(PROFILE_KEY, JSON.stringify(next))
+  if (profileHasCity(next)) markLocationSettled()
   return next
 }
 

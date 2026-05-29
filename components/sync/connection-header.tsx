@@ -12,6 +12,7 @@ import type { TimelineMilestone } from "@/lib/connection-timeline"
 import { deriveChatExperience, getChatExperienceLabel } from "@/lib/chat-emotional-experience"
 import { getAIConnectionStateLabel } from "@/lib/ai-connection-engine"
 import { ConnectionTimer } from "@/components/connection/connection-timer"
+import { ConnectionProgress } from "@/components/sync/connection-progress"
 import { SharedEnergyBar } from "@/components/sync/shared-energy-bar"
 import { SyncTimeline } from "@/components/sync/sync-timeline"
 import { useConnectionAnalysis } from "@/hooks/use-connection-analysis"
@@ -53,6 +54,8 @@ type ConnectionHeaderProps = {
   relationshipIdentity?: RelationshipIdentity | null
   relationshipAura?: ConnectionAuraProfile | null
   relationshipMoments?: RelationshipMoment[]
+  /** Sheet / modal: full stats always visible, no collapse control */
+  alwaysExpanded?: boolean
 }
 
 export function ConnectionHeader({
@@ -67,10 +70,11 @@ export function ConnectionHeader({
   relationshipIdentity,
   relationshipAura,
   relationshipMoments = [],
+  alwaysExpanded = false,
 }: ConnectionHeaderProps) {
   const { t, locale } = useI18n()
   const reduce = useReducedMotion()
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(alwaysExpanded)
   const recentActivity = Boolean(justSent || showTyping || hasUnread)
 
   const internal = useConnectionAnalysis(view, messages, {
@@ -141,39 +145,60 @@ export function ConnectionHeader({
           transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        <button
-          type="button"
-          onClick={() => setExpanded((v) => !v)}
-          className="w-full text-left touch-manipulation relative z-[1]"
-          aria-expanded={expanded}
-        >
-          {analysis && metrics ? (
-            <SyncStatusBar
-              analysis={analysis}
-              copy={copy}
-              syncSurge={syncSurge}
-              className="pr-8"
-            />
-          ) : (
-            <p className="text-[10px] text-white/40 font-extralight">{copy.syncStatusWaiting}</p>
-          )}
-
-          <div className="absolute right-0 top-1 flex flex-col items-end gap-2">
-            <ConnectionTimer view={view} compact stableLabel={copy.stableLabel} />
-            <svg
-              className={cn(
-                "w-3.5 h-3.5 text-white/35 transition-transform",
-                expanded && "rotate-180"
-              )}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+        {alwaysExpanded ? (
+          <div className="w-full relative z-[1]">
+            {analysis && metrics ? (
+              <SyncStatusBar analysis={analysis} copy={copy} syncSurge={syncSurge} />
+            ) : (
+              <p className="text-[10px] text-white/40 font-extralight">{copy.syncStatusWaiting}</p>
+            )}
+            <div className="absolute right-0 top-1 flex flex-col items-end gap-2">
+              <ConnectionTimer view={view} compact stableLabel={copy.stableLabel} />
+            </div>
           </div>
-        </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            className="w-full text-left touch-manipulation relative z-[1]"
+            aria-expanded={expanded}
+          >
+            {analysis && metrics ? (
+              <SyncStatusBar analysis={analysis} copy={copy} syncSurge={syncSurge} className="pr-8" />
+            ) : (
+              <p className="text-[10px] text-white/40 font-extralight">{copy.syncStatusWaiting}</p>
+            )}
+            <div className="absolute right-0 top-1 flex flex-col items-end gap-2">
+              <ConnectionTimer view={view} compact stableLabel={copy.stableLabel} />
+              <svg
+                className={cn(
+                  "w-3.5 h-3.5 text-white/35 transition-transform",
+                  expanded && "rotate-180"
+                )}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </button>
+        )}
+
+        {alwaysExpanded && metrics && (
+          <div className="mt-3 grid gap-2.5 relative z-[1]">
+            <ConnectionProgress metrics={metrics} label={copy.connectionLabel} />
+            <ConnectionProgress
+              metrics={{ ...metrics, connectionPercent: metrics.chemistryPercent }}
+              label={copy.chemistryLabel}
+            />
+            <ConnectionProgress
+              metrics={{ ...metrics, connectionPercent: metrics.bondPercent }}
+              label={copy.bondLabel}
+            />
+          </div>
+        )}
 
         {analysis && (
           <div className="mt-2.5 flex flex-wrap items-center gap-2 relative z-[1]">
@@ -215,13 +240,13 @@ export function ConnectionHeader({
           </div>
         )}
 
-        {detailLine && !expanded && (
+        {detailLine && !expanded && !alwaysExpanded && (
           <p className="mt-2 text-[9px] text-amber-200/55 font-extralight truncate relative z-[1]">
             {detailLine}
           </p>
         )}
 
-        {expanded && (
+        {(expanded || alwaysExpanded) && (
           <motion.div
             initial={reduce ? false : { opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}

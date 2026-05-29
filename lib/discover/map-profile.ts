@@ -30,6 +30,7 @@ export function discoverProfileToSwipe(
     images: card.images,
     timeLeft: "—",
     bio: card.bio,
+    about: card.bio,
     interests: card.interests,
     lat: card.lat ?? 0,
     lng: card.lng ?? 0,

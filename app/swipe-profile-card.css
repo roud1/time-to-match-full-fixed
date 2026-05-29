@@ -1,0 +1,381 @@
+/* Discover swipe profile card — polished presence layout */
+
+.ttm-native-app--discover .swipe-profile-presence .profile-presence__identity--cover,
+.ttm-native-app--discover .swipe-profile-presence__hero {
+  max-height: 26rem;
+  aspect-ratio: 4 / 5;
+}
+
+.ttm-native-app--discover .swipe-profile-presence .profile-presence__identity-body--cover {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  min-height: 0;
+  justify-content: flex-end;
+}
+
+.ttm-native-app--discover .swipe-profile-presence .profile-presence__identity-text {
+  margin-top: auto;
+}
+
+.ttm-native-app--discover .swipe-profile-presence .profile-presence__identity-edit {
+  top: 0.65rem;
+  right: 0.65rem;
+}
+
+@media (min-width: 1024px) {
+  .ttm-native-app--discover .p9-onboarding--wide.swipe-profile-presence .profile-presence__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(5.5rem, 7rem) minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto;
+    align-items: stretch;
+    column-gap: 0.6rem;
+  }
+
+  /* Equal photo + interests tiles */
+  .ttm-native-app--discover .p9-onboarding--wide .profile-presence__identity--cover,
+  .ttm-native-app--discover .p9-onboarding--wide .swipe-profile-presence__hero,
+  .ttm-native-app--discover
+    .p9-onboarding--wide
+    .profile-presence__atmosphere.swipe-profile-presence__panel--interests {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 4 / 5;
+  }
+
+  .ttm-native-app--discover
+    .p9-onboarding--wide
+    .profile-presence__atmosphere.swipe-profile-presence__panel--interests {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    justify-content: flex-start;
+  }
+
+  .ttm-native-app--discover .p9-onboarding--wide .profile-presence__atmosphere .swipe-profile-presence__bio {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  /* Pulse — centered between equal columns */
+  .ttm-native-app--discover .p9-onboarding--wide.swipe-profile-presence .profile-presence__head,
+  .ttm-native-app--discover .p9-onboarding--wide.swipe-profile-presence .swipe-profile-presence__pulse-host {
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .ttm-native-app--discover .p9-onboarding--wide.swipe-profile-presence .swipe-profile-presence__pulse {
+    width: min(100%, 6rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .ttm-native-app--discover .p9-onboarding--wide.swipe-profile-presence .profile-presence__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(6rem, 7.5rem) minmax(0, 1fr);
+    column-gap: 0.75rem;
+  }
+
+  .ttm-native-app--discover .p9-onboarding--wide.swipe-profile-presence .swipe-profile-presence__pulse {
+    width: min(100%, 6.75rem);
+  }
+}
+
+.swipe-profile-presence.p9-onboarding {
+  border-color: color-mix(in srgb, var(--ttm-brand-accent) 22%, var(--ttm-brand-line));
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--ttm-brand-elevated) 88%, transparent) 0%,
+    color-mix(in srgb, var(--ttm-brand-graphite) 94%, transparent) 55%,
+    color-mix(in srgb, var(--ttm-brand-deep) 98%, transparent) 100%
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent),
+    0 28px 72px -36px rgba(0, 0, 0, 0.78),
+    inset 0 1px 0 color-mix(in srgb, var(--foreground) 7%, transparent);
+}
+
+.swipe-profile-presence[data-atmosphere="warm"] {
+  border-color: color-mix(in srgb, #f59e0b 28%, var(--ttm-brand-line));
+}
+
+.swipe-profile-presence[data-atmosphere="intense"] {
+  border-color: color-mix(in srgb, #ec4899 26%, var(--ttm-brand-line));
+}
+
+.swipe-profile-presence[data-atmosphere="calm"] {
+  border-color: color-mix(in srgb, #38bdf8 22%, var(--ttm-brand-line));
+}
+
+.swipe-profile-presence .profile-presence__layout {
+  gap: 0.8rem;
+}
+
+.swipe-profile-presence .profile-presence__connection {
+  display: none;
+}
+
+/* Hero photo */
+.swipe-profile-presence__hero {
+  margin-bottom: 0;
+  border-radius: 1.15rem;
+  border-color: color-mix(in srgb, var(--foreground) 10%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--foreground) 8%, transparent),
+    0 22px 52px -28px rgba(0, 0, 0, 0.72),
+    inset 0 0 0 1px color-mix(in srgb, #fff 6%, transparent);
+}
+
+.swipe-profile-presence__hero .profile-presence__identity-bg {
+  transform: scale(1.02);
+  transition: transform 0.5s var(--ttm-ease-out, ease);
+}
+
+.swipe-profile-presence__hero .profile-presence__identity-scrim {
+  background:
+    linear-gradient(180deg, rgba(8, 8, 14, 0.35) 0%, transparent 28%),
+    linear-gradient(0deg, rgba(8, 8, 14, 0.94) 0%, rgba(8, 8, 14, 0.55) 38%, transparent 68%);
+}
+
+.swipe-profile-presence__hero .profile-presence__identity-body--cover {
+  align-items: flex-start;
+  text-align: left;
+  padding: 0.65rem 1rem 0.9rem;
+}
+
+.swipe-profile-presence__hero .profile-presence__identity-name {
+  font-size: clamp(1.15rem, 2.2vw, 1.4rem);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.swipe-profile-presence__hero .profile-presence__identity-city {
+  margin-top: 0.2rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.swipe-profile-presence__identity-chrome {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-width: calc(100% - 3.25rem);
+}
+
+.swipe-profile-presence__safety-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(8, 8, 14, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 16px -6px rgba(0, 0, 0, 0.55);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.swipe-profile-presence__safety-btn:hover {
+  background: rgba(8, 8, 14, 0.68);
+  border-color: rgba(255, 255, 255, 0.32);
+  transform: scale(1.04);
+}
+
+/* Pulse between profile tiles */
+.swipe-profile-presence .profile-presence__head {
+  margin-bottom: 0;
+}
+
+.swipe-profile-presence__pulse {
+  width: min(100%, 5.5rem);
+}
+
+/* Glass panels */
+.swipe-profile-presence__panel {
+  margin-bottom: 0;
+  border-radius: 1rem;
+  border: 1px solid var(--ttm-brand-line);
+  background: color-mix(in srgb, var(--ttm-brand-surface) 62%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  padding: 0.9rem 1rem;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+
+.swipe-profile-presence__panel-label {
+  margin: 0 0 0.65rem;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--ttm-brand-accent) 85%, var(--muted-foreground));
+}
+
+.swipe-profile-presence__chip {
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 300;
+  border: 1px solid color-mix(in srgb, var(--ttm-brand-accent) 22%, var(--ttm-brand-line));
+  background: color-mix(in srgb, var(--ttm-brand-accent) 8%, transparent);
+  color: color-mix(in srgb, var(--foreground) 92%, transparent);
+}
+
+.swipe-profile-presence__bio-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.swipe-profile-presence__bio {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--foreground) 86%, transparent);
+}
+
+/* Resonance */
+.swipe-profile-presence__resonance-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.swipe-profile-presence__match-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  color: color-mix(in srgb, var(--ttm-brand-accent) 95%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ttm-brand-accent) 35%, transparent);
+  background: color-mix(in srgb, var(--ttm-brand-accent) 12%, transparent);
+  box-shadow: 0 0 20px -8px color-mix(in srgb, var(--ttm-brand-accent) 55%, transparent);
+}
+
+.swipe-profile-presence__meter {
+  height: 0.42rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 8%, transparent);
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.swipe-profile-presence__meter-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ttm-brand-gradient-sync);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--ttm-glow-sync) 65%, transparent);
+}
+
+.swipe-profile-presence__resonance-hint {
+  margin: 0.55rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 300;
+  line-height: 1.45;
+  color: var(--muted-foreground);
+}
+
+.swipe-profile-presence__overlap-chip {
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 300;
+  border: 1px solid color-mix(in srgb, #34d399 30%, transparent);
+  background: color-mix(in srgb, #34d399 12%, transparent);
+  color: color-mix(in srgb, #a7f3d0 90%, var(--foreground));
+}
+
+/* Gallery */
+.swipe-profile-presence__gallery .p9-register-step-label,
+.swipe-profile-presence__gallery .swipe-profile-presence__panel-label {
+  margin-bottom: 0.5rem;
+}
+
+.swipe-profile-presence__photo-row {
+  gap: 0.5rem;
+}
+
+.swipe-profile-presence__photo-thumb {
+  border-radius: 0.85rem;
+  border-color: color-mix(in srgb, var(--foreground) 10%, transparent);
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s var(--ttm-ease-out, ease);
+}
+
+.swipe-profile-presence__photo-thumb:hover {
+  border-color: color-mix(in srgb, var(--ttm-brand-accent) 40%, transparent);
+  transform: translateY(-1px);
+}
+
+.swipe-profile-presence__photo-thumb--active {
+  border-color: color-mix(in srgb, var(--ttm-brand-accent) 65%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--ttm-brand-accent) 45%, transparent),
+    0 10px 28px -12px color-mix(in srgb, var(--ttm-brand-accent) 50%, transparent);
+  transform: scale(1.03);
+}
+
+.swipe-profile-presence__trust {
+  padding: 0.15rem 0;
+}
+
+@media (min-width: 1024px) {
+  .p9-onboarding--wide.swipe-profile-presence .profile-presence__strength.swipe-profile-presence__panel--resonance {
+    padding: 1rem 1.1rem;
+  }
+}
+
+html[data-theme="light"] .swipe-profile-presence.p9-onboarding {
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, #fff 94%, transparent),
+    color-mix(in srgb, var(--ttm-brand-surface) 40%, #f4f3f8) 100%
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--foreground) 8%, transparent),
+    0 20px 56px -32px rgba(30, 27, 46, 0.18);
+}
+
+html[data-theme="light"] .swipe-profile-presence__panel {
+  background: color-mix(in srgb, #fff 72%, transparent);
+  border-color: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+html[data-theme="light"] .swipe-profile-presence__hero .profile-presence__identity-scrim {
+  background:
+    linear-gradient(180deg, rgba(18, 17, 26, 0.25) 0%, transparent 30%),
+    linear-gradient(0deg, rgba(18, 17, 26, 0.9) 0%, rgba(18, 17, 26, 0.5) 40%, transparent 70%);
+}

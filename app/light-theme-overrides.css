@@ -438,11 +438,6 @@ textarea {
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* —— Site background (light) — cinematic mesh shows through transparent chrome —— */
-.site-bg-root {
-  background: #f3e8ff;
-}
-
 .site-bg-vignette {
   background: radial-gradient(
     ellipse 85% 75% at 50% 45%,
@@ -532,20 +527,70 @@ textarea {
   color: var(--tile-text-muted);
 }
 
-/* —— Discover strip —— */
-.ttm-discover-strip {
-  border-color: var(--border);
+/* —— Discover toolbar —— */
+html:not([data-theme="dark"]) .ttm-discover-toolbar__hint {
+  border-color: color-mix(in srgb, #db2777 22%, transparent);
+  background: color-mix(in srgb, #fce7f3 70%, var(--tile-surface));
 }
 
-.ttm-discover-title {
-  background: linear-gradient(to right, var(--text-primary), color-mix(in srgb, var(--text-primary) 70%, transparent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+html:not([data-theme="dark"]) .ttm-discover-toolbar__hint-text {
+  color: color-mix(in srgb, #9d174d 75%, var(--text-secondary));
 }
 
-.ttm-discover-subtitle {
-  color: var(--text-secondary);
+html:not([data-theme="dark"]) .ttm-discover-toolbar__icon-btn {
+  background: var(--tile-surface);
+  border-color: var(--tile-border);
+}
+
+html:not([data-theme="dark"]) .ttm-discover-toolbar__boost {
+  color: #92400e;
+  background: color-mix(in srgb, #fef3c7 85%, var(--tile-surface));
+  border-color: color-mix(in srgb, #f59e0b 40%, transparent);
+}
+
+/* —— Swipe card & actions (light) —— */
+html:not([data-theme="dark"]) .ttm-swipe-card-shell {
+  background: linear-gradient(165deg, var(--tile-surface) 0%, var(--tile-surface-elevated) 100%);
+  box-shadow: var(--shadow-lg), 0 0 0 1px var(--tile-border) inset;
+}
+
+html:not([data-theme="dark"]) .discover-card__info {
+  background: linear-gradient(180deg, rgba(24, 24, 32, 0.92) 0%, rgba(12, 12, 18, 0.98) 100%);
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+html:not([data-theme="dark"]) .ttm-swipe-action-btn--rewind {
+  border-color: var(--tile-border);
+  background: var(--tile-surface);
+  color: #b45309;
+  box-shadow: var(--shadow-sm);
+}
+
+html:not([data-theme="dark"]) .ttm-swipe-action-btn--nope {
+  border-color: color-mix(in srgb, #f43f5e 35%, var(--tile-border));
+  background: color-mix(in srgb, #fff1f2 90%, var(--tile-surface));
+  color: #e11d48;
+  box-shadow: 0 8px 24px -12px rgba(244, 63, 94, 0.35);
+}
+
+html:not([data-theme="dark"]) .ttm-swipe-action-btn--super {
+  border-color: color-mix(in srgb, #0ea5e9 35%, var(--tile-border));
+  background: color-mix(in srgb, #e0f2fe 88%, var(--tile-surface));
+  color: #0284c7;
+  box-shadow: 0 8px 24px -12px rgba(14, 165, 233, 0.3);
+}
+
+html:not([data-theme="dark"]) .ttm-swipe-action-btn--like {
+  border-color: color-mix(in srgb, #ec4899 30%, transparent);
+  box-shadow:
+    0 12px 32px -10px rgba(236, 72, 153, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+html:not([data-theme="dark"]) .ttm-interest-compat__chip {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* Likes row: glass + tile */

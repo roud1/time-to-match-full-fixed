@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Time to Match",
     short_name: "TTM",
     description:
-      "Премиальное приложение для знакомств. Каждый профиль исчезает через 72 часа — не упусти свой шанс.",
+      "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
     start_url: "/",
     scope: "/",
     display: "standalone",

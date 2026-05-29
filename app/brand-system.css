@@ -599,13 +599,6 @@ a.ttm-nav-pill-login:hover,
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.65));
 }
 
-.ttm-auth-shell {
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  background: transparent;
-}
-
 .ttm-connection-aura-1 {
   box-shadow: inset 0 0 24px -12px var(--ttm-glow-sync-soft);
 }
@@ -625,19 +618,9 @@ a.ttm-nav-pill-login:hover,
   background: radial-gradient(ellipse 90% 80% at 50% 0%, var(--ttm-glow-cinematic), transparent 65%);
 }
 
-.ttm-auth-shell__header {
-  padding: 1rem 1rem 0;
-}
-
-@media (min-width: 768px) {
-  .ttm-auth-shell__header {
-    padding: 1rem 2rem 0;
-  }
-}
-
-/* Universe atmosphere on root */
+/* Universe atmosphere on root — void comes from global site-ambient */
 .ttm-brand-universe {
-  background-color: var(--ttm-brand-void);
+  background-color: transparent;
   color: var(--foreground);
 }
 

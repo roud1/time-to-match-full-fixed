@@ -52,6 +52,7 @@ export function SwipeProfileDetailScreen({
 
   const heroPhoto = photos[0]
   const otherPhotos = photos.slice(1)
+  const photoVerified = profile?.photoVerified === true
   const compatibility = profile ? computeDiscoverCompatibility(profile) : null
   const interestOverlap = profile ? computeInterestOverlapForProfile(profile) : null
   const matchPct = interestOverlap?.compatibility ?? compatibility?.resonancePercent ?? 0

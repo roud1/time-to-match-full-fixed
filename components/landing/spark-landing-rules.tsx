@@ -6,9 +6,9 @@ import { SparkTiltCard } from "@/components/landing/spark-tilt-card"
 
 const RULES = [
   {
-    icon: "⏳",
-    title: "Анкета — 72 часа",
-    text: "Твоя анкета исчезнет через трое суток. Это мотивирует быть настоящим",
+    icon: "✨",
+    title: "Будь собой",
+    text: "Честный профиль и атмосфера — так тебя почувствуют в ленте",
   },
   {
     icon: "🔥",

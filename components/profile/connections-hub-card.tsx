@@ -8,7 +8,7 @@ import { formatConnectionTime } from "@/lib/connection-system"
 import { getConnectionSummary } from "@/lib/connection-summary"
 import { cn } from "@/lib/utils"
 
-export function ConnectionsHubCard() {
+export function ConnectionsHubCard({ className }: { className?: string }) {
   const { t } = useI18n()
   const [summary, setSummary] = useState(getConnectionSummary)
 
@@ -26,7 +26,12 @@ export function ConnectionsHubCard() {
   }, [])
 
   return (
-    <div className="rounded-[1.35rem] p-5 mb-5 border border-white/10 bg-gradient-to-br from-white/[0.04] via-transparent to-white/[0.06] backdrop-blur-xl">
+    <div
+      className={cn(
+        "rounded-[1.35rem] p-5 border border-white/10 bg-gradient-to-br from-white/[0.04] via-transparent to-white/[0.06] backdrop-blur-xl h-full",
+        className
+      )}
+    >
       <div className="flex items-start gap-4">
         <div className="min-w-0 flex-1">
           <p className="text-[10px] uppercase tracking-[0.2em] text-white/45 font-light mb-1">

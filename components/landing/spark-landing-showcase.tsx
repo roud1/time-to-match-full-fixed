@@ -22,7 +22,7 @@ export function SparkLandingShowcase() {
       <div className="spark-landing__container spark-landing__container--showcase">
         <h2 className="spark-landing__section-title">Прямо сейчас анкеты ждут своего часа</h2>
         <p className="spark-landing__section-lead">
-          Каждая из них исчезнет через 72 часа — не упусти тех, кто рядом
+          У каждого мэтча — сутки на диалог. Не упусти тех, кто рядом
         </p>
         <SparkShowcaseMarquee />
         <div className="spark-landing__showcase-actions">

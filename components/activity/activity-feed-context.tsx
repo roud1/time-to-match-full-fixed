@@ -1,10 +1,9 @@
 "use client"
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { usePathname } from "next/navigation"
 import { useI18n } from "@/lib/i18n"
+import type { ActivityBumpKind } from "@/lib/activity-notify"
 import { getActivityCounts } from "@/lib/activity-metrics"
-import { diffActivityDigest, readActivityDigest, writeActivityDigest } from "@/lib/activity-digest"
 import { getChats, getProfileById } from "@/lib/social-store"
 import { hasUnreadThread } from "@/lib/chat-thread-seen"
 import type { ChatThread } from "@/lib/social-store"
@@ -31,7 +30,6 @@ const ActivityFeedContext = createContext<ActivityFeedContextValue | null>(null)
 
 export function ActivityFeedProvider({ children }: { children: React.ReactNode }) {
   const { t, locale, location } = useI18n()
-  const pathname = usePathname()
   const [hubOpen, setHubOpen] = useState(false)
   const [toasts, setToasts] = useState<ActivityToast[]>([])
   const [tick, setTick] = useState(0)
@@ -48,67 +46,53 @@ export function ActivityFeedProvider({ children }: { children: React.ReactNode }
     }, 5200)
   }, [])
 
-  useEffect(() => {
-    const id = window.setInterval(refresh, 14000)
-    const onVis = () => {
-      if (document.visibilityState === "visible") refresh()
-    }
-    const onStorage = () => refresh()
-    const onSocial = () => refresh()
-    window.addEventListener("storage", onStorage)
-    window.addEventListener("ttm-social-updated", onSocial)
-    document.addEventListener("visibilitychange", onVis)
-    return () => {
-      clearInterval(id)
-      window.removeEventListener("storage", onStorage)
-      window.removeEventListener("ttm-social-updated", onSocial)
-      document.removeEventListener("visibilitychange", onVis)
-    }
-  }, [refresh])
-
-  useEffect(() => {
-    const counts = getActivityCounts(locale, location.position)
-    const prev = readActivityDigest()
-    if (!prev) {
-      writeActivityDigest({
-        likes: counts.likesUnread,
-        chats: counts.chatsUnread,
-        matches: counts.matchCount,
-      })
-      return
-    }
-    const bumps = diffActivityDigest(prev, {
-      likes: counts.likesUnread,
-      chats: counts.chatsUnread,
-      matches: counts.matchCount,
-    })
-    const hasMatchBump = bumps.some((b) => b.kind === "matches")
-    for (const b of bumps) {
-      if (b.kind === "likes")
+  const pushForBump = useCallback(
+    (kind: ActivityBumpKind) => {
+      if (kind === "likes") {
         pushToast({
           variant: "like",
           title: t("toastNewLike"),
           body: t("toastNewLikeBody"),
         })
-      if (b.kind === "matches")
+      } else if (kind === "matches") {
         pushToast({
           variant: "match",
           title: t("toastNewMatch"),
           body: t("toastNewMatchBody"),
         })
-      if (b.kind === "chats" && !hasMatchBump)
+      } else if (kind === "chats") {
         pushToast({
           variant: "message",
           title: t("toastNewMessage"),
           body: t("toastNewMessageBody"),
         })
+      }
+    },
+    [pushToast, t]
+  )
+
+  useEffect(() => {
+    const onBump = (ev: Event) => {
+      const kind = (ev as CustomEvent<{ kind: ActivityBumpKind }>).detail?.kind
+      if (kind) pushForBump(kind)
+      refresh()
     }
-    writeActivityDigest({
-      likes: counts.likesUnread,
-      chats: counts.chatsUnread,
-      matches: counts.matchCount,
-    })
-  }, [locale, location.position, pathname, pushToast, t, tick])
+    const onVis = () => {
+      if (document.visibilityState === "visible") refresh()
+    }
+    const onStorage = () => refresh()
+    const onSocial = () => refresh()
+    window.addEventListener("ttm-activity-bump", onBump)
+    window.addEventListener("storage", onStorage)
+    window.addEventListener("ttm-social-updated", onSocial)
+    document.addEventListener("visibilitychange", onVis)
+    return () => {
+      window.removeEventListener("ttm-activity-bump", onBump)
+      window.removeEventListener("storage", onStorage)
+      window.removeEventListener("ttm-social-updated", onSocial)
+      document.removeEventListener("visibilitychange", onVis)
+    }
+  }, [pushForBump, refresh])
 
   useEffect(() => {
     const onOpenHub = () => setHubOpen(true)

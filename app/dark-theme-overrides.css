@@ -33,10 +33,7 @@ html[data-theme="dark"] .landing-nav {
   color: var(--text-primary);
 }
 
-/* Site ambient background */
-html[data-theme="dark"] .site-bg-root {
-  background: #0f0a1a;
-}
+/* Site ambient — see site-ambient.css */
 
 /* Chat bubbles */
 html[data-theme="dark"] .ttm-chat-bubble--them,

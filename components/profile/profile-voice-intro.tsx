@@ -3,6 +3,7 @@
 import { motion } from "motion/react"
 import { useReducedMotion } from "motion/react"
 import { ChatVoiceNoteDemo } from "@/components/chat/chat-voice-note-demo"
+import { cn } from "@/lib/utils"
 
 type ProfileVoiceIntroProps = {
   seed: number
@@ -14,6 +15,7 @@ type ProfileVoiceIntroProps = {
   voiceDemo: string
   voiceDuration: string
   markReady: string
+  className?: string
 }
 
 export function ProfileVoiceIntro({
@@ -26,11 +28,17 @@ export function ProfileVoiceIntro({
   voiceDemo,
   voiceDuration,
   markReady,
+  className,
 }: ProfileVoiceIntroProps) {
   const reduce = useReducedMotion()
 
   return (
-    <div className="rounded-[1.35rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent backdrop-blur-2xl p-4 md:p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.85)]">
+    <div
+      className={cn(
+        "rounded-[1.35rem] border border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent backdrop-blur-2xl p-4 md:p-5 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.85)]",
+        className
+      )}
+    >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div>
           <p className="text-[10px] uppercase tracking-[0.22em] text-white/80/80 font-light mb-1">{voiceHint}</p>

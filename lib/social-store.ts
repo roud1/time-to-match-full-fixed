@@ -10,7 +10,10 @@ import {
   recordConnectionMessage,
   setMemoryProfileName,
 } from "@/lib/connection-store"
+import { emitActivityBump } from "@/lib/activity-notify"
 import { broadcastPresenceUpdate } from "@/lib/presence/realtime-presence"
+import { getPulseProfile } from "@/lib/pulse/profile"
+import { isPulseProfileId } from "@/lib/pulse/constants"
 
 const SOCIAL_KEY = "ttm-social"
 
@@ -85,7 +88,9 @@ function ensureSeeded(state: SocialState, locale: Locale, position: GeoPosition 
   if (state.seeded) return state
   const user = getUserProfile()
   const all = filterProfilesForUser(buildDemoSwipeProfiles(locale, position), user)
-  const pick = all.slice(0, 4).map((p) => p.id)
+  const pick = [0, 2, 4, 6, 8, 10]
+    .map((i) => all[i]?.id)
+    .filter((id): id is number => id != null)
   return {
     ...state,
     likedYou: pick,
@@ -114,7 +119,23 @@ export function getProfileById(
   position: GeoPosition | null
 ): SwipeProfile | undefined {
   if (id <= 0) return undefined
+  if (isPulseProfileId(id)) return getPulseProfile(locale)
   return buildDemoSwipeProfiles(locale, position).find((p) => p.id === id)
+}
+
+/** Removes a chat thread locally. Pulse AI chat cannot be deleted. */
+export function deleteChatThread(profileId: number): boolean {
+  if (profileId <= 0 || isPulseProfileId(profileId)) return false
+  let state = load()
+  const before = state.chats.length
+  state = { ...state, chats: state.chats.filter((c) => c.profileId !== profileId) }
+  if (state.chats.length === before) return false
+  save(state)
+  if (typeof window !== "undefined") {
+    sessionStorage.removeItem(`ttm-chat-seen:${profileId}`)
+    window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+  }
+  return true
 }
 
 export function getLikedYouProfiles(locale: Locale, position: GeoPosition | null): SwipeProfile[] {
@@ -197,11 +218,17 @@ export function recordSwipe(
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("ttm-social-updated"))
     if (matched) {
+      emitActivityBump("matches")
       void import("@/lib/gamification/api").then(({ reportAchievementEvent, dispatchGamificationUpdate }) =>
         reportAchievementEvent({ event: "match_created" }).then((snap) =>
           dispatchGamificationUpdate(snap ?? undefined)
         )
       )
+    } else if (
+      state.likedYou.includes(profile.id) &&
+      !state.matches.includes(profile.id)
+    ) {
+      emitActivityBump("likes")
     }
   }
   return { matched }
@@ -258,6 +285,7 @@ function pushMessage(
   if (profile) setMemoryProfileName(profileId, profile.name)
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+    if (from === "them") emitActivityBump("chats")
     broadcastPresenceUpdate({ profileId, source: "social" })
   }
   return next

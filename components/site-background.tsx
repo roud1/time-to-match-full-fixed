@@ -1,14 +1,12 @@
 "use client"
 
-import { SparkCinematicAtmosphere } from "@/components/background/spark-cinematic-atmosphere"
-import { SparkFloatingParticles } from "@/components/landing/spark-floating-particles"
+import { DatingParallaxBg } from "@/components/landing/dating/dating-parallax-bg"
 
-/** Site-wide cinematic ambient — purple → pink → gold mesh, waves, vignette, sparks. */
+/** Site-wide ambient — same dark neon mesh as the dating homepage. */
 export function SiteBackground() {
   return (
-    <div className="site-bg-root fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden>
-      <SparkCinematicAtmosphere />
-      <SparkFloatingParticles />
+    <div className="site-bg-root site-ambient" aria-hidden>
+      <DatingParallaxBg className="site-ambient__parallax" />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState, type ReactNode } from "react"
 import { motion, animate, type PanInfo } from "motion/react"
 import { useReducedMotion } from "motion/react"
 import { useI18n } from "@/lib/i18n"
@@ -24,9 +24,9 @@ import { cn } from "@/lib/utils"
 
 const STACK_VISIBLE = 3
 
-function SwipeDeckSkeleton({ centered }: { centered?: boolean }) {
+function SwipeDeckSkeleton({ centered, cardOnly }: { centered?: boolean; cardOnly?: boolean }) {
   const card = (
-    <div className="relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[var(--radius-lg)] overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border)] shadow-[var(--shadow-md)]">
+    <div className="ttm-swipe-card-shell relative w-full max-w-[min(100%,24rem)] h-full min-h-[18rem] max-h-full rounded-[var(--radius-lg)] overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border)] shadow-[var(--shadow-md)]">
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--border)] via-transparent to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
         <div className="h-6 w-2/3 rounded-lg bg-[var(--border)]" />
@@ -45,6 +45,14 @@ function SwipeDeckSkeleton({ centered }: { centered?: boolean }) {
       ))}
     </div>
   )
+
+  if (cardOnly) {
+    return (
+      <div className="flex flex-1 min-h-0 w-full items-center justify-center animate-pulse" aria-busy aria-label="Loading">
+        {card}
+      </div>
+    )
+  }
 
   if (centered) {
     return (
@@ -67,16 +75,38 @@ function SwipeDeckSkeleton({ centered }: { centered?: boolean }) {
   )
 }
 
+export type SwipeDeckSlots = {
+  card: ReactNode
+  actions: ReactNode
+  dialogs: ReactNode
+}
+
 type SwipeDeckProps = {
   profiles: SwipeProfile[]
   /** When false, show skeleton (initial load before profiles are set). */
   booted: boolean
-  onProfilesChange: (profiles: SwipeProfile[]) => void
+  emptyReason?: "swiped" | "filters" | null
+  onProfilesChange: (
+    update: SwipeProfile[] | ((prev: SwipeProfile[]) => SwipeProfile[])
+  ) => void
+  onResetFilters?: () => void
   /** Place card in center grid column with balanced side gutters. */
   centered?: boolean
+  /** Welcome-style layout: card only inline; actions rendered via children slot. */
+  cardOnly?: boolean
+  children?: (slots: SwipeDeckSlots) => ReactNode
 }
 
-export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: SwipeDeckProps) {
+export function SwipeDeck({
+  profiles,
+  booted,
+  emptyReason = null,
+  onProfilesChange,
+  onResetFilters,
+  centered,
+  cardOnly = false,
+  children,
+}: SwipeDeckProps) {
   const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
   const reduceMotion = useReducedMotion()
@@ -89,25 +119,34 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   const [safetyOpen, setSafetyOpen] = useState(false)
   const lastRemovedRef = useRef<SwipeProfile | null>(null)
   const exitLockRef = useRef(false)
+  const xAnimRef = useRef<ReturnType<typeof animate> | null>(null)
 
   const current = profiles[0]
   const { x, rotate, likeOpacity, nopeOpacity } = useTopCardSwipe(current?.id)
+
+  const cancelXAnim = useCallback(() => {
+    const ctrl = xAnimRef.current
+    if (ctrl && typeof ctrl.stop === "function") ctrl.stop()
+    xAnimRef.current = null
+  }, [])
 
   const flyOff = useCallback(
     async (direction: "left" | "right") => {
       const top = profiles[0]
       if (!top || exitLockRef.current) return
       exitLockRef.current = true
-      x.stopAnimation()
+      cancelXAnim()
+
       const w = typeof window !== "undefined" ? window.innerWidth : 390
       const target = direction === "right" ? w * 1.35 : -w * 1.35
 
       try {
         if (reduceMotion) {
-          await animate(x, target, { duration: 0.22, ease: [0.22, 1, 0.36, 1] })
+          xAnimRef.current = animate(x, target, { duration: 0.22, ease: [0.22, 1, 0.36, 1] })
         } else {
-          await animate(x, target, { type: "spring", stiffness: 400, damping: 32 })
+          xAnimRef.current = animate(x, target, { type: "spring", stiffness: 400, damping: 32 })
         }
+        await xAnimRef.current
 
         const { matched } = recordSwipe(top, direction, locale, location.position)
         if (matched && direction === "right") {
@@ -117,13 +156,23 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
 
         lastRemovedRef.current = top
         setCanRewind(true)
-        onProfilesChange(profiles.slice(1))
+        onProfilesChange((prev) => prev.filter((p) => p.id !== top.id))
+        x.set(0)
+      } catch {
+        const { matched } = recordSwipe(top, direction, locale, location.position)
+        if (matched && direction === "right") {
+          setFirstMatchMode(isFirstMatchPending())
+          setMatchedProfile(top)
+        }
+        lastRemovedRef.current = top
+        setCanRewind(true)
+        onProfilesChange((prev) => prev.filter((p) => p.id !== top.id))
         x.set(0)
       } finally {
         exitLockRef.current = false
       }
     },
-    [profiles, locale, location.position, onProfilesChange, reduceMotion, x]
+    [profiles, locale, location.position, onProfilesChange, reduceMotion, x, cancelXAnim]
   )
 
   const onDragEnd = useCallback(
@@ -135,10 +184,11 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
       } else if (offset.x < -threshold || velocity.x < -380) {
         void flyOff("left")
       } else {
-        void animate(x, 0, { type: "spring", stiffness: 480, damping: 32, mass: 0.85 })
+        cancelXAnim()
+        xAnimRef.current = animate(x, 0, { type: "spring", stiffness: 480, damping: 32, mass: 0.85 })
       }
     },
-    [flyOff, x]
+    [flyOff, x, cancelXAnim]
   )
 
   const rewind = useCallback(() => {
@@ -149,7 +199,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
       openUpgrade("rewind")
       return
     }
-    onProfilesChange([last, ...profiles])
+    onProfilesChange((prev) => [last, ...prev])
     lastRemovedRef.current = null
     setCanRewind(false)
   }, [canRewind, onProfilesChange, profiles, openUpgrade])
@@ -173,32 +223,67 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
     safetyAria: t("trustSafetyOpenAria"),
   }
 
+  const useWelcomeSlots = cardOnly || Boolean(children)
+
   if (!booted) {
+    if (useWelcomeSlots && children) {
+      return (
+        <>
+          {children({
+            card: <SwipeDeckSkeleton cardOnly />,
+            actions: null,
+            dialogs: null,
+          })}
+        </>
+      )
+    }
     return <SwipeDeckSkeleton centered={centered} />
   }
 
   if (profiles.length === 0) {
-    return (
-      <div className="flex flex-1 items-center justify-center px-4 py-8 col-span-3">
+    const filtersEmpty = emptyReason === "filters"
+    const emptyState = (
+      <div className="flex flex-1 items-center justify-center px-4 py-8 w-full min-h-[min(420px,50dvh)]">
         <EmptyState
           icon={Sparkles}
-          title={t("discoverEmptyAllSwipedTitle")}
-          description={t("discoverEmptyAllSwipedBody")}
+          title={filtersEmpty ? t("discoverEmptyFiltersTitle") : t("discoverEmptyAllSwipedTitle")}
+          description={
+            filtersEmpty ? t("discoverEmptyFiltersBody") : t("discoverEmptyAllSwipedBody")
+          }
           className="max-w-sm w-full"
           action={
-            <Button asChild variant="default" className="rounded-full px-6">
-              <Link href="/profile">{t("discoverEmptyCreateProfile")}</Link>
-            </Button>
+            filtersEmpty ? (
+              <Button
+                type="button"
+                variant="default"
+                className="rounded-full px-6"
+                onClick={onResetFilters}
+              >
+                {t("discoverEmptyFiltersReset")}
+              </Button>
+            ) : (
+              <Button asChild variant="default" className="rounded-full px-6">
+                <Link href="/profile">{t("discoverEmptyCreateProfile")}</Link>
+              </Button>
+            )
           }
         />
       </div>
     )
+    if (useWelcomeSlots && children) {
+      return (
+        <>
+          {children({ card: emptyState, actions: null, dialogs: null })}
+        </>
+      )
+    }
+    return emptyState
   }
 
-  const stack = profiles.slice(0, STACK_VISIBLE)
+  const stack = profiles.slice(0, cardOnly ? 1 : STACK_VISIBLE)
 
   const actionButtons = (
-    <div className="shrink-0 flex flex-col items-center justify-center gap-3 sm:gap-4 py-2 safe-area-pb relative z-40 pointer-events-auto">
+    <div className="ttm-swipe-actions shrink-0 flex flex-row lg:flex-col items-center justify-center gap-2.5 sm:gap-3 lg:gap-4 py-1 lg:py-0 safe-area-pb lg:pb-2 relative z-40 pointer-events-auto w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
       <motion.button
         type="button"
         whileTap={{ scale: 0.92 }}
@@ -207,9 +292,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={rewind}
         aria-label={t("swipeRewindAria")}
         className={cn(
-          "ttm-swipe-action-btn relative h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] rounded-full flex items-center justify-center touch-manipulation",
-          "border border-white/15 bg-white/[0.06] backdrop-blur-xl text-amber-200/90",
-          "shadow-[0_0_28px_-8px_rgba(251,191,36,0.25)]",
+          "ttm-swipe-action-btn ttm-swipe-action-btn--rewind relative h-11 w-11 sm:h-[52px] sm:w-[52px] rounded-full flex items-center justify-center touch-manipulation",
           !canRewind && "opacity-35 pointer-events-none"
         )}
       >
@@ -225,9 +308,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={() => void flyOff("left")}
         aria-label={t("nope")}
         className={cn(
-          "ttm-swipe-action-btn h-[54px] w-[54px] sm:h-[58px] sm:w-[58px] rounded-full flex items-center justify-center touch-manipulation",
-          "border border-rose-500/35 bg-rose-500/[0.12] backdrop-blur-xl text-rose-300",
-          "shadow-[0_12px_40px_-12px_rgba(244,63,94,0.45)]",
+          "ttm-swipe-action-btn ttm-swipe-action-btn--nope h-[3.25rem] w-[3.25rem] sm:h-[58px] sm:w-[58px] lg:h-16 lg:w-16 rounded-full flex items-center justify-center touch-manipulation",
           !current && "opacity-40 pointer-events-none"
         )}
       >
@@ -244,9 +325,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={superLike}
         aria-label={t("swipeSuperLikeAria")}
         className={cn(
-          "ttm-swipe-action-btn h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] rounded-full flex items-center justify-center touch-manipulation",
-          "border border-sky-400/40 bg-sky-500/15 backdrop-blur-xl text-sky-200",
-          "shadow-[0_0_32px_-6px_rgba(56,189,248,0.4)]",
+          "ttm-swipe-action-btn ttm-swipe-action-btn--super h-11 w-11 sm:h-[52px] sm:w-[52px] lg:h-14 lg:w-14 rounded-full flex items-center justify-center touch-manipulation",
           !current && "opacity-40 pointer-events-none"
         )}
       >
@@ -263,9 +342,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         onClick={() => void flyOff("right")}
         aria-label={t("like")}
         className={cn(
-          "ttm-swipe-action-btn h-[58px] w-[58px] sm:h-[64px] sm:w-[64px] rounded-full flex items-center justify-center touch-manipulation text-white",
-          "bg-gradient-to-br cin-action-like border border-white/14",
-          "shadow-[0_16px_48px_-8px_rgba(255,255,255,0.55)]",
+          "ttm-swipe-action-btn ttm-swipe-action-btn--like h-[3.5rem] w-[3.5rem] sm:h-16 sm:w-16 lg:h-[4.25rem] lg:w-[4.25rem] rounded-full flex items-center justify-center touch-manipulation",
           !current && "opacity-40 pointer-events-none"
         )}
       >
@@ -277,22 +354,83 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
   )
 
   const cardShellClass = cn(
-    "relative w-[min(88vw,22rem)] sm:w-[21rem] md:w-[24rem] aspect-[3/4.55] max-h-[min(78vh,680px)] rounded-[var(--radius-lg)] overflow-hidden",
-    "bg-gradient-to-b from-white/[0.07] via-transparent to-white/[0.06]",
-    "ring-1 ring-white/[0.06] shadow-[0_40px_120px_-40px_rgba(0,0,0,0.9)]"
+    "ttm-swipe-card-shell relative w-full mx-auto shrink-0 h-full min-h-0",
+    "max-w-[min(100%,22rem)] sm:max-w-[24rem] md:max-w-[26rem] lg:max-w-[28rem]",
+    "max-h-full",
+    "rounded-[var(--radius-lg)] overflow-hidden"
   )
 
-  const cardColumn = (
+  const renderStack = (layout: "stack" | "welcome") =>
+    stack.length > 0 ? (
+      <div
+        className={cn(
+          "ttm-swipe-deck-stack relative w-full mx-auto overflow-hidden rounded-[var(--radius-lg)]",
+          layout === "welcome"
+            ? "ttm-swipe-deck-stack--welcome min-h-[min(26rem,58dvh)] h-auto max-h-[min(calc(100dvh-var(--ttm-header-height,3rem)-var(--ttm-dock-height)-11rem),44rem)] overflow-y-auto"
+            : "h-full min-h-0 max-h-full"
+        )}
+      >
+        {[...stack].reverse().map((profile, reversedIdx) => {
+          const index = stack.length - 1 - reversedIdx
+          const isTop = index === 0
+          return (
+            <SwipeProfileCard
+              key={`${locale}-${profile.id}-${profiles.length}`}
+              profile={profile}
+              stackIndex={index}
+              isTop={isTop}
+              labels={labels}
+              reduceMotion={reduceMotion}
+              stackLayout={layout}
+              trust={getPeerTrustSignals(profile.id)}
+              onOpenSafety={isTop ? () => setSafetyOpen(true) : undefined}
+              onOpenProfile={
+                isTop
+                  ? (photoIndex) => {
+                      setDetailPhotoIndex(photoIndex)
+                      setDetailProfile(profile)
+                    }
+                  : undefined
+              }
+              x={isTop ? x : undefined}
+              rotate={isTop ? rotate : undefined}
+              likeOpacity={isTop ? likeOpacity : undefined}
+              nopeOpacity={isTop ? nopeOpacity : undefined}
+              onDragEnd={isTop ? onDragEnd : undefined}
+            />
+          )
+        })}
+      </div>
+    ) : (
+      <div className="min-h-[12rem] flex items-center justify-center px-6">
+        <p className="text-muted-foreground font-light text-center text-sm leading-relaxed">{t("noMoreProfiles")}</p>
+      </div>
+    )
+
+  const cardColumn = useWelcomeSlots ? (
+    <div className="w-full min-w-0 flex flex-col flex-1 min-h-[min(26rem,58dvh)]">
+      <div className="relative z-[1] w-full flex-1 flex flex-col min-h-0">{renderStack("welcome")}</div>
+    </div>
+  ) : (
     <div
       className={cn(
-        centered
-          ? "justify-self-center self-center max-h-full min-w-0"
-          : "flex-1 min-w-0 flex flex-col min-h-0 items-center justify-center max-h-full"
+        "w-full min-w-0 max-h-full flex flex-col items-stretch justify-center",
+        centered ? "self-stretch" : "flex-1 min-h-0"
       )}
     >
-      <div className={cn(!centered && "flex-1 flex items-center justify-center max-h-full", cardShellClass)}>
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(255,255,255,0.18),transparent)]" />
-        <CinematicParticles count={8} className="opacity-55" />
+      <div
+        className={cn(
+          "w-full",
+          !centered && "flex-1 flex items-center justify-center min-h-0",
+          cardShellClass
+        )}
+      >
+        {!cardOnly && (
+          <>
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(255,255,255,0.18),transparent)]" />
+            <CinematicParticles count={8} className="opacity-55" />
+          </>
+        )}
         {superRipple && (
           <motion.div
             className="pointer-events-none absolute inset-0 z-[25] rounded-[2rem] bg-gradient-to-br from-amber-400/20 via-transparent to-white/08"
@@ -302,44 +440,8 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
           />
         )}
 
-        <div className="relative z-[1] h-full w-full p-1 flex items-center justify-center">
-          {stack.length > 0 ? (
-            <div className="relative w-full h-full max-h-full aspect-[3/4.55] mx-auto">
-              {[...stack].reverse().map((profile, reversedIdx) => {
-                const index = stack.length - 1 - reversedIdx
-                const isTop = index === 0
-                return (
-                  <SwipeProfileCard
-                    key={`${locale}-${profile.id}-${profiles.length}`}
-                    profile={profile}
-                    stackIndex={index}
-                    isTop={isTop}
-                    labels={labels}
-                    reduceMotion={reduceMotion}
-                    trust={getPeerTrustSignals(profile.id)}
-                    onOpenSafety={isTop ? () => setSafetyOpen(true) : undefined}
-                    onOpenProfile={
-                      isTop
-                        ? (photoIndex) => {
-                            setDetailPhotoIndex(photoIndex)
-                            setDetailProfile(profile)
-                          }
-                        : undefined
-                    }
-                    x={isTop ? x : undefined}
-                    rotate={isTop ? rotate : undefined}
-                    likeOpacity={isTop ? likeOpacity : undefined}
-                    nopeOpacity={isTop ? nopeOpacity : undefined}
-                    onDragEnd={isTop ? onDragEnd : undefined}
-                  />
-                )
-              })}
-            </div>
-          ) : (
-            <div className="h-full flex items-center justify-center px-6">
-              <p className="text-muted-foreground font-light text-center text-sm leading-relaxed">{t("noMoreProfiles")}</p>
-            </div>
-          )}
+        <div className="relative z-[1] h-full w-full p-0.5 flex items-stretch justify-center min-h-0">
+          {renderStack("stack")}
         </div>
       </div>
     </div>
@@ -358,7 +460,7 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
         profileName={current?.name ?? ""}
         context="discover"
         onAfterBlock={() => {
-          if (profiles.length > 0) onProfilesChange(profiles.slice(1))
+          if (current) onProfilesChange((prev) => prev.filter((p) => p.id !== current.id))
         }}
       />
       <SwipeProfileDetailScreen
@@ -384,14 +486,49 @@ export function SwipeDeck({ profiles, booted, onProfilesChange, centered }: Swip
     </>
   )
 
+  const cardSlot = (
+    <div
+      className={cn(
+        "ttm-swipe-deck--card-only w-full flex flex-col items-stretch pointer-events-none",
+        useWelcomeSlots ? "flex-1 min-h-[min(26rem,58dvh)]" : "min-h-0 justify-center",
+        !useWelcomeSlots && centered && "ttm-swipe-deck col-span-3 flex-1"
+      )}
+    >
+      <div
+        className={cn(
+          "pointer-events-auto w-full flex flex-col min-w-0",
+          useWelcomeSlots ? "flex-1 min-h-0" : "items-center justify-center min-h-0",
+          !useWelcomeSlots && centered && "ttm-swipe-deck__card-slot lg:w-auto lg:flex-none"
+        )}
+      >
+        {cardColumn}
+      </div>
+    </div>
+  )
+
+  if (useWelcomeSlots && children) {
+    return (
+      <>
+        {children({
+          card: cardSlot,
+          actions: actionButtons,
+          dialogs,
+        })}
+      </>
+    )
+  }
+
   if (centered) {
     return (
       <>
         {dialogs}
-        <div className="col-span-3 w-full min-h-0 flex-1 grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-1 sm:gap-2 pointer-events-none">
-          <div className="min-w-0" aria-hidden />
-          <div className="pointer-events-auto min-w-0">{cardColumn}</div>
-          <div className={cn(actionsWrapClass, "pointer-events-auto")}>{actionButtons}</div>
+        <div className="ttm-swipe-deck col-span-3 w-full min-h-0 flex-1 flex flex-col items-stretch justify-center gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-8 xl:gap-10 pointer-events-none px-1 sm:px-2">
+          <div className="ttm-swipe-deck__card-slot pointer-events-auto w-full lg:w-auto lg:flex-none flex flex-col items-center justify-center min-h-0 min-w-0">
+            {cardColumn}
+          </div>
+          <div className="ttm-swipe-deck__actions-slot pointer-events-auto w-full lg:w-auto shrink-0 flex justify-center">
+            {actionButtons}
+          </div>
         </div>
       </>
     )

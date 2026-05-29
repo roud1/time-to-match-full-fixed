@@ -2,13 +2,17 @@
 
 import { motion } from "motion/react"
 import { useI18n } from "@/lib/i18n"
+import { isLocationSettled } from "@/lib/location-settled"
+import { cn } from "@/lib/utils"
 
 export function LocationControl() {
   const { t, location } = useI18n()
 
   const label =
-    location.status === "loading" || location.status === "idle"
+    location.status === "loading"
       ? t("locationLoading")
+      : location.status === "idle"
+        ? t("locationEnable")
       : location.status === "ready" && location.city
         ? location.city
         : location.status === "denied"
@@ -55,10 +59,22 @@ export function LocationControl() {
   )
 }
 
-export function LocationBanner() {
+type LocationBannerProps = {
+  className?: string
+}
+
+export function LocationBanner({ className }: LocationBannerProps) {
   const { t, location } = useI18n()
 
-  if (location.status !== "denied" && location.status !== "error") {
+  if (isLocationSettled()) {
+    return null
+  }
+
+  if (
+    location.status !== "denied" &&
+    location.status !== "error" &&
+    location.status !== "unsupported"
+  ) {
     return null
   }
 
@@ -66,7 +82,10 @@ export function LocationBanner() {
     <motion.div
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 w-full max-w-md"
+      className={cn(
+        "fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 w-full max-w-md",
+        className
+      )}
     >
       <motion.div className="glass rounded-2xl px-4 py-3 flex items-center justify-between gap-3 border border-foreground/10 shadow-lg">
         <p className="text-xs text-muted-foreground font-light leading-relaxed">
@@ -74,7 +93,7 @@ export function LocationBanner() {
         </p>
         <button
           type="button"
-          onClick={location.requestLocation}
+          onClick={() => location.requestLocation({ force: true })}
           className="ttm-brand-cta shrink-0 px-3 py-1.5 text-xs font-extralight whitespace-nowrap min-h-0"
         >
           {t("locationEnable")}

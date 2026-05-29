@@ -1,5 +1,5 @@
+import { LoginPageExperience } from "@/components/auth/login-page-experience"
 import { AuthShell } from "@/components/auth-shell"
-import { LoginForm } from "@/components/login-form"
 
 export const metadata = {
   title: "Вход — Time to Match",
@@ -9,7 +9,7 @@ export const metadata = {
 export default function LoginPage() {
   return (
     <AuthShell>
-      <LoginForm />
+      <LoginPageExperience />
     </AuthShell>
   )
 }

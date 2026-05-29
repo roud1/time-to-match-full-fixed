@@ -3,10 +3,19 @@
 @import '../src/styles/foundation.css';
 @import './brand-system.css';
 @import './design-system.css';
+@import './ttm-design.css';
 @import './sync-design.css';
 @import './chat-experience.css';
 @import './chat-layout.css';
 @import './discover-experience.css';
+@import './welcome-page.css';
+@import './discover-page.css';
+@import './likes-page.css';
+@import './chat-page.css';
+@import './map-page.css';
+@import './swipe-profile-card.css';
+@import './match-celebration.css';
+@import './activity-hub-sheet.css';
 @import './landing-experience.css';
 @import './spark-landing.css';
 @import './premium-landing.css';
@@ -24,6 +33,7 @@
 @import './theme-tokens.css';
 @import './light-theme-overrides.css';
 @import './dark-theme-overrides.css';
+@import './site-ambient.css';
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 
@@ -113,6 +123,11 @@
   border-color: var(--accent-soft-border);
   background: var(--accent-soft-bg);
   color: var(--text-primary);
+}
+
+.ttm-floating-chrome__theme {
+  border-radius: 999px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
 }
 
 /* Bond meter — chat header */

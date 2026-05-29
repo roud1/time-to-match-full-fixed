@@ -1,36 +1,61 @@
 "use client"
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { formatExtensionHours, type ConnectionEvent } from "@/lib/connection-system"
-import { clearConnectionEvent, getRecentConnectionEvents } from "@/lib/connection-store"
+import { clearConnectionEvent } from "@/lib/connection-store"
 import { cn } from "@/lib/utils"
 
 type ToastItem = ConnectionEvent & { key: string }
+
+const SEEN_KEY = "ttm-connection-toast-seen-at"
+
+function readSeenAt(): number {
+  if (typeof sessionStorage === "undefined") return Date.now()
+  const raw = sessionStorage.getItem(SEEN_KEY)
+  const n = raw ? Number.parseInt(raw, 10) : NaN
+  return Number.isFinite(n) ? n : Date.now()
+}
+
+function markSeenAt(at: number) {
+  if (typeof sessionStorage === "undefined") return
+  const prev = readSeenAt()
+  sessionStorage.setItem(SEEN_KEY, String(Math.max(prev, at)))
+}
 
 export function ConnectionExtensionToastStack() {
   const { t, locale } = useI18n()
   const reduce = useReducedMotion()
   const [toasts, setToasts] = useState<ToastItem[]>([])
+  const bootstrapped = useRef(false)
 
   useEffect(() => {
+    if (!bootstrapped.current) {
+      bootstrapped.current = true
+      markSeenAt(Date.now())
+    }
+
     const push = (events: ConnectionEvent[]) => {
+      const seenAt = readSeenAt()
       const fresh = events
-        .filter((e) => e.type === "extended" || e.type === "stage_up" || e.type === "streak")
+        .filter(
+          (e) =>
+            (e.type === "extended" || e.type === "stage_up" || e.type === "streak") && e.at > seenAt
+        )
         .map((e) => ({ ...e, key: `${e.type}-${e.profileId}-${e.at}` }))
       if (fresh.length === 0) return
+      const maxAt = Math.max(...fresh.map((f) => f.at))
+      markSeenAt(maxAt)
       setToasts((prev) => {
         const keys = new Set(prev.map((p) => p.key))
         return [...fresh.filter((f) => !keys.has(f.key)), ...prev].slice(0, 3)
       })
     }
 
-    push(getRecentConnectionEvents())
-
     const onUpdate = (ev: Event) => {
       const detail = (ev as CustomEvent<{ events?: ConnectionEvent[] }>).detail
-      if (detail?.events) push(detail.events)
+      if (detail?.events?.length) push(detail.events)
     }
     window.addEventListener("ttm-connection-updated", onUpdate)
     return () => window.removeEventListener("ttm-connection-updated", onUpdate)

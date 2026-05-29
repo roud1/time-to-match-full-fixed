@@ -7,8 +7,12 @@ import {
   parseStoredPosition,
   storePosition,
 } from "@/lib/geo"
+import { getCityCoords } from "@/lib/cities"
+import { getProfileCityName } from "@/lib/cities"
 import type { Locale } from "@/lib/i18n/config"
 import { localeToBcp47 } from "@/lib/i18n/config"
+import { isLocationSettled, markLocationSettled } from "@/lib/location-settled"
+import { getUserProfile } from "@/lib/user-profile"
 
 export type LocationStatus =
   | "idle"
@@ -54,6 +58,7 @@ async function reverseGeocode(
       headers: {
         Accept: "application/json",
         "Accept-Language": localeToBcp47(locale),
+        "User-Agent": "TimeToMatch/1.0 (dating app; contact: support@timetomatch.app)",
       },
     }
   )
@@ -143,9 +148,13 @@ export function useUserLocation({
     []
   )
 
-  const requestLocation = useCallback(() => {
+  const requestLocation = useCallback((options?: { force?: boolean }) => {
     if (typeof window === "undefined" || !navigator.geolocation) {
       setStatus("unsupported")
+      return
+    }
+
+    if (!options?.force && isLocationSettled()) {
       return
     }
 
@@ -153,6 +162,7 @@ export function useUserLocation({
 
     navigator.geolocation.getCurrentPosition(
       (result) => {
+        markLocationSettled()
         void applyPosition(
           { lat: result.coords.latitude, lng: result.coords.longitude },
           true
@@ -184,6 +194,18 @@ export function useUserLocation({
       return
     }
 
+    if (isLocationSettled()) {
+      const profile = getUserProfile()
+      if (profile?.cityId) {
+        void applyPosition(getCityCoords(profile.cityId), false)
+        return
+      }
+      const name = profile ? getProfileCityName(profile, localeRef.current) : ""
+      if (name) setCity(name)
+      setStatus("ready")
+      return
+    }
+
     if (autoRequest) {
       requestLocation()
     } else {
@@ -201,6 +223,33 @@ export function useUserLocation({
       }
     })
   }, [locale, position])
+
+  const syncFromProfile = useCallback(() => {
+    if (!isLocationSettled()) return
+    if (position) return
+
+    const profile = getUserProfile()
+    if (profile?.cityId) {
+      void applyPosition(getCityCoords(profile.cityId), false)
+      return
+    }
+
+    const name = profile ? getProfileCityName(profile, localeRef.current) : ""
+    if (name) {
+      setCity(name)
+      setStatus("ready")
+    }
+  }, [applyPosition, position])
+
+  useEffect(() => {
+    syncFromProfile()
+    window.addEventListener("ttm-location-settled", syncFromProfile)
+    window.addEventListener("ttm-user-profile-changed", syncFromProfile)
+    return () => {
+      window.removeEventListener("ttm-location-settled", syncFromProfile)
+      window.removeEventListener("ttm-user-profile-changed", syncFromProfile)
+    }
+  }, [syncFromProfile])
 
   return {
     status,

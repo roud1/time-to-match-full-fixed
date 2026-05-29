@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BottomNavBar } from "@/components/app/bottom-nav-bar"
@@ -12,11 +12,9 @@ import { MapPanel } from "@/components/app/map-panel"
 import { Logo } from "@/components/logo"
 import { ActivityFeedProvider } from "@/components/activity/activity-feed-context"
 import { ActivityAppChrome } from "@/components/activity/activity-app-chrome"
-import { HeaderProfileLink } from "@/components/app/header-profile-link"
 import { LevelBadge } from "@/components/gamification/level-badge"
 import { useUser } from "@/hooks/use-user"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
-import { LiveActivityFeed } from "@/components/live-activity-feed"
 import { PremiumUpgradeProvider } from "@/components/premium/premium-upgrade-context"
 import { ConnectionExtensionToastStack } from "@/components/connection/connection-extension-toast"
 import { PremiumUpgradeSheet } from "@/components/premium/premium-upgrade-sheet"
@@ -39,6 +37,13 @@ import { useEnergyFeed } from "@/hooks/use-energy-feed"
 import { PlatformSoulField } from "@/components/reality-expansion/platform-soul-field"
 import { PlatformInsightWhisper } from "@/components/product/platform-insight-whisper"
 import { pickPlatformInsight } from "@/lib/product-platform-insight"
+import { GeolocationBootstrap } from "@/components/geolocation-bootstrap"
+import { LocationBanner } from "@/components/location-control"
+import { DesktopAppNav } from "@/components/layout/desktop-app-nav"
+import { useDesktopAppNav } from "@/hooks/use-desktop-app-nav"
+
+const PAGE_MAX_WIDE = "max-w-[min(1200px,100%)]"
+const PAGE_MAX_NARROW = "max-w-lg"
 
 export function AppShell() {
   const { t, locale, location } = useI18n()
@@ -49,6 +54,7 @@ export function AppShell() {
     tabParam === "likes" || tabParam === "chat" || tabParam === "map" ? tabParam : "discover"
   const [ready, setReady] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const isDesktopNav = useDesktopAppNav()
 
   useEffect(() => {
     document.documentElement.classList.add("ttm-native-scroll-lock")
@@ -81,11 +87,6 @@ export function AppShell() {
     setReady(true)
     recordProfileActivity()
   }, [router])
-
-  useEffect(() => {
-    if (!ready || location.status !== "idle") return
-    location.requestLocation()
-  }, [ready, location.status, location.requestLocation])
 
   const [premiumTick, setPremiumTick] = useState(0)
   const { user: meUser } = useUser()
@@ -132,18 +133,40 @@ export function AppShell() {
   const chatWith = searchParams.get("with")
   const chatThreadOpen = tab === "chat" && Boolean(chatWith)
   const immersiveTab = tab === "discover"
-  const showHeader = !chatThreadOpen
-  const showDock = !chatThreadOpen
+  const likesTab = tab === "likes"
+  const chatTab = tab === "chat"
+  const mapTab = tab === "map"
+  const wideTab = immersiveTab || likesTab || chatTab || mapTab
+  const pageMax = wideTab ? PAGE_MAX_WIDE : PAGE_MAX_NARROW
+  const mobileChatRoom = chatTab && chatThreadOpen && !isDesktopNav
+  const desktopChatThread = chatTab && chatThreadOpen && isDesktopNav
+  const showHeader = !mobileChatRoom
+  const showDock = !mobileChatRoom && !isDesktopNav
 
   return (
     <ActivityFeedProvider>
       <PremiumUpgradeProvider>
         <EmotionalWorldRoot
           ambient
-          className="ttm-native-app"
+          className={cn(
+            "ttm-native-app ttm-with-desktop-nav",
+            immersiveTab && "ttm-native-app--discover",
+            likesTab && "ttm-native-app--likes",
+            chatTab && "ttm-native-app--chat",
+            mapTab && "ttm-native-app--map"
+          )}
           locale={locale}
           position={location.position}
         >
+          {ready && (
+            <>
+              <Suspense fallback={null}>
+                <DesktopAppNav />
+              </Suspense>
+              <GeolocationBootstrap autoRequest />
+              <LocationBanner />
+            </>
+          )}
           {showHeader && (
             <header
               className={cn(
@@ -154,7 +177,7 @@ export function AppShell() {
               <div
                 className={cn(
                   "mx-auto flex items-center justify-between gap-2 w-full ttm-page ttm-page--app",
-                  immersiveTab ? "max-w-4xl" : "max-w-lg"
+                  pageMax
                 )}
               >
                 <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile">
@@ -167,7 +190,6 @@ export function AppShell() {
                   {meUser?.level != null && meUser.id !== "local" && (
                     <LevelBadge level={meUser.level} />
                   )}
-                  <HeaderProfileLink className="shrink-0" />
                   <ActivityAppChrome />
                   <ThemeToggle compact className="shrink-0" />
                   {showPremiumBadge && (
@@ -178,20 +200,27 @@ export function AppShell() {
             </header>
           )}
 
-          {showHeader && (
+          {showHeader && !immersiveTab && !desktopChatThread && (
             <>
               <PlatformInsightWhisper
                 insight={platformInsight}
-                className="mx-auto max-w-lg w-full px-4 pt-1 mb-1"
+                className={cn("mx-auto w-full px-4 pt-1 mb-1", wideTab ? pageMax : PAGE_MAX_NARROW)}
               />
               {!platformInsight && (
-                <PresencePlatformAmbient className="mx-auto max-w-lg w-full px-4 -mt-0.5 mb-1" />
+                <PresencePlatformAmbient
+                  className={cn("mx-auto w-full px-4 -mt-0.5 mb-1", wideTab ? pageMax : PAGE_MAX_NARROW)}
+                />
               )}
               <PlatformSoulField
                 soul={reality.soul}
-                className="mx-auto max-w-lg w-full px-4 mb-1 hidden sm:block"
+                className={cn(
+                  "mx-auto w-full px-4 mb-1 hidden sm:block",
+                  wideTab ? pageMax : PAGE_MAX_NARROW
+                )}
               />
-              <EmotionalRetentionStrip className="mx-auto max-w-lg w-full px-3 mb-2" />
+              <EmotionalRetentionStrip
+                className={cn("mx-auto w-full px-3 mb-2", wideTab ? pageMax : PAGE_MAX_NARROW)}
+              />
               <DailyReturnBanner
                 insights={insights}
                 open={showReturn}
@@ -204,10 +233,14 @@ export function AppShell() {
             className={cn(
               "ttm-native-app__main mx-auto w-full ttm-page ttm-page--app",
               immersiveTab
-                ? "flex flex-col overflow-hidden max-w-4xl"
-                : chatThreadOpen
+                ? "flex flex-col overflow-hidden max-w-[min(1200px,100%)] w-full"
+                : mobileChatRoom
                   ? "relative flex flex-col flex-1 min-h-0 overflow-hidden w-full max-w-lg md:max-w-none"
-                  : "ttm-native-app__main--scroll max-w-lg",
+                  : (chatTab || mapTab) && isDesktopNav
+                    ? cn("flex flex-col flex-1 min-h-0 overflow-hidden w-full", PAGE_MAX_WIDE)
+                    : wideTab
+                      ? cn("ttm-native-app__main--scroll w-full", PAGE_MAX_WIDE)
+                      : cn("ttm-native-app__main--scroll", PAGE_MAX_NARROW),
               showDock && "pb-[var(--ttm-dock-height)]"
             )}
           >
@@ -220,11 +253,6 @@ export function AppShell() {
           </main>
 
           {showDock && <BottomNavBar />}
-          {showHeader && tab !== "map" && (
-            <div className="p9-live-energy pointer-events-none sm:pointer-events-auto">
-              <LiveActivityFeed appearDelayMs={2400} />
-            </div>
-          )}
         </EmotionalWorldRoot>
         <EvolutionEventCelebration />
         <ConnectionExtensionToastStack />

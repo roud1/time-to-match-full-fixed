@@ -1,18 +1,25 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
-import { motion } from "motion/react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import type { SwipeProfile } from "@/lib/demo-profiles"
-import { getDiscoverDeckProfiles } from "@/lib/discover-deck"
+import { getDiscoverDeckProfiles, isDiscoverFilteredEmpty } from "@/lib/discover-deck"
 import { fetchDiscoverProfiles } from "@/lib/discover/api"
+import {
+  hasDiscoverViewerPosition,
+  resolveDiscoverViewerPosition,
+} from "@/lib/discover/viewer-position"
 import { discoverProfileToSwipe } from "@/lib/discover/map-profile"
 import type { DiscoverFilters } from "@/lib/discover/types"
 import { loadDiscoverFilters, saveDiscoverFilters } from "@/lib/discover/filters-storage"
 import { SwipeDeck } from "@/components/app/swipe-deck"
 import { DiscoverAmbient } from "@/components/discover/discover-ambient"
-import { DiscoverTimeLimitsBanner } from "@/components/discover/discover-time-limits-banner"
+import { DiscoverToolbar } from "@/components/discover/discover-toolbar"
 import { DiscoverFiltersModal } from "@/components/discover/discover-filters-modal"
+import { DiscoverAside } from "@/components/discover/discover-aside"
+import { DiscoverPitch } from "@/components/discover/discover-pitch"
+import { WelcomeTips } from "@/components/welcome/welcome-tips"
+import { WelcomeMatchTimer } from "@/components/welcome/welcome-match-timer"
 import { useTrustSafetyVersion } from "@/hooks/use-trust-safety-version"
 import { useHydrated } from "@/hooks/use-hydrated"
 import { getUserProfile, isPremiumActive } from "@/lib/user-profile"
@@ -20,73 +27,8 @@ import { usePremiumUpgrade } from "@/components/premium/premium-upgrade-context"
 import { ProfileLifeDiscoverGate } from "@/components/profile/profile-life-presence"
 import { useProfileLife } from "@/hooks/use-profile-life"
 import { reviveProfilePresence } from "@/lib/profile-life-store"
-
-/** Compact copy strip — lives under the app header, not beside the card. */
-function DiscoverContextStrip({
-  premium,
-  onBoost,
-  onOpenFilters,
-}: {
-  premium: boolean
-  onBoost: () => void
-  onOpenFilters: () => void
-}) {
-  const { t } = useI18n()
-
-  return (
-    <div className="ttm-discover-strip shrink-0 w-full text-left pb-2 sm:pb-3 border-b mb-2 sm:mb-3">
-      <div className="flex items-center justify-between gap-2 min-h-[1.75rem]">
-        <h1 className="ttm-discover-title text-base sm:text-lg font-medium tracking-tight truncate min-w-0">
-          {t("tabDiscover")}
-        </h1>
-        <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            type="button"
-            onClick={onOpenFilters}
-            className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] touch-manipulation"
-            aria-label={t("discoverFiltersOpen")}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M3 4h18M7 8h10M11 12h2M13 16h-2"
-              />
-            </svg>
-          </button>
-        {premium ? (
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[9px] sm:text-[10px] font-light text-amber-100/95 ttm-premium-badge-glow">
-            <span className="h-1 w-1 rounded-full bg-amber-300 animate-pulse" aria-hidden />
-            {t("premiumBoostActive")}
-          </span>
-        ) : (
-          <motion.button
-            type="button"
-            whileTap={{ scale: 0.97 }}
-            onClick={onBoost}
-            className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-500/25 bg-amber-500/10 px-2 py-0.5 text-[9px] sm:text-[10px] font-light text-amber-100/90 touch-manipulation"
-          >
-            <svg className="w-2.5 h-2.5 text-amber-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7-6-4.6h7.6L12 2z" />
-            </svg>
-            {t("premiumBoostChip")}
-          </motion.button>
-        )}
-        </div>
-      </div>
-      <p className="ttm-discover-subtitle mt-1 text-[10px] sm:text-[11px] font-extralight leading-snug line-clamp-2">
-        {t("discoverPanelSubtitle")}
-      </p>
-      <p className="ttm-discover-subtitle mt-0.5 text-[9px] sm:text-[10px] font-extralight leading-snug line-clamp-1 opacity-80">
-        {t("discoverPanelHint")}
-      </p>
-    </div>
-  )
-}
-
 export function DiscoverPanel() {
-  const { locale, location } = useI18n()
+  const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
   const trustV = useTrustSafetyVersion()
   const hydrated = useHydrated()
@@ -95,31 +37,66 @@ export function DiscoverPanel() {
   const [profileTick, setProfileTick] = useState(0)
   const [filters, setFilters] = useState<DiscoverFilters>(() => loadDiscoverFilters())
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [deckEmptyReason, setDeckEmptyReason] = useState<"swiped" | "filters" | null>(null)
+  const [deckRefreshing, setDeckRefreshing] = useState(false)
 
-  const loadDeck = useCallback(async () => {
-    let deck = getDiscoverDeckProfiles(locale, location.position, filters)
-    try {
-      const fromApi = await fetchDiscoverProfiles(filters, location.position)
-      if (fromApi.length > 0) {
-        const apiCards = fromApi.map((c) => discoverProfileToSwipe(c, locale))
-        const apiIds = new Set(apiCards.map((c) => c.id))
-        deck = [...apiCards, ...deck.filter((p) => !apiIds.has(p.id))]
+  const loadDeck = useCallback(
+    async (activeFilters: DiscoverFilters = filters) => {
+      const viewerPosition = resolveDiscoverViewerPosition(location.position)
+      const filteredEmpty = isDiscoverFilteredEmpty(locale, viewerPosition, activeFilters)
+
+      let deck = getDiscoverDeckProfiles(locale, viewerPosition, activeFilters)
+      try {
+        const fromApi = await fetchDiscoverProfiles(activeFilters, viewerPosition)
+        if (fromApi.length > 0) {
+          const apiCards = fromApi.map((c) => discoverProfileToSwipe(c, locale))
+          const apiIds = new Set(apiCards.map((c) => c.id))
+          deck = [...apiCards, ...deck.filter((p) => !apiIds.has(p.id))]
+        }
+      } catch {
+        /* demo deck only */
       }
-    } catch {
-      /* demo deck only */
-    }
-    return deck
-  }, [locale, location.position, trustV, profileTick, filters])
+
+      setDeckEmptyReason(
+        deck.length === 0 ? (filteredEmpty ? "filters" : "swiped") : null
+      )
+      return deck
+    },
+    [locale, location.position, trustV, profileTick, filters]
+  )
+
+  const reloadDeck = useCallback(
+    async (activeFilters: DiscoverFilters = filters) => {
+      setDeckRefreshing(true)
+      try {
+        const deck = await loadDeck(activeFilters)
+        setProfiles(deck)
+        setDeckBooted(true)
+      } finally {
+        setDeckRefreshing(false)
+      }
+    },
+    [filters, loadDeck]
+  )
 
   useEffect(() => {
     const bump = () => setProfileTick((x) => x + 1)
     window.addEventListener("ttm-user-profile-changed", bump)
-    return () => window.removeEventListener("ttm-user-profile-changed", bump)
+    window.addEventListener("ttm-location-settled", bump)
+    return () => {
+      window.removeEventListener("ttm-user-profile-changed", bump)
+      window.removeEventListener("ttm-location-settled", bump)
+    }
   }, [])
 
   const user = getUserProfile()
   const premium = Boolean(user && isPremiumActive(user))
   const profileLife = useProfileLife()
+  const displayName = useMemo(() => {
+    const name = user?.name?.trim()
+    if (!name) return null
+    return name.split(/\s+/)[0] || name
+  }, [user?.name])
 
   useEffect(() => {
     const bump = () => setProfileTick((x) => x + 1)
@@ -130,66 +107,106 @@ export function DiscoverPanel() {
   useEffect(() => {
     if (!hydrated) return
     let cancelled = false
-    void loadDeck().then((deck) => {
-      if (!cancelled) {
-        setProfiles(deck)
-        setDeckBooted(true)
-      }
+    void reloadDeck().then(() => {
+      if (cancelled) return
     })
     return () => {
       cancelled = true
     }
-  }, [hydrated, loadDeck])
+  }, [hydrated, reloadDeck])
 
   const handleProfilesChange = useCallback(
-    (next: SwipeProfile[]) => {
-      if (next.length === 0) {
-        void loadDeck().then(setProfiles)
-        return
-      }
-      setProfiles(next)
+    (update: SwipeProfile[] | ((prev: SwipeProfile[]) => SwipeProfile[])) => {
+      setProfiles((prev) => {
+        const next = typeof update === "function" ? update(prev) : update
+        return next
+      })
     },
-    [loadDeck]
+    []
   )
 
   useEffect(() => {
-    if (!hydrated || !deckBooted) return
-    const refillIfEmpty = () => {
-      if (profiles.length > 0) return
-      void loadDeck().then(setProfiles)
-    }
-    window.addEventListener("ttm-social-updated", refillIfEmpty)
-    return () => window.removeEventListener("ttm-social-updated", refillIfEmpty)
-  }, [hydrated, deckBooted, loadDeck, profiles.length])
+    if (!hydrated || !deckBooted || profiles.length > 0) return
+    void loadDeck().then((deck) => {
+      setDeckEmptyReason(deck.length === 0 ? (isDiscoverFilteredEmpty(locale, resolveDiscoverViewerPosition(location.position), filters) ? "filters" : "swiped") : null)
+      setProfiles(deck)
+    })
+  }, [hydrated, deckBooted, profiles.length, loadDeck, locale, location.position, filters])
 
   const handleRevive = () => {
     reviveProfilePresence()
     setProfileTick((x) => x + 1)
   }
 
+  const toolbar = (
+    <DiscoverToolbar
+      compactRow
+      premium={premium}
+      onBoost={() => openUpgrade("boost")}
+      onOpenFilters={() => setFiltersOpen(true)}
+    />
+  )
+
   const deck = (
-    <div className="relative z-[1] grid grid-cols-[1fr_auto_1fr] flex-1 min-h-0 w-full items-center overflow-hidden">
-      <SwipeDeck booted={deckBooted} profiles={profiles} onProfilesChange={handleProfilesChange} centered />
-    </div>
+    <SwipeDeck
+      cardOnly
+      booted={deckBooted && !deckRefreshing}
+      profiles={profiles}
+      emptyReason={deckEmptyReason}
+      onProfilesChange={handleProfilesChange}
+      onResetFilters={() => {
+        setFilters({})
+        saveDiscoverFilters({})
+        void reloadDeck({})
+      }}
+    >
+      {({ card, actions, dialogs }) => (
+        <div className="ttm-welcome-page">
+          {dialogs}
+          <DiscoverPitch name={displayName} className="ttm-welcome-page__pitch--mobile" />
+
+          <div className="ttm-welcome-page__grid">
+            <aside className="ttm-welcome-page__aside" aria-label={t("discoverAsideAria")}>
+              <DiscoverPitch name={displayName} className="ttm-welcome-page__pitch--desktop" />
+              <DiscoverAside />
+            </aside>
+
+            <div className="ttm-welcome-page__card-col">
+              <div className="ttm-welcome-page__card">{card}</div>
+              <div
+                className="ttm-welcome-page__actions-bar"
+                aria-label={t("discoverSwipeActionsAria")}
+              >
+                {actions ? (
+                  <div className="ttm-welcome-page__actions-bar-swipe">{actions}</div>
+                ) : null}
+                <div className="ttm-welcome-page__actions-bar-tools">{toolbar}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="ttm-welcome-page__footer--mobile">
+            <WelcomeMatchTimer />
+            <WelcomeTips />
+            <DiscoverAside compact />
+          </div>
+        </div>
+      )}
+    </SwipeDeck>
   )
 
   return (
-    <div className="discover-panel-root flex flex-col h-full min-h-0 overflow-hidden pt-2">
+    <div className="discover-panel-root flex flex-col h-full min-h-0 overflow-hidden">
       <DiscoverAmbient />
-      <DiscoverContextStrip
-        premium={premium}
-        onBoost={() => openUpgrade("boost")}
-        onOpenFilters={() => setFiltersOpen(true)}
-      />
-      <DiscoverTimeLimitsBanner className="relative z-[1] shrink-0 mb-2 sm:mb-3" />
       <DiscoverFiltersModal
         open={filtersOpen}
         filters={filters}
-        hasLocation={location.position != null}
+        hasLocation={hasDiscoverViewerPosition(location.position)}
         onClose={() => setFiltersOpen(false)}
         onApply={(next) => {
           setFilters(next)
           saveDiscoverFilters(next)
+          void reloadDeck(next)
         }}
       />
       {profileLife ? (

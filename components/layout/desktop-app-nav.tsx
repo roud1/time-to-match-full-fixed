@@ -23,7 +23,9 @@ export function DesktopAppNav() {
   const tab: AppTab =
     tabParam === "likes" || tabParam === "chat" || tabParam === "map" ? tabParam : "discover"
 
-  if (pathname !== "/app") return null
+  const onApp = pathname === "/app"
+  const onProfile = pathname === "/profile" || pathname.startsWith("/profile/")
+  if (!onApp && !onProfile) return null
 
   return (
     <aside className="ttm-desktop-nav" aria-label="App navigation">
@@ -35,7 +37,7 @@ export function DesktopAppNav() {
         return (
           <Link
             key={id}
-            href={`/app?tab=${id}`}
+            href={id === "discover" ? "/app" : `/app?tab=${id}`}
             className={cn("ttm-desktop-nav__item", active && "ttm-desktop-nav__item--active")}
             aria-current={active ? "page" : undefined}
           >
@@ -44,13 +46,11 @@ export function DesktopAppNav() {
           </Link>
         )
       })}
-      <div className="flex-1" />
+      <div className="flex-1" aria-hidden />
       <Link
         href="/profile"
-        className={cn(
-          "ttm-desktop-nav__item",
-          pathname.startsWith("/profile") && "ttm-desktop-nav__item--active"
-        )}
+        className={cn("ttm-desktop-nav__item", onProfile && "ttm-desktop-nav__item--active")}
+        aria-current={onProfile ? "page" : undefined}
       >
         <User className="w-5 h-5" strokeWidth={1.5} />
         <span>{t("tabProfile")}</span>

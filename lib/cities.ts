@@ -2,25 +2,9 @@ import type { Locale } from "@/lib/i18n/config"
 import { localeToBcp47 } from "@/lib/i18n/config"
 import { pickLocalized } from "@/lib/i18n/pick-localized"
 import type { GeoPosition } from "@/lib/geo"
+import { UA_CITIES } from "@/lib/ua-cities-data"
 
-export const CITIES = [
-  { id: "kyiv", lat: 50.4501, lng: 30.5234, ru: "Киев", uk: "Київ", en: "Kyiv" },
-  { id: "kharkiv", lat: 49.9935, lng: 36.2304, ru: "Харьков", uk: "Харків", en: "Kharkiv" },
-  { id: "odesa", lat: 46.4825, lng: 30.7233, ru: "Одесса", uk: "Одеса", en: "Odesa" },
-  { id: "dnipro", lat: 48.4647, lng: 35.0462, ru: "Днепр", uk: "Дніпро", en: "Dnipro" },
-  { id: "lviv", lat: 49.8397, lng: 24.0297, ru: "Львов", uk: "Львів", en: "Lviv" },
-  { id: "zaporizhzhia", lat: 47.8388, lng: 35.1396, ru: "Запорожье", uk: "Запоріжжя", en: "Zaporizhzhia" },
-  { id: "vinnytsia", lat: 49.2331, lng: 28.4682, ru: "Винница", uk: "Вінниця", en: "Vinnytsia" },
-  { id: "poltava", lat: 49.5883, lng: 34.5514, ru: "Полтава", uk: "Полтава", en: "Poltava" },
-  { id: "chernihiv", lat: 51.4982, lng: 31.2893, ru: "Чернигов", uk: "Чернігів", en: "Chernihiv" },
-  { id: "ivano-frankivsk", lat: 48.9226, lng: 24.7111, ru: "Ивано-Франковск", uk: "Івано-Франківськ", en: "Ivano-Frankivsk" },
-  { id: "ternopil", lat: 49.5535, lng: 25.5948, ru: "Тернополь", uk: "Тернопіль", en: "Ternopil" },
-  { id: "lutsk", lat: 50.7472, lng: 25.3254, ru: "Луцк", uk: "Луцьк", en: "Lutsk" },
-  { id: "rivne", lat: 50.6199, lng: 26.2516, ru: "Ровно", uk: "Рівне", en: "Rivne" },
-  { id: "sumy", lat: 50.9077, lng: 34.7981, ru: "Сумы", uk: "Суми", en: "Sumy" },
-  { id: "mykolaiv", lat: 46.975, lng: 31.9946, ru: "Николаев", uk: "Миколаїв", en: "Mykolaiv" },
-  { id: "uzhhorod", lat: 48.6208, lng: 22.2879, ru: "Ужгород", uk: "Ужгород", en: "Uzhhorod" },
-] as const
+export const CITIES = UA_CITIES
 
 export type CityId = (typeof CITIES)[number]["id"]
 export const CUSTOM_CITY_ID = "other" as const
@@ -46,16 +30,48 @@ export function getCityCoords(id: CityId): GeoPosition {
   return { lat: city.lat, lng: city.lng }
 }
 
+function cityNameVariants(city: (typeof CITIES)[number]): string[] {
+  return [city.ru, city.uk, city.en, city.id].map((v) => v.toLowerCase())
+}
+
 export function findCityIdFromName(name: string | null | undefined): CityId | null {
   if (!name) return null
   const normalized = name.trim().toLowerCase()
+  if (!normalized) return null
+
   for (const city of CITIES) {
-    const variants = [city.ru, city.uk, city.en, city.id].map((v) => v.toLowerCase())
-    if (variants.some((v) => v === normalized || normalized.includes(v) || v.includes(normalized))) {
+    const variants = cityNameVariants(city)
+    if (variants.includes(normalized)) return city.id
+  }
+
+  for (const city of CITIES) {
+    const variants = cityNameVariants(city)
+    if (variants.some((v) => v.startsWith(normalized) || normalized.startsWith(v))) {
       return city.id
     }
   }
+
   return null
+}
+
+export function filterCities(query: string, locale: Locale, limit = 12) {
+  const cities = getCitiesForLocale(locale)
+  const q = query.trim().toLowerCase()
+  if (!q) return cities.slice(0, limit)
+
+  const scored = cities
+    .map((city) => {
+      const label = city.label.toLowerCase()
+      let score = 0
+      if (label === q) score = 100
+      else if (label.startsWith(q)) score = 80
+      else if (label.includes(q)) score = 50
+      return { city, score }
+    })
+    .filter((row) => row.score > 0)
+    .sort((a, b) => b.score - a.score || a.city.label.localeCompare(b.city.label, localeToBcp47(locale)))
+
+  return scored.slice(0, limit).map((row) => row.city)
 }
 
 export function getCitiesForLocale(locale: Locale) {

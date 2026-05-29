@@ -9,7 +9,7 @@ import { SiteBackground } from "@/components/site-background"
 import { MobileScreenTransition } from "@/components/mobile/mobile-screen-transition"
 import { ServiceWorkerRegister } from "@/components/pwa/service-worker-register"
 import { PushSubscriptionBootstrap } from "@/components/pwa/push-subscription-bootstrap"
-import { LanguageSwitcher } from "@/components/language-switcher"
+import { FloatingChrome } from "@/components/floating-chrome"
 import { ThemeProvider } from "@/components/theme/theme-provider"
 import { ThemeScript } from "@/components/theme/theme-script"
 import { Toaster } from "@/components/ui/sonner"
@@ -21,16 +21,16 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   applicationName: "Time to Match",
   title: {
-    default: "Time to Match — У тебя всего 72 часа",
+    default: "Time to Match — Мэтч живёт 24 часа",
     template: "%s · Time to Match",
   },
   description:
-    "Премиальное приложение для знакомств. Каждый профиль исчезает через 72 часа. Не упусти свой шанс.",
+    "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
   keywords: [
     "знакомства",
     "dating",
     "премиум",
-    "72 часа",
+    "24 часа",
     "Time to Match",
     "match",
     "отношения",
@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     locale: "ru_RU",
     url: siteUrl,
     siteName: "Time to Match",
-    title: "Time to Match — У тебя всего 72 часа",
+    title: "Time to Match — Мэтч живёт 24 часа",
     description:
-      "Премиальное приложение для знакомств. Каждый профиль исчезает через 72 часа. Не упусти свой шанс.",
+      "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
     images: [
       {
         url: "/icon.svg",
@@ -56,9 +56,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Time to Match — У тебя всего 72 часа",
+    title: "Time to Match — Мэтч живёт 24 часа",
     description:
-      "Премиальное приложение для знакомств. Каждый профиль исчезает через 72 часа. Не упусти свой шанс.",
+      "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
     images: ["/icon.svg"],
   },
   robots: {
@@ -114,7 +114,7 @@ export default function RootLayout({
                 <MobileScreenTransition>
                   <div className="relative z-0 min-h-screen">{children}</div>
                 </MobileScreenTransition>
-                <LanguageSwitcher />
+                <FloatingChrome />
                 <Toaster position="top-center" richColors closeButton />
               </AchievementProvider>
             </QueryProvider>

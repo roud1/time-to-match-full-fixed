@@ -28,6 +28,8 @@ export type SwipeProfile = {
   userId?: string
   /** Server photo verification badge. */
   photoVerified?: boolean
+  /** Longer about text for discover full card. */
+  about?: string
 }
 
 const CITY_IDS: CityId[] = ["kyiv", "lviv", "odesa", "kharkiv", "dnipro", "lviv", "kyiv", "odesa"]
@@ -54,6 +56,14 @@ const DEMO_DATA: Record<
     { name: "Иван", bio: "Люблю готовить и открывать новые места", interests: ["Кулинария", "Путешествия", "Кино"], age: 31, timeLeft: "44:55:40", distanceIndex: 3 },
     { name: "Катя", bio: "Дизайнер интерьеров. Обожаю минимализм", interests: ["Дизайн", "Искусство", "Мода"], age: 26, timeLeft: "39:12:18", distanceIndex: 0 },
     { name: "Олег", bio: "Бегаю марафоны и смотрю сериалы", interests: ["Спорт", "Фитнес", "Кино"], age: 30, timeLeft: "33:48:06", distanceIndex: 1 },
+    { name: "Настя", bio: "Рисую акварелью и ищу вдохновение", interests: ["Искусство", "Природа", "Кофе"], age: 22, timeLeft: "31:20:44", distanceIndex: 2 },
+    { name: "Роман", bio: "Стартапер. Люблю длинные прогулки", interests: ["Бизнес", "Путешествия", "Книги"], age: 27, timeLeft: "28:55:12", distanceIndex: 3 },
+    { name: "Лера", bio: "Танцую сальсу, мечтаю о море", interests: ["Танцы", "Музыка", "Путешествия"], age: 25, timeLeft: "26:40:08", distanceIndex: 0 },
+    { name: "Павел", bio: "Инженер и любитель настолок", interests: ["Игры", "Кино", "Кофе"], age: 29, timeLeft: "24:18:33", distanceIndex: 1 },
+    { name: "Даша", bio: "Маркетолог. Обожаю креатив", interests: ["Дизайн", "Мода", "Кофе"], age: 24, timeLeft: "22:07:19", distanceIndex: 2 },
+    { name: "Кирилл", bio: "Серфинг по выходным", interests: ["Спорт", "Природа", "Путешествия"], age: 28, timeLeft: "19:52:41", distanceIndex: 3 },
+    { name: "Анна", bio: "Ветеринар. Мягкая и внимательная", interests: ["Животные", "Природа", "Книги"], age: 26, timeLeft: "17:33:55", distanceIndex: 0 },
+    { name: "Глеб", bio: "Диджей вечеринок", interests: ["Музыка", "Вечеринки", "Кино"], age: 27, timeLeft: "15:11:28", distanceIndex: 1 },
   ],
   uk: [
     { name: "Аліса", bio: "Люблю подорожі та гарну каву", interests: ["Подорожі", "Кава", "Фотографія"], age: 25, timeLeft: "71:12:08", distanceIndex: 0 },
@@ -66,6 +76,14 @@ const DEMO_DATA: Record<
     { name: "Іван", bio: "Люблю готувати та відкривати нові місця", interests: ["Кулінарія", "Подорожі", "Кіно"], age: 31, timeLeft: "44:55:40", distanceIndex: 3 },
     { name: "Катя", bio: "Дизайнер інтер'єрів. Обожнюю мінімалізм", interests: ["Дизайн", "Мистецтво", "Мода"], age: 26, timeLeft: "39:12:18", distanceIndex: 0 },
     { name: "Олег", bio: "Бігаю марафони та дивлюсь серіали", interests: ["Спорт", "Фітнес", "Кіно"], age: 30, timeLeft: "33:48:06", distanceIndex: 1 },
+    { name: "Настя", bio: "Малюю аквареллю й шукаю натхнення", interests: ["Мистецтво", "Природа", "Кава"], age: 22, timeLeft: "31:20:44", distanceIndex: 2 },
+    { name: "Роман", bio: "Стартапер. Люблю довгі прогулянки", interests: ["Бізнес", "Подорожі", "Книги"], age: 27, timeLeft: "28:55:12", distanceIndex: 3 },
+    { name: "Лера", bio: "Танцюю сальсу, мрію про море", interests: ["Танці", "Музика", "Подорожі"], age: 25, timeLeft: "26:40:08", distanceIndex: 0 },
+    { name: "Павло", bio: "Інженер і любитель настільних ігор", interests: ["Ігри", "Кіно", "Кава"], age: 29, timeLeft: "24:18:33", distanceIndex: 1 },
+    { name: "Даша", bio: "Маркетолог. Обожнюю креатив", interests: ["Дизайн", "Мода", "Кава"], age: 24, timeLeft: "22:07:19", distanceIndex: 2 },
+    { name: "Кирило", bio: "Серфінг на вихідних", interests: ["Спорт", "Природа", "Подорожі"], age: 28, timeLeft: "19:52:41", distanceIndex: 3 },
+    { name: "Анна", bio: "Ветеринар. М'яка й уважна", interests: ["Тварини", "Природа", "Книги"], age: 26, timeLeft: "17:33:55", distanceIndex: 0 },
+    { name: "Гліб", bio: "Діджей вечірок", interests: ["Музика", "Вечірки", "Кіно"], age: 27, timeLeft: "15:11:28", distanceIndex: 1 },
   ],
   en: [
     { name: "Alice", bio: "Love traveling and good coffee", interests: ["Travel", "Coffee", "Photography"], age: 25, timeLeft: "71:12:08", distanceIndex: 0 },
@@ -78,10 +96,63 @@ const DEMO_DATA: Record<
     { name: "Ivan", bio: "Love cooking and discovering new places", interests: ["Cooking", "Travel", "Movies"], age: 31, timeLeft: "44:55:40", distanceIndex: 3 },
     { name: "Kate", bio: "Interior designer. Minimalism fan", interests: ["Design", "Art", "Fashion"], age: 26, timeLeft: "39:12:18", distanceIndex: 0 },
     { name: "Oleg", bio: "Marathon runner and series binger", interests: ["Sports", "Fitness", "Movies"], age: 30, timeLeft: "33:48:06", distanceIndex: 1 },
+    { name: "Nastya", bio: "Watercolor artist seeking inspiration", interests: ["Art", "Nature", "Coffee"], age: 22, timeLeft: "31:20:44", distanceIndex: 2 },
+    { name: "Roman", bio: "Startup founder. Love long walks", interests: ["Business", "Travel", "Books"], age: 27, timeLeft: "28:55:12", distanceIndex: 3 },
+    { name: "Lera", bio: "Salsa dancer dreaming of the sea", interests: ["Dance", "Music", "Travel"], age: 25, timeLeft: "26:40:08", distanceIndex: 0 },
+    { name: "Paul", bio: "Engineer and board-game fan", interests: ["Games", "Movies", "Coffee"], age: 29, timeLeft: "24:18:33", distanceIndex: 1 },
+    { name: "Dasha", bio: "Marketer. Creative soul", interests: ["Design", "Fashion", "Coffee"], age: 24, timeLeft: "22:07:19", distanceIndex: 2 },
+    { name: "Kirill", bio: "Weekend surfer", interests: ["Sports", "Nature", "Travel"], age: 28, timeLeft: "19:52:41", distanceIndex: 3 },
+    { name: "Anna", bio: "Vet. Gentle and attentive", interests: ["Animals", "Nature", "Books"], age: 26, timeLeft: "17:33:55", distanceIndex: 0 },
+    { name: "Gleb", bio: "Party DJ", interests: ["Music", "Nightlife", "Movies"], age: 27, timeLeft: "15:11:28", distanceIndex: 1 },
   ],
 }
 
 const FALLBACK_KM = [2, 5, 1, 8, 12, 3, 6, 4, 7, 9]
+
+const ABOUT_TAIL: Partial<Record<Locale, string[]>> = {
+  ru: [
+    "Открыта к встречам и долгим разговорам.",
+    "Ценю юмор, честность и живой диалог.",
+    "Ищу человека, с кем легко молчать и говорить.",
+    "Люблю спонтанные планы и тёплые вечера.",
+    "Важны эмпатия и общие ритуалы.",
+    "Готова удивлять и удивляться.",
+    "Свободна вечером — напиши первым.",
+    "Верю в химию, а не в идеальные анкеты.",
+    "Собираю моменты, а не галочки.",
+    "Хочу связь, где оба растут.",
+  ],
+  uk: [
+    "Відкрита до зустрічей і довгих розмов.",
+    "Ціную гумор, чесність і живий діалог.",
+    "Шукаю людину, з якою легко мовчати й говорити.",
+    "Люблю спонтанні плани й теплі вечори.",
+    "Важливі емпатія й спільні ритуали.",
+    "Готова дивувати й дивуватися.",
+    "Вільна ввечері — напиши першим.",
+    "Вірю в хімію, а не в ідеальні анкети.",
+    "Збираю моменти, а не галочки.",
+    "Хочу зв'язок, де обидва ростуть.",
+  ],
+  en: [
+    "Open to meetups and long conversations.",
+    "I value humor, honesty, and real dialogue.",
+    "Looking for someone easy to talk and be quiet with.",
+    "Love spontaneous plans and warm evenings.",
+    "Empathy and shared rituals matter to me.",
+    "Ready to surprise and be surprised.",
+    "Free most evenings — say hi first.",
+    "I believe in chemistry, not perfect profiles.",
+    "Collecting moments, not checkboxes.",
+    "I want a connection where we both grow.",
+  ],
+}
+
+function buildProfileAbout(locale: Locale, bio: string, index: number): string {
+  const tails = ABOUT_TAIL[locale] ?? ABOUT_TAIL.en ?? []
+  const tail = tails[index % tails.length] ?? ""
+  return tail ? `${bio} ${tail}` : bio
+}
 
 /** Stable nearby offset (~2–12 km) from a base point for map markers. */
 export function offsetPosition(base: GeoPosition, index: number): GeoPosition {
@@ -118,11 +189,10 @@ export function buildDemoSwipeProfiles(
         : formatDistance(locale, FALLBACK_KM[profile.distanceIndex % FALLBACK_KM.length])
 
     const cityCoords = getCityCoords(cityId)
-    const coords = userPosition
-      ? offsetPosition(userPosition, index)
-      : offsetPosition(cityCoords, index)
+    const anchor = userPosition ?? cityCoords
+    const coords = offsetPosition(anchor, index)
 
-    const slot = (index % 4) + 1
+    const slot = ((index * 3 + profile.distanceIndex) % 4) + 1
     const images = [
       `/images/profile-${slot}.jpg`,
       `/images/profile-${(slot % 4) + 1}.jpg`,
@@ -140,6 +210,7 @@ export function buildDemoSwipeProfiles(
       images,
       timeLeft: profile.timeLeft,
       bio: profile.bio,
+      about: buildProfileAbout(locale, profile.bio, index),
       interests: profile.interests,
       lat: coords.lat,
       lng: coords.lng,
