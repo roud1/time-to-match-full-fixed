@@ -1030,13 +1030,31 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 .ttm-dating-hero__portraits {
   position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  transform-style: preserve-3d;
+  transition: transform 0.35s var(--dt-ease);
+}
+
+.ttm-dating-hero__portraits-cards {
+  position: relative;
+  width: 100%;
   aspect-ratio: 1 / 0.92;
   display: grid;
   place-items: center;
-  transform-style: preserve-3d;
-  transition: transform 0.35s var(--dt-ease);
-  --dt-match-seam-x: 41%;
-  --dt-match-seam-y: 36%;
+}
+
+.ttm-dating-hero__match-below {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  pointer-events: none;
 }
 
 .ttm-dating-hero__portraits-glow {
@@ -1110,11 +1128,31 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   animation: dt-spark-trail-draw 0.75s var(--dt-ease) 0.45s forwards;
 }
 
+.ttm-dating-hero__spark-trail--center {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .ttm-dating-hero__spark-trail--left,
+  .ttm-dating-hero__spark-trail--right {
+    display: none;
+  }
+
+  .ttm-dating-hero__spark-trail--center {
+    display: block;
+    animation: dt-spark-trail-draw 0.75s var(--dt-ease) 0.4s forwards;
+  }
+
+  .ttm-dating-hero__match-below {
+    gap: 0.35rem;
+  }
+}
+
 .ttm-dating-hero__spark-bloom {
   position: absolute;
-  top: var(--dt-match-seam-y);
-  left: var(--dt-match-seam-x);
-  translate: -50% -50%;
+  bottom: 2.15rem;
+  left: 50%;
+  translate: -50% 50%;
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
@@ -1135,9 +1173,9 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 
 .ttm-dating-hero__spark-burst {
   position: absolute;
-  top: var(--dt-match-seam-y);
-  left: var(--dt-match-seam-x);
-  translate: -50% -50%;
+  bottom: 2.15rem;
+  left: 50%;
+  translate: -50% 50%;
   width: 0;
   height: 0;
 }
@@ -1213,10 +1251,6 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
     width: min(72vw, 280px);
   }
 
-  .ttm-dating-hero__portraits {
-    --dt-match-seam-x: 50%;
-    --dt-match-seam-y: 50%;
-  }
 }
 
 .ttm-dating-hero__portrait-frame {
@@ -1370,37 +1404,9 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   box-shadow: 0 20px 48px -20px rgba(0, 0, 0, 0.55);
 }
 
-.ttm-dating-hero__match-bridge {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.ttm-dating-hero__match-bridge-line {
-  stroke: url(#dt-match-bridge-grad);
-  stroke-width: 2;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
-  opacity: 0;
-  animation: dt-match-bridge-in 0.9s var(--dt-ease) 0.55s forwards;
-}
-
-@media (max-width: 767px) {
-  .ttm-dating-hero__match-bridge {
-    display: none;
-  }
-}
-
 .ttm-dating-hero__match-label {
-  position: absolute;
-  top: calc(var(--dt-match-seam-y) - 3.25rem);
-  left: var(--dt-match-seam-x);
-  translate: -50% 0;
-  z-index: 5;
+  position: relative;
+  z-index: 1;
   padding: 0.22rem 0.65rem;
   border-radius: 999px;
   font-family: var(--dt-font-body);
@@ -1416,18 +1422,9 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   pointer-events: none;
 }
 
-@media (max-width: 767px) {
-  .ttm-dating-hero__match-label {
-    display: none;
-  }
-}
-
 .ttm-dating-hero__portraits-spark {
-  position: absolute;
-  top: var(--dt-match-seam-y);
-  left: var(--dt-match-seam-x);
-  translate: -50% -50%;
-  z-index: 6;
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   width: 4.5rem;
@@ -2578,7 +2575,6 @@ html[data-theme="light"] .ttm-dating-emotional__band {
   .ttm-dating-hero__glow,
   .ttm-dating-hero__heart--float,
   .ttm-dating-float--animate,
-  .ttm-dating-hero__match-bridge-line,
   .ttm-dating-hero__portraits-spark--live,
   .ttm-dating-hero__portraits-spark--live .ttm-dating-hero__portraits-spark-ring,
   .ttm-dating-hero__portraits-glow,

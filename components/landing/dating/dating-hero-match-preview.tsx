@@ -22,9 +22,6 @@ type DatingHeroMatchPreviewProps = {
   scrollProgress: MotionValue<number>
 }
 
-/** Sync with --dt-match-seam-x/y in dating-landing.css (400×360 SVG viewBox). */
-const MATCH_SEAM_SVG = { x: 164, y: 130 } as const
-
 function ProfileCard({
   profile,
   variant,
@@ -190,82 +187,55 @@ export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPrevie
             : undefined
         }
       >
-        <div className="ttm-dating-hero__portraits-glow ttm-dating-hero__portraits-glow--pulse" aria-hidden />
-        <div className="ttm-dating-hero__portraits-reflection" aria-hidden />
+        <div className="ttm-dating-hero__portraits-cards">
+          <div className="ttm-dating-hero__portraits-glow ttm-dating-hero__portraits-glow--pulse" aria-hidden />
+          <div className="ttm-dating-hero__portraits-reflection" aria-hidden />
 
-        {peek ? <PeekCard profile={peek} reduce={reduce} /> : null}
+          {peek ? <PeekCard profile={peek} reduce={reduce} /> : null}
 
-        <svg
-          className="ttm-dating-hero__match-bridge"
-          viewBox="0 0 400 360"
-          preserveAspectRatio="xMidYMid meet"
-          aria-hidden
-        >
-          <defs>
-            <linearGradient id="dt-match-bridge-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(251, 113, 133, 0)" />
-              <stop offset="35%" stopColor="rgba(251, 113, 133, 0.55)" />
-              <stop offset="50%" stopColor="rgba(251, 191, 36, 0.95)" />
-              <stop offset="65%" stopColor="rgba(251, 113, 133, 0.55)" />
-              <stop offset="100%" stopColor="rgba(251, 113, 133, 0)" />
-            </linearGradient>
-          </defs>
-          <line
-            className="ttm-dating-hero__match-bridge-line"
-            x1="96"
-            y1={MATCH_SEAM_SVG.y - 2}
-            x2={MATCH_SEAM_SVG.x}
-            y2={MATCH_SEAM_SVG.y}
+          <ProfileCard
+            profile={left}
+            variant="back"
+            reduce={reduce}
+            scrollProgress={scrollProgress}
           />
-          <line
-            className="ttm-dating-hero__match-bridge-line"
-            x1="242"
-            y1={MATCH_SEAM_SVG.y + 4}
-            x2={MATCH_SEAM_SVG.x}
-            y2={MATCH_SEAM_SVG.y}
+          <ProfileCard
+            profile={right}
+            variant="front"
+            reduce={reduce}
+            scrollProgress={scrollProgress}
           />
-        </svg>
+        </div>
 
         <DatingHeroSpark />
 
-        <ProfileCard
-          profile={left}
-          variant="back"
-          reduce={reduce}
-          scrollProgress={scrollProgress}
-        />
-        <ProfileCard
-          profile={right}
-          variant="front"
-          reduce={reduce}
-          scrollProgress={scrollProgress}
-        />
+        <div className="ttm-dating-hero__match-below">
+          {!reduce ? (
+            <motion.span
+              className="ttm-dating-hero__match-label"
+              initial={{ opacity: 0, y: 8, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, delay: 1.05, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {t("datingHeroMatchMoment")}
+            </motion.span>
+          ) : null}
 
-        {!reduce ? (
-          <motion.span
-            className="ttm-dating-hero__match-label"
-            initial={{ opacity: 0, y: 8, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.5, delay: 1.05, ease: [0.22, 1, 0.36, 1] }}
+          <motion.div
+            className={cn(
+              "ttm-dating-hero__portraits-spark",
+              !reduce && "ttm-dating-hero__portraits-spark--live"
+            )}
+            initial={reduce ? false : { scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.55, delay: 0.82, type: "spring", stiffness: 260, damping: 16 }}
+            aria-hidden
           >
-            {t("datingHeroMatchMoment")}
-          </motion.span>
-        ) : null}
-
-        <motion.div
-          className={cn(
-            "ttm-dating-hero__portraits-spark",
-            !reduce && "ttm-dating-hero__portraits-spark--live"
-          )}
-          initial={reduce ? false : { scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.55, delay: 0.82, type: "spring", stiffness: 260, damping: 16 }}
-          aria-hidden
-        >
-          <span className="ttm-dating-hero__portraits-spark-ring" />
-          <span className="ttm-dating-hero__portraits-spark-ring ttm-dating-hero__portraits-spark-ring--outer" />
-          <Heart size={28} fill="currentColor" strokeWidth={0} />
-        </motion.div>
+            <span className="ttm-dating-hero__portraits-spark-ring" />
+            <span className="ttm-dating-hero__portraits-spark-ring ttm-dating-hero__portraits-spark-ring--outer" />
+            <Heart size={28} fill="currentColor" strokeWidth={0} />
+          </motion.div>
+        </div>
       </motion.div>
     </DatingParallaxLayer>
   )
