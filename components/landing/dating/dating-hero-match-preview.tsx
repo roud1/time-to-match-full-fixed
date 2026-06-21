@@ -81,7 +81,7 @@ function Portrait({
           alt=""
           fill
           className="object-cover object-[center_18%]"
-          sizes="(max-width: 768px) 55vw, 280px"
+          sizes="(max-width: 768px) 60vw, 380px"
           draggable={false}
           priority
         />
@@ -138,6 +138,7 @@ export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPrevie
         }
       >
         <div className="ttm-dating-hero__portraits-glow ttm-dating-hero__portraits-glow--pulse" aria-hidden />
+        <div className="ttm-dating-hero__portraits-reflection" aria-hidden />
 
         <DatingHeroSpark />
 
@@ -165,7 +166,7 @@ export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPrevie
           aria-hidden
         >
           <span className="ttm-dating-hero__portraits-spark-ring" />
-          <Heart size={20} fill="currentColor" />
+          <Heart size={24} fill="currentColor" />
         </motion.div>
       </motion.div>
     </DatingParallaxLayer>

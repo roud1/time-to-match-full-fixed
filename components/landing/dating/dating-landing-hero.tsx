@@ -5,6 +5,9 @@ import { Clock, Sparkles } from "lucide-react"
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { DatingHeroAtmosphere } from "@/components/landing/dating/dating-hero-atmosphere"
+import { DatingHeroBottomBand } from "@/components/landing/dating/dating-hero-bottom-band"
+import { DatingHeroCenterCard } from "@/components/landing/dating/dating-hero-center-card"
+import { DatingHeroFloats } from "@/components/landing/dating/dating-hero-floats"
 import { DatingHeroMatchPreview } from "@/components/landing/dating/dating-hero-match-preview"
 import { useParallaxIntensity } from "@/hooks/use-parallax"
 import { useI18n } from "@/lib/i18n"
@@ -163,12 +166,13 @@ export function DatingLandingHero() {
       aria-labelledby="dating-hero-title"
     >
       <DatingHeroAtmosphere scrollProgress={scrollYProgress} />
+      <DatingHeroFloats scrollProgress={scrollYProgress} />
 
       <motion.div
         className="ttm-dating-hero__content"
         style={{ y: contentY, scale: contentScale, opacity: contentOpacity }}
       >
-        <div className="ttm-dating-container">
+        <div className="ttm-dating-container ttm-dating-hero__main">
           <div className="ttm-dating-hero__stack">
             <motion.div className="ttm-dating-hero__copy" style={{ y: copyY }}>
               <motion.p className="ttm-dating-hero__eyebrow" {...fadeUp(STAGGER.eyebrow)}>
@@ -238,16 +242,11 @@ export function DatingLandingHero() {
               <DatingHeroMatchPreview scrollProgress={scrollYProgress} />
             </motion.div>
           </div>
+          <DatingHeroCenterCard />
         </div>
       </motion.div>
 
-      <motion.div
-        className="ttm-dating-hero__scroll-hint"
-        aria-hidden
-        style={{ opacity: scrollHintOpacity }}
-      >
-        <span className="ttm-dating-hero__scroll-dot" />
-      </motion.div>
+      <DatingHeroBottomBand scrollHintOpacity={scrollHintOpacity} />
     </section>
   )
 }

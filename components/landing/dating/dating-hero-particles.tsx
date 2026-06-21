@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useReducedMotion } from "motion/react"
+import { cn } from "@/lib/utils"
 
-const DESKTOP_COUNT = 26
-const MOBILE_COUNT = 10
+const DESKTOP_COUNT = 42
+const MOBILE_COUNT = 14
+const BOKEH_COUNT = 8
 
 function seededRandom(seed: number) {
   const x = Math.sin(seed * 7841) * 10000
@@ -37,6 +39,7 @@ export function DatingHeroParticles() {
         delay: `${fixed(seededRandom(i + 44) * -18, 4)}s`,
         duration: `${fixed(10 + seededRandom(i + 55) * 14, 4)}s`,
         opacity: fixed(0.15 + seededRandom(i + 66) * 0.45, 6),
+        bokeh: i < BOKEH_COUNT,
       })),
     [count]
   )
@@ -48,15 +51,22 @@ export function DatingHeroParticles() {
       {particles.map((p) => (
         <span
           key={p.id}
-          className="ttm-dating-hero__particle"
+          className={cn(
+            "ttm-dating-hero__particle",
+            p.bokeh && "ttm-dating-hero__particle--bokeh"
+          )}
           style={{
             left: p.left,
             top: p.top,
-            width: p.size,
-            height: p.size,
+            width: p.bokeh
+              ? `${fixed(48 + seededRandom(p.id + 77) * 80, 4)}px`
+              : p.size,
+            height: p.bokeh
+              ? `${fixed(48 + seededRandom(p.id + 77) * 80, 4)}px`
+              : p.size,
             animationDelay: p.delay,
             animationDuration: p.duration,
-            opacity: p.opacity,
+            opacity: p.bokeh ? fixed(0.06 + seededRandom(p.id + 88) * 0.12, 6) : p.opacity,
           }}
         />
       ))}
