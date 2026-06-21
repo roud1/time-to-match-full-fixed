@@ -22,6 +22,9 @@ type DatingHeroMatchPreviewProps = {
   scrollProgress: MotionValue<number>
 }
 
+/** Sync with --dt-match-seam-x/y in dating-landing.css (400×360 SVG viewBox). */
+const MATCH_SEAM_SVG = { x: 164, y: 130 } as const
+
 function ProfileCard({
   profile,
   variant,
@@ -209,17 +212,17 @@ export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPrevie
           </defs>
           <line
             className="ttm-dating-hero__match-bridge-line"
-            x1="108"
-            y1="158"
-            x2="200"
-            y2="158"
+            x1="96"
+            y1={MATCH_SEAM_SVG.y - 2}
+            x2={MATCH_SEAM_SVG.x}
+            y2={MATCH_SEAM_SVG.y}
           />
           <line
             className="ttm-dating-hero__match-bridge-line"
-            x1="292"
-            y1="158"
-            x2="200"
-            y2="158"
+            x1="242"
+            y1={MATCH_SEAM_SVG.y + 4}
+            x2={MATCH_SEAM_SVG.x}
+            y2={MATCH_SEAM_SVG.y}
           />
         </svg>
 

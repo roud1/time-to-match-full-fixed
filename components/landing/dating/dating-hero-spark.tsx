@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils"
 
 const BURST_DOTS = 14
 
+/** Sync with --dt-match-seam-x/y in dating-landing.css (400×360 SVG viewBox). */
+const MATCH_SEAM_SVG = { x: 164, y: 130 } as const
+
 type DatingHeroSparkProps = {
   className?: string
 }
@@ -38,12 +41,12 @@ export function DatingHeroSpark({ className }: DatingHeroSparkProps) {
         </defs>
         <path
           className="ttm-dating-hero__spark-trail ttm-dating-hero__spark-trail--left"
-          d="M 88 118 Q 138 142 200 158"
+          d={`M 78 98 Q 118 112 ${MATCH_SEAM_SVG.x} ${MATCH_SEAM_SVG.y}`}
           pathLength={1}
         />
         <path
           className="ttm-dating-hero__spark-trail ttm-dating-hero__spark-trail--right"
-          d="M 312 248 Q 258 200 200 158"
+          d={`M 258 205 Q 212 162 ${MATCH_SEAM_SVG.x} ${MATCH_SEAM_SVG.y}`}
           pathLength={1}
         />
       </svg>

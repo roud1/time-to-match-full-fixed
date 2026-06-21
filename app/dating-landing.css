@@ -1035,8 +1035,8 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   place-items: center;
   transform-style: preserve-3d;
   transition: transform 0.35s var(--dt-ease);
-  --dt-match-seam-x: 50%;
-  --dt-match-seam-y: 44%;
+  --dt-match-seam-x: 41%;
+  --dt-match-seam-y: 36%;
 }
 
 .ttm-dating-hero__portraits-glow {
@@ -1044,7 +1044,7 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   inset: 8% 5%;
   border-radius: 50%;
   background: radial-gradient(
-    ellipse 70% 65% at 50% 45%,
+    ellipse 70% 65% at 42% 38%,
     rgba(225, 29, 72, 0.38) 0%,
     rgba(249, 115, 22, 0.18) 45%,
     transparent 72%
