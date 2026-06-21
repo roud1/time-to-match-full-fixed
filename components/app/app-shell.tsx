@@ -21,6 +21,7 @@ import { PremiumUpgradeSheet } from "@/components/premium/premium-upgrade-sheet"
 import { PremiumBadgeLink } from "@/components/premium/premium-badge"
 import { AppTabTransition } from "@/components/mobile/app-tab-transition"
 import { useI18n } from "@/lib/i18n"
+import { fetchMe } from "@/lib/user/api"
 import { getUserProfile, isLoggedIn, isPremiumActive } from "@/lib/user-profile"
 import { cn } from "@/lib/utils"
 import { recordProfileActivity } from "@/lib/profile-life-store"
@@ -76,16 +77,35 @@ export function AppShell() {
   }, [tab, ready])
 
   useEffect(() => {
-    if (!getUserProfile()) {
-      router.replace("/register")
-      return
+    let cancelled = false
+
+    async function init() {
+      const me = await fetchMe()
+      if (cancelled) return
+
+      if (!me) {
+        router.replace("/login")
+        return
+      }
+
+      if (!getUserProfile()) {
+        router.replace("/register")
+        return
+      }
+
+      if (me.id === "local" && !isLoggedIn()) {
+        router.replace("/login")
+        return
+      }
+
+      setReady(true)
+      recordProfileActivity()
     }
-    if (!isLoggedIn()) {
-      router.replace("/login")
-      return
+
+    void init()
+    return () => {
+      cancelled = true
     }
-    setReady(true)
-    recordProfileActivity()
   }, [router])
 
   const [premiumTick, setPremiumTick] = useState(0)

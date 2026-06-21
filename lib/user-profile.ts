@@ -69,19 +69,51 @@ type Session = {
   loggedInAt: number
 }
 
-export function saveUserProfile(profile: StoredUserProfile, password: string) {
+export function clearCredentials() {
+  if (typeof window === "undefined") return
+  localStorage.removeItem(CREDENTIALS_KEY)
+}
+
+/** Persist profile locally. Pass password only for demo-mode credential storage. */
+export function saveUserProfile(profile: StoredUserProfile, password?: string) {
   if (typeof window === "undefined") return
   const stored = { ...profile }
   if (stored.photoUrls?.length) delete stored.photoUrl
   localStorage.setItem(PROFILE_KEY, JSON.stringify(stored))
-  localStorage.setItem(
-    CREDENTIALS_KEY,
-    JSON.stringify({
-      email: profile.email.toLowerCase(),
-      password,
-    } satisfies StoredCredentials)
-  )
+  if (password !== undefined) {
+    localStorage.setItem(
+      CREDENTIALS_KEY,
+      JSON.stringify({
+        email: profile.email.toLowerCase(),
+        password,
+      } satisfies StoredCredentials)
+    )
+  }
   if (profileHasCity(profile)) markLocationSettled()
+  window.dispatchEvent(new CustomEvent("ttm-auth-changed"))
+}
+
+export function applyServerUserToLocalProfile(
+  patch: Partial<StoredUserProfile> & Pick<StoredUserProfile, "name" | "email">
+): StoredUserProfile {
+  const existing = getUserProfile()
+  const next: StoredUserProfile = {
+    name: patch.name,
+    email: patch.email,
+    bio: patch.bio ?? existing?.bio ?? "",
+    gender: patch.gender ?? existing?.gender ?? "male",
+    lookingFor: patch.lookingFor ?? existing?.lookingFor ?? "all",
+    registeredAt: patch.registeredAt ?? existing?.registeredAt ?? Date.now(),
+    ...existing,
+    ...patch,
+  }
+  if (next.photoUrls?.length) delete next.photoUrl
+  if (typeof window !== "undefined") {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(next))
+    window.dispatchEvent(new CustomEvent("ttm-auth-changed"))
+  }
+  if (profileHasCity(next)) markLocationSettled()
+  return next
 }
 
 export function updateUserProfile(
@@ -162,6 +194,7 @@ export function setSession(email: string, remember: boolean) {
     loggedInAt: Date.now(),
   }
   localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+  window.dispatchEvent(new CustomEvent("ttm-auth-changed"))
 }
 
 export function getSession(): Session | null {
@@ -185,6 +218,7 @@ export function isLoggedIn(): boolean {
 export function clearSession() {
   if (typeof window === "undefined") return
   localStorage.removeItem(SESSION_KEY)
+  window.dispatchEvent(new CustomEvent("ttm-auth-changed"))
 }
 
 export const PROFILE_DURATION_MS = 72 * 60 * 60 * 1000

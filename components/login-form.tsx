@@ -7,12 +7,15 @@ import { motion } from "motion/react"
 import { useHydrated } from "@/hooks/use-hydrated"
 import { useI18n } from "@/lib/i18n"
 import {
+  clearCredentials,
   getUserProfile,
   hasRegisteredAccount,
-  isLoggedIn,
+  saveUserProfile,
   setSession,
   verifyLogin,
 } from "@/lib/user-profile"
+import { fetchMe } from "@/lib/user/api"
+import { loginOnServer, localProfileFromAuthUser } from "@/lib/auth/client"
 import { recordProfileActivity } from "@/lib/profile-life-store"
 import { isWelcomeSeen } from "@/lib/welcome-seen"
 import { CinematicButton } from "@/components/ui/cinematic-button"
@@ -47,18 +50,27 @@ export function LoginForm() {
 
   useEffect(() => {
     if (!hydrated) return
-    if (isLoggedIn()) {
+    let cancelled = false
+
+    async function checkAuth() {
+      const me = await fetchMe()
+      if (cancelled || !me) return
       setRedirecting(true)
       const target = postAuthPath()
       router.replace(target)
-      const fallback = window.setTimeout(() => {
+      window.setTimeout(() => {
         if (window.location.pathname === "/login") window.location.assign(target)
       }, 3000)
-      return () => window.clearTimeout(fallback)
     }
+
+    void checkAuth()
     const profile = getUserProfile()
     if (profile?.email) {
       setForm((prev) => ({ ...prev, email: profile.email }))
+    }
+
+    return () => {
+      cancelled = true
     }
   }, [hydrated, router])
 
@@ -73,7 +85,7 @@ export function LoginForm() {
     setErrors((prev) => ({ ...prev, [key]: undefined, form: undefined }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!hydrated || loading) return
 
@@ -88,20 +100,46 @@ export function LoginForm() {
       return
     }
 
-    if (!hasRegisteredAccount()) {
-      setErrors({ form: t("loginErrorNoAccount") })
-      return
-    }
-
-    if (!verifyLogin(form.email, form.password)) {
-      setErrors({ form: t("loginErrorInvalid") })
-      return
-    }
-
     setLoading(true)
-    setSession(form.email, form.remember)
-    recordProfileActivity()
-    router.replace(postAuthPath())
+    try {
+      const serverResult = await loginOnServer({
+        email: form.email.trim(),
+        password: form.password,
+      })
+
+      if (serverResult.ok) {
+        clearCredentials()
+        await fetchMe()
+        if (!getUserProfile()) {
+          saveUserProfile(localProfileFromAuthUser(serverResult.user))
+        }
+        setSession(form.email.trim(), form.remember)
+        recordProfileActivity()
+        router.replace(postAuthPath())
+        return
+      }
+
+      if (serverResult.demoFallback) {
+        if (!hasRegisteredAccount()) {
+          setErrors({ form: t("loginErrorNoAccount") })
+          return
+        }
+
+        if (!verifyLogin(form.email, form.password)) {
+          setErrors({ form: t("loginErrorInvalid") })
+          return
+        }
+
+        setSession(form.email, form.remember)
+        recordProfileActivity()
+        router.replace(postAuthPath())
+        return
+      }
+
+      setErrors({ form: serverResult.message ?? t("loginErrorInvalid") })
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (!hydrated || redirecting) {

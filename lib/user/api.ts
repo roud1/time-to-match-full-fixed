@@ -1,12 +1,32 @@
 import type { BuyFreezesResponse, MeResponse } from "@/lib/user/types"
+import type { DatingPurpose } from "@/lib/interests/types"
 import type { FreezePackageId } from "@/lib/freeze-packages"
-import { getUserProfile } from "@/lib/user-profile"
+import {
+  applyServerUserToLocalProfile,
+  getUserProfile,
+  isLoggedIn,
+  setSession,
+} from "@/lib/user-profile"
 import {
   addLocalFreezeBalance,
   getLocalFreezeBalance,
   getLocalLastFreezeAt,
 } from "@/lib/user/local-freeze-wallet"
 import { getFreezePackage } from "@/lib/freeze-packages"
+import { getAppMode } from "@/lib/auth/client"
+
+function syncLocalFromServerUser(user: MeResponse["user"]): void {
+  applyServerUserToLocalProfile({
+    name: user.name,
+    email: user.email,
+    purpose: (user.purpose ?? undefined) as DatingPurpose | undefined,
+    ageMin: user.ageMin,
+    ageMax: user.ageMax,
+    maxDistance: user.maxDistance,
+    dbInterestIds: user.interestIds,
+  })
+  if (!isLoggedIn()) setSession(user.email, true)
+}
 
 export async function fetchMe(): Promise<MeResponse["user"] | null> {
   try {
@@ -18,14 +38,25 @@ export async function fetchMe(): Promise<MeResponse["user"] | null> {
       signal: controller.signal,
     })
     window.clearTimeout(timeoutId)
+
     if (res.ok) {
       const data = (await res.json()) as MeResponse
+      syncLocalFromServerUser(data.user)
       return data.user
     }
+
+    if (res.status === 401) return null
+
+    if (res.status !== 503) {
+      const mode = await getAppMode()
+      if (mode === "production") return null
+    }
   } catch {
-    /* demo fallback */
+    const mode = await getAppMode().catch(() => "demo" as const)
+    if (mode === "production") return null
   }
 
+  if (!isLoggedIn()) return null
   const profile = getUserProfile()
   if (!profile) return null
 

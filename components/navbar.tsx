@@ -7,7 +7,8 @@ import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import { useI18n } from "@/lib/i18n"
 import { Logo } from "@/components/logo"
-import { getUserProfile, isLoggedIn } from "@/lib/user-profile"
+import { getUserProfile } from "@/lib/user-profile"
+import { fetchMe } from "@/lib/user/api"
 import { cn } from "@/lib/utils"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 
@@ -31,13 +32,23 @@ export function Navbar({ variant = "default" }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    const sync = () => {
-      setLoggedIn(isLoggedIn())
-      setUserName(getUserProfile()?.name ?? null)
+    let cancelled = false
+
+    const sync = async () => {
+      const me = await fetchMe()
+      if (cancelled) return
+      setLoggedIn(me != null)
+      setUserName(me?.name ?? getUserProfile()?.name ?? null)
     }
-    sync()
+
+    void sync()
     window.addEventListener("storage", sync)
-    return () => window.removeEventListener("storage", sync)
+    window.addEventListener("ttm-auth-changed", sync)
+    return () => {
+      cancelled = true
+      window.removeEventListener("storage", sync)
+      window.removeEventListener("ttm-auth-changed", sync)
+    }
   }, [])
 
   useEffect(() => {

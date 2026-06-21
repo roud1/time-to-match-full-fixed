@@ -15,7 +15,8 @@ import {
 import { storePosition } from "@/lib/geo"
 import { markLocationSettled } from "@/lib/location-settled"
 import { trackProductEvent } from "@/lib/analytics-client"
-import { saveUserProfile, setSession } from "@/lib/user-profile"
+import { saveUserProfile, setSession, clearCredentials } from "@/lib/user-profile"
+import { registerOnServer, syncRegistrationProfile } from "@/lib/auth/client"
 import { recordProfileActivity } from "@/lib/profile-life-store"
 import { CityField } from "@/components/city-field"
 import { InterestPicker } from "@/components/interest-picker"
@@ -65,7 +66,7 @@ type FormData = {
 }
 
 type FormErrors = Partial<
-  Record<keyof FormData | "photo" | "city" | "vibes" | "energy" | "intention" | "communication" | "connectionPref", string>
+  Record<keyof FormData | "photo" | "city" | "vibes" | "energy" | "intention" | "communication" | "connectionPref" | "form", string>
 >
 
 const STEPS = [1, 2, 3, 4] as const
@@ -86,6 +87,7 @@ export function RegisterForm() {
   const [step, setStep] = useState<(typeof STEPS)[number]>(1)
   const [errors, setErrors] = useState<FormErrors>({})
   const [photos, setPhotos] = useState<string[]>([])
+  const [submitting, setSubmitting] = useState(false)
 
   const [form, setForm] = useState<FormData>({
     name: "",
@@ -185,8 +187,8 @@ export function RegisterForm() {
     else handleSubmit()
   }
 
-  const handleSubmit = () => {
-    if (!validateStep(4)) return
+  const handleSubmit = async () => {
+    if (!validateStep(4) || submitting) return
 
     const isManual = form.cityId === CUSTOM_CITY_ID
     const profile = {
@@ -211,21 +213,60 @@ export function RegisterForm() {
         : { cityId: form.cityId as Exclude<CitySelectValue, "" | typeof CUSTOM_CITY_ID> }),
     }
 
-    saveUserProfile(profile, form.password)
-    recordProfileActivity()
+    setSubmitting(true)
+    try {
+      const serverResult = await registerOnServer({
+        email: form.email.trim(),
+        password: form.password,
+        name: form.name.trim(),
+      })
 
-    if (!isManual && form.cityId && form.cityId !== CUSTOM_CITY_ID) {
-      const coords = getCityCoords(form.cityId)
-      if (coords) storePosition(coords)
+      if (serverResult.ok) {
+        clearCredentials()
+        saveUserProfile(profile)
+        await syncRegistrationProfile(profile)
+
+        if (!isManual && form.cityId && form.cityId !== CUSTOM_CITY_ID) {
+          const coords = getCityCoords(form.cityId)
+          if (coords) storePosition(coords)
+        }
+        setSession(form.email.trim(), true)
+        recordProfileActivity()
+        trackProductEvent("register_complete", {
+          has_photos: photos.length > 0,
+          city_preset: !isManual,
+        })
+        router.push("/welcome")
+        return
+      }
+
+      if (serverResult.demoFallback) {
+        saveUserProfile(profile, form.password)
+        recordProfileActivity()
+
+        if (!isManual && form.cityId && form.cityId !== CUSTOM_CITY_ID) {
+          const coords = getCityCoords(form.cityId)
+          if (coords) storePosition(coords)
+        }
+        setSession(form.email.trim(), true)
+        trackProductEvent("register_complete", {
+          has_photos: photos.length > 0,
+          city_preset: !isManual,
+        })
+        router.push("/welcome")
+        return
+      }
+
+      if (serverResult.status === 409) {
+        setErrors({ email: serverResult.message ?? t("regErrorEmail") })
+        setStep(1)
+        return
+      }
+
+      setErrors({ form: serverResult.message ?? t("regErrorRequired") })
+    } finally {
+      setSubmitting(false)
     }
-    setSession(form.email.trim(), true)
-
-    trackProductEvent("register_complete", {
-      has_photos: photos.length > 0,
-      city_preset: !isManual,
-    })
-
-    router.push("/welcome")
   }
 
   const stepLabels = [t("regStepAccount"), t("regStepRoots"), t("regStepSoul"), t("regStepReveal")]
@@ -504,8 +545,9 @@ export function RegisterForm() {
             size="mobile"
             className={step > 1 ? "flex-1" : "w-full"}
             onClick={handleNext}
+            disabled={submitting}
           >
-            {step === 4 ? t("regSubmit") : t("regNext")}
+            {step === 4 ? (submitting ? t("loginLoading") : t("regSubmit")) : t("regNext")}
           </CinematicButton>
         </div>
 

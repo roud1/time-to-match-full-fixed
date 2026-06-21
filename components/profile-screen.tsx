@@ -28,6 +28,7 @@ import {
   updateUserProfile,
   type StoredUserProfile,
 } from "@/lib/user-profile"
+import { logoutOnServer } from "@/lib/auth/client"
 import { CityField } from "@/components/city-field"
 import { InterestPicker } from "@/components/interest-picker"
 import { Textarea } from "@/components/ui/textarea"
@@ -236,6 +237,7 @@ export function ProfileScreen() {
   const strength = useMemo(() => (profile ? computeProfileStrength(profile) : 0), [profile])
 
   const handleLogout = () => {
+    void logoutOnServer()
     clearSession()
     router.push("/")
   }
