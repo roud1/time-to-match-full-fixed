@@ -144,14 +144,14 @@
 /* —— Dark theme (data-theme on html) —— */
 [data-theme="dark"],
 .dark {
-  --bg-primary: #0f0f1a;
-  --bg-secondary: #1a1a2e;
-  --bg-header: rgba(15, 15, 26, 0.85);
-  --text-primary: #f0f0f5;
-  --text-secondary: #9ca3af;
-  --accent: #9b5de5;
-  --accent-gradient: linear-gradient(135deg, #9b5de5 0%, #f06292 100%);
-  --hero-highlight-gradient: linear-gradient(135deg, #5eead4 0%, #9b5de5 50%, #f472b6 100%);
+  --bg-primary: #0a0708;
+  --bg-secondary: #141014;
+  --bg-header: rgba(10, 7, 8, 0.88);
+  --text-primary: #faf7f5;
+  --text-secondary: #a8a29e;
+  --accent: #f43f5e;
+  --accent-gradient: linear-gradient(135deg, #fda4af 0%, #f43f5e 42%, #e8a87c 88%);
+  --hero-highlight-gradient: linear-gradient(135deg, #e11d48 0%, #fb7185 48%, #e8a87c 100%);
   --warning: #fbbf24;
   --error: #f87171;
   --success: #34d399;
@@ -159,12 +159,12 @@
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
-  --accent-soft-bg: rgba(155, 93, 229, 0.14);
-  --accent-soft-border: rgba(155, 93, 229, 0.28);
-  --tile-surface: rgba(26, 26, 46, 0.95);
-  --tile-surface-elevated: rgba(36, 36, 58, 0.98);
-  --tile-border: #2e2e3e;
-  --tile-border-strong: rgba(155, 93, 229, 0.35);
+  --accent-soft-bg: rgba(244, 63, 94, 0.14);
+  --accent-soft-border: rgba(244, 63, 94, 0.28);
+  --tile-surface: rgba(20, 16, 20, 0.95);
+  --tile-surface-elevated: rgba(28, 22, 26, 0.98);
+  --tile-border: #2a2226;
+  --tile-border-strong: rgba(244, 63, 94, 0.35);
   --tile-text: #f0f0f5;
   --tile-text-muted: #9ca3af;
 
@@ -183,16 +183,16 @@
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.98 0.01 285);
   --input: oklch(0.18 0.01 285);
-  --ring: oklch(0.7 0.15 330);
+  --ring: rgba(244, 63, 94, 0.45);
   --glow-pink: oklch(0.75 0.06 285);
   --glow-purple: oklch(0.65 0.05 285);
   --graphite: oklch(0.22 0.008 285);
 
-  --ttm-brand-void: #0f0f1a;
-  --ttm-brand-deep: #0f0f1a;
-  --ttm-brand-graphite: #1a1a2e;
-  --ttm-brand-surface: #1a1a2e;
-  --ttm-brand-elevated: #24243a;
+  --ttm-brand-void: #0a0708;
+  --ttm-brand-deep: #0a0708;
+  --ttm-brand-graphite: #141014;
+  --ttm-brand-surface: #141014;
+  --ttm-brand-elevated: #1e181c;
   --ttm-brand-mist: rgba(255, 255, 255, 0.42);
   --ttm-brand-fog: rgba(255, 255, 255, 0.22);
   --ttm-brand-whisper: rgba(255, 255, 255, 0.12);

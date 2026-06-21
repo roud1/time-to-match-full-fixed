@@ -29,7 +29,7 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] .site-bg-root.site-ambient {
-  background: linear-gradient(180deg, #0c0b10 0%, #0a0a0d 28%, #0a0a0d 100%);
+  background: linear-gradient(180deg, #120c0e 0%, #0a0708 28%, #0a0708 100%);
 }
 
 html[data-theme="dark"] .site-bg-root.site-ambient::before {
@@ -38,10 +38,10 @@ html[data-theme="dark"] .site-bg-root.site-ambient::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 50% 42% at 78% 8%, rgba(236, 72, 153, 0.14), transparent 70%),
-    radial-gradient(ellipse 48% 38% at 12% 38%, rgba(34, 211, 238, 0.12), transparent 72%),
-    radial-gradient(ellipse 55% 40% at 50% 32%, rgba(167, 139, 250, 0.1), transparent 74%),
-    radial-gradient(ellipse 42% 34% at 52% 88%, rgba(167, 139, 250, 0.1), transparent 76%);
+    radial-gradient(ellipse 50% 42% at 78% 8%, rgba(244, 63, 94, 0.16), transparent 70%),
+    radial-gradient(ellipse 48% 38% at 12% 38%, rgba(232, 168, 124, 0.14), transparent 72%),
+    radial-gradient(ellipse 55% 40% at 50% 32%, rgba(253, 164, 175, 0.1), transparent 74%),
+    radial-gradient(ellipse 42% 34% at 52% 88%, rgba(251, 113, 133, 0.1), transparent 76%);
 }
 
 html[data-theme="dark"] .site-bg-root.site-ambient::after {
@@ -55,7 +55,7 @@ html[data-theme="dark"] .site-bg-root.site-ambient::after {
   border-radius: 50%;
   filter: blur(110px);
   opacity: 0.85;
-  background: rgba(124, 92, 255, 0.14);
+  background: rgba(244, 63, 94, 0.12);
   pointer-events: none;
 }
 
@@ -64,21 +64,21 @@ html[data-theme="dark"] .site-ambient__parallax .ttm-dating-parallax__blob {
 }
 
 html[data-theme="dark"] .site-ambient__parallax .ttm-dating-parallax__blob--pink {
-  background: rgba(236, 72, 153, 0.4);
+  background: rgba(244, 63, 94, 0.42);
 }
 
 html[data-theme="dark"] .site-ambient__parallax .ttm-dating-parallax__blob--blue {
-  background: rgba(34, 211, 238, 0.28);
+  background: rgba(232, 168, 124, 0.3);
 }
 
 html[data-theme="dark"] .site-ambient__parallax .ttm-dating-parallax__blob--violet {
-  background: rgba(167, 139, 250, 0.22);
+  background: rgba(253, 164, 175, 0.24);
 }
 
 html[data-theme="dark"] .site-ambient__parallax .ttm-dating-parallax__mesh {
   background:
-    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(236, 72, 153, 0.07), transparent 58%),
-    radial-gradient(ellipse 70% 45% at 50% 45%, rgba(167, 139, 250, 0.05), transparent 65%);
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(244, 63, 94, 0.08), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 50% 45%, rgba(232, 168, 124, 0.06), transparent 65%);
 }
 
 /* ─── Light ambient ─── */
@@ -88,7 +88,7 @@ html[data-theme="light"] {
 }
 
 html[data-theme="light"] .site-bg-root.site-ambient {
-  background: linear-gradient(180deg, #faf8ff 0%, #f4f0ff 32%, #f8f9fc 100%);
+  background: linear-gradient(180deg, #fff8f6 0%, #fff1ee 32%, #fff8f6 100%);
 }
 
 html[data-theme="light"] .site-bg-root.site-ambient::before {
@@ -97,10 +97,10 @@ html[data-theme="light"] .site-bg-root.site-ambient::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 52% 44% at 82% 6%, rgba(236, 72, 153, 0.12), transparent 72%),
-    radial-gradient(ellipse 50% 40% at 10% 36%, rgba(34, 211, 238, 0.14), transparent 74%),
-    radial-gradient(ellipse 58% 42% at 48% 30%, rgba(167, 139, 250, 0.1), transparent 76%),
-    radial-gradient(ellipse 44% 36% at 50% 92%, rgba(244, 114, 182, 0.08), transparent 78%);
+    radial-gradient(ellipse 52% 44% at 82% 6%, rgba(244, 63, 94, 0.12), transparent 72%),
+    radial-gradient(ellipse 50% 40% at 10% 36%, rgba(232, 168, 124, 0.14), transparent 74%),
+    radial-gradient(ellipse 58% 42% at 48% 30%, rgba(253, 164, 175, 0.1), transparent 76%),
+    radial-gradient(ellipse 44% 36% at 50% 92%, rgba(251, 113, 133, 0.08), transparent 78%);
 }
 
 html[data-theme="light"] .site-bg-root.site-ambient::after {
@@ -114,7 +114,7 @@ html[data-theme="light"] .site-bg-root.site-ambient::after {
   border-radius: 50%;
   filter: blur(100px);
   opacity: 0.65;
-  background: rgba(167, 139, 250, 0.16);
+  background: rgba(253, 164, 175, 0.16);
   pointer-events: none;
 }
 
@@ -123,21 +123,21 @@ html[data-theme="light"] .site-ambient__parallax .ttm-dating-parallax__blob {
 }
 
 html[data-theme="light"] .site-ambient__parallax .ttm-dating-parallax__blob--pink {
-  background: rgba(236, 72, 153, 0.28);
+  background: rgba(244, 63, 94, 0.28);
 }
 
 html[data-theme="light"] .site-ambient__parallax .ttm-dating-parallax__blob--blue {
-  background: rgba(34, 211, 238, 0.22);
+  background: rgba(232, 168, 124, 0.22);
 }
 
 html[data-theme="light"] .site-ambient__parallax .ttm-dating-parallax__blob--violet {
-  background: rgba(167, 139, 250, 0.2);
+  background: rgba(253, 164, 175, 0.2);
 }
 
 html[data-theme="light"] .site-ambient__parallax .ttm-dating-parallax__mesh {
   background:
-    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(236, 72, 153, 0.06), transparent 58%),
-    radial-gradient(ellipse 70% 45% at 50% 45%, rgba(167, 139, 250, 0.05), transparent 65%);
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(244, 63, 94, 0.06), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 50% 45%, rgba(232, 168, 124, 0.05), transparent 65%);
 }
 
 /* ─── Shared parallax layer ─── */

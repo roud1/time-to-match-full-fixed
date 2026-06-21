@@ -2,10 +2,11 @@
 
 .ttm-auth-shell {
   --auth-side-padding: 1.25rem;
-  --auth-nav-text: #faf9fc;
-  --auth-nav-muted: rgba(250, 249, 252, 0.52);
-  --auth-nav-border: rgba(255, 255, 255, 0.1);
-  --auth-nav-glass: rgba(10, 10, 13, 0.82);
+  --auth-nav-text: #faf7f5;
+  --auth-nav-muted: rgba(250, 247, 245, 0.54);
+  --auth-nav-border: rgba(255, 255, 255, 0.09);
+  --auth-nav-glass: rgba(10, 7, 8, 0.78);
+  --auth-nav-accent: rgba(244, 63, 94, 0.35);
   --auth-nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
   min-height: 100dvh;
   display: flex;
@@ -52,8 +53,10 @@ html[data-theme="light"] .ttm-auth-shell {
   border-radius: 999px;
   border: 1px solid var(--auth-nav-border);
   background: var(--auth-nav-glass);
-  backdrop-filter: blur(20px) saturate(1.5);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(22px) saturate(1.5);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(244, 63, 94, 0.05) inset;
   transition:
     background 0.4s var(--auth-nav-ease),
     border-color 0.4s,
@@ -61,7 +64,7 @@ html[data-theme="light"] .ttm-auth-shell {
 }
 
 html[data-theme="light"] .ttm-auth-nav__inner {
-  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 8px 32px rgba(244, 63, 94, 0.1);
 }
 
 .ttm-auth-nav__brand {
@@ -113,7 +116,7 @@ html[data-theme="light"] .ttm-auth-nav__inner {
 }
 
 .ttm-auth-nav__theme:hover {
-  border-color: rgba(236, 72, 153, 0.35);
+  border-color: var(--auth-nav-accent);
   background: rgba(255, 255, 255, 0.1);
   color: var(--auth-nav-text);
 }

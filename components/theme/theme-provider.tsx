@@ -29,7 +29,7 @@ const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   /** Must match SSR so hydration agrees with server HTML (see inline ThemeScript on <html>). */
-  const [theme, setThemeState] = useState<Theme>("light")
+  const [theme, setThemeState] = useState<Theme>("dark")
 
   const setTheme = useCallback((next: Theme) => {
     persistTheme(next)

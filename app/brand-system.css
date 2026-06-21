@@ -16,20 +16,20 @@
   --ttm-brand-line: rgba(255, 255, 255, 0.08);
   --ttm-brand-line-strong: rgba(255, 255, 255, 0.14);
 
-  /* —— Electric accents (not playful / not neon gaming) —— */
-  --ttm-brand-accent: #c8d2ff;
-  --ttm-brand-accent-soft: #9aa8e8;
-  --ttm-brand-accent-muted: #6b7aa8;
+  /* —— Warm rose & champagne accents —— */
+  --ttm-brand-accent: #fda4af;
+  --ttm-brand-accent-soft: #fb7185;
+  --ttm-brand-accent-muted: #be123c;
   --ttm-brand-gradient-sync: linear-gradient(
     135deg,
-    rgba(99, 102, 241, 0.55) 0%,
-    rgba(139, 92, 246, 0.45) 50%,
-    rgba(200, 210, 255, 0.35) 100%
+    rgba(253, 164, 175, 0.55) 0%,
+    rgba(244, 63, 94, 0.48) 50%,
+    rgba(232, 168, 124, 0.38) 100%
   );
   --ttm-brand-gradient-intimate: linear-gradient(
     160deg,
-    rgba(180, 195, 255, 0.12) 0%,
-    rgba(80, 70, 120, 0.06) 45%,
+    rgba(253, 164, 175, 0.14) 0%,
+    rgba(120, 40, 60, 0.08) 45%,
     transparent 72%
   );
 
@@ -40,14 +40,14 @@
   --ttm-glow-intensity-lg: 0.38;
   --ttm-glow-intensity-peak: 0.52;
 
-  --ttm-glow-sync: rgba(160, 175, 255, 0.42);
-  --ttm-glow-sync-soft: rgba(140, 155, 230, 0.22);
-  --ttm-glow-chemistry: rgba(168, 130, 255, 0.4);
-  --ttm-glow-chemistry-peak: rgba(200, 180, 255, 0.55);
-  --ttm-glow-bond: rgba(140, 200, 180, 0.32);
-  --ttm-glow-bond-deep: rgba(120, 190, 170, 0.45);
-  --ttm-glow-aura: rgba(200, 195, 255, 0.2);
-  --ttm-glow-cinematic: rgba(220, 225, 255, 0.14);
+  --ttm-glow-sync: rgba(251, 113, 133, 0.42);
+  --ttm-glow-sync-soft: rgba(244, 63, 94, 0.22);
+  --ttm-glow-chemistry: rgba(232, 168, 124, 0.4);
+  --ttm-glow-chemistry-peak: rgba(253, 164, 175, 0.55);
+  --ttm-glow-bond: rgba(251, 191, 36, 0.28);
+  --ttm-glow-bond-deep: rgba(232, 168, 124, 0.42);
+  --ttm-glow-aura: rgba(253, 164, 175, 0.2);
+  --ttm-glow-cinematic: rgba(244, 63, 94, 0.14);
   --ttm-glow-fade: rgba(180, 140, 100, 0.28);
 
   /* —— Emotional state colors —— */
@@ -441,7 +441,7 @@
   opacity: 0.92;
 }
 
-/* —— CTA (intimate electric, not playful pink) —— */
+/* —— CTA (warm rose gold) —— */
 .ttm-brand-cta {
   display: inline-flex;
   align-items: center;
@@ -452,18 +452,18 @@
   font-size: 0.875rem;
   font-weight: 300;
   letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.95);
+  color: #1a0909;
   background: linear-gradient(
     125deg,
-    rgba(200, 210, 255, 0.22) 0%,
-    rgba(99, 102, 241, 0.55) 38%,
-    rgba(139, 92, 246, 0.5) 68%,
-    rgba(60, 55, 100, 0.65) 100%
+    rgba(253, 164, 175, 0.95) 0%,
+    rgba(244, 63, 94, 0.92) 38%,
+    rgba(232, 168, 124, 0.88) 68%,
+    rgba(120, 40, 50, 0.85) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 8px 32px -10px rgba(99, 102, 241, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 8px 32px -10px rgba(244, 63, 94, 0.45);
   transition:
     filter var(--ttm-brand-duration-fast) var(--ttm-brand-ease),
     box-shadow var(--ttm-brand-duration) var(--ttm-brand-ease),
@@ -473,8 +473,8 @@
 .ttm-brand-cta:hover {
   filter: brightness(1.08);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 12px 40px -8px rgba(139, 92, 246, 0.5);
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 12px 40px -8px rgba(244, 63, 94, 0.52);
 }
 
 .ttm-brand-cta:active {
@@ -485,18 +485,18 @@
 .cin-btn-primary,
 .ttm-nav-pill-primary,
 .ttm-nav-pill-register-cta {
-  color: rgba(255, 255, 255, 0.95);
+  color: #1a0909;
   background: linear-gradient(
     125deg,
-    rgba(200, 210, 255, 0.22) 0%,
-    rgba(99, 102, 241, 0.55) 38%,
-    rgba(139, 92, 246, 0.5) 68%,
-    rgba(60, 55, 100, 0.65) 100%
+    rgba(253, 164, 175, 0.95) 0%,
+    rgba(244, 63, 94, 0.92) 38%,
+    rgba(232, 168, 124, 0.88) 68%,
+    rgba(120, 40, 50, 0.85) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 8px 32px -10px rgba(99, 102, 241, 0.45);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 8px 32px -10px rgba(244, 63, 94, 0.45);
   transition:
     filter var(--ttm-brand-duration-fast) var(--ttm-brand-ease),
     box-shadow var(--ttm-brand-duration) var(--ttm-brand-ease),

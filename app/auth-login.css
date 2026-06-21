@@ -49,11 +49,14 @@
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #ec4899;
+  color: #fb7185;
 }
 
-html[data-theme="light"] .ttm-login-page__eyebrow {
-  color: #db2777;
+html[data-theme="light"] .ttm-login-page__title-soft {
+  background: linear-gradient(135deg, #be123c 0%, #e11d48 45%, #c2410c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .ttm-login-page__title {
@@ -70,7 +73,10 @@ html[data-theme="light"] .ttm-login-page__eyebrow {
 
 .ttm-login-page__title-soft {
   font-weight: 600;
-  color: color-mix(in srgb, var(--foreground) 72%, transparent);
+  background: linear-gradient(135deg, #fda4af 0%, #fb7185 42%, #e8a87c 88%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .ttm-login-page__chips {
@@ -94,7 +100,23 @@ html[data-theme="light"] .ttm-login-page__eyebrow {
 
 html[data-theme="dark"] .ttm-login-page__chip {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(251, 113, 133, 0.16);
+}
+
+/* Premium glass auth card */
+.ttm-login-page .ttm-brand-glass {
+  border-color: rgba(251, 113, 133, 0.14);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 20px 56px rgba(0, 0, 0, 0.42),
+    0 0 48px -16px rgba(244, 63, 94, 0.12);
+}
+
+html[data-theme="light"] .ttm-login-page .ttm-brand-glass {
+  border-color: rgba(244, 63, 94, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(26, 17, 20, 0.04) inset,
+    0 16px 48px rgba(244, 63, 94, 0.1);
 }
 
 /* Form column */
@@ -240,7 +262,7 @@ html[data-theme="dark"] .ttm-login-live {
   height: 55%;
   border-radius: 50%;
   filter: blur(72px);
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.24), transparent 70%);
   pointer-events: none;
 }
 

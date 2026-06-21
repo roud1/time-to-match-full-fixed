@@ -1,16 +1,19 @@
-/* ─── Premium dating landing (#0A0A0D) ─── */
+/* ─── Premium dating landing — warm rose & champagne (#0A0708) ─── */
 
 .ttm-dating-landing {
-  --dt-bg: #0a0a0d;
-  --dt-bg-soft: #0c0b10;
-  --dt-glass: rgba(255, 255, 255, 0.06);
-  --dt-border: rgba(255, 255, 255, 0.1);
-  --dt-text: #faf9fc;
-  --dt-muted: rgba(250, 249, 252, 0.52);
-  --dt-pink: #ec4899;
-  --dt-cyan: #22d3ee;
-  --dt-blue: #22d3ee;
-  --dt-violet: #a78bfa;
+  --dt-bg: #0a0708;
+  --dt-bg-soft: #120c0e;
+  --dt-glass: rgba(255, 255, 255, 0.055);
+  --dt-border: rgba(255, 255, 255, 0.09);
+  --dt-text: #faf7f5;
+  --dt-muted: rgba(250, 247, 245, 0.54);
+  --dt-pink: #f43f5e;
+  --dt-rose: #fb7185;
+  --dt-coral: #f97316;
+  --dt-gold: #e8a87c;
+  --dt-cyan: #e8a87c;
+  --dt-blue: #fb7185;
+  --dt-violet: #fda4af;
   --dt-font: var(--font-inter-display), "Inter", system-ui, -apple-system, sans-serif;
   --dt-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dt-radius-card: 20px;
@@ -64,7 +67,10 @@
   margin-inline: auto;
   padding: 0.6rem 1rem;
   border-radius: 999px;
-  border: 1px solid transparent;
+  border: 1px solid var(--dt-border);
+  background: rgba(10, 7, 8, 0.52);
+  backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
   transition:
     background 0.4s var(--dt-ease),
     border-color 0.4s,
@@ -73,10 +79,12 @@
 }
 
 .ttm-dating-nav__inner--scrolled {
-  background: rgba(10, 10, 13, 0.82);
-  border-color: var(--dt-border);
-  backdrop-filter: blur(20px) saturate(1.5);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  background: rgba(10, 7, 8, 0.88);
+  border-color: rgba(251, 113, 133, 0.18);
+  backdrop-filter: blur(24px) saturate(1.55);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.52),
+    0 0 0 1px rgba(244, 63, 94, 0.06) inset;
 }
 
 .ttm-dating-nav__brand {
@@ -117,6 +125,7 @@
   font-weight: 500;
   color: var(--dt-muted);
   text-decoration: none;
+  cursor: pointer;
   transition: color 0.25s ease;
 }
 
@@ -136,6 +145,7 @@
   text-decoration: none;
   padding: 0.45rem 0.5rem;
   white-space: nowrap;
+  cursor: pointer;
   transition: color 0.25s ease;
 }
 
@@ -155,17 +165,19 @@
   border-radius: 999px;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #0a0a0d;
+  color: #1a0909;
   text-decoration: none;
-  background: linear-gradient(135deg, #7dd3fc 0%, #c4b5fd 45%, #f9a8d4 100%);
+  cursor: pointer;
+  background: linear-gradient(135deg, #fda4af 0%, #f43f5e 38%, #e8a87c 72%, #fbbf24 100%);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-    0 0 48px rgba(236, 72, 153, 0.35),
-    0 0 64px rgba(56, 189, 248, 0.2),
-    0 12px 32px rgba(0, 0, 0, 0.4);
+    0 0 0 1px rgba(255, 255, 255, 0.22) inset,
+    0 0 48px rgba(244, 63, 94, 0.38),
+    0 0 56px rgba(232, 168, 124, 0.22),
+    0 12px 32px rgba(0, 0, 0, 0.42);
   transition:
     transform 0.3s var(--dt-ease),
-    box-shadow 0.3s ease;
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
   overflow: hidden;
 }
 
@@ -198,12 +210,13 @@
 }
 
 .ttm-dating-cta:hover {
-  transform: scale(1.05);
+  transform: scale(1.04);
+  filter: brightness(1.06);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
-    0 0 72px rgba(236, 72, 153, 0.55),
-    0 0 96px rgba(56, 189, 248, 0.35),
-    0 16px 40px rgba(0, 0, 0, 0.45);
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+    0 0 72px rgba(244, 63, 94, 0.55),
+    0 0 88px rgba(232, 168, 124, 0.35),
+    0 16px 40px rgba(0, 0, 0, 0.48);
 }
 
 .ttm-dating-cta:hover .ttm-dating-cta__shine {
@@ -256,8 +269,8 @@
   inset: 5% 8% 8% 12%;
   border-radius: 50%;
   background:
-    radial-gradient(ellipse 55% 70% at 38% 48%, rgba(236, 72, 153, 0.14), transparent 62%),
-    radial-gradient(ellipse 45% 55% at 72% 52%, rgba(34, 211, 238, 0.12), transparent 58%);
+    radial-gradient(ellipse 55% 70% at 38% 48%, rgba(244, 63, 94, 0.16), transparent 62%),
+    radial-gradient(ellipse 45% 55% at 72% 52%, rgba(232, 168, 124, 0.14), transparent 58%);
   filter: blur(40px);
   opacity: 0.9;
   pointer-events: none;
@@ -276,8 +289,8 @@
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(236, 72, 153, 0.35) 28%,
-    rgba(34, 211, 238, 0.4) 72%,
+    rgba(244, 63, 94, 0.38) 28%,
+    rgba(232, 168, 124, 0.42) 72%,
     transparent 100%
   );
   filter: blur(6px);
@@ -295,7 +308,7 @@
     content: "";
     position: absolute;
     inset: -24px -40px;
-    background: radial-gradient(ellipse at center, rgba(236, 72, 153, 0.12), transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(244, 63, 94, 0.14), transparent 70%);
     filter: blur(20px);
   }
 }
@@ -332,8 +345,11 @@
 }
 
 .ttm-dating-hero__title-line--soft {
-  opacity: 0.8;
   font-weight: 700;
+  background: linear-gradient(135deg, #fda4af 0%, #fb7185 42%, #e8a87c 88%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .ttm-dating-hero__actions {
@@ -385,11 +401,11 @@
 }
 
 .ttm-dating-cta--hero:hover {
-  transform: scale(1.06);
+  transform: scale(1.05);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.3) inset,
-    0 0 80px rgba(236, 72, 153, 0.55),
-    0 0 88px rgba(34, 211, 238, 0.35),
+    0 0 80px rgba(244, 63, 94, 0.55),
+    0 0 88px rgba(232, 168, 124, 0.38),
     0 18px 44px rgba(0, 0, 0, 0.45);
 }
 
@@ -402,15 +418,15 @@
   100% {
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-      0 0 36px rgba(236, 72, 153, 0.28),
-      0 0 44px rgba(34, 211, 238, 0.14),
+      0 0 36px rgba(244, 63, 94, 0.3),
+      0 0 44px rgba(232, 168, 124, 0.16),
       0 10px 28px rgba(0, 0, 0, 0.38);
   }
   50% {
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.26) inset,
-      0 0 56px rgba(236, 72, 153, 0.45),
-      0 0 64px rgba(34, 211, 238, 0.28),
+      0 0 56px rgba(244, 63, 94, 0.48),
+      0 0 64px rgba(232, 168, 124, 0.3),
       0 14px 36px rgba(0, 0, 0, 0.42);
   }
 }
@@ -448,8 +464,8 @@
   aspect-ratio: 3 / 4;
   background: radial-gradient(
     ellipse 80% 70% at 40% 50%,
-    rgba(236, 72, 153, 0.16),
-    rgba(34, 211, 238, 0.08) 45%,
+    rgba(244, 63, 94, 0.18),
+    rgba(232, 168, 124, 0.1) 45%,
     transparent 72%
   );
   filter: blur(34px);
@@ -484,7 +500,7 @@
 }
 
 .ttm-dating-hero__card-float:hover {
-  filter: drop-shadow(0 0 28px rgba(236, 72, 153, 0.35));
+  filter: drop-shadow(0 0 28px rgba(244, 63, 94, 0.38));
 }
 
 .ttm-dating-hero__card-float:hover .ttm-dating-card--scene {
@@ -587,9 +603,9 @@
 }
 
 .ttm-dating-card--featured {
-  border-color: rgba(236, 72, 153, 0.35);
+  border-color: rgba(244, 63, 94, 0.38);
   box-shadow:
-    0 0 32px rgba(236, 72, 153, 0.18),
+    0 0 32px rgba(244, 63, 94, 0.2),
     0 20px 48px rgba(0, 0, 0, 0.45);
 }
 
@@ -677,22 +693,22 @@
 }
 
 .ttm-dating-hero__cards-under-item:nth-child(1) .ttm-dating-card--mini {
-  border-color: rgba(236, 72, 153, 0.2);
+  border-color: rgba(244, 63, 94, 0.22);
 }
 
 .ttm-dating-hero__cards-under-item:nth-child(2) .ttm-dating-card--mini {
-  border-color: rgba(34, 211, 238, 0.2);
+  border-color: rgba(232, 168, 124, 0.24);
 }
 
 .ttm-dating-hero__cards-under-item:nth-child(3) .ttm-dating-card--mini {
-  border-color: rgba(167, 139, 250, 0.2);
+  border-color: rgba(253, 164, 175, 0.24);
 }
 
 .ttm-dating-card:hover:not(.ttm-dating-card--scene) {
   transform: translateY(-6px) scale(1.02);
-  border-color: rgba(236, 72, 153, 0.45);
+  border-color: rgba(244, 63, 94, 0.48);
   box-shadow:
-    0 0 40px rgba(236, 72, 153, 0.28),
+    0 0 40px rgba(244, 63, 94, 0.3),
     0 20px 48px rgba(0, 0, 0, 0.5);
 }
 
@@ -950,7 +966,7 @@
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  background: linear-gradient(135deg, #f9fafb 0%, #e9d5ff 45%, #fda4af 100%);
+  background: linear-gradient(135deg, #f9fafb 0%, #fda4af 45%, #e8a87c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1035,8 +1051,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  background: rgba(34, 211, 238, 0.1);
-  color: var(--dt-cyan);
+  background: rgba(232, 168, 124, 0.12);
+  color: var(--dt-gold);
 }
 
 .ttm-dating-flow__avatar-img {
@@ -1075,7 +1091,7 @@
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  background: linear-gradient(135deg, #f9fafb 0%, #a5f3fc 40%, #f9a8d4 100%);
+  background: linear-gradient(135deg, #f9fafb 0%, #fda4af 40%, #e8a87c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1162,8 +1178,8 @@
   margin-bottom: 0.45rem;
   padding: 0.2rem 0.45rem;
   border-radius: 999px;
-  border: 1px solid rgba(236, 72, 153, 0.25);
-  background: rgba(236, 72, 153, 0.08);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  background: rgba(244, 63, 94, 0.1);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1222,8 +1238,8 @@
 
 .ttm-dating-trust__item:hover {
   transform: translateX(6px);
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 0 32px rgba(56, 189, 248, 0.1);
+  border-color: rgba(232, 168, 124, 0.38);
+  box-shadow: 0 0 32px rgba(232, 168, 124, 0.12);
 }
 
 .ttm-dating-trust__check {
@@ -1233,9 +1249,9 @@
   height: 2rem;
   flex-shrink: 0;
   border-radius: 50%;
-  color: var(--dt-blue);
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--dt-gold);
+  background: rgba(232, 168, 124, 0.14);
+  border: 1px solid rgba(232, 168, 124, 0.28);
 }
 
 /* Emotional */
@@ -1248,7 +1264,7 @@
 .ttm-dating-emotional__glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(236, 72, 153, 0.1), transparent 70%);
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(244, 63, 94, 0.12), transparent 70%);
   pointer-events: none;
 }
 
@@ -1336,7 +1352,7 @@ html:has(.ttm-dating-landing) .ttm-dating-floating-chrome .ttm-lang-switcher [ro
 }
 
 .ttm-dating-nav__theme:hover {
-  border-color: rgba(236, 72, 153, 0.35);
+  border-color: rgba(244, 63, 94, 0.38);
   color: var(--dt-text);
   background: rgba(255, 255, 255, 0.08);
 }
@@ -1344,18 +1360,18 @@ html:has(.ttm-dating-landing) .ttm-dating-floating-chrome .ttm-lang-switcher [ro
 /* ─── Light theme (dating landing) ─── */
 
 html[data-theme="light"] .ttm-dating-landing {
-  --dt-bg: #f8f9fc;
-  --dt-bg-soft: #faf8ff;
-  --dt-glass: rgba(255, 255, 255, 0.78);
-  --dt-border: rgba(18, 17, 26, 0.1);
-  --dt-text: #12111a;
-  --dt-muted: rgba(18, 17, 26, 0.55);
+  --dt-bg: #fff8f6;
+  --dt-bg-soft: #fff1ee;
+  --dt-glass: rgba(255, 255, 255, 0.82);
+  --dt-border: rgba(26, 17, 20, 0.1);
+  --dt-text: #1a1114;
+  --dt-muted: rgba(26, 17, 20, 0.55);
 }
 
 html[data-theme="light"] .ttm-dating-nav__inner--scrolled {
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.9);
   border-color: var(--dt-border);
-  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 8px 32px rgba(244, 63, 94, 0.1);
 }
 
 html[data-theme="light"] .ttm-dating-nav__theme {
