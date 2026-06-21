@@ -3,6 +3,11 @@ import { distanceKm } from "@/lib/geo"
 import type { DiscoverFilters, DiscoverProfile } from "@/lib/discover/types"
 import type { CommonInterest } from "@/lib/interests/types"
 import { interestCompatibilityPercent } from "@/lib/server/discover/compatibility"
+import {
+  applyVisibilityCap,
+  rankDiscoverProfiles,
+} from "@/lib/server/engines/ranking/ranking.service"
+import { getBehaviorUser } from "@/lib/server/engines/behavior/repository"
 import { getInterestIdsByUser, getInterestsForUsers } from "@/lib/server/repositories/interests"
 
 type DiscoverCandidateRow = {
@@ -163,7 +168,9 @@ export async function listDiscoverProfiles(input: {
     })
   }
 
-  return result.sort((a, b) => b.compatibility - a.compatibility)
+  const ranked = await rankDiscoverProfiles({ viewerId: input.viewerId, profiles: result })
+  const viewer = await getBehaviorUser(input.viewerId)
+  return applyVisibilityCap(ranked, viewer?.discover_visibility ?? 1)
 }
 
 export async function updateUserDiscoveryFields(
@@ -219,7 +226,7 @@ export async function updateUserDiscoveryFields(
   }
   if (patch.profile !== undefined) {
     await db`
-      UPDATE users SET profile = ${db.json(patch.profile)} WHERE id = ${userId}
+      UPDATE users SET profile = ${db.json(JSON.parse(JSON.stringify(patch.profile)))} WHERE id = ${userId}
     `
   }
   if (patch.isActive !== undefined) {

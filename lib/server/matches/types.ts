@@ -1,4 +1,5 @@
 import type { GamificationSnapshot } from "@/lib/server/gamification/types"
+import type { MatchStatus } from "@/lib/server/match-engine/types"
 
 export type MatchBondStats = {
   totalMessages: number
@@ -18,6 +19,8 @@ export type MatchDto = {
   expiresAt: string
   isFrozen: boolean
   isExpired: boolean
+  /** Canonical engine status (24h lifecycle). */
+  status?: MatchStatus
   bond: MatchBondStats
 }
 

@@ -1,4 +1,8 @@
-export type NotificationType = "profile_expiring" | "match_expiring" | "achievement_unlocked"
+export type NotificationType =
+  | "profile_expiring"
+  | "match_expiring"
+  | "match_urgency_warning"
+  | "achievement_unlocked"
 
 export type DbNotificationRow = {
   id: string

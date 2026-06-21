@@ -6,6 +6,7 @@ import {
   messagesUntilNextFromTotal,
 } from "@/lib/server/matches/bond-constants"
 import type { MessageSentResponse } from "@/lib/server/matches/types"
+import { syncMatchExpiry } from "@/lib/server/match-engine/repository"
 import { findMatchByIdForUser, type DbLikeRow } from "@/lib/server/repositories/likes"
 
 export type DbMatchStatsRow = {
@@ -44,7 +45,8 @@ export function bondStatsFromRow(
 async function prolongMatchPair(
   db: NonNullable<ReturnType<typeof getDb>>,
   userId: string,
-  peerId: string
+  peerId: string,
+  engineMatchId: string | null
 ) {
   await db`
     UPDATE likes
@@ -57,6 +59,19 @@ async function prolongMatchPair(
         OR (from_user = ${peerId} AND to_user = ${userId})
       )
   `
+
+  if (engineMatchId) {
+    await db`
+      UPDATE matches
+      SET expires_at = GREATEST(expires_at, now()) + interval '6 hours'
+      WHERE id = ${engineMatchId}
+    `
+    const rows = await db<{ expires_at: Date }[]>`
+      SELECT expires_at FROM matches WHERE id = ${engineMatchId} LIMIT 1
+    `
+    const next = rows[0]?.expires_at
+    if (next) await syncMatchExpiry(engineMatchId, next, true)
+  }
 }
 
 function canProlongNow(lastProlongedAt: Date | null): boolean {
@@ -83,6 +98,7 @@ export async function recordMessageSentForMatch(
   }
 
   const peerId = like.to_user
+  const engineMatchId = like.match_id
 
   const rows = await db<DbMatchStatsRow[]>`
     INSERT INTO match_stats (match_id, total_messages, updated_at)
@@ -102,7 +118,7 @@ export async function recordMessageSentForMatch(
     stats.total_messages > 0 && stats.total_messages % BOND_MESSAGES_PER_PROLONG === 0
 
   if (shouldCheckProlong && canProlongNow(stats.last_prolonged_at)) {
-    await prolongMatchPair(db, userId, peerId)
+    await prolongMatchPair(db, userId, peerId, engineMatchId)
     const updatedStats = await db<DbMatchStatsRow[]>`
       UPDATE match_stats
       SET

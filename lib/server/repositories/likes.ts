@@ -1,5 +1,7 @@
 import { getDb } from "@/lib/server/db"
 import { checkAndGrantAchievements } from "@/lib/server/gamification/check"
+import { createMatchForPair } from "@/lib/server/match-engine/repository"
+import type { MatchStatus } from "@/lib/server/match-engine/types"
 import type { MatchDto } from "@/lib/server/matches/types"
 import { bondStatsFromRow } from "@/lib/server/repositories/match-stats"
 
@@ -12,22 +14,29 @@ export type DbLikeRow = {
   is_match: boolean
   is_expired: boolean
   is_frozen: boolean
+  match_id: string | null
 }
 
 type DbLikeWithBond = DbLikeRow & {
   stat_total_messages: number | null
   stat_prolong_count: number | null
   stat_last_prolonged_at: Date | null
+  engine_status: MatchStatus | null
 }
 
 function rowToMatch(row: DbLikeWithBond, peerName: string | null): MatchDto {
+  const status =
+    row.engine_status ??
+    (row.is_expired ? "expired" : row.stat_total_messages && row.stat_total_messages > 0 ? "waiting_reply" : "new_match")
+
   return {
     id: row.id,
     peerUserId: row.to_user,
     peerName,
     expiresAt: (row.expires_at ?? new Date()).toISOString(),
     isFrozen: row.is_frozen,
-    isExpired: row.is_expired,
+    isExpired: row.is_expired || status === "expired",
+    status,
     bond: bondStatsFromRow(
       row.stat_total_messages != null
         ? {
@@ -57,13 +66,16 @@ export async function findMatchByIdForUser(
       l.is_match,
       l.is_expired,
       l.is_frozen,
+      l.match_id,
       ms.total_messages AS stat_total_messages,
       ms.prolong_count AS stat_prolong_count,
       ms.last_prolonged_at AS stat_last_prolonged_at,
+      m.status AS engine_status,
       peer.name AS peer_name
     FROM likes l
     LEFT JOIN users peer ON peer.id = l.to_user
     LEFT JOIN match_stats ms ON ms.match_id = l.id
+    LEFT JOIN matches m ON m.id = l.match_id
     WHERE l.id = ${matchId}
       AND l.from_user = ${userId}
       AND l.is_match = true
@@ -86,13 +98,16 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
       l.is_match,
       l.is_expired,
       l.is_frozen,
+      l.match_id,
       ms.total_messages AS stat_total_messages,
       ms.prolong_count AS stat_prolong_count,
       ms.last_prolonged_at AS stat_last_prolonged_at,
+      m.status AS engine_status,
       peer.name AS peer_name
     FROM likes l
     LEFT JOIN users peer ON peer.id = l.to_user
     LEFT JOIN match_stats ms ON ms.match_id = l.id
+    LEFT JOIN matches m ON m.id = l.match_id
     WHERE l.from_user = ${userId}
       AND l.is_match = true
       AND l.is_expired = false
@@ -113,6 +128,7 @@ export async function createMutualMatchLikes(input: {
   if (!db) return
 
   const { userA, userB, expiresAt } = input
+  const createdAt = new Date(expiresAt.getTime() - 24 * 60 * 60 * 1000)
 
   await db`
     INSERT INTO likes (from_user, to_user, expires_at, is_match, is_frozen)
@@ -131,6 +147,10 @@ export async function createMutualMatchLikes(input: {
       is_match = true,
       is_expired = false
   `
+
+  const engineMatch = await createMatchForPair({ userA, userB, createdAt, expiresAt })
+  const { integrateMatchCreated } = await import("@/lib/server/engines/integration")
+  await integrateMatchCreated(engineMatch.id, userA, userB)
 
   await checkAndGrantAchievements(userA, { event: "match_created", activeMatchesCount: undefined })
   await checkAndGrantAchievements(userB, { event: "match_created", activeMatchesCount: undefined })
@@ -153,10 +173,12 @@ async function extendMatchExpiry(
   peerId: string,
   setFrozen: boolean
 ) {
+  const nextExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000)
+
   await db`
     UPDATE likes
     SET
-      expires_at = now() + interval '24 hours',
+      expires_at = ${nextExpiry},
       is_frozen = CASE WHEN ${setFrozen} THEN true ELSE is_frozen END,
       is_expired = false
     WHERE is_match = true
@@ -165,6 +187,17 @@ async function extendMatchExpiry(
         OR (from_user = ${peerId} AND to_user = ${userId})
       )
   `
+
+  const link = await db<{ match_id: string | null }[]>`
+    SELECT match_id FROM likes
+    WHERE from_user = ${userId} AND to_user = ${peerId} AND is_match = true
+    LIMIT 1
+  `
+  const matchId = link[0]?.match_id
+  if (matchId) {
+    const { syncMatchExpiry } = await import("@/lib/server/match-engine/repository")
+    await syncMatchExpiry(matchId, nextExpiry, true)
+  }
 }
 
 export async function freezeMatchForUser(

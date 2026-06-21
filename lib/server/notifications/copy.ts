@@ -34,6 +34,25 @@ export function buildNotificationContent(input: {
   const href = referenceId
     ? `${origin}/app?tab=chat&with=${referenceId}`
     : `${origin}/app?tab=chat`
+
+  if (type === "match_urgency_warning") {
+    const title =
+      leadHours <= 1
+        ? `Последний час с ${name}`
+        : `Время уходит — ${name} ждёт ответа`
+    const body =
+      leadHours <= 1
+        ? `Остался час, чтобы не потерять мэтч с ${name}. Ответь сейчас.`
+        : `Прошло 12 часов без ответа. Мэтч с ${name} скоро исчезнет — напиши первым.`
+    return {
+      title,
+      body,
+      href,
+      tag: `match-urgency-${referenceId ?? "unknown"}-${leadHours}`,
+      html: `<p>${body}</p><p><a href="${href}">Открыть чат</a></p>`,
+    }
+  }
+
   const title = `Мэтч с ${name === "собеседником" ? "собеседником" : name} догорает. Сохрани его`
   const body =
     leadHours === 6

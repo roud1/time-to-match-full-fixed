@@ -11,6 +11,7 @@ import {
   listUserUnlockedAchievements,
 } from "@/lib/server/gamification/repository"
 import { xpProgressInLevel } from "@/lib/server/gamification/xp"
+import { getUserBehaviorMetrics } from "@/lib/server/engines/behavior/behavior.service"
 
 export const runtime = "nodejs"
 
@@ -47,6 +48,7 @@ export async function GET(request: Request) {
   const interestIds = await getInterestIdsByUser(user.id)
   const catalog = await listAllInterests()
   const interests = catalog.filter((i) => interestIds.includes(i.id))
+  const behavior = await getUserBehaviorMetrics(user.id)
 
   return withCors(
     request,
@@ -77,6 +79,17 @@ export async function GET(request: Request) {
         xpProgress: xpProg.progress,
         achievements,
         achievementCatalog,
+        behavior: behavior
+          ? {
+              score: behavior.behaviorScore,
+              tier: behavior.rankingTier,
+              discoverVisibility: behavior.discoverVisibility,
+              responseTimeAvgMs: behavior.responseTimeAvgMs,
+              ignoreRate: behavior.ignoreRate,
+              activityScore: behavior.activityScore,
+              conversationDepth: behavior.conversationDepth,
+            }
+          : null,
       },
     })
   )
