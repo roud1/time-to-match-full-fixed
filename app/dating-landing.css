@@ -296,7 +296,7 @@ html[data-theme="light"] .ttm-dating-landing {
 
 .ttm-dating-hero--cinematic {
   position: relative;
-  min-height: min(100dvh, 920px);
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -339,6 +339,26 @@ html[data-theme="light"] .ttm-dating-hero__mesh {
     #fff8f6 100%
   );
   opacity: 0.65;
+}
+
+.ttm-dating-hero__aurora {
+  position: absolute;
+  inset: -30% -20%;
+  background:
+    radial-gradient(ellipse 50% 40% at 30% 40%, rgba(225, 29, 72, 0.45) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 70% 55%, rgba(249, 115, 22, 0.35) 0%, transparent 65%),
+    radial-gradient(ellipse 35% 30% at 50% 20%, rgba(251, 191, 36, 0.2) 0%, transparent 60%);
+  opacity: 0.85;
+  mix-blend-mode: screen;
+}
+
+.ttm-dating-hero__aurora--live {
+  animation: dt-aurora-shift 12s ease-in-out infinite alternate;
+}
+
+html[data-theme="light"] .ttm-dating-hero__aurora {
+  opacity: 0.55;
+  mix-blend-mode: multiply;
 }
 
 .ttm-dating-hero__glow {
@@ -617,17 +637,245 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 }
 
 .ttm-dating-hero__visual {
-  display: grid;
-  gap: 1rem;
-  max-width: 22rem;
+  position: relative;
+  width: 100%;
+  max-width: 26rem;
   margin-inline: auto;
 }
 
 @media (min-width: 1024px) {
   .ttm-dating-hero__visual {
+    max-width: none;
     margin-inline: 0;
     margin-left: auto;
   }
+}
+
+.ttm-dating-hero__match-stage-wrap {
+  width: 100%;
+}
+
+.ttm-dating-hero__match-stage {
+  position: relative;
+  padding: 1.25rem;
+  border-radius: calc(var(--dt-radius-lg) + 4px);
+  border: 1px solid var(--dt-border-strong);
+  background: color-mix(in srgb, var(--dt-bg) 40%, transparent);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 60px -12px rgba(225, 29, 72, 0.5),
+    0 24px 48px -20px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
+.ttm-dating-hero__match-aurora {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    rgba(225, 29, 72, 0.25),
+    rgba(249, 115, 22, 0.2),
+    rgba(251, 191, 36, 0.15),
+    rgba(225, 29, 72, 0.25)
+  );
+  opacity: 0.6;
+  animation: dt-match-aurora 10s linear infinite;
+  pointer-events: none;
+}
+
+.ttm-dating-hero__match-timer {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0.75rem 1rem 1rem;
+  border-radius: var(--dt-radius-lg);
+  border: 1px solid var(--dt-border-strong);
+  background: linear-gradient(145deg, rgba(190, 18, 60, 0.4) 0%, rgba(26, 10, 18, 0.75) 100%);
+  margin-bottom: 1.25rem;
+}
+
+html[data-theme="light"] .ttm-dating-hero__match-timer {
+  background: linear-gradient(145deg, rgba(255, 228, 230, 0.95) 0%, rgba(255, 248, 246, 0.98) 100%);
+}
+
+.ttm-dating-hero__match-timer-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dt-muted);
+}
+
+.ttm-dating-hero__match-timer-value {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--dt-font-display);
+  font-size: clamp(2.5rem, 7vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--dt-amber);
+  text-shadow: 0 0 40px rgba(251, 191, 36, 0.55);
+  animation: dt-timer-glow 3s ease-in-out infinite;
+}
+
+.ttm-dating-hero__match-timer-caption {
+  margin: 0.5rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--dt-muted);
+}
+
+.ttm-dating-hero__match-arena {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 11rem;
+}
+
+.ttm-dating-hero__match-profile {
+  flex: 0 0 auto;
+  width: min(34vw, 130px);
+  border-radius: var(--dt-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--dt-border-strong);
+  background: var(--dt-surface);
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.4);
+}
+
+.ttm-dating-hero__match-profile--left {
+  rotate: -6deg;
+}
+
+.ttm-dating-hero__match-profile--right {
+  rotate: 6deg;
+}
+
+.ttm-dating-hero__match-photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+}
+
+.ttm-dating-hero__match-shade {
+  position: absolute;
+  inset: auto 0 0;
+  height: 50%;
+  background: linear-gradient(transparent, rgba(13, 4, 8, 0.9));
+}
+
+.ttm-dating-hero__match-score {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  padding: 0.18rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff1f2;
+  background: rgba(225, 29, 72, 0.8);
+}
+
+.ttm-dating-hero__match-name {
+  margin: 0;
+  padding: 0.5rem 0.55rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.ttm-dating-hero__match-bridge {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 3.5rem;
+  max-width: 5.5rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+}
+
+.ttm-dating-hero__match-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ttm-dating-hero__match-line-path {
+  stroke-dasharray: 140;
+  stroke-dashoffset: 140;
+  animation: dt-match-line-draw 2.2s ease-out 0.6s forwards, dt-match-line-pulse 2.8s ease-in-out 2.8s infinite;
+}
+
+.ttm-dating-hero__match-spark {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  color: var(--dt-amber);
+  background: rgba(251, 191, 36, 0.15);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.55);
+}
+
+.ttm-dating-hero__match-spark--live {
+  animation: dt-match-spark-travel 2.8s ease-in-out 2.8s infinite;
+}
+
+.ttm-dating-hero__match-heart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  color: #fff1f2;
+  background: linear-gradient(135deg, var(--dt-rose), var(--dt-coral));
+  box-shadow: 0 0 28px rgba(225, 29, 72, 0.6);
+}
+
+.ttm-dating-hero__match-heart--pulse {
+  animation: dt-spark-beat 1.8s ease-in-out infinite;
+}
+
+.ttm-dating-hero__match-result {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--dt-border);
+  background: color-mix(in srgb, var(--dt-surface-strong) 75%, transparent);
+}
+
+.ttm-dating-hero__match-result-score {
+  font-family: var(--dt-font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--dt-rose-soft);
+}
+
+.ttm-dating-hero__match-result-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dt-muted);
 }
 
 .ttm-dating-hero__timer-card {
@@ -724,6 +972,52 @@ html[data-theme="light"] .ttm-dating-hero__timer-card {
   background: var(--dt-rose-soft);
   box-shadow: 0 0 12px rgba(251, 113, 133, 0.55);
   animation: dt-scroll-hint 2s ease-in-out infinite;
+}
+
+@keyframes dt-aurora-shift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate(3%, -2%) rotate(3deg);
+  }
+}
+
+@keyframes dt-match-aurora {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dt-match-line-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes dt-match-line-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes dt-match-spark-travel {
+  0%,
+  100% {
+    left: 18%;
+    opacity: 0.6;
+  }
+  50% {
+    left: 82%;
+    opacity: 1;
+  }
 }
 
 @keyframes dt-hero-mesh {

@@ -1,7 +1,7 @@
 "use client"
 
 import { Heart } from "lucide-react"
-import { useReducedMotion } from "motion/react"
+import { useReducedMotion, useTransform, type MotionValue } from "motion/react"
 import { DatingParallaxLayer } from "@/components/landing/dating/dating-parallax-layer"
 import { useScrollParallaxY } from "@/hooks/use-parallax"
 import { cn } from "@/lib/utils"
@@ -43,16 +43,27 @@ function HeartParallax({
   )
 }
 
-export function DatingHeroAtmosphere() {
+type DatingHeroAtmosphereProps = {
+  scrollProgress: MotionValue<number>
+}
+
+export function DatingHeroAtmosphere({ scrollProgress }: DatingHeroAtmosphereProps) {
   const reduce = useReducedMotion()
   const meshY = useScrollParallaxY({ input: [0, 700], output: [0, 120] })
+  const auroraY = useScrollParallaxY({ input: [0, 600], output: [0, 90] })
   const roseGlowY = useScrollParallaxY({ input: [0, 700], output: [0, 80] })
   const amberGlowY = useScrollParallaxY({ input: [0, 700], output: [0, 55] })
   const pulseY = useScrollParallaxY({ input: [0, 500], output: [0, -30] })
+  const auroraScale = useTransform(scrollProgress, [0, 0.6], [1, reduce ? 1 : 1.12])
 
   return (
     <div className="ttm-dating-hero__atmosphere" aria-hidden>
       <DatingParallaxLayer y={meshY} className="ttm-dating-hero__mesh" />
+      <DatingParallaxLayer
+        y={auroraY}
+        className={cn("ttm-dating-hero__aurora", !reduce && "ttm-dating-hero__aurora--live")}
+        style={{ scale: auroraScale }}
+      />
       <DatingParallaxLayer
         y={roseGlowY}
         className="ttm-dating-hero__glow ttm-dating-hero__glow--rose"
