@@ -8,8 +8,11 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react"
+import { useEffect, useState } from "react"
+import { DatingHeroSpark } from "@/components/landing/dating/dating-hero-spark"
 import { DatingParallaxLayer } from "@/components/landing/dating/dating-parallax-layer"
 import { useDatingHeroProfiles } from "@/components/landing/dating/use-dating-profiles"
+import { useMouseTilt } from "@/hooks/use-mouse-tilt"
 import { useScrollParallaxY } from "@/hooks/use-parallax"
 import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
@@ -32,27 +35,47 @@ function Portrait({
   const driftX = useTransform(
     scrollProgress,
     [0, 0.55],
-    [0, reduce ? 0 : variant === "back" ? -18 : 14]
+    [0, reduce ? 0 : variant === "back" ? -28 : 22]
   )
-  const driftY = useTransform(scrollProgress, [0, 0.55], [0, reduce ? 0 : 22])
-  const scale = useTransform(scrollProgress, [0, 0.5], [1, reduce ? 1 : 0.94])
+  const driftY = useTransform(scrollProgress, [0, 0.55], [0, reduce ? 0 : 28])
+  const scale = useTransform(scrollProgress, [0, 0.5], [1, reduce ? 1 : 0.92])
+  const isBack = variant === "back"
 
   return (
     <motion.figure
       className={cn(
         "ttm-dating-hero__portrait",
-        variant === "back" ? "ttm-dating-hero__portrait--back" : "ttm-dating-hero__portrait--front"
+        isBack ? "ttm-dating-hero__portrait--back" : "ttm-dating-hero__portrait--front"
       )}
       style={{ x: driftX, y: driftY, scale }}
-      initial={reduce ? false : { opacity: 0, y: 40, scale: 0.92 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={
+        reduce
+          ? false
+          : {
+              opacity: 0,
+              x: isBack ? -96 : 96,
+              y: isBack ? 24 : 32,
+              rotate: isBack ? -18 : 16,
+              scale: 0.86,
+            }
+      }
+      animate={{ opacity: 1, x: 0, y: 0, rotate: isBack ? -9 : 7, scale: 1 }}
       transition={{
-        duration: 0.9,
-        delay: variant === "back" ? 0.2 : 0.35,
-        ease: [0.22, 1, 0.36, 1],
+        type: "spring",
+        stiffness: 180,
+        damping: 20,
+        mass: 0.9,
+        delay: isBack ? 0.28 : 0.42,
       }}
     >
-      <div className="ttm-dating-hero__portrait-frame">
+      <div
+        className={cn(
+          "ttm-dating-hero__portrait-inner",
+          !reduce && "ttm-dating-hero__portrait--float",
+          isBack ? "ttm-dating-hero__portrait-inner--back" : "ttm-dating-hero__portrait-inner--front"
+        )}
+      >
+        <div className="ttm-dating-hero__portrait-frame">
         <Image
           src={profile.imageUrl}
           alt=""
@@ -67,6 +90,7 @@ function Portrait({
       <figcaption className="ttm-dating-hero__portrait-caption">
         {profile.name}, {profile.age}
       </figcaption>
+      </div>
     </motion.figure>
   )
 }
@@ -77,9 +101,19 @@ export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPrevie
   const profiles = useDatingHeroProfiles()
   const left = profiles[0]
   const right = profiles[1] ?? profiles[2]
+  const [tiltEnabled, setTiltEnabled] = useState(false)
+  const { ref: tiltRef, rotateX, rotateY } = useMouseTilt(tiltEnabled, 6)
 
-  const stageY = useScrollParallaxY({ input: [0, 500], output: [0, -28] })
-  const stageOpacity = useTransform(scrollProgress, [0, 0.6], [1, reduce ? 1 : 0.7])
+  const stageY = useScrollParallaxY({ input: [0, 500], output: [0, -32] })
+  const stageOpacity = useTransform(scrollProgress, [0, 0.6], [1, reduce ? 1 : 0.65])
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)")
+    const update = () => setTiltEnabled(mq.matches && !reduce)
+    update()
+    mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [reduce])
 
   if (!left || !right) return null
 
@@ -90,13 +124,22 @@ export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPrevie
       className="ttm-dating-hero__portraits-wrap"
     >
       <motion.div
+        ref={tiltRef}
         className="ttm-dating-hero__portraits"
         aria-label={t("datingHeroCardsAria")}
-        initial={reduce ? false : { opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.85, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        style={
+          tiltEnabled
+            ? {
+                rotateX,
+                rotateY,
+                transformPerspective: 900,
+              }
+            : undefined
+        }
       >
-        <div className="ttm-dating-hero__portraits-glow" aria-hidden />
+        <div className="ttm-dating-hero__portraits-glow ttm-dating-hero__portraits-glow--pulse" aria-hidden />
+
+        <DatingHeroSpark />
 
         <Portrait
           profile={left}
@@ -118,7 +161,7 @@ export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPrevie
           )}
           initial={reduce ? false : { scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.55, delay: 0.75, type: "spring", stiffness: 260, damping: 18 }}
+          transition={{ duration: 0.55, delay: 0.82, type: "spring", stiffness: 260, damping: 16 }}
           aria-hidden
         >
           <span className="ttm-dating-hero__portraits-spark-ring" />

@@ -2,13 +2,14 @@
 
 import Link from "next/link"
 import { Clock, Sparkles } from "lucide-react"
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { DatingHeroAtmosphere } from "@/components/landing/dating/dating-hero-atmosphere"
 import { DatingHeroMatchPreview } from "@/components/landing/dating/dating-hero-match-preview"
 import { useParallaxIntensity } from "@/hooks/use-parallax"
 import { useI18n } from "@/lib/i18n"
 import { isLoggedIn } from "@/lib/user-profile"
+import { cn } from "@/lib/utils"
 
 function useCountdownDisplay() {
   const [time, setTime] = useState("23:59:42")
@@ -35,15 +36,88 @@ function useCountdownDisplay() {
   return time
 }
 
+function StaggerWords({
+  text,
+  className,
+  baseDelay = 0,
+}: {
+  text: string
+  className?: string
+  baseDelay?: number
+}) {
+  const reduce = useReducedMotion()
+  const words = text.split(/\s+/).filter(Boolean)
+
+  if (reduce) {
+    return <span className={className}>{text}</span>
+  }
+
+  return (
+    <span className={className} aria-hidden>
+      {words.map((word, index) => (
+        <motion.span
+          key={`${word}-${index}`}
+          className="ttm-dating-hero__title-word"
+          initial={{ opacity: 0, y: 32, filter: "blur(14px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            duration: 0.72,
+            delay: baseDelay + index * 0.09,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        >
+          {word}
+          {index < words.length - 1 ? "\u00A0" : ""}
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+function CountdownValue({ value }: { value: string }) {
+  const reduce = useReducedMotion()
+  const segments = value.split(":")
+
+  return (
+    <span
+      className={cn(
+        "ttm-dating-hero__countdown-value",
+        !reduce && "ttm-dating-hero__countdown-value--live"
+      )}
+      aria-live="polite"
+    >
+      {segments.map((segment, index) => (
+        <span key={index} className="ttm-dating-hero__countdown-segment-wrap">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={segment}
+              className="ttm-dating-hero__countdown-segment"
+              initial={reduce ? false : { opacity: 0, y: 10, rotateX: -72 }}
+              animate={{ opacity: 1, y: 0, rotateX: 0 }}
+              exit={reduce ? undefined : { opacity: 0, y: -8, rotateX: 72 }}
+              transition={{ type: "spring", stiffness: 420, damping: 28 }}
+            >
+              {segment}
+            </motion.span>
+          </AnimatePresence>
+          {index < segments.length - 1 ? (
+            <span className="ttm-dating-hero__countdown-colon">:</span>
+          ) : null}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 const STAGGER = {
   eyebrow: 0,
-  timer: 0.06,
-  title1: 0.12,
-  title2: 0.2,
-  sub: 0.28,
-  actions: 0.36,
-  chips: 0.44,
-  visual: 0.18,
+  timer: 0.08,
+  title1: 0.14,
+  title2: 0.32,
+  sub: 0.48,
+  actions: 0.58,
+  chips: 0.68,
+  visual: 0.2,
 } as const
 
 export function DatingLandingHero() {
@@ -60,10 +134,10 @@ export function DatingLandingHero() {
     offset: ["start start", "end start"],
   })
 
-  const contentY = useTransform(scrollY, [0, 480], [0, reduce ? 0 : -50 * intensity])
-  const contentScale = useTransform(scrollYProgress, [0, 0.55], [1, reduce ? 1 : 0.97])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, reduce ? 1 : 0.5])
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -18 * intensity])
+  const contentY = useTransform(scrollY, [0, 480], [0, reduce ? 0 : -56 * intensity])
+  const contentScale = useTransform(scrollYProgress, [0, 0.55], [1, reduce ? 1 : 0.94])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.72], [1, reduce ? 1 : 0.42])
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -24 * intensity])
   const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0])
 
   useEffect(() => {
@@ -77,8 +151,8 @@ export function DatingLandingHero() {
     reduce
       ? {}
       : {
-          initial: { opacity: 0, y: 24 },
-          animate: { opacity: 1, y: 0 },
+          initial: { opacity: 0, y: 24, filter: "blur(8px)" },
+          animate: { opacity: 1, y: 0, filter: "blur(0px)" },
           transition: { duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] as const },
         }
 
@@ -103,34 +177,28 @@ export function DatingLandingHero() {
               </motion.p>
 
               <motion.div
-                className="ttm-dating-hero__countdown-pill"
+                className={cn(
+                  "ttm-dating-hero__countdown-pill",
+                  !reduce && "ttm-dating-hero__countdown-pill--pulse"
+                )}
                 {...fadeUp(STAGGER.timer)}
               >
                 <Clock size={14} aria-hidden />
                 <span className="ttm-dating-hero__countdown-label">{t("datingHow3Title")}</span>
-                <span className="ttm-dating-hero__countdown-value" aria-live="polite">
-                  {countdown}
-                </span>
+                <CountdownValue value={countdown} />
               </motion.div>
 
               <motion.h1
                 id="dating-hero-title"
                 className="ttm-dating-hero__title"
                 aria-label={titleFull}
-                {...fadeUp(STAGGER.title1)}
               >
-                <motion.span
-                  className="ttm-dating-hero__title-line"
-                  {...fadeUp(STAGGER.title1)}
-                >
-                  {t("datingHeroTitleLine1")}
-                </motion.span>
-                <motion.span
-                  className="ttm-dating-hero__title-line ttm-dating-hero__title-line--accent"
-                  {...fadeUp(STAGGER.title2)}
-                >
-                  {t("datingHeroTitleLine2")}
-                </motion.span>
+                <span className="ttm-dating-hero__title-line">
+                  <StaggerWords text={t("datingHeroTitleLine1")} baseDelay={STAGGER.title1} />
+                </span>
+                <span className="ttm-dating-hero__title-line ttm-dating-hero__title-line--accent">
+                  <StaggerWords text={t("datingHeroTitleLine2")} baseDelay={STAGGER.title2} />
+                </span>
               </motion.h1>
 
               <motion.p className="ttm-dating-hero__sub" {...fadeUp(STAGGER.sub)}>
@@ -140,6 +208,7 @@ export function DatingLandingHero() {
               <motion.div className="ttm-dating-hero__actions" {...fadeUp(STAGGER.actions)}>
                 <Link href={ctaHref} className="ttm-dating-cta ttm-dating-cta--hero ttm-dating-cta--pulse">
                   <span className="ttm-dating-cta__ring" aria-hidden />
+                  <span className="ttm-dating-cta__shine" aria-hidden />
                   {t("datingHeroCta")}
                 </Link>
                 <Link href="/login" className="ttm-dating-cta ttm-dating-cta--ghost">
@@ -162,7 +231,9 @@ export function DatingLandingHero() {
 
             <motion.div
               className="ttm-dating-hero__visual"
-              {...fadeUp(STAGGER.visual)}
+              initial={reduce ? false : { opacity: 0, y: 32, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.9, delay: STAGGER.visual, ease: [0.22, 1, 0.36, 1] }}
             >
               <DatingHeroMatchPreview scrollProgress={scrollYProgress} />
             </motion.div>

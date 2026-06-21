@@ -241,6 +241,25 @@ html[data-theme="light"] .ttm-dating-landing {
   animation: dt-cta-pulse 2.8s ease-in-out infinite;
 }
 
+.ttm-dating-cta__shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 62%
+  );
+  opacity: 0;
+  pointer-events: none;
+  animation: dt-cta-shimmer 3.2s ease-in-out 1.1s infinite;
+}
+
+.ttm-dating-cta--hero:hover .ttm-dating-cta__shine {
+  animation: dt-cta-shimmer 1.1s ease;
+}
+
 .ttm-dating-cta__ring {
   position: absolute;
   inset: -3px;
@@ -292,6 +311,24 @@ html[data-theme="light"] .ttm-dating-landing {
   }
 }
 
+@keyframes dt-cta-shimmer {
+  0% {
+    opacity: 0;
+    transform: translateX(-120%);
+  }
+  18% {
+    opacity: 0.85;
+  }
+  38% {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+}
+
 /* ─── Cinematic hero ─── */
 
 .ttm-dating-hero--cinematic {
@@ -325,8 +362,11 @@ html[data-theme="light"] .ttm-dating-landing {
     #120608 100%
   );
   background-size: 220% 220%;
-  animation: dt-hero-mesh 18s ease-in-out infinite alternate;
   opacity: 0.42;
+}
+
+.ttm-dating-hero__mesh--live {
+  animation: dt-hero-mesh 18s ease-in-out infinite alternate;
 }
 
 html[data-theme="light"] .ttm-dating-hero__mesh {
@@ -354,6 +394,62 @@ html[data-theme="light"] .ttm-dating-hero__mesh {
 
 .ttm-dating-hero__aurora--live {
   animation: dt-aurora-shift 12s ease-in-out infinite alternate;
+}
+
+.ttm-dating-hero__aurora-mesh {
+  position: absolute;
+  inset: -35% -25%;
+  background:
+    conic-gradient(
+      from 210deg at 42% 38%,
+      rgba(225, 29, 72, 0.22) 0deg,
+      rgba(249, 115, 22, 0.16) 95deg,
+      rgba(251, 191, 36, 0.1) 180deg,
+      rgba(190, 18, 60, 0.18) 260deg,
+      rgba(225, 29, 72, 0.22) 360deg
+    );
+  opacity: 0.55;
+  filter: blur(48px);
+  mix-blend-mode: screen;
+}
+
+.ttm-dating-hero__aurora-mesh--live {
+  animation: dt-aurora-mesh 16s ease-in-out infinite alternate;
+}
+
+html[data-theme="light"] .ttm-dating-hero__aurora-mesh {
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+}
+
+.ttm-dating-hero__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.ttm-dating-hero__particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ttm-dating-hero__particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(251, 191, 36, 0.95) 0%,
+    rgba(251, 113, 133, 0.45) 55%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
+  animation: dt-particle-drift ease-in-out infinite;
 }
 
 html[data-theme="light"] .ttm-dating-hero__aurora {
@@ -571,6 +667,10 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   backdrop-filter: blur(12px);
 }
 
+.ttm-dating-hero__countdown-pill--pulse {
+  animation: dt-countdown-pill-glow 2.4s ease-in-out 0.5s 2;
+}
+
 .ttm-dating-hero__countdown-label {
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -578,12 +678,34 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 }
 
 .ttm-dating-hero__countdown-value {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--dt-font-display);
   font-size: 0.95rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--dt-amber);
   text-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+}
+
+.ttm-dating-hero__countdown-value--live {
+  animation: dt-timer-glow 3s ease-in-out infinite;
+}
+
+.ttm-dating-hero__countdown-segment-wrap {
+  display: inline-flex;
+  align-items: center;
+  perspective: 320px;
+}
+
+.ttm-dating-hero__countdown-segment {
+  display: inline-block;
+  transform-origin: center bottom;
+}
+
+.ttm-dating-hero__countdown-colon {
+  margin-inline: 0.05rem;
+  opacity: 0.75;
 }
 
 .ttm-dating-hero__title {
@@ -598,6 +720,11 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 
 .ttm-dating-hero__title-line {
   display: block;
+}
+
+.ttm-dating-hero__title-word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
 }
 
 .ttm-dating-hero__title-line--accent {
@@ -686,6 +813,8 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   aspect-ratio: 1 / 0.92;
   display: grid;
   place-items: center;
+  transform-style: preserve-3d;
+  transition: transform 0.35s var(--dt-ease);
 }
 
 .ttm-dating-hero__portraits-glow {
@@ -700,6 +829,100 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   );
   filter: blur(28px);
   animation: dt-glow-drift 14s ease-in-out infinite alternate;
+}
+
+.ttm-dating-hero__portraits-glow--pulse {
+  animation:
+    dt-glow-drift 14s ease-in-out infinite alternate,
+    dt-match-bloom 2.8s ease-in-out infinite;
+}
+
+.ttm-dating-hero__spark-sequence {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ttm-dating-hero__spark-trails {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ttm-dating-hero__spark-trail {
+  fill: none;
+  stroke: url(#dt-spark-trail-grad);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 6px rgba(251, 113, 133, 0.65));
+}
+
+.ttm-dating-hero__spark-trail--left {
+  animation: dt-spark-trail-draw 0.75s var(--dt-ease) 0.35s forwards;
+}
+
+.ttm-dating-hero__spark-trail--right {
+  animation: dt-spark-trail-draw 0.75s var(--dt-ease) 0.45s forwards;
+}
+
+.ttm-dating-hero__spark-bloom {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(249, 115, 22, 0.45) 0%,
+    rgba(225, 29, 72, 0.22) 45%,
+    transparent 72%
+  );
+  filter: blur(18px);
+  opacity: 0;
+}
+
+.ttm-dating-hero__spark-bloom--live {
+  animation: dt-spark-bloom-in 1.8s ease-out 0.65s forwards,
+    dt-match-bloom 2.6s ease-in-out 1.4s infinite;
+}
+
+.ttm-dating-hero__spark-burst {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 0;
+  height: 0;
+}
+
+.ttm-dating-hero__spark-burst-dot {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fbbf24 0%, #fb7185 70%, transparent 100%);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.65);
+  animation: dt-spark-burst 0.85s var(--dt-ease) forwards;
+  animation-delay: calc(var(--burst-i) * 0.025s);
+  transform: rotate(calc(var(--burst-i) * 25.7deg)) translateY(0);
+}
+
+.ttm-dating-hero__portrait--float {
+  animation: dt-portrait-float 5.8s ease-in-out infinite;
+}
+
+.ttm-dating-hero__portrait-inner--back.ttm-dating-hero__portrait--float {
+  animation-delay: 0s;
+}
+
+.ttm-dating-hero__portrait-inner--front.ttm-dating-hero__portrait--float {
+  animation-delay: -2.9s;
 }
 
 .ttm-dating-hero__portrait {
@@ -898,6 +1121,89 @@ html[data-theme="light"] .ttm-dating-hero__timer-card {
   }
   100% {
     transform: translate(3%, -2%) rotate(3deg);
+  }
+}
+
+@keyframes dt-aurora-mesh {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  100% {
+    transform: translate(-4%, 3%) rotate(-8deg) scale(1.06);
+  }
+}
+
+@keyframes dt-particle-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(8px, -18px) scale(1.15);
+    opacity: 0.85;
+  }
+}
+
+@keyframes dt-countdown-pill-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 rgba(251, 191, 36, 0);
+    border-color: rgba(251, 113, 133, 0.28);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(251, 191, 36, 0.28);
+    border-color: rgba(251, 191, 36, 0.45);
+  }
+}
+
+@keyframes dt-spark-trail-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes dt-spark-bloom-in {
+  0% {
+    opacity: 0;
+    scale: 0.4;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes dt-match-bloom {
+  0%,
+  100% {
+    filter: blur(18px);
+    opacity: 0.65;
+  }
+  50% {
+    filter: blur(24px);
+    opacity: 1;
+  }
+}
+
+@keyframes dt-spark-burst {
+  0% {
+    opacity: 1;
+    transform: rotate(calc(var(--burst-i) * 25.7deg)) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(calc(var(--burst-i) * 25.7deg)) translateY(-42px) scale(0.2);
+  }
+}
+
+@keyframes dt-portrait-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
   }
 }
 
@@ -1645,20 +1951,35 @@ html[data-theme="light"] .ttm-dating-emotional__band {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ttm-dating-hero__mesh,
+  .ttm-dating-hero__mesh--live,
+  .ttm-dating-hero__aurora--live,
+  .ttm-dating-hero__aurora-mesh--live,
   .ttm-dating-hero__glow,
   .ttm-dating-hero__heart--float,
   .ttm-dating-float--animate,
   .ttm-dating-hero__portraits-spark--live,
   .ttm-dating-hero__portraits-spark--live .ttm-dating-hero__portraits-spark-ring,
   .ttm-dating-hero__portraits-glow,
+  .ttm-dating-hero__portraits-glow--pulse,
+  .ttm-dating-hero__portrait--float,
+  .ttm-dating-hero__spark-trail,
+  .ttm-dating-hero__spark-bloom--live,
+  .ttm-dating-hero__spark-burst-dot,
+  .ttm-dating-hero__particle,
+  .ttm-dating-hero__countdown-pill--pulse,
+  .ttm-dating-hero__countdown-value--live,
   .ttm-dating-hero__timer,
   .ttm-dating-hero__spark-icon,
   .ttm-dating-hero__scroll-dot,
   .ttm-dating-cta--pulse,
   .ttm-dating-cta__ring,
+  .ttm-dating-cta__shine,
   .ttm-dating-feature-card__live-dot,
   .ttm-dating-section-orbs__orb {
     animation: none !important;
+  }
+
+  .ttm-dating-hero__portraits {
+    transition: none;
   }
 }
