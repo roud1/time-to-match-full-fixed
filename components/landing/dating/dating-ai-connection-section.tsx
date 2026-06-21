@@ -2,8 +2,11 @@
 
 import Link from "next/link"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState, type ReactNode } from "react"
+import { DatingParallaxLayer } from "@/components/landing/dating/dating-parallax-layer"
 import { DatingScrollReveal } from "@/components/landing/dating/dating-scroll-reveal"
+import { DatingSectionOrbs } from "@/components/landing/dating/dating-section-orbs"
+import { useSectionParallaxY } from "@/hooks/use-parallax"
 import { useI18n, type TranslationKey } from "@/lib/i18n"
 
 const CYCLE_KEYS: TranslationKey[] = [
@@ -19,9 +22,33 @@ const SIGNAL_KEYS: TranslationKey[] = [
   "datingAiSignal3",
 ]
 
+const CARD_DEPTHS = [0.5, 0.35, 0.65, 0.45, 0.55] as const
+
+function AiFeatureCard({
+  children,
+  className,
+  depthIndex,
+}: {
+  children: ReactNode
+  className: string
+  depthIndex: number
+}) {
+  const ref = useRef<HTMLElement>(null)
+  const y = useSectionParallaxY(ref, [-20, 20], CARD_DEPTHS[depthIndex] ?? 0.5)
+
+  return (
+    <DatingParallaxLayer y={y}>
+      <article ref={ref} className={className}>
+        {children}
+      </article>
+    </DatingParallaxLayer>
+  )
+}
+
 export function DatingAiConnectionSection() {
   const { t } = useI18n()
   const reduce = useReducedMotion()
+  const sectionRef = useRef<HTMLElement>(null)
   const [cycleIndex, setCycleIndex] = useState(0)
   const [score, setScore] = useState(84)
 
@@ -44,19 +71,21 @@ export function DatingAiConnectionSection() {
 
   return (
     <section
+      ref={sectionRef}
       id="ai"
-      className="ttm-dating-section ttm-dating-section--compact"
+      className="ttm-dating-section ttm-dating-section--compact ttm-dating-section--parallax"
       aria-labelledby="dating-ai-title"
     >
+      <DatingSectionOrbs variant="coral" />
       <div className="ttm-dating-container">
-        <DatingScrollReveal>
+        <DatingScrollReveal depth={0.45}>
           <p className="ttm-dating-section__eyebrow">{t("datingAiEyebrow")}</p>
           <h2 id="dating-ai-title" className="ttm-dating-section__title">
             {t("datingAiConnectionTitle")}
           </h2>
 
           <div className="ttm-dating-features__grid">
-            <article className="ttm-dating-feature-card ttm-dating-feature-card--main">
+            <AiFeatureCard className="ttm-dating-feature-card ttm-dating-feature-card--main" depthIndex={0}>
               <span className="ttm-dating-feature-card__live">
                 <span className="ttm-dating-feature-card__live-dot" aria-hidden />
                 {t("datingAiLiveLabel")}
@@ -78,9 +107,9 @@ export function DatingAiConnectionSection() {
                 </AnimatePresence>
               </p>
               <p className="ttm-dating-bento-score-label">{t("datingAiScoreHint")}</p>
-            </article>
+            </AiFeatureCard>
 
-            <article className="ttm-dating-feature-card ttm-dating-feature-card--side">
+            <AiFeatureCard className="ttm-dating-feature-card ttm-dating-feature-card--side" depthIndex={1}>
               <p className="ttm-dating-bento-signal">
                 <strong>{t("datingAiWeAnalyze")}</strong>
               </p>
@@ -94,13 +123,17 @@ export function DatingAiConnectionSection() {
               <p className="ttm-dating-bento-score-label" style={{ marginTop: "1rem" }}>
                 {t("datingAiOutputLabel")}: {t("datingAiOutputValue")}
               </p>
-            </article>
+            </AiFeatureCard>
 
-            {SIGNAL_KEYS.map((key) => (
-              <article key={key} className="ttm-dating-feature-card ttm-dating-feature-card--small">
+            {SIGNAL_KEYS.map((key, index) => (
+              <AiFeatureCard
+                key={key}
+                className="ttm-dating-feature-card ttm-dating-feature-card--small"
+                depthIndex={index + 2}
+              >
                 <p className="ttm-dating-flow__step-title">{t(key)}</p>
                 <p className="ttm-dating-flow__step-text">{t("datingAiScoreHint")}</p>
-              </article>
+              </AiFeatureCard>
             ))}
           </div>
 

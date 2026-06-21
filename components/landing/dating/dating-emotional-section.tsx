@@ -1,30 +1,45 @@
 "use client"
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { DatingParallaxBg } from "@/components/landing/dating/dating-parallax-bg"
+import { DatingParallaxLayer } from "@/components/landing/dating/dating-parallax-layer"
 import { DatingScrollReveal } from "@/components/landing/dating/dating-scroll-reveal"
+import { useSectionParallaxY } from "@/hooks/use-parallax"
 import { useI18n } from "@/lib/i18n"
 import { isLoggedIn } from "@/lib/user-profile"
 
 export function DatingEmotionalSection() {
   const { t } = useI18n()
   const [ctaHref, setCtaHref] = useState("/register")
+  const sectionRef = useRef<HTMLElement>(null)
+  const roseBlobY = useSectionParallaxY(sectionRef, [-50, 50], 1)
+  const amberBlobY = useSectionParallaxY(sectionRef, [-35, 35], 0.7)
 
   useEffect(() => {
     setCtaHref(isLoggedIn() ? "/app" : "/register")
   }, [])
 
   return (
-    <section className="ttm-dating-emotional" aria-labelledby="dating-emotional-title">
+    <section
+      ref={sectionRef}
+      className="ttm-dating-emotional"
+      aria-labelledby="dating-emotional-title"
+    >
       <div className="ttm-dating-emotional__parallax" aria-hidden>
         <DatingParallaxBg />
-        <div className="ttm-dating-emotional__parallax-blob ttm-dating-emotional__parallax-blob--rose" />
-        <div className="ttm-dating-emotional__parallax-blob ttm-dating-emotional__parallax-blob--amber" />
+        <DatingParallaxLayer
+          y={roseBlobY}
+          className="ttm-dating-emotional__parallax-blob ttm-dating-emotional__parallax-blob--rose"
+        />
+        <DatingParallaxLayer
+          y={amberBlobY}
+          className="ttm-dating-emotional__parallax-blob ttm-dating-emotional__parallax-blob--amber"
+        />
       </div>
       <div className="ttm-dating-emotional__band">
         <div className="ttm-dating-container ttm-dating-emotional__inner">
-          <DatingScrollReveal y={36}>
+          <DatingScrollReveal y={36} depth={0.6}>
             <blockquote id="dating-emotional-title" className="ttm-dating-emotional__quote">
               <p className="ttm-dating-emotional__line">{t("datingEmotional1")}</p>
               <p className="ttm-dating-emotional__line ttm-dating-emotional__line--dim">
@@ -36,7 +51,7 @@ export function DatingEmotionalSection() {
             </blockquote>
           </DatingScrollReveal>
 
-          <DatingScrollReveal delay={0.15}>
+          <DatingScrollReveal delay={0.15} depth={0.35}>
             <div className="ttm-dating-emotional__cta-wrap">
               <Link href={ctaHref} className="ttm-dating-cta ttm-dating-cta--hero">
                 {t("datingEmotionalCta")}

@@ -567,6 +567,7 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   font-weight: 600;
   line-height: 1.02;
   letter-spacing: -0.02em;
+  will-change: transform;
 }
 
 .ttm-dating-hero__title-line {
@@ -1372,6 +1373,60 @@ html[data-theme="light"] .ttm-dating-emotional__band {
   z-index: 60;
 }
 
+.ttm-dating-section--parallax {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ttm-dating-section-orbs {
+  position: absolute;
+  inset: -15% 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ttm-dating-section-orbs__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.ttm-dating-section-orbs__orb--rose {
+  width: min(55vw, 380px);
+  height: min(55vw, 380px);
+  top: 5%;
+  left: -12%;
+  background: rgba(225, 29, 72, 0.14);
+}
+
+.ttm-dating-section-orbs__orb--coral {
+  width: min(45vw, 320px);
+  height: min(45vw, 320px);
+  bottom: 10%;
+  right: -8%;
+  background: rgba(249, 115, 22, 0.12);
+}
+
+.ttm-dating-section-orbs__orb--amber {
+  width: min(35vw, 240px);
+  height: min(35vw, 240px);
+  top: 40%;
+  left: 35%;
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.ttm-dating-section--parallax > .ttm-dating-container {
+  position: relative;
+  z-index: 1;
+}
+
+.ttm-dating-proof.ttm-dating-section--parallax {
+  overflow: hidden;
+}
+
 .ttm-dating-emotional__parallax .ttm-dating-parallax {
   position: absolute;
   inset: 0;
@@ -1425,7 +1480,8 @@ html[data-theme="light"] .ttm-dating-emotional__band {
   .ttm-dating-hero__scroll-dot,
   .ttm-dating-cta--pulse,
   .ttm-dating-cta__ring,
-  .ttm-dating-feature-card__live-dot {
+  .ttm-dating-feature-card__live-dot,
+  .ttm-dating-section-orbs__orb {
     animation: none !important;
   }
 }
