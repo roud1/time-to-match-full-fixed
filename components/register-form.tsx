@@ -215,7 +215,8 @@ export function RegisterForm() {
     recordProfileActivity()
 
     if (!isManual && form.cityId && form.cityId !== CUSTOM_CITY_ID) {
-      storePosition(getCityCoords(form.cityId))
+      const coords = getCityCoords(form.cityId)
+      if (coords) storePosition(coords)
     }
     setSession(form.email.trim(), true)
 
@@ -364,7 +365,10 @@ export function RegisterForm() {
                       setErrors((prev) => ({ ...prev, city: undefined }))
                       if (id) {
                         markLocationSettled()
-                        if (id !== CUSTOM_CITY_ID) storePosition(getCityCoords(id))
+                        if (id !== CUSTOM_CITY_ID) {
+                          const coords = getCityCoords(id)
+                          if (coords) storePosition(coords)
+                        }
                       }
                     }}
                     onCustomCityChange={(value) => {

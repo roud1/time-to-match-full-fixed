@@ -31,7 +31,7 @@ export function MapPanel() {
   const [detailProfile, setDetailProfile] = useState<SwipeProfile | null>(null)
 
   useEffect(() => {
-    setPosition(location.position ?? getCityCoords("kyiv"))
+    setPosition(location.position ?? getCityCoords("kyiv") ?? { lat: 50.4501, lng: 30.5234 })
   }, [location.position])
 
   const profiles = useMemo(

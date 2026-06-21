@@ -69,11 +69,19 @@ async function main() {
 
   const nextBin = path.join(root, "node_modules", "next", "dist", "bin", "next")
 
-  const child = spawn(process.execPath, [nextBin, "dev", "-H", "0.0.0.0", "-p", String(PORT)], {
-    stdio: "inherit",
-    cwd: root,
-    env: process.env,
-  })
+  // Webpack avoids Turbopack HMR panics ("Next.js package not found") that full-reload the page in a loop.
+  const child = spawn(
+    process.execPath,
+    [nextBin, "dev", "-H", "0.0.0.0", "-p", String(PORT), "--webpack"],
+    {
+      stdio: "inherit",
+      cwd: root,
+      env: {
+        ...process.env,
+        WATCHPACK_POLLING: process.env.WATCHPACK_POLLING ?? "true",
+      },
+    }
+  )
 
   child.on("exit", (code) => process.exit(code ?? 0))
 }

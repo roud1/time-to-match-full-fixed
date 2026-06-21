@@ -11,7 +11,7 @@ import "@/app/auth-shell.css"
 export function AuthShell({ children }: { children: ReactNode }) {
   return (
     <div className="ttm-auth-shell ttm-brand-universe">
-      <GeolocationBootstrap autoRequest />
+      <GeolocationBootstrap />
       <LocationBanner className="ttm-location-banner--auth" />
       <header className="ttm-auth-nav">
         <nav className="ttm-auth-nav__inner" aria-label="Main">

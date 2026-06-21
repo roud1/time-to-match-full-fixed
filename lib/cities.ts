@@ -25,8 +25,9 @@ export function getCityLabel(id: CityId, locale: Locale): string {
   return pickLocalized(locale, city)
 }
 
-export function getCityCoords(id: CityId): GeoPosition {
-  const city = CITIES.find((c) => c.id === id)!
+export function getCityCoords(id: CityId): GeoPosition | null {
+  const city = CITIES.find((c) => c.id === id)
+  if (!city) return null
   return { lat: city.lat, lng: city.lng }
 }
 

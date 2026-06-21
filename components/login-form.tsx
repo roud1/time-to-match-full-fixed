@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion } from "motion/react"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { useI18n } from "@/lib/i18n"
 import {
   getUserProfile,
@@ -31,8 +32,10 @@ type FormErrors = Partial<Record<keyof FormData, string>> & { form?: string }
 export function LoginForm() {
   const { t } = useI18n()
   const router = useRouter()
+  const hydrated = useHydrated()
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
+  const [redirecting, setRedirecting] = useState(false)
 
   const [form, setForm] = useState<FormData>({
     email: "",
@@ -43,15 +46,27 @@ export function LoginForm() {
   const postAuthPath = () => (isWelcomeSeen() ? "/app" : "/welcome")
 
   useEffect(() => {
+    if (!hydrated) return
     if (isLoggedIn()) {
-      router.replace(postAuthPath())
-      return
+      setRedirecting(true)
+      const target = postAuthPath()
+      router.replace(target)
+      const fallback = window.setTimeout(() => {
+        if (window.location.pathname === "/login") window.location.assign(target)
+      }, 3000)
+      return () => window.clearTimeout(fallback)
     }
     const profile = getUserProfile()
     if (profile?.email) {
       setForm((prev) => ({ ...prev, email: profile.email }))
     }
-  }, [router])
+  }, [hydrated, router])
+
+  useEffect(() => {
+    if (!loading) return
+    const id = window.setTimeout(() => setLoading(false), 12_000)
+    return () => window.clearTimeout(id)
+  }, [loading])
 
   const update = <K extends keyof FormData>(key: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
@@ -60,6 +75,8 @@ export function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (!hydrated || loading) return
+
     const next: FormErrors = {}
 
     if (!form.email.trim()) next.email = t("regErrorRequired")
@@ -84,7 +101,17 @@ export function LoginForm() {
     setLoading(true)
     setSession(form.email, form.remember)
     recordProfileActivity()
-    router.push(postAuthPath())
+    router.replace(postAuthPath())
+  }
+
+  if (!hydrated || redirecting) {
+    return (
+      <div className="w-full max-w-md">
+        <CinematicCard variant="glass" className="p-8 text-center">
+          <p className="ttm-type-muted">{t("loginLoading")}</p>
+        </CinematicCard>
+      </div>
+    )
   }
 
   return (
@@ -101,7 +128,7 @@ export function LoginForm() {
           <p className="ttm-brand-caption">{t("loginPageSubtitle")}</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
           {errors.form && (
             <p className="text-sm text-red-400/95 font-light text-center px-2 leading-relaxed">
               {errors.form}

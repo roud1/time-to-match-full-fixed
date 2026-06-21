@@ -10,7 +10,14 @@ import { getFreezePackage } from "@/lib/freeze-packages"
 
 export async function fetchMe(): Promise<MeResponse["user"] | null> {
   try {
-    const res = await fetch("/api/me", { credentials: "include", cache: "no-store" })
+    const controller = new AbortController()
+    const timeoutId = window.setTimeout(() => controller.abort(), 8_000)
+    const res = await fetch("/api/me", {
+      credentials: "include",
+      cache: "no-store",
+      signal: controller.signal,
+    })
+    window.clearTimeout(timeoutId)
     if (res.ok) {
       const data = (await res.json()) as MeResponse
       return data.user

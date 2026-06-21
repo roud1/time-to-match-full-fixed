@@ -6,10 +6,10 @@ import { getCityCoords } from "@/lib/cities"
 
 /** Profile cities in display order (index matches profile cards). */
 export const PROFILE_CITY_COORDS = [
-  getCityCoords("kyiv"),
-  getCityCoords("lviv"),
-  getCityCoords("odesa"),
-  getCityCoords("kharkiv"),
+  getCityCoords("kyiv")!,
+  getCityCoords("lviv")!,
+  getCityCoords("odesa")!,
+  getCityCoords("kharkiv")!,
 ] as const
 
 export type GeoPosition = { lat: number; lng: number }

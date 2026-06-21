@@ -60,6 +60,7 @@ async function reverseGeocode(
         "Accept-Language": localeToBcp47(locale),
         "User-Agent": "TimeToMatch/1.0 (dating app; contact: support@timetomatch.app)",
       },
+      signal: AbortSignal.timeout(8_000),
     }
   )
 
@@ -197,8 +198,11 @@ export function useUserLocation({
     if (isLocationSettled()) {
       const profile = getUserProfile()
       if (profile?.cityId) {
-        void applyPosition(getCityCoords(profile.cityId), false)
-        return
+        const coords = getCityCoords(profile.cityId)
+        if (coords) {
+          void applyPosition(coords, false)
+          return
+        }
       }
       const name = profile ? getProfileCityName(profile, localeRef.current) : ""
       if (name) setCity(name)
@@ -230,8 +234,11 @@ export function useUserLocation({
 
     const profile = getUserProfile()
     if (profile?.cityId) {
-      void applyPosition(getCityCoords(profile.cityId), false)
-      return
+      const coords = getCityCoords(profile.cityId)
+      if (coords) {
+        void applyPosition(coords, false)
+        return
+      }
     }
 
     const name = profile ? getProfileCityName(profile, localeRef.current) : ""

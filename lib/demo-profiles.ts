@@ -188,7 +188,7 @@ export function buildDemoSwipeProfiles(
         ? formatDistance(locale, distanceKm(userPosition, getCityCoords(cityId)))
         : formatDistance(locale, FALLBACK_KM[profile.distanceIndex % FALLBACK_KM.length])
 
-    const cityCoords = getCityCoords(cityId)
+    const cityCoords = getCityCoords(cityId)!
     const anchor = userPosition ?? cityCoords
     const coords = offsetPosition(anchor, index)
 
