@@ -1,6 +1,8 @@
 import { getDb } from "@/lib/server/db"
 import { checkAndGrantAchievements } from "@/lib/server/gamification/check"
+import { matchExpiresAt } from "@/lib/server/match-engine/constants"
 import { createMatchForPair } from "@/lib/server/match-engine/repository"
+import { findUserById } from "@/lib/server/repositories/users"
 import type { MatchStatus } from "@/lib/server/match-engine/types"
 import type { MatchDto } from "@/lib/server/matches/types"
 import { bondStatsFromRow } from "@/lib/server/repositories/match-stats"
@@ -154,6 +156,112 @@ export async function createMutualMatchLikes(input: {
 
   await checkAndGrantAchievements(userA, { event: "match_created", activeMatchesCount: undefined })
   await checkAndGrantAchievements(userB, { event: "match_created", activeMatchesCount: undefined })
+}
+
+export type RecordLikeResult =
+  | { ok: true; liked: true; matched: false }
+  | { ok: true; liked: true; matched: true; matchId: string }
+  | { ok: false; code: "not_found" | "self" | "blocked" }
+
+export type RecordPassResult =
+  | { ok: true; passed: true }
+  | { ok: false; code: "not_found" | "self" | "blocked" }
+
+export async function recordLikeForUser(
+  fromUserId: string,
+  targetUserId: string
+): Promise<RecordLikeResult> {
+  if (fromUserId === targetUserId) return { ok: false, code: "self" }
+
+  const db = getDb()
+  if (!db) return { ok: false, code: "not_found" }
+
+  const target = await findUserById(targetUserId)
+  if (!target || !target.is_active || target.is_blocked) {
+    return { ok: false, code: "not_found" }
+  }
+
+  const viewer = await findUserById(fromUserId)
+  if (!viewer || viewer.is_blocked) return { ok: false, code: "blocked" }
+
+  const existing = await db<{ id: string; is_match: boolean }[]>`
+    SELECT id, is_match FROM likes
+    WHERE from_user = ${fromUserId} AND to_user = ${targetUserId}
+    LIMIT 1
+  `
+  if (existing[0]?.is_match) {
+    return { ok: true, liked: true, matched: true, matchId: existing[0].id }
+  }
+
+  await db`
+    DELETE FROM discover_passes
+    WHERE from_user = ${fromUserId} AND to_user = ${targetUserId}
+  `
+
+  const reverse = await db<{ id: string; is_match: boolean }[]>`
+    SELECT id, is_match FROM likes
+    WHERE from_user = ${targetUserId} AND to_user = ${fromUserId}
+    LIMIT 1
+  `
+
+  const isMutual = Boolean(reverse[0] && !reverse[0].is_match)
+
+  if (isMutual) {
+    const expiresAt = matchExpiresAt()
+    await createMutualMatchLikes({ userA: fromUserId, userB: targetUserId, expiresAt })
+
+    const likeRow = await db<{ id: string }[]>`
+      SELECT id FROM likes
+      WHERE from_user = ${fromUserId} AND to_user = ${targetUserId} AND is_match = true
+      LIMIT 1
+    `
+    const matchId = likeRow[0]?.id
+    if (!matchId) return { ok: false, code: "not_found" }
+    return { ok: true, liked: true, matched: true, matchId }
+  }
+
+  await db`
+    INSERT INTO likes (from_user, to_user, is_match, is_frozen, is_expired)
+    VALUES (${fromUserId}, ${targetUserId}, false, false, false)
+    ON CONFLICT (from_user, to_user) DO UPDATE SET
+      is_match = CASE WHEN likes.is_match THEN true ELSE false END,
+      is_expired = false
+  `
+
+  return { ok: true, liked: true, matched: false }
+}
+
+export async function recordPassForUser(
+  fromUserId: string,
+  targetUserId: string
+): Promise<RecordPassResult> {
+  if (fromUserId === targetUserId) return { ok: false, code: "self" }
+
+  const db = getDb()
+  if (!db) return { ok: false, code: "not_found" }
+
+  const target = await findUserById(targetUserId)
+  if (!target || !target.is_active || target.is_blocked) {
+    return { ok: false, code: "not_found" }
+  }
+
+  const viewer = await findUserById(fromUserId)
+  if (!viewer || viewer.is_blocked) return { ok: false, code: "blocked" }
+
+  await db`
+    INSERT INTO discover_passes (from_user, to_user)
+    VALUES (${fromUserId}, ${targetUserId})
+    ON CONFLICT (from_user, to_user) DO NOTHING
+  `
+
+  await db`
+    DELETE FROM likes
+    WHERE from_user = ${fromUserId}
+      AND to_user = ${targetUserId}
+      AND is_match = false
+  `
+
+  return { ok: true, passed: true }
 }
 
 export type FreezeMatchResult =

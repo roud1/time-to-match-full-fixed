@@ -92,12 +92,13 @@ export function LikesPanel() {
   }, [refresh])
 
   const handleLikeBack = (profile: SwipeProfile) => {
-    const matched = likeBack(profile.id, locale, location.position)
-    if (matched) {
-      setFirstMatchMode(isFirstMatchPending())
-      setMatchedProfile(profile)
-    }
-    refresh()
+    void likeBack(profile.id, locale, location.position).then((matched) => {
+      if (matched) {
+        setFirstMatchMode(isFirstMatchPending())
+        setMatchedProfile(profile)
+      }
+      refresh()
+    })
   }
 
   const presenceLabels = {

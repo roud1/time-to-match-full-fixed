@@ -148,7 +148,7 @@ export function SwipeDeck({
         }
         await xAnimRef.current
 
-        const { matched } = recordSwipe(top, direction, locale, location.position)
+        const { matched } = await recordSwipe(top, direction, locale, location.position)
         if (matched && direction === "right") {
           setFirstMatchMode(isFirstMatchPending())
           setMatchedProfile(top)
@@ -159,7 +159,7 @@ export function SwipeDeck({
         onProfilesChange((prev) => prev.filter((p) => p.id !== top.id))
         x.set(0)
       } catch {
-        const { matched } = recordSwipe(top, direction, locale, location.position)
+        const { matched } = await recordSwipe(top, direction, locale, location.position)
         if (matched && direction === "right") {
           setFirstMatchMode(isFirstMatchPending())
           setMatchedProfile(top)

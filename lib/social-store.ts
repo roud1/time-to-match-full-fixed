@@ -14,6 +14,8 @@ import { emitActivityBump } from "@/lib/activity-notify"
 import { broadcastPresenceUpdate } from "@/lib/presence/realtime-presence"
 import { getPulseProfile } from "@/lib/pulse/profile"
 import { isPulseProfileId } from "@/lib/pulse/constants"
+import { getAppMode } from "@/lib/auth/client"
+import { postDiscoverLike, postDiscoverPass } from "@/lib/discover/api"
 
 const SOCIAL_KEY = "ttm-social"
 
@@ -164,19 +166,90 @@ export function getChats(locale: Locale, position: GeoPosition | null): ChatThre
   return [...state.chats].sort((a, b) => b.updatedAt - a.updatedAt)
 }
 
-export function recordSwipe(
+function applyLocalSwipeState(
+  state: SocialState,
+  profile: SwipeProfile,
+  direction: "left" | "right",
+  matched: boolean
+): SocialState {
+  let next = { ...state }
+  if (direction === "left") {
+    if (!next.passed.includes(profile.id)) next.passed.push(profile.id)
+    return next
+  }
+
+  if (!next.yourLikes.includes(profile.id)) next.yourLikes.push(profile.id)
+  if (matched && !next.matches.includes(profile.id)) {
+    next.matches.push(profile.id)
+  }
+  return next
+}
+
+function finalizeSwipeSideEffects(
+  profile: SwipeProfile,
+  direction: "left" | "right",
+  matched: boolean,
+  locale: Locale,
+  state: SocialState
+) {
+  save(state)
+  recordProfileActivity()
+  if (typeof window === "undefined") return
+
+  window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+  if (matched && direction === "right") {
+    ensureConnectionForMatch(profile.id)
+    setMemoryProfileName(profile.id, profile.name)
+    recordConnectionMessage(profile.id, "them")
+    emitActivityBump("matches")
+    void import("@/lib/gamification/api").then(({ reportAchievementEvent, dispatchGamificationUpdate }) =>
+      reportAchievementEvent({ event: "match_created" }).then((snap) =>
+        dispatchGamificationUpdate(snap ?? undefined)
+      )
+    )
+  } else if (
+    direction === "right" &&
+    state.likedYou.includes(profile.id) &&
+    !state.matches.includes(profile.id)
+  ) {
+    emitActivityBump("likes")
+  }
+}
+
+async function tryServerSwipe(
+  profile: SwipeProfile,
+  direction: "left" | "right"
+): Promise<{ matched: boolean } | null> {
+  if (!profile.userId || typeof window === "undefined") return null
+
+  const mode = await getAppMode()
+  if (mode === "demo") return null
+
+  if (direction === "right") {
+    const res = await postDiscoverLike(profile.userId)
+    if (!res.ok && res.demoFallback) return null
+    if (!res.ok) return null
+    return { matched: res.matched }
+  }
+
+  const res = await postDiscoverPass(profile.userId)
+  if (!res.ok && res.demoFallback) return null
+  if (!res.ok) return null
+  return { matched: false }
+}
+
+function recordSwipeLocal(
   profile: SwipeProfile,
   direction: "left" | "right",
   locale: Locale,
   position: GeoPosition | null
-): { matched: boolean } {
+): { matched: boolean; state: SocialState } {
   let state = load()
   state = ensureSeeded(state, locale, position)
 
   if (direction === "left") {
     if (!state.passed.includes(profile.id)) state.passed.push(profile.id)
-    save(state)
-    return { matched: false }
+    return { matched: false, state }
   }
 
   if (!state.yourLikes.includes(profile.id)) state.yourLikes.push(profile.id)
@@ -205,43 +278,42 @@ export function recordSwipe(
           ],
         })
       }
-      ensureConnectionForMatch(profile.id)
-      setMemoryProfileName(profile.id, profile.name)
-      recordConnectionMessage(profile.id, "them")
     }
   } else if (Math.random() < 0.35 && !state.likedYou.includes(profile.id)) {
     state.likedYou.push(profile.id)
   }
 
-  save(state)
-  recordProfileActivity()
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(new CustomEvent("ttm-social-updated"))
-    if (matched) {
-      emitActivityBump("matches")
-      void import("@/lib/gamification/api").then(({ reportAchievementEvent, dispatchGamificationUpdate }) =>
-        reportAchievementEvent({ event: "match_created" }).then((snap) =>
-          dispatchGamificationUpdate(snap ?? undefined)
-        )
-      )
-    } else if (
-      state.likedYou.includes(profile.id) &&
-      !state.matches.includes(profile.id)
-    ) {
-      emitActivityBump("likes")
-    }
+  return { matched, state }
+}
+
+export async function recordSwipe(
+  profile: SwipeProfile,
+  direction: "left" | "right",
+  locale: Locale,
+  position: GeoPosition | null
+): Promise<{ matched: boolean }> {
+  const serverResult = await tryServerSwipe(profile, direction)
+  if (serverResult) {
+    let state = load()
+    state = ensureSeeded(state, locale, position)
+    state = applyLocalSwipeState(state, profile, direction, serverResult.matched)
+    finalizeSwipeSideEffects(profile, direction, serverResult.matched, locale, state)
+    return serverResult
   }
+
+  const { matched, state } = recordSwipeLocal(profile, direction, locale, position)
+  finalizeSwipeSideEffects(profile, direction, matched, locale, state)
   return { matched }
 }
 
-export function likeBack(
+export async function likeBack(
   profileId: number,
   locale: Locale,
   position: GeoPosition | null
-): boolean {
+): Promise<boolean> {
   const profile = getProfileById(profileId, locale, position)
   if (!profile) return false
-  const result = recordSwipe(profile, "right", locale, position)
+  const result = await recordSwipe(profile, "right", locale, position)
   return result.matched || getSocialState(locale, position).matches.includes(profileId)
 }
 

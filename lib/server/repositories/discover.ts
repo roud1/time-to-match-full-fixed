@@ -87,13 +87,21 @@ export async function listDiscoverProfiles(input: {
   const viewerInterestRows = viewerInterestMap.get(input.viewerId) ?? []
 
   const rows = await db<DiscoverCandidateRow[]>`
-    SELECT id, name, profile, purpose, gender, latitude, longitude, photo_verified
-    FROM users
-    WHERE id <> ${input.viewerId}
-      AND is_active = true
-      AND COALESCE(is_blocked, false) = false
-      AND profile_expires_at IS NOT NULL
-      AND profile_expires_at > now()
+    SELECT u.id, u.name, u.profile, u.purpose, u.gender, u.latitude, u.longitude, u.photo_verified
+    FROM users u
+    WHERE u.id <> ${input.viewerId}
+      AND u.is_active = true
+      AND COALESCE(u.is_blocked, false) = false
+      AND u.profile_expires_at IS NOT NULL
+      AND u.profile_expires_at > now()
+      AND NOT EXISTS (
+        SELECT 1 FROM likes l
+        WHERE l.from_user = ${input.viewerId} AND l.to_user = u.id
+      )
+      AND NOT EXISTS (
+        SELECT 1 FROM discover_passes p
+        WHERE p.from_user = ${input.viewerId} AND p.to_user = u.id
+      )
     LIMIT 120
   `
 

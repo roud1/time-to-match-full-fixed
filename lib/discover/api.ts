@@ -60,3 +60,62 @@ export async function fetchDiscoverProfiles(
   const data = (await res.json()) as { profiles?: DiscoverProfile[] }
   return data.profiles ?? []
 }
+
+export type DiscoverLikeResponse =
+  | { ok: true; liked: true; matched: false }
+  | { ok: true; liked: true; matched: true; matchId: string }
+  | { ok: false; demoFallback: true }
+  | { ok: false; status: number }
+
+export type DiscoverPassResponse =
+  | { ok: true; passed: true }
+  | { ok: false; demoFallback: true }
+  | { ok: false; status: number }
+
+export async function postDiscoverLike(targetUserId: string): Promise<DiscoverLikeResponse> {
+  const res = await fetch("/api/discover/like", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ targetUserId }),
+  })
+
+  if (res.status === 503) {
+    return { ok: false, demoFallback: true }
+  }
+
+  const data = (await res.json().catch(() => ({}))) as {
+    liked?: boolean
+    matched?: boolean
+    matchId?: string
+  }
+
+  if (!res.ok) {
+    return { ok: false, status: res.status }
+  }
+
+  if (data.matched && data.matchId) {
+    return { ok: true, liked: true, matched: true, matchId: data.matchId }
+  }
+
+  return { ok: true, liked: true, matched: false }
+}
+
+export async function postDiscoverPass(targetUserId: string): Promise<DiscoverPassResponse> {
+  const res = await fetch("/api/discover/pass", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ targetUserId }),
+  })
+
+  if (res.status === 503) {
+    return { ok: false, demoFallback: true }
+  }
+
+  if (!res.ok) {
+    return { ok: false, status: res.status }
+  }
+
+  return { ok: true, passed: true }
+}
