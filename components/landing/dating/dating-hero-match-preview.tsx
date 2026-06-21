@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Heart, Sparkles } from "lucide-react"
+import { Heart } from "lucide-react"
 import {
   motion,
   useReducedMotion,
@@ -15,167 +15,115 @@ import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 type DatingHeroMatchPreviewProps = {
-  countdown: string
   scrollProgress: MotionValue<number>
 }
 
-function MatchProfileCard({
+function Portrait({
   profile,
-  side,
+  variant,
   reduce,
   scrollProgress,
 }: {
   profile: NonNullable<ReturnType<typeof useDatingHeroProfiles>[number]>
-  side: "left" | "right"
+  variant: "back" | "front"
   reduce: boolean | null
   scrollProgress: MotionValue<number>
 }) {
-  const flyX = useTransform(
+  const driftX = useTransform(
     scrollProgress,
-    [0, 0.6],
-    [0, reduce ? 0 : side === "left" ? -48 : 48]
+    [0, 0.55],
+    [0, reduce ? 0 : variant === "back" ? -18 : 14]
   )
-  const flyY = useTransform(scrollProgress, [0, 0.6], [0, reduce ? 0 : 28])
-  const cardScale = useTransform(scrollProgress, [0, 0.5], [1, reduce ? 1 : 0.88])
+  const driftY = useTransform(scrollProgress, [0, 0.55], [0, reduce ? 0 : 22])
+  const scale = useTransform(scrollProgress, [0, 0.5], [1, reduce ? 1 : 0.94])
 
   return (
-    <motion.div
+    <motion.figure
       className={cn(
-        "ttm-dating-hero__match-profile",
-        side === "left" ? "ttm-dating-hero__match-profile--left" : "ttm-dating-hero__match-profile--right"
+        "ttm-dating-hero__portrait",
+        variant === "back" ? "ttm-dating-hero__portrait--back" : "ttm-dating-hero__portrait--front"
       )}
-      style={{ x: flyX, y: flyY, scale: cardScale }}
-      initial={reduce ? false : { opacity: 0, x: side === "left" ? -32 : 32, scale: 0.9 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      transition={{ duration: 0.85, delay: side === "left" ? 0.25 : 0.4, ease: [0.22, 1, 0.36, 1] }}
+      style={{ x: driftX, y: driftY, scale }}
+      initial={reduce ? false : { opacity: 0, y: 40, scale: 0.92 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{
+        duration: 0.9,
+        delay: variant === "back" ? 0.2 : 0.35,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
-      <div className="ttm-dating-hero__match-photo">
+      <div className="ttm-dating-hero__portrait-frame">
         <Image
           src={profile.imageUrl}
           alt=""
           fill
-          className="object-cover object-[center_20%]"
-          sizes="140px"
+          className="object-cover object-[center_18%]"
+          sizes="(max-width: 768px) 55vw, 280px"
           draggable={false}
           priority
         />
-        <div className="ttm-dating-hero__match-shade" />
-        <span className="ttm-dating-hero__match-score">{profile.connectionScore}%</span>
+        <div className="ttm-dating-hero__portrait-shade" />
       </div>
-      <p className="ttm-dating-hero__match-name">
+      <figcaption className="ttm-dating-hero__portrait-caption">
         {profile.name}, {profile.age}
-      </p>
-    </motion.div>
+      </figcaption>
+    </motion.figure>
   )
 }
 
-export function DatingHeroMatchPreview({ countdown, scrollProgress }: DatingHeroMatchPreviewProps) {
+export function DatingHeroMatchPreview({ scrollProgress }: DatingHeroMatchPreviewProps) {
   const { t } = useI18n()
   const reduce = useReducedMotion()
   const profiles = useDatingHeroProfiles()
   const left = profiles[0]
   const right = profiles[1] ?? profiles[2]
 
-  const stageY = useScrollParallaxY({ input: [0, 500], output: [0, -35] })
-  const stageScale = useTransform(scrollProgress, [0, 0.55], [1, reduce ? 1 : 0.94])
-  const stageOpacity = useTransform(scrollProgress, [0, 0.65], [1, reduce ? 1 : 0.75])
+  const stageY = useScrollParallaxY({ input: [0, 500], output: [0, -28] })
+  const stageOpacity = useTransform(scrollProgress, [0, 0.6], [1, reduce ? 1 : 0.7])
 
   if (!left || !right) return null
-
-  const matchScore = Math.round((left.connectionScore + right.connectionScore) / 2)
 
   return (
     <DatingParallaxLayer
       y={stageY}
       opacity={stageOpacity}
-      className="ttm-dating-hero__match-stage-wrap"
+      className="ttm-dating-hero__portraits-wrap"
     >
       <motion.div
-        className="ttm-dating-hero__match-stage"
-        style={{ scale: stageScale }}
-        initial={reduce ? false : { opacity: 0, y: 36 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.95, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        className="ttm-dating-hero__portraits"
         aria-label={t("datingHeroCardsAria")}
+        initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.85, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="ttm-dating-hero__match-aurora" aria-hidden />
+        <div className="ttm-dating-hero__portraits-glow" aria-hidden />
 
-        <div className="ttm-dating-hero__match-timer">
-          <span className="ttm-dating-hero__match-timer-label">{t("datingHow3Title")}</span>
-          <span className="ttm-dating-hero__match-timer-value" aria-live="polite">
-            {countdown}
-          </span>
-          <p className="ttm-dating-hero__match-timer-caption">{t("datingHeroTime")}</p>
-        </div>
+        <Portrait
+          profile={left}
+          variant="back"
+          reduce={reduce}
+          scrollProgress={scrollProgress}
+        />
+        <Portrait
+          profile={right}
+          variant="front"
+          reduce={reduce}
+          scrollProgress={scrollProgress}
+        />
 
-        <div className="ttm-dating-hero__match-arena">
-          <MatchProfileCard
-            profile={left}
-            side="left"
-            reduce={reduce}
-            scrollProgress={scrollProgress}
-          />
-
-          <div className="ttm-dating-hero__match-bridge" aria-hidden>
-            <svg
-              className="ttm-dating-hero__match-line"
-              viewBox="0 0 120 40"
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <linearGradient id="dt-match-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="var(--dt-rose-soft)" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="var(--dt-coral)" stopOpacity="1" />
-                  <stop offset="100%" stopColor="var(--dt-amber)" stopOpacity="0.2" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M 0 20 Q 60 4 120 20"
-                fill="none"
-                stroke="url(#dt-match-line-grad)"
-                strokeWidth="2"
-                strokeLinecap="round"
-                className={cn(!reduce && "ttm-dating-hero__match-line-path")}
-              />
-            </svg>
-
-            <motion.span
-              className={cn(
-                "ttm-dating-hero__match-spark",
-                !reduce && "ttm-dating-hero__match-spark--live"
-              )}
-              initial={reduce ? false : { scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Sparkles size={14} aria-hidden />
-            </motion.span>
-
-            <motion.span
-              className={cn(
-                "ttm-dating-hero__match-heart",
-                !reduce && "ttm-dating-hero__match-heart--pulse"
-              )}
-              initial={reduce ? false : { scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.55, delay: 0.85, type: "spring", stiffness: 260, damping: 18 }}
-            >
-              <Heart size={22} fill="currentColor" aria-hidden />
-            </motion.span>
-          </div>
-
-          <MatchProfileCard
-            profile={right}
-            side="right"
-            reduce={reduce}
-            scrollProgress={scrollProgress}
-          />
-        </div>
-
-        <div className="ttm-dating-hero__match-result">
-          <span className="ttm-dating-hero__match-result-score">{matchScore}%</span>
-          <span className="ttm-dating-hero__match-result-label">{t("datingAiOutputLabel")}</span>
-        </div>
+        <motion.div
+          className={cn(
+            "ttm-dating-hero__portraits-spark",
+            !reduce && "ttm-dating-hero__portraits-spark--live"
+          )}
+          initial={reduce ? false : { scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.55, delay: 0.75, type: "spring", stiffness: 260, damping: 18 }}
+          aria-hidden
+        >
+          <span className="ttm-dating-hero__portraits-spark-ring" />
+          <Heart size={20} fill="currentColor" />
+        </motion.div>
       </motion.div>
     </DatingParallaxLayer>
   )

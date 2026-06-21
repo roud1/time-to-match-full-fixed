@@ -1,11 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { Sparkles } from "lucide-react"
+import { Clock, Sparkles } from "lucide-react"
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { DatingHeroAtmosphere } from "@/components/landing/dating/dating-hero-atmosphere"
-import { DatingHeroFloats } from "@/components/landing/dating/dating-hero-floats"
 import { DatingHeroMatchPreview } from "@/components/landing/dating/dating-hero-match-preview"
 import { useParallaxIntensity } from "@/hooks/use-parallax"
 import { useI18n } from "@/lib/i18n"
@@ -38,11 +37,13 @@ function useCountdownDisplay() {
 
 const STAGGER = {
   eyebrow: 0,
-  title1: 0.08,
-  title2: 0.16,
-  sub: 0.24,
-  actions: 0.32,
-  chips: 0.4,
+  timer: 0.06,
+  title1: 0.12,
+  title2: 0.2,
+  sub: 0.28,
+  actions: 0.36,
+  chips: 0.44,
+  visual: 0.18,
 } as const
 
 export function DatingLandingHero() {
@@ -59,10 +60,10 @@ export function DatingLandingHero() {
     offset: ["start start", "end start"],
   })
 
-  const contentY = useTransform(scrollY, [0, 480], [0, reduce ? 0 : -60 * intensity])
-  const contentScale = useTransform(scrollYProgress, [0, 0.55], [1, reduce ? 1 : 0.96])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, reduce ? 1 : 0.45])
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -22 * intensity])
+  const contentY = useTransform(scrollY, [0, 480], [0, reduce ? 0 : -50 * intensity])
+  const contentScale = useTransform(scrollYProgress, [0, 0.55], [1, reduce ? 1 : 0.97])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, reduce ? 1 : 0.5])
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -18 * intensity])
   const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0])
 
   useEffect(() => {
@@ -88,19 +89,29 @@ export function DatingLandingHero() {
       aria-labelledby="dating-hero-title"
     >
       <DatingHeroAtmosphere scrollProgress={scrollYProgress} />
-      <DatingHeroFloats scrollProgress={scrollYProgress} />
 
       <motion.div
         className="ttm-dating-hero__content"
         style={{ y: contentY, scale: contentScale, opacity: contentOpacity }}
       >
         <div className="ttm-dating-container">
-          <div className="ttm-dating-hero__grid">
+          <div className="ttm-dating-hero__stack">
             <motion.div className="ttm-dating-hero__copy" style={{ y: copyY }}>
               <motion.p className="ttm-dating-hero__eyebrow" {...fadeUp(STAGGER.eyebrow)}>
                 <Sparkles size={14} aria-hidden />
                 {t("datingHeroEyebrow")}
               </motion.p>
+
+              <motion.div
+                className="ttm-dating-hero__countdown-pill"
+                {...fadeUp(STAGGER.timer)}
+              >
+                <Clock size={14} aria-hidden />
+                <span className="ttm-dating-hero__countdown-label">{t("datingHow3Title")}</span>
+                <span className="ttm-dating-hero__countdown-value" aria-live="polite">
+                  {countdown}
+                </span>
+              </motion.div>
 
               <motion.h1
                 id="dating-hero-title"
@@ -149,9 +160,12 @@ export function DatingLandingHero() {
               </motion.ul>
             </motion.div>
 
-            <div className="ttm-dating-hero__visual">
-              <DatingHeroMatchPreview countdown={countdown} scrollProgress={scrollYProgress} />
-            </div>
+            <motion.div
+              className="ttm-dating-hero__visual"
+              {...fadeUp(STAGGER.visual)}
+            >
+              <DatingHeroMatchPreview scrollProgress={scrollYProgress} />
+            </motion.div>
           </div>
         </div>
       </motion.div>
