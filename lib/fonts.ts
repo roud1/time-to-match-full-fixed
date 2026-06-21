@@ -1,17 +1,19 @@
-import { Inter, Manrope } from "next/font/google"
+import { DM_Sans, Syne } from "next/font/google"
 
-export const manrope = Manrope({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-manrope",
+/** Body copy — clean geometric sans */
+export const dmSans = DM_Sans({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-dm-sans",
   display: "swap",
   preload: true,
-  weight: ["200", "300", "400", "500"],
+  weight: ["400", "500", "600", "700"],
 })
 
-/** Premium landing — Inter / SF Pro–style headlines */
-export const interDisplay = Inter({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-inter-display",
+/** Display headlines — bold editorial geometric */
+export const syne = Syne({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-syne",
   display: "swap",
+  preload: true,
   weight: ["400", "500", "600", "700", "800"],
 })

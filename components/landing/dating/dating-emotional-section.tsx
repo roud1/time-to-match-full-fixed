@@ -15,26 +15,29 @@ export function DatingEmotionalSection() {
   }, [])
 
   return (
-    <section className="ttm-dating-section ttm-dating-section--compact ttm-dating-emotional ttm-dating-emotional--final" aria-labelledby="dating-emotional-title">
-      <div className="ttm-dating-emotional__glow" aria-hidden />
-      <div className="ttm-dating-container ttm-dating-emotional__inner">
-        <DatingScrollReveal y={36}>
-          <blockquote id="dating-emotional-title" className="ttm-dating-emotional__quote">
-            <p className="ttm-dating-emotional__line">{t("datingEmotional1")}</p>
-            <p className="ttm-dating-emotional__line ttm-dating-emotional__line--dim">
-              {t("datingEmotional2")}
-            </p>
-            <p className="ttm-dating-emotional__line ttm-dating-emotional__line--accent">
-              {t("datingEmotional3")}
-            </p>
-          </blockquote>
-        </DatingScrollReveal>
+    <section className="ttm-dating-emotional" aria-labelledby="dating-emotional-title">
+      <div className="ttm-dating-emotional__band">
+        <div className="ttm-dating-container ttm-dating-emotional__inner">
+          <DatingScrollReveal y={36}>
+            <blockquote id="dating-emotional-title" className="ttm-dating-emotional__quote">
+              <p className="ttm-dating-emotional__line">{t("datingEmotional1")}</p>
+              <p className="ttm-dating-emotional__line ttm-dating-emotional__line--dim">
+                {t("datingEmotional2")}
+              </p>
+              <p className="ttm-dating-emotional__line ttm-dating-emotional__line--accent">
+                {t("datingEmotional3")}
+              </p>
+            </blockquote>
+          </DatingScrollReveal>
 
-        <DatingScrollReveal delay={0.15}>
-          <Link href={ctaHref} className="ttm-dating-cta ttm-dating-cta--ghost">
-            {t("datingEmotionalCta")}
-          </Link>
-        </DatingScrollReveal>
+          <DatingScrollReveal delay={0.15}>
+            <div className="ttm-dating-emotional__cta-wrap">
+              <Link href={ctaHref} className="ttm-dating-cta ttm-dating-cta--hero">
+                {t("datingEmotionalCta")}
+              </Link>
+            </div>
+          </DatingScrollReveal>
+        </div>
       </div>
     </section>
   )

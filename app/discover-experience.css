@@ -186,7 +186,7 @@
   height: 45%;
   left: -10%;
   top: 5%;
-  background: radial-gradient(circle, rgba(160, 170, 255, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.14), transparent 70%);
 }
 
 .discover-ambient__blob--b {
@@ -194,7 +194,7 @@
   height: 40%;
   right: -8%;
   bottom: 15%;
-  background: radial-gradient(circle, rgba(200, 150, 220, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(204, 255, 0, 0.08), transparent 70%);
   animation-delay: -6s;
   animation-duration: 22s;
 }
@@ -259,11 +259,12 @@
 
 /* Discover profile card */
 .discover-card {
-  --discover-glow: rgba(180, 195, 255, 0.18);
-  --discover-accent: rgba(220, 225, 255, 0.35);
+  --discover-glow: rgba(139, 92, 246, 0.2);
+  --discover-accent: rgba(204, 255, 0, 0.25);
   position: relative;
-  border-radius: var(--radius-lg);
+  border-radius: 10px;
   overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, 0.2);
   box-shadow: var(--shadow-lg), 0 20px 40px -18px rgba(0, 0, 0, 0.35);
 }
 

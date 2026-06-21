@@ -45,71 +45,67 @@ export function DatingAiConnectionSection() {
   return (
     <section
       id="ai"
-      className="ttm-dating-section ttm-dating-section--compact ttm-dating-ai"
+      className="ttm-dating-section ttm-dating-section--compact"
       aria-labelledby="dating-ai-title"
     >
       <div className="ttm-dating-container">
         <DatingScrollReveal>
-          <p className="ttm-dating-section__eyebrow ttm-dating-section__eyebrow--left">
-            {t("datingAiEyebrow")}
-          </p>
-          <h2 id="dating-ai-title" className="ttm-dating-ai__title">
+          <p className="ttm-dating-section__eyebrow">{t("datingAiEyebrow")}</p>
+          <h2 id="dating-ai-title" className="ttm-dating-section__title">
             {t("datingAiConnectionTitle")}
           </h2>
 
-          <div className="ttm-dating-ai__panel">
-            <div className="ttm-dating-ai__main">
-              <div className="ttm-dating-ai__scan" aria-hidden>
-                <motion.div
-                  className="ttm-dating-ai__scan-bar"
-                  animate={reduce ? undefined : { x: ["-100%", "100%"] }}
-                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-                />
-              </div>
+          <div className="ttm-dating-features__grid">
+            <article className="ttm-dating-feature-card ttm-dating-feature-card--main">
+              <span className="ttm-dating-feature-card__live">
+                <span className="ttm-dating-feature-card__live-dot" aria-hidden />
+                {t("datingAiLiveLabel")}
+              </span>
+              <p className="ttm-dating-feature-card__score" aria-live="polite">
+                {score}%
+              </p>
+              <p className="ttm-dating-feature-card__cycle">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={cycleIndex}
+                    initial={reduce ? false : { opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reduce ? undefined : { opacity: 0, y: -6 }}
+                    transition={{ duration: 0.35 }}
+                  >
+                    {t(CYCLE_KEYS[cycleIndex])}
+                  </motion.span>
+                </AnimatePresence>
+              </p>
+              <p className="ttm-dating-bento-score-label">{t("datingAiScoreHint")}</p>
+            </article>
 
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={CYCLE_KEYS[cycleIndex]}
-                  className="ttm-dating-ai__status"
-                  initial={reduce ? false : { opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={reduce ? undefined : { opacity: 0, y: -6 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  {t(CYCLE_KEYS[cycleIndex])}
-                </motion.p>
-              </AnimatePresence>
-
-              <ul className="ttm-dating-ai__chips" aria-label={t("datingAiChipsAria")}>
+            <article className="ttm-dating-feature-card ttm-dating-feature-card--side">
+              <p className="ttm-dating-bento-signal">
+                <strong>{t("datingAiWeAnalyze")}</strong>
+              </p>
+              <ul className="ttm-dating-feature-card__signals" aria-label={t("datingAiChipsAria")}>
                 {SIGNAL_KEYS.map((key) => (
-                  <li key={key} className="ttm-dating-ai__chip">
+                  <li key={key} className="ttm-dating-feature-card__signal">
                     {t(key)}
                   </li>
                 ))}
               </ul>
-            </div>
+              <p className="ttm-dating-bento-score-label" style={{ marginTop: "1rem" }}>
+                {t("datingAiOutputLabel")}: {t("datingAiOutputValue")}
+              </p>
+            </article>
 
-            <div className="ttm-dating-ai__score" aria-live="polite">
-              <span className="ttm-dating-ai__live">
-                <span className="ttm-dating-ai__live-dot" aria-hidden />
-                {t("datingAiLiveLabel")}
-              </span>
-              <p className="ttm-dating-ai__score-label">{t("datingAiOutputLabel")}</p>
-              <motion.p
-                className="ttm-dating-ai__score-value"
-                key={score}
-                initial={reduce ? false : { opacity: 0.6, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {score}%
-              </motion.p>
-              <p className="ttm-dating-ai__score-hint">{t("datingAiScoreHint")}</p>
-            </div>
+            {SIGNAL_KEYS.map((key) => (
+              <article key={key} className="ttm-dating-feature-card ttm-dating-feature-card--small">
+                <p className="ttm-dating-flow__step-title">{t(key)}</p>
+                <p className="ttm-dating-flow__step-text">{t("datingAiScoreHint")}</p>
+              </article>
+            ))}
           </div>
 
-          <div className="ttm-dating-ai__cta-wrap">
-            <Link href="/register" className="ttm-dating-cta ttm-dating-cta--ghost ttm-dating-ai__cta">
+          <div style={{ marginTop: "2rem" }}>
+            <Link href="/register" className="ttm-dating-cta">
               {t("datingAiCta")}
             </Link>
           </div>

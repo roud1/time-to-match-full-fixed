@@ -7,6 +7,7 @@ import { DatingLandingFooter } from "@/components/landing/dating/dating-landing-
 import { DatingLandingHero } from "@/components/landing/dating/dating-landing-hero"
 import { DatingLangSwitcher } from "@/components/landing/dating/dating-lang-switcher"
 import { DatingLandingNav } from "@/components/landing/dating/dating-landing-nav"
+import { DatingSocialProofSection } from "@/components/landing/dating/dating-social-proof-section"
 
 export function DatingLandingPage() {
   return (
@@ -14,8 +15,9 @@ export function DatingLandingPage() {
       <main className="ttm-dating-landing">
         <DatingLandingNav />
         <DatingLandingHero />
-        <DatingAiConnectionSection />
+        <DatingSocialProofSection />
         <DatingMatchFlowSection />
+        <DatingAiConnectionSection />
         <DatingEmotionalSection />
         <DatingLandingFooter />
       </main>
