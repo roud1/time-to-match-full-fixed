@@ -1,27 +1,14 @@
 import type { MessageSentResponse, MatchDto } from "@/lib/server/matches/types"
-import { fetchActiveMatches, isLocalMatchId, localMatchId } from "@/lib/match-freeze-client"
+import { isLocalMatchId, localMatchId } from "@/lib/match-freeze-client"
 import { recordLocalMessageSent } from "@/lib/match-bond-local"
-
-const serverMatchKey = (profileId: number) => `ttm-server-match:${profileId}`
+import { resolveMatchIdForProfile } from "@/lib/matches/resolve"
 
 export type ReportMessageSentResult =
   | { ok: true; payload: MessageSentResponse; matchId: string }
   | { ok: false; reason: "skipped" | "network" | "not_found" }
 
 export async function reportMessageSent(profileId: number): Promise<ReportMessageSentResult> {
-  const storedId =
-    typeof window !== "undefined" ? sessionStorage.getItem(serverMatchKey(profileId)) : null
-
-  let matchId = storedId ?? localMatchId(profileId)
-
-  if (!storedId) {
-    const matches = await fetchActiveMatches()
-    const byPeer = matches.find((m) => m.peerUserId === String(profileId))
-    if (byPeer) {
-      matchId = byPeer.id
-      sessionStorage.setItem(serverMatchKey(profileId), matchId)
-    }
-  }
+  const matchId = await resolveMatchIdForProfile(profileId)
 
   if (isLocalMatchId(matchId)) {
     const payload = recordLocalMessageSent(profileId)

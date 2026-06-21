@@ -1,5 +1,6 @@
 import type { MatchDto } from "@/lib/server/matches/types"
 import { fetchActiveMatches, isLocalMatchId } from "@/lib/match-freeze-client"
+import { fetchMatchDetail } from "@/lib/matches/api"
 import { localBondToMatchBond } from "@/lib/match-bond-local"
 
 export const matchQueryKey = (matchId: string) => ["match", matchId] as const
@@ -18,6 +19,21 @@ export async function fetchMatchById(matchId: string): Promise<MatchDto | null> 
       bond: localBondToMatchBond(profileId),
     }
   }
+  const detail = await fetchMatchDetail(matchId)
+  if (detail.ok) {
+    const { messages: _messages, ...rest } = detail.match
+    return {
+      id: rest.id,
+      peerUserId: rest.peerUserId,
+      peerName: rest.peerName,
+      expiresAt: rest.expiresAt,
+      isFrozen: rest.isFrozen ?? false,
+      isExpired: rest.isExpired,
+      status: rest.status,
+      bond: rest.bond,
+    }
+  }
+
   const matches = await fetchActiveMatches()
   return matches.find((m) => m.id === matchId) ?? null
 }

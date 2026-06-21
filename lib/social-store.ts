@@ -16,6 +16,17 @@ import { getPulseProfile } from "@/lib/pulse/profile"
 import { isPulseProfileId } from "@/lib/pulse/constants"
 import { getAppMode } from "@/lib/auth/client"
 import { postDiscoverLike, postDiscoverPass } from "@/lib/discover/api"
+import { discoverIdToNumeric } from "@/lib/discover/map-profile"
+import { fetchMatchDetail, sendMatchMessage, type ServerMatchMessage } from "@/lib/matches/api"
+import {
+  chatThreadUpdatedAt,
+  mergeChatThreads,
+  serverMessagesToChat,
+  threadsFromServerMatches,
+} from "@/lib/matches/map-chat"
+import { resolveMatchIdForProfile, storeServerMatchId } from "@/lib/matches/resolve"
+import { isLocalMatchId } from "@/lib/match-freeze-client"
+import type { MessageSentResponse } from "@/lib/server/matches/types"
 
 const SOCIAL_KEY = "ttm-social"
 
@@ -219,7 +230,7 @@ function finalizeSwipeSideEffects(
 async function tryServerSwipe(
   profile: SwipeProfile,
   direction: "left" | "right"
-): Promise<{ matched: boolean } | null> {
+): Promise<{ matched: boolean; matchId?: string } | null> {
   if (!profile.userId || typeof window === "undefined") return null
 
   const mode = await getAppMode()
@@ -229,7 +240,10 @@ async function tryServerSwipe(
     const res = await postDiscoverLike(profile.userId)
     if (!res.ok && res.demoFallback) return null
     if (!res.ok) return null
-    return { matched: res.matched }
+    if (res.matched && res.matchId) {
+      storeServerMatchId(profile.id, res.matchId)
+    }
+    return { matched: res.matched, matchId: res.matched ? res.matchId : undefined }
   }
 
   const res = await postDiscoverPass(profile.userId)
@@ -397,4 +411,161 @@ export function getUnreadLikesCount(locale: Locale, position: GeoPosition | null
 
 export function getUnreadChatsCount(): number {
   return 0
+}
+
+function replaceThreadMessages(
+  state: SocialState,
+  profileId: number,
+  messages: ChatMessage[],
+  locale: Locale,
+  position: GeoPosition | null
+): SocialState {
+  const next = ensureSeeded(state, locale, position)
+  const updatedAt = chatThreadUpdatedAt(messages)
+  const existing = next.chats.find((c) => c.profileId === profileId)
+  const thread: ChatThread = existing
+    ? { ...existing, messages, updatedAt }
+    : { profileId, messages, updatedAt }
+  return {
+    ...next,
+    chats: existing
+      ? next.chats.map((c) => (c.profileId === profileId ? thread : c))
+      : [...next.chats, thread],
+  }
+}
+
+/** Sync server messages into local chat cache (read-through for production). */
+export function syncServerThreadMessages(
+  profileId: number,
+  serverMessages: ServerMatchMessage[],
+  locale: Locale,
+  position: GeoPosition | null
+): ChatThread {
+  const messages = serverMessagesToChat(serverMessages)
+  const next = replaceThreadMessages(load(), profileId, messages, locale, position)
+  save(next)
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+  }
+  const thread = next.chats.find((c) => c.profileId === profileId)
+  return thread ?? { profileId, messages, updatedAt: chatThreadUpdatedAt(messages) }
+}
+
+/** Build chat inbox from GET /api/matches in production; null = use local demo store. */
+export async function loadServerChatThreads(
+  locale: Locale,
+  position: GeoPosition | null
+): Promise<ChatThread[] | null> {
+  const mode = await getAppMode()
+  if (mode === "demo") return null
+
+  const { fetchActiveMatches } = await import("@/lib/match-freeze-client")
+  const matches = await fetchActiveMatches()
+  const local = getSocialState(locale, position)
+  for (const m of matches) {
+    storeServerMatchId(discoverIdToNumeric(m.peerUserId), m.id)
+  }
+  return threadsFromServerMatches(matches, local.chats)
+}
+
+export type SendChatMessageResult =
+  | { mode: "local" }
+  | { mode: "server"; payload: MessageSentResponse; matchId: string; systemMessage?: string }
+  | { mode: "error"; reason: string }
+
+/** Send chat message — server in production, localStorage fallback in demo. */
+export async function sendChatMessage(
+  profileId: number,
+  text: string,
+  locale: Locale,
+  position: GeoPosition | null
+): Promise<SendChatMessageResult> {
+  const trimmed = text.trim()
+  if (!trimmed || profileId <= 0) return { mode: "error", reason: "empty" }
+
+  const mode = await getAppMode()
+  if (mode === "demo") {
+    sendMessage(profileId, trimmed, locale, position)
+    return { mode: "local" }
+  }
+
+  const matchId = await resolveMatchIdForProfile(profileId)
+  if (isLocalMatchId(matchId)) {
+    sendMessage(profileId, trimmed, locale, position)
+    return { mode: "local" }
+  }
+
+  const result = await sendMatchMessage(matchId, trimmed)
+  if (!result.ok) {
+    if (result.demoFallback) {
+      sendMessage(profileId, trimmed, locale, position)
+      return { mode: "local" }
+    }
+    return { mode: "error", reason: result.error ?? "send_failed" }
+  }
+
+  const detail = await fetchMatchDetail(matchId)
+  if (detail.ok) {
+    syncServerThreadMessages(profileId, detail.match.messages, locale, position)
+  } else {
+    pushMessage(load(), profileId, "me", trimmed, locale, position)
+  }
+
+  const payload: MessageSentResponse = {
+    ...(result.bond ?? {
+      prolonged: false,
+      bondLevel: 0,
+      totalMessages: 0,
+      bondProgress: 0,
+      prolongCount: 0,
+      messagesUntilNext: 5,
+    }),
+    systemMessage: result.systemMessage,
+    gamification: result.gamification,
+  }
+
+  if (typeof window !== "undefined" && result.bond) {
+    window.dispatchEvent(
+      new CustomEvent("ttm-bond-updated", { detail: { profileId, payload, matchId } })
+    )
+    if (payload.prolonged) {
+      window.dispatchEvent(new CustomEvent("ttm-connection-updated"))
+    }
+  }
+
+  return {
+    mode: "server",
+    payload,
+    matchId,
+    systemMessage: result.systemMessage,
+  }
+}
+
+/** Load persisted messages for an open chat thread. */
+export async function loadServerMessagesForProfile(
+  profileId: number,
+  locale: Locale,
+  position: GeoPosition | null
+): Promise<ChatThread | null> {
+  const mode = await getAppMode()
+  if (mode === "demo") return null
+
+  const matchId = await resolveMatchIdForProfile(profileId)
+  if (isLocalMatchId(matchId)) return null
+
+  const detail = await fetchMatchDetail(matchId)
+  if (!detail.ok) return null
+
+  return syncServerThreadMessages(profileId, detail.match.messages, locale, position)
+}
+
+/** Merge server match list with local demo threads for inbox display. */
+export async function getChatsWithServerSync(
+  locale: Locale,
+  position: GeoPosition | null
+): Promise<ChatThread[]> {
+  const local = getChats(locale, position)
+  const serverThreads = await loadServerChatThreads(locale, position)
+  if (serverThreads === null) return local
+  return mergeChatThreads(local, serverThreads)
 }

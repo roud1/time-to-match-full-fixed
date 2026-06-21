@@ -2,6 +2,7 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { fetchActiveMatches } from "@/lib/match-freeze-client"
+import { findServerMatchForProfile } from "@/lib/matches/resolve"
 import type { MatchDto } from "@/lib/server/matches/types"
 
 export const MATCHES_QUERY_KEY = ["matches"] as const
@@ -22,13 +23,5 @@ export function useInvalidateMatches() {
 export function useMatchForProfile(profileId: number | null | undefined): MatchDto | null {
   const { data } = useMatches()
   if (profileId == null || !data) return null
-  const stored =
-    typeof window !== "undefined"
-      ? sessionStorage.getItem(`ttm-server-match:${profileId}`)
-      : null
-  if (stored) {
-    const hit = data.find((m) => m.id === stored)
-    if (hit) return hit
-  }
-  return data.find((m) => m.peerUserId === String(profileId)) ?? null
+  return findServerMatchForProfile(data, profileId) ?? null
 }

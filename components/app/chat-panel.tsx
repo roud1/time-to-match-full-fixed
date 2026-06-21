@@ -6,20 +6,23 @@ import { useI18n } from "@/lib/i18n"
 import {
   appendSystemMessage,
   deleteChatThread,
-  getChats,
+  getChatsWithServerSync,
+  loadServerMessagesForProfile,
+  sendChatMessage,
   getProfileById,
-  sendMessage,
   type ChatThread,
 } from "@/lib/social-store"
 import { reportMessageSent, bondFromPayload, patchMatchInCache } from "@/lib/match-bond-client"
-import { MATCHES_QUERY_KEY, useInvalidateMatches } from "@/hooks/use-matches"
+import { MATCHES_QUERY_KEY, useInvalidateMatches, useMatches } from "@/hooks/use-matches"
 import { matchQueryKey, patchMatchQueryCache } from "@/hooks/use-match"
 import { applyGamificationSnapshot } from "@/lib/gamification/apply-snapshot"
 import { useChatMatchExpiry } from "@/hooks/use-chat-match-expiry"
 import { useQueryClient } from "@tanstack/react-query"
-import type { MatchDto } from "@/lib/server/matches/types"
+import type { MatchDto, MessageSentResponse } from "@/lib/server/matches/types"
 import { markThreadSeen } from "@/lib/chat-thread-seen"
 import type { SwipeProfile } from "@/lib/demo-profiles"
+import { discoverIdToNumeric } from "@/lib/discover/map-profile"
+import { profileFromServerMatch } from "@/lib/matches/map-chat"
 import { ChatInboxScreen } from "@/components/chat/chat-inbox-screen"
 import { ChatRoomScreen } from "@/components/chat/chat-room-screen"
 import { PulseChatRoom } from "@/components/chat/pulse-chat-room"
@@ -60,6 +63,10 @@ export function ChatPanel() {
   const [pulseThread, setPulseThread] = useState<ChatThread | null>(null)
   const [listReady, setListReady] = useState(false)
   const [draft, setDraft] = useState("")
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
+  const [messagesLoading, setMessagesLoading] = useState(false)
+  const { data: serverMatches } = useMatches()
 
   const activeId = useMemo(() => parseWithParam(withParam), [withParam])
   const isPulseActive = activeId != null && isPulseProfileId(activeId)
@@ -80,15 +87,16 @@ export function ChatPanel() {
   }, [t])
 
   const refresh = useCallback(() => {
-    setThreads(getChats(locale, location.position))
+    void getChatsWithServerSync(locale, location.position).then((next) => {
+      setThreads(next)
+      setListReady(true)
+    })
     refreshPulse()
   }, [locale, location.position, refreshPulse])
 
   useEffect(() => {
     setListReady(false)
     refresh()
-    const id = requestAnimationFrame(() => setListReady(true))
-    return () => cancelAnimationFrame(id)
   }, [refresh])
 
   useEffect(() => {
@@ -110,23 +118,54 @@ export function ChatPanel() {
     }
   }, [activeId, trustV, setActiveChat])
 
+  const resolveProfile = useCallback(
+    (profileId: number): SwipeProfile | undefined => {
+      const demo = getProfileById(profileId, locale, location.position)
+      if (demo) return demo
+      const match = serverMatches?.find((m) => discoverIdToNumeric(m.peerUserId) === profileId)
+      return match ? profileFromServerMatch(match) : undefined
+    },
+    [locale, location.position, serverMatches]
+  )
+
   const profileMap = useMemo(() => {
     const m = new Map<number, SwipeProfile>()
     for (const th of visibleThreads) {
-      const p = getProfileById(th.profileId, locale, location.position)
+      const p = resolveProfile(th.profileId)
       if (p) m.set(th.profileId, p)
     }
     return m
-  }, [visibleThreads, locale, location.position])
+  }, [visibleThreads, resolveProfile])
 
-  const activeProfile =
-    activeId != null ? getProfileById(activeId, locale, location.position) : undefined
+  const activeProfile = activeId != null ? resolveProfile(activeId) : undefined
   const activeThread = isPulseActive
     ? pulseThread
     : threads.find((th) => th.profileId === activeId)
   const matchExpiry = useChatMatchExpiry(isPulseActive ? null : activeId)
   const queryClient = useQueryClient()
   const invalidateMatches = useInvalidateMatches()
+
+  useEffect(() => {
+    if (activeId == null || isPulseProfileId(activeId)) return
+    let cancelled = false
+    setMessagesLoading(true)
+    void loadServerMessagesForProfile(activeId, locale, location.position)
+      .then((thread) => {
+        if (cancelled) return
+        if (thread) {
+          setThreads((prev) => {
+            const rest = prev.filter((t) => t.profileId !== activeId)
+            return [...rest, thread].sort((a, b) => b.updatedAt - a.updatedAt)
+          })
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setMessagesLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [activeId, locale, location.position])
 
   const inboxLabels = {
     title: t("tabChat"),
@@ -171,16 +210,8 @@ export function ChatPanel() {
     },
   }
 
-  const sendText = (text: string) => {
-    if (activeId == null || isPulseProfileId(activeId) || !text.trim()) return
-    const body = text.trim()
-    sendMessage(activeId, body, locale, location.position)
-    refresh()
-
-    void reportMessageSent(activeId).then((result) => {
-      if (!result.ok) return
-      const { payload, matchId } = result
-
+  const applyBondPayload = useCallback(
+    (payload: MessageSentResponse, matchId: string) => {
       if (payload.prolonged && payload.newExpiresAt && matchExpiry) {
         matchExpiry.applyFreeze({
           expiresAt: payload.newExpiresAt,
@@ -191,8 +222,10 @@ export function ChatPanel() {
 
       const systemText =
         payload.systemMessage ??
-        (payload.prolonged ? t("bondProlongToast").replace("{hours}", String(payload.addedHours ?? 6)) : null)
-      if (systemText) {
+        (payload.prolonged
+          ? t("bondProlongToast").replace("{hours}", String(payload.addedHours ?? 6))
+          : null)
+      if (systemText && activeId != null) {
         appendSystemMessage(activeId, systemText, locale, location.position)
         refresh()
       }
@@ -212,11 +245,39 @@ export function ChatPanel() {
       void queryClient.invalidateQueries({ queryKey: matchQueryKey(matchId) })
       void invalidateMatches()
       applyGamificationSnapshot(queryClient, payload.gamification)
+    },
+    [activeId, invalidateMatches, locale, location.position, matchExpiry, queryClient, refresh, t]
+  )
+
+  const sendText = (text: string) => {
+    if (activeId == null || isPulseProfileId(activeId) || !text.trim() || sending) return
+    const body = text.trim()
+    setSending(true)
+    setSendError(null)
+
+    void sendChatMessage(activeId, body, locale, location.position).then(async (result) => {
+      setSending(false)
+      refresh()
+
+      if (result.mode === "error") {
+        setSendError(result.reason)
+        return
+      }
+
+      if (result.mode === "local") {
+        const bondResult = await reportMessageSent(activeId)
+        if (bondResult.ok) {
+          applyBondPayload(bondResult.payload, bondResult.matchId)
+        }
+        return
+      }
+
+      applyBondPayload(result.payload, result.matchId)
     })
   }
 
   const handleSend = () => {
-    if (!draft.trim() || isPulseActive) return
+    if (!draft.trim() || isPulseActive || sending) return
     const text = draft.trim()
     setDraft("")
     sendText(text)
@@ -311,7 +372,19 @@ export function ChatPanel() {
       />
     ) : null
 
-  const activeRoom = pulseRoom ?? room
+  const roomWithStatus =
+    room && sendError ? (
+      <div className="flex flex-col min-h-0 flex-1">
+        <p className="text-xs text-destructive text-center py-2 px-4 shrink-0" role="alert">
+          {sendError}
+        </p>
+        {room}
+      </div>
+    ) : (
+      room
+    )
+
+  const activeRoom = pulseRoom ?? roomWithStatus
 
   if (isDesktop) {
     return (
@@ -333,6 +406,13 @@ export function ChatPanel() {
   }
 
   if (activeId != null && activeProfile && !activeThread && !isPulseActive) {
+    if (messagesLoading) {
+      return (
+        <div className="ttm-page ttm-page--app max-w-lg mx-auto px-6 py-16 text-center">
+          <p className="text-sm text-muted-foreground font-normal">{t("chatTyping")}</p>
+        </div>
+      )
+    }
     return (
       <div className="ttm-page ttm-page--app max-w-lg mx-auto px-6 py-16 text-center">
         <p className="text-sm text-muted-foreground font-normal">{t("chatEmpty")}</p>

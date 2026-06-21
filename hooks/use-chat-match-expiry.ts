@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { getConnection } from "@/lib/connection-store"
 import { fetchActiveMatches, localMatchId } from "@/lib/match-freeze-client"
+import { findServerMatchForProfile, serverMatchKey } from "@/lib/matches/resolve"
 import type { MatchDto } from "@/lib/server/matches/types"
 
-const serverMatchKey = (profileId: number) => `ttm-server-match:${profileId}`
+const serverMatchKeyExport = serverMatchKey
 
 export type ChatMatchExpiryState = {
   matchId: string
@@ -30,12 +31,9 @@ export function useChatMatchExpiry(profileId: number | null | undefined): ChatMa
     if (profileId == null) return
     let cancelled = false
 
-    const storedId =
-      typeof window !== "undefined" ? sessionStorage.getItem(serverMatchKey(profileId)) : null
-
     void fetchActiveMatches().then((matches) => {
       if (cancelled) return
-      const found = storedId ? matches.find((m) => m.id === storedId) ?? null : null
+      const found = findServerMatchForProfile(matches, profileId) ?? null
       setServerMatch(found)
     })
 
@@ -71,7 +69,7 @@ export function useChatMatchExpiry(profileId: number | null | undefined): ChatMa
       refresh,
       applyFreeze: (patch) => {
         if (patch.matchId && typeof window !== "undefined") {
-          sessionStorage.setItem(serverMatchKey(profileId), patch.matchId)
+          sessionStorage.setItem(serverMatchKeyExport(profileId), patch.matchId)
           setServerMatch((prev) =>
             prev
               ? { ...prev, ...patch, id: patch.matchId! }
