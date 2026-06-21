@@ -1,19 +1,20 @@
-import { DM_Sans, Syne } from "next/font/google"
+import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google"
 
-/** Body copy — clean geometric sans */
-export const dmSans = DM_Sans({
+/** Body copy — modern romantic sans */
+export const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-dm-sans",
+  variable: "--font-plus-jakarta",
   display: "swap",
   preload: true,
   weight: ["400", "500", "600", "700"],
 })
 
-/** Display headlines — bold editorial geometric */
-export const syne = Syne({
+/** Display headlines — romantic serif */
+export const playfair = Playfair_Display({
   subsets: ["latin", "latin-ext"],
-  variable: "--font-syne",
+  variable: "--font-playfair",
   display: "swap",
   preload: true,
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 })

@@ -1,19 +1,50 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
-import { motion, useReducedMotion } from "motion/react"
+import { Heart, Sparkles } from "lucide-react"
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useMemo, useState } from "react"
+import { DatingHeroAtmosphere } from "@/components/landing/dating/dating-hero-atmosphere"
+import { DatingHeroFloats } from "@/components/landing/dating/dating-hero-floats"
 import { useDatingHeroProfiles } from "@/components/landing/dating/use-dating-profiles"
 import { useI18n } from "@/lib/i18n"
 import { isLoggedIn } from "@/lib/user-profile"
+
+function useCountdownDisplay() {
+  const [time, setTime] = useState("23:59:42")
+
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date()
+      const end = new Date(now)
+      end.setHours(24, 0, 0, 0)
+      const diff = Math.max(0, end.getTime() - now.getTime())
+      const h = Math.floor(diff / 3_600_000)
+      const m = Math.floor((diff % 3_600_000) / 60_000)
+      const s = Math.floor((diff % 60_000) / 1000)
+      setTime(
+        `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
+      )
+    }
+
+    tick()
+    const id = window.setInterval(tick, 1000)
+    return () => window.clearInterval(id)
+  }, [])
+
+  return time
+}
 
 export function DatingLandingHero() {
   const { t } = useI18n()
   const reduce = useReducedMotion()
   const [ctaHref, setCtaHref] = useState("/register")
   const profiles = useDatingHeroProfiles()
-  const profile = profiles[0]
+  const profile = profiles[1] ?? profiles[0]
+  const countdown = useCountdownDisplay()
+  const { scrollY } = useScroll()
+  const heroY = useTransform(scrollY, [0, 500], [0, reduce ? 0 : -80])
+  const heroOpacity = useTransform(scrollY, [0, 420], [1, reduce ? 1 : 0.55])
 
   useEffect(() => {
     setCtaHref(isLoggedIn() ? "/app" : "/register")
@@ -26,110 +57,87 @@ export function DatingLandingHero() {
   const titleFull = `${t("datingHeroTitleLine1")} ${t("datingHeroTitleLine2")}`
 
   return (
-    <section className="ttm-dating-hero" aria-labelledby="dating-hero-title">
-      <div className="ttm-dating-container">
-        <motion.div
-          className="ttm-dating-hero__grid"
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div className="ttm-dating-hero__copy">
-            <p className="ttm-dating-hero__eyebrow">{t("datingHeroEyebrow")}</p>
+    <section className="ttm-dating-hero ttm-dating-hero--cinematic" aria-labelledby="dating-hero-title">
+      <DatingHeroAtmosphere />
+      <DatingHeroFloats />
 
-            <h1 id="dating-hero-title" className="ttm-dating-hero__title" aria-label={titleFull}>
-              <span className="ttm-dating-hero__title-line">{t("datingHeroTitleLine1")}</span>
-              <span className="ttm-dating-hero__title-line ttm-dating-hero__title-line--accent">
-                {t("datingHeroTitleLine2")}
-              </span>
-            </h1>
-
-            <p className="ttm-dating-hero__sub">{t("datingHeroSub")}</p>
-
-            <div className="ttm-dating-hero__actions">
-              <Link href={ctaHref} className="ttm-dating-cta ttm-dating-cta--hero">
-                {t("datingHeroCta")}
-              </Link>
-              <Link href="/login" className="ttm-dating-cta ttm-dating-cta--ghost">
-                {t("login")}
-              </Link>
-            </div>
-
-            <ul className="ttm-dating-hero__chips" aria-label={t("datingHeroChipsAria")}>
-              {heroChips.map((chip) => (
-                <li key={chip} className="ttm-dating-hero__chip">
-                  {chip}
-                </li>
-              ))}
-            </ul>
-
-            <div className="ttm-dating-hero__stats" aria-hidden>
-              <div className="ttm-dating-hero__stat">
-                <span className="ttm-dating-hero__stat-value">24h</span>
-                <span className="ttm-dating-hero__stat-label">{t("datingHow3Title")}</span>
-              </div>
-              <div className="ttm-dating-hero__stat">
-                <span className="ttm-dating-hero__stat-value">AI</span>
-                <span className="ttm-dating-hero__stat-label">{t("datingNavAi")}</span>
-              </div>
-              <div className="ttm-dating-hero__stat">
-                <span className="ttm-dating-hero__stat-value">1×</span>
-                <span className="ttm-dating-hero__stat-label">{t("datingHeroChip1")}</span>
-              </div>
-            </div>
-          </div>
-
-          <motion.div
-            className="ttm-dating-hero__bento"
-            aria-label={t("datingHeroCardsAria")}
-            initial={reduce ? false : { opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.85, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="ttm-dating-bento-cell ttm-dating-bento-cell--timer">
-              <span className="ttm-dating-bento-timer-label">{t("datingHow3Title")}</span>
-              <span className="ttm-dating-bento-timer">23:59</span>
-              <p className="ttm-dating-bento-timer-label">{t("datingHeroTime")}</p>
-            </div>
-
-            <div className="ttm-dating-bento-cell ttm-dating-bento-cell--profile">
-              <div className="ttm-dating-bento-profile">
-                <Image
-                  src={profile.imageUrl}
-                  alt=""
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
-                  priority
-                />
-                <div className="ttm-dating-bento-profile__overlay">
-                  <p className="ttm-dating-bento-profile__name">
-                    {profile.name}, {profile.age}
-                  </p>
-                  <p className="ttm-dating-bento-profile__meta">{profile.distance}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="ttm-dating-bento-cell ttm-dating-bento-cell--score">
-              <span className="ttm-dating-bento-score">{profile.connectionScore}%</span>
-              <span className="ttm-dating-bento-score-label">{t("datingAiOutputLabel")}</span>
-            </div>
-
-            <div className="ttm-dating-bento-cell ttm-dating-bento-cell--signal">
-              <p className="ttm-dating-bento-signal">
-                <strong>{t("datingAiWeAnalyze")}</strong>
-                {t("datingAiSignal1")} · {t("datingAiSignal2")}
+      <motion.div
+        className="ttm-dating-hero__content"
+        style={{ y: heroY, opacity: heroOpacity }}
+      >
+        <div className="ttm-dating-container">
+          <div className="ttm-dating-hero__grid">
+            <motion.div
+              className="ttm-dating-hero__copy"
+              initial={reduce ? false : { opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="ttm-dating-hero__eyebrow">
+                <Sparkles size={14} aria-hidden />
+                {t("datingHeroEyebrow")}
               </p>
-            </div>
 
-            <div className="ttm-dating-bento-cell ttm-dating-bento-cell--cta">
-              <Link href={ctaHref} className="ttm-dating-cta ttm-dating-cta--sm">
-                {t("datingNavStartMatching")}
-              </Link>
-            </div>
-          </motion.div>
-        </motion.div>
+              <h1 id="dating-hero-title" className="ttm-dating-hero__title" aria-label={titleFull}>
+                <span className="ttm-dating-hero__title-line">{t("datingHeroTitleLine1")}</span>
+                <span className="ttm-dating-hero__title-line ttm-dating-hero__title-line--accent">
+                  {t("datingHeroTitleLine2")}
+                </span>
+              </h1>
+
+              <p className="ttm-dating-hero__sub">{t("datingHeroSub")}</p>
+
+              <div className="ttm-dating-hero__actions">
+                <Link href={ctaHref} className="ttm-dating-cta ttm-dating-cta--hero ttm-dating-cta--pulse">
+                  <span className="ttm-dating-cta__ring" aria-hidden />
+                  {t("datingHeroCta")}
+                </Link>
+                <Link href="/login" className="ttm-dating-cta ttm-dating-cta--ghost">
+                  {t("login")}
+                </Link>
+              </div>
+
+              <ul className="ttm-dating-hero__chips" aria-label={t("datingHeroChipsAria")}>
+                {heroChips.map((chip) => (
+                  <li key={chip} className="ttm-dating-hero__chip">
+                    {chip}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            <motion.div
+              className="ttm-dating-hero__visual"
+              initial={reduce ? false : { opacity: 0, scale: 0.94, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+              aria-label={t("datingHeroCardsAria")}
+            >
+              <div className="ttm-dating-hero__timer-card">
+                <span className="ttm-dating-hero__timer-label">{t("datingHow3Title")}</span>
+                <span className="ttm-dating-hero__timer" aria-live="polite">
+                  {countdown}
+                </span>
+                <p className="ttm-dating-hero__timer-caption">{t("datingHeroTime")}</p>
+              </div>
+
+              <div className="ttm-dating-hero__spark-card">
+                <span className="ttm-dating-hero__spark-icon" aria-hidden>
+                  <Heart size={20} fill="currentColor" />
+                </span>
+                <p className="ttm-dating-hero__spark-score">{profile.connectionScore}%</p>
+                <p className="ttm-dating-hero__spark-label">{t("datingAiOutputLabel")}</p>
+                <p className="ttm-dating-hero__spark-name">
+                  {profile.name}, {profile.age}
+                </p>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+
+      <div className="ttm-dating-hero__scroll-hint" aria-hidden>
+        <span className="ttm-dating-hero__scroll-dot" />
       </div>
     </section>
   )

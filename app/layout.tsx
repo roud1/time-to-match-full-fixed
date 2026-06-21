@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { dmSans, syne } from "@/lib/fonts"
+import { playfair, plusJakarta } from "@/lib/fonts"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0A0814",
+  themeColor: "#0D0408",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -102,7 +102,7 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={`${dmSans.variable} ${syne.variable} font-sans antialiased ttm-root ttm-brand-universe`}
+        className={`${plusJakarta.variable} ${playfair.variable} font-sans antialiased ttm-root ttm-brand-universe`}
       >
         <ThemeProvider>
           <I18nProvider>

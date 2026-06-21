@@ -10,14 +10,14 @@ export function Logo({ size = "md" }: LogoProps) {
 
   return (
     <div className={`relative ${box} flex items-center justify-center`}>
-      <div className="absolute inset-0 rounded-[6px] border border-[var(--lime-border,theme(colors.violet.300))] bg-[var(--bg-secondary,theme(colors.violet.950))] rotate-3" />
-      <div className="absolute inset-0 rounded-[6px] border border-violet-500/30 bg-violet-950/80 -rotate-3" />
+      <div className="absolute inset-0 rounded-[6px] border border-[var(--lime-border,theme(colors.rose.300))] bg-[var(--bg-secondary,theme(colors.rose.950))] rotate-3" />
+      <div className="absolute inset-0 rounded-[6px] border border-rose-500/30 bg-rose-950/80 -rotate-3" />
       <svg
         width={icon}
         height={icon}
         viewBox="0 0 24 24"
         fill="none"
-        className="relative z-[1] text-[#bfff00]"
+        className="relative z-[1] text-[#fb7185]"
         aria-hidden
       >
         <path

@@ -16,20 +16,20 @@
   --ttm-brand-line: rgba(255, 255, 255, 0.08);
   --ttm-brand-line-strong: rgba(255, 255, 255, 0.14);
 
-  /* —— Violet & electric lime accents —— */
-  --ttm-brand-accent: #a78bfa;
-  --ttm-brand-accent-soft: #8b5cf6;
-  --ttm-brand-accent-muted: #4c1d95;
+  /* —— Rose, coral & amber accents —— */
+  --ttm-brand-accent: #fb7185;
+  --ttm-brand-accent-soft: #fda4af;
+  --ttm-brand-accent-muted: #be123c;
   --ttm-brand-gradient-sync: linear-gradient(
     135deg,
-    rgba(167, 139, 250, 0.55) 0%,
-    rgba(139, 92, 246, 0.48) 50%,
-    rgba(204, 255, 0, 0.28) 100%
+    rgba(251, 113, 133, 0.55) 0%,
+    rgba(225, 29, 72, 0.48) 50%,
+    rgba(249, 115, 22, 0.28) 100%
   );
   --ttm-brand-gradient-intimate: linear-gradient(
     160deg,
-    rgba(139, 92, 246, 0.14) 0%,
-    rgba(76, 29, 149, 0.08) 45%,
+    rgba(225, 29, 72, 0.14) 0%,
+    rgba(190, 18, 60, 0.08) 45%,
     transparent 72%
   );
 
@@ -40,15 +40,15 @@
   --ttm-glow-intensity-lg: 0.38;
   --ttm-glow-intensity-peak: 0.52;
 
-  --ttm-glow-sync: rgba(139, 92, 246, 0.42);
-  --ttm-glow-sync-soft: rgba(167, 139, 250, 0.22);
-  --ttm-glow-chemistry: rgba(204, 255, 0, 0.35);
-  --ttm-glow-chemistry-peak: rgba(167, 139, 250, 0.55);
-  --ttm-glow-bond: rgba(204, 255, 0, 0.28);
-  --ttm-glow-bond-deep: rgba(132, 204, 22, 0.42);
-  --ttm-glow-aura: rgba(139, 92, 246, 0.2);
-  --ttm-glow-cinematic: rgba(109, 40, 217, 0.14);
-  --ttm-glow-fade: rgba(204, 255, 0, 0.22);
+  --ttm-glow-sync: rgba(225, 29, 72, 0.42);
+  --ttm-glow-sync-soft: rgba(251, 113, 133, 0.22);
+  --ttm-glow-chemistry: rgba(249, 115, 22, 0.35);
+  --ttm-glow-chemistry-peak: rgba(251, 113, 133, 0.55);
+  --ttm-glow-bond: rgba(249, 115, 22, 0.28);
+  --ttm-glow-bond-deep: rgba(251, 191, 36, 0.42);
+  --ttm-glow-aura: rgba(225, 29, 72, 0.2);
+  --ttm-glow-cinematic: rgba(190, 18, 60, 0.14);
+  --ttm-glow-fade: rgba(249, 115, 22, 0.22);
 
   /* —— Emotional state colors —— */
   --ttm-state-curious: rgba(160, 180, 220, 0.35);

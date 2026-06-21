@@ -19,6 +19,24 @@ export const DATING_HERO_PROFILE_META: DatingProfileMeta[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=480&h=600&fit=crop&q=85",
   },
+  {
+    nameKey: "datingProfileNameJames",
+    age: 27,
+    km: 3,
+    connectionScore: 82,
+    verified: true,
+    imageUrl:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=480&h=600&fit=crop&q=85",
+  },
+  {
+    nameKey: "datingProfileNameSofia",
+    age: 22,
+    km: 1,
+    connectionScore: 91,
+    verified: true,
+    imageUrl:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=480&h=600&fit=crop&q=85",
+  },
 ]
 
 export const DATING_CONNECTION_META = {

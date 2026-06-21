@@ -29,7 +29,7 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] .site-bg-root.site-ambient {
-  background: linear-gradient(180deg, #12101c 0%, #0a0814 28%, #0a0814 100%);
+  background: linear-gradient(180deg, #1a0a12 0%, #0d0408 28%, #0d0408 100%);
 }
 
 html[data-theme="dark"] .site-bg-root.site-ambient::before {
@@ -38,10 +38,10 @@ html[data-theme="dark"] .site-bg-root.site-ambient::before {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 50% 42% at 78% 8%, rgba(139, 92, 246, 0.18), transparent 70%),
-    radial-gradient(ellipse 48% 38% at 12% 38%, rgba(204, 255, 0, 0.08), transparent 72%),
-    radial-gradient(ellipse 55% 40% at 50% 32%, rgba(167, 139, 250, 0.12), transparent 74%),
-    radial-gradient(ellipse 42% 34% at 52% 88%, rgba(109, 40, 217, 0.1), transparent 76%);
+    radial-gradient(ellipse 50% 42% at 78% 8%, rgba(225, 29, 72, 0.18), transparent 70%),
+    radial-gradient(ellipse 48% 38% at 12% 38%, rgba(249, 115, 22, 0.08), transparent 72%),
+    radial-gradient(ellipse 55% 40% at 50% 32%, rgba(251, 113, 133, 0.12), transparent 74%),
+    radial-gradient(ellipse 42% 34% at 52% 88%, rgba(190, 18, 60, 0.1), transparent 76%);
 }
 
 html[data-theme="dark"] .site-bg-root.site-ambient::after {
@@ -55,7 +55,7 @@ html[data-theme="dark"] .site-bg-root.site-ambient::after {
   border-radius: 50%;
   filter: blur(110px);
   opacity: 0.85;
-  background: rgba(139, 92, 246, 0.14);
+  background: rgba(225, 29, 72, 0.14);
   pointer-events: none;
 }
 

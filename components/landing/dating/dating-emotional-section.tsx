@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { DatingParallaxBg } from "@/components/landing/dating/dating-parallax-bg"
 import { DatingScrollReveal } from "@/components/landing/dating/dating-scroll-reveal"
 import { useI18n } from "@/lib/i18n"
 import { isLoggedIn } from "@/lib/user-profile"
@@ -16,6 +17,11 @@ export function DatingEmotionalSection() {
 
   return (
     <section className="ttm-dating-emotional" aria-labelledby="dating-emotional-title">
+      <div className="ttm-dating-emotional__parallax" aria-hidden>
+        <DatingParallaxBg />
+        <div className="ttm-dating-emotional__parallax-blob ttm-dating-emotional__parallax-blob--rose" />
+        <div className="ttm-dating-emotional__parallax-blob ttm-dating-emotional__parallax-blob--amber" />
+      </div>
       <div className="ttm-dating-emotional__band">
         <div className="ttm-dating-container ttm-dating-emotional__inner">
           <DatingScrollReveal y={36}>

@@ -49,11 +49,11 @@
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #8b5cf6;
+  color: #fb7185;
 }
 
 html[data-theme="light"] .ttm-login-page__title-soft {
-  background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #84cc16 100%);
+  background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #f97316 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -64,17 +64,18 @@ html[data-theme="light"] .ttm-login-page__title-soft {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  font-family: var(--font-syne), "Syne", system-ui, sans-serif;
+  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
   font-size: clamp(1.65rem, 4.5vw, 2.15rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
   color: var(--foreground);
 }
 
 .ttm-login-page__title-soft {
-  font-weight: 700;
-  background: linear-gradient(135deg, #c4b5fd 0%, #8b5cf6 42%, #ccff00 88%);
+  font-weight: 500;
+  font-style: italic;
+  background: linear-gradient(135deg, #fda4af 0%, #fb7185 42%, #f97316 88%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -96,29 +97,29 @@ html[data-theme="light"] .ttm-login-page__title-soft {
   font-weight: 500;
   color: var(--foreground);
   background: color-mix(in srgb, var(--foreground) 6%, transparent);
-  border: 1px solid color-mix(in srgb, #8b5cf6 22%, transparent);
+  border: 1px solid color-mix(in srgb, #fb7185 22%, transparent);
 }
 
 html[data-theme="dark"] .ttm-login-page__chip {
-  background: rgba(139, 92, 246, 0.08);
-  border-color: rgba(167, 139, 250, 0.2);
+  background: rgba(225, 29, 72, 0.08);
+  border-color: rgba(251, 113, 133, 0.2);
 }
 
 /* Auth form card */
 .ttm-login-page .ttm-brand-glass {
-  border-radius: 10px;
-  border-color: rgba(167, 139, 250, 0.18);
+  border-radius: 16px;
+  border-color: rgba(251, 113, 133, 0.18);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.04) inset,
     0 20px 56px rgba(0, 0, 0, 0.42),
-    0 0 48px -16px rgba(139, 92, 246, 0.15);
+    0 0 48px -16px rgba(225, 29, 72, 0.15);
 }
 
 html[data-theme="light"] .ttm-login-page .ttm-brand-glass {
-  border-color: rgba(109, 40, 217, 0.14);
+  border-color: rgba(225, 29, 72, 0.14);
   box-shadow:
-    0 0 0 1px rgba(20, 10, 40, 0.04) inset,
-    0 16px 48px rgba(109, 40, 217, 0.1);
+    0 0 0 1px rgba(136, 19, 55, 0.04) inset,
+    0 16px 48px rgba(225, 29, 72, 0.1);
 }
 
 /* Form column */
@@ -165,8 +166,8 @@ html[data-theme="dark"] .ttm-login-live {
   height: 0.45rem;
   border-radius: 50%;
   flex-shrink: 0;
-  background: #ccff00;
-  box-shadow: 0 0 10px rgba(204, 255, 0, 0.55);
+  background: #f97316;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.55);
   animation: ttm-login-live-pulse 1.8s ease-in-out infinite;
 }
 
@@ -264,7 +265,7 @@ html[data-theme="dark"] .ttm-login-live {
   height: 55%;
   border-radius: 50%;
   filter: blur(72px);
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.28), transparent 70%);
+  background: radial-gradient(circle, rgba(225, 29, 72, 0.28), transparent 70%);
   pointer-events: none;
 }
 
