@@ -7,52 +7,52 @@ import { useDatingHeroProfiles } from "@/components/landing/dating/use-dating-pr
 import { useScrollParallaxY } from "@/hooks/use-parallax"
 import { cn } from "@/lib/utils"
 
-const FLOAT_LAYOUT = [
-  { className: "ttm-dating-float--accent-left", delay: 0.2, depth: 0.5, flyX: -60, flyY: -30 },
-  { className: "ttm-dating-float--accent-right", delay: 0.35, depth: 0.7, flyX: 60, flyY: -25 },
-] as const
+const FLOAT_LAYOUT = {
+  className: "ttm-dating-float--accent",
+  delay: 0.28,
+  depth: 0.55,
+  flyX: 36,
+  flyY: -18,
+} as const
 
 function FloatCard({
-  layout,
-  index,
   reduce,
   profile,
   scrollProgress,
 }: {
-  layout: (typeof FLOAT_LAYOUT)[number]
-  index: number
   reduce: boolean | null
   profile: NonNullable<ReturnType<typeof useDatingHeroProfiles>[number]>
   scrollProgress: MotionValue<number>
 }) {
   const scrollY = useScrollParallaxY({
     input: [0, 600],
-    output: [0, 24 + layout.depth * 35],
+    output: [0, 24 + FLOAT_LAYOUT.depth * 35],
   })
 
   const scatterX = useTransform(
     scrollProgress,
     [0, 0.5],
-    [0, reduce ? 0 : layout.flyX]
+    [0, reduce ? 0 : FLOAT_LAYOUT.flyX]
   )
   const scatterY = useTransform(
     scrollProgress,
     [0, 0.5],
-    [0, reduce ? 0 : layout.flyY]
+    [0, reduce ? 0 : FLOAT_LAYOUT.flyY]
   )
-  const scatterOpacity = useTransform(scrollProgress, [0, 0.45], [1, reduce ? 1 : 0.12])
-  const scatterScale = useTransform(scrollProgress, [0, 0.5], [1, reduce ? 1 : 0.85])
+  const scatterOpacity = useTransform(scrollProgress, [0, 0.45], [1, reduce ? 1 : 0.18])
+  const scatterScale = useTransform(scrollProgress, [0, 0.5], [1, reduce ? 1 : 0.88])
 
   return (
     <DatingParallaxLayer
       y={scrollY}
-      className={cn("ttm-dating-float", layout.className, !reduce && "ttm-dating-float--animate")}
+      className={cn("ttm-dating-float", FLOAT_LAYOUT.className, !reduce && "ttm-dating-float--animate")}
     >
-      <motion.div
+      <motion.figure
+        className="ttm-dating-float__card"
         style={{ x: scatterX, y: scatterY, opacity: scatterOpacity, scale: scatterScale }}
-        initial={reduce ? false : { opacity: 0, x: index === 0 ? -32 : 32, y: 24 }}
+        initial={reduce ? false : { opacity: 0, x: 28, y: 20 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ duration: 0.85, delay: layout.delay, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.85, delay: FLOAT_LAYOUT.delay, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="ttm-dating-float__photo">
           <Image
@@ -60,12 +60,15 @@ function FloatCard({
             alt=""
             fill
             className="object-cover object-[center_20%]"
-            sizes="120px"
+            sizes="140px"
             draggable={false}
           />
           <div className="ttm-dating-float__shade" />
         </div>
-      </motion.div>
+        <figcaption className="ttm-dating-float__caption">
+          {profile.name}, {profile.age}
+        </figcaption>
+      </motion.figure>
     </DatingParallaxLayer>
   )
 }
@@ -77,24 +80,13 @@ type DatingHeroFloatsProps = {
 export function DatingHeroFloats({ scrollProgress }: DatingHeroFloatsProps) {
   const reduce = useReducedMotion()
   const profiles = useDatingHeroProfiles()
+  const profile = profiles[3] ?? profiles[2]
+
+  if (!profile) return null
 
   return (
     <div className="ttm-dating-hero__floats ttm-dating-hero__floats--accent" aria-hidden>
-      {FLOAT_LAYOUT.map((layout, index) => {
-        const profile = profiles[index + 2] ?? profiles[index]
-        if (!profile) return null
-
-        return (
-          <FloatCard
-            key={`${profile.name}-${index}`}
-            layout={layout}
-            index={index}
-            reduce={reduce}
-            profile={profile}
-            scrollProgress={scrollProgress}
-          />
-        )
-      })}
+      <FloatCard reduce={reduce} profile={profile} scrollProgress={scrollProgress} />
     </div>
   )
 }

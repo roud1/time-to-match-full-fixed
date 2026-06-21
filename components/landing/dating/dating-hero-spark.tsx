@@ -38,12 +38,12 @@ export function DatingHeroSpark({ className }: DatingHeroSparkProps) {
         </defs>
         <path
           className="ttm-dating-hero__spark-trail ttm-dating-hero__spark-trail--left"
-          d="M 72 108 Q 148 168 200 158"
+          d="M 96 92 Q 148 128 188 142"
           pathLength={1}
         />
         <path
           className="ttm-dating-hero__spark-trail ttm-dating-hero__spark-trail--right"
-          d="M 328 248 Q 252 188 200 158"
+          d="M 304 268 Q 248 210 188 142"
           pathLength={1}
         />
       </svg>

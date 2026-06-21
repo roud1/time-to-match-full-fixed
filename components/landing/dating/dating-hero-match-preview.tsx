@@ -59,7 +59,7 @@ function Portrait({
               scale: 0.86,
             }
       }
-      animate={{ opacity: 1, x: 0, y: 0, rotate: isBack ? -9 : 7, scale: 1 }}
+      animate={{ opacity: 1, x: 0, y: 0, rotate: isBack ? -11 : 8, scale: 1 }}
       transition={{
         type: "spring",
         stiffness: 180,

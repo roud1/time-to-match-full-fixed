@@ -1398,6 +1398,7 @@ export const translations = {
     datingHeroTitle: "У тебя 24 часа. Потом мэтч исчезает.",
     datingHeroTitleLine1: "У тебя 24 часа.",
     datingHeroTitleLine2: "Потом мэтч исчезает.",
+    datingHeroTitleLine3: "Успей почувствовать химию.",
     datingHeroSub: "Без бесконечного свайпа. Реальные люди — одно честное решение.",
     datingHeroTime: "Пока тикает таймер, вы либо сближаетесь, либо теряете шанс.",
     datingHeroChip1: "Один мэтч — одно решение",

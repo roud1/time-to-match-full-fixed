@@ -7,7 +7,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { DatingHeroAtmosphere } from "@/components/landing/dating/dating-hero-atmosphere"
 import { DatingHeroBottomBand } from "@/components/landing/dating/dating-hero-bottom-band"
 import { DatingHeroCenterCard } from "@/components/landing/dating/dating-hero-center-card"
-import { DatingHeroFloats } from "@/components/landing/dating/dating-hero-floats"
 import { DatingHeroMatchPreview } from "@/components/landing/dating/dating-hero-match-preview"
 import { useParallaxIntensity } from "@/hooks/use-parallax"
 import { useI18n } from "@/lib/i18n"
@@ -42,17 +41,19 @@ function useCountdownDisplay() {
 function StaggerWords({
   text,
   className,
+  wordClassName,
   baseDelay = 0,
 }: {
   text: string
   className?: string
+  wordClassName?: string
   baseDelay?: number
 }) {
   const reduce = useReducedMotion()
   const words = text.split(/\s+/).filter(Boolean)
 
   if (reduce) {
-    return <span className={className}>{text}</span>
+    return <span className={cn(className, wordClassName)}>{text}</span>
   }
 
   return (
@@ -60,7 +61,7 @@ function StaggerWords({
       {words.map((word, index) => (
         <motion.span
           key={`${word}-${index}`}
-          className="ttm-dating-hero__title-word"
+          className={cn("ttm-dating-hero__title-word", wordClassName)}
           initial={{ opacity: 0, y: 32, filter: "blur(14px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{
@@ -116,10 +117,11 @@ const STAGGER = {
   eyebrow: 0,
   timer: 0.08,
   title1: 0.14,
-  title2: 0.32,
-  sub: 0.48,
-  actions: 0.58,
-  chips: 0.68,
+  title2: 0.34,
+  title3: 0.52,
+  sub: 0.62,
+  actions: 0.72,
+  chips: 0.82,
   visual: 0.2,
 } as const
 
@@ -148,7 +150,7 @@ export function DatingLandingHero() {
   }, [])
 
   const heroChips = useMemo(() => [t("datingHeroChip1"), t("datingHeroChip2")], [t])
-  const titleFull = `${t("datingHeroTitleLine1")} ${t("datingHeroTitleLine2")}`
+  const titleFull = `${t("datingHeroTitleLine1")} ${t("datingHeroTitleLine2")} ${t("datingHeroTitleLine3")}`
 
   const fadeUp = (delay: number) =>
     reduce
@@ -166,7 +168,6 @@ export function DatingLandingHero() {
       aria-labelledby="dating-hero-title"
     >
       <DatingHeroAtmosphere scrollProgress={scrollYProgress} />
-      <DatingHeroFloats scrollProgress={scrollYProgress} />
 
       <motion.div
         className="ttm-dating-hero__content"
@@ -200,8 +201,19 @@ export function DatingLandingHero() {
                 <span className="ttm-dating-hero__title-line">
                   <StaggerWords text={t("datingHeroTitleLine1")} baseDelay={STAGGER.title1} />
                 </span>
-                <span className="ttm-dating-hero__title-line ttm-dating-hero__title-line--accent">
-                  <StaggerWords text={t("datingHeroTitleLine2")} baseDelay={STAGGER.title2} />
+                <span className="ttm-dating-hero__title-line ttm-dating-hero__title-line--hook">
+                  <StaggerWords
+                    text={t("datingHeroTitleLine2")}
+                    wordClassName="ttm-dating-hero__title-word--hook"
+                    baseDelay={STAGGER.title2}
+                  />
+                </span>
+                <span className="ttm-dating-hero__title-line ttm-dating-hero__title-line--punch">
+                  <StaggerWords
+                    text={t("datingHeroTitleLine3")}
+                    wordClassName="ttm-dating-hero__title-word--punch"
+                    baseDelay={STAGGER.title3}
+                  />
                 </span>
               </motion.h1>
 
@@ -240,9 +252,9 @@ export function DatingLandingHero() {
               transition={{ duration: 0.9, delay: STAGGER.visual, ease: [0.22, 1, 0.36, 1] }}
             >
               <DatingHeroMatchPreview scrollProgress={scrollYProgress} />
+              <DatingHeroCenterCard />
             </motion.div>
           </div>
-          <DatingHeroCenterCard />
         </div>
       </motion.div>
 
