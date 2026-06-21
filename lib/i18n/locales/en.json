@@ -1353,6 +1353,7 @@
   "datingHeroScrollHint": "Scroll",
   "datingHeroMatchesToday": "{count} matches today",
   "datingHeroLiveTicker": "{name} just matched",
+  "datingHeroMatchMoment": "It's a Match!",
   "datingKmAway": "{km} km away",
   "datingVerifiedTitle": "Verified",
   "datingProfileNameEmma": "Emma",

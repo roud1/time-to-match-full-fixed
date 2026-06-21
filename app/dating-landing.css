@@ -1030,13 +1030,13 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 .ttm-dating-hero__portraits {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 0.88;
+  aspect-ratio: 1 / 0.92;
   display: grid;
   place-items: center;
   transform-style: preserve-3d;
   transition: transform 0.35s var(--dt-ease);
-  --dt-match-seam-x: 47%;
-  --dt-match-seam-y: 39%;
+  --dt-match-seam-x: 50%;
+  --dt-match-seam-y: 44%;
 }
 
 .ttm-dating-hero__portraits-glow {
@@ -1169,62 +1169,257 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 .ttm-dating-hero__portrait {
   position: absolute;
   margin: 0;
-  width: min(58vw, 240px);
+  width: min(62vw, 260px);
+}
+
+@media (min-width: 768px) {
+  .ttm-dating-hero__portrait {
+    width: min(44vw, 300px);
+  }
 }
 
 @media (min-width: 1024px) {
   .ttm-dating-hero__portrait {
-    width: min(26vw, 380px);
+    width: min(28vw, 340px);
   }
 }
 
 .ttm-dating-hero__portrait--back {
-  left: 12%;
-  top: 2%;
-  z-index: 1;
-  rotate: -11deg;
+  left: 4%;
+  top: 6%;
+  z-index: 2;
+  rotate: -17deg;
 }
 
 .ttm-dating-hero__portrait--front {
-  right: 12%;
-  bottom: 0;
-  z-index: 2;
-  rotate: 8deg;
+  right: 4%;
+  bottom: 2%;
+  z-index: 3;
+  rotate: 15deg;
+}
+
+@media (max-width: 767px) {
+  .ttm-dating-hero__portrait--back {
+    display: none;
+  }
+
+  .ttm-dating-hero__portrait--front {
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    top: 50%;
+    translate: -50% -50%;
+    rotate: 0deg;
+    width: min(72vw, 280px);
+  }
+
+  .ttm-dating-hero__portraits {
+    --dt-match-seam-x: 50%;
+    --dt-match-seam-y: 50%;
+  }
 }
 
 .ttm-dating-hero__portrait-frame {
   position: relative;
   aspect-ratio: 3 / 4;
-  border-radius: calc(var(--dt-radius-lg) + 6px);
+  border-radius: calc(var(--dt-radius-lg) + 8px);
   overflow: hidden;
-  border: 2px solid rgba(255, 241, 242, 0.14);
+  border: 1px solid rgba(251, 113, 133, 0.38);
   box-shadow:
-    0 24px 56px -16px rgba(0, 0, 0, 0.55),
-    0 0 48px -8px rgba(225, 29, 72, 0.35);
+    inset 0 0 0 1px rgba(255, 241, 242, 0.1),
+    0 0 28px -6px rgba(225, 29, 72, 0.42),
+    0 32px 64px -18px rgba(0, 0, 0, 0.68);
 }
 
 .ttm-dating-hero__portrait--front .ttm-dating-hero__portrait-frame {
-  border-color: rgba(251, 113, 133, 0.28);
+  border-color: rgba(251, 113, 133, 0.48);
   box-shadow:
-    0 28px 64px -12px rgba(0, 0, 0, 0.6),
-    0 0 56px -4px rgba(249, 115, 22, 0.4);
+    inset 0 0 0 1px rgba(255, 241, 242, 0.12),
+    0 0 36px -4px rgba(249, 115, 22, 0.45),
+    0 36px 72px -14px rgba(0, 0, 0, 0.72);
+}
+
+.ttm-dating-hero__portrait-glass-edge {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 241, 242, 0.14) 0%,
+    transparent 38%,
+    transparent 62%,
+    rgba(225, 29, 72, 0.1) 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 241, 242, 0.18);
 }
 
 .ttm-dating-hero__portrait-shade {
   position: absolute;
   inset: auto 0 0;
-  height: 42%;
-  background: linear-gradient(transparent, rgba(13, 4, 8, 0.82));
+  height: 48%;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(13, 4, 8, 0.92) 0%,
+    rgba(13, 4, 8, 0.55) 42%,
+    transparent 100%
+  );
+}
+
+.ttm-dating-hero__portrait-badges {
+  position: absolute;
+  inset: 0.75rem 0.75rem auto;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ttm-dating-hero__portrait-score {
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--dt-font-body);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff1f2;
+  background: rgba(225, 29, 72, 0.82);
+  border: 1px solid rgba(251, 113, 133, 0.45);
+  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.ttm-dating-hero__portrait-online {
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 50%;
+  background: #4ade80;
+  border: 2px solid rgba(13, 4, 8, 0.65);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.65);
+}
+
+.ttm-dating-hero__portrait-info {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0 1rem 1rem;
+}
+
+.ttm-dating-hero__portrait-name {
+  font-family: var(--dt-font-body);
+  font-size: clamp(1rem, 2.8vw, 1.12rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(13, 4, 8, 0.55);
+}
+
+.ttm-dating-hero__portrait-distance {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--dt-font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255, 241, 242, 0.92);
+  background: rgba(255, 241, 242, 0.12);
+  border: 1px solid rgba(255, 241, 242, 0.14);
+  backdrop-filter: blur(6px);
 }
 
 .ttm-dating-hero__portrait-caption {
-  margin: 0.65rem 0 0;
-  font-family: var(--dt-font-display);
-  font-size: 0.92rem;
-  font-weight: 600;
-  text-align: center;
-  color: var(--dt-text);
-  text-shadow: 0 2px 12px rgba(13, 4, 8, 0.65);
+  display: none;
+}
+
+.ttm-dating-hero__portrait-peek {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -52%;
+  margin: 0;
+  width: min(48vw, 240px);
+  z-index: 0;
+  opacity: 0.32;
+  rotate: 1deg;
+  scale: 0.78;
+  filter: saturate(0.75) brightness(0.82);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .ttm-dating-hero__portrait-peek {
+    display: none;
+  }
+}
+
+.ttm-dating-hero__portrait-peek-frame {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: calc(var(--dt-radius-lg) + 6px);
+  overflow: hidden;
+  border: 1px solid rgba(251, 113, 133, 0.18);
+  box-shadow: 0 20px 48px -20px rgba(0, 0, 0, 0.55);
+}
+
+.ttm-dating-hero__match-bridge {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.ttm-dating-hero__match-bridge-line {
+  stroke: url(#dt-match-bridge-grad);
+  stroke-width: 2;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.55));
+  opacity: 0;
+  animation: dt-match-bridge-in 0.9s var(--dt-ease) 0.55s forwards;
+}
+
+@media (max-width: 767px) {
+  .ttm-dating-hero__match-bridge {
+    display: none;
+  }
+}
+
+.ttm-dating-hero__match-label {
+  position: absolute;
+  top: calc(var(--dt-match-seam-y) - 3.25rem);
+  left: var(--dt-match-seam-x);
+  translate: -50% 0;
+  z-index: 5;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  font-family: var(--dt-font-body);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dt-amber);
+  background: rgba(13, 4, 8, 0.55);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.28);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .ttm-dating-hero__match-label {
+    display: none;
+  }
 }
 
 .ttm-dating-hero__portraits-spark {
@@ -1232,17 +1427,18 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   top: var(--dt-match-seam-y);
   left: var(--dt-match-seam-x);
   translate: -50% -50%;
-  z-index: 4;
+  z-index: 6;
   display: grid;
   place-items: center;
-  width: 3.75rem;
-  height: 3.75rem;
+  width: 4.5rem;
+  height: 4.5rem;
   border-radius: 50%;
   color: #fff1f2;
-  background: linear-gradient(135deg, var(--dt-rose), var(--dt-coral));
+  background: linear-gradient(145deg, var(--dt-rose) 0%, var(--dt-coral) 100%);
   box-shadow:
-    0 0 32px rgba(225, 29, 72, 0.65),
-    0 0 64px rgba(249, 115, 22, 0.25);
+    0 0 36px rgba(225, 29, 72, 0.72),
+    0 0 72px rgba(249, 115, 22, 0.28),
+    inset 0 1px 0 rgba(255, 241, 242, 0.25);
 }
 
 .ttm-dating-hero__portrait-center {
@@ -1380,7 +1576,13 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 1px solid rgba(251, 113, 133, 0.5);
+  border: 1px solid rgba(251, 113, 133, 0.55);
+}
+
+.ttm-dating-hero__portraits-spark-ring--outer {
+  inset: -14px;
+  border-color: rgba(251, 113, 133, 0.22);
+  opacity: 0.75;
 }
 
 .ttm-dating-hero__portraits-spark--live {
@@ -1389,6 +1591,19 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 
 .ttm-dating-hero__portraits-spark--live .ttm-dating-hero__portraits-spark-ring {
   animation: dt-match-ring 2.6s ease-out infinite;
+}
+
+.ttm-dating-hero__portraits-spark--live .ttm-dating-hero__portraits-spark-ring--outer {
+  animation: dt-match-ring 2.6s ease-out 0.35s infinite;
+}
+
+@keyframes dt-match-bridge-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .ttm-dating-hero__timer-card {
@@ -2363,6 +2578,7 @@ html[data-theme="light"] .ttm-dating-emotional__band {
   .ttm-dating-hero__glow,
   .ttm-dating-hero__heart--float,
   .ttm-dating-float--animate,
+  .ttm-dating-hero__match-bridge-line,
   .ttm-dating-hero__portraits-spark--live,
   .ttm-dating-hero__portraits-spark--live .ttm-dating-hero__portraits-spark-ring,
   .ttm-dating-hero__portraits-glow,

@@ -1412,6 +1412,7 @@ export const translations = {
     datingHeroScrollHint: "Листай",
     datingHeroMatchesToday: "{count} мэтчей сегодня",
     datingHeroLiveTicker: "{name} только что нашла пару",
+    datingHeroMatchMoment: "Это мэтч!",
     datingKmAway: "{km} км от вас",
     datingVerifiedTitle: "Верифицирован",
     datingProfileNameEmma: "Эмма",

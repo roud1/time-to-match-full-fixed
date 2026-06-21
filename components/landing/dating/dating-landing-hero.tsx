@@ -6,7 +6,6 @@ import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } fr
 import { useEffect, useMemo, useRef, useState } from "react"
 import { DatingHeroAtmosphere } from "@/components/landing/dating/dating-hero-atmosphere"
 import { DatingHeroBottomBand } from "@/components/landing/dating/dating-hero-bottom-band"
-import { DatingHeroCenterCard } from "@/components/landing/dating/dating-hero-center-card"
 import { DatingHeroMatchPreview } from "@/components/landing/dating/dating-hero-match-preview"
 import { useParallaxIntensity } from "@/hooks/use-parallax"
 import { useI18n } from "@/lib/i18n"
@@ -252,7 +251,6 @@ export function DatingLandingHero() {
               transition={{ duration: 0.9, delay: STAGGER.visual, ease: [0.22, 1, 0.36, 1] }}
             >
               <DatingHeroMatchPreview scrollProgress={scrollYProgress} />
-              <DatingHeroCenterCard />
             </motion.div>
           </div>
         </div>
