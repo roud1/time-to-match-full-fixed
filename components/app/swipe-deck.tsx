@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useRef, useState, type ReactNode } from "react"
-import { motion, animate, type PanInfo } from "motion/react"
+import { motion, animate } from "motion/react"
 import { useReducedMotion } from "motion/react"
 import { useI18n } from "@/lib/i18n"
 import type { SwipeProfile } from "@/lib/demo-profiles"
@@ -176,7 +176,10 @@ export function SwipeDeck({
   )
 
   const onDragEnd = useCallback(
-    (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    (
+      _: MouseEvent | TouchEvent | PointerEvent,
+      info: { offset: { x: number; y: number }; velocity: { x: number; y: number } }
+    ) => {
       const { offset, velocity } = info
       const threshold = 88
       if (offset.x > threshold || velocity.x > 380) {

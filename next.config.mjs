@@ -3,9 +3,6 @@ const nextConfig = {
   output: "standalone",
   poweredByHeader: false,
   compress: true,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   serverExternalPackages: ["postgres", "bcryptjs"],
   experimental: {
     optimizePackageImports: ["lucide-react"],

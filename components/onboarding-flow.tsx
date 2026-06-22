@@ -7,7 +7,9 @@ import { CinematicButton } from "@/components/ui/cinematic-button"
 import { OnboardingSyncVisual } from "@/components/product/onboarding-sync-visual"
 import { cn } from "@/lib/utils"
 
-const SLIDES = [
+import type { TranslationKey } from "@/lib/i18n"
+
+const SLIDES: { title: TranslationKey; sub: TranslationKey; visual: "sync" | "pulse" | "moment" | "create" }[] = [
   { title: "onboardStoryTitle", sub: "onboardStorySub", visual: "sync" as const },
   { title: "onboard1Title", sub: "onboard1Sub", visual: "pulse" as const },
   { title: "onboard2Title", sub: "onboard2Sub", visual: "moment" as const },

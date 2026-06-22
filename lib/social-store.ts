@@ -79,7 +79,7 @@ function save(state: SocialState) {
   localStorage.setItem(SOCIAL_KEY, JSON.stringify(state))
 }
 
-const GREETINGS: Record<Locale, string[]> = {
+const GREETINGS: Partial<Record<Locale, string[]>> = {
   ru: [
     "Привет! Рада взаимной симпатии 👋",
     "Привет! Как дела?",
@@ -238,8 +238,10 @@ async function tryServerSwipe(
 
   if (direction === "right") {
     const res = await postDiscoverLike(profile.userId)
-    if (!res.ok && res.demoFallback) return null
-    if (!res.ok) return null
+    if (!res.ok) {
+      if ("demoFallback" in res && res.demoFallback) return null
+      return null
+    }
     if (res.matched && res.matchId) {
       storeServerMatchId(profile.id, res.matchId)
     }
@@ -247,8 +249,10 @@ async function tryServerSwipe(
   }
 
   const res = await postDiscoverPass(profile.userId)
-  if (!res.ok && res.demoFallback) return null
-  if (!res.ok) return null
+  if (!res.ok) {
+    if ("demoFallback" in res && res.demoFallback) return null
+    return null
+  }
   return { matched: false }
 }
 
@@ -275,8 +279,8 @@ function recordSwipeLocal(
     if (!state.matches.includes(profile.id)) {
       state.matches.push(profile.id)
       matched = true
-      const greetings = GREETINGS[locale]
-      const text = greetings[profile.id % greetings.length]
+      const greetings = GREETINGS[locale] ?? GREETINGS.en ?? []
+      const text = greetings[profile.id % greetings.length] ?? greetings[0] ?? "Hey!"
       const existing = state.chats.find((c) => c.profileId === profile.id)
       if (!existing) {
         state.chats.push({
@@ -497,11 +501,11 @@ export async function sendChatMessage(
 
   const result = await sendMatchMessage(matchId, trimmed)
   if (!result.ok) {
-    if (result.demoFallback) {
+    if ("demoFallback" in result && result.demoFallback) {
       sendMessage(profileId, trimmed, locale, position)
       return { mode: "local" }
     }
-    return { mode: "error", reason: result.error ?? "send_failed" }
+    return { mode: "error", reason: ("error" in result ? result.error : undefined) ?? "send_failed" }
   }
 
   const detail = await fetchMatchDetail(matchId)

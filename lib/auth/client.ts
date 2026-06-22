@@ -1,6 +1,6 @@
 import type { StoredUserProfile } from "@/lib/user-profile"
 import type { InterestId } from "@/lib/interests"
-import { getCityCoords, type CitySelectValue, CUSTOM_CITY_ID } from "@/lib/cities"
+import { getCityCoords } from "@/lib/cities"
 import {
   fetchInterests,
   saveUserInterests,
@@ -97,8 +97,8 @@ export async function logoutOnServer(): Promise<void> {
 }
 
 function profileCoords(profile: StoredUserProfile): { lat: number; lng: number } | null {
-  if (profile.cityId && profile.cityId !== CUSTOM_CITY_ID) {
-    return getCityCoords(profile.cityId as Exclude<CitySelectValue, "" | typeof CUSTOM_CITY_ID>)
+  if (profile.cityId) {
+    return getCityCoords(profile.cityId)
   }
   return null
 }

@@ -75,7 +75,7 @@ export function getMatchConversationStarters(
   locale: Locale,
   gender?: StoredUserProfile["gender"]
 ): string[] {
-  const pack = MATCH_CONVERSATION_STARTERS[locale] ?? MATCH_CONVERSATION_STARTERS.en
+  const pack = MATCH_CONVERSATION_STARTERS[locale] ?? MATCH_CONVERSATION_STARTERS.en!
   if (gender === "male") return pack.male
   if (gender === "female") return pack.female
   return pack.neutral

@@ -4,7 +4,8 @@ import {
   stageFromConnectionStage,
 } from "@/lib/ecosystem/relationship-stages"
 import { getAIMemories } from "@/lib/ai-connection-memory-store"
-import { extractSignals, analyzeConnection } from "@/lib/connection-engine"
+import { extractAIConnectionSignals } from "@/lib/ai-connection-engine"
+import { analyzeConnection } from "@/lib/connection-engine"
 import {
   buildConnectionView,
   type ConnectionMemory,
@@ -90,7 +91,7 @@ export function buildEcosystemMemoryItems(
     const messages = getChatMessagesForProfile(pid)
     if (!record) continue
     const view = buildConnectionView(record)
-    const signals = extractSignals(messages, record)
+    const signals = extractAIConnectionSignals(messages, record)
     const analysis = analyzeConnection(view, messages, record)
     const defaultStage = resolveEcosystemStage(
       view,

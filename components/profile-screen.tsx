@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import { useReducedMotion } from "motion/react"
-import { useI18n, type TranslationKey } from "@/lib/i18n"
+import { useI18n, type Locale, type TranslationKey } from "@/lib/i18n"
 import { localeToBcp47 } from "@/lib/i18n/config"
 import { CUSTOM_CITY_ID, type CitySelectValue } from "@/lib/cities"
 import { getInterestLabel, MIN_INTERESTS, type InterestId } from "@/lib/interests"
@@ -113,7 +113,7 @@ function formatDiscoverAgeRange(ageMin?: number | null, ageMax?: number | null) 
   return `≤${ageMax}`
 }
 
-function formatMemberDate(ts: number, locale: string) {
+function formatMemberDate(ts: number, locale: Locale) {
   return new Intl.DateTimeFormat(localeToBcp47(locale), {
     day: "numeric",
     month: "long",

@@ -81,7 +81,6 @@ export function SwipeProfileCard({
     preventScrollOnSwipe: true,
     delta: 50,
     swipeDuration: 500,
-    disabled: Boolean(onDragEnd),
   })
 
   const stackClass =

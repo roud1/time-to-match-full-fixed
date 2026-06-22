@@ -35,11 +35,14 @@ export function buildAnalyzeConnectionRequest(
   return {
     profileId,
     locale: locale as AnalyzeConnectionRequest["locale"],
-    messages: messages.slice(-30).map((m) => ({
-      from: m.from,
-      text: m.text,
-      at: m.at,
-    })),
+    messages: messages
+      .slice(-30)
+      .filter((m): m is ChatMessage & { from: "me" | "them" } => m.from !== "system")
+      .map((m) => ({
+        from: m.from,
+        text: m.text,
+        at: m.at,
+      })),
     responseTimes: replyTimes(messages),
     activityLevel: activityLevelFromSignals(signals),
     conversationLength: messages.length,

@@ -34,7 +34,7 @@ export async function sendWebPush(
 
   try {
     await webpush.sendNotification(
-      subscription as webpush.PushSubscription,
+      subscription as Parameters<typeof webpush.sendNotification>[0],
       JSON.stringify(payload)
     )
     return true

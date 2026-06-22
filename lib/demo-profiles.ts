@@ -34,16 +34,18 @@ export type SwipeProfile = {
 
 const CITY_IDS: CityId[] = ["kyiv", "lviv", "odesa", "kharkiv", "dnipro", "lviv", "kyiv", "odesa"]
 
-const DEMO_DATA: Record<
-  Locale,
-  Array<{
-    name: string
-    bio: string
-    interests: string[]
-    age: number
-    timeLeft: string
-    distanceIndex: number
-  }>
+const DEMO_DATA: Partial<
+  Record<
+    Locale,
+    Array<{
+      name: string
+      bio: string
+      interests: string[]
+      age: number
+      timeLeft: string
+      distanceIndex: number
+    }>
+  >
 > = {
   ru: [
     { name: "Алиса", bio: "Люблю путешествия и хороший кофе", interests: ["Путешествия", "Кофе", "Фотография"], age: 25, timeLeft: "71:12:08", distanceIndex: 0 },
@@ -179,17 +181,17 @@ export function buildDemoSwipeProfiles(
   locale: Locale,
   userPosition?: GeoPosition | null
 ): SwipeProfile[] {
-  const data = DEMO_DATA[locale]
+  const data = DEMO_DATA[locale] ?? DEMO_DATA.en ?? []
 
   return data.map((profile, index) => {
     const cityId = CITY_IDS[index % CITY_IDS.length]
+    const cityCoords = getCityCoords(cityId)
     const distance =
-      userPosition != null
-        ? formatDistance(locale, distanceKm(userPosition, getCityCoords(cityId)))
+      userPosition != null && cityCoords != null
+        ? formatDistance(locale, distanceKm(userPosition, cityCoords))
         : formatDistance(locale, FALLBACK_KM[profile.distanceIndex % FALLBACK_KM.length])
 
-    const cityCoords = getCityCoords(cityId)!
-    const anchor = userPosition ?? cityCoords
+    const anchor = userPosition ?? cityCoords ?? { lat: 50.45, lng: 30.52 }
     const coords = offsetPosition(anchor, index)
 
     const slot = ((index * 3 + profile.distanceIndex) % 4) + 1

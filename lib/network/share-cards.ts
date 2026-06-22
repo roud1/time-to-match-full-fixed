@@ -1,6 +1,7 @@
 import type { SyncMetrics } from "@/lib/sync-system"
 import type { RelationshipLiveState } from "@/lib/shared/relationship-live-state"
 import type { ConnectionAuraProfile } from "@/lib/relationship-identity"
+import { getConnectionPersonalityLabel } from "@/lib/ai-connection-engine/personality"
 import type { RelationshipEcosystemStage } from "@/lib/ecosystem"
 import type { ShareMoment } from "@/lib/shared/share-moments"
 import { STAGE_LABEL_KEYS } from "@/lib/ecosystem"
@@ -14,11 +15,12 @@ export function buildAuraShareMoment(
   state: RelationshipLiveState,
   t: (key: TranslationKey) => string
 ): ShareMoment {
+  const personalityLabel = getConnectionPersonalityLabel(aura.personality, t)
   const stageLabel = stage ? t(STAGE_LABEL_KEYS[stage]) : ""
   return {
     kind: "aura",
     title: t("netShareAuraTitle"),
-    subtitle: stageLabel ? `${stageLabel} · ${aura.label}` : aura.label,
+    subtitle: stageLabel ? `${stageLabel} · ${personalityLabel}` : personalityLabel,
     syncPercent,
     state,
     partnerName,

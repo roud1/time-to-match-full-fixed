@@ -2,13 +2,14 @@
 
 import { motion, useReducedMotion } from "motion/react"
 import type { EmotionalTimelineEntry } from "@/lib/time"
+import type { Locale } from "@/lib/i18n"
 import { useI18n } from "@/lib/i18n"
 import { formatMemoryDate } from "@/lib/format-chat-time"
 import { cn } from "@/lib/utils"
 
 type EmotionalTimeTimelineProps = {
   entries: EmotionalTimelineEntry[]
-  locale: string
+  locale: Locale
   className?: string
   compact?: boolean
 }

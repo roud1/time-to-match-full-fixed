@@ -36,7 +36,7 @@ export function usePresenceRealtime(options: UsePresenceRealtimeOptions = {}) {
 
     const slow = window.setInterval(bump, intervalMs)
 
-    let active: ReturnType<typeof setInterval> | undefined
+    let active: number | undefined
     const startActive = () => {
       if (document.hidden) return
       active = window.setInterval(bump, activeIntervalMs)

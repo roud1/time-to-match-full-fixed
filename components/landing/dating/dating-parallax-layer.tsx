@@ -1,11 +1,11 @@
 "use client"
 
 import { motion, type MotionStyle } from "motion/react"
-import type { ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 import { cn } from "@/lib/utils"
 
 type DatingParallaxLayerProps = {
-  children: ReactNode
+  children?: ReactNode
   className?: string
   /** MotionValue<number> for Y translate, or undefined to skip parallax. */
   y?: MotionStyle["y"]
@@ -23,7 +23,7 @@ export function DatingParallaxLayer({
 }: DatingParallaxLayerProps) {
   if (y === undefined && opacity === undefined) {
     return (
-      <div className={className} style={style}>
+      <div className={className} style={style as CSSProperties | undefined}>
         {children}
       </div>
     )

@@ -66,7 +66,7 @@ export async function showEmotionalPush(payload: PushPayload): Promise<boolean> 
       badge: "/icon.svg",
       tag: payload.tag ?? "ttm-emotional",
       data: { url: payload.url ?? "/app" },
-      vibrate: [80, 40, 80],
+      ...( { vibrate: [80, 40, 80] } as NotificationOptions ),
     })
     return true
   } catch {

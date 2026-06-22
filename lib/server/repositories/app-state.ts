@@ -36,7 +36,7 @@ export async function upsertUserAppState(userId: string, payload: AppStatePayloa
   const body = { ...payload, savedAt: Date.now() }
   await db`
     INSERT INTO user_app_state (user_id, connections_json, updated_at)
-    VALUES (${userId}::uuid, ${db.json(body)}, now())
+    VALUES (${userId}::uuid, ${db.json(JSON.parse(JSON.stringify(body)))}, now())
     ON CONFLICT (user_id) DO UPDATE SET
       connections_json = EXCLUDED.connections_json,
       updated_at = now()

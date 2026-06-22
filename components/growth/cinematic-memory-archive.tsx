@@ -8,7 +8,8 @@ import { getConnectionMemories } from "@/lib/connection-store"
 import { getAIMemories } from "@/lib/ai-connection-memory-store"
 import { buildRelationshipMoments } from "@/lib/relationship-identity/moments"
 import { buildConnectionView } from "@/lib/connection-system"
-import { extractSignals, analyzeConnection } from "@/lib/connection-engine"
+import { extractAIConnectionSignals } from "@/lib/ai-connection-engine"
+import { analyzeConnection } from "@/lib/connection-engine"
 import { getActiveConnections, getConnection } from "@/lib/connection-store"
 import { getChatMessagesForProfile } from "@/lib/social-store"
 import { formatMemoryDate } from "@/lib/format-chat-time"
@@ -54,7 +55,7 @@ export function CinematicMemoryArchive({ profileId, limit = 6, className }: Cine
       const messages = getChatMessagesForProfile(pid)
       if (!record) continue
       const view = buildConnectionView(record)
-      const signals = extractSignals(messages, record)
+      const signals = extractAIConnectionSignals(messages, record)
       const analysis = analyzeConnection(view, messages, record)
       const moments = buildRelationshipMoments(messages, record, signals, analysis.syncPercent, t)
       for (const mom of moments.filter((x) => x.reached).slice(-2)) {

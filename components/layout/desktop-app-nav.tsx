@@ -5,10 +5,10 @@ import { usePathname, useSearchParams } from "next/navigation"
 import { Compass, Heart, MapPin, MessageCircle, User } from "lucide-react"
 import { Logo } from "@/components/logo"
 import { cn } from "@/lib/utils"
-import { useI18n } from "@/lib/i18n"
+import { useI18n, type TranslationKey } from "@/lib/i18n"
 import type { AppTab } from "@/components/app/bottom-nav"
 
-const ITEMS: { tab: AppTab; icon: typeof Compass; labelKey: string }[] = [
+const ITEMS: { tab: AppTab; icon: typeof Compass; labelKey: TranslationKey }[] = [
   { tab: "discover", icon: Compass, labelKey: "tabDiscover" },
   { tab: "likes", icon: Heart, labelKey: "tabLikes" },
   { tab: "chat", icon: MessageCircle, labelKey: "tabChat" },

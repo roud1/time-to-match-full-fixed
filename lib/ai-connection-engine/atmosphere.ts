@@ -22,6 +22,11 @@ const PERSONALITY_WARMTH: Record<ConnectionPersonality, number> = {
   slow_burn: 0.38,
   emotional_chaos: 0.48,
   deep_compatibility: 0.78,
+  deep_sync: 0.72,
+  magnetic_chemistry: 0.9,
+  night_energy: 0.65,
+  stable_bond: 0.6,
+  intense_attraction: 0.88,
 }
 
 /** Map AI output → realtime UI atmosphere (glow, motion, particles). */

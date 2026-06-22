@@ -83,7 +83,7 @@ export async function createUser(input: {
       ${input.email.trim()},
       ${input.passwordHash},
       ${input.name.trim()},
-      ${db.json(input.profile)},
+      ${db.json(JSON.parse(JSON.stringify(input.profile)))},
       ${input.profileExpiresAt}
     )
     RETURNING id

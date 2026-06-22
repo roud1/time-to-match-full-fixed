@@ -109,7 +109,7 @@ export function computeDiscoverCompatibility(profile: SwipeProfile): DiscoverCom
   if (profile.bio.length >= 28) resonance += 3
 
   if (me?.interests?.length) {
-    const myLabels = new Set(
+    const myLabels = new Set<string>(
       me.interests.flatMap((id) => {
         const item = INTERESTS.find((i) => i.id === id)
         return item ? [item.ru, item.uk, item.en] : []

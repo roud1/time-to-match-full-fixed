@@ -9,6 +9,11 @@ const PERSONALITY_I18N: Record<ConnectionPersonality, TranslationKey> = {
   slow_burn: "aiPersonalitySlowBurn",
   emotional_chaos: "aiPersonalityChaos",
   deep_compatibility: "aiPersonalityDeepCompat",
+  deep_sync: "relPersonalityDeepSync",
+  magnetic_chemistry: "relPersonalityMagneticChemistry",
+  night_energy: "relPersonalityNightEnergy",
+  stable_bond: "relPersonalityStableBond",
+  intense_attraction: "relPersonalityIntenseAttraction",
 }
 
 export function getConnectionPersonalityLabel(

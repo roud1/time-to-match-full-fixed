@@ -98,14 +98,14 @@ export function applyServerUserToLocalProfile(
 ): StoredUserProfile {
   const existing = getUserProfile()
   const next: StoredUserProfile = {
+    ...existing,
+    ...patch,
     name: patch.name,
     email: patch.email,
     bio: patch.bio ?? existing?.bio ?? "",
     gender: patch.gender ?? existing?.gender ?? "male",
     lookingFor: patch.lookingFor ?? existing?.lookingFor ?? "all",
     registeredAt: patch.registeredAt ?? existing?.registeredAt ?? Date.now(),
-    ...existing,
-    ...patch,
   }
   if (next.photoUrls?.length) delete next.photoUrl
   if (typeof window !== "undefined") {

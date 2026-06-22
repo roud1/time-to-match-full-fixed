@@ -118,7 +118,9 @@ export function buildConnectionAIPayload(
       isFading: view.isFading,
       isStable: view.isStable,
     },
-    recentMessages: recent.map((m) => ({ from: m.from, text: m.text, at: m.at })),
+    recentMessages: recent
+      .filter((m) => m.from !== "system")
+      .map((m) => ({ from: m.from as "me" | "them", text: m.text, at: m.at })),
   }
 }
 

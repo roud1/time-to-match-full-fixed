@@ -19,7 +19,8 @@ export function useEmotionalTimeline(profileId?: number): EmotionalTimelineEntry
     const view = buildConnectionView(record)
     const messages = getChatMessagesForProfile(record.profileId)
     const analysis = analyzeConnection(view, messages, record)
-    const sync = deriveSyncMetrics(view, messages, analysis)
+    const sync = deriveSyncMetrics(view, { messages, record })
+    if (!sync) return []
     const timeState = resolveRelationshipTimeState(record, analysis, messages)
     return buildEmotionalTimeline(messages, record, sync.syncPercent, timeState)
   }, [profileId])

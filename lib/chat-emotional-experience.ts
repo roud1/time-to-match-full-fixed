@@ -64,7 +64,7 @@ export function deriveChatExperience(
     const state = AI_STATE_MAP[metrics.aiConnectionState]!
     return {
       state,
-      intensity: glow ?? metrics.atmosphereLevel ? metrics.atmosphereLevel / 100 : 0.6,
+      intensity: glow ?? (metrics.atmosphereLevel ? metrics.atmosphereLevel / 100 : 0.6),
       tier,
       motionScale: motion ?? 0.7,
       particleDensity: particles ?? 0.4,

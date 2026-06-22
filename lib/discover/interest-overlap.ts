@@ -21,7 +21,7 @@ export function computeInterestOverlapForProfile(profile: SwipeProfile): {
     return { compatibility: profile.compatibility ?? 0, commonInterests: profile.commonInterests ?? [] }
   }
 
-  const myLabels = new Set(
+  const myLabels = new Set<string>(
     myIds.flatMap((id) => {
       const item = INTERESTS.find((i) => i.id === id)
       return item ? [item.ru, item.uk, item.en] : []

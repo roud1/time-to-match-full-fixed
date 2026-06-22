@@ -62,14 +62,19 @@ export async function getInterestsForUsers(
   const map = new Map<string, DbInterestRow[]>()
   if (!db || userIds.length === 0) return map
 
-  const rows = await db<
-    { user_id: string; id: number; name: string; category: string | null; emoji: string | null; slug: string | null }
-  >`
+  const rows = await db`
     SELECT ui.user_id, i.id, i.name, i.category, i.emoji, i.slug
     FROM user_interests ui
     JOIN interests i ON i.id = ui.interest_id
     WHERE ui.user_id = ANY(${userIds})
-  `
+  ` as Array<{
+    user_id: string
+    id: number
+    name: string
+    category: string | null
+    emoji: string | null
+    slug: string | null
+  }>
 
   for (const row of rows) {
     const list = map.get(row.user_id) ?? []

@@ -31,9 +31,9 @@ export function DatingAiSection() {
           </div>
           <p className="ttm-dating-section__eyebrow">{t("datingAiEyebrow")}</p>
           <h2 id="dating-ai-title" className="ttm-dating-ai__title">
-            {t("datingAiTitle")}
+            {t("datingAiConnectionTitle")}
           </h2>
-          <p className="ttm-dating-ai__hint">{t("datingAiHint")}</p>
+          <p className="ttm-dating-ai__hint">{t("datingAiScoreHint")}</p>
         </motion.div>
       </div>
     </section>

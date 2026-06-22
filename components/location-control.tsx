@@ -29,7 +29,7 @@ export function LocationControl() {
   return (
     <button
       type="button"
-      onClick={location.requestLocation}
+      onClick={() => location.requestLocation()}
       title={canRetry ? t("locationEnable") : undefined}
       className="flex items-center gap-1.5 max-w-[140px] px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full bg-foreground/5 border border-foreground/10 text-foreground/80 text-[10px] sm:text-xs font-light hover:bg-foreground/10 transition-all duration-300"
     >

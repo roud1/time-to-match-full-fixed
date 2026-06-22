@@ -775,6 +775,7 @@ export const translations = {
     discoverConnectLabel: "Связь",
     discoverPassLabel: "Дальше",
     discoverCompatibilityLabel: "Совместимость",
+    discoverExpiryHoursShort: "{hours} ч",
     discoverFiltersTitle: "Фильтры",
     discoverFiltersClose: "Закрыть фильтры",
     discoverFiltersAny: "Любой",
@@ -1471,14 +1472,14 @@ type LocaleMessages = typeof translations.ru
 type ProfileTranslation = (typeof translations.ru.profiles)[number]
 
 const JSON_LOCALES: Partial<Record<Locale, LocaleMessages>> = {
-  en: enMessages as LocaleMessages,
-  uk: ukMessages as LocaleMessages,
-  de: deMessages as LocaleMessages,
-  es: esMessages as LocaleMessages,
-  pl: plMessages as LocaleMessages,
-  fr: frMessages as LocaleMessages,
-  it: itMessages as LocaleMessages,
-  tr: trMessages as LocaleMessages,
+  en: enMessages as unknown as LocaleMessages,
+  uk: ukMessages as unknown as LocaleMessages,
+  de: deMessages as unknown as LocaleMessages,
+  es: esMessages as unknown as LocaleMessages,
+  pl: plMessages as unknown as LocaleMessages,
+  fr: frMessages as unknown as LocaleMessages,
+  it: itMessages as unknown as LocaleMessages,
+  tr: trMessages as unknown as LocaleMessages,
 }
 
 function getLocalePack(loc: Locale): LocaleMessages | undefined {
