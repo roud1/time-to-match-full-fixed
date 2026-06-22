@@ -1,20 +1,19 @@
-import { Cormorant_Garamond, Outfit } from "next/font/google"
+import { Onest, Unbounded } from "next/font/google"
 
-/** UI body — clean geometric sans (latin); Cyrillic via system fallbacks in CSS */
-export const fontBody = Outfit({
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-outfit",
+/** UI body — modern geometric sans with full Cyrillic */
+export const fontBody = Onest({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-onest",
   display: "swap",
   preload: true,
   weight: ["300", "400", "500", "600", "700"],
 })
 
-/** Display headlines — romantic premium serif with Cyrillic */
-export const fontDisplay = Cormorant_Garamond({
+/** Display headlines — bold futuristic impact with Cyrillic */
+export const fontDisplay = Unbounded({
   subsets: ["latin", "cyrillic"],
-  variable: "--font-cormorant",
+  variable: "--font-unbounded",
   display: "swap",
   preload: true,
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 })

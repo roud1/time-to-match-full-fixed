@@ -4,8 +4,8 @@
 
 :root {
   /* —— Typography (set in layout via next/font; fallbacks here) —— */
-  --font-body: var(--font-outfit), 'Outfit', 'Segoe UI', system-ui, sans-serif;
-  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-body: var(--font-onest), 'Onest', 'Segoe UI', system-ui, sans-serif;
+  --font-display: var(--font-unbounded), 'Unbounded', system-ui, sans-serif;
 
   /* —— Core palette (warm light) —— */
   --bg-primary: #fff1f2;

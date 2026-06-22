@@ -99,8 +99,8 @@ html[data-theme="light"] .ttm-dating-landing {
   gap: 0.75rem;
   font-family: var(--dt-font-display);
   font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  letter-spacing: -0.04em;
   color: var(--dt-text);
   text-decoration: none;
 }
@@ -893,10 +893,10 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 .ttm-dating-hero__title {
   margin: 0;
   font-family: var(--dt-font-display);
-  font-size: clamp(2.65rem, 8.5vw, 4.75rem);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.025em;
+  font-size: clamp(2.85rem, 9.5vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.06em;
   will-change: transform;
 }
 
@@ -922,11 +922,11 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 }
 
 .ttm-dating-hero__title-word--hook {
-  font-style: italic;
-  font-size: clamp(2.85rem, 9vw, 5.15rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-size: clamp(3.05rem, 10vw, 5.85rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  transform: skewX(-4deg);
   background: linear-gradient(135deg, #ffe4e6 0%, var(--dt-rose-soft) 18%, var(--dt-coral) 52%, var(--dt-amber) 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -935,17 +935,18 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
 }
 
 .ttm-dating-hero__title-word--punch {
-  font-size: clamp(1.35rem, 3.8vw, 2rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.45rem, 4.2vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
   color: var(--dt-rose-soft);
   text-shadow: 0 0 32px rgba(251, 113, 133, 0.35);
 }
 
 .ttm-dating-hero__title-line--accent {
-  font-style: italic;
-  font-size: 1.08em;
-  font-weight: 700;
+  font-size: 1.12em;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  transform: skewX(-3deg);
   background: linear-gradient(135deg, var(--dt-rose-soft) 0%, var(--dt-coral) 45%, var(--dt-amber) 100%);
   -webkit-background-clip: text;
   background-clip: text;

@@ -39,9 +39,9 @@
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme inline {
-  --font-body: var(--font-outfit), 'Outfit', 'Segoe UI', system-ui, sans-serif;
+  --font-body: var(--font-onest), 'Onest', 'Segoe UI', system-ui, sans-serif;
   --font-sans: var(--font-body);
-  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-display: var(--font-unbounded), 'Unbounded', system-ui, sans-serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -86,7 +86,7 @@
   body {
     @apply text-foreground font-sans;
     font-family: var(--font-sans);
-    font-weight: 300;
+    font-weight: 400;
     background: transparent;
     color: var(--text-primary);
     transition: var(--theme-transition);
@@ -97,12 +97,14 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: -0.03em;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    text-transform: none;
   }
 
   h1 {
-    letter-spacing: -0.04em;
+    font-weight: 800;
+    letter-spacing: -0.055em;
   }
 
   .font-display {

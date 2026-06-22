@@ -39,11 +39,11 @@ html[data-theme="light"] .ttm-profile-page {
   --app-glass-strong: rgba(255, 248, 246, 0.96);
 }
 
-/* Panel titles — display serif headlines */
+/* Panel titles — bold display headlines */
 .ttm-app-panel-title {
   font-family: var(--app-font-display);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.045em;
   color: var(--app-text);
 }
 
