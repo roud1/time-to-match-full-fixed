@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
+import { ProfilePhotoImage } from "@/components/ui/profile-photo-image"
 import { motion, useReducedMotion, type MotionValue } from "motion/react"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import type { PeerTrustSignals } from "@/lib/demo-trust-signals"
@@ -92,11 +92,9 @@ export function SwipeProfilePresenceCard({
         </div>
 
         <div className="profile-presence__identity profile-presence__identity--cover swipe-profile-presence__hero overflow-hidden relative">
-          <Image
+          <ProfilePhotoImage
             key={coverPhoto}
             src={coverPhoto}
-            alt=""
-            fill
             className="profile-presence__identity-bg object-cover object-[center_18%]"
             sizes="(max-width: 1023px) 100vw, 360px"
             priority
@@ -203,7 +201,7 @@ export function SwipeProfilePresenceCard({
                   )}
                   aria-label={t("swipePhotoGoTo").replace("{n}", String(i + 1))}
                 >
-                  <Image src={src} alt="" fill className="object-cover object-[center_18%]" sizes="80px" />
+                  <ProfilePhotoImage src={src} className="object-cover object-[center_18%]" sizes="80px" />
                 </button>
               ))}
             </div>

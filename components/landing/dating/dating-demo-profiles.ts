@@ -45,3 +45,13 @@ export const DATING_CONNECTION_META = {
   imageUrl:
     "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&h=120&fit=crop&q=80",
 }
+
+/** Phone mockup swipe card — Sofia */
+export const DATING_MOCKUP_SWIPE_PHOTO = DATING_HERO_PROFILE_META[2].imageUrl
+
+/** Product preview swipe panel */
+export const DATING_PREVIEW_SWIPE_PHOTO =
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=480&h=600&fit=crop&q=85"
+
+export const DATING_PREVIEW_SWIPE_AGE = 27
+export const DATING_PREVIEW_SWIPE_KM = 2

@@ -3,9 +3,9 @@
  */
 
 :root {
-  /* —— Typography (set in layout via next/font; fallbacks here) —— */
-  --font-body: var(--font-onest), 'Onest', 'Segoe UI', system-ui, sans-serif;
-  --font-display: var(--font-unbounded), 'Unbounded', system-ui, sans-serif;
+  /* —— Typography — Playfair + Inter site-wide (SaaS premium) —— */
+  --font-body: var(--saas-font-body);
+  --font-display: var(--saas-font-display);
 
   /* —— Core palette (warm light) —— */
   --bg-primary: #fff1f2;
@@ -143,79 +143,82 @@
 
 [data-theme="dark"],
 .dark {
-  --bg-primary: #050208;
-  --bg-secondary: #0a0406;
-  --bg-header: rgba(5, 2, 8, 0.94);
-  --text-primary: #fff1f2;
-  --text-secondary: #e8b4bc;
-  --accent: #e8798f;
-  --accent-gradient: linear-gradient(135deg, #c45a6e 0%, #be123c 42%, #c2410c 88%);
-  --hero-highlight-gradient: linear-gradient(135deg, #e8798f 0%, #be123c 48%, #d97706 100%);
-  --warning: #d97706;
+  --bg-primary: var(--saas-bg);
+  --bg-secondary: var(--saas-surface);
+  --bg-header: rgba(11, 15, 20, 0.94);
+  --text-primary: var(--saas-text);
+  --text-secondary: var(--saas-muted);
+  --accent: var(--accent-copper);
+  --accent-gradient: var(--saas-neon-gradient);
+  --hero-highlight-gradient: linear-gradient(135deg, var(--accent-copper) 0%, var(--neon-pink) 50%, var(--neon-purple) 100%);
+  --warning: #f59e0b;
   --error: #f87171;
   --success: #34d399;
-  --border: #1a0610;
+  --border: var(--saas-border);
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.55);
   --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.65);
-  --accent-soft-bg: rgba(190, 18, 60, 0.1);
-  --accent-soft-border: rgba(190, 18, 60, 0.22);
-  --lime: #ea580c;
-  --lime-soft: rgba(234, 88, 12, 0.08);
-  --lime-border: rgba(234, 88, 12, 0.24);
+  --accent-soft-bg: rgba(168, 85, 247, 0.1);
+  --accent-soft-border: rgba(240, 169, 136, 0.22);
+  --lime: var(--accent-copper);
+  --lime-soft: rgba(240, 169, 136, 0.1);
+  --lime-border: rgba(240, 169, 136, 0.28);
 
-  --tile-surface: rgba(10, 4, 6, 0.96);
-  --tile-surface-elevated: rgba(14, 6, 9, 0.98);
-  --tile-border: #1a0610;
-  --tile-border-strong: rgba(190, 18, 60, 0.32);
-  --tile-text: #fff1f2;
-  --tile-text-muted: #e8b4bc;
+  --tile-surface: var(--saas-surface);
+  --tile-surface-elevated: var(--saas-surface-elevated);
+  --tile-border: var(--saas-border);
+  --tile-border-strong: var(--saas-border-strong);
+  --tile-text: var(--saas-text);
+  --tile-text-muted: var(--saas-muted);
 
-  --background: #050208;
-  --foreground: #fff1f2;
-  --card: #0a0406;
-  --card-foreground: #fff1f2;
-  --popover: #080306;
-  --popover-foreground: #fff1f2;
-  --primary: #e8798f;
-  --primary-foreground: #050208;
-  --secondary: #100508;
-  --secondary-foreground: #fff1f2;
-  --muted: #100508;
-  --muted-foreground: #e8b4bc;
+  --background: var(--saas-bg);
+  --foreground: var(--saas-text);
+  --card: var(--saas-surface);
+  --card-foreground: var(--saas-text);
+  --popover: var(--saas-bg-deep);
+  --popover-foreground: var(--saas-text);
+  --primary: var(--accent-copper);
+  --primary-foreground: var(--saas-bg);
+  --secondary: var(--saas-surface-elevated);
+  --secondary-foreground: var(--saas-text);
+  --muted: var(--saas-surface);
+  --muted-foreground: var(--saas-muted);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: #fafafa;
-  --input: #100508;
-  --ring: rgba(190, 18, 60, 0.38);
-  --glow-pink: rgba(190, 18, 60, 0.22);
-  --glow-purple: rgba(190, 18, 60, 0.16);
-  --graphite: #1a0610;
+  --input: var(--saas-surface-elevated);
+  --ring: rgba(240, 169, 136, 0.38);
+  --glow-pink: var(--saas-glow-pink);
+  --glow-purple: var(--saas-glow-purple);
+  --graphite: var(--saas-surface-elevated);
 
-  --ttm-brand-void: #050208;
-  --ttm-brand-deep: #050208;
-  --ttm-brand-graphite: #0a0406;
-  --ttm-brand-surface: #0a0406;
-  --ttm-brand-elevated: #100508;
-  --ttm-brand-mist: rgba(255, 241, 242, 0.58);
-  --ttm-brand-fog: rgba(255, 241, 242, 0.24);
-  --ttm-brand-whisper: rgba(255, 241, 242, 0.1);
-  --ttm-brand-line: rgba(255, 241, 242, 0.06);
-  --ttm-brand-line-strong: rgba(190, 18, 60, 0.18);
+  --ttm-brand-void: var(--saas-bg);
+  --ttm-brand-deep: var(--saas-bg-deep);
+  --ttm-brand-graphite: var(--saas-surface);
+  --ttm-brand-surface: var(--saas-surface);
+  --ttm-brand-elevated: var(--saas-surface-elevated);
+  --ttm-brand-mist: rgba(255, 255, 255, 0.58);
+  --ttm-brand-fog: rgba(255, 255, 255, 0.24);
+  --ttm-brand-whisper: rgba(255, 255, 255, 0.1);
+  --ttm-brand-line: var(--saas-border);
+  --ttm-brand-line-strong: var(--saas-border-strong);
+  --ttm-brand-accent: var(--accent-copper);
+  --ttm-brand-accent-soft: var(--neon-pink);
+  --ttm-brand-accent-muted: var(--neon-purple);
 
-  --ttm-glow-sync: rgba(190, 18, 60, 0.22);
-  --ttm-glow-sync-soft: rgba(190, 18, 60, 0.12);
-  --ttm-glow-chemistry: rgba(194, 65, 12, 0.14);
-  --ttm-glow-chemistry-peak: rgba(190, 18, 60, 0.28);
-  --ttm-glow-bond: rgba(194, 65, 12, 0.12);
-  --ttm-glow-bond-deep: rgba(217, 119, 6, 0.2);
-  --ttm-glow-aura: rgba(190, 18, 60, 0.1);
-  --ttm-glow-cinematic: rgba(190, 18, 60, 0.08);
+  --ttm-glow-sync: var(--saas-glow-purple);
+  --ttm-glow-sync-soft: rgba(168, 85, 247, 0.12);
+  --ttm-glow-chemistry: rgba(240, 169, 136, 0.14);
+  --ttm-glow-chemistry-peak: rgba(236, 72, 153, 0.28);
+  --ttm-glow-bond: rgba(59, 130, 246, 0.12);
+  --ttm-glow-bond-deep: rgba(168, 85, 247, 0.2);
+  --ttm-glow-aura: rgba(236, 72, 153, 0.1);
+  --ttm-glow-cinematic: rgba(168, 85, 247, 0.08);
 
-  --ttm-glass-bg: rgba(5, 2, 8, 0.82);
-  --ttm-glass-bg-strong: rgba(5, 2, 8, 0.92);
+  --ttm-glass-bg: rgba(11, 15, 20, 0.82);
+  --ttm-glass-bg-strong: rgba(11, 15, 20, 0.92);
   --ttm-glass-blur: 24px;
   --ttm-glass-blur-deep: 32px;
-  --ttm-glass-border: rgba(237, 233, 254, 0.08);
+  --ttm-glass-border: var(--saas-border);
 
   --ttm-depth-0: 0 0 0 1px rgba(237, 233, 254, 0.06);
   --ttm-depth-1: var(--ttm-depth-0), 0 12px 40px -20px rgba(0, 0, 0, 0.75);

@@ -70,7 +70,7 @@
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #ec4899;
+  color: var(--accent-copper);
 }
 
 html[data-theme="light"] .ttm-welcome-page__eyebrow {

@@ -1,21 +1,21 @@
-/* ─── Auth shell — Romantic Night + Rose Coral ─── */
+/* ─── Auth shell — Premium dark SaaS glass ─── */
 
 .ttm-auth-shell {
   --auth-side-padding: 1.25rem;
-  --auth-nav-text: #fff1f2;
-  --auth-nav-muted: rgba(253, 164, 175, 0.72);
-  --auth-nav-border: rgba(255, 241, 242, 0.1);
-  --auth-nav-bg: rgba(5, 2, 8, 0.94);
-  --auth-nav-accent: rgba(190, 18, 60, 0.28);
-  --auth-panel-bg: linear-gradient(160deg, #1a0610 0%, #4a1025 42%, #050208 100%);
-  --auth-nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --auth-nav-text: var(--saas-text);
+  --auth-nav-muted: var(--saas-muted);
+  --auth-nav-border: var(--saas-border);
+  --auth-nav-bg: rgba(11, 15, 20, 0.94);
+  --auth-nav-accent: rgba(240, 169, 136, 0.28);
+  --auth-panel-bg: linear-gradient(160deg, #121217 0%, #1a1520 42%, var(--saas-bg) 100%);
+  --auth-nav-ease: var(--saas-ease);
   position: relative;
   isolation: isolate;
   overflow: hidden;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: #050208;
+  background: var(--saas-bg);
 }
 
 html[data-theme="light"] .ttm-auth-shell {
@@ -64,10 +64,10 @@ html[data-theme="light"] .ttm-auth-shell {
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
-  font-family: var(--font-display);
+  font-family: var(--saas-font-display);
   font-size: 0.95rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--auth-nav-text);
   text-decoration: none;
   transition: opacity 0.25s ease;

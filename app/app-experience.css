@@ -1,24 +1,24 @@
-/* ─── Time to Match — In-app dark romantic experience (/app) ─── */
+/* ─── Time to Match — In-app premium dark SaaS (/app) ─── */
 
 .ttm-native-app,
 .ttm-profile-page {
-  --app-bg: #050208;
-  --app-bg-soft: #0a0406;
-  --app-surface: rgba(255, 241, 242, 0.025);
-  --app-surface-strong: rgba(255, 241, 242, 0.05);
-  --app-border: rgba(255, 241, 242, 0.06);
-  --app-border-strong: rgba(190, 18, 60, 0.26);
-  --app-text: #fff1f2;
-  --app-muted: rgba(253, 164, 175, 0.78);
-  --app-rose: #e8798f;
-  --app-rose-deep: #be123c;
-  --app-coral: #ea580c;
+  --app-bg: var(--saas-bg);
+  --app-bg-soft: var(--saas-bg-deep);
+  --app-surface: rgba(255, 255, 255, 0.025);
+  --app-surface-strong: rgba(255, 255, 255, 0.05);
+  --app-border: var(--saas-border);
+  --app-border-strong: var(--saas-border-strong);
+  --app-text: var(--saas-text);
+  --app-muted: var(--saas-muted);
+  --app-rose: var(--neon-pink);
+  --app-rose-deep: var(--neon-purple);
+  --app-coral: var(--accent-copper);
   --app-amber: #fbbf24;
-  --app-font-display: var(--font-display);
-  --app-font-body: var(--font-body);
-  --app-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --app-glass: rgba(5, 2, 8, 0.82);
-  --app-glass-strong: rgba(5, 2, 8, 0.92);
+  --app-font-display: var(--saas-font-display);
+  --app-font-body: var(--saas-font-body);
+  --app-ease: var(--saas-ease);
+  --app-glass: rgba(11, 15, 20, 0.82);
+  --app-glass-strong: rgba(11, 15, 20, 0.92);
   color: var(--app-text);
 }
 
@@ -90,11 +90,11 @@ html[data-theme="light"] .ttm-profile-page {
 }
 
 .ttm-native-app .ttm-dock-tab--active {
-  color: var(--app-rose);
-  background: color-mix(in srgb, var(--app-rose-deep) 14%, transparent);
+  color: var(--accent-copper);
+  background: color-mix(in srgb, var(--neon-purple) 14%, transparent);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--app-rose) 22%, transparent) inset,
-    0 0 20px -6px color-mix(in srgb, var(--app-coral) 28%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--accent-copper) 22%, transparent) inset,
+    0 0 20px -6px var(--saas-glow-purple);
 }
 
 .ttm-native-app .ttm-dock-tab__label {
@@ -109,68 +109,69 @@ html[data-theme="light"] .ttm-profile-page {
   box-shadow: 0 0 12px color-mix(in srgb, var(--app-rose) 45%, transparent);
 }
 
-/* Discover ambient — rose/coral glows (not purple/lime) */
+/* Discover ambient — neon mesh */
 .ttm-native-app--discover .discover-ambient__blob--a {
-  background: radial-gradient(circle, rgba(190, 18, 60, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12), transparent 70%);
 }
 
 .ttm-native-app--discover .discover-ambient__blob--b {
-  background: radial-gradient(circle, rgba(234, 88, 12, 0.07), transparent 70%);
+  background: radial-gradient(circle, rgba(240, 169, 136, 0.08), transparent 70%);
 }
 
 .discover-ambient__blob--a {
-  background: radial-gradient(circle, rgba(190, 18, 60, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.14), transparent 70%);
 }
 
 .discover-ambient__blob--b {
-  background: radial-gradient(circle, rgba(234, 88, 12, 0.08), transparent 70%);
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.1), transparent 70%);
 }
 
-/* Discover cards — landing hero card parity */
+/* Discover cards — glass + neon glow */
 .ttm-native-app .discover-card {
-  --discover-glow: rgba(190, 18, 60, 0.18);
-  --discover-accent: rgba(232, 121, 143, 0.32);
+  --discover-glow: var(--saas-glow-purple);
+  --discover-accent: rgba(240, 169, 136, 0.32);
   border-radius: 20px;
-  border: 1px solid var(--app-border);
+  border: 1px solid var(--app-border-strong);
   box-shadow:
-    0 24px 56px -20px rgba(190, 18, 60, 0.22),
-    0 0 0 1px rgba(255, 241, 242, 0.04) inset;
+    0 24px 56px -20px rgba(168, 85, 247, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 40px -16px var(--saas-glow-copper);
 }
 
 .ttm-native-app .discover-card[data-atmosphere="warm"] {
-  --discover-glow: rgba(234, 88, 12, 0.16);
-  --discover-accent: rgba(251, 191, 36, 0.28);
+  --discover-glow: rgba(240, 169, 136, 0.16);
+  --discover-accent: rgba(236, 72, 153, 0.28);
 }
 
 .ttm-native-app .discover-card[data-atmosphere="intense"] {
-  --discover-glow: rgba(190, 18, 60, 0.22);
-  --discover-accent: rgba(232, 121, 143, 0.38);
+  --discover-glow: rgba(168, 85, 247, 0.22);
+  --discover-accent: rgba(236, 72, 153, 0.38);
 }
 
 .ttm-native-app .discover-card[data-atmosphere="mysterious"],
 .ttm-native-app .discover-card[data-atmosphere="cinematic"] {
-  --discover-glow: rgba(127, 29, 58, 0.14);
-  --discover-accent: rgba(190, 18, 60, 0.24);
+  --discover-glow: rgba(59, 130, 246, 0.14);
+  --discover-accent: rgba(168, 85, 247, 0.24);
 }
 
 .ttm-native-app .ttm-swipe-card-shell {
   border-radius: 20px;
-  border: 1px solid var(--app-border);
+  border: 1px solid var(--app-border-strong);
   background: var(--app-surface-strong);
   box-shadow:
     0 24px 64px -28px rgba(0, 0, 0, 0.75),
-    0 0 0 1px rgba(255, 241, 242, 0.05) inset,
-    0 0 40px -20px rgba(190, 18, 60, 0.12);
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 0 40px -20px var(--saas-glow-purple);
 }
 
-/* Swipe actions — rose/coral */
+/* Swipe actions — copper/neon CTA */
 .ttm-native-app .ttm-swipe-action-btn--like {
-  color: #fff1f2;
-  border: 1px solid color-mix(in srgb, var(--app-rose) 35%, transparent);
-  background: linear-gradient(145deg, var(--app-rose) 0%, var(--app-rose-deep) 48%, var(--app-coral) 100%);
+  color: var(--saas-bg);
+  border: 1px solid color-mix(in srgb, var(--accent-copper) 35%, transparent);
+  background: var(--saas-cta-gradient);
   box-shadow:
-    0 16px 44px -12px rgba(190, 18, 60, 0.55),
-    0 0 0 1px rgba(255, 241, 242, 0.1) inset;
+    0 16px 44px -12px rgba(240, 169, 136, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -261,23 +262,18 @@ html[data-theme="light"] .ttm-profile-page {
 .ttm-native-app .ttm-chat-immersive {
   background: radial-gradient(
     ellipse 120% 80% at 50% -10%,
-    rgba(190, 18, 60, 0.06),
+    rgba(168, 85, 247, 0.06),
     var(--app-bg) 55%
   );
 }
 
 .ttm-native-app .ttm-chat-bubble--me {
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--app-rose) 88%, #fff) 0%,
-    var(--app-rose-deep) 55%,
-    var(--app-coral) 100%
-  );
-  color: #fff1f2;
-  border: 1px solid color-mix(in srgb, var(--app-rose) 30%, transparent);
+  background: var(--saas-cta-gradient);
+  color: var(--saas-bg);
+  border: 1px solid color-mix(in srgb, var(--accent-copper) 30%, transparent);
   box-shadow:
-    0 8px 32px -12px rgba(190, 18, 60, 0.45),
-    inset 0 1px 0 rgba(255, 241, 242, 0.15);
+    0 8px 32px -12px rgba(240, 169, 136, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .ttm-native-app .ttm-chat-bubble--them {

@@ -3,6 +3,12 @@
 import { Clock, Heart, MessageCircle } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { DatingScrollReveal } from "@/components/landing/dating/dating-scroll-reveal"
+import {
+  DATING_PREVIEW_SWIPE_AGE,
+  DATING_PREVIEW_SWIPE_KM,
+  DATING_PREVIEW_SWIPE_PHOTO,
+} from "@/components/landing/dating/dating-demo-profiles"
+import { ProfilePhotoImage } from "@/components/ui/profile-photo-image"
 import { useI18n } from "@/lib/i18n"
 
 export function DatingProductPreviewSection() {
@@ -56,10 +62,16 @@ export function DatingProductPreviewSection() {
                   {panel.id === "swipe" && (
                     <>
                       <div className="ttm-dating-preview__profile-card">
-                        <div className="ttm-dating-preview__profile-photo" />
+                        <div className="ttm-dating-preview__profile-photo">
+                          <ProfilePhotoImage
+                            src={DATING_PREVIEW_SWIPE_PHOTO}
+                            className="object-cover object-[center_18%]"
+                            sizes="280px"
+                          />
+                        </div>
                         <div className="ttm-dating-preview__profile-meta">
-                          <span>Anna, 27</span>
-                          <span>2 km</span>
+                          <span>Anna, {DATING_PREVIEW_SWIPE_AGE}</span>
+                          <span>{DATING_PREVIEW_SWIPE_KM} km</span>
                         </div>
                       </div>
                       <div className="ttm-dating-preview__swipe-actions">

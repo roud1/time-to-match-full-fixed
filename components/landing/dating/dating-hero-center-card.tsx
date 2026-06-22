@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import { ProfilePhotoImage } from "@/components/ui/profile-photo-image"
 import { motion, useReducedMotion } from "motion/react"
 import { useDatingHeroProfiles } from "@/components/landing/dating/use-dating-profiles"
 import { cn } from "@/lib/utils"
@@ -24,13 +24,10 @@ export function DatingHeroCenterCard() {
       aria-hidden
     >
       <div className="ttm-dating-hero__portrait-center-frame">
-        <Image
+        <ProfilePhotoImage
           src={center.imageUrl}
-          alt=""
-          fill
           className="object-cover object-[center_20%]"
           sizes="120px"
-          draggable={false}
         />
         <div className="ttm-dating-hero__portrait-shade" />
       </div>

@@ -1,0 +1,37 @@
+/**
+ * Time to Match — Premium dark SaaS design tokens (site-wide)
+ * Source: dating landing (70d5340) + brand logo (444bbaf)
+ */
+
+:root {
+  --saas-bg: #0b0f14;
+  --saas-bg-deep: #08080f;
+  --saas-surface: #121217;
+  --saas-surface-elevated: #1a1a20;
+  --saas-border: rgba(255, 255, 255, 0.06);
+  --saas-border-strong: rgba(240, 169, 136, 0.28);
+  --saas-text: #ffffff;
+  --saas-muted: #a1a1aa;
+  --saas-muted-dim: #6b6b76;
+  --neon-purple: #a855f7;
+  --neon-pink: #ec4899;
+  --neon-blue: #3b82f6;
+  --accent-copper: #f0a988;
+  --accent-copper-deep: #d97a5e;
+  --saas-font-display: var(--font-landing-display), "Playfair Display", Georgia, serif;
+  --saas-font-body: var(--font-landing-body), "Inter", system-ui, sans-serif;
+  --saas-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --saas-radius: 14px;
+  --saas-radius-lg: 22px;
+  --saas-glass-bg: color-mix(in srgb, var(--saas-surface) 82%, transparent);
+  --saas-glass-blur: blur(18px) saturate(1.15);
+  --saas-glow-purple: rgba(168, 85, 247, 0.45);
+  --saas-glow-pink: rgba(236, 72, 153, 0.4);
+  --saas-glow-copper: rgba(240, 169, 136, 0.35);
+  --saas-cta-gradient: linear-gradient(135deg, var(--accent-copper) 0%, var(--accent-copper-deep) 100%);
+  --saas-neon-gradient: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-pink) 50%, var(--neon-blue) 100%);
+  --saas-ambient-mesh:
+    radial-gradient(ellipse 90% 60% at 15% 10%, rgba(168, 85, 247, 0.12), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 85% 25%, rgba(236, 72, 153, 0.08), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 90%, rgba(59, 130, 246, 0.06), transparent 55%);
+}

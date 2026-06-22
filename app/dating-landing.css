@@ -15,11 +15,11 @@
   --neon-blue: #3b82f6;
   --accent-copper: #f0a988;
   --accent-copper-deep: #d97a5e;
-  --dt-font-display: var(--font-landing-display), "Playfair Display", Georgia, serif;
-  --dt-font-body: var(--font-landing-body), "Inter", system-ui, sans-serif;
-  --dt-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --dt-radius: 14px;
-  --dt-radius-lg: 22px;
+  --dt-font-display: var(--saas-font-display);
+  --dt-font-body: var(--saas-font-body);
+  --dt-ease: var(--saas-ease);
+  --dt-radius: var(--saas-radius);
+  --dt-radius-lg: var(--saas-radius-lg);
   --dt-side-padding: 1.25rem;
 
   position: relative;
@@ -519,8 +519,10 @@
 }
 
 .ttm-dating-mockup__card-photo {
+  position: relative;
   height: 180px;
-  background: linear-gradient(160deg, #2a1f2e 0%, #1a1520 40%, #3d2a35 100%);
+  overflow: hidden;
+  background: var(--saas-surface-elevated);
 }
 
 .ttm-dating-mockup__card-info {
@@ -740,8 +742,10 @@
 }
 
 .ttm-dating-preview__profile-photo {
+  position: relative;
   height: 100%;
-  background: linear-gradient(145deg, #2d2438, #1a1520);
+  overflow: hidden;
+  background: var(--saas-surface-elevated);
 }
 
 .ttm-dating-preview__profile-meta {

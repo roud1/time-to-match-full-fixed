@@ -2,7 +2,7 @@
 
 import { useSwipeable } from "react-swipeable"
 import { motion, type MotionValue } from "motion/react"
-import Image from "next/image"
+import { ProfilePhotoImage } from "@/components/ui/profile-photo-image"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import type { PeerTrustSignals } from "@/lib/demo-trust-signals"
 import { computeDiscoverCompatibility } from "@/lib/discover-compatibility"
@@ -182,13 +182,10 @@ function CompactStackCard({
       <span className="discover-card__aura" aria-hidden />
       <div className="discover-card__layout">
         <div className="discover-card__photo !flex-[1]">
-          <Image
+          <ProfilePhotoImage
             src={photos[0] ?? profile.image}
-            alt=""
-            fill
             className="object-cover object-[center_18%] select-none pointer-events-none"
             sizes="320px"
-            draggable={false}
           />
           <div className="discover-card__photo-scrim absolute inset-0 pointer-events-none" aria-hidden />
           <div className="absolute bottom-0 left-0 right-0 p-3 z-[2]">

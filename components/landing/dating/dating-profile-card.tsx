@@ -1,8 +1,8 @@
 "use client"
 
 import type { CSSProperties } from "react"
-import Image from "next/image"
 import { Heart } from "lucide-react"
+import { ProfilePhotoImage } from "@/components/ui/profile-photo-image"
 import { VerifiedBadge } from "@/components/ui/verified-badge"
 import type { DatingDemoProfile } from "@/components/landing/dating/use-dating-profiles"
 import { useI18n } from "@/lib/i18n"
@@ -41,14 +41,12 @@ export function DatingProfileCard({
       style={style}
     >
       <div className="ttm-dating-card__photo">
-        <Image
+        <ProfilePhotoImage
           key={profile.imageUrl}
           src={profile.imageUrl}
-          alt=""
-          fill
-          className="ttm-dating-card__image"
+          className="ttm-dating-card__image object-cover object-[center_18%]"
           sizes="(max-width: 768px) 70vw, 260px"
-          draggable={false}
+          priority
         />
         <div className="ttm-dating-card__shade" aria-hidden />
         {profile.verified && (

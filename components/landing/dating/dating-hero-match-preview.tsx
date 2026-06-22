@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import { ProfilePhotoImage } from "@/components/ui/profile-photo-image"
 import { Heart } from "lucide-react"
 import {
   motion,
@@ -85,13 +85,10 @@ function ProfileCard({
         )}
       >
         <div className="ttm-dating-hero__portrait-frame">
-          <Image
+          <ProfilePhotoImage
             src={profile.imageUrl}
-            alt=""
-            fill
             className="object-cover object-[center_18%]"
             sizes="(max-width: 768px) 60vw, 380px"
-            draggable={false}
             priority
           />
           <div className="ttm-dating-hero__portrait-glass-edge" aria-hidden />
@@ -130,13 +127,10 @@ function PeekCard({
       aria-hidden
     >
       <div className="ttm-dating-hero__portrait-peek-frame">
-        <Image
+        <ProfilePhotoImage
           src={profile.imageUrl}
-          alt=""
-          fill
           className="object-cover object-[center_20%]"
           sizes="200px"
-          draggable={false}
         />
         <div className="ttm-dating-hero__portrait-shade" />
       </div>

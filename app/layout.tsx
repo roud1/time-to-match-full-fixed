@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { fontBody, fontDisplay } from "@/lib/fonts"
+import { fontBody, fontDisplay, fontLandingBody, fontLandingDisplay } from "@/lib/fonts"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
@@ -102,7 +102,7 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body
-        className={`${fontBody.variable} ${fontDisplay.variable} font-sans antialiased ttm-root ttm-brand-universe`}
+        className={`${fontBody.variable} ${fontDisplay.variable} ${fontLandingDisplay.variable} ${fontLandingBody.variable} font-sans antialiased ttm-root ttm-brand-universe`}
       >
         <ThemeProvider>
           <I18nProvider>

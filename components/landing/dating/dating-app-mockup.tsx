@@ -3,6 +3,8 @@
 import { Clock, Heart, MessageCircle, Sparkles } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { Logo } from "@/components/logo"
+import { ProfilePhotoImage } from "@/components/ui/profile-photo-image"
+import { DATING_MOCKUP_SWIPE_PHOTO } from "@/components/landing/dating/dating-demo-profiles"
 import { useI18n } from "@/lib/i18n"
 
 export function DatingAppMockup() {
@@ -15,14 +17,20 @@ export function DatingAppMockup() {
       <div className="ttm-dating-mockup__phone">
         <div className="ttm-dating-mockup__notch" aria-hidden />
         <div className="ttm-dating-mockup__screen">
-          {/* Swipe card */}
           <motion.div
             className="ttm-dating-mockup__card ttm-dating-mockup__card--swipe"
             initial={reduce ? false : { opacity: 0, x: 20, rotate: 4 }}
             animate={{ opacity: 1, x: 0, rotate: 2 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="ttm-dating-mockup__card-photo" />
+            <div className="ttm-dating-mockup__card-photo">
+              <ProfilePhotoImage
+                src={DATING_MOCKUP_SWIPE_PHOTO}
+                className="object-cover object-[center_18%]"
+                sizes="280px"
+                priority
+              />
+            </div>
             <div className="ttm-dating-mockup__card-info">
               <span className="ttm-dating-mockup__card-name">{t("datingProfileNameSofia")}, 26</span>
               <span className="ttm-dating-mockup__card-meta">
@@ -40,7 +48,6 @@ export function DatingAppMockup() {
             </div>
           </motion.div>
 
-          {/* Chat preview */}
           <motion.div
             className="ttm-dating-mockup__chat"
             initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -59,7 +66,6 @@ export function DatingAppMockup() {
             </div>
           </motion.div>
 
-          {/* Timer pill */}
           <motion.div
             className="ttm-dating-mockup__timer"
             initial={reduce ? false : { opacity: 0, scale: 0.9 }}
@@ -73,7 +79,6 @@ export function DatingAppMockup() {
         </div>
       </div>
 
-      {/* Floating secondary phone */}
       <motion.div
         className="ttm-dating-mockup__phone ttm-dating-mockup__phone--secondary"
         initial={reduce ? false : { opacity: 0, y: 24, x: -12 }}

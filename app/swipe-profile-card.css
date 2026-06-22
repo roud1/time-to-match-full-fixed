@@ -90,17 +90,18 @@
 }
 
 .swipe-profile-presence.p9-onboarding {
-  border-color: color-mix(in srgb, var(--ttm-brand-accent) 22%, var(--ttm-brand-line));
+  border-color: var(--saas-border-strong);
   background: linear-gradient(
     168deg,
-    color-mix(in srgb, var(--ttm-brand-elevated) 88%, transparent) 0%,
-    color-mix(in srgb, var(--ttm-brand-graphite) 94%, transparent) 55%,
-    color-mix(in srgb, var(--ttm-brand-deep) 98%, transparent) 100%
+    color-mix(in srgb, var(--saas-surface-elevated) 88%, transparent) 0%,
+    color-mix(in srgb, var(--saas-surface) 94%, transparent) 55%,
+    color-mix(in srgb, var(--saas-bg-deep) 98%, transparent) 100%
   );
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
     0 28px 72px -36px rgba(0, 0, 0, 0.78),
-    inset 0 1px 0 color-mix(in srgb, var(--foreground) 7%, transparent);
+    0 0 40px -16px var(--saas-glow-copper),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .swipe-profile-presence[data-atmosphere="warm"] {
@@ -277,10 +278,10 @@
   font-size: 0.75rem;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: #fff1f2;
-  border: 1px solid rgba(232, 121, 143, 0.35);
-  background: rgba(190, 18, 60, 0.82);
-  box-shadow: 0 0 20px -8px rgba(190, 18, 60, 0.55);
+  color: var(--saas-bg);
+  border: 1px solid rgba(240, 169, 136, 0.35);
+  background: var(--saas-cta-gradient);
+  box-shadow: 0 0 20px -8px var(--saas-glow-copper);
 }
 
 .swipe-profile-presence__meter {
