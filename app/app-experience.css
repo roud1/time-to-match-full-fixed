@@ -1,0 +1,382 @@
+/* ─── Time to Match — In-app dark romantic experience (/app) ─── */
+
+.ttm-native-app,
+.ttm-profile-page {
+  --app-bg: #050208;
+  --app-bg-soft: #0a0406;
+  --app-surface: rgba(255, 241, 242, 0.025);
+  --app-surface-strong: rgba(255, 241, 242, 0.05);
+  --app-border: rgba(255, 241, 242, 0.06);
+  --app-border-strong: rgba(190, 18, 60, 0.26);
+  --app-text: #fff1f2;
+  --app-muted: rgba(253, 164, 175, 0.78);
+  --app-rose: #e8798f;
+  --app-rose-deep: #be123c;
+  --app-coral: #ea580c;
+  --app-amber: #fbbf24;
+  --app-font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --app-font-body: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  --app-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --app-glass: rgba(5, 2, 8, 0.82);
+  --app-glass-strong: rgba(5, 2, 8, 0.92);
+  color: var(--app-text);
+}
+
+html[data-theme="light"] .ttm-native-app,
+html[data-theme="light"] .ttm-profile-page {
+  --app-bg: #fff1f2;
+  --app-bg-soft: #fff8f6;
+  --app-surface: rgba(136, 19, 55, 0.04);
+  --app-surface-strong: rgba(136, 19, 55, 0.08);
+  --app-border: rgba(136, 19, 55, 0.1);
+  --app-border-strong: rgba(225, 29, 72, 0.22);
+  --app-text: #881337;
+  --app-muted: rgba(159, 18, 57, 0.72);
+  --app-rose: #be123c;
+  --app-rose-deep: #881337;
+  --app-coral: #ea580c;
+  --app-glass: rgba(255, 248, 246, 0.92);
+  --app-glass-strong: rgba(255, 248, 246, 0.96);
+}
+
+/* Panel titles — Playfair headlines */
+.ttm-app-panel-title {
+  font-family: var(--app-font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--app-text);
+}
+
+.ttm-app-panel-subtitle {
+  font-family: var(--app-font-body);
+  font-weight: 400;
+  color: var(--app-muted);
+}
+
+/* Floating header — dark glass */
+.ttm-native-app .ttm-floating-header {
+  background: var(--app-glass);
+  border-bottom-color: var(--app-border);
+  backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
+}
+
+.ttm-native-app .ttm-floating-header--scrolled {
+  background: var(--app-glass-strong);
+  border-bottom-color: var(--app-border-strong);
+  box-shadow: 0 12px 40px -16px rgba(0, 0, 0, 0.55);
+}
+
+.ttm-native-app .ttm-floating-header .text-foreground\/90,
+.ttm-native-app .ttm-floating-header .group-hover\:text-foreground {
+  color: var(--app-text);
+}
+
+/* Bottom dock — square dark glass, rose/coral active */
+.ttm-native-app .ttm-floating-dock__inner {
+  max-width: 26rem;
+  border-radius: 10px;
+  border: 1px solid var(--app-border);
+  background: color-mix(in srgb, var(--app-bg) 88%, transparent);
+  backdrop-filter: blur(24px) saturate(1.15);
+  -webkit-backdrop-filter: blur(24px) saturate(1.15);
+  box-shadow:
+    0 0 0 1px rgba(255, 241, 242, 0.04) inset,
+    0 16px 48px rgba(0, 0, 0, 0.55);
+}
+
+.ttm-native-app .ttm-dock-tab--idle {
+  color: var(--app-muted);
+}
+
+.ttm-native-app .ttm-dock-tab--active {
+  color: var(--app-rose);
+  background: color-mix(in srgb, var(--app-rose-deep) 14%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--app-rose) 22%, transparent) inset,
+    0 0 20px -6px color-mix(in srgb, var(--app-coral) 28%, transparent);
+}
+
+.ttm-native-app .ttm-dock-tab__label {
+  font-family: var(--app-font-body);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.ttm-native-app .ttm-notify-badge {
+  background: linear-gradient(145deg, var(--app-rose-deep) 0%, var(--app-coral) 100%);
+  border-color: color-mix(in srgb, var(--app-bg) 90%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--app-rose) 45%, transparent);
+}
+
+/* Discover ambient — rose/coral glows (not purple/lime) */
+.ttm-native-app--discover .discover-ambient__blob--a {
+  background: radial-gradient(circle, rgba(190, 18, 60, 0.1), transparent 70%);
+}
+
+.ttm-native-app--discover .discover-ambient__blob--b {
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.07), transparent 70%);
+}
+
+.discover-ambient__blob--a {
+  background: radial-gradient(circle, rgba(190, 18, 60, 0.12), transparent 70%);
+}
+
+.discover-ambient__blob--b {
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.08), transparent 70%);
+}
+
+/* Discover cards — landing hero card parity */
+.ttm-native-app .discover-card {
+  --discover-glow: rgba(190, 18, 60, 0.18);
+  --discover-accent: rgba(232, 121, 143, 0.32);
+  border-radius: 20px;
+  border: 1px solid var(--app-border);
+  box-shadow:
+    0 24px 56px -20px rgba(190, 18, 60, 0.22),
+    0 0 0 1px rgba(255, 241, 242, 0.04) inset;
+}
+
+.ttm-native-app .discover-card[data-atmosphere="warm"] {
+  --discover-glow: rgba(234, 88, 12, 0.16);
+  --discover-accent: rgba(251, 191, 36, 0.28);
+}
+
+.ttm-native-app .discover-card[data-atmosphere="intense"] {
+  --discover-glow: rgba(190, 18, 60, 0.22);
+  --discover-accent: rgba(232, 121, 143, 0.38);
+}
+
+.ttm-native-app .discover-card[data-atmosphere="mysterious"],
+.ttm-native-app .discover-card[data-atmosphere="cinematic"] {
+  --discover-glow: rgba(127, 29, 58, 0.14);
+  --discover-accent: rgba(190, 18, 60, 0.24);
+}
+
+.ttm-native-app .ttm-swipe-card-shell {
+  border-radius: 20px;
+  border: 1px solid var(--app-border);
+  background: var(--app-surface-strong);
+  box-shadow:
+    0 24px 64px -28px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 241, 242, 0.05) inset,
+    0 0 40px -20px rgba(190, 18, 60, 0.12);
+}
+
+/* Swipe actions — rose/coral */
+.ttm-native-app .ttm-swipe-action-btn--like {
+  color: #fff1f2;
+  border: 1px solid color-mix(in srgb, var(--app-rose) 35%, transparent);
+  background: linear-gradient(145deg, var(--app-rose) 0%, var(--app-rose-deep) 48%, var(--app-coral) 100%);
+  box-shadow:
+    0 16px 44px -12px rgba(190, 18, 60, 0.55),
+    0 0 0 1px rgba(255, 241, 242, 0.1) inset;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ttm-native-app .ttm-swipe-action-btn--like:not(:disabled) {
+    animation: app-like-pulse 2.8s ease-in-out infinite;
+  }
+}
+
+@keyframes app-like-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 16px 44px -12px rgba(190, 18, 60, 0.55),
+      0 0 0 1px rgba(255, 241, 242, 0.1) inset;
+  }
+  50% {
+    box-shadow:
+      0 16px 44px -8px rgba(190, 18, 60, 0.72),
+      0 0 24px -4px rgba(234, 88, 12, 0.35),
+      0 0 0 1px rgba(255, 241, 242, 0.14) inset;
+  }
+}
+
+.ttm-native-app .ttm-swipe-action-btn--nope {
+  border-color: color-mix(in srgb, var(--app-rose-deep) 40%, transparent);
+  background: color-mix(in srgb, var(--app-rose-deep) 14%, transparent);
+  color: var(--app-rose);
+  box-shadow: 0 12px 36px -14px rgba(190, 18, 60, 0.45);
+}
+
+.ttm-native-app .ttm-swipe-action-btn--super {
+  border-color: color-mix(in srgb, var(--app-coral) 42%, transparent);
+  background: color-mix(in srgb, var(--app-coral) 14%, transparent);
+  color: #fdba74;
+  box-shadow: 0 0 28px -8px rgba(234, 88, 12, 0.4);
+}
+
+.ttm-native-app .ttm-swipe-action-btn--rewind {
+  border-color: var(--app-border);
+  background: var(--app-surface-strong);
+  color: var(--app-amber);
+  box-shadow: 0 0 24px -10px rgba(251, 191, 36, 0.3);
+}
+
+/* Expiry chip — landing countdown pill */
+.ttm-native-app .ttm-swipe-expiry-chip {
+  border-color: rgba(251, 113, 133, 0.28);
+  background: color-mix(in srgb, var(--app-bg) 55%, transparent);
+  color: var(--app-muted);
+  font-family: var(--app-font-body);
+}
+
+.ttm-native-app .ttm-swipe-expiry-chip--urgent {
+  color: var(--app-amber);
+  border-color: rgba(234, 88, 12, 0.45);
+  background: rgba(234, 88, 12, 0.18);
+  box-shadow: 0 0 12px -4px rgba(234, 88, 12, 0.45);
+}
+
+/* Match / countdown timer — landing pill style */
+.ttm-native-app .ttm-match-expiry-bar,
+.ttm-native-app .ttm-match-expiry-bar--header {
+  border: 1px solid rgba(251, 113, 133, 0.28);
+  background: color-mix(in srgb, var(--app-bg) 55%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 999px;
+}
+
+.ttm-native-app .ttm-countdown-timer--warning,
+.ttm-native-app .ttm-countdown-timer[data-urgency="warning"] {
+  color: var(--app-coral);
+}
+
+.ttm-native-app .ttm-countdown-timer--critical,
+.ttm-native-app .ttm-countdown-timer[data-urgency="critical"] {
+  color: var(--app-amber);
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+}
+
+.ttm-native-app .ttm-countdown-timer__digits {
+  font-family: var(--app-font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chat — dark glass bubbles, rose sent */
+.ttm-native-app .ttm-chat-room,
+.ttm-native-app .ttm-chat-immersive {
+  background: radial-gradient(
+    ellipse 120% 80% at 50% -10%,
+    rgba(190, 18, 60, 0.06),
+    var(--app-bg) 55%
+  );
+}
+
+.ttm-native-app .ttm-chat-bubble--me {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--app-rose) 88%, #fff) 0%,
+    var(--app-rose-deep) 55%,
+    var(--app-coral) 100%
+  );
+  color: #fff1f2;
+  border: 1px solid color-mix(in srgb, var(--app-rose) 30%, transparent);
+  box-shadow:
+    0 8px 32px -12px rgba(190, 18, 60, 0.45),
+    inset 0 1px 0 rgba(255, 241, 242, 0.15);
+}
+
+.ttm-native-app .ttm-chat-bubble--them {
+  background: color-mix(in srgb, var(--app-bg-soft) 92%, transparent);
+  border: 1px solid var(--app-border);
+  color: var(--app-text);
+  box-shadow: 0 12px 40px -20px rgba(0, 0, 0, 0.65);
+}
+
+.ttm-native-app .ttm-chat-area__header,
+.ttm-native-app .ttm-chat-room-header__toolbar {
+  background: var(--app-glass);
+  border-color: var(--app-border);
+}
+
+.ttm-native-app .ambient-chat-bg__particle {
+  background: rgba(232, 121, 143, 0.45);
+}
+
+.ttm-native-app .ttm-chat-inbox__row--active {
+  outline-color: color-mix(in srgb, var(--app-rose) 45%, transparent);
+  background: color-mix(in srgb, var(--app-rose-deep) 10%, transparent);
+}
+
+/* Likes panel */
+.ttm-native-app .ttm-likes-page__title {
+  font-family: var(--app-font-display);
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.ttm-native-app .ttm-likes-page__stat,
+.ttm-native-app .ttm-likes-card {
+  border-color: var(--app-border);
+  background: var(--app-surface-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ttm-native-app .ttm-likes-card__like-btn {
+  color: var(--app-rose);
+  background: color-mix(in srgb, var(--app-rose-deep) 12%, transparent);
+  border-color: color-mix(in srgb, var(--app-rose) 35%, transparent);
+}
+
+.ttm-native-app .ttm-likes-card__like-btn:hover {
+  background: color-mix(in srgb, var(--app-rose-deep) 22%, transparent);
+  border-color: color-mix(in srgb, var(--app-rose) 55%, transparent);
+}
+
+@media (min-width: 640px) {
+  .ttm-native-app .ttm-likes-card__like-btn {
+    color: #fff1f2;
+    background: linear-gradient(135deg, var(--app-rose) 0%, var(--app-rose-deep) 52%, var(--app-coral) 100%);
+    border-color: rgba(255, 241, 242, 0.12);
+    box-shadow: 0 8px 24px -12px rgba(190, 18, 60, 0.55);
+  }
+
+  .ttm-native-app .ttm-likes-card__like-btn:hover {
+    background: linear-gradient(135deg, #fb7185 0%, var(--app-rose-deep) 48%, #f97316 100%);
+    border-color: rgba(255, 241, 242, 0.2);
+  }
+}
+
+/* Profile page in app route */
+.ttm-profile-page .ttm-profile-page__title {
+  font-family: var(--app-font-display);
+}
+
+.ttm-profile-page .ttm-profile-band {
+  border-color: var(--app-border);
+  background: var(--app-surface-strong);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.ttm-profile-page .ttm-profile-band__title {
+  font-family: var(--app-font-display);
+  color: var(--app-text);
+}
+
+/* Loading shell */
+.ttm-app-loading {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-bg, #050208);
+  color: var(--app-muted, rgba(253, 164, 175, 0.78));
+  font-family: var(--app-font-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-native-app .ttm-swipe-action-btn--like:not(:disabled) {
+    animation: none !important;
+  }
+
+  .ttm-native-app .ttm-countdown-timer--critical,
+  .ttm-native-app .ttm-countdown-timer[data-urgency="critical"] {
+    animation: none !important;
+  }
+}

@@ -26,8 +26,8 @@ const STACK_VISIBLE = 3
 
 function SwipeDeckSkeleton({ centered, cardOnly }: { centered?: boolean; cardOnly?: boolean }) {
   const card = (
-    <div className="ttm-swipe-card-shell relative w-full max-w-[min(100%,24rem)] h-full min-h-[18rem] max-h-full rounded-[var(--radius-lg)] overflow-hidden bg-[var(--bg-secondary)] border border-[var(--border)] shadow-[var(--shadow-md)]">
-      <div className="absolute inset-0 bg-gradient-to-t from-[var(--border)] via-transparent to-transparent" />
+    <div className="ttm-swipe-card-shell relative w-full max-w-[min(100%,24rem)] h-full min-h-[18rem] max-h-full rounded-[20px] overflow-hidden bg-[#0a0406] border border-[rgba(255,241,242,0.06)] shadow-[0_24px_56px_-20px_rgba(190,18,60,0.22)]">
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050208] via-transparent to-transparent opacity-90" />
       <div className="absolute bottom-0 left-0 right-0 p-4 space-y-2">
         <div className="h-6 w-2/3 rounded-lg bg-[var(--border)]" />
         <div className="h-3 w-1/2 rounded bg-[var(--border)] opacity-70" />

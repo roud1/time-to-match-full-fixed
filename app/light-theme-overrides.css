@@ -614,10 +614,10 @@ html:not([data-theme="dark"]) .ttm-interest-compat__chip {
 
 .ttm-dock-tab--active {
   color: var(--tile-text);
-  background: rgba(45, 212, 191, 0.2);
+  background: rgba(190, 18, 60, 0.12);
   box-shadow:
-    0 0 0 1px var(--tile-border) inset,
-    0 4px 14px -6px rgba(20, 184, 166, 0.35);
+    0 0 0 1px rgba(225, 29, 72, 0.18) inset,
+    0 4px 14px -6px rgba(234, 88, 12, 0.28);
 }
 
 .ttm-dock-tab__label {

@@ -127,11 +127,11 @@
 }
 
 .ttm-native-app--discover .discover-ambient__blob--a {
-  background: radial-gradient(circle, rgba(160, 170, 255, 0.08), transparent 70%);
+  background: radial-gradient(circle, rgba(190, 18, 60, 0.1), transparent 70%);
 }
 
 .ttm-native-app--discover .discover-ambient__blob--b {
-  background: radial-gradient(circle, rgba(200, 150, 220, 0.06), transparent 70%);
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.07), transparent 70%);
 }
 
 .ttm-native-app--discover .ttm-floating-header {
@@ -186,7 +186,7 @@
   height: 45%;
   left: -10%;
   top: 5%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.14), transparent 70%);
+  background: radial-gradient(circle, rgba(190, 18, 60, 0.12), transparent 70%);
 }
 
 .discover-ambient__blob--b {
@@ -194,7 +194,7 @@
   height: 40%;
   right: -8%;
   bottom: 15%;
-  background: radial-gradient(circle, rgba(204, 255, 0, 0.08), transparent 70%);
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.08), transparent 70%);
   animation-delay: -6s;
   animation-duration: 22s;
 }
@@ -259,13 +259,15 @@
 
 /* Discover profile card */
 .discover-card {
-  --discover-glow: rgba(139, 92, 246, 0.2);
-  --discover-accent: rgba(204, 255, 0, 0.25);
+  --discover-glow: rgba(190, 18, 60, 0.18);
+  --discover-accent: rgba(232, 121, 143, 0.32);
   position: relative;
-  border-radius: 10px;
+  border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(167, 139, 250, 0.2);
-  box-shadow: var(--shadow-lg), 0 20px 40px -18px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 241, 242, 0.06);
+  box-shadow:
+    0 24px 56px -20px rgba(190, 18, 60, 0.22),
+    0 0 0 1px rgba(255, 241, 242, 0.04) inset;
 }
 
 .discover-card[data-atmosphere="warm"] {
@@ -274,8 +276,8 @@
 }
 
 .discover-card[data-atmosphere="mysterious"] {
-  --discover-glow: rgba(120, 100, 180, 0.24);
-  --discover-accent: rgba(167, 139, 250, 0.32);
+  --discover-glow: rgba(127, 29, 58, 0.14);
+  --discover-accent: rgba(190, 18, 60, 0.24);
 }
 
 .discover-card[data-atmosphere="intense"] {
@@ -289,8 +291,8 @@
 }
 
 .discover-card[data-atmosphere="cinematic"] {
-  --discover-glow: rgba(200, 195, 255, 0.26);
-  --discover-accent: rgba(199, 210, 254, 0.4);
+  --discover-glow: rgba(127, 29, 58, 0.14);
+  --discover-accent: rgba(190, 18, 60, 0.24);
 }
 
 .discover-card[data-atmosphere="minimal"] {
@@ -343,10 +345,10 @@
 .discover-card__photo-scrim {
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.35) 0%,
+    rgba(5, 2, 8, 0.35) 0%,
     transparent 28%,
     transparent 52%,
-    rgba(0, 0, 0, 0.55) 100%
+    rgba(5, 2, 8, 0.72) 100%
   );
 }
 
@@ -365,8 +367,8 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: 0.65rem 0.85rem 0.85rem;
-  background: linear-gradient(180deg, rgba(8, 8, 14, 0.88) 0%, rgba(4, 4, 8, 0.98) 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(5, 2, 8, 0.88) 0%, rgba(5, 2, 8, 0.98) 100%);
+  border-top: 1px solid rgba(255, 241, 242, 0.06);
 }
 
 .discover-card__name {
@@ -453,12 +455,12 @@
 }
 
 .ttm-swipe-action-btn--like {
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: linear-gradient(145deg, #ec4899 0%, #a855f7 55%, #6366f1 100%);
+  color: #fff1f2;
+  border: 1px solid rgba(232, 121, 143, 0.35);
+  background: linear-gradient(145deg, #e8798f 0%, #be123c 48%, #ea580c 100%);
   box-shadow:
-    0 16px 44px -12px rgba(236, 72, 153, 0.55),
-    0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+    0 16px 44px -12px rgba(190, 18, 60, 0.55),
+    0 0 0 1px rgba(255, 241, 242, 0.1) inset;
 }
 
 .ttm-swipe-action-btn--like:active:not(:disabled),
@@ -525,12 +527,12 @@
   padding: 0.28rem 0.55rem;
   border-radius: var(--radius-full);
   font-size: 0.625rem;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 1.2;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(8, 8, 14, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  letter-spacing: 0.04em;
+  color: rgba(253, 164, 175, 0.9);
+  background: color-mix(in srgb, #050208 55%, transparent);
+  border: 1px solid rgba(251, 113, 133, 0.28);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.5);

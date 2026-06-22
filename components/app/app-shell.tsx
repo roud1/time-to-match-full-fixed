@@ -141,8 +141,8 @@ export function AppShell() {
 
   if (!ready) {
     return (
-      <div className="ttm-native-app items-center justify-center">
-        <p className="text-muted-foreground font-extralight">{t("locationLoading")}</p>
+      <div className="ttm-app-loading ttm-native-app">
+        <p className="font-extralight">{t("locationLoading")}</p>
       </div>
     )
   }

@@ -181,7 +181,7 @@
   width: 2px;
   height: 2px;
   border-radius: 999px;
-  background: rgba(220, 225, 255, 0.5);
+  background: rgba(232, 121, 143, 0.5);
   filter: blur(0.5px);
   animation: ambient-particle-float 14s ease-in-out infinite;
 }
@@ -228,20 +228,24 @@
 .ttm-chat-bubble--me {
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(255, 255, 255, 0.06) 100%
+    rgba(232, 121, 143, 0.92) 0%,
+    rgba(190, 18, 60, 0.88) 52%,
+    rgba(234, 88, 12, 0.75) 100%
   );
+  color: #fff1f2;
+  border: 1px solid rgba(232, 121, 143, 0.28);
   box-shadow:
-    0 8px 32px -12px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    0 8px 32px -12px rgba(190, 18, 60, 0.45),
+    inset 0 1px 0 rgba(255, 241, 242, 0.15);
 }
 
 .ttm-chat-bubble--them {
   background: linear-gradient(
     145deg,
-    rgba(255, 255, 255, 0.09) 0%,
-    rgba(255, 255, 255, 0.03) 100%
+    rgba(10, 4, 6, 0.92) 0%,
+    rgba(5, 2, 8, 0.88) 100%
   );
+  border: 1px solid rgba(255, 241, 242, 0.06);
   box-shadow: 0 12px 40px -20px rgba(0, 0, 0, 0.75);
 }
 
@@ -287,7 +291,7 @@
 
 /* PHASE 7 — immersive mobile chat */
 .ttm-chat-immersive {
-  background: radial-gradient(ellipse 120% 80% at 50% -10%, rgba(120, 130, 200, 0.08), #030304 55%);
+  background: radial-gradient(ellipse 120% 80% at 50% -10%, rgba(190, 18, 60, 0.06), #050208 55%);
 }
 
 .ttm-chat-immersive .ambient-chat-bg__veil {

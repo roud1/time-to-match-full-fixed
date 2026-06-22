@@ -141,8 +141,8 @@
 
 .swipe-profile-presence__hero .profile-presence__identity-scrim {
   background:
-    linear-gradient(180deg, rgba(8, 8, 14, 0.35) 0%, transparent 28%),
-    linear-gradient(0deg, rgba(8, 8, 14, 0.94) 0%, rgba(8, 8, 14, 0.55) 38%, transparent 68%);
+    linear-gradient(180deg, rgba(5, 2, 8, 0.35) 0%, transparent 28%),
+    linear-gradient(0deg, rgba(5, 2, 8, 0.94) 0%, rgba(5, 2, 8, 0.55) 38%, transparent 68%);
 }
 
 .swipe-profile-presence__hero .profile-presence__identity-body--cover {
@@ -275,12 +275,12 @@
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
   font-size: 0.75rem;
-  font-weight: 400;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
-  color: color-mix(in srgb, var(--ttm-brand-accent) 95%, #fff);
-  border: 1px solid color-mix(in srgb, var(--ttm-brand-accent) 35%, transparent);
-  background: color-mix(in srgb, var(--ttm-brand-accent) 12%, transparent);
-  box-shadow: 0 0 20px -8px color-mix(in srgb, var(--ttm-brand-accent) 55%, transparent);
+  color: #fff1f2;
+  border: 1px solid rgba(232, 121, 143, 0.35);
+  background: rgba(190, 18, 60, 0.82);
+  box-shadow: 0 0 20px -8px rgba(190, 18, 60, 0.55);
 }
 
 .swipe-profile-presence__meter {

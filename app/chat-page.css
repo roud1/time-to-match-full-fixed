@@ -121,8 +121,8 @@
 }
 
 .ttm-chat-inbox--sidebar .ttm-chat-inbox__row--active {
-  outline: 1px solid rgba(255, 154, 61, 0.45);
-  background: rgba(255, 154, 61, 0.08);
+  outline: 1px solid rgba(232, 121, 143, 0.45);
+  background: rgba(190, 18, 60, 0.08);
 }
 
 .ttm-chat-desktop-placeholder {
