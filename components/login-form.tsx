@@ -212,9 +212,9 @@ export function LoginForm() {
                 {t("loginRemember")}
               </label>
             </div>
-            <button type="button" className="ttm-type-muted text-white/60 hover:underline">
+            <Link href="/forgot-password" className="ttm-type-muted text-white/60 hover:underline">
               {t("loginForgotPassword")}
-            </button>
+            </Link>
           </div>
 
           <CinematicButton

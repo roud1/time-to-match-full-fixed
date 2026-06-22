@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import type { SwipeProfile } from "@/lib/demo-profiles"
 import { getDiscoverDeckProfiles, isDiscoverFilteredEmpty } from "@/lib/discover-deck"
+import { getAppMode } from "@/lib/auth/client"
 import { fetchDiscoverProfiles } from "@/lib/discover/api"
 import {
   hasDiscoverViewerPosition,
@@ -44,17 +45,24 @@ export function DiscoverPanel() {
     async (activeFilters: DiscoverFilters = filters) => {
       const viewerPosition = resolveDiscoverViewerPosition(location.position)
       const filteredEmpty = isDiscoverFilteredEmpty(locale, viewerPosition, activeFilters)
+      const mode = await getAppMode()
 
-      let deck = getDiscoverDeckProfiles(locale, viewerPosition, activeFilters)
-      try {
+      let deck: SwipeProfile[] = []
+      if (mode === "production") {
         const fromApi = await fetchDiscoverProfiles(activeFilters, viewerPosition)
-        if (fromApi.length > 0) {
-          const apiCards = fromApi.map((c) => discoverProfileToSwipe(c, locale))
-          const apiIds = new Set(apiCards.map((c) => c.id))
-          deck = [...apiCards, ...deck.filter((p) => !apiIds.has(p.id))]
+        deck = fromApi.map((c) => discoverProfileToSwipe(c, locale))
+      } else {
+        deck = getDiscoverDeckProfiles(locale, viewerPosition, activeFilters)
+        try {
+          const fromApi = await fetchDiscoverProfiles(activeFilters, viewerPosition)
+          if (fromApi.length > 0) {
+            const apiCards = fromApi.map((c) => discoverProfileToSwipe(c, locale))
+            const apiIds = new Set(apiCards.map((c) => c.id))
+            deck = [...apiCards, ...deck.filter((p) => !apiIds.has(p.id))]
+          }
+        } catch {
+          /* demo deck only */
         }
-      } catch {
-        /* demo deck only */
       }
 
       setDeckEmptyReason(

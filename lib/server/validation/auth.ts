@@ -11,6 +11,15 @@ export const loginBodySchema = z.object({
   password: z.string().min(1).max(128),
 })
 
+export const forgotPasswordBodySchema = z.object({
+  email: z.string().email().max(320),
+})
+
+export const resetPasswordBodySchema = z.object({
+  token: z.string().min(16).max(256),
+  password: z.string().min(8).max(128),
+})
+
 export function sanitizeDisplayName(raw: string) {
   return raw.replace(/[<>]/g, "").trim()
 }

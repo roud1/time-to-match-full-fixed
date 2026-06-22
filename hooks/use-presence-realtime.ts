@@ -19,7 +19,10 @@ export function usePresenceRealtime(options: UsePresenceRealtimeOptions = {}) {
   const { intervalMs = 30_000, activeIntervalMs = 12_000, profileId } = options
   const [tick, setTick] = useState(0)
   const profileRef = useRef(profileId)
-  profileRef.current = profileId
+
+  useEffect(() => {
+    profileRef.current = profileId
+  }, [profileId])
 
   useEffect(() => {
     const bump = (e?: Event) => {

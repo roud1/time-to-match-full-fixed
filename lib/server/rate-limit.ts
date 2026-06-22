@@ -1,30 +1,55 @@
-/**
- * Fixed-window in-memory rate limiter.
- * For multi-instance production, replace with Redis / Upstash / edge shared store.
- */
-type Bucket = { count: number; resetAt: number }
+import { Ratelimit } from "@upstash/ratelimit"
+import { Redis } from "@upstash/redis"
+import type { RateLimitResult } from "@/lib/server/rate-limit-types"
+import { checkRateLimitInMemory } from "@/lib/server/rate-limit-memory"
 
-const buckets = new Map<string, Bucket>()
+let redisClient: Redis | null = null
+const limiterCache = new Map<string, Ratelimit>()
 
-export function checkRateLimit(key: string, max: number, windowMs: number): { ok: true } | { ok: false; retryAfterSec: number } {
-  const now = Date.now()
-  let b = buckets.get(key)
-  if (!b || now >= b.resetAt) {
-    b = { count: 0, resetAt: now + windowMs }
-    buckets.set(key, b)
-  }
-  if (b.count >= max) {
-    return { ok: false, retryAfterSec: Math.max(1, Math.ceil((b.resetAt - now) / 1000)) }
-  }
-  b.count += 1
-  return { ok: true }
+function getRedis(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+  if (!url || !token) return null
+  if (!redisClient) redisClient = new Redis({ url, token })
+  return redisClient
 }
 
-export function getClientIp(request: Request): string {
-  const fwd = request.headers.get("x-forwarded-for")
-  if (fwd) {
-    const first = fwd.split(",")[0]?.trim()
-    if (first) return first
+function getLimiter(max: number, windowMs: number): Ratelimit | null {
+  const redis = getRedis()
+  if (!redis) return null
+
+  const cacheKey = `${max}:${windowMs}`
+  let limiter = limiterCache.get(cacheKey)
+  if (!limiter) {
+    const windowSec = Math.max(1, Math.ceil(windowMs / 1000))
+    limiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(max, `${windowSec} s`),
+      prefix: "ttm:rl",
+      analytics: false,
+    })
+    limiterCache.set(cacheKey, limiter)
   }
-  return request.headers.get("x-real-ip") || "unknown"
+  return limiter
 }
+
+export function isRedisRateLimitConfigured(): boolean {
+  return Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN)
+}
+
+/** Rate limit — Upstash Redis when configured, otherwise in-memory. */
+export async function checkRateLimit(
+  key: string,
+  max: number,
+  windowMs: number
+): Promise<RateLimitResult> {
+  const limiter = getLimiter(max, windowMs)
+  if (!limiter) return checkRateLimitInMemory(key, max, windowMs)
+
+  const result = await limiter.limit(key)
+  if (result.success) return { ok: true }
+  const retryAfterSec = Math.max(1, Math.ceil((result.reset - Date.now()) / 1000))
+  return { ok: false, retryAfterSec }
+}
+
+export { getClientIp } from "@/lib/server/rate-limit-memory"

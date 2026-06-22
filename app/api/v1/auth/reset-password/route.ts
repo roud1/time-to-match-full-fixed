@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server"
-import { AUTH_COOKIE_NAME, authCookieOptions, signSessionToken } from "@/lib/server/auth/jwt"
-import { verifyPassword } from "@/lib/server/auth/password"
+import { hashPassword } from "@/lib/server/auth/password"
 import { getServerEnv } from "@/lib/server/env"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/lib/server/http"
 import { log } from "@/lib/server/log"
 import { checkRateLimit, getClientIp } from "@/lib/server/rate-limit"
-import { findUserForAuthByEmail } from "@/lib/server/repositories/users"
-import { loginBodySchema } from "@/lib/server/validation/auth"
+import {
+  consumePasswordResetToken,
+  updateUserPassword,
+} from "@/lib/server/repositories/password-reset"
+import { resetPasswordBodySchema } from "@/lib/server/validation/auth"
 
 export const runtime = "nodejs"
 
@@ -21,13 +23,13 @@ export async function POST(request: Request) {
       request,
       jsonError(503, {
         error: "service_unavailable",
-        message: "Configure DATABASE_URL and AUTH_SECRET to enable server authentication.",
+        message: "Password reset is not available in demo mode.",
       })
     )
   }
 
   const ip = getClientIp(request)
-  const rl = await checkRateLimit(`auth:login:${ip}`, 20, 15 * 60 * 1000)
+  const rl = await checkRateLimit(`auth:reset:${ip}`, 10, 15 * 60 * 1000)
   if (!rl.ok) {
     return withCors(
       request,
@@ -42,24 +44,23 @@ export async function POST(request: Request) {
     return withCors(request, jsonError(400, { error: "invalid_json", message: "Body must be JSON" }))
   }
 
-  const parsed = loginBodySchema.safeParse(body)
+  const parsed = resetPasswordBodySchema.safeParse(body)
   if (!parsed.success) return withCors(request, jsonFromZodError(parsed.error))
 
-  const email = parsed.data.email.trim().toLowerCase()
-  const row = await findUserForAuthByEmail(email)
-  const valid = row && (await verifyPassword(parsed.data.password, row.password_hash))
-
-  if (!valid || !row) {
-    log.warn("auth_login_fail", { email })
+  const userId = await consumePasswordResetToken(parsed.data.token)
+  if (!userId) {
     return withCors(
       request,
-      jsonError(401, { error: "invalid_credentials", message: "Invalid email or password" })
+      jsonError(400, { error: "invalid_token", message: "Reset link is invalid or expired." })
     )
   }
 
-  const token = await signSessionToken({ sub: row.id, email: row.email })
-  const res = jsonOk({ user: { id: row.id, email: row.email, name: row.name } })
-  res.cookies.set(AUTH_COOKIE_NAME, token, authCookieOptions())
-  log.info("auth_login_ok", { userId: row.id })
-  return withCors(request, res)
+  const passwordHash = await hashPassword(parsed.data.password)
+  const updated = await updateUserPassword(userId, passwordHash)
+  if (!updated) {
+    return withCors(request, jsonError(500, { error: "internal_error", message: "Could not update password." }))
+  }
+
+  log.info("auth_reset_ok", { userId })
+  return withCors(request, jsonOk({ ok: true, message: "Password updated. You can sign in now." }))
 }

@@ -32,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   const ip = getClientIp(request)
-  const rl = checkRateLimit(`auth:register:${ip}`, 8, 15 * 60 * 1000)
+  const rl = await checkRateLimit(`auth:register:${ip}`, 8, 15 * 60 * 1000)
   if (!rl.ok) {
     return withCors(
       request,

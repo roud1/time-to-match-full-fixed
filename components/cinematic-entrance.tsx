@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import { Logo } from "@/components/logo"
 
@@ -11,6 +11,15 @@ export function CinematicEntrance() {
   const { t } = useI18n()
   const reduceMotion = useReducedMotion()
   const [visible, setVisible] = useState(false)
+
+  const dismiss = useCallback(() => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, "1")
+    } catch {
+      /* ignore */
+    }
+    setVisible(false)
+  }, [])
 
   useEffect(() => {
     if (reduceMotion) return
@@ -22,16 +31,7 @@ export function CinematicEntrance() {
     setVisible(true)
     const done = setTimeout(() => dismiss(), 1600)
     return () => clearTimeout(done)
-  }, [reduceMotion])
-
-  const dismiss = () => {
-    try {
-      sessionStorage.setItem(STORAGE_KEY, "1")
-    } catch {
-      /* ignore */
-    }
-    setVisible(false)
-  }
+  }, [reduceMotion, dismiss])
 
   return (
     <AnimatePresence>

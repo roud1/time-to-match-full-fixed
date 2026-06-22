@@ -1,43 +1,98 @@
-# v0-time-to-match-ui
+# Time to Match
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [v0](https://v0.app).
+A cinematic dating app built with **Next.js 16** (App Router), optional **PostgreSQL**, and real-time match/chat mechanics. Matches expire in 24 hours — use them or lose them.
 
-## Built with v0
+## Modes
 
-This repository is linked to a [v0](https://v0.app) project. You can continue developing by visiting the link below -- start new chats to make changes, and v0 will push commits directly to this repo. Every merge to `main` will automatically deploy.
+| Mode | When | Behavior |
+|------|------|----------|
+| **Demo** | `DATABASE_URL` empty | localStorage-only auth, discover deck, and chat — no server persistence |
+| **Production** | `DATABASE_URL` + `AUTH_SECRET` set | Real auth, likes/matches, chat, cron jobs, notifications |
 
-[Continue working on v0 →](https://v0.app/chat/projects/prj_HAvrpxXJVSylrpJBzlJPimbSKzf0)
+Check mode anytime: `GET /api/ready` → `{ mode: "demo" \| "production", database, auth }`.
 
-## Getting Started
+## Quick start
 
-### Demo mode (no database)
+### Demo (no database)
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Without `DATABASE_URL`, the app uses **demo mode** (localStorage).
+Open [http://localhost:3000](http://localhost:3000).
 
-### Production mode locally
+### Production locally
 
 ```bash
 npm install
 npm run db:setup    # Docker Postgres + .env.local + migrations
 npm run dev
-curl http://localhost:3000/api/ready   # expect mode: "production"
+curl http://localhost:3000/api/ready
 ```
 
 Or manually: `docker compose up -d`, copy `.env.example` → `.env.local`, set `DATABASE_URL` and `AUTH_SECRET`, then `npm run db:migrate`.
 
-See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for Vercel/Render/Docker deploy steps and the full env var checklist.
+## Scripts
 
-## Learn More
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier write |
+| `npm run typecheck` | TypeScript (`tsc --noEmit`) |
+| `npm run test:e2e` | Playwright smoke tests |
+| `npm run db:migrate` | Apply SQL migrations |
+| `npm run db:setup` | Docker Postgres + migrate + `.env.local` |
+| `npm run db:cleanup` | Delete expired profiles/messages |
+| `npm run check:env` | Validate env vars |
+| `npm run check:env:strict` | Fail on missing required production vars |
 
-To learn more, take a look at the following resources:
+## Environment variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [v0 Documentation](https://v0.app/docs) - learn about v0 and how to use it.
+Copy `.env.example` to `.env.local`. Required for production:
 
-<a href="https://v0.app/chat/api/kiro/clone/roud1/v0-time-to-match-ui" alt="Open in Kiro"><img src="https://pdgvvgmkdvyeydso.public.blob.vercel-storage.com/open%20in%20kiro.svg?sanitize=true" /></a>
+- `DATABASE_URL` — PostgreSQL connection string
+- `AUTH_SECRET` — session JWT secret (≥32 chars)
+- `NEXT_PUBLIC_APP_URL` — canonical public URL
+- `CRON_SECRET` — protects `/api/v1/cron/*` routes
+
+Optional integrations (see `.env.example` for full list):
+
+- **Sentry** — `SENTRY_DSN` for error tracking (no-op if unset)
+- **Upstash Redis** — `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` for shared rate limits
+- **Resend** — `RESEND_API_KEY` for expiry emails and password reset
+- **Web Push** — `VAPID_*` keys for push notifications (generate via `node scripts/generate-vapid-keys.mjs`)
+
+## Deployment
+
+See **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** for Vercel, Render, Railway, and Docker deploy steps.
+
+Cron routes (protected by `CRON_SECRET`):
+
+- `POST /api/v1/cron/expire-matches` — every minute
+- `POST /api/v1/cron/notify` — every 15 minutes (email + push expiry alerts)
+- `POST /api/v1/cron/cleanup` — weekly DB cleanup (expired profiles/messages)
+
+## Notifications
+
+Expiry notifications are handled by `/api/v1/cron/notify`:
+
+1. **Email** — requires `RESEND_API_KEY` + `RESEND_FROM_EMAIL`
+2. **Web Push** — requires `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, and user push subscriptions
+
+Without these env vars, the cron still runs but skips unconfigured channels (logged, not fatal).
+
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on push/PR to `main`: install → lint → typecheck → build → Playwright smoke tests.
+
+## Post-P1 roadmap
+
+- **S3/R2 photo uploads** — presigned URL adapter stub at `lib/server/photos/storage.ts`; full implementation deferred
+
+## License
+
+Private — see repository owner.

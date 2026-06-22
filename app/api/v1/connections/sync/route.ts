@@ -43,7 +43,7 @@ export async function PUT(request: Request) {
   }
 
   const ip = getClientIp(request)
-  const rl = checkRateLimit(`sync:${session.sub}`, 60, 60 * 1000)
+  const rl = await checkRateLimit(`sync:${session.sub}`, 60, 60 * 1000)
   if (!rl.ok) {
     return withCors(
       request,

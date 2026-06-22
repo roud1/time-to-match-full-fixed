@@ -1,6 +1,8 @@
-Contact: mailto:security@example.com
+Contact: mailto:security@github.com/roud1/time-to-match-full-fixed
+Contact: https://github.com/roud1/time-to-match-full-fixed/security/advisories/new
 Expires: 2027-12-31T23:59:59.000Z
 Preferred-Languages: en, ru
-Canonical: https://example.com/.well-known/security.txt
+Canonical: https://github.com/roud1/time-to-match-full-fixed/blob/main/public/.well-known/security.txt
+Policy: https://github.com/roud1/time-to-match-full-fixed/security/policy
 
-# Replace security@example.com and the Canonical URL before launch.
+# Report vulnerabilities via GitHub Security Advisories or email the repository owner.

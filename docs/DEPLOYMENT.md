@@ -16,6 +16,8 @@ Set these on **Vercel**, **Render**, **Railway**, or your host before going live
 | `AUTH_SECRET` | **Yes** | Session JWT secret — `openssl rand -base64 32`, ≥32 chars. |
 | `NEXT_PUBLIC_APP_URL` | **Yes** | Canonical `https://your-domain.example` (OG, sitemap, PWA). |
 | `CRON_SECRET` | **Yes** (if using crons) | Protects `/api/v1/cron/*`; Vercel Cron sends `Authorization: Bearer …`. |
+| `SENTRY_DSN` | No | Error tracking via `@sentry/nextjs` (no-op if unset). |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | No | Shared rate limiting across instances; in-memory fallback otherwise. |
 
 **Validate locally before deploy:**
 
@@ -106,6 +108,8 @@ curl -s https://your-domain.example/api/ready | jq
 curl -X POST https://<your-service>/api/v1/cron/expire-matches \
   -H "Authorization: Bearer $CRON_SECRET"
 curl -X POST https://<your-service>/api/v1/cron/notify \
+  -H "Authorization: Bearer $CRON_SECRET"
+curl -X POST https://<your-service>/api/v1/cron/cleanup \
   -H "Authorization: Bearer $CRON_SECRET"
 ```
 
@@ -225,7 +229,7 @@ WebSockets are **not** embedded in this Next process. Use a managed realtime lay
 
 - **Vercel:** Analytics + Speed Insights (already integrated).
 - **Structured logs:** API routes use `lib/server/log.ts` (JSON lines) — ship stdout to Datadog / Axiom / Grafana Loki.
-- **Errors:** add Sentry (`@sentry/nextjs`) in a follow-up; keep DSN in env only.
+- **Errors:** `@sentry/nextjs` when `SENTRY_DSN` is set (see `.env.example`).
 
 ---
 

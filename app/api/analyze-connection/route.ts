@@ -16,7 +16,7 @@ export async function OPTIONS(request: Request) {
 
 export async function POST(request: Request) {
   const ip = getClientIp(request)
-  const limit = checkRateLimit(`analyze-connection:${ip}`, RATE_MAX, RATE_WINDOW_MS)
+  const limit = await checkRateLimit(`analyze-connection:${ip}`, RATE_MAX, RATE_WINDOW_MS)
   if (!limit.ok) {
     return withCors(
       request,

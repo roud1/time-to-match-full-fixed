@@ -230,7 +230,7 @@ function finalizeSwipeSideEffects(
 async function tryServerSwipe(
   profile: SwipeProfile,
   direction: "left" | "right"
-): Promise<{ matched: boolean; matchId?: string } | null> {
+): Promise<{ matched: boolean; matchId?: string } | { serverError: true } | null> {
   if (!profile.userId || typeof window === "undefined") return null
 
   const mode = await getAppMode()
@@ -240,7 +240,7 @@ async function tryServerSwipe(
     const res = await postDiscoverLike(profile.userId)
     if (!res.ok) {
       if ("demoFallback" in res && res.demoFallback) return null
-      return null
+      return { serverError: true }
     }
     if (res.matched && res.matchId) {
       storeServerMatchId(profile.id, res.matchId)
@@ -251,7 +251,7 @@ async function tryServerSwipe(
   const res = await postDiscoverPass(profile.userId)
   if (!res.ok) {
     if ("demoFallback" in res && res.demoFallback) return null
-    return null
+    return { serverError: true }
   }
   return { matched: false }
 }
@@ -309,8 +309,11 @@ export async function recordSwipe(
   direction: "left" | "right",
   locale: Locale,
   position: GeoPosition | null
-): Promise<{ matched: boolean }> {
+): Promise<{ matched: boolean; serverError?: boolean }> {
   const serverResult = await tryServerSwipe(profile, direction)
+  if (serverResult && "serverError" in serverResult) {
+    return { matched: false, serverError: true }
+  }
   if (serverResult) {
     let state = load()
     state = ensureSeeded(state, locale, position)

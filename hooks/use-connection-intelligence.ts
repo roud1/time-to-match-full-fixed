@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef } from "react"
+import { useEffect, useMemo, useState } from "react"
 import type { ConnectionView } from "@/lib/connection-system"
 import type { ConnectionAnalysis } from "@/lib/connection-engine"
 import type { ConnectionRecord } from "@/lib/connection-system"
@@ -16,18 +16,14 @@ export function useConnectionIntelligence(
   messages: ChatMessage[],
   record: ConnectionRecord | null | undefined
 ): ConnectionIntelligence | null {
-  const prevSyncRef = useRef<number | undefined>(undefined)
+  const [prevSync, setPrevSync] = useState<number | undefined>(undefined)
+
+  useEffect(() => {
+    if (analysis) setPrevSync(analysis.syncPercent)
+  }, [analysis])
 
   return useMemo(() => {
     if (!view || !analysis || !record) return null
-    const intel = analyzeConnectionIntelligence(
-      view,
-      analysis,
-      messages,
-      record,
-      prevSyncRef.current
-    )
-    prevSyncRef.current = analysis.syncPercent
-    return intel
-  }, [view, analysis, messages, record])
+    return analyzeConnectionIntelligence(view, analysis, messages, record, prevSync)
+  }, [view, analysis, messages, record, prevSync])
 }

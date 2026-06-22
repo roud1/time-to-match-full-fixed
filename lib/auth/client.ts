@@ -96,6 +96,44 @@ export async function logoutOnServer(): Promise<void> {
   }
 }
 
+export async function requestPasswordReset(email: string): Promise<
+  | { ok: true; message?: string }
+  | { ok: false; status: number; message?: string; demoFallback?: boolean }
+> {
+  const res = await fetch("/api/v1/auth/forgot-password", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  })
+  const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string }
+
+  if (res.status === 503) {
+    return { ok: false, status: 503, demoFallback: true, message: body.message }
+  }
+  if (!res.ok) {
+    return { ok: false, status: res.status, message: body.message ?? body.error }
+  }
+  return { ok: true, message: body.message }
+}
+
+export async function resetPasswordOnServer(input: {
+  token: string
+  password: string
+}): Promise<{ ok: true; message?: string } | { ok: false; status: number; message?: string }> {
+  const res = await fetch("/api/v1/auth/reset-password", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  })
+  const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string }
+  if (!res.ok) {
+    return { ok: false, status: res.status, message: body.message ?? body.error }
+  }
+  return { ok: true, message: body.message }
+}
+
 function profileCoords(profile: StoredUserProfile): { lat: number; lng: number } | null {
   if (profile.cityId) {
     return getCityCoords(profile.cityId)

@@ -65,12 +65,12 @@ export type DiscoverLikeResponse =
   | { ok: true; liked: true; matched: false }
   | { ok: true; liked: true; matched: true; matchId: string }
   | { ok: false; demoFallback: true }
-  | { ok: false; status: number }
+  | { ok: false; status: number; serverError: true }
 
 export type DiscoverPassResponse =
   | { ok: true; passed: true }
   | { ok: false; demoFallback: true }
-  | { ok: false; status: number }
+  | { ok: false; status: number; serverError: true }
 
 export async function postDiscoverLike(targetUserId: string): Promise<DiscoverLikeResponse> {
   const res = await fetch("/api/discover/like", {
@@ -91,7 +91,7 @@ export async function postDiscoverLike(targetUserId: string): Promise<DiscoverLi
   }
 
   if (!res.ok) {
-    return { ok: false, status: res.status }
+    return { ok: false, status: res.status, serverError: true }
   }
 
   if (data.matched && data.matchId) {
@@ -114,7 +114,7 @@ export async function postDiscoverPass(targetUserId: string): Promise<DiscoverPa
   }
 
   if (!res.ok) {
-    return { ok: false, status: res.status }
+    return { ok: false, status: res.status, serverError: true }
   }
 
   return { ok: true, passed: true }

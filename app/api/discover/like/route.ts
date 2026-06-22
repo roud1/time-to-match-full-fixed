@@ -27,7 +27,7 @@ export async function POST(request: Request) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const rl = checkRateLimit(`discover-like:${session.sub}`, 120, 60 * 1000)
+  const rl = await checkRateLimit(`discover-like:${session.sub}`, 120, 60 * 1000)
   if (!rl.ok) {
     return withCors(
       request,
