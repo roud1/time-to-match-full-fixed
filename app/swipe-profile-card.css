@@ -380,3 +380,38 @@ html[data-theme="light"] .swipe-profile-presence__hero .profile-presence__identi
     linear-gradient(180deg, rgba(18, 17, 26, 0.25) 0%, transparent 30%),
     linear-gradient(0deg, rgba(18, 17, 26, 0.9) 0%, rgba(18, 17, 26, 0.5) 40%, transparent 70%);
 }
+
+/* Connection tip — SaaS glass */
+.swipe-profile-presence__connection {
+  border-color: var(--saas-border-strong);
+  background: color-mix(in srgb, var(--saas-surface) 72%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Mobile discover — Tinder-style full-bleed hero photo */
+@media (max-width: 1023px) {
+  .ttm-native-app--discover .swipe-profile-presence .profile-presence__head {
+    display: none;
+  }
+
+  .ttm-native-app--discover .swipe-profile-presence .profile-presence__identity--cover,
+  .ttm-native-app--discover .swipe-profile-presence__hero {
+    max-height: none;
+    min-height: min(52vh, 26rem);
+    aspect-ratio: 3 / 4;
+    width: 100%;
+    border-radius: 1.25rem;
+  }
+
+  .ttm-native-app--discover .swipe-profile-presence .profile-presence__identity-body--cover {
+    align-items: flex-end;
+    text-align: left;
+    padding: 0.85rem 1rem 1rem;
+  }
+
+  .ttm-native-app--discover .swipe-profile-presence__hero .profile-presence__identity-name {
+    font-size: clamp(1.35rem, 5vw, 1.65rem);
+    font-weight: 600;
+  }
+}

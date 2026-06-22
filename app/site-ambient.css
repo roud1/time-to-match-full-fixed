@@ -69,8 +69,8 @@ html[data-theme="dark"] .site-ambient__parallax .ttm-dating-parallax__blob--viol
 
 html[data-theme="dark"] .site-ambient__parallax .ttm-dating-parallax__mesh {
   background:
-    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(190, 18, 60, 0.04), transparent 58%),
-    radial-gradient(ellipse 70% 45% at 50% 45%, rgba(154, 52, 18, 0.03), transparent 65%);
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(168, 85, 247, 0.04), transparent 58%),
+    radial-gradient(ellipse 70% 45% at 50% 45%, rgba(240, 169, 136, 0.03), transparent 65%);
 }
 
 /* ─── Light ambient ─── */

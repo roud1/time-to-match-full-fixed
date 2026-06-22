@@ -221,7 +221,7 @@ export function SwipeProfilePresenceCard({
           </div>
         )}
 
-        <div className="profile-presence__connection rounded-2xl border border-indigo-500/15 bg-indigo-500/[0.06] px-4 py-3 mt-0">
+        <div className="profile-presence__connection swipe-profile-presence__connection rounded-2xl border px-4 py-3 mt-0">
           <p className="text-sm font-extralight text-foreground/85 mb-1">{t("welcomeConnectionTitle")}</p>
           <p className="text-xs text-muted-foreground font-light leading-relaxed">
             {t("welcomeConnectionBody")}

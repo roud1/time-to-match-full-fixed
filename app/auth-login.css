@@ -111,7 +111,7 @@ html[data-theme="light"] .ttm-login-live {
 }
 
 .ttm-reg-progress__segment--active {
-  background: linear-gradient(90deg, #be123c 0%, #fb7185 52%, #f97316 100%);
+  background: var(--saas-neon-gradient);
 }
 
 @media (prefers-reduced-motion: reduce) {

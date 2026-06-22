@@ -111,6 +111,31 @@ const DEMO_DATA: Partial<
 
 const FALLBACK_KM = [2, 5, 1, 8, 12, 3, 6, 4, 7, 9]
 
+/** High-quality demo portraits (Unsplash) — cycles for 18 demo profiles. */
+const DEMO_PHOTO_URLS = [
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1539571696357-5a90ebe6d8b2?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=640&h=800&fit=crop&q=85",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=640&h=800&fit=crop&q=85",
+] as const
+
+function demoProfilePhotos(index: number): string[] {
+  const base = index % DEMO_PHOTO_URLS.length
+  return [
+    DEMO_PHOTO_URLS[base],
+    DEMO_PHOTO_URLS[(base + 1) % DEMO_PHOTO_URLS.length],
+    DEMO_PHOTO_URLS[(base + 2) % DEMO_PHOTO_URLS.length],
+  ]
+}
+
 const ABOUT_TAIL: Partial<Record<Locale, string[]>> = {
   ru: [
     "Открыта к встречам и долгим разговорам.",
@@ -194,12 +219,7 @@ export function buildDemoSwipeProfiles(
     const anchor = userPosition ?? cityCoords ?? { lat: 50.45, lng: 30.52 }
     const coords = offsetPosition(anchor, index)
 
-    const slot = ((index * 3 + profile.distanceIndex) % 4) + 1
-    const images = [
-      `/images/profile-${slot}.jpg`,
-      `/images/profile-${(slot % 4) + 1}.jpg`,
-      `/images/profile-${((slot + 1) % 4) + 1}.jpg`,
-    ]
+    const images = demoProfilePhotos(index)
 
     return {
       id: index + 1,

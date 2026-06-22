@@ -127,11 +127,11 @@
 }
 
 .ttm-native-app--discover .discover-ambient__blob--a {
-  background: radial-gradient(circle, rgba(190, 18, 60, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent 70%);
 }
 
 .ttm-native-app--discover .discover-ambient__blob--b {
-  background: radial-gradient(circle, rgba(234, 88, 12, 0.07), transparent 70%);
+  background: radial-gradient(circle, rgba(240, 169, 136, 0.07), transparent 70%);
 }
 
 .ttm-native-app--discover .ttm-floating-header {
@@ -186,7 +186,7 @@
   height: 45%;
   left: -10%;
   top: 5%;
-  background: radial-gradient(circle, rgba(190, 18, 60, 0.12), transparent 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12), transparent 70%);
 }
 
 .discover-ambient__blob--b {
@@ -194,7 +194,7 @@
   height: 40%;
   right: -8%;
   bottom: 15%;
-  background: radial-gradient(circle, rgba(234, 88, 12, 0.08), transparent 70%);
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.08), transparent 70%);
   animation-delay: -6s;
   animation-duration: 22s;
 }
@@ -259,15 +259,16 @@
 
 /* Discover profile card */
 .discover-card {
-  --discover-glow: rgba(190, 18, 60, 0.18);
-  --discover-accent: rgba(232, 121, 143, 0.32);
+  --discover-glow: var(--saas-glow-purple, rgba(168, 85, 247, 0.18));
+  --discover-accent: rgba(240, 169, 136, 0.32);
   position: relative;
   border-radius: 20px;
   overflow: hidden;
-  border: 1px solid rgba(255, 241, 242, 0.06);
+  border: 1px solid var(--saas-border, rgba(255, 255, 255, 0.06));
   box-shadow:
-    0 24px 56px -20px rgba(190, 18, 60, 0.22),
-    0 0 0 1px rgba(255, 241, 242, 0.04) inset;
+    0 24px 56px -20px rgba(168, 85, 247, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 0 40px -16px var(--saas-glow-copper, rgba(240, 169, 136, 0.12));
 }
 
 .discover-card[data-atmosphere="warm"] {
@@ -367,8 +368,8 @@
   flex-direction: column;
   justify-content: flex-end;
   padding: 0.65rem 0.85rem 0.85rem;
-  background: linear-gradient(180deg, rgba(5, 2, 8, 0.88) 0%, rgba(5, 2, 8, 0.98) 100%);
-  border-top: 1px solid rgba(255, 241, 242, 0.06);
+  background: linear-gradient(180deg, rgba(11, 15, 20, 0.88) 0%, rgba(11, 15, 20, 0.98) 100%);
+  border-top: 1px solid var(--saas-border, rgba(255, 255, 255, 0.06));
 }
 
 .discover-card__name {

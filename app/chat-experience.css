@@ -1,9 +1,17 @@
 /* PHASE 2 — emotional connection chat */
 
 .ttm-chat-room {
-  --chat-glow: var(--ttm-glow-cinematic);
-  --chat-accent: var(--ttm-brand-accent);
-  background: var(--ttm-brand-deep);
+  --chat-glow: var(--saas-glow-purple);
+  --chat-accent: var(--accent-copper);
+  background: var(--saas-bg);
+}
+
+.ttm-native-app .ttm-chat-room {
+  background: radial-gradient(
+    ellipse 120% 80% at 50% -10%,
+    rgba(168, 85, 247, 0.06),
+    var(--saas-bg) 55%
+  );
 }
 
 .ttm-chat-room[data-exp="energy_fading"] {
