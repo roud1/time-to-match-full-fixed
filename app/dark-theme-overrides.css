@@ -142,3 +142,37 @@ html[data-theme="dark"] .live-connection-demo__sync-glow {
 html[data-theme="dark"] .live-connection-demo__particle {
   background: rgba(167, 139, 250, 0.55);
 }
+
+/* Glass empty states — dark SaaS */
+html[data-theme="dark"] .ttm-empty-state,
+[data-theme="dark"] .ttm-empty-state {
+  background: var(--saas-glass-bg);
+  border: 1px solid var(--saas-border);
+  border-radius: var(--saas-radius-lg);
+  backdrop-filter: var(--saas-glass-blur);
+  -webkit-backdrop-filter: var(--saas-glass-blur);
+  box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.65);
+  color: var(--saas-text);
+}
+
+html[data-theme="dark"] .ttm-empty-state__icon,
+[data-theme="dark"] .ttm-empty-state__icon {
+  border: 1px solid var(--saas-border-strong);
+  background: color-mix(in srgb, var(--neon-purple) 12%, transparent);
+}
+
+html[data-theme="dark"] .ttm-empty-state__icon svg,
+[data-theme="dark"] .ttm-empty-state__icon svg {
+  color: var(--accent-copper);
+}
+
+html[data-theme="dark"] .ttm-empty-state__title,
+[data-theme="dark"] .ttm-empty-state__title {
+  color: var(--saas-text);
+  font-family: var(--saas-font-display);
+}
+
+html[data-theme="dark"] .ttm-empty-state__desc,
+[data-theme="dark"] .ttm-empty-state__desc {
+  color: var(--saas-muted);
+}

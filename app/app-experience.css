@@ -42,8 +42,8 @@ html[data-theme="light"] .ttm-profile-page {
 /* Panel titles — bold display headlines */
 .ttm-app-panel-title {
   font-family: var(--app-font-display);
-  font-weight: 800;
-  letter-spacing: -0.045em;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   color: var(--app-text);
 }
 
@@ -359,11 +359,62 @@ html[data-theme="light"] .ttm-profile-page {
 .ttm-app-loading {
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.25rem;
   background: var(--app-bg, #050208);
   color: var(--app-muted, rgba(253, 164, 175, 0.78));
   font-family: var(--app-font-body);
+}
+
+.ttm-app-loading__skeleton {
+  width: min(18rem, 72vw);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ttm-app-loading__bar {
+  height: 0.65rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--saas-border) 80%, transparent) 0%,
+    color-mix(in srgb, var(--accent-copper) 22%, transparent) 50%,
+    color-mix(in srgb, var(--saas-border) 80%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: ttm-app-loading-shimmer 1.4s ease-in-out infinite;
+}
+
+.ttm-app-loading__bar--wide {
+  width: 100%;
+}
+
+.ttm-app-loading__bar--mid {
+  width: 72%;
+  align-self: center;
+}
+
+.ttm-app-loading__bar--short {
+  width: 48%;
+  align-self: center;
+}
+
+@keyframes ttm-app-loading-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-app-loading__bar {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -381,6 +432,7 @@ html[data-theme="light"] .ttm-profile-page {
 .ttm-native-app:not(.ttm-app-loading) {
   background: transparent;
   font-family: var(--app-font-body);
+  overflow-x: hidden;
 }
 
 .ttm-native-app .ttm-native-app__main,

@@ -141,8 +141,13 @@ export function AppShell() {
 
   if (!ready) {
     return (
-      <div className="ttm-app-loading ttm-native-app">
-        <p className="font-extralight">{t("locationLoading")}</p>
+      <div className="ttm-app-loading ttm-native-app" aria-busy aria-label={t("locationLoading")}>
+        <div className="ttm-app-loading__skeleton" aria-hidden>
+          <div className="ttm-app-loading__bar ttm-app-loading__bar--wide" />
+          <div className="ttm-app-loading__bar ttm-app-loading__bar--mid" />
+          <div className="ttm-app-loading__bar ttm-app-loading__bar--short" />
+        </div>
+        <p className="font-extralight text-sm">{t("locationLoading")}</p>
       </div>
     )
   }

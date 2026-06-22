@@ -129,11 +129,13 @@
 
 .match-moment__title {
   margin: 0;
+  font-family: var(--saas-font-display, inherit);
   font-size: clamp(1.45rem, 4.5vw, 1.65rem);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.02em;
   text-align: center;
-  color: var(--foreground);
+  color: var(--saas-text, var(--foreground));
+  text-shadow: 0 0 32px rgba(240, 169, 136, 0.18);
 }
 
 .match-moment__subtitle {
@@ -244,11 +246,12 @@
   border-radius: 9999px;
   font-size: 0.9rem;
   font-weight: 500;
-  color: #fff;
-  background: linear-gradient(90deg, #7c3aed 0%, #c026d3 52%, #ec4899 100%);
+  color: #0b0f14;
+  background: var(--saas-cta-gradient, linear-gradient(135deg, #f0a988 0%, #d97a5e 100%));
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.12) inset,
-    0 12px 36px -10px rgba(168, 85, 247, 0.55);
+    0 12px 36px -10px rgba(240, 169, 136, 0.55),
+    0 0 40px -12px rgba(168, 85, 247, 0.35);
   transition:
     opacity 0.2s ease,
     transform 0.2s ease,
@@ -260,7 +263,8 @@
   opacity: 0.96;
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.16) inset,
-    0 16px 44px -8px rgba(236, 72, 153, 0.5);
+    0 16px 44px -8px rgba(240, 169, 136, 0.5),
+    0 0 48px -8px rgba(236, 72, 153, 0.4);
 }
 
 .match-moment__cta:active {

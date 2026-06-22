@@ -19,7 +19,7 @@
   --accent-copper: #f0a988;
   --accent-copper-deep: #d97a5e;
   --saas-font-display: var(--font-landing-display), "Playfair Display", Georgia, serif;
-  --saas-font-body: var(--font-landing-body), "Inter", system-ui, sans-serif;
+  --saas-font-body: var(--font-landing-body), var(--font-onest), "Inter", "Onest", system-ui, sans-serif;
   --saas-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --saas-radius: 14px;
   --saas-radius-lg: 22px;

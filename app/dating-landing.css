@@ -280,6 +280,23 @@
   display: flex;
   align-items: center;
   gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 479px) {
+  .ttm-dating-nav__sign {
+    display: none;
+  }
+
+  .ttm-dating-nav__inner {
+    padding: 0.55rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .ttm-dating-cta--sm {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.75rem;
+  }
 }
 
 .ttm-dating-nav__sign {
