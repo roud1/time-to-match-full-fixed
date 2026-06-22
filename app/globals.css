@@ -39,7 +39,7 @@
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 @theme inline {
-  --font-body: var(--font-outfit), 'Outfit', system-ui, sans-serif;
+  --font-body: var(--font-outfit), 'Outfit', 'Segoe UI', system-ui, sans-serif;
   --font-sans: var(--font-body);
   --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';

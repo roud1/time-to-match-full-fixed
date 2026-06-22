@@ -4,7 +4,7 @@
 
 :root {
   /* —— Typography (set in layout via next/font; fallbacks here) —— */
-  --font-body: var(--font-outfit), 'Outfit', system-ui, sans-serif;
+  --font-body: var(--font-outfit), 'Outfit', 'Segoe UI', system-ui, sans-serif;
   --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
 
   /* —— Core palette (warm light) —— */

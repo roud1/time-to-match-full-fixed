@@ -1,9 +1,8 @@
 import { Cormorant_Garamond, Outfit } from "next/font/google"
 
-/** UI body — clean geometric sans with Cyrillic */
+/** UI body — clean geometric sans (latin); Cyrillic via system fallbacks in CSS */
 export const fontBody = Outfit({
-  // @ts-expect-error Outfit ships Cyrillic on Google Fonts; next/font subset types are incomplete
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin", "latin-ext"],
   variable: "--font-outfit",
   display: "swap",
   preload: true,
