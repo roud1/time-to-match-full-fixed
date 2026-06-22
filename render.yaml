@@ -8,6 +8,7 @@ services:
     region: frankfurt
     plan: starter
     buildCommand: npm ci && npm run build
+    preDeployCommand: npm run db:migrate
     startCommand: npm run start
     healthCheckPath: /api/health
     envVars:

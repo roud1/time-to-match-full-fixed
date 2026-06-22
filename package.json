@@ -12,7 +12,10 @@
     "start": "next start -H 0.0.0.0",
     "lint": "eslint .",
     "db:migrate": "node scripts/db-migrate.mjs",
+    "db:setup": "node scripts/db-setup.mjs",
     "db:cleanup": "node scripts/db-cleanup.mjs",
+    "check:env": "node scripts/check-env.mjs",
+    "check:env:strict": "node scripts/check-env.mjs --strict",
     "i18n:extract-ru": "node scripts/i18n-extract-ru.mjs",
     "i18n:translate": "node scripts/i18n-translate-from-ru.mjs en uk de es pl fr it tr"
   },

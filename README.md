@@ -10,19 +10,27 @@ This repository is linked to a [v0](https://v0.app) project. You can continue de
 
 ## Getting Started
 
-First, run the development server:
+### Demo mode (no database)
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). Without `DATABASE_URL`, the app uses **demo mode** (localStorage).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production mode locally
+
+```bash
+npm install
+npm run db:setup    # Docker Postgres + .env.local + migrations
+npm run dev
+curl http://localhost:3000/api/ready   # expect mode: "production"
+```
+
+Or manually: `docker compose up -d`, copy `.env.example` → `.env.local`, set `DATABASE_URL` and `AUTH_SECRET`, then `npm run db:migrate`.
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for Vercel/Render/Docker deploy steps and the full env var checklist.
 
 ## Learn More
 
