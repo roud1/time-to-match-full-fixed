@@ -16,6 +16,7 @@ import { SwipeProfileDetailScreen } from "@/components/app/swipe-profile-detail-
 import { MatchCelebrationScreen } from "@/components/app/match-celebration-screen"
 import { EmptyState } from "@/components/ui/empty-state"
 import { isFirstMatchPending } from "@/lib/product-experience"
+import { trackFunnelOnce } from "@/lib/analytics-funnel"
 import { Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -149,6 +150,7 @@ export function SwipeDeck({
         await xAnimRef.current
 
         const { matched } = await recordSwipe(top, direction, locale, location.position)
+        trackFunnelOnce("first_swipe", { direction })
         if (matched && direction === "right") {
           setFirstMatchMode(isFirstMatchPending())
           setMatchedProfile(top)
@@ -160,6 +162,7 @@ export function SwipeDeck({
         x.set(0)
       } catch {
         const { matched } = await recordSwipe(top, direction, locale, location.position)
+        trackFunnelOnce("first_swipe", { direction })
         if (matched && direction === "right") {
           setFirstMatchMode(isFirstMatchPending())
           setMatchedProfile(top)
@@ -461,6 +464,7 @@ export function SwipeDeck({
         onOpenChange={setSafetyOpen}
         profileId={current?.id ?? 0}
         profileName={current?.name ?? ""}
+        serverUserId={current?.userId}
         context="discover"
         onAfterBlock={() => {
           if (current) onProfilesChange((prev) => prev.filter((p) => p.id !== current.id))

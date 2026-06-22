@@ -1,19 +1,17 @@
 import type { MetadataRoute } from "next"
 
-function baseUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-}
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
 export default function robots(): MetadataRoute.Robots {
-  const host = baseUrl()
+  const host = siteUrl.replace(/\/$/, "")
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/"],
+        disallow: ["/api/", "/app", "/settings", "/notifications", "/memories"],
       },
     ],
-    sitemap: `${host.replace(/\/$/, "")}/sitemap.xml`,
+    sitemap: `${host}/sitemap.xml`,
   }
 }

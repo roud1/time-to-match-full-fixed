@@ -1,10 +1,12 @@
 "use client"
 
+import { useCallback, useRef } from "react"
 import { CountdownTimer } from "@/components/ui/countdown-timer"
 import { FreezeButton } from "@/components/matches/freeze-button"
 import { OnboardingHint } from "@/components/ui/onboarding-hint"
 import { useChatMatchExpiry } from "@/hooks/use-chat-match-expiry"
 import { useI18n } from "@/lib/i18n"
+import { trackMatchExpiredOnce } from "@/lib/analytics-funnel"
 import { cn } from "@/lib/utils"
 
 type ChatMatchExpiryBarProps = {
@@ -23,6 +25,15 @@ export function ChatMatchExpiryBar({
 }: ChatMatchExpiryBarProps) {
   const { t } = useI18n()
   const expiry = useChatMatchExpiry(profileId)
+  const expiredTracked = useRef(false)
+
+  const handleExpire = useCallback(() => {
+    expiry?.refresh()
+    if (!expiredTracked.current && expiry?.matchId) {
+      expiredTracked.current = true
+      trackMatchExpiredOnce(expiry.matchId)
+    }
+  }, [expiry])
 
   if (!expiry) return null
 
@@ -45,7 +56,7 @@ export function ChatMatchExpiryBar({
         expiresAt={expiry.expiresAt}
         compact={compact}
         flashKey={expiry.flashKey}
-        onExpire={expiry.refresh}
+        onExpire={handleExpire}
         context="match"
       />
       <FreezeButton

@@ -14,6 +14,8 @@ import { getUserProfile } from "@/lib/user-profile"
 import { computeDiscoverCompatibility, getCompatibilityHintLabel } from "@/lib/discover-compatibility"
 import { PulseCharacter } from "@/components/landing/pulse-character"
 import { markFirstMatchCelebrated } from "@/lib/product-experience"
+import { PushPromptBanner } from "@/components/pwa/push-prompt-banner"
+import { trackProductEvent } from "@/lib/analytics-client"
 import "@/app/match-celebration.css"
 
 type MatchCelebrationScreenProps = {
@@ -28,10 +30,17 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
   const reduce = useReducedMotion()
   const open = profile != null
   const [mounted, setMounted] = useState(false)
+  const [pushPromptDismissed, setPushPromptDismissed] = useState(false)
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (open) {
+      trackProductEvent("match_created", { first: isFirstMatch })
+    }
+  }, [open, isFirstMatch])
 
   useEffect(() => {
     if (open && isFirstMatch) markFirstMatchCelebrated()
@@ -185,6 +194,13 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
               <button type="button" onClick={() => goToChat()} className="match-moment__cta">
                 {t("matchModalOpenChat")}
               </button>
+
+              {isFirstMatch && !pushPromptDismissed && (
+                <PushPromptBanner
+                  className="mt-2"
+                  onDismiss={() => setPushPromptDismissed(true)}
+                />
+              )}
             </motion.div>
           </div>
         </motion.div>

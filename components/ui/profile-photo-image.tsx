@@ -55,6 +55,7 @@ export function ProfilePhotoImage({
         className={className}
         sizes={sizes}
         priority={priority}
+        loading={priority ? undefined : "lazy"}
         onError={() => setFailed(true)}
       />
     )
@@ -69,6 +70,7 @@ export function ProfilePhotoImage({
       className={className}
       sizes={sizes}
       priority={priority}
+      loading={priority ? undefined : "lazy"}
       onError={() => setFailed(true)}
     />
   )

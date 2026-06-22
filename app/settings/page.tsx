@@ -8,6 +8,7 @@ import { CinematicButton } from "@/components/ui/cinematic-button"
 import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 import { PushNotificationSettings } from "@/components/pwa/push-notification-settings"
+import { SettingsBlockedList } from "@/components/settings/settings-blocked-list"
 import { CinematicInviteFlow } from "@/components/network/cinematic-invite-flow"
 import { pushConnectionSync } from "@/lib/connection-sync-client"
 
@@ -94,10 +95,16 @@ export default function SettingsPage() {
           ) : (
             <div className="space-y-4 max-w-md">
               {section === "privacy" && (
-                <label className="flex items-center justify-between ttm-brand-glass rounded-2xl px-4 py-3 cursor-pointer">
-                  <span className="text-sm font-light text-white/70">{t("settingsPrivacyToggle")}</span>
-                  <input type="checkbox" className="accent-indigo-400" defaultChecked />
-                </label>
+                <>
+                  <label className="flex items-center justify-between ttm-brand-glass rounded-2xl px-4 py-3 cursor-pointer">
+                    <span className="text-sm font-light text-white/70">{t("settingsPrivacyToggle")}</span>
+                    <input type="checkbox" className="accent-indigo-400" defaultChecked />
+                  </label>
+                  <div>
+                    <p className="p9-register-step-label mb-3">{t("trustBlockedListTitle")}</p>
+                    <SettingsBlockedList />
+                  </div>
+                </>
               )}
               {section === "security" && (
                 <p className="text-xs text-white/40 font-light">{t("settingsSecurityHint")}</p>

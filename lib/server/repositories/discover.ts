@@ -102,6 +102,11 @@ export async function listDiscoverProfiles(input: {
         SELECT 1 FROM discover_passes p
         WHERE p.from_user = ${input.viewerId} AND p.to_user = u.id
       )
+      AND NOT EXISTS (
+        SELECT 1 FROM user_blocks b
+        WHERE (b.blocker_id = ${input.viewerId} AND b.blocked_id = u.id)
+           OR (b.blocker_id = u.id AND b.blocked_id = ${input.viewerId})
+      )
     LIMIT 120
   `
 

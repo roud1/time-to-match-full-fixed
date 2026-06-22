@@ -658,6 +658,7 @@ export function ChatRoomScreen({
         onOpenChange={setSafetyOpen}
         profileId={profile.id}
         profileName={profile.name}
+        serverUserId={profile.userId}
         context="chat"
         onAfterBlock={onBack}
       />

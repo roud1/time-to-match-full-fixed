@@ -156,6 +156,9 @@ export async function createMutualMatchLikes(input: {
 
   await checkAndGrantAchievements(userA, { event: "match_created", activeMatchesCount: undefined })
   await checkAndGrantAchievements(userB, { event: "match_created", activeMatchesCount: undefined })
+
+  const { scheduleNewMatchNotifications } = await import("@/lib/server/notifications/repository")
+  await scheduleNewMatchNotifications(userA, userB)
 }
 
 export type RecordLikeResult =
@@ -183,6 +186,11 @@ export async function recordLikeForUser(
 
   const viewer = await findUserById(fromUserId)
   if (!viewer || viewer.is_blocked) return { ok: false, code: "blocked" }
+
+  const { isEitherBlocked } = await import("@/lib/server/repositories/moderation")
+  if (await isEitherBlocked(fromUserId, targetUserId)) {
+    return { ok: false, code: "not_found" }
+  }
 
   const existing = await db<{ id: string; is_match: boolean }[]>`
     SELECT id, is_match FROM likes

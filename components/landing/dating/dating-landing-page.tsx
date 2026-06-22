@@ -12,9 +12,41 @@ import { DatingLandingNav } from "@/components/landing/dating/dating-landing-nav
 import { DatingPricingSection } from "@/components/landing/dating/dating-pricing-section"
 import { DatingProductPreviewSection } from "@/components/landing/dating/dating-product-preview-section"
 
+const siteUrl = (process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000").replace(/\/$/, "")
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "Time to Match",
+      url: siteUrl,
+      logo: `${siteUrl}/brand/ttm-logo-full.png`,
+    },
+    {
+      "@type": "WebApplication",
+      name: "Time to Match",
+      url: siteUrl,
+      applicationCategory: "LifestyleApplication",
+      operatingSystem: "Web",
+      description:
+        "Premium dating where every match lives for 24 hours. Connect now or lose them forever.",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+    },
+  ],
+}
+
 export function DatingLandingPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <main
         className={cn(
           fontLandingDisplay.variable,

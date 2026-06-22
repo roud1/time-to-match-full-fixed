@@ -14,6 +14,8 @@ import { ProfilePresenceCard } from "@/components/profile/profile-presence-card"
 import { WelcomeMatchTimer } from "@/components/welcome/welcome-match-timer"
 import { WelcomeCompletionChecklist } from "@/components/welcome/welcome-completion-checklist"
 import { WelcomeTips } from "@/components/welcome/welcome-tips"
+import { WelcomeProgressSteps } from "@/components/welcome/welcome-progress-steps"
+import { WelcomeOnboardingShell } from "@/components/welcome/welcome-onboarding-shell"
 function WelcomePitch({ className, name }: { className?: string; name: string }) {
   const { t } = useI18n()
   const chips = [t("welcomeChipMatch24"), t("profileChipSync"), t("profileChipStrength")]
@@ -111,10 +113,13 @@ export function WelcomeScreen() {
   const displayName = profile.name.split(/\s+/)[0] || profile.name
 
   return (
-    <div className="ttm-welcome-page">
-      <WelcomePitch className="ttm-welcome-page__pitch--mobile" name={displayName} />
+    <WelcomeOnboardingShell>
+      <div className="ttm-welcome-page">
+        <WelcomePitch className="ttm-welcome-page__pitch--mobile" name={displayName} />
 
-      <div className="ttm-welcome-page__grid">
+        <WelcomeProgressSteps strength={strength} className="ttm-welcome-page__progress mb-6" />
+
+        <div className="ttm-welcome-page__grid">
         <aside className="ttm-welcome-page__aside">
           <WelcomePitch className="ttm-welcome-page__pitch--desktop" name={displayName} />
           <WelcomeMatchTimer />
@@ -143,5 +148,6 @@ export function WelcomeScreen() {
         <WelcomeActions strength={strength} />
       </div>
     </div>
+    </WelcomeOnboardingShell>
   )
 }

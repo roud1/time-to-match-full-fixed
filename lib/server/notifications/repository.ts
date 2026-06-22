@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/server/db"
+import { discoverIdToNumeric } from "@/lib/discover/map-profile"
 import type {
   DbNotificationRow,
   NotificationInboxItem,
@@ -60,7 +61,7 @@ function inboxRowToItem(
       row.type === "profile_expiring"
         ? "/profile"
         : row.reference_id
-          ? `/app?tab=chat&with=${row.reference_id}`
+          ? `/app?tab=chat&with=${discoverIdToNumeric(row.reference_id)}`
           : "/app?tab=chat",
   }
 }
@@ -180,6 +181,25 @@ export async function scheduleExpiryNotifications(): Promise<ScheduleResult> {
   }
 
   return { profileScheduled, matchScheduled }
+}
+
+export async function scheduleNewMatchNotifications(userA: string, userB: string): Promise<number> {
+  const db = getDb()
+  if (!db) return 0
+
+  const insertedA = await db<{ id: string }[]>`
+    INSERT INTO notifications (user_id, type, reference_id, lead_hours, scheduled_for)
+    VALUES (${userA}, 'new_match', ${userB}, 0, now())
+    ON CONFLICT DO NOTHING
+    RETURNING id
+  `
+  const insertedB = await db<{ id: string }[]>`
+    INSERT INTO notifications (user_id, type, reference_id, lead_hours, scheduled_for)
+    VALUES (${userB}, 'new_match', ${userA}, 0, now())
+    ON CONFLICT DO NOTHING
+    RETURNING id
+  `
+  return insertedA.length + insertedB.length
 }
 
 export async function fetchPendingForDelivery(limit = 200): Promise<PendingNotificationRow[]> {

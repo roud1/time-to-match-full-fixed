@@ -1,4 +1,10 @@
 import type { NotificationDeliveryContent, NotificationType } from "@/lib/server/notifications/types"
+import { discoverIdToNumeric } from "@/lib/discover/map-profile"
+
+function chatHref(origin: string, peerUserId: string | null): string {
+  if (!peerUserId) return `${origin}/app?tab=chat`
+  return `${origin}/app?tab=chat&with=${discoverIdToNumeric(peerUserId)}`
+}
 
 export function buildNotificationContent(input: {
   type: NotificationType
@@ -31,9 +37,19 @@ export function buildNotificationContent(input: {
   }
 
   const name = peerName ?? "собеседником"
-  const href = referenceId
-    ? `${origin}/app?tab=chat&with=${referenceId}`
-    : `${origin}/app?tab=chat`
+  const href = chatHref(origin, referenceId)
+
+  if (type === "new_match") {
+    const title = `Новый мэтч с ${name === "собеседником" ? "собеседником" : name}!`
+    const body = "У вас 24 часа, чтобы зажечь диалог. Напишите первым."
+    return {
+      title,
+      body,
+      href,
+      tag: `new-match-${referenceId ?? "unknown"}`,
+      html: `<p>${body}</p><p><a href="${href}">Открыть чат</a></p>`,
+    }
+  }
 
   if (type === "match_urgency_warning") {
     const title =

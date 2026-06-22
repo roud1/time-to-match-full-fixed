@@ -1,583 +1,64 @@
-/* ─── Welcome page — full viewport (desktop), not phone column ─── */
-
-.ttm-auth-shell__content:has(.ttm-welcome-page) {
-  max-width: min(1200px, 100%);
-}
-
-.ttm-auth-shell:has(.ttm-welcome-page) .ttm-auth-shell__main {
-  align-items: stretch;
-  justify-content: flex-start;
-  padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));
-  padding-bottom: max(2rem, env(safe-area-inset-bottom, 0px));
-}
-
-.ttm-welcome-page {
+.ttm-welcome-progress {
   width: 100%;
-  min-height: min(720px, calc(100dvh - 7rem));
 }
 
-.ttm-welcome-page__grid {
+.ttm-welcome-progress__list {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-}
-
-@media (min-width: 1024px) {
-  .ttm-welcome-page__grid {
-    display: grid;
-    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
-    gap: clamp(1.5rem, 3vw, 2.5rem);
-    align-items: start;
-  }
-}
-
-/* Left column — pitch, tips, CTAs */
-.ttm-welcome-page__aside {
-  display: none;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 1.5rem;
-}
-
-@media (min-width: 1024px) {
-  .ttm-welcome-page__aside {
-    display: flex;
-  }
-}
-
-.ttm-welcome-page__pitch--desktop {
-  display: none;
-}
-
-.ttm-welcome-page__pitch--mobile {
-  margin-bottom: 0.25rem;
-}
-
-@media (min-width: 1024px) {
-  .ttm-welcome-page__pitch--mobile {
-    display: none;
-  }
-
-  .ttm-welcome-page__pitch--desktop {
-    display: block;
-  }
-}
-
-.ttm-welcome-page__eyebrow {
-  margin: 0 0 0.65rem;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent-copper);
-}
-
-html[data-theme="light"] .ttm-welcome-page__eyebrow {
-  color: #db2777;
-}
-
-.ttm-welcome-page__title {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.85rem, 3.8vw, 2.55rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.05em;
-  color: var(--foreground);
-}
-
-.ttm-welcome-page__title em {
-  font-style: normal;
-  background: var(--ttm-brand-gradient-sync, linear-gradient(90deg, #ec4899, #a78bfa));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.ttm-welcome-page__lead {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 300;
-  line-height: 1.55;
-  color: color-mix(in srgb, var(--foreground) 68%, transparent);
-}
-
-.ttm-welcome-page__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.1rem 0 0;
-  padding: 0;
+  gap: 0;
   list-style: none;
-}
-
-.ttm-welcome-page__chip {
-  padding: 0.4rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 400;
-  color: color-mix(in srgb, var(--foreground) 75%, transparent);
-  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
-  background: color-mix(in srgb, var(--foreground) 4%, transparent);
-}
-
-.ttm-welcome-page__tips {
   margin: 0;
   padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
 }
 
-.ttm-welcome-page__tip {
-  display: flex;
-  gap: 0.65rem;
-  font-size: 0.8rem;
-  font-weight: 300;
-  line-height: 1.45;
-  color: color-mix(in srgb, var(--foreground) 58%, transparent);
-}
-
-.ttm-welcome-page__tip-mark {
-  color: color-mix(in srgb, #a78bfa 80%, transparent);
-  flex-shrink: 0;
-}
-
-.ttm-welcome-page__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: auto;
-  padding-top: 0.5rem;
-}
-
-.ttm-welcome-page__actions .ttm-brand-cta {
-  min-height: 3.25rem;
-  font-size: 1rem;
-}
-
-.ttm-welcome-page__edit-link {
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: 300;
-  color: color-mix(in srgb, var(--foreground) 48%, transparent);
-  text-decoration: none;
-  padding: 0.35rem;
-  transition: color 0.25s ease;
-}
-
-.ttm-welcome-page__edit-link:hover {
-  color: var(--foreground);
-}
-
-/* Mobile-only footer under card */
-.ttm-welcome-page__footer--mobile {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-@media (min-width: 1024px) {
-  .ttm-welcome-page__footer--mobile {
-    display: none;
-  }
-}
-
-.ttm-welcome-page__footer--aside {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .ttm-welcome-page__footer--aside {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
-
-/* Shared aside panels (checklist, discover gestures) */
-.ttm-welcome-page__panel {
-  padding: 0.85rem 1rem;
-  border-radius: 1.15rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
-  background: color-mix(in srgb, var(--foreground) 4%, transparent);
-}
-
-.ttm-welcome-page__panel-title {
-  margin: 0 0 0.65rem;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--foreground) 55%, transparent);
-}
-
-/* Discover gestures (aside) */
-.ttm-welcome-page__gesture-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-}
-
-.ttm-welcome-page__gesture {
+.ttm-welcome-progress__item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.65rem 0.5rem;
-  border-radius: 0.85rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
-  background: color-mix(in srgb, var(--foreground) 3%, transparent);
-}
-
-.ttm-welcome-page__gesture-key {
-  font-size: 1.1rem;
-  font-weight: 300;
-  line-height: 1;
-  opacity: 0.75;
-}
-
-.ttm-welcome-page__gesture-text {
-  font-size: 0.72rem;
-  font-weight: 300;
-  text-align: center;
-  color: var(--foreground);
-}
-
-.ttm-welcome-page__gesture--like .ttm-welcome-page__gesture-key {
-  color: color-mix(in srgb, var(--accent) 85%, white);
-}
-
-/* Discover — card column + swipe chrome */
-.ttm-welcome-page__card-col {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-width: 0;
-}
-
-.ttm-welcome-page__swipe-actions {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 0.15rem;
-}
-
-.ttm-welcome-page__swipe-actions .ttm-swipe-actions {
-  flex-direction: row;
-  gap: 0.75rem;
-  width: 100%;
-  max-width: 26rem;
-  margin-inline: auto;
-}
-
-@media (min-width: 1024px) {
-  .ttm-welcome-page__swipe-actions .ttm-swipe-actions {
-    gap: 0.85rem;
-  }
-}
-
-.ttm-welcome-page__toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.ttm-welcome-page__footer--mobile .ttm-welcome-page__toolbar {
-  margin-bottom: 0.15rem;
-}
-
-/* Right column — presence + feed preview */
-.ttm-welcome-page__card {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  min-width: 0;
-}
-
-.ttm-welcome-page__card .p9-onboarding {
-  margin-bottom: 0;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-}
-
-@media (min-width: 1024px) {
-  .ttm-welcome-page__card .p9-onboarding {
-    padding: clamp(1.75rem, 3vw, 2.75rem) clamp(2rem, 4vw, 3rem);
-  }
-}
-
-/* Discover deck inside ritual card column */
-.ttm-welcome-page__card .ttm-swipe-deck--card-only {
-  width: 100%;
-  max-width: none;
-}
-
-.ttm-welcome-page__card .ttm-swipe-deck-stack--welcome {
-  width: 100%;
-  border-radius: 1.25rem;
-  scrollbar-width: thin;
-}
-
-.ttm-welcome-page__card .swipe-profile-presence {
-  margin-bottom: 0;
-  width: 100%;
-  max-width: none;
-}
-
-/* Wide presence card interior */
-.p9-onboarding--wide .profile-presence__layout {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  position: relative;
   flex: 1;
+  max-width: 7rem;
 }
 
-@media (min-width: 1024px) {
-  .p9-onboarding--wide .profile-presence__layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(9.5rem, 12rem) minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
-    gap: 1rem 1rem;
-    align-items: stretch;
-    align-content: start;
-  }
-
-  /* [профиль] — SYNC — [атмосфера] */
-  .p9-onboarding--wide .profile-presence__identity {
-    grid-column: 1;
-    grid-row: 1;
-    margin-bottom: 0;
-    min-height: 0;
-    align-self: stretch;
-  }
-
-  .p9-onboarding--wide .profile-presence__identity--cover {
-    max-height: none;
-    height: 100%;
-  }
-
-  .p9-onboarding--wide .profile-presence__identity:not(.profile-presence__identity--cover) {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 0.75rem;
-  }
-
-  .p9-onboarding--wide .profile-presence__identity:not(.profile-presence__identity--cover) .profile-presence__identity-text {
-    text-align: center;
-    flex: none;
-    width: 100%;
-  }
-
-  .p9-onboarding--wide .profile-presence__head {
-    grid-column: 2;
-    grid-row: 1;
-    text-align: center;
-    margin-bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-    padding-block: 0;
-  }
-
-  .p9-onboarding--wide .profile-presence__head .p9-sync-visual {
-    margin-inline: auto;
-    width: 100%;
-    max-width: 13.5rem;
-  }
-
-  .p9-onboarding--wide .profile-presence__atmosphere {
-    grid-column: 3;
-    grid-row: 1;
-    margin-bottom: 0;
-    min-height: 0;
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .p9-onboarding--wide .profile-presence__atmosphere .p9-register-step-label {
-    text-align: left;
-  }
-
-  .p9-onboarding--wide .profile-presence__strength {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .p9-onboarding--wide .profile-presence__connection {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    margin-top: 0;
-  }
-
-  /* Discover peer card — extra rows (gallery, trust) */
-  .p9-onboarding--wide.swipe-profile-presence .profile-presence__gallery,
-  .p9-onboarding--wide.swipe-profile-presence .swipe-profile-presence__trust {
-    grid-column: 1 / -1;
-    margin-bottom: 0;
-  }
-
-  .p9-onboarding--wide.swipe-profile-presence .profile-presence__strength {
-    grid-row: 2;
-  }
-
-  .p9-onboarding--wide.swipe-profile-presence .profile-presence__gallery {
-    grid-row: 3;
-  }
-
-  .p9-onboarding--wide.swipe-profile-presence .swipe-profile-presence__trust {
-    grid-row: 4;
-  }
-
-  .p9-onboarding--wide.swipe-profile-presence .profile-presence__connection {
-    grid-row: 5;
-  }
+.ttm-welcome-progress__dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  margin-bottom: 0.5rem;
 }
 
-@media (min-width: 1280px) {
-  .p9-onboarding--wide .profile-presence__layout {
-    grid-template-columns: minmax(0, 1.1fr) minmax(12rem, 15rem) minmax(0, 1.1fr);
-    gap: 1.25rem 1.5rem;
-  }
-
-  .p9-onboarding--wide .profile-presence__head .p9-sync-visual {
-    max-width: 15rem;
-  }
+.ttm-welcome-progress__dot--done {
+  border-color: rgba(129, 140, 248, 0.55);
+  background: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
 }
 
-/* Match timer (24h demo) */
-.ttm-welcome-match-timer {
-  padding: 1rem 1.1rem;
-  border-radius: 1.15rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.ttm-welcome-match-timer__head {
-  display: flex;
-  gap: 0.65rem;
-  align-items: flex-start;
-  margin-bottom: 0.75rem;
-}
-
-.ttm-welcome-match-timer__title {
-  margin: 0 0 0.25rem;
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--foreground);
-}
-
-.ttm-welcome-match-timer__body {
-  margin: 0;
-  font-size: 0.72rem;
-  font-weight: 300;
-  line-height: 1.45;
-  color: color-mix(in srgb, var(--foreground) 62%, transparent);
-}
-
-.ttm-welcome-match-timer__value {
-  margin: 0;
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 300;
-  letter-spacing: 0.06em;
-  text-align: center;
-  color: var(--foreground);
-}
-
-.ttm-welcome-match-timer__demo {
-  margin: 0.45rem 0 0;
+.ttm-welcome-progress__label {
   font-size: 0.65rem;
-  text-align: center;
-  letter-spacing: 0.08em;
+  font-weight: 200;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--foreground) 45%, transparent);
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
 }
 
-/* Completion checklist — panel chrome via .ttm-welcome-page__panel */
-.ttm-welcome-checklist__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
+.ttm-welcome-progress__label--done {
+  color: rgba(199, 210, 254, 0.85);
 }
 
-.ttm-welcome-checklist__item {
-  display: inline-block;
-  padding: 0.4rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 400;
-  text-decoration: none;
-  color: color-mix(in srgb, var(--foreground) 85%, transparent);
-  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
-  background: color-mix(in srgb, var(--foreground) 3%, transparent);
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
+.ttm-welcome-progress__line {
+  position: absolute;
+  top: 0.3125rem;
+  left: calc(50% + 0.5rem);
+  width: calc(100% - 1rem);
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+  pointer-events: none;
 }
 
-.ttm-welcome-checklist__item:hover {
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-}
-
-.profile-presence__strength-link {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* Light theme — readable chips, timer, checklist */
-html[data-theme="light"] .ttm-welcome-page__lead {
-  color: color-mix(in srgb, var(--foreground) 78%, transparent);
-}
-
-html[data-theme="light"] .ttm-welcome-page__chip {
-  color: color-mix(in srgb, var(--foreground) 88%, transparent);
-  border-color: color-mix(in srgb, var(--foreground) 16%, transparent);
-  background: color-mix(in srgb, var(--foreground) 6%, transparent);
-}
-
-html[data-theme="light"] .ttm-welcome-page__tip {
-  color: color-mix(in srgb, var(--foreground) 72%, transparent);
-}
-
-html[data-theme="light"] .ttm-welcome-page__panel {
-  border-color: color-mix(in srgb, var(--foreground) 14%, transparent);
-  background: color-mix(in srgb, var(--foreground) 5%, transparent);
-}
-
-html[data-theme="light"] .ttm-welcome-match-timer {
-  border-color: color-mix(in srgb, #db2777 28%, transparent);
-  background: color-mix(in srgb, #fce7f3 55%, var(--background));
-}
-
-html[data-theme="light"] .ttm-welcome-checklist__item:hover {
-  background: color-mix(in srgb, #db2777 12%, transparent);
-}
-
-/* Mobile — card first, tools under */
-@media (max-width: 1023px) {
-  .ttm-welcome-page__grid {
-    gap: 1.25rem;
-  }
-
-  .ttm-welcome-page__card .p9-onboarding {
-    padding: 1.25rem 1rem;
-  }
-
-  .ttm-welcome-page__footer--mobile {
-    padding-top: 0.25rem;
-  }
+.ttm-welcome-progress__item:last-child .ttm-welcome-progress__line {
+  display: none;
 }

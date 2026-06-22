@@ -89,12 +89,31 @@ Cron routes (protected by `CRON_SECRET`):
 
 ## Notifications
 
-Expiry notifications are handled by `/api/v1/cron/notify`:
+Expiry and new-match notifications are handled by `/api/v1/cron/notify`:
 
-1. **Email** — requires `RESEND_API_KEY` + `RESEND_FROM_EMAIL`
+1. **Email** — requires `RESEND_API_KEY` + `RESEND_FROM_EMAIL` (match expiry + new match)
 2. **Web Push** — requires `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, and user push subscriptions
 
-Without these env vars, the cron still runs but skips unconfigured channels (logged, not fatal).
+New matches enqueue immediate `new_match` notifications for both users when a mutual like occurs (production DB).
+
+Without these env vars, the cron still runs but skips unconfigured channels (logged, not fatal). Demo mode without keys is a no-op.
+
+## Moderation
+
+- **Report** — `POST /api/v1/report` (production DB; localStorage fallback in demo)
+- **Block** — `POST /api/v1/block` — hides user from discover, expires active match
+- **Admin** — `PUT /api/admin/verification/:id` with `x-admin-key` header when `ADMIN_API_KEY` is set
+- Reports are stored in the `reports` table for admin review
+
+## Analytics funnel
+
+Client events fire to `POST /api/v1/analytics/event` (server logs + Vercel Analytics in production):
+
+`register_complete`, `first_swipe`, `match_created`, `first_message`, `match_expired`
+
+## Performance
+
+Key images use `next/image` with lazy loading below the fold. Heavy app shell is dynamically imported on `/app`.
 
 ## CI
 

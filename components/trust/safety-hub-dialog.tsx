@@ -11,6 +11,7 @@ import {
   submitReport,
   unmuteProfile,
 } from "@/lib/trust-safety-store"
+import { blockUserOnServer, submitReportOnServer } from "@/lib/trust-safety-api"
 import { cn } from "@/lib/utils"
 import {
   Dialog,
@@ -29,6 +30,7 @@ export function SafetyHubDialog({
   onOpenChange,
   profileId,
   profileName,
+  serverUserId,
   context,
   onAfterBlock,
 }: {
@@ -36,6 +38,8 @@ export function SafetyHubDialog({
   onOpenChange: (v: boolean) => void
   profileId: number
   profileName: string
+  /** Server UUID when in production mode */
+  serverUserId?: string | null
   context: "discover" | "chat"
   onAfterBlock?: () => void
 }) {
@@ -56,6 +60,9 @@ export function SafetyHubDialog({
 
   const handleBlock = () => {
     blockProfile(profileId)
+    if (serverUserId) {
+      void blockUserOnServer({ blockedUserId: serverUserId, action: "block" })
+    }
     onAfterBlock?.()
     close()
   }
@@ -63,6 +70,9 @@ export function SafetyHubDialog({
   const handleReport = () => {
     if (!reason) return
     submitReport(profileId, reason)
+    if (serverUserId) {
+      void submitReportOnServer({ reportedUserId: serverUserId, reasonKey: reason })
+    }
     setView("report-done")
   }
 
