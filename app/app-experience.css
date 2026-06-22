@@ -380,3 +380,267 @@ html[data-theme="light"] .ttm-profile-page {
     animation: none !important;
   }
 }
+
+/* ─── App shell background ─── */
+.ttm-native-app {
+  background: var(--app-bg);
+  font-family: var(--app-font-body);
+}
+
+.ttm-native-app .ttm-native-app__main {
+  background: transparent;
+}
+
+/* ─── Desktop sidebar — dark glass, rose active (not golden) ─── */
+.ttm-native-app .ttm-desktop-nav {
+  background: var(--app-glass-strong);
+  border-right-color: var(--app-border);
+  backdrop-filter: blur(24px) saturate(1.12);
+  -webkit-backdrop-filter: blur(24px) saturate(1.12);
+}
+
+.ttm-native-app .ttm-desktop-nav__item {
+  color: var(--app-muted);
+  font-family: var(--app-font-body);
+}
+
+.ttm-native-app .ttm-desktop-nav__item:hover {
+  color: var(--app-text);
+  background: var(--app-surface-strong);
+}
+
+.ttm-native-app .ttm-desktop-nav__item--active {
+  color: var(--app-rose);
+  background: color-mix(in srgb, var(--app-rose-deep) 14%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--app-rose) 22%, transparent) inset,
+    0 0 20px -6px color-mix(in srgb, var(--app-coral) 28%, transparent);
+}
+
+/* ─── Discover pitch / welcome aside (desktop left column) ─── */
+.ttm-native-app .ttm-welcome-page__eyebrow {
+  color: var(--app-rose);
+  font-family: var(--app-font-body);
+  letter-spacing: 0.14em;
+}
+
+.ttm-native-app .ttm-welcome-page__title {
+  font-family: var(--app-font-display);
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.ttm-native-app .ttm-welcome-page__title em {
+  font-style: italic;
+  background: linear-gradient(105deg, var(--app-rose) 0%, var(--app-rose-deep) 52%, var(--app-coral) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ttm-native-app .ttm-welcome-page__lead {
+  color: var(--app-muted);
+  font-weight: 400;
+}
+
+.ttm-native-app .ttm-welcome-page__chip {
+  color: var(--app-muted);
+  border-color: var(--app-border);
+  background: var(--app-surface);
+}
+
+.ttm-native-app .ttm-welcome-page__tip {
+  color: color-mix(in srgb, var(--app-muted) 88%, transparent);
+}
+
+.ttm-native-app .ttm-welcome-page__tip-mark {
+  color: var(--app-rose);
+}
+
+.ttm-native-app .ttm-welcome-page__panel {
+  border-color: var(--app-border);
+  background: var(--app-surface-strong);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.ttm-native-app .ttm-welcome-page__panel-title {
+  color: color-mix(in srgb, var(--app-muted) 92%, transparent);
+}
+
+.ttm-native-app .ttm-welcome-page__gesture {
+  border-color: var(--app-border);
+  background: var(--app-surface);
+}
+
+.ttm-native-app .ttm-welcome-page__gesture--like .ttm-welcome-page__gesture-key {
+  color: var(--app-rose);
+}
+
+.ttm-native-app .ttm-welcome-match-timer {
+  border-color: color-mix(in srgb, var(--app-rose) 28%, transparent);
+  background: color-mix(in srgb, var(--app-rose-deep) 10%, var(--app-bg-soft));
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.ttm-native-app .ttm-welcome-match-timer__value {
+  font-family: var(--app-font-display);
+  color: var(--app-text);
+}
+
+/* ─── Swipe profile presence card (actual discover deck card) ─── */
+.ttm-native-app .swipe-profile-presence.p9-onboarding {
+  border-color: var(--app-border);
+  background: linear-gradient(
+    168deg,
+    color-mix(in srgb, var(--app-bg-soft) 92%, transparent) 0%,
+    color-mix(in srgb, var(--app-bg) 96%, transparent) 55%,
+    var(--app-bg) 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(255, 241, 242, 0.04) inset,
+    0 28px 72px -36px rgba(0, 0, 0, 0.78),
+    0 0 40px -20px rgba(190, 18, 60, 0.12);
+}
+
+.ttm-native-app .swipe-profile-presence__panel {
+  border-color: var(--app-border);
+  background: var(--app-surface);
+}
+
+.ttm-native-app .swipe-profile-presence__panel-label,
+.ttm-native-app .swipe-profile-presence__bio-label {
+  color: color-mix(in srgb, var(--app-muted) 90%, transparent);
+  letter-spacing: 0.12em;
+}
+
+.ttm-native-app .swipe-profile-presence__chip {
+  border-color: var(--app-border);
+  background: var(--app-surface-strong);
+  color: var(--app-text);
+}
+
+.ttm-native-app .swipe-profile-presence__match-badge {
+  border-color: color-mix(in srgb, var(--app-rose) 35%, transparent);
+  background: linear-gradient(145deg, var(--app-rose-deep) 0%, var(--app-coral) 100%);
+  box-shadow: 0 0 20px -8px rgba(190, 18, 60, 0.55);
+}
+
+.ttm-native-app .swipe-profile-presence__meter-fill {
+  background: linear-gradient(90deg, var(--app-rose-deep) 0%, var(--app-rose) 45%, var(--app-coral) 100%);
+  box-shadow: 0 0 14px rgba(190, 18, 60, 0.45);
+}
+
+.ttm-native-app .swipe-profile-presence__overlap-chip {
+  border-color: color-mix(in srgb, var(--app-rose) 30%, transparent);
+  background: color-mix(in srgb, var(--app-rose-deep) 12%, transparent);
+  color: var(--app-muted);
+}
+
+.ttm-native-app .swipe-profile-presence__photo-thumb--active {
+  border-color: color-mix(in srgb, var(--app-rose) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--app-rose) 35%, transparent),
+    0 10px 28px -12px rgba(190, 18, 60, 0.45);
+}
+
+/* Hero photo — landing-style full bleed + bottom scrim */
+.ttm-native-app .swipe-profile-presence__hero,
+.ttm-native-app .swipe-profile-presence .profile-presence__identity--cover {
+  border-radius: 1.15rem;
+  overflow: hidden;
+  border: 1px solid var(--app-border);
+}
+
+.ttm-native-app .swipe-profile-presence__hero .profile-presence__identity-scrim,
+.ttm-native-app .swipe-profile-presence .profile-presence__identity-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(5, 2, 8, 0.35) 0%,
+    transparent 28%,
+    transparent 52%,
+    rgba(5, 2, 8, 0.82) 100%
+  );
+}
+
+.ttm-native-app .swipe-profile-presence__hero .profile-presence__identity-name,
+.ttm-native-app .swipe-profile-presence .profile-presence__identity-name {
+  font-family: var(--app-font-display);
+  font-weight: 600;
+  color: #fff1f2;
+}
+
+.ttm-native-app .swipe-profile-presence__hero .profile-presence__identity-city {
+  color: rgba(253, 164, 175, 0.88);
+}
+
+@media (max-width: 1023px) {
+  .ttm-native-app .swipe-profile-presence.p9-onboarding {
+    padding: 0.85rem;
+  }
+
+  .ttm-native-app .swipe-profile-presence__hero,
+  .ttm-native-app .swipe-profile-presence .profile-presence__identity--cover {
+    max-height: none;
+    aspect-ratio: 3 / 4;
+    width: 100%;
+  }
+
+  .ttm-native-app .swipe-profile-presence .profile-presence__head {
+    display: none;
+  }
+}
+
+/* ─── Pulse sphere — rose/coral glow (not purple/pink neon) ─── */
+.ttm-native-app .ttm-pulse__aura--far {
+  background: radial-gradient(circle, rgba(190, 18, 60, 0.32) 0%, transparent 68%);
+}
+
+.ttm-native-app .ttm-pulse__aura--near {
+  background: radial-gradient(circle, rgba(232, 121, 143, 0.34) 0%, transparent 62%);
+}
+
+.ttm-native-app .ttm-pulse__blob {
+  background: linear-gradient(
+    145deg,
+    rgba(232, 121, 143, 0.95) 0%,
+    rgba(190, 18, 60, 0.92) 48%,
+    rgba(234, 88, 12, 0.85) 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(255, 241, 242, 0.12) inset,
+    0 0 64px rgba(190, 18, 60, 0.5),
+    0 0 120px rgba(234, 88, 12, 0.22),
+    0 24px 64px rgba(0, 0, 0, 0.55);
+}
+
+.ttm-native-app .ttm-pulse:hover .ttm-pulse__blob {
+  box-shadow:
+    0 0 0 1px rgba(255, 241, 242, 0.18) inset,
+    0 0 96px rgba(190, 18, 60, 0.65),
+    0 0 140px rgba(234, 88, 12, 0.28),
+    0 28px 72px rgba(0, 0, 0, 0.6);
+}
+
+/* ─── Discover toolbar boost chip ─── */
+.ttm-native-app .ttm-discover-toolbar__boost {
+  border-color: color-mix(in srgb, var(--app-coral) 35%, transparent);
+  background: color-mix(in srgb, var(--app-coral) 12%, transparent);
+  color: #fdba74;
+}
+
+.ttm-native-app .ttm-discover-toolbar__boost-dot {
+  background: var(--app-amber);
+}
+
+.ttm-native-app .ttm-discover-toolbar__icon-btn {
+  border-color: var(--app-border);
+  background: var(--app-surface-strong);
+  color: var(--app-muted);
+}
+
+.ttm-native-app .ttm-discover-toolbar__icon-btn:hover {
+  color: var(--app-text);
+  border-color: var(--app-border-strong);
+}
