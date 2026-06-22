@@ -38,8 +38,8 @@ export function PremiumLandingNav() {
         aria-label="Main"
       >
         <Link href="/" className="ttm-premium-nav__brand">
-          <Logo />
-          <span>Time to Match</span>
+          <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
+          <Logo variant="icon" size="sm" className="sm:hidden" />
         </Link>
         <div className="ttm-premium-nav__links">
           <a href="#pulse" className="ttm-premium-nav__link">

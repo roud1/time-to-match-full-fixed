@@ -72,9 +72,7 @@ export function CinematicEntrance() {
               animate={{ scale: 1 }}
               transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             >
-              <span className="drop-shadow-[0_0_20px_rgba(45,212,191,0.35)]">
-                <Logo size="lg" />
-              </span>
+              <Logo variant="icon" size="xl" />
             </motion.div>
             <p className="ttm-cin-overline mb-3 text-muted-foreground">
               {t("entranceTagline")}

@@ -38,8 +38,8 @@ export function AiLandingNav() {
         aria-label="Main"
       >
         <Link href="/" className="ttm-ai-nav__brand">
-          <Logo />
-          <span>Time to Match</span>
+          <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
+          <Logo variant="icon" size="sm" className="sm:hidden" />
         </Link>
         <div className="ttm-ai-nav__links">
           <a href="#ai" className="ttm-ai-nav__link">

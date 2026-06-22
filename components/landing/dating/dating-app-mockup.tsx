@@ -2,6 +2,7 @@
 
 import { Clock, Heart, MessageCircle, Sparkles } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
+import { Logo } from "@/components/logo"
 import { useI18n } from "@/lib/i18n"
 
 export function DatingAppMockup() {
@@ -83,7 +84,7 @@ export function DatingAppMockup() {
         <div className="ttm-dating-mockup__notch" />
         <div className="ttm-dating-mockup__screen ttm-dating-mockup__screen--match">
           <div className="ttm-dating-mockup__match-ring">
-            <Heart size={28} aria-hidden />
+            <Logo variant="icon" size="lg" />
           </div>
           <p className="ttm-dating-mockup__match-text">{t("datingHeroMatchMoment")}</p>
         </div>

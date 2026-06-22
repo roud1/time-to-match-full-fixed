@@ -29,8 +29,8 @@ export function DesktopAppNav() {
 
   return (
     <aside className="ttm-desktop-nav" aria-label="App navigation">
-      <Link href="/" className="mb-4 opacity-90 hover:opacity-100 transition-opacity">
-        <Logo size="sm" />
+      <Link href="/" className="mb-4 opacity-90 hover:opacity-100 transition-opacity" aria-label="Time to Match">
+        <Logo variant="icon" size="sm" />
       </Link>
       {ITEMS.map(({ tab: id, icon: Icon, labelKey }) => {
         const active = tab === id

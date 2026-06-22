@@ -200,11 +200,9 @@ export function AppShell() {
                   pageMax
                 )}
               >
-                <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile">
-                  <Logo size="sm" />
-                  <span className="text-sm font-normal text-foreground/90 hidden sm:inline group-hover:text-foreground transition-colors truncate">
-                    Time to Match
-                  </span>
+                <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile" aria-label="Time to Match">
+                  <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
+                  <Logo variant="icon" size="sm" className="sm:hidden" />
                 </Link>
                 <div className="flex items-center gap-2 shrink-0 min-w-0">
                   {meUser?.level != null && meUser.id !== "local" && (

@@ -105,11 +105,9 @@ export function Navbar({ variant = "default" }: NavbarProps) {
           href="/"
           className="group flex items-center gap-2 sm:gap-3 rounded-lg min-w-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[rgba(124,58,237,0.35)]"
         >
-          <span className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] shrink-0">
-            <Logo />
-          </span>
-          <span className="text-[var(--text-primary)]/80 font-light tracking-[0.12em] text-xs uppercase hidden sm:inline truncate">
-            Time to Match
+          <span className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02] shrink-0">
+            <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
+            <Logo variant="icon" size="sm" className="sm:hidden" />
           </span>
         </Link>
 

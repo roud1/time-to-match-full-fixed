@@ -50,8 +50,8 @@ export function DatingLandingNav() {
         aria-label="Main"
       >
         <Link href="/" className="ttm-dating-nav__brand">
-          <Logo />
-          <span>Time to Match</span>
+          <Logo variant="full" size="sm" className="hidden min-[480px]:inline-flex" />
+          <Logo variant="icon" size="sm" className="min-[480px]:hidden" />
         </Link>
 
         <div className="ttm-dating-nav__links">

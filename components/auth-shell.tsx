@@ -41,8 +41,8 @@ export function AuthShell({ children }: { children: ReactNode }) {
       <header className="ttm-auth-nav">
         <nav className="ttm-auth-nav__inner" aria-label="Main">
           <Link href="/" className="ttm-auth-nav__brand">
-            <Logo />
-            <span>Time to Match</span>
+            <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
+            <Logo variant="icon" size="sm" className="sm:hidden" />
           </Link>
           <div className="ttm-auth-nav__actions">
             <ThemeToggle compact className="ttm-auth-nav__theme" />

@@ -47,9 +47,9 @@ export const metadata: Metadata = {
       "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
     images: [
       {
-        url: "/icon.svg",
-        width: 512,
-        height: 512,
+        url: "/brand/ttm-logo-full.png",
+        width: 1200,
+        height: 630,
         alt: "Time to Match",
       },
     ],
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     title: "Time to Match — Мэтч живёт 24 часа",
     description:
       "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
-    images: ["/icon.svg"],
+    images: ["/brand/ttm-logo-full.png"],
   },
   robots: {
     index: true,
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0D0408",
+  themeColor: "#0B0F14",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",

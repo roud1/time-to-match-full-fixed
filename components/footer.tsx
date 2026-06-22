@@ -21,8 +21,7 @@ export function Footer() {
             viewport={{ once: true }}
             className="flex items-center gap-2"
           >
-            <Logo size="sm" />
-            <span className="text-[var(--text-secondary)] font-light tracking-[0.12em] text-xs uppercase">Time to Match</span>
+            <Logo variant="full" size="sm" />
           </motion.div>
 
           <motion.div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
