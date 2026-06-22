@@ -4,10 +4,16 @@ import Link from "next/link"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { Logo } from "@/components/logo"
-import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { useI18n } from "@/lib/i18n"
 import { isLoggedIn } from "@/lib/user-profile"
 import { cn } from "@/lib/utils"
+
+const NAV_LINKS = [
+  { href: "#how", key: "datingNavHow" as const },
+  { href: "#preview", key: "datingNavPreview" as const },
+  { href: "#features", key: "datingNavFeatures" as const },
+  { href: "#pricing", key: "datingNavPricing" as const },
+]
 
 export function DatingLandingNav() {
   const { t } = useI18n()
@@ -47,18 +53,18 @@ export function DatingLandingNav() {
           <Logo />
           <span>Time to Match</span>
         </Link>
+
         <div className="ttm-dating-nav__links">
-          <a href="#ai" className="ttm-dating-nav__link">
-            {t("datingNavAi")}
-          </a>
-          <a href="#how" className="ttm-dating-nav__link">
-            {t("datingNavHow")}
-          </a>
+          {NAV_LINKS.map((link) => (
+            <a key={link.href} href={link.href} className="ttm-dating-nav__link">
+              {t(link.key)}
+            </a>
+          ))}
         </div>
+
         <div className="ttm-dating-nav__actions">
-          <ThemeToggle compact className="ttm-dating-nav__theme" />
           {loggedIn ? (
-            <Link href="/app" className="ttm-dating-nav__sign">
+            <Link href="/app" className="ttm-dating-cta ttm-dating-cta--sm">
               {t("navApp")}
             </Link>
           ) : (
