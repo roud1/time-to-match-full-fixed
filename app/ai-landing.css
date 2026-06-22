@@ -20,7 +20,7 @@ html:has(.ttm-ai-landing) {
   --ai-blue: #38bdf8;
   --ai-pink: #ec4899;
   --ai-violet: #a78bfa;
-  --ai-font: var(--font-inter-display), "Inter", system-ui, -apple-system, sans-serif;
+  --ai-font: var(--font-body);
   --ai-radius: 1.25rem;
   --ai-radius-lg: 1.75rem;
 
@@ -30,6 +30,15 @@ html:has(.ttm-ai-landing) {
   color: var(--ai-text);
   font-family: var(--ai-font);
   overflow-x: hidden;
+}
+
+.ttm-ai-hero__title,
+.ttm-ai-section__title,
+.ttm-ai-urgency__title,
+.ttm-ai-final__title,
+.ttm-ai-thinking__title {
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 .ttm-ai-container {

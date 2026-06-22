@@ -22,7 +22,7 @@ html:has(.ttm-premium-landing) {
   --pl-accent-3: #d946ef;
   --pl-glow: rgba(168, 85, 247, 0.5);
   --pl-glow-rose: rgba(236, 72, 153, 0.45);
-  --pl-font: var(--font-inter-display), "Inter", system-ui, -apple-system, sans-serif;
+  --pl-font: var(--font-body);
   --pl-radius: 1.25rem;
   --pl-radius-lg: 1.75rem;
 
@@ -32,6 +32,14 @@ html:has(.ttm-premium-landing) {
   color: var(--pl-text);
   font-family: var(--pl-font);
   overflow-x: hidden;
+}
+
+.ttm-premium-hero__title,
+.ttm-premium-section__title,
+.ttm-premium-pulse-rules__title,
+.ttm-premium-final__title {
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 
 .ttm-premium-landing__ambient {

@@ -41,6 +41,7 @@
 }
 
 .ttm-chat-inbox--sidebar .ttm-chat-inbox__title {
+  font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 400;
   letter-spacing: -0.02em;

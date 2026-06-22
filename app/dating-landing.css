@@ -13,8 +13,8 @@
   --dt-rose-soft: #fb7185;
   --dt-coral: #f97316;
   --dt-amber: #fbbf24;
-  --dt-font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
-  --dt-font-body: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  --dt-font-display: var(--font-display);
+  --dt-font-body: var(--font-body);
   --dt-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --dt-radius: 12px;
   --dt-radius-lg: 20px;

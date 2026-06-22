@@ -53,6 +53,13 @@
 }
 
 /* —— Typography scale —— */
+.ttm-type-display,
+.ttm-type-hero,
+.ttm-type-h1,
+.ttm-type-h2 {
+  font-family: var(--font-display);
+}
+
 .ttm-type-display {
   font-size: clamp(2.75rem, 8vw, 5.5rem);
   font-weight: 200;

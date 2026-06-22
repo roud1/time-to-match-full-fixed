@@ -14,8 +14,8 @@
   --app-rose-deep: #be123c;
   --app-coral: #ea580c;
   --app-amber: #fbbf24;
-  --app-font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
-  --app-font-body: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  --app-font-display: var(--font-display);
+  --app-font-body: var(--font-body);
   --app-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --app-glass: rgba(5, 2, 8, 0.82);
   --app-glass-strong: rgba(5, 2, 8, 0.92);
@@ -39,7 +39,7 @@ html[data-theme="light"] .ttm-profile-page {
   --app-glass-strong: rgba(255, 248, 246, 0.96);
 }
 
-/* Panel titles — Playfair headlines */
+/* Panel titles — display serif headlines */
 .ttm-app-panel-title {
   font-family: var(--app-font-display);
   font-weight: 600;

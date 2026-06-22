@@ -64,7 +64,7 @@ html[data-theme="light"] .ttm-auth-shell {
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
-  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -200,7 +200,7 @@ html[data-theme="light"] .ttm-auth-shell {
 
 .ttm-auth-shell__panel-eyebrow {
   margin: 0 0 0.75rem;
-  font-family: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -213,7 +213,7 @@ html[data-theme="light"] .ttm-auth-shell {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-family: var(--font-display);
   font-size: clamp(1.85rem, 3.5vw, 2.35rem);
   font-weight: 600;
   line-height: 1.08;
@@ -253,7 +253,7 @@ html[data-theme="light"] .ttm-auth-shell__panel-title-soft {
 .ttm-auth-shell__panel-chip {
   padding: 0.45rem 0.8rem;
   border-radius: 999px;
-  font-family: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 500;
   color: rgba(255, 241, 242, 0.88);
@@ -273,7 +273,7 @@ html[data-theme="light"] .ttm-auth-shell__panel-chip {
   margin: 2rem 0 0;
   padding: 0;
   border: none;
-  font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 500;
   font-style: italic;

@@ -66,7 +66,7 @@ html[data-theme="light"] .ttm-login-live {
 }
 
 .ttm-login-live__text {
-  font-family: var(--font-plus-jakarta), "Plus Jakarta Sans", system-ui, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 500;
   color: color-mix(in srgb, var(--foreground) 78%, transparent);

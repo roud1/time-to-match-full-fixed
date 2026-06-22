@@ -49,8 +49,7 @@
 
 .ttm-arc-era .font-sans,
 .ttm-arc-era {
-  font-family: "General Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui,
-    sans-serif;
+  font-family: var(--font-body);
 }
 
 /* —— Living background —— */
