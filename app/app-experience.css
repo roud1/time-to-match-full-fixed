@@ -381,14 +381,41 @@ html[data-theme="light"] .ttm-profile-page {
   }
 }
 
-/* ─── App shell background ─── */
-.ttm-native-app {
-  background: var(--app-bg);
+/* ─── App shell background — landing site-ambient shows through ─── */
+.ttm-native-app:not(.ttm-app-loading) {
+  background: transparent;
   font-family: var(--app-font-body);
 }
 
-.ttm-native-app .ttm-native-app__main {
+.ttm-native-app .ttm-native-app__main,
+.ttm-native-app .discover-panel-root,
+.ttm-native-app .ttm-welcome-page {
   background: transparent;
+}
+
+/* Legacy Emotional OS / world veils — purple indigo mesh, not landing romantic */
+.ttm-native-app > .ec-silence-field,
+.ttm-native-app > .ec-tension-veil,
+.ttm-native-app > .ec-atmosphere-veil,
+.ttm-native-app > .ec-realism-veil,
+.ttm-native-app > .ec-memory-echo-layer,
+.ttm-native-app > .er-weather-layer,
+.ttm-native-app > .er-cinematic-veil,
+.ttm-native-app > .er-living-ui-veil,
+.ttm-native-app > .er-soul-field,
+.ttm-native-app > .eo-network-layer,
+.ttm-native-app > .eo-orchestrator-veil,
+.ttm-native-app > .eo-continuity-breath,
+.ttm-native-app > .world-atmosphere-layer,
+.ttm-native-app > .p16-world-ambient,
+.ttm-native-app > .p17-time-ambient,
+.ttm-native-app > .world-live-field {
+  display: none !important;
+}
+
+/* Discover tab blobs — site-ambient already provides rose/coral orbs */
+.ttm-native-app .discover-ambient {
+  display: none;
 }
 
 /* ─── Desktop sidebar — dark glass, rose active (not golden) ─── */
