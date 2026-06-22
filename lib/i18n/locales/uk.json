@@ -424,6 +424,7 @@
   "regPassword": "Пароль",
   "regPasswordPlaceholder": "Мінімум 8 символів",
   "regConfirmPassword": "Підтвердьте пароль",
+  "regConfirmPasswordPlaceholder": "Повторіть пароль",
   "regBirthdate": "Дата народження",
   "regGender": "Я",
   "regGenderMale": "Чоловік",

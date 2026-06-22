@@ -8,10 +8,32 @@ import { LocationBanner, LocationControl } from "@/components/location-control"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { useI18n } from "@/lib/i18n"
 import "@/app/auth-shell.css"
+import "@/app/auth-login.css"
+
+function AuthPanelPitch() {
+  const { t } = useI18n()
+  const chips = [t("datingHeroChip1"), t("datingHeroChip2"), t("datingHow3Title")]
+
+  return (
+    <>
+      <p className="ttm-auth-shell__panel-eyebrow">{t("datingHeroEyebrow")}</p>
+      <h2 className="ttm-auth-shell__panel-title">
+        <span>{t("datingHeroTitleLine1")}</span>
+        <span className="ttm-auth-shell__panel-title-soft">{t("datingHeroTitleLine2")}</span>
+      </h2>
+      <ul className="ttm-auth-shell__panel-chips" aria-label={t("datingHeroChipsAria")}>
+        {chips.map((chip) => (
+          <li key={chip} className="ttm-auth-shell__panel-chip">
+            {chip}
+          </li>
+        ))}
+      </ul>
+      <blockquote className="ttm-auth-shell__panel-quote">{t("datingEmotional3")}</blockquote>
+    </>
+  )
+}
 
 export function AuthShell({ children }: { children: ReactNode }) {
-  const { t } = useI18n()
-
   return (
     <div className="ttm-auth-shell ttm-brand-universe">
       <GeolocationBootstrap />
@@ -31,26 +53,16 @@ export function AuthShell({ children }: { children: ReactNode }) {
 
       <main className="ttm-auth-shell__main">
         <aside className="ttm-auth-shell__panel" aria-hidden>
-          <div className="ttm-auth-shell__panel-grid">
-            <div className="ttm-auth-shell__panel-cell">
-              <p className="ttm-auth-shell__panel-stat">24h</p>
-              <p className="ttm-auth-shell__panel-label">{t("datingHow3Title")}</p>
-            </div>
-            <div className="ttm-auth-shell__panel-cell">
-              <p className="ttm-auth-shell__panel-stat">AI</p>
-              <p className="ttm-auth-shell__panel-label">{t("datingNavAi")}</p>
-            </div>
-            <div className="ttm-auth-shell__panel-cell ttm-auth-shell__panel-cell--wide">
-              <p className="ttm-auth-shell__panel-stat">1×</p>
-              <p className="ttm-auth-shell__panel-label">{t("datingHeroChip1")}</p>
-            </div>
+          <div className="ttm-auth-shell__panel-glow" aria-hidden />
+          <div className="ttm-auth-shell__panel-inner">
+            <AuthPanelPitch />
           </div>
-          <blockquote className="ttm-auth-shell__panel-quote">
-            {t("datingEmotional3")}
-          </blockquote>
         </aside>
 
         <div className="ttm-auth-shell__content-wrap">
+          <div className="ttm-auth-shell__mobile-pitch" aria-hidden>
+            <AuthPanelPitch />
+          </div>
           <div className="ttm-auth-shell__content">{children}</div>
         </div>
       </main>

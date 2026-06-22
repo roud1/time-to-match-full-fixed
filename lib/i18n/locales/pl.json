@@ -422,6 +422,7 @@
   "regPassword": "Hasło",
   "regPasswordPlaceholder": "Minimum 8 znaków",
   "regConfirmPassword": "Potwierdź swoje hasło",
+  "regConfirmPasswordPlaceholder": "Powtórz hasło",
   "regBirthdate": "Data urodzenia",
   "regGender": "I",
   "regGenderMale": "Człowiek",

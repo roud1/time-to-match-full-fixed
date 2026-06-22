@@ -422,6 +422,7 @@
   "regPassword": "Mot de passe",
   "regPasswordPlaceholder": "Minimum 8 caractères",
   "regConfirmPassword": "Confirmez votre mot de passe",
+  "regConfirmPasswordPlaceholder": "Répétez le mot de passe",
   "regBirthdate": "Date de naissance",
   "regGender": "je",
   "regGenderMale": "Homme",

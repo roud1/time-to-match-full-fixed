@@ -428,6 +428,7 @@
   "regPassword": "Password",
   "regPasswordPlaceholder": "Minimum 8 characters",
   "regConfirmPassword": "Confirm your password",
+  "regConfirmPasswordPlaceholder": "Repeat your password",
   "regBirthdate": "Date of birth",
   "birthdatePlaceholder": "Pick a date",
   "birthdateInputPlaceholder": "MM/DD/YYYY",

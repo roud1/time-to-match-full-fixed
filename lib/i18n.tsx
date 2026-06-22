@@ -473,6 +473,7 @@ export const translations = {
     regPassword: "Пароль",
     regPasswordPlaceholder: "Минимум 8 символов",
     regConfirmPassword: "Подтвердите пароль",
+    regConfirmPasswordPlaceholder: "Повторите пароль",
     regBirthdate: "Дата рождения",
     birthdatePlaceholder: "Выберите дату",
     birthdateInputPlaceholder: "ДД.ММ.ГГГГ",

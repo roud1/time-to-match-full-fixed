@@ -1,12 +1,15 @@
 "use client"
 
-import { AuthMarketingLayout } from "@/components/auth/auth-marketing-layout"
 import { LoginForm } from "@/components/login-form"
+import { LoginLiveStatus } from "@/components/auth/login-live-status"
+import { LoginTrustRow } from "@/components/auth/login-trust-row"
 
 export function LoginPageExperience() {
   return (
-    <AuthMarketingLayout>
+    <div className="ttm-auth-form-page">
+      <LoginLiveStatus />
       <LoginForm />
-    </AuthMarketingLayout>
+      <LoginTrustRow />
+    </div>
   )
 }

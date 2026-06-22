@@ -1,12 +1,13 @@
 "use client"
 
-import { AuthMarketingLayout } from "@/components/auth/auth-marketing-layout"
 import { RegisterForm } from "@/components/register-form"
+import { LoginTrustRow } from "@/components/auth/login-trust-row"
 
 export function RegisterPageExperience() {
   return (
-    <AuthMarketingLayout wide>
+    <div className="ttm-auth-form-page">
       <RegisterForm />
-    </AuthMarketingLayout>
+      <LoginTrustRow />
+    </div>
   )
 }

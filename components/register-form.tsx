@@ -273,20 +273,20 @@ export function RegisterForm() {
 
   return (
     <div className="w-full">
-      <CinematicCard variant="glass" className="p-6 md:p-8 border border-white/10 shadow-[0_28px_90px_-40px_rgba(255,255,255,0.35)]">
+      <CinematicCard variant="glass" className="ttm-brand-glass p-6 md:p-8 border border-white/10">
         <div className="text-center mb-8">
           <span className="ttm-badge-brand mb-4 block mx-auto w-fit">SYNC</span>
           <h1 className="ttm-brand-title text-foreground mb-2">{t("regPageTitle")}</h1>
           <p className="ttm-type-muted">{t("regPageSubtitle")}</p>
         </div>
 
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-2" role="progressbar" aria-valuenow={step} aria-valuemin={1} aria-valuemax={4}>
           {STEPS.map((s, i) => (
             <div key={s} className="flex-1 flex items-center gap-2">
               <motion.div
                 className={cn(
-                  "h-1 flex-1 rounded-full transition-colors duration-300",
-                  step >= s ? "bg-[linear-gradient(90deg,rgba(99,102,241,0.7),rgba(139,92,246,0.6))]" : "bg-foreground/10"
+                  "ttm-reg-progress__segment",
+                  step >= s && "ttm-reg-progress__segment--active"
                 )}
                 layout={!reduce}
               />
@@ -337,6 +337,7 @@ export function RegisterForm() {
                     type="password"
                     value={form.confirmPassword}
                     onChange={(e) => update("confirmPassword", e.target.value)}
+                    placeholder={t("regConfirmPasswordPlaceholder")}
                   />
                 </CinematicField>
               </>

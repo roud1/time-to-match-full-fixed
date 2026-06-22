@@ -422,6 +422,7 @@
   "regPassword": "Password",
   "regPasswordPlaceholder": "Minimo 8 caratteri",
   "regConfirmPassword": "Conferma la tua password",
+  "regConfirmPasswordPlaceholder": "Ripeti la password",
   "regBirthdate": "Data di nascita",
   "regGender": "IO",
   "regGenderMale": "Uomo",

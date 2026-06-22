@@ -422,6 +422,7 @@
   "regPassword": "Passwort",
   "regPasswordPlaceholder": "Mindestens 8 Zeichen",
   "regConfirmPassword": "Bestätigen Sie Ihr Passwort",
+  "regConfirmPasswordPlaceholder": "Passwort wiederholen",
   "regBirthdate": "Geburtsdatum",
   "regGender": "ICH",
   "regGenderMale": "Mann",
