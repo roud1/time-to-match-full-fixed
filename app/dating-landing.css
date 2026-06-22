@@ -1103,48 +1103,39 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   pointer-events: none;
 }
 
-.ttm-dating-hero__spark-trails {
+.ttm-dating-hero__spark-aura {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  bottom: 2.15rem;
+  left: 50%;
+  translate: -50% 55%;
+  width: min(88%, 340px);
+  height: 58%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse 58% 42% at 50% 100%,
+    rgba(249, 115, 22, 0.32) 0%,
+    rgba(225, 29, 72, 0.18) 32%,
+    rgba(251, 191, 36, 0.1) 52%,
+    transparent 76%
+  );
+  filter: blur(24px);
+  opacity: 0;
+  pointer-events: none;
 }
 
-.ttm-dating-hero__spark-trail {
-  fill: none;
-  stroke: url(#dt-spark-trail-grad);
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  filter: drop-shadow(0 0 6px rgba(251, 113, 133, 0.65));
-}
-
-.ttm-dating-hero__spark-trail--left {
-  animation: dt-spark-trail-draw 0.75s var(--dt-ease) 0.35s forwards;
-}
-
-.ttm-dating-hero__spark-trail--right {
-  animation: dt-spark-trail-draw 0.75s var(--dt-ease) 0.45s forwards;
-}
-
-.ttm-dating-hero__spark-trail--center {
-  display: none;
+.ttm-dating-hero__spark-aura--live {
+  animation: dt-spark-aura-in 1.5s ease-out 0.35s forwards,
+    dt-match-bloom 3s ease-in-out 1.1s infinite;
 }
 
 @media (max-width: 767px) {
-  .ttm-dating-hero__spark-trail--left,
-  .ttm-dating-hero__spark-trail--right {
-    display: none;
-  }
-
-  .ttm-dating-hero__spark-trail--center {
-    display: block;
-    animation: dt-spark-trail-draw 0.75s var(--dt-ease) 0.4s forwards;
-  }
-
   .ttm-dating-hero__match-below {
     gap: 0.35rem;
+  }
+
+  .ttm-dating-hero__spark-aura {
+    width: min(92%, 280px);
+    height: 50%;
   }
 }
 
@@ -1153,16 +1144,16 @@ html[data-theme="light"] .ttm-dating-hero__vignette {
   bottom: 2.15rem;
   left: 50%;
   translate: -50% 50%;
-  width: 5rem;
-  height: 5rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(249, 115, 22, 0.45) 0%,
-    rgba(225, 29, 72, 0.22) 45%,
-    transparent 72%
+    rgba(249, 115, 22, 0.5) 0%,
+    rgba(225, 29, 72, 0.26) 42%,
+    transparent 70%
   );
-  filter: blur(18px);
+  filter: blur(20px);
   opacity: 0;
 }
 
@@ -1770,9 +1761,14 @@ html[data-theme="light"] .ttm-dating-hero__timer-card {
   }
 }
 
-@keyframes dt-spark-trail-draw {
-  to {
-    stroke-dashoffset: 0;
+@keyframes dt-spark-aura-in {
+  0% {
+    opacity: 0;
+    scale: 0.82 0.55;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
   }
 }
 
@@ -2581,7 +2577,7 @@ html[data-theme="light"] .ttm-dating-emotional__band {
   .ttm-dating-hero__portraits-glow--pulse,
   .ttm-dating-hero__portrait--float,
   .ttm-dating-hero__portrait-center--float,
-  .ttm-dating-hero__spark-trail,
+  .ttm-dating-hero__spark-aura--live,
   .ttm-dating-hero__spark-bloom--live,
   .ttm-dating-hero__spark-burst-dot,
   .ttm-dating-hero__particle,
