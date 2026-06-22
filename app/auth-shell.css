@@ -77,19 +77,6 @@ html[data-theme="light"] .ttm-auth-shell {
   opacity: 0.88;
 }
 
-.ttm-auth-nav__brand span {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .ttm-auth-nav__brand span {
-    display: inline;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-
 .ttm-auth-nav__actions {
   display: flex;
   align-items: center;

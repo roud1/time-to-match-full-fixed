@@ -91,16 +91,6 @@ html:has(.ttm-ai-landing) {
   text-decoration: none;
 }
 
-.ttm-ai-nav__brand span {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .ttm-ai-nav__brand span {
-    display: inline;
-  }
-}
-
 .ttm-ai-nav__links {
   display: none;
   gap: 1.5rem;

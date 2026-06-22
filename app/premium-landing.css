@@ -120,16 +120,6 @@ html:has(.ttm-premium-landing) {
   text-decoration: none;
 }
 
-.ttm-premium-nav__brand span {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .ttm-premium-nav__brand span {
-    display: inline;
-  }
-}
-
 .ttm-premium-nav__links {
   display: none;
   gap: 1.5rem;
