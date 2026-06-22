@@ -18,4 +18,11 @@ services:
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
       # Set in dashboard (secrets):
-      # DATABASE_URL, AUTH_SECRET, NEXT_PUBLIC_APP_URL, CORS_ORIGINS
+      # DATABASE_URL, AUTH_SECRET, NEXT_PUBLIC_APP_URL, CORS_ORIGINS, CRON_SECRET
+      #
+      # External cron (Render has no built-in scheduler): hit every minute
+      # curl -X POST https://<your-service>/api/v1/cron/expire-matches \
+      #   -H "Authorization: Bearer $CRON_SECRET"
+      # Notify cron every 15 min:
+      # curl -X POST https://<your-service>/api/v1/cron/notify \
+      #   -H "Authorization: Bearer $CRON_SECRET"

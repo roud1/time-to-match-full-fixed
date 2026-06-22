@@ -4,3 +4,9 @@ builder = "NIXPACKS"
 [deploy]
 startCommand = "npm run start"
 restartPolicyType = "ON_FAILURE"
+
+# External cron (Railway has no built-in scheduler):
+# expire-matches every minute:
+# curl -X POST https://<your-service>/api/v1/cron/expire-matches -H "Authorization: Bearer $CRON_SECRET"
+# notify every 15 minutes:
+# curl -X POST https://<your-service>/api/v1/cron/notify -H "Authorization: Bearer $CRON_SECRET"
