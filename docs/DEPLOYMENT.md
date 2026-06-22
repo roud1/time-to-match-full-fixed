@@ -18,6 +18,7 @@ Set these on **Vercel**, **Render**, **Railway**, or your host before going live
 | `CRON_SECRET` | **Yes** (if using crons) | Protects `/api/v1/cron/*`; Vercel Cron sends `Authorization: Bearer …`. |
 | `SENTRY_DSN` | No | Error tracking via `@sentry/nextjs` (no-op if unset). |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | No | Shared rate limiting across instances; in-memory fallback otherwise. |
+| `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | No | Presigned photo uploads (R2/S3). `S3_ENDPOINT` for R2; `S3_PUBLIC_URL` for CDN. |
 
 **Validate locally before deploy:**
 
@@ -27,6 +28,22 @@ DATABASE_URL=... AUTH_SECRET=... NEXT_PUBLIC_APP_URL=https://... CRON_SECRET=...
 ```
 
 **Readiness:** `GET /api/ready` returns `mode: "production"`, `database: "ok"`, `auth: "ok"` when configured correctly.
+
+**Smoke test after deploy:**
+
+```bash
+BASE_URL=https://your-domain.example node scripts/smoke-test.mjs
+```
+
+Checks: `/api/ready`, homepage, register page, optional register→discover flow when `DATABASE_URL` is set, photo upload config.
+
+Manual curl (minimal):
+
+```bash
+curl -s https://your-domain.example/api/ready | jq
+curl -sI https://your-domain.example/ | head -1
+curl -sI https://your-domain.example/register | head -1
+```
 
 ---
 
@@ -207,6 +224,7 @@ Leave `DATABASE_URL` empty in `.env.local` to stay in **demo mode**.
 | `RESEND_*` | Expiry email notifications. |
 | `NEXT_PUBLIC_ANALYTICS_DISABLED` | Set `1` to silence client analytics in dev. |
 | `TTM_STRICT_ENV` | Set `1` to exit on missing required env at startup. |
+| `S3_*` / `AWS_*` | Presigned profile photo uploads (`POST /api/user/photos/upload-url`). |
 
 ---
 
