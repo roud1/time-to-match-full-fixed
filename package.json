@@ -19,10 +19,13 @@
     "db:cleanup": "node scripts/db-cleanup.mjs",
     "check:env": "node scripts/check-env.mjs",
     "check:env:strict": "node scripts/check-env.mjs --strict",
+    "smoke-test": "node scripts/smoke-test.mjs",
     "i18n:extract-ru": "node scripts/i18n-extract-ru.mjs",
     "i18n:translate": "node scripts/i18n-translate-from-ru.mjs en uk de es pl fr it tr"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1074.0",
+    "@aws-sdk/s3-request-presigner": "^3.1074.0",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "1.2.12",
     "@radix-ui/react-alert-dialog": "1.1.15",

@@ -4,10 +4,10 @@ import Image from "next/image"
 import { useRef } from "react"
 import { useI18n } from "@/lib/i18n"
 import {
-  filesToDataUrls,
-  MAX_PROFILE_PHOTOS,
   mergePhotos,
+  MAX_PROFILE_PHOTOS,
 } from "@/lib/profile-photos"
+import { uploadPhotoFiles } from "@/lib/client/photo-upload"
 import { cn } from "@/lib/utils"
 
 type ProfilePhotoPickerProps = {
@@ -31,7 +31,7 @@ export function ProfilePhotoPicker({
     if (!files?.length || atMax) return
     const list = Array.from(files).filter((f) => f.type.startsWith("image/"))
     if (!list.length) return
-    const urls = await filesToDataUrls(list)
+    const urls = await uploadPhotoFiles(list)
     onChange(mergePhotos(value, urls))
     if (inputRef.current) inputRef.current.value = ""
   }
