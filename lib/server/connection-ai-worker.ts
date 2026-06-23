@@ -1,69 +1,63 @@
 /**
- * Lightweight async connection analysis on message thresholds.
- * Full production: replace with BullMQ / Redis queue workers (see docs/AI_CONNECTION_WORKERS.md).
+ * DB-backed connection analysis queue (see docs/AI_CONNECTION_WORKERS.md).
+ * Enqueues on message thresholds; worker runs via cron or fire-and-forget after enqueue.
  */
 
+import { processConnectionAnalysisJobs } from "@/lib/server/connection-ai-processor"
 import { isOpenRouterConfigured } from "@/lib/server/openrouter"
+import { enqueueAiAnalysisJob } from "@/lib/server/repositories/ai-analysis"
+import { getServerEnv } from "@/lib/server/env"
 import { setConnectionAnalyzing } from "@/lib/server/realtime/ephemeral"
 
-const ANALYSIS_INTERVAL = 5
+export const ANALYSIS_INTERVAL = 5
 
-type PendingJob = {
-  userId: string
-  matchId: string
-  messageCount: number
-  queuedAt: number
-}
-
-const pending = new Map<string, PendingJob>()
-
-function jobKey(userId: string, matchId: string) {
-  return `${userId}:${matchId}`
-}
-
-/** Queue (in-process) analysis when message count hits a threshold. */
+/** Queue analysis when message count hits a threshold. Non-blocking for HTTP handlers. */
 export function maybeQueueConnectionAnalysis(
   userId: string,
   matchId: string,
   messageCount: number
 ): boolean {
+  if (!getServerEnv().isDatabaseConfigured) return false
   if (!isOpenRouterConfigured()) return false
   if (messageCount < ANALYSIS_INTERVAL) return false
   if (messageCount % ANALYSIS_INTERVAL !== 0) return false
 
-  const key = jobKey(userId, matchId)
-  pending.set(key, { userId, matchId, messageCount, queuedAt: Date.now() })
-
-  void setConnectionAnalyzing(matchId)
-
-  queueMicrotask(() => {
-    void flushConnectionAnalysisJob(key)
-  })
-
+  void enqueueAndKickWorker(userId, matchId, messageCount)
   return true
 }
 
-async function flushConnectionAnalysisJob(key: string): Promise<void> {
-  const job = pending.get(key)
-  if (!job) return
-  pending.delete(key)
+async function enqueueAndKickWorker(
+  userId: string,
+  matchId: string,
+  messageCount: number
+): Promise<void> {
+  const { queued } = await enqueueAiAnalysisJob({ matchId, userId, messageCount })
+  if (!queued) return
 
-  // Client triggers POST /api/analyze-connection; server marks analyzing for UI polling.
+  await setConnectionAnalyzing(matchId)
+
   if (process.env.NODE_ENV !== "production") {
     console.info("[ttm/ai-worker] connection analysis queued", {
-      matchId: job.matchId,
-      messageCount: job.messageCount,
+      matchId,
+      messageCount,
       provider: "openrouter",
     })
   }
+
+  void processConnectionAnalysisJobs(1).catch((err) => {
+    console.error(
+      "[ttm/ai-worker] inline process failed:",
+      err instanceof Error ? err.message : err
+    )
+  })
 }
 
 export function getConnectionAnalysisWorkerNotes() {
   return {
     interval: ANALYSIS_INTERVAL,
-    queue: "in-process stub + ephemeral analyzing flag",
-    production: "BullMQ + Redis or Vercel background functions",
-    api: "POST /api/analyze-connection",
-    env: "OPENROUTER_API_KEY",
+    queue: "postgres ai_analysis_jobs + connection_scores",
+    production: "cron /api/v1/cron/ai-analysis + inline kick after enqueue",
+    api: "GET /api/matches/:id/connection-score",
+    env: "OPENROUTER_API_KEY + DATABASE_URL",
   } as const
 }

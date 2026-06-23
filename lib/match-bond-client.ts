@@ -35,6 +35,11 @@ export async function reportMessageSent(profileId: number): Promise<ReportMessag
       if (payload.prolonged) {
         window.dispatchEvent(new CustomEvent("ttm-connection-updated"))
       }
+      if (payload.analysisQueued) {
+        window.dispatchEvent(
+          new CustomEvent("ttm-analysis-queued", { detail: { matchId, profileId } })
+        )
+      }
     }
     return { ok: true, payload, matchId }
   } catch {

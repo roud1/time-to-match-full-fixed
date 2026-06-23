@@ -163,3 +163,12 @@ export async function isConnectionAnalyzing(matchId: string): Promise<boolean> {
   }
   return true
 }
+
+export async function clearConnectionAnalyzing(matchId: string): Promise<void> {
+  const redis = getRedis()
+  if (redis) {
+    await redis.del(analyzingKey(matchId))
+    return
+  }
+  memoryAnalyzing.delete(matchId)
+}

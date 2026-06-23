@@ -5,9 +5,11 @@ export async function register() {
     log.info("next_instrumentation_boot", { node: process.version })
     const { validateProductionEnv } = await import("@/lib/server/env")
     validateProductionEnv()
-    const { startDevNotificationsCron, startDevExpireMatchesCron } = await import("@/lib/server/cron-dev")
+    const { startDevNotificationsCron, startDevExpireMatchesCron, startDevAiAnalysisCron } =
+      await import("@/lib/server/cron-dev")
     startDevNotificationsCron()
     startDevExpireMatchesCron()
+    startDevAiAnalysisCron()
   }
 }
 

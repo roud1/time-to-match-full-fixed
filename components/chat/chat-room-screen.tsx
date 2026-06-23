@@ -36,6 +36,7 @@ import { pickAIInsight } from "@/lib/ai-connection-engine"
 import { extractAIConnectionSignals } from "@/lib/ai-connection-engine"
 import { getConnection } from "@/lib/connection-store"
 import { useConnectionAnalysis } from "@/hooks/use-connection-analysis"
+import { usePersistedConnectionScore } from "@/hooks/use-persisted-connection-score"
 import { useRelationshipEcosystem } from "@/hooks/use-relationship-ecosystem"
 import { SharedSyncSpace } from "@/components/ecosystem/shared-sync-space"
 import { IntelligentSpaceLayer } from "@/components/intelligence/intelligent-space-layer"
@@ -184,14 +185,21 @@ export function ChatRoomScreen({
     recentActivity,
     enableAI: true,
   })
+  const persistedScore = usePersistedConnectionScore(matchExpiry?.matchId ?? null)
   const {
     analysis,
     metrics: syncMetrics,
     aiEnhanced,
-    aiInsight,
     aiLoading,
     ai: aiAnalysis,
   } = connectionAnalysis
+
+  const persistedAi = persistedScore.score
+  const workerAnalyzing = persistedScore.analyzing
+  const displayAiAnalysis = persistedAi ?? aiAnalysis
+  const displayAiLoading = workerAnalyzing || (aiLoading && !persistedAi?.insight)
+  const displayAiEnhanced =
+    Boolean(persistedAi?.source === "openrouter") || aiEnhanced
 
   const {
     identity,
@@ -207,7 +215,7 @@ export function ChatRoomScreen({
     thread.messages,
     analysis,
     syncMetrics,
-    aiAnalysis
+    displayAiAnalysis
   )
 
   const experience = useMemo(
@@ -295,10 +303,19 @@ export function ChatRoomScreen({
         : t("presenceQuiet")
 
   const scrollInsight = useMemo(() => {
+    if (persistedAi?.insight) return persistedAi.insight
     const record = connectionView ? getConnection(connectionView.profileId) : undefined
     const signals = record ? extractAIConnectionSignals(thread.messages, record) : null
-    return pickAIInsight(aiAnalysis, analysis, signals, recentActivity, t)
-  }, [aiAnalysis, aiInsight, analysis, connectionView, thread.messages, recentActivity, t])
+    return pickAIInsight(displayAiAnalysis, analysis, signals, recentActivity, t)
+  }, [
+    persistedAi?.insight,
+    displayAiAnalysis,
+    analysis,
+    connectionView,
+    thread.messages,
+    recentActivity,
+    t,
+  ])
 
   useEffect(() => {
     setIcebreakerDismissed(false)
@@ -550,11 +567,11 @@ export function ChatRoomScreen({
                       ))}
                   </div>
                 )}
-                {(scrollInsight || aiLoading) && (
+                {(scrollInsight || displayAiLoading) && (
                   <div className="mb-4">
                     <EmotionalInsightCard
                       insight={scrollInsight ?? ""}
-                      loading={aiLoading && !scrollInsight}
+                      loading={displayAiLoading && !scrollInsight}
                     />
                   </div>
                 )}
@@ -607,7 +624,7 @@ export function ChatRoomScreen({
       )}
       data-exp={experience.state}
       data-rel-state={liveState}
-      data-ai-enhanced={aiEnhanced ? "true" : undefined}
+      data-ai-enhanced={displayAiEnhanced ? "true" : undefined}
       {...ecosystemAttrs}
       {...realityExpansion.attrs}
       {...realityExpansion.os.attrs}
@@ -696,7 +713,7 @@ export function ChatRoomScreen({
             emotionalPresence={emotionalPresence}
             presenceSystem={presenceSystem}
             syncMetrics={syncMetrics}
-            aiEnhanced={aiEnhanced}
+            aiEnhanced={displayAiEnhanced}
             syncSurge={syncSurge}
             relationshipPersonality={identity?.personality}
             evolutionProgress={identity?.evolutionProgress}
@@ -708,7 +725,7 @@ export function ChatRoomScreen({
             showBack={showBack}
             compact={isEmbedded}
             partnerOnline={partnerOnline}
-            showAnalyzing={aiLoading}
+            showAnalyzing={displayAiLoading}
             onOpenProfile={() => setProfileOpen(true)}
             onOpenSafety={() => setSafetyOpen(true)}
             onOpenShare={() => setShareOpen(true)}
