@@ -20,6 +20,27 @@ const name = "Smoke Tester"
 let passed = 0
 let failed = 0
 
+/** Minimal cookie jar so register → /api/me share the session in Node fetch. */
+const cookies = new Map()
+
+function storeCookies(res) {
+  const getSetCookie = res.headers.getSetCookie?.bind(res.headers)
+  const list = getSetCookie ? getSetCookie() : []
+  if (!list.length) {
+    const single = res.headers.get("set-cookie")
+    if (single) list.push(single)
+  }
+  for (const raw of list) {
+    const [pair] = raw.split(";")
+    const eq = pair.indexOf("=")
+    if (eq > 0) cookies.set(pair.slice(0, eq).trim(), pair.slice(eq + 1).trim())
+  }
+}
+
+function cookieHeader() {
+  return [...cookies.entries()].map(([k, v]) => `${k}=${v}`).join("; ")
+}
+
 function ok(label) {
   console.log(`  ✓ ${label}`)
   passed++
@@ -35,9 +56,11 @@ async function request(path, init = {}) {
     ...init,
     headers: {
       Accept: "application/json",
+      ...(cookies.size ? { Cookie: cookieHeader() } : {}),
       ...(init.headers || {}),
     },
   })
+  storeCookies(res)
   const text = await res.text()
   let json = null
   try {

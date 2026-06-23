@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  CI_DATABASE_URL: postgresql://ttm:ttm_ci_password@localhost:5432/timetomatch
+  CI_AUTH_SECRET: ci-test-auth-secret-min-32-chars-long!!
+  CI_CRON_SECRET: ci-cron-secret-for-tests-only!!
+  CI_APP_URL: http://localhost:3000
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,7 +41,99 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      - name: E2E smoke tests
-        run: npm run test:e2e
+      - name: E2E smoke tests (demo mode)
+        run: npm run test:e2e -- tests/e2e/smoke.spec.ts
         env:
           NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: ttm
+          POSTGRES_PASSWORD: ttm_ci_password
+          POSTGRES_DB: timetomatch
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ttm -d timetomatch"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run database migrations
+        run: npm run db:migrate
+        env:
+          DATABASE_URL: ${{ env.CI_DATABASE_URL }}
+
+      - name: Build for E2E
+        run: npm run build
+        env:
+          NEXT_PUBLIC_APP_URL: ${{ env.CI_APP_URL }}
+          TTM_STRICT_ENV: "0"
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Start Next.js server
+        run: |
+          npm run start > .next-server.log 2>&1 &
+          echo $! > .next-server.pid
+        env:
+          DATABASE_URL: ${{ env.CI_DATABASE_URL }}
+          AUTH_SECRET: ${{ env.CI_AUTH_SECRET }}
+          CRON_SECRET: ${{ env.CI_CRON_SECRET }}
+          NEXT_PUBLIC_APP_URL: ${{ env.CI_APP_URL }}
+
+      - name: Wait for /api/ready (production)
+        run: node scripts/wait-ready.mjs
+        env:
+          NEXT_PUBLIC_APP_URL: ${{ env.CI_APP_URL }}
+
+      - name: E2E tests (Postgres)
+        run: npm run test:e2e
+        env:
+          PLAYWRIGHT_SKIP_WEBSERVER: "1"
+          PLAYWRIGHT_BASE_URL: ${{ env.CI_APP_URL }}
+          DATABASE_URL: ${{ env.CI_DATABASE_URL }}
+          AUTH_SECRET: ${{ env.CI_AUTH_SECRET }}
+          CRON_SECRET: ${{ env.CI_CRON_SECRET }}
+          NEXT_PUBLIC_APP_URL: ${{ env.CI_APP_URL }}
+
+      - name: API smoke test
+        run: npm run smoke-test
+        env:
+          BASE_URL: ${{ env.CI_APP_URL }}
+          NEXT_PUBLIC_APP_URL: ${{ env.CI_APP_URL }}
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+      - name: Upload server log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-server-log
+          path: .next-server.log
+          retention-days: 3

@@ -39,9 +39,6 @@ test.describe("API readiness", () => {
 })
 
 /**
- * Full register → match → chat flow requires DATABASE_URL on the server.
- * Run manually against a production-like instance:
- *
- *   DATABASE_URL=... AUTH_SECRET=... npm run build && npm run start
- *   BASE_URL=http://127.0.0.1:3000 node scripts/smoke-test.mjs
+ * DB-backed auth + discover flows live in auth.spec.ts and run in the CI `e2e` job.
+ * Locally: npm run test:e2e:ci  (docker Postgres + migrate + server + Playwright)
  */
