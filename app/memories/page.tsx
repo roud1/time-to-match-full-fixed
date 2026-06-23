@@ -1,5 +1,6 @@
 "use client"
 
+import "@/app/app-globals.css"
 import { Navbar } from "@/components/navbar"
 import { RealityMemoryCinema } from "@/components/reality/reality-memory-cinema"
 import { EmotionalTimeTimeline } from "@/components/time/emotional-time-timeline"

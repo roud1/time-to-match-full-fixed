@@ -1,0 +1,24 @@
+/**
+ * App-shell experience layers — loaded on /app and other immersive routes,
+ * not on landing or auth pages.
+ */
+@import './sync-design.css';
+@import './chat-experience.css';
+@import './chat-layout.css';
+@import './discover-experience.css';
+@import './discover-page.css';
+@import './likes-page.css';
+@import './chat-page.css';
+@import './map-page.css';
+@import './swipe-profile-card.css';
+@import './match-celebration.css';
+@import './activity-hub-sheet.css';
+@import './mobile-experience.css';
+@import './relationship-identity.css';
+@import './product-experience.css';
+@import './emotional-os-experience.css';
+@import './reality-expansion-experience.css';
+@import './emotional-consciousness-experience.css';
+@import './growth-experience.css';
+@import './cinematic.css';
+@import './app-experience.css';

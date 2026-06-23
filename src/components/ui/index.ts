@@ -1,5 +1,0 @@
-export { Button, type ButtonProps, type ButtonVariant } from "@/src/components/ui/button"
-export { Container } from "@/src/components/ui/container"
-export { Card, type CardProps } from "@/src/components/ui/card"
-export { Input, type InputProps } from "@/src/components/ui/input"
-export { Section } from "@/src/components/ui/section"

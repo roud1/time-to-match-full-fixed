@@ -6,6 +6,8 @@ export type TestUser = {
   name: string
 }
 
+export type RegisteredUser = TestUser & { id: string }
+
 /** Unique credentials per test run — avoids collisions in shared CI Postgres. */
 export function createTestUser(prefix = "e2e"): TestUser {
   const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
@@ -19,13 +21,28 @@ export function createTestUser(prefix = "e2e"): TestUser {
 export async function registerUserViaApi(
   request: APIRequestContext,
   user: TestUser
-): Promise<void> {
+): Promise<RegisteredUser> {
   const res = await request.post("/api/v1/auth/register", {
     data: { email: user.email, password: user.password, name: user.name },
   })
   if (!res.ok()) {
     const body = await res.text()
     throw new Error(`register failed (${res.status()}): ${body}`)
+  }
+  const body = (await res.json()) as { user: { id: string; email: string; name: string } }
+  return { ...user, id: body.user.id }
+}
+
+export async function loginViaApi(
+  request: APIRequestContext,
+  user: TestUser
+): Promise<void> {
+  const res = await request.post("/api/v1/auth/login", {
+    data: { email: user.email, password: user.password },
+  })
+  if (!res.ok()) {
+    const body = await res.text()
+    throw new Error(`login failed (${res.status()}): ${body}`)
   }
 }
 

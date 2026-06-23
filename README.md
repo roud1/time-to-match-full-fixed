@@ -72,15 +72,33 @@ Optional integrations (see `.env.example` for full list):
 
 See **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** for Vercel, Render, Railway, and Docker deploy steps.
 
-### Deploy checklist
+### Production env checklist
 
-1. Copy `.env.example` → set `DATABASE_URL`, `AUTH_SECRET`, `NEXT_PUBLIC_APP_URL`, `CRON_SECRET`
-2. Run `npm run check:env:strict` with production env (or `NODE_ENV=production`)
-3. Run `npm run db:migrate` against production Postgres
-4. Deploy (`npm run build` passes; CI runs lint, typecheck, e2e)
-5. Verify `curl https://your-domain/api/ready`
-6. Run `BASE_URL=https://your-domain node scripts/smoke-test.mjs`
-7. Optional: configure `S3_*` for presigned photo uploads (see `.env.example`)
+Run **`npm run check:env:strict`** with production env (`NODE_ENV=production` or hosted flags) before every deploy. It fails on missing required vars and warns on weak secrets.
+
+| Variable | Required | Notes |
+|----------|----------|-------|
+| `DATABASE_URL` | **Yes** | PostgreSQL connection string (pooled URL on serverless). Without it the app runs in **demo mode**. |
+| `AUTH_SECRET` | **Yes** | Session JWT secret — `openssl rand -base64 32`, ≥32 chars when `DATABASE_URL` is set. |
+| `NEXT_PUBLIC_APP_URL` | **Yes** (hosted) | Canonical `https://your-domain` for OG, sitemap, PWA, and Stripe redirects. |
+| `CRON_SECRET` | **Yes** (hosted) | Protects `/api/v1/cron/*`; Vercel Cron sends `Authorization: Bearer …`. |
+| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | **Yes** (Vercel prod) | Shared rate limits and realtime state across instances. |
+| `ADMIN_API_KEY` | Recommended | Protects `/admin` and admin APIs (`x-admin-key` header). |
+| `SENTRY_DSN` | Optional | Error tracking via `@sentry/nextjs` (no-op if unset). |
+| `RESEND_API_KEY` + `RESEND_FROM_EMAIL` | Optional | Match-expiry email and password reset. |
+| `VAPID_*` / `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | Optional | Web Push notifications (`node scripts/generate-vapid-keys.mjs`). |
+| `S3_*` | Optional | Presigned photo uploads (R2/S3); base64 fallback in demo. |
+| `STRIPE_*` | Optional | Premium/VIP billing when keys are set. |
+| `OPENROUTER_API_KEY` | Optional | Server-only AI (connection analysis, Pulse chat). |
+
+**Deploy steps:**
+
+1. Copy `.env.example` → set required vars on your host (Production + Preview as needed).
+2. `NODE_ENV=production npm run check:env:strict` — fix all errors before shipping.
+3. `npm run db:migrate` against production Postgres (safe to re-run; tracks applied files).
+4. `npm run build` (CI also runs lint, typecheck, Playwright `@db` tests when Postgres is available).
+5. Verify `curl https://your-domain/api/ready` → `mode: "production"`, `database: "ok"`, `auth: "ok"`.
+6. `BASE_URL=https://your-domain node scripts/smoke-test.mjs` — register, discover, core APIs.
 
 Cron routes (protected by `CRON_SECRET`):
 
