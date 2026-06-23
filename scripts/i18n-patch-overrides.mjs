@@ -82,6 +82,13 @@ const OVERRIDES = {
     discoverFiltersKm: "km",
     profileStatTimer: "Sayaç",
     datingPreviewTimer: "Sayaç",
+    activityClose: "Kapat",
+    trustClose: "Kapat",
+    chemistryPeak: "Zirve",
+    lifeActiveNow: "ŞİMDİ AKTİF ✦",
+    lifePeerActiveNow: "ŞİMDİ AKTİF ✦",
+    photoVerifyClose: "Kapat",
+    dailyReturnDismiss: "Kapat",
   },
 }
 
