@@ -4,6 +4,7 @@
  */
 
 import { isOpenRouterConfigured } from "@/lib/server/openrouter"
+import { setConnectionAnalyzing } from "@/lib/server/realtime/ephemeral"
 
 const ANALYSIS_INTERVAL = 5
 
@@ -25,17 +26,21 @@ export function maybeQueueConnectionAnalysis(
   userId: string,
   matchId: string,
   messageCount: number
-): void {
-  if (!isOpenRouterConfigured()) return
-  if (messageCount < ANALYSIS_INTERVAL) return
-  if (messageCount % ANALYSIS_INTERVAL !== 0) return
+): boolean {
+  if (!isOpenRouterConfigured()) return false
+  if (messageCount < ANALYSIS_INTERVAL) return false
+  if (messageCount % ANALYSIS_INTERVAL !== 0) return false
 
   const key = jobKey(userId, matchId)
   pending.set(key, { userId, matchId, messageCount, queuedAt: Date.now() })
 
+  void setConnectionAnalyzing(matchId)
+
   queueMicrotask(() => {
     void flushConnectionAnalysisJob(key)
   })
+
+  return true
 }
 
 async function flushConnectionAnalysisJob(key: string): Promise<void> {
@@ -43,8 +48,7 @@ async function flushConnectionAnalysisJob(key: string): Promise<void> {
   if (!job) return
   pending.delete(key)
 
-  // Stub worker — heavy analysis is triggered client-side via POST /api/analyze-connection.
-  // Server workers would load messages + signals here and persist scores to match_stats.
+  // Client triggers POST /api/analyze-connection; server marks analyzing for UI polling.
   if (process.env.NODE_ENV !== "production") {
     console.info("[ttm/ai-worker] connection analysis queued", {
       matchId: job.matchId,
@@ -57,7 +61,7 @@ async function flushConnectionAnalysisJob(key: string): Promise<void> {
 export function getConnectionAnalysisWorkerNotes() {
   return {
     interval: ANALYSIS_INTERVAL,
-    queue: "in-process stub",
+    queue: "in-process stub + ephemeral analyzing flag",
     production: "BullMQ + Redis or Vercel background functions",
     api: "POST /api/analyze-connection",
     env: "OPENROUTER_API_KEY",

@@ -264,6 +264,7 @@ export function ChatRoomScreen({
   })
   const isReachable = isEmotionallyReachable(emotionalPresenceEarly)
   const showTyping = partnerTyping && isReachable
+  const partnerTypingLabel = t("chatPartnerTyping").replace("{name}", profile.name)
 
   const presenceSystem = useEmotionalPresenceSystem(profile.id, {
     thread,
@@ -278,7 +279,7 @@ export function ChatRoomScreen({
 
   const emotionalPresence = presenceSystem?.presence ?? emotionalPresenceEarly
   const statusLine = showTyping
-    ? labels.typing
+    ? partnerTypingLabel
     : partnerOnline
       ? labels.online
       : emotionalPresence
@@ -355,7 +356,7 @@ export function ChatRoomScreen({
 
   const typingBlock = showTyping ? (
     <div className="mt-3">
-      <ChatTypingIndicator />
+      <ChatTypingIndicator label={partnerTypingLabel} />
     </div>
   ) : null
 
@@ -541,7 +542,7 @@ export function ChatRoomScreen({
                       ))}
                   </div>
                 )}
-                {(scrollInsight || (aiLoading && justSent)) && (
+                {(scrollInsight || aiLoading) && (
                   <div className="mb-4">
                     <EmotionalInsightCard
                       insight={scrollInsight ?? ""}
@@ -698,6 +699,8 @@ export function ChatRoomScreen({
             onBack={onBack}
             showBack={showBack}
             compact={isEmbedded}
+            partnerOnline={partnerOnline}
+            showAnalyzing={aiLoading}
             onOpenProfile={() => setProfileOpen(true)}
             onOpenSafety={() => setSafetyOpen(true)}
             onOpenShare={() => setShareOpen(true)}

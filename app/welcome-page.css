@@ -36,6 +36,13 @@
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.35);
 }
 
+.ttm-welcome-progress__dot--active {
+  border-color: rgba(165, 180, 252, 0.75);
+  background: rgba(129, 140, 248, 0.35);
+  box-shadow: 0 0 16px rgba(129, 140, 248, 0.45);
+  transform: scale(1.15);
+}
+
 .ttm-welcome-progress__label {
   font-size: 0.65rem;
   font-weight: 200;
@@ -49,6 +56,10 @@
   color: rgba(199, 210, 254, 0.85);
 }
 
+.ttm-welcome-progress__label--active {
+  color: rgba(224, 231, 255, 0.95);
+}
+
 .ttm-welcome-progress__line {
   position: absolute;
   top: 0.3125rem;
@@ -57,6 +68,14 @@
   height: 1px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
   pointer-events: none;
+}
+
+.ttm-welcome-progress__line--done {
+  background: linear-gradient(90deg, rgba(129, 140, 248, 0.45), rgba(99, 102, 241, 0.25));
+}
+
+.ttm-welcome-progress__item--active .ttm-welcome-progress__label {
+  font-weight: 300;
 }
 
 .ttm-welcome-progress__item:last-child .ttm-welcome-progress__line {

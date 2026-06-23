@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
+import { toast } from "sonner"
 import { useI18n } from "@/lib/i18n"
 import {
   REPORT_REASON_KEYS,
@@ -66,14 +67,18 @@ export function SafetyHubDialog({
     if (serverUserId) {
       void blockUserOnServer({ blockedUserId: serverUserId, action: "block" })
     }
+    toast.success(t("toastBlockSuccess"))
     onAfterBlock?.()
     close()
   }
 
-  const handleUnmatch = () => {
-    void unmatchOnServer(profileId)
-    onAfterUnmatch?.()
-    close()
+  const handleUnmatch = async () => {
+    const result = await unmatchOnServer(profileId)
+    if (result.ok) {
+      toast.success(t("toastUnmatchSuccess"))
+      onAfterUnmatch?.()
+      close()
+    }
   }
 
   const handleReport = () => {
@@ -228,7 +233,7 @@ export function SafetyHubDialog({
                 <DialogFooter className="flex-col gap-2 sm:flex-col">
                   <button
                     type="button"
-                    onClick={handleUnmatch}
+                    onClick={() => void handleUnmatch()}
                     className="w-full rounded-2xl border border-amber-500/35 bg-amber-500/15 py-3 text-sm font-light text-amber-50 hover:bg-amber-500/25 transition-colors touch-manipulation"
                   >
                     {t("trustUnmatchConfirmCta")}

@@ -9,6 +9,7 @@ import { useI18n } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 import { PushNotificationSettings } from "@/components/pwa/push-notification-settings"
 import { SettingsBlockedList } from "@/components/settings/settings-blocked-list"
+import { SettingsSubscriptionCard } from "@/components/settings/settings-subscription-card"
 import { CinematicInviteFlow } from "@/components/network/cinematic-invite-flow"
 import { pushConnectionSync } from "@/lib/connection-sync-client"
 
@@ -111,6 +112,7 @@ export default function SettingsPage() {
               )}
               {section === "account" && (
                 <>
+                  <SettingsSubscriptionCard />
                   <CinematicInviteFlow />
                   <label className="block">
                     <span className="p9-register-step-label block mb-2">{t("settingsDisplayName")}</span>

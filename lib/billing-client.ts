@@ -1,9 +1,43 @@
 export type BillingPlan = "premium" | "vip"
+export type SubscriptionPlan = BillingPlan | "free"
+
+export type SubscriptionInfo = {
+  plan: SubscriptionPlan
+  status: string
+  currentPeriodEnd: string | null
+  configured: boolean
+  mode: "demo" | "live"
+}
 
 export type CheckoutResult =
   | { ok: true; url: string }
   | { ok: false; demo: true; message: string }
   | { ok: false; demo: false; message: string }
+
+export async function fetchSubscription(): Promise<SubscriptionInfo> {
+  try {
+    const res = await fetch("/api/billing/subscription", { credentials: "include", cache: "no-store" })
+    const data = (await res.json()) as {
+      plan?: SubscriptionPlan
+      status?: string
+      currentPeriodEnd?: string | null
+      configured?: boolean
+      mode?: "demo" | "live"
+    }
+    if (!res.ok) {
+      return { plan: "free", status: "none", currentPeriodEnd: null, configured: false, mode: "demo" }
+    }
+    return {
+      plan: data.plan ?? "free",
+      status: data.status ?? "none",
+      currentPeriodEnd: data.currentPeriodEnd ?? null,
+      configured: Boolean(data.configured),
+      mode: data.mode ?? "demo",
+    }
+  } catch {
+    return { plan: "free", status: "none", currentPeriodEnd: null, configured: false, mode: "demo" }
+  }
+}
 
 export async function startBillingCheckout(plan: BillingPlan): Promise<CheckoutResult> {
   try {

@@ -7,11 +7,13 @@ import { Redis } from "@upstash/redis"
 
 const TYPING_TTL_SEC = 4
 const PRESENCE_TTL_SEC = 90
+const ANALYZING_TTL_SEC = 12
 const ONLINE_THRESHOLD_MS = 45_000
 
 type MemoryTyping = Map<string, number>
 const memoryTyping = new Map<string, MemoryTyping>()
 const memoryPresence = new Map<string, number>()
+const memoryAnalyzing = new Map<string, number>()
 
 let redisClient: Redis | null = null
 
@@ -33,6 +35,10 @@ function typingKey(matchId: string, userId: string) {
 
 function presenceKey(userId: string) {
   return `ttm:rt:presence:${userId}`
+}
+
+function analyzingKey(matchId: string) {
+  return `ttm:rt:analyzing:${matchId}`
 }
 
 function pruneMemoryTyping(room: MemoryTyping) {
@@ -128,4 +134,32 @@ export async function getOnlineMap(userIds: string[]): Promise<Record<string, bo
     })
   )
   return out
+}
+
+export async function setConnectionAnalyzing(matchId: string): Promise<void> {
+  const redis = getRedis()
+  const expiresAt = Date.now() + ANALYZING_TTL_SEC * 1000
+
+  if (redis) {
+    await redis.set(analyzingKey(matchId), "1", { ex: ANALYZING_TTL_SEC })
+    return
+  }
+
+  memoryAnalyzing.set(matchId, expiresAt)
+}
+
+export async function isConnectionAnalyzing(matchId: string): Promise<boolean> {
+  const redis = getRedis()
+  if (redis) {
+    const v = await redis.get(analyzingKey(matchId))
+    return v != null
+  }
+
+  const exp = memoryAnalyzing.get(matchId)
+  if (!exp) return false
+  if (exp <= Date.now()) {
+    memoryAnalyzing.delete(matchId)
+    return false
+  }
+  return true
 }

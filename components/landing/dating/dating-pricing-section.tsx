@@ -1,13 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Check } from "lucide-react"
 import { motion, useReducedMotion } from "motion/react"
 import { toast } from "sonner"
 import { DatingScrollReveal } from "@/components/landing/dating/dating-scroll-reveal"
 import { useI18n, type TranslationKey } from "@/lib/i18n"
-import { startBillingCheckout, type BillingPlan, isStripePublishableConfigured } from "@/lib/billing-client"
+import {
+  startBillingCheckout,
+  fetchSubscription,
+  type BillingPlan,
+  type SubscriptionPlan,
+  isStripePublishableConfigured,
+} from "@/lib/billing-client"
+import { isLoggedIn } from "@/lib/user-profile"
 
 type Plan = {
   id: "free" | BillingPlan
@@ -48,14 +55,30 @@ export function DatingPricingSection() {
   const reduce = useReducedMotion()
   const stripeReady = isStripePublishableConfigured()
   const [loadingPlan, setLoadingPlan] = useState<BillingPlan | null>(null)
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [currentPlan, setCurrentPlan] = useState<SubscriptionPlan>("free")
+
+  useEffect(() => {
+    setLoggedIn(isLoggedIn())
+    if (isLoggedIn()) {
+      void fetchSubscription().then((sub) => setCurrentPlan(sub.plan))
+    }
+  }, [])
 
   const handlePlanCta = async (plan: Plan) => {
     if (plan.id === "free") return
+
+    if (!loggedIn) {
+      toast.message(t("datingPricingLoginRequired"))
+      return
+    }
 
     if (!stripeReady) {
       toast.message(t("datingPricingComingSoon"))
       return
     }
+
+    if (currentPlan === plan.id) return
 
     setLoadingPlan(plan.id)
     const result = await startBillingCheckout(plan.id)
@@ -67,6 +90,13 @@ export function DatingPricingSection() {
     }
 
     toast.message(result.demo ? t("datingPricingComingSoon") : t("datingPricingCheckoutError"))
+  }
+
+  const paidCtaLabel = (plan: Plan) => {
+    if (!stripeReady) return t("datingPricingComingSoon")
+    if (!loggedIn) return t("datingPricingLoginRequired")
+    if (currentPlan === plan.id) return t("datingPricingCurrentPlan")
+    return t("datingPricingSubscribe")
   }
 
   return (
@@ -82,12 +112,9 @@ export function DatingPricingSection() {
         <div className="ttm-dating-pricing__grid">
           {PLANS.map((plan, i) => {
             const isPaid = plan.id !== "free"
-            const ctaDisabled = isPaid && !stripeReady
-            const ctaLabel = isPaid
-              ? stripeReady
-                ? t("datingPricingSubscribe")
-                : t("datingPricingComingSoon")
-              : t("datingPricingCta")
+            const isCurrent = isPaid && currentPlan === plan.id
+            const ctaDisabled = isPaid && (!stripeReady || isCurrent || (!loggedIn && stripeReady))
+            const ctaLabel = isPaid ? paidCtaLabel(plan) : t("datingPricingCta")
 
             return (
               <motion.article
@@ -100,6 +127,11 @@ export function DatingPricingSection() {
               >
                 {plan.featured && (
                   <span className="ttm-dating-pricing__badge">{t("datingPricingPopular")}</span>
+                )}
+                {isCurrent && (
+                  <span className="ttm-dating-pricing__badge ttm-dating-pricing__badge--current">
+                    {t("datingPricingCurrentPlan")}
+                  </span>
                 )}
                 <h3 className="ttm-dating-pricing__name">{t(plan.nameKey)}</h3>
                 <p className="ttm-dating-pricing__price">
@@ -117,9 +149,22 @@ export function DatingPricingSection() {
                   ))}
                 </ul>
                 {plan.id === "free" ? (
+                  loggedIn ? (
+                    <span className="ttm-dating-cta ttm-dating-cta--block ttm-dating-cta--ghost opacity-70 cursor-default text-center">
+                      {currentPlan === "free" ? t("datingPricingCurrentPlan") : t("datingPricingCta")}
+                    </span>
+                  ) : (
+                    <Link
+                      href="/register"
+                      className={`ttm-dating-cta ttm-dating-cta--block${plan.featured ? "" : " ttm-dating-cta--ghost"}`}
+                    >
+                      {ctaLabel}
+                    </Link>
+                  )
+                ) : !loggedIn ? (
                   <Link
-                    href="/register"
-                    className={`ttm-dating-cta ttm-dating-cta--block${plan.featured ? "" : " ttm-dating-cta--ghost"}`}
+                    href="/login"
+                    className={`ttm-dating-cta ttm-dating-cta--block${plan.featured ? "" : " ttm-dating-cta--ghost"}${!stripeReady ? " opacity-60" : ""}`}
                   >
                     {ctaLabel}
                   </Link>

@@ -56,12 +56,17 @@ export async function POST(request: Request, context: RouteContext) {
     at: new Date(),
   })
 
-  maybeQueueConnectionAnalysis(session.sub, matchId.trim(), result.payload.totalMessages)
+  const analysisQueued = maybeQueueConnectionAnalysis(
+    session.sub,
+    matchId.trim(),
+    result.payload.totalMessages
+  )
 
   const payload: MessageSentResponse = {
     ...result.payload,
     systemMessage: result.payload.prolonged ? SYSTEM_MSG_RU : undefined,
     gamification,
+    analysisQueued,
   }
 
   if (result.payload.prolonged && !payload.newExpiresAt) {

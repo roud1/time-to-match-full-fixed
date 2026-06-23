@@ -18,6 +18,7 @@ import { fetchMe } from "@/lib/user/api"
 import { loginOnServer, localProfileFromAuthUser } from "@/lib/auth/client"
 import { recordProfileActivity } from "@/lib/profile-life-store"
 import { trackEvent } from "@/lib/analytics-client"
+import { trackFunnelOnce } from "@/lib/analytics-funnel"
 import { postAuthPath } from "@/lib/welcome-routing"
 import { CinematicButton } from "@/components/ui/cinematic-button"
 import { CinematicCard } from "@/components/ui/cinematic-card"
@@ -117,6 +118,7 @@ export function LoginForm() {
         setSession(form.email.trim(), form.remember)
         recordProfileActivity()
         trackEvent("login")
+        trackFunnelOnce("login_complete")
         router.replace(resolvePostAuthPath())
         return
       }
@@ -135,6 +137,7 @@ export function LoginForm() {
         setSession(form.email, form.remember)
         recordProfileActivity()
         trackEvent("login")
+        trackFunnelOnce("login_complete")
         router.replace(resolvePostAuthPath())
         return
       }

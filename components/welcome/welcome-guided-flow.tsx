@@ -13,6 +13,8 @@ import {
   type StoredUserProfile,
 } from "@/lib/user-profile"
 import { markWelcomeSeen } from "@/lib/welcome-seen"
+import { WelcomeProgressSteps } from "@/components/welcome/welcome-progress-steps"
+import { computeProfileStrength } from "@/lib/profile-completion"
 import { CinematicButton } from "@/components/ui/cinematic-button"
 import { CinematicCard } from "@/components/ui/cinematic-card"
 import { Input } from "@/components/ui/input"
@@ -20,8 +22,26 @@ import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 
 const SLIDES_DONE_KEY = "ttm-onboarding-done"
+const PHASE_INDEX_KEY = "ttm-welcome-phase-index"
 
 type GuidedPhase = "profile" | "interests" | "how-it-works"
+
+function readSavedPhaseIndex(): number {
+  if (typeof window === "undefined") return 0
+  const raw = localStorage.getItem(PHASE_INDEX_KEY)
+  const n = raw ? Number.parseInt(raw, 10) : 0
+  return Number.isFinite(n) && n >= 0 ? n : 0
+}
+
+function savePhaseIndex(index: number) {
+  if (typeof window === "undefined") return
+  localStorage.setItem(PHASE_INDEX_KEY, String(index))
+}
+
+function clearPhaseIndex() {
+  if (typeof window === "undefined") return
+  localStorage.removeItem(PHASE_INDEX_KEY)
+}
 
 function needsProfileStep(profile: StoredUserProfile): boolean {
   const photos = getProfilePhotos(profile)
@@ -61,8 +81,8 @@ export function WelcomeGuidedFlow({ profile: initialProfile, onComplete, classNa
   const router = useRouter()
   const [profile, setProfile] = useState(initialProfile)
   const phases = useMemo(() => computePhases(profile), [profile])
-  const [phaseIndex, setPhaseIndex] = useState(0)
-  const phase = phases[phaseIndex]
+  const [phaseIndex, setPhaseIndex] = useState(() => readSavedPhaseIndex())
+  const phase = phases[Math.min(phaseIndex, Math.max(phases.length - 1, 0))]
 
   const [name, setName] = useState(profile.name ?? "")
   const [photos, setPhotos] = useState<string[]>(getProfilePhotos(profile))
@@ -71,6 +91,7 @@ export function WelcomeGuidedFlow({ profile: initialProfile, onComplete, classNa
   const finish = useCallback(() => {
     markWelcomeSeen()
     markSlidesDone()
+    clearPhaseIndex()
     onComplete?.()
     router.replace("/app")
   }, [onComplete, router])
@@ -80,7 +101,9 @@ export function WelcomeGuidedFlow({ profile: initialProfile, onComplete, classNa
       finish()
       return
     }
-    setPhaseIndex((i) => i + 1)
+    const next = phaseIndex + 1
+    savePhaseIndex(next)
+    setPhaseIndex(next)
   }, [finish, phaseIndex, phases.length])
 
   const saveProfileStep = () => {
@@ -125,6 +148,13 @@ export function WelcomeGuidedFlow({ profile: initialProfile, onComplete, classNa
 
   return (
     <CinematicCard variant="glass" className={cn("ttm-brand-glass w-full border border-white/10 p-6 md:p-8", className)}>
+      <WelcomeProgressSteps
+        strength={computeProfileStrength(profile)}
+        activeStep={
+          phase === "profile" || phase === "interests" ? "profile" : phase === "how-it-works" ? "swipe" : "account"
+        }
+        className="mb-6"
+      />
       <p className="p9-register-step-label mb-2">
         {stepNum} / {totalSteps}
       </p>

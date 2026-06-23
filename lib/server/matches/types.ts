@@ -35,6 +35,8 @@ export type MessageSentResponse = {
   addedHours?: number
   systemMessage?: string
   gamification?: GamificationSnapshot
+  /** True when OpenRouter analysis was queued on a message threshold. */
+  analysisQueued?: boolean
 }
 
 export type FreezeMatchResponse = {

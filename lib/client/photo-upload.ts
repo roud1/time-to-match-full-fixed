@@ -4,7 +4,14 @@
 
 export type PhotoUploadMode = "s3" | "local"
 
+export type PhotoUploadResult = {
+  url: string
+  mode: PhotoUploadMode
+  usedFallback: boolean
+}
+
 let cachedMode: PhotoUploadMode | null = null
+let cachedConfigured: boolean | null = null
 
 export async function getPhotoUploadMode(): Promise<PhotoUploadMode> {
   if (cachedMode) return cachedMode
@@ -12,22 +19,32 @@ export async function getPhotoUploadMode(): Promise<PhotoUploadMode> {
     const res = await fetch("/api/user/photos/upload-url", { credentials: "include" })
     if (!res.ok) {
       cachedMode = "local"
+      cachedConfigured = false
       return cachedMode
     }
     const data = (await res.json()) as { configured?: boolean }
+    cachedConfigured = Boolean(data.configured)
     cachedMode = data.configured ? "s3" : "local"
     return cachedMode
   } catch {
     cachedMode = "local"
+    cachedConfigured = false
     return cachedMode
   }
 }
 
-export function resetPhotoUploadModeCache(): void {
-  cachedMode = null
+export async function isPhotoS3Configured(): Promise<boolean> {
+  if (cachedConfigured != null) return cachedConfigured
+  await getPhotoUploadMode()
+  return cachedConfigured ?? false
 }
 
-export async function uploadPhotoFile(file: File): Promise<string> {
+export function resetPhotoUploadModeCache(): void {
+  cachedMode = null
+  cachedConfigured = null
+}
+
+export async function uploadPhotoFile(file: File): Promise<PhotoUploadResult> {
   const contentType = file.type || "image/jpeg"
 
   const presignRes = await fetch("/api/user/photos/upload-url", {
@@ -38,7 +55,8 @@ export async function uploadPhotoFile(file: File): Promise<string> {
   })
 
   if (!presignRes.ok) {
-    return readFileAsDataUrl(file)
+    const url = await readFileAsDataUrl(file)
+    return { url, mode: "local", usedFallback: true }
   }
 
   const presign = (await presignRes.json()) as {
@@ -49,7 +67,10 @@ export async function uploadPhotoFile(file: File): Promise<string> {
   }
 
   if (!presign.configured || presign.mode !== "s3" || !presign.uploadUrl || !presign.publicUrl) {
-    return readFileAsDataUrl(file)
+    cachedConfigured = false
+    cachedMode = "local"
+    const url = await readFileAsDataUrl(file)
+    return { url, mode: "local", usedFallback: true }
   }
 
   const putRes = await fetch(presign.uploadUrl, {
@@ -59,11 +80,13 @@ export async function uploadPhotoFile(file: File): Promise<string> {
   })
 
   if (!putRes.ok) {
-    return readFileAsDataUrl(file)
+    const url = await readFileAsDataUrl(file)
+    return { url, mode: "local", usedFallback: true }
   }
 
   cachedMode = "s3"
-  return presign.publicUrl
+  cachedConfigured = true
+  return { url: presign.publicUrl, mode: "s3", usedFallback: false }
 }
 
 function readFileAsDataUrl(file: File): Promise<string> {
@@ -75,6 +98,15 @@ function readFileAsDataUrl(file: File): Promise<string> {
   })
 }
 
-export async function uploadPhotoFiles(files: File[]): Promise<string[]> {
-  return Promise.all(files.map(uploadPhotoFile))
+export async function uploadPhotoFiles(
+  files: File[],
+  onProgress?: (done: number, total: number) => void
+): Promise<PhotoUploadResult[]> {
+  const results: PhotoUploadResult[] = []
+  for (let i = 0; i < files.length; i++) {
+    const result = await uploadPhotoFile(files[i])
+    results.push(result)
+    onProgress?.(i + 1, files.length)
+  }
+  return results
 }

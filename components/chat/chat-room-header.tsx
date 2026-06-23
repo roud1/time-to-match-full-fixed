@@ -10,6 +10,7 @@ import { BondMeter } from "@/components/chat/bond-meter"
 import { ChatMatchExpiryBar } from "@/components/chat/chat-match-expiry-bar"
 import { RelationshipStateBadge } from "@/components/growth/relationship-state-badge"
 import { EmotionalPresenceBadge } from "@/components/world/emotional-presence-badge"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import type { useConnectionLive } from "@/hooks/use-connection-live"
 import type { useConnectionAnalysis } from "@/hooks/use-connection-analysis"
 import type { useMatchBond } from "@/hooks/use-match-bond"
@@ -42,6 +43,8 @@ export type ChatRoomHeaderProps = {
   onBack: () => void
   showBack?: boolean
   compact?: boolean
+  partnerOnline?: boolean
+  showAnalyzing?: boolean
   onOpenProfile: () => void
   onOpenSafety: () => void
   onOpenShare: () => void
@@ -69,6 +72,8 @@ export function ChatRoomHeader({
   onBack,
   showBack = true,
   compact = false,
+  partnerOnline = false,
+  showAnalyzing = false,
   onOpenProfile,
   onOpenSafety,
   onOpenShare,
@@ -207,6 +212,14 @@ export function ChatRoomHeader({
         )}
       >
         <BondMeter bond={bond} className="ttm-chat-room-header__bond" />
+        {showAnalyzing && (
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-indigo-400/25 bg-indigo-500/10 px-2.5 py-0.5 text-[10px] font-extralight text-indigo-100/90 shrink-0">
+            {!reduceMotion && (
+              <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" aria-hidden />
+            )}
+            {t("chatConnectionAnalyzing")}
+          </span>
+        )}
         {(showTyping || showPresenceBadge || showStatusText) && (
           <p
             className={cn(
@@ -225,7 +238,18 @@ export function ChatRoomHeader({
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-400/90" />
               </span>
             )}
-            {showStatusText && <span className="truncate">{statusLine}</span>}
+            {showStatusText && partnerOnline && !showTyping ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="truncate cursor-default">{statusLine}</span>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="bg-[#0a0a10] text-white/90 border border-white/10">
+                  {t("chatOnlineTooltip")}
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              showStatusText && <span className="truncate">{statusLine}</span>
+            )}
           </p>
         )}
       </div>

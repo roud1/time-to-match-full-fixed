@@ -82,8 +82,8 @@ export async function POST(request: Request) {
         },
       },
     ],
-    success_url: `${base}/app?billing=success&plan=${plan}`,
-    cancel_url: `${base}/?billing=cancel#pricing`,
+    success_url: `${base}/billing/success?plan=${plan}`,
+    cancel_url: `${base}/billing/cancel`,
   })
 
   if (!checkout.url) {

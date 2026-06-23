@@ -15,6 +15,7 @@ import {
 import { storePosition } from "@/lib/geo"
 import { markLocationSettled } from "@/lib/location-settled"
 import { trackEvent } from "@/lib/analytics-client"
+import { trackFunnelOnce } from "@/lib/analytics-funnel"
 import { saveUserProfile, setSession, clearCredentials } from "@/lib/user-profile"
 import { registerOnServer, syncRegistrationProfile } from "@/lib/auth/client"
 import { recordProfileActivity } from "@/lib/profile-life-store"
@@ -237,6 +238,7 @@ export function RegisterForm() {
           has_photos: photos.length > 0,
           city_preset: !isManual,
         })
+        trackFunnelOnce("registration_complete", { has_photos: photos.length > 0 })
         router.push("/welcome")
         return
       }
@@ -255,6 +257,7 @@ export function RegisterForm() {
           has_photos: photos.length > 0,
           city_preset: !isManual,
         })
+        trackFunnelOnce("registration_complete", { has_photos: photos.length > 0 })
         router.push("/welcome")
         return
       }
