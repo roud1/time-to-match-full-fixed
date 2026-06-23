@@ -1,12 +1,12 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     await import("./sentry.server.config")
-    const { log } = await import("@/lib/server/log")
+    const { log } = await import("@/server/log")
     log.info("next_instrumentation_boot", { node: process.version })
-    const { validateProductionEnv } = await import("@/lib/server/env")
+    const { validateProductionEnv } = await import("@/config/env")
     validateProductionEnv()
     const { startDevNotificationsCron, startDevExpireMatchesCron, startDevAiAnalysisCron } =
-      await import("@/lib/server/cron-dev")
+      await import("@/server/cron-dev")
     startDevNotificationsCron()
     startDevExpireMatchesCron()
     startDevAiAnalysisCron()

@@ -2,10 +2,10 @@
 
 import { motion } from "motion/react"
 import Link from "next/link"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { TtmButton } from "@/components/ds/ttm-button"
-import { useI18n } from "@/lib/i18n"
+import { Navbar } from "@/client/components/navbar"
+import { Footer } from "@/client/components/footer"
+import { TtmButton } from "@/client/components/ds/ttm-button"
+import { useI18n } from "@/client/lib/i18n"
 import { Shield, Sparkles, Timer, Users } from "lucide-react"
 
 const VALUES = [

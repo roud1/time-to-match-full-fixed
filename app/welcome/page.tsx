@@ -1,6 +1,6 @@
 import { Suspense } from "react"
-import { AuthShell } from "@/components/auth-shell"
-import { WelcomeScreen } from "@/components/welcome-screen"
+import { AuthShell } from "@/client/components/auth-shell"
+import { WelcomeScreen } from "@/client/components/welcome-screen"
 
 export const metadata = {
   title: "Добро пожаловать — Time to Match",

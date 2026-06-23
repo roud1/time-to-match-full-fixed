@@ -4,10 +4,10 @@ import { Suspense, useEffect } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { CheckCircle2 } from "lucide-react"
-import { Navbar } from "@/components/navbar"
-import { CinematicButton } from "@/components/ui/cinematic-button"
-import { useI18n } from "@/lib/i18n"
-import { trackProductEvent } from "@/lib/analytics-client"
+import { Navbar } from "@/client/components/navbar"
+import { CinematicButton } from "@/client/components/ui/cinematic-button"
+import { useI18n } from "@/client/lib/i18n"
+import { trackProductEvent } from "@/client/lib/analytics-client"
 
 function BillingSuccessContent() {
   const { t } = useI18n()

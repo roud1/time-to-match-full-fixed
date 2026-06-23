@@ -1,15 +1,15 @@
 "use client"
 
 import "@/app/app-globals.css"
-import { Navbar } from "@/components/navbar"
-import { RealityMemoryCinema } from "@/components/reality/reality-memory-cinema"
-import { EmotionalTimeTimeline } from "@/components/time/emotional-time-timeline"
-import { useEmotionalTimeline } from "@/hooks/use-emotional-timeline"
-import { EmotionalWorldRoot } from "@/components/world/emotional-world-root"
-import { MemoryFragmentField } from "@/components/reality-expansion/memory-fragment-field"
-import { MemoryEchoLayer } from "@/components/emotional-consciousness/memory-echo-layer"
-import { useEmotionalRealityExpansion } from "@/hooks/use-emotional-reality-expansion"
-import { useI18n } from "@/lib/i18n"
+import { Navbar } from "@/client/components/navbar"
+import { RealityMemoryCinema } from "@/client/components/reality/reality-memory-cinema"
+import { EmotionalTimeTimeline } from "@/client/components/time/emotional-time-timeline"
+import { useEmotionalTimeline } from "@/client/hooks/use-emotional-timeline"
+import { EmotionalWorldRoot } from "@/client/components/world/emotional-world-root"
+import { MemoryFragmentField } from "@/client/components/reality-expansion/memory-fragment-field"
+import { MemoryEchoLayer } from "@/client/components/emotional-consciousness/memory-echo-layer"
+import { useEmotionalRealityExpansion } from "@/client/hooks/use-emotional-reality-expansion"
+import { useI18n } from "@/client/lib/i18n"
 
 export default function MemoriesPage() {
   const { t, locale } = useI18n()

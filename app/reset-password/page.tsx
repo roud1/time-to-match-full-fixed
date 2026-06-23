@@ -1,6 +1,6 @@
 import { Suspense } from "react"
-import { ResetPasswordForm } from "@/components/reset-password-form"
-import { AuthShell } from "@/components/auth-shell"
+import { ResetPasswordForm } from "@/client/components/reset-password-form"
+import { AuthShell } from "@/client/components/auth-shell"
 
 export const metadata = {
   title: "Новый пароль — Time to Match",

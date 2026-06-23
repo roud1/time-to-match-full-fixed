@@ -1,5 +1,5 @@
-import { RegisterPageExperience } from "@/components/auth/register-page-experience"
-import { AuthShell } from "@/components/auth-shell"
+import { RegisterPageExperience } from "@/client/components/auth/register-page-experience"
+import { AuthShell } from "@/client/components/auth-shell"
 
 export const metadata = {
   title: "Регистрация — Time to Match",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { HomePage } from "@/components/home-page"
+import { HomePage } from "@/client/components/home-page"
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 

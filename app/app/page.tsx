@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import dynamic from "next/dynamic"
 
-const AppShell = dynamic(() => import("@/components/app/app-shell").then((m) => m.AppShell), {
+const AppShell = dynamic(() => import("@/client/components/app/app-shell").then((m) => m.AppShell), {
   ssr: true,
   loading: () => (
     <div className="min-h-screen flex items-center justify-center bg-transparent">

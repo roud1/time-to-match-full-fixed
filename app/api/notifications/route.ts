@@ -1,36 +1,5 @@
-import { NextResponse } from "next/server"
-import { getServerEnv } from "@/lib/server/env"
-import { getSessionFromRequest } from "@/lib/server/auth/session-request"
-import { jsonError, jsonOk, withCors } from "@/lib/server/http"
-import { countUnread, listUnreadInbox } from "@/lib/server/notifications/repository"
+/** Thin Next.js entry — logic in @/api/handlers */
 
 export const runtime = "nodejs"
 
-export async function OPTIONS(request: Request) {
-  return withCors(request, new NextResponse(null, { status: 204 }))
-}
-
-export async function GET(request: Request) {
-  const env = getServerEnv()
-  if (!env.isAuthConfigured) {
-    return withCors(
-      request,
-      jsonError(503, {
-        error: "service_unavailable",
-        message: "Configure DATABASE_URL and AUTH_SECRET for notifications.",
-      })
-    )
-  }
-
-  const session = await getSessionFromRequest()
-  if (!session) {
-    return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
-  }
-
-  const [notifications, unreadCount] = await Promise.all([
-    listUnreadInbox(session.sub),
-    countUnread(session.sub),
-  ])
-
-  return withCors(request, jsonOk({ notifications, unreadCount }))
-}
+export { OPTIONS, GET } from "@/api/handlers/notifications/handler"

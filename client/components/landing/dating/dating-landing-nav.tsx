@@ -1,0 +1,84 @@
+"use client"
+
+import Link from "next/link"
+import { motion } from "motion/react"
+import { useEffect, useState } from "react"
+import { Logo } from "@/client/components/logo"
+import { useI18n } from "@/client/lib/i18n"
+import { isLoggedIn } from "@/client/lib/user-profile"
+import { cn } from "@/client/lib/utils"
+
+const NAV_LINKS = [
+  { href: "#how", key: "datingNavHow" as const },
+  { href: "#preview", key: "datingNavPreview" as const },
+  { href: "#features", key: "datingNavFeatures" as const },
+  { href: "#pricing", key: "datingNavPricing" as const },
+]
+
+export function DatingLandingNav() {
+  const { t } = useI18n()
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const sync = () => setLoggedIn(isLoggedIn())
+    sync()
+    window.addEventListener("storage", sync)
+    window.addEventListener("ttm-user-profile-changed", sync)
+    return () => {
+      window.removeEventListener("storage", sync)
+      window.removeEventListener("ttm-user-profile-changed", sync)
+    }
+  }, [])
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  return (
+    <motion.header
+      className="ttm-dating-nav"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <nav
+        className={cn("ttm-dating-nav__inner", scrolled && "ttm-dating-nav__inner--scrolled")}
+        aria-label="Main"
+      >
+        <Link href="/" className="ttm-dating-nav__brand">
+          <Logo variant="full" size="sm" className="hidden min-[480px]:inline-flex" />
+          <Logo variant="icon" size="sm" className="min-[480px]:hidden" />
+        </Link>
+
+        <div className="ttm-dating-nav__links">
+          {NAV_LINKS.map((link) => (
+            <a key={link.href} href={link.href} className="ttm-dating-nav__link">
+              {t(link.key)}
+            </a>
+          ))}
+        </div>
+
+        <div className="ttm-dating-nav__actions">
+          {loggedIn ? (
+            <Link href="/app" className="ttm-dating-cta ttm-dating-cta--sm">
+              {t("navApp")}
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" className="ttm-dating-nav__sign">
+                {t("login")}
+              </Link>
+              <Link href="/register" className="ttm-dating-cta ttm-dating-cta--sm">
+                {t("register")}
+              </Link>
+            </>
+          )}
+        </div>
+      </nav>
+    </motion.header>
+  )
+}

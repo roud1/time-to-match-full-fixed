@@ -11,6 +11,22 @@ A cinematic dating app built with **Next.js 16** (App Router), optional **Postgr
 
 Check mode anytime: `GET /api/ready` → `{ mode: "demo" \| "production", database, auth }`.
 
+## Project structure
+
+Modular monolith — Next.js App Router at the root, with clear boundaries:
+
+| Path | Role |
+|------|------|
+| `app/` | Next.js routes & layouts (thin `app/api/**/route.ts` wrappers) |
+| `client/` | Frontend: components, hooks, styles, client `lib/` |
+| `server/` | Backend domain: auth, match-engine, repositories, billing, realtime |
+| `api/handlers/` | API route handler logic (imported by `app/api`) |
+| `database/` | SQL migrations (`database/migrations/`) |
+| `config/` | Env schema (`config/env.ts`), app/stripe/database constants |
+| `shared/` | Types shared across client and server |
+
+TypeScript path aliases: `@/client/*`, `@/server/*`, `@/api/*`, `@/database/*`, `@/config/*`, `@/shared/*`.
+
 ## Quick start
 
 ### Demo (no database)

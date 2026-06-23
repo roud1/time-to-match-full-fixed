@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { isProtectedAppPath, isRequestAuthenticated } from "@/lib/server/auth/session-edge"
+import { isProtectedAppPath, isRequestAuthenticated } from "@/server/auth/session-edge"
 
 function corsHeaders(request: NextRequest): Record<string, string> {
   const origin = request.headers.get("origin")

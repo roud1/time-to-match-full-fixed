@@ -1,5 +1,5 @@
-import { ForgotPasswordForm } from "@/components/forgot-password-form"
-import { AuthShell } from "@/components/auth-shell"
+import { ForgotPasswordForm } from "@/client/components/forgot-password-form"
+import { AuthShell } from "@/client/components/auth-shell"
 
 export const metadata = {
   title: "Сброс пароля — Time to Match",

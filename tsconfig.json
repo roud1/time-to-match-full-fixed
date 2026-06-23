@@ -25,6 +25,24 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@/client/*": [
+        "./client/*"
+      ],
+      "@/server/*": [
+        "./server/*"
+      ],
+      "@/api/*": [
+        "./api/*"
+      ],
+      "@/database/*": [
+        "./database/*"
+      ],
+      "@/config/*": [
+        "./config/*"
+      ],
+      "@/shared/*": [
+        "./shared/*"
       ]
     }
   },

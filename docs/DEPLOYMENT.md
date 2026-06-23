@@ -61,7 +61,7 @@ Set `TTM_STRICT_ENV=1` in CI or Docker if you want the process to **exit** on mi
 
 ### 2. Run database migrations
 
-Migrations live in `db/migrations/` (17+ files). The runner tracks applied files in **`schema_migrations`** (`filename`, `applied_at`) and skips already-applied SQL.
+Migrations live in `database/migrations/` (17+ files). The runner tracks applied files in **`schema_migrations`** (`filename`, `applied_at`) and skips already-applied SQL.
 
 ```bash
 npm run db:migrate

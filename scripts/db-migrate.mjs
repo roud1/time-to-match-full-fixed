@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Applies SQL files in db/migrations/ in lexical order.
+ * Applies SQL files in database/migrations/ in lexical order.
  * Tracks applied files in schema_migrations (filename + applied_at).
  * Requires DATABASE_URL in the environment.
  *
@@ -16,7 +16,7 @@ import postgres from "postgres"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.join(__dirname, "..")
-const dir = path.join(root, "db", "migrations")
+const dir = path.join(root, "database", "migrations")
 const bootstrap = process.argv.includes("--bootstrap")
 
 const url = process.env.DATABASE_URL

@@ -1,5 +1,5 @@
-import { LoginPageExperience } from "@/components/auth/login-page-experience"
-import { AuthShell } from "@/components/auth-shell"
+import { LoginPageExperience } from "@/client/components/auth/login-page-experience"
+import { AuthShell } from "@/client/components/auth-shell"
 
 export const metadata = {
   title: "Вход — Time to Match",

@@ -2,9 +2,9 @@
 
 import Link from "next/link"
 import { XCircle } from "lucide-react"
-import { Navbar } from "@/components/navbar"
-import { CinematicButton } from "@/components/ui/cinematic-button"
-import { useI18n } from "@/lib/i18n"
+import { Navbar } from "@/client/components/navbar"
+import { CinematicButton } from "@/client/components/ui/cinematic-button"
+import { useI18n } from "@/client/lib/i18n"
 
 export default function BillingCancelPage() {
   const { t } = useI18n()

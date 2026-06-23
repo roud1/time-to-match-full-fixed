@@ -1,6 +1,6 @@
 import { Suspense } from "react"
-import { ProfilePageShell } from "@/components/app/profile-page-shell"
-import { ProfileScreen } from "@/components/profile-screen"
+import { ProfilePageShell } from "@/client/components/app/profile-page-shell"
+import { ProfileScreen } from "@/client/components/profile-screen"
 
 export const metadata = {
   title: "Мой профиль — Time to Match",
