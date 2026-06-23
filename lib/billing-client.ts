@@ -64,6 +64,24 @@ export async function startBillingCheckout(plan: BillingPlan): Promise<CheckoutR
   }
 }
 
+export type PortalResult =
+  | { ok: true; url: string }
+  | { ok: false; message: string }
+
+export async function openBillingPortal(): Promise<PortalResult> {
+  try {
+    const res = await fetch("/api/billing/portal", {
+      method: "POST",
+      credentials: "include",
+    })
+    const data = (await res.json()) as { url?: string; message?: string }
+    if (res.ok && data.url) return { ok: true, url: data.url }
+    return { ok: false, message: data.message ?? "portal_failed" }
+  } catch {
+    return { ok: false, message: "network_error" }
+  }
+}
+
 export function isStripePublishableConfigured(): boolean {
   const key = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim()
   return Boolean(key && key.length > 8)

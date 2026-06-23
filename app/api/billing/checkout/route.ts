@@ -71,6 +71,7 @@ export async function POST(request: Request) {
     mode: "subscription",
     client_reference_id: session.sub,
     metadata: { userId: session.sub, plan },
+    subscription_data: { metadata: { userId: session.sub, plan } },
     line_items: [
       {
         quantity: 1,

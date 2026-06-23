@@ -6,7 +6,10 @@ import {
   getStripeWebhookSecret,
   type BillingPlan,
 } from "@/lib/server/billing/config"
-import { upsertUserSubscription } from "@/lib/server/billing/repository"
+import {
+  getUserIdByStripeSubscriptionId,
+  upsertUserSubscription,
+} from "@/lib/server/billing/repository"
 
 export const runtime = "nodejs"
 
@@ -19,6 +22,11 @@ function planFromMetadata(meta: Stripe.Metadata | null): BillingPlan | "free" {
 function subscriptionPeriodEnd(sub: Stripe.Subscription): Date | null {
   const raw = (sub as Stripe.Subscription & { current_period_end?: number }).current_period_end
   return typeof raw === "number" ? new Date(raw * 1000) : null
+}
+
+async function resolveUserId(sub: Stripe.Subscription): Promise<string | null> {
+  if (sub.metadata?.userId) return sub.metadata.userId
+  return getUserIdByStripeSubscriptionId(sub.id)
 }
 
 /** POST /api/billing/webhook — activate subscription after Stripe checkout */
@@ -65,7 +73,7 @@ export async function POST(request: Request) {
     case "customer.subscription.updated":
     case "customer.subscription.created": {
       const sub = event.data.object as Stripe.Subscription
-      const userId = sub.metadata?.userId
+      const userId = await resolveUserId(sub)
       if (!userId) break
       const plan = planFromMetadata(sub.metadata)
       await upsertUserSubscription({
@@ -80,7 +88,7 @@ export async function POST(request: Request) {
     }
     case "customer.subscription.deleted": {
       const sub = event.data.object as Stripe.Subscription
-      const userId = sub.metadata?.userId
+      const userId = await resolveUserId(sub)
       if (!userId) break
       await upsertUserSubscription({
         userId,

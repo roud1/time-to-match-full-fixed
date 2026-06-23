@@ -121,7 +121,24 @@ Set `NEXT_PUBLIC_ANALYTICS_DISABLED=1` to silence beacons in local dev.
 ## Phase 3 (scale)
 
 - **Realtime** — polling `/api/realtime/*` for typing + presence; optional Ably/Pusher env (see `.env.example`)
-- **Billing** — Stripe Checkout for Premium/VIP when `STRIPE_*` keys are set; demo shows “Coming soon”
+- **Billing** — Stripe Checkout for Premium/VIP when `STRIPE_*` keys are set; **Customer Portal** (`POST /api/billing/portal`) lets subscribers manage/cancel from Settings; demo shows “Coming soon”
+
+### Stripe billing (test mode)
+
+1. Set `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, and `STRIPE_WEBHOOK_SECRET` in `.env.local`.
+2. In [Stripe Dashboard → Settings → Billing → Customer portal](https://dashboard.stripe.com/test/settings/billing/portal), enable the portal (cancel subscriptions, update payment method).
+3. Forward webhooks locally: `stripe listen --forward-to localhost:3000/api/billing/webhook` (copy `whsec_…` into `STRIPE_WEBHOOK_SECRET`).
+4. Subscribe via landing pricing → complete Checkout with test card `4242 4242 4242 4242`.
+5. Open **Settings** → **Manage subscription** → redirects to Stripe Customer Portal.
+
+| Endpoint | Method | Auth | Response |
+|----------|--------|------|----------|
+| `/api/billing/checkout` | POST | session cookie | `{ url, sessionId }` |
+| `/api/billing/portal` | POST | session cookie | `{ url }` |
+| `/api/billing/subscription` | GET | session cookie | `{ plan, status, currentPeriodEnd }` |
+| `/api/billing/webhook` | POST | Stripe signature | `{ received: true }` |
+
+Webhook events handled: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`.
 - **Mobile** — shared types in `lib/shared`; Expo app post–Phase 3 ([docs/MOBILE_SHARED.md](docs/MOBILE_SHARED.md))
 
 ## Performance

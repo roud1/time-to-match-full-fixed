@@ -10,6 +10,20 @@ export type SubscriptionRow = {
   current_period_end: Date | null
 }
 
+export async function getUserIdByStripeSubscriptionId(
+  stripeSubscriptionId: string
+): Promise<string | null> {
+  const db = getDb()
+  if (!db) return null
+
+  const rows = await db<{ user_id: string }[]>`
+    SELECT user_id FROM user_subscriptions
+    WHERE stripe_subscription_id = ${stripeSubscriptionId}
+    LIMIT 1
+  `
+  return rows[0]?.user_id ?? null
+}
+
 export async function getUserSubscription(userId: string): Promise<SubscriptionRow | null> {
   const db = getDb()
   if (!db) return null

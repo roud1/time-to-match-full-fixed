@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useI18n } from "@/lib/i18n"
-import { fetchSubscription, type SubscriptionInfo } from "@/lib/billing-client"
+import { fetchSubscription, openBillingPortal, type SubscriptionInfo } from "@/lib/billing-client"
 import { cn } from "@/lib/utils"
 
 function planLabel(plan: SubscriptionInfo["plan"], t: (k: import("@/lib/i18n").TranslationKey) => string) {
@@ -16,6 +16,8 @@ export function SettingsSubscriptionCard() {
   const { t } = useI18n()
   const [info, setInfo] = useState<SubscriptionInfo | null>(null)
   const [loading, setLoading] = useState(true)
+  const [portalLoading, setPortalLoading] = useState(false)
+  const [portalError, setPortalError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -38,6 +40,18 @@ export function SettingsSubscriptionCard() {
         year: "numeric",
       })
     : null
+
+  async function handleManageSubscription() {
+    setPortalError(null)
+    setPortalLoading(true)
+    const result = await openBillingPortal()
+    setPortalLoading(false)
+    if (result.ok) {
+      window.location.href = result.url
+      return
+    }
+    setPortalError(result.message)
+  }
 
   return (
     <div className="ttm-brand-glass rounded-2xl px-4 py-4 space-y-2">
@@ -68,6 +82,21 @@ export function SettingsSubscriptionCard() {
             >
               {t("settingsSubscriptionManage")} →
             </Link>
+          )}
+          {active && info?.configured && (
+            <div className="space-y-1">
+              <button
+                type="button"
+                onClick={() => void handleManageSubscription()}
+                disabled={portalLoading}
+                className="inline-block text-xs text-indigo-200/80 hover:text-indigo-100 font-light disabled:opacity-50"
+              >
+                {portalLoading ? t("settingsSubscriptionPortalLoading") : t("settingsSubscriptionPortal")} →
+              </button>
+              {portalError && (
+                <p className="text-xs text-rose-300/80 font-light">{t("settingsSubscriptionPortalError")}</p>
+              )}
+            </div>
           )}
         </>
       )}
