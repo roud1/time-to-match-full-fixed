@@ -1,5 +1,12 @@
 /**
  * Copy missing keys from en.json into other locale JSON files (English fallback).
+ *
+ * WARNING: This only ADDS missing top-level keys — it does NOT re-translate existing
+ * values. Running it after real translations will fill gaps with English, but will
+ * not repair locales that were overwritten. For full locale files use:
+ *   npm run i18n:extract-ru   — refresh ru.json from lib/i18n.tsx
+ *   npm run i18n:translate    — translate ru → uk de es pl fr it tr (cached API)
+ *
  * Usage: node scripts/i18n-sync-from-en.mjs
  */
 import fs from "fs"
