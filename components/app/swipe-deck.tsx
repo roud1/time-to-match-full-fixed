@@ -16,6 +16,7 @@ import { SwipeProfileDetailScreen } from "@/components/app/swipe-profile-detail-
 import { MatchCelebrationScreen } from "@/components/app/match-celebration-screen"
 import { EmptyState } from "@/components/ui/empty-state"
 import { isFirstMatchPending } from "@/lib/product-experience"
+import { trackEvent } from "@/lib/analytics-client"
 import { trackFunnelOnce } from "@/lib/analytics-funnel"
 import { Sparkles } from "lucide-react"
 import Link from "next/link"
@@ -150,6 +151,7 @@ export function SwipeDeck({
         await xAnimRef.current
 
         const { matched } = await recordSwipe(top, direction, locale, location.position)
+        trackEvent(direction === "right" ? "swipe_like" : "swipe_pass")
         trackFunnelOnce("first_swipe", { direction })
         if (matched && direction === "right") {
           setFirstMatchMode(isFirstMatchPending())
@@ -162,6 +164,7 @@ export function SwipeDeck({
         x.set(0)
       } catch {
         const { matched } = await recordSwipe(top, direction, locale, location.position)
+        trackEvent(direction === "right" ? "swipe_like" : "swipe_pass")
         trackFunnelOnce("first_swipe", { direction })
         if (matched && direction === "right") {
           setFirstMatchMode(isFirstMatchPending())

@@ -29,3 +29,6 @@ export function trackProductEvent(
     keepalive: true,
   }).catch(() => {})
 }
+
+/** Canonical client analytics helper — alias for trackProductEvent. */
+export const trackEvent = trackProductEvent

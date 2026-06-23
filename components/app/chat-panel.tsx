@@ -30,6 +30,7 @@ import { ChatDesktopShell } from "@/components/chat/chat-desktop-shell"
 import { ChatThreadTransition } from "@/components/mobile/app-tab-transition"
 import { useTrustSafetyVersion } from "@/hooks/use-trust-safety-version"
 import { isProfileBlocked, isProfileMuted } from "@/lib/trust-safety-store"
+import { trackEvent } from "@/lib/analytics-client"
 import { trackFunnelOnce } from "@/lib/analytics-funnel"
 import { getConnectionMemories } from "@/lib/connection-store"
 import { useProfileLife } from "@/hooks/use-profile-life"
@@ -270,11 +271,13 @@ export function ChatPanel() {
         if (bondResult.ok) {
           applyBondPayload(bondResult.payload, bondResult.matchId)
         }
+        trackEvent("message_sent")
         trackFunnelOnce("first_message")
         return
       }
 
       applyBondPayload(result.payload, result.matchId)
+      trackEvent("message_sent")
       trackFunnelOnce("first_message")
     })
   }

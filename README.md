@@ -107,13 +107,30 @@ Without these env vars, the cron still runs but skips unconfigured channels (log
 
 ## Analytics funnel
 
-Client events fire to `POST /api/v1/analytics/event` (server logs + Vercel Analytics in production):
+Client events fire to `POST /api/v1/analytics/event` via `trackEvent()` (server logs + Vercel Analytics in production):
 
-`register_complete`, `profile_complete`, `first_swipe`, `first_match`, `match_created`, `first_message`, `match_expired`
+**Core funnel:** `register`, `login`, `swipe_like`, `swipe_pass`, `match_created`, `message_sent`, `match_expired`
+
+**Once-per-user milestones:** `register_complete`, `profile_complete`, `first_swipe`, `first_match`, `first_message`
+
+Set `NEXT_PUBLIC_ANALYTICS_DISABLED=1` to silence beacons in local dev.
 
 ## Performance
 
 Key images use `next/image` with lazy loading below the fold. Heavy app shell is dynamically imported on `/app`.
+
+**Lighthouse targets (mobile, production build on 4G):**
+
+| Metric | Target |
+|--------|--------|
+| Performance | ≥ 80 |
+| Accessibility | ≥ 90 |
+| Best Practices | ≥ 90 |
+| SEO | ≥ 90 |
+| LCP | < 2.5 s |
+| CLS | < 0.1 |
+
+Run `npm run build && npm run start`, then audit with Chrome DevTools → Lighthouse (or PageSpeed Insights against your deploy URL).
 
 ## CI
 

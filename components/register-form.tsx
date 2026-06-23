@@ -14,7 +14,7 @@ import {
 } from "@/lib/cities"
 import { storePosition } from "@/lib/geo"
 import { markLocationSettled } from "@/lib/location-settled"
-import { trackProductEvent } from "@/lib/analytics-client"
+import { trackEvent } from "@/lib/analytics-client"
 import { saveUserProfile, setSession, clearCredentials } from "@/lib/user-profile"
 import { registerOnServer, syncRegistrationProfile } from "@/lib/auth/client"
 import { recordProfileActivity } from "@/lib/profile-life-store"
@@ -232,7 +232,8 @@ export function RegisterForm() {
         }
         setSession(form.email.trim(), true)
         recordProfileActivity()
-        trackProductEvent("register_complete", {
+        trackEvent("register", { has_photos: photos.length > 0, city_preset: !isManual })
+        trackEvent("register_complete", {
           has_photos: photos.length > 0,
           city_preset: !isManual,
         })
@@ -249,7 +250,8 @@ export function RegisterForm() {
           if (coords) storePosition(coords)
         }
         setSession(form.email.trim(), true)
-        trackProductEvent("register_complete", {
+        trackEvent("register", { has_photos: photos.length > 0, city_preset: !isManual })
+        trackEvent("register_complete", {
           has_photos: photos.length > 0,
           city_preset: !isManual,
         })
