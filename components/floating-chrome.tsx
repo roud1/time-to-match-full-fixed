@@ -6,7 +6,7 @@ import { LanguageSwitcher } from "@/components/language-switcher"
 import { ThemeToggle } from "@/components/theme/theme-toggle"
 import { cn } from "@/lib/utils"
 
-const AUTH_PATHS = new Set(["/login", "/register"])
+const AUTH_PATHS = new Set(["/login", "/register", "/admin"])
 
 function FloatingChromeInner() {
   const pathname = usePathname() ?? ""

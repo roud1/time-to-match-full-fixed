@@ -59,6 +59,7 @@ Copy `.env.example` to `.env.local`. Required for production:
 - `AUTH_SECRET` — session JWT secret (≥32 chars)
 - `NEXT_PUBLIC_APP_URL` — canonical public URL
 - `CRON_SECRET` — protects `/api/v1/cron/*` routes
+- `ADMIN_API_KEY` — protects admin APIs and the `/admin` reports UI (≥8 chars; sent as `x-admin-key` header)
 
 Optional integrations (see `.env.example` for full list):
 
@@ -105,6 +106,7 @@ Without these env vars, the cron still runs but skips unconfigured channels (log
 - **Unmatch** — `POST /api/matches/:id/unmatch` — expire match without blocking (chat safety menu)
 - **Admin** — `GET /api/admin/reports` and `PUT /api/admin/verification/:id` with `x-admin-key` when `ADMIN_API_KEY` is set
 - Reports are stored in the `reports` table for admin review
+- **Admin UI** — open [`/admin`](http://localhost:3000/admin), enter your `ADMIN_API_KEY` (stored in `sessionStorage` for the tab only; never bundled in client code)
 
 ## Analytics funnel
 
