@@ -13,6 +13,19 @@ function profileHasCity(profile: StoredUserProfile): boolean {
 const PROFILE_KEY = "ttm-user-profile"
 const CREDENTIALS_KEY = "ttm-user-credentials"
 const SESSION_KEY = "ttm-session"
+export const DEMO_SESSION_COOKIE = "ttm_demo_session"
+
+const DEMO_SESSION_MAX_AGE_SEC = 60 * 60 * 24 * 7
+
+export function syncDemoSessionCookie() {
+  if (typeof document === "undefined") return
+  document.cookie = `${DEMO_SESSION_COOKIE}=1; path=/; max-age=${DEMO_SESSION_MAX_AGE_SEC}; SameSite=Lax`
+}
+
+function clearDemoSessionCookie() {
+  if (typeof document === "undefined") return
+  document.cookie = `${DEMO_SESSION_COOKIE}=; path=/; max-age=0; SameSite=Lax`
+}
 
 export type StoredUserProfile = {
   name: string
@@ -194,6 +207,7 @@ export function setSession(email: string, remember: boolean) {
     loggedInAt: Date.now(),
   }
   localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+  syncDemoSessionCookie()
   window.dispatchEvent(new CustomEvent("ttm-auth-changed"))
 }
 
@@ -218,6 +232,7 @@ export function isLoggedIn(): boolean {
 export function clearSession() {
   if (typeof window === "undefined") return
   localStorage.removeItem(SESSION_KEY)
+  clearDemoSessionCookie()
   window.dispatchEvent(new CustomEvent("ttm-auth-changed"))
 }
 

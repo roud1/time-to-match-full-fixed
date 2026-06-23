@@ -1,18 +1,11 @@
 import { NextResponse } from "next/server"
+import { authorizeCron } from "@/lib/server/cron-auth"
 import { getServerEnv } from "@/lib/server/env"
 import { jsonError, jsonOk, withCors } from "@/lib/server/http"
 import { log } from "@/lib/server/log"
 import { runEnginesCron } from "@/lib/server/engines/expiration/expiration.worker"
 
 export const runtime = "nodejs"
-
-function authorizeCron(request: Request): boolean {
-  const secret = process.env.CRON_SECRET
-  if (!secret) return process.env.NODE_ENV === "development"
-  const header = request.headers.get("authorization")
-  if (header === `Bearer ${secret}`) return true
-  return request.headers.get("x-cron-secret") === secret
-}
 
 export async function GET(request: Request) {
   return handleExpire(request)

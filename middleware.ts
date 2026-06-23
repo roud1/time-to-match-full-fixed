@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { isProtectedAppPath, isRequestAuthenticated } from "@/lib/server/auth/session-edge"
 
 function corsHeaders(request: NextRequest): Record<string, string> {
   const origin = request.headers.get("origin")
@@ -16,14 +17,7 @@ function corsHeaders(request: NextRequest): Record<string, string> {
   }
 }
 
-export function middleware(request: NextRequest) {
-  const path = request.nextUrl.pathname
-
-  if (path.startsWith("/api/") && request.method === "OPTIONS") {
-    return new NextResponse(null, { status: 204, headers: corsHeaders(request) })
-  }
-
-  const res = NextResponse.next()
+function applySecurityHeaders(res: NextResponse, request: NextRequest) {
   res.headers.set("X-Content-Type-Options", "nosniff")
   res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
   res.headers.set("X-Frame-Options", "DENY")
@@ -36,7 +30,26 @@ export function middleware(request: NextRequest) {
   for (const [k, v] of Object.entries(corsHeaders(request))) {
     res.headers.set(k, v)
   }
+}
 
+export async function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname
+
+  if (path.startsWith("/api/") && request.method === "OPTIONS") {
+    return new NextResponse(null, { status: 204, headers: corsHeaders(request) })
+  }
+
+  if (isProtectedAppPath(path)) {
+    const authenticated = await isRequestAuthenticated(request)
+    if (!authenticated) {
+      const login = new URL("/login", request.url)
+      login.searchParams.set("next", `${path}${request.nextUrl.search}`)
+      return NextResponse.redirect(login)
+    }
+  }
+
+  const res = NextResponse.next()
+  applySecurityHeaders(res, request)
   return res
 }
 

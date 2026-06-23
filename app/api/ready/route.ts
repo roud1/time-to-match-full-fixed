@@ -10,6 +10,17 @@ export async function GET() {
   const configIssues = getProductionEnvIssues()
   const hasConfigErrors = configIssues.some((i) => i.severity === "error")
 
+  const hosted =
+    process.env.NODE_ENV === "production" ||
+    process.env.VERCEL === "1" ||
+    process.env.RENDER === "true"
+  const cronStatus =
+    hosted && env.isDatabaseConfigured
+      ? env.CRON_SECRET
+        ? "ok"
+        : "not_configured"
+      : "not_applicable"
+
   if (!env.isDatabaseConfigured) {
     return NextResponse.json(
       {
@@ -17,6 +28,7 @@ export async function GET() {
         mode: "demo",
         database: "not_configured",
         auth: "not_configured",
+        cron: cronStatus,
         ...(configIssues.length ? { configIssues } : {}),
       },
       { status: hasConfigErrors ? 503 : 200 }
@@ -30,6 +42,7 @@ export async function GET() {
         mode: "production",
         database: "configured",
         auth: "not_configured",
+        cron: cronStatus,
         configIssues,
       },
       { status: 503 }
@@ -44,6 +57,7 @@ export async function GET() {
         mode: "production",
         database: "unhealthy",
         auth: "ok",
+        cron: cronStatus,
         error: db.error,
         ...(configIssues.length ? { configIssues } : {}),
       },
@@ -59,6 +73,7 @@ export async function GET() {
       mode: "production",
       database: "ok",
       auth: "ok",
+      cron: cronStatus,
       latencyMs: db.latencyMs,
       ...(configIssues.length ? { configIssues } : {}),
     },

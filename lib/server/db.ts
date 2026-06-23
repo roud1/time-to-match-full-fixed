@@ -4,13 +4,20 @@ import { log } from "@/lib/server/log"
 
 let sql: ReturnType<typeof postgres> | null = null
 
+function defaultPoolMax(): number {
+  const configured = process.env.DATABASE_POOL_MAX?.trim()
+  if (configured) return Number(configured)
+  if (process.env.VERCEL === "1") return 5
+  return 10
+}
+
 /** Node.js SQL client (postgres.js). Returns null when DATABASE_URL is unset — demo mode. */
 export function getDb() {
   const { DATABASE_URL, isDatabaseConfigured } = getServerEnv()
   if (!isDatabaseConfigured || !DATABASE_URL) return null
   if (!sql) {
     sql = postgres(DATABASE_URL, {
-      max: Number(process.env.DATABASE_POOL_MAX || 10),
+      max: defaultPoolMax(),
       idle_timeout: 20,
       connect_timeout: 10,
       prepare: false,

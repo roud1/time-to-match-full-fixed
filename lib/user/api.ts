@@ -14,6 +14,7 @@ import {
 } from "@/lib/user/local-freeze-wallet"
 import { getFreezePackage } from "@/lib/freeze-packages"
 import { getAppMode } from "@/lib/auth/client"
+import { syncDemoSessionCookie } from "@/lib/user-profile"
 
 function syncLocalFromServerUser(user: MeResponse["user"]): void {
   applyServerUserToLocalProfile({
@@ -29,6 +30,8 @@ function syncLocalFromServerUser(user: MeResponse["user"]): void {
 }
 
 export async function fetchMe(): Promise<MeResponse["user"] | null> {
+  const mode = await getAppMode().catch(() => "production" as const)
+
   try {
     const controller = new AbortController()
     const timeoutId = window.setTimeout(() => controller.abort(), 8_000)
@@ -47,18 +50,17 @@ export async function fetchMe(): Promise<MeResponse["user"] | null> {
 
     if (res.status === 401) return null
 
-    if (res.status !== 503) {
-      const mode = await getAppMode()
-      if (mode === "production") return null
-    }
+    if (mode === "production") return null
   } catch {
-    const mode = await getAppMode().catch(() => "demo" as const)
     if (mode === "production") return null
   }
 
+  if (mode !== "demo") return null
   if (!isLoggedIn()) return null
   const profile = getUserProfile()
   if (!profile) return null
+
+  syncDemoSessionCookie()
 
   return {
     id: "local",
@@ -77,6 +79,8 @@ export async function buyFreezes(
   const pack = getFreezePackage(packageId)
   if (!pack) return { ok: false, message: "Unknown package" }
 
+  const mode = await getAppMode().catch(() => "production" as const)
+
   try {
     const res = await fetch("/api/purchases/buy-freezes", {
       method: "POST",
@@ -89,12 +93,18 @@ export async function buyFreezes(
       return { ok: true, newBalance: body.newBalance }
     }
     if (res.status === 401 || res.status === 503) {
-      const newBalance = addLocalFreezeBalance(pack.count)
-      return { ok: true, newBalance }
+      if (mode === "demo") {
+        const newBalance = addLocalFreezeBalance(pack.count)
+        return { ok: true, newBalance }
+      }
+      return { ok: false, message: body.message ?? "Purchase failed" }
     }
     return { ok: false, message: body.message ?? "Purchase failed" }
   } catch {
-    const newBalance = addLocalFreezeBalance(pack.count)
-    return { ok: true, newBalance }
+    if (mode === "demo") {
+      const newBalance = addLocalFreezeBalance(pack.count)
+      return { ok: true, newBalance }
+    }
+    return { ok: false, message: "Purchase failed" }
   }
 }

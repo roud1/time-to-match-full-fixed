@@ -132,6 +132,22 @@ export function getProductionEnvIssues(): ProductionEnvIssue[] {
     })
   }
 
+  const hasUpstash =
+    Boolean(process.env.UPSTASH_REDIS_REST_URL?.trim()) &&
+    Boolean(process.env.UPSTASH_REDIS_REST_TOKEN?.trim())
+  if (
+    process.env.NODE_ENV === "production" &&
+    process.env.VERCEL === "1" &&
+    !hasUpstash
+  ) {
+    issues.push({
+      variable: "UPSTASH_REDIS_REST_URL",
+      severity: "error",
+      message:
+        "Required on Vercel production for shared rate limits and realtime state across instances.",
+    })
+  }
+
   return issues
 }
 
