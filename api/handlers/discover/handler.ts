@@ -3,7 +3,7 @@ import { getServerEnv } from "@/config/env"
 import { getSessionFromRequest } from "@/server/auth/session-request"
 import { jsonError, jsonOk, withCors } from "@/server/http"
 import { findUserById } from "@/server/repositories/users"
-import { listDiscoverProfiles } from "@/server/repositories/discover"
+import { matchingService } from "@/server/matching"
 import type { DiscoverFilters } from "@/client/lib/discover/types"
 
 export const runtime = "nodejs"
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
       ? Number(lngParam)
       : user.longitude
 
-  const profiles = await listDiscoverProfiles({
+  const profiles = await matchingService.getDiscoverFeed({
     viewerId: session.sub,
     filters,
     viewerLat: Number.isFinite(viewerLat) ? viewerLat : null,

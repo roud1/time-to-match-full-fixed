@@ -34,7 +34,7 @@ export function discoverProfileToSwipe(
     interests: card.interests,
     lat: card.lat ?? 0,
     lng: card.lng ?? 0,
-    compatibility: card.compatibility,
+    compatibility: card.compatibilityScore ?? card.compatibility,
     commonInterests: card.commonInterests,
     userId: card.id,
     photoVerified: card.photoVerified,

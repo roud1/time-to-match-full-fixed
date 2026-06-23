@@ -3,7 +3,7 @@ import { getServerEnv } from "@/config/env"
 import { getSessionFromRequest } from "@/server/auth/session-request"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { checkRateLimit } from "@/server/rate-limit"
-import { recordLikeForUser } from "@/server/repositories/likes"
+import { matchingService } from "@/server/matching"
 import { discoverSwipeBodySchema } from "@/server/validation/discover-swipe"
 
 export const runtime = "nodejs"
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     return withCors(request, jsonFromZodError(parsed.error))
   }
 
-  const result = await recordLikeForUser(session.sub, parsed.data.targetUserId)
+  const result = await matchingService.recordLike(session.sub, parsed.data.targetUserId)
   if (!result.ok) {
     const status = result.code === "blocked" ? 403 : 404
     return withCors(
