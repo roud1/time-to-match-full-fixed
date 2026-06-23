@@ -69,6 +69,7 @@ import {
 } from "@/lib/shared"
 import { MatchUrgencySnackbar } from "@/components/chat/match-urgency-snackbar"
 import { useChatMatchExpiry } from "@/hooks/use-chat-match-expiry"
+import { useChatRealtime } from "@/hooks/use-chat-realtime"
 import { useMatchBond } from "@/hooks/use-match-bond"
 import { ChatArea } from "@/components/chat/chat-area"
 import { ChatFooter } from "@/components/chat/chat-footer"
@@ -140,7 +141,10 @@ export function ChatRoomScreen({
     messages: thread.messages,
   })
   const reduce = useReducedMotion()
-  const [typing, setTyping] = useState(true)
+  const matchExpiry = useChatMatchExpiry(profile.id)
+  const { partnerTyping, partnerOnline, reportDraftChange, reportStoppedTyping } = useChatRealtime(
+    matchExpiry?.matchId ?? null
+  )
   const [replySnippet, setReplySnippet] = useState<string | null>(null)
   const [safetyOpen, setSafetyOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -167,7 +171,7 @@ export function ChatRoomScreen({
   const syncCopy = buildSyncCopy(t)
   const lastMsg = thread.messages[thread.messages.length - 1]
   const hasUnread = hasUnreadThread(thread.profileId, thread.updatedAt, lastMsg?.from === "them")
-  const recentActivity = Boolean(justSent || typing || hasUnread)
+  const recentActivity = Boolean(justSent || partnerTyping || hasUnread)
   const connectionAnalysis = useConnectionAnalysis(connectionView ?? null, thread.messages, {
     recentActivity,
     enableAI: true,
@@ -259,7 +263,7 @@ export function ChatRoomScreen({
     syncMetrics: syncMetrics ?? null,
   })
   const isReachable = isEmotionallyReachable(emotionalPresenceEarly)
-  const showTyping = typing && isReachable
+  const showTyping = partnerTyping && isReachable
 
   const presenceSystem = useEmotionalPresenceSystem(profile.id, {
     thread,
@@ -275,9 +279,11 @@ export function ChatRoomScreen({
   const emotionalPresence = presenceSystem?.presence ?? emotionalPresenceEarly
   const statusLine = showTyping
     ? labels.typing
-    : emotionalPresence
-      ? t(emotionalPresence.labelKey)
-      : t("presenceQuiet")
+    : partnerOnline
+      ? labels.online
+      : emotionalPresence
+        ? t(emotionalPresence.labelKey)
+        : t("presenceQuiet")
 
   const scrollInsight = useMemo(() => {
     const record = connectionView ? getConnection(connectionView.profileId) : undefined
@@ -334,18 +340,6 @@ export function ChatRoomScreen({
     if (detected.length > 0) persistEvolutionEvents(detected)
   }, [syncSurge, connectionView, analysis, ecology, identity?.evolutionStage, profile.id, thread.messages])
 
-  useEffect(() => {
-    const last = thread.messages[thread.messages.length - 1]
-    if (last?.from === "them") {
-      setTyping(false)
-      return
-    }
-    setTyping(true)
-    const id = window.setTimeout(() => setTyping(false), 2000)
-    return () => clearTimeout(id)
-  }, [thread.profileId, thread.messages.length, thread.messages])
-
-  const matchExpiry = useChatMatchExpiry(profile.id)
   const bond = useMatchBond(profile.id, matchExpiry?.matchId ?? null)
 
   const messageList = (
@@ -368,8 +362,12 @@ export function ChatRoomScreen({
   const chatFooter = (
     <ChatFooter
       draft={draft}
-      onDraftChange={onDraftChange}
+      onDraftChange={(v) => {
+        onDraftChange(v)
+        reportDraftChange(v)
+      }}
       onSend={() => {
+        reportStoppedTyping()
         onSend()
         setJustSent(true)
         setSyncSurge(true)
@@ -661,6 +659,7 @@ export function ChatRoomScreen({
         serverUserId={profile.userId}
         context="chat"
         onAfterBlock={onBack}
+        onAfterUnmatch={onBack}
       />
 
       <SwipeProfileDetailScreen

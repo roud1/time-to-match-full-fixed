@@ -1,19 +1,38 @@
-# Mobile shared logic
+# Mobile shared layer (`lib/shared`)
 
-Import from `@/lib/shared` in Expo / React Native:
+Phase 3 documents the shared module; a full **React Native / Expo** app is planned post–Phase 3.
+
+## Purpose
+
+`lib/shared` holds **framework-agnostic** relationship logic importable from:
+
+- Next.js web app (current)
+- Future Expo / React Native client
+
+Keep modules free of React DOM APIs and `window` where possible.
+
+## Exports (`lib/shared/index.ts`)
+
+| Module | Description |
+|--------|-------------|
+| `relationship-live-state` | Live relationship state tokens + data attrs |
+| `daily-return` | Daily visit insights |
+| `emotional-notifications` | Notification copy builders |
+| `share-moments` | Share card text / native share helpers |
+| `relationship-insights` | Pattern analysis |
+
+## Using from React Native (future)
 
 ```ts
-import {
-  deriveLiveRelationshipState,
-  computeDailyReturnInsights,
-  buildEmotionalNotifications,
-  buildSyncShareMoment,
-  analyzeRelationshipPatterns,
-} from "@/lib/shared"
+import { deriveLiveRelationshipState, buildEmotionalNotifications } from "@/lib/shared"
 ```
 
-Rules:
+Configure Metro/Expo `tsconfig` paths to resolve `@/lib/shared` from a monorepo or git submodule.
 
-- No React in `lib/shared/*`
-- Persist with AsyncStorage mirroring `localStorage` keys (`ttm-daily-return`, `ttm-connections`)
-- UI: reimplement `components/growth/*` in native with same data contracts
+## Not in scope (Phase 3)
+
+- Expo project scaffold
+- Push notifications on native (web push exists)
+- Native navigation / swipe deck
+
+Track mobile app work after Phase 3 billing + realtime are stable in production.

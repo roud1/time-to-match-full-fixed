@@ -37,6 +37,7 @@ import { useProfileLife } from "@/hooks/use-profile-life"
 import { useDesktopAppNav } from "@/hooks/use-desktop-app-nav"
 import { isPulseProfileId } from "@/lib/pulse/constants"
 import { getPulseThread, subscribePulseChat } from "@/lib/pulse/chat-store"
+import { useMatchPresence } from "@/hooks/use-match-presence"
 import { cn } from "@/lib/utils"
 
 function parseWithParam(withParam: string | null): number | null {
@@ -69,6 +70,12 @@ export function ChatPanel() {
   const [sendError, setSendError] = useState<string | null>(null)
   const [messagesLoading, setMessagesLoading] = useState(false)
   const { data: serverMatches } = useMatches()
+
+  const peerUserIds = useMemo(
+    () => (serverMatches ?? []).map((m) => m.peerUserId).filter(Boolean),
+    [serverMatches]
+  )
+  const onlineByUserId = useMatchPresence(peerUserIds)
 
   const activeId = useMemo(() => parseWithParam(withParam), [withParam])
   const isPulseActive = activeId != null && isPulseProfileId(activeId)
@@ -344,6 +351,7 @@ export function ChatPanel() {
       onOpen={handleOpenThread}
       onDeleteThread={handleDeleteThread}
       labels={inboxLabels}
+      onlineByUserId={onlineByUserId}
     />
   )
 

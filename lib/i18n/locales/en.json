@@ -1463,5 +1463,13 @@
   "datingEmotionalCta": "Start matching",
   "datingFooterTagline": "24 hours to make your match real.",
   "datingFooterRights": "Time to Match. All rights reserved.",
-  "datingLanguageLabel": "Language"
+  "datingLanguageLabel": "Language",
+  "datingPricingComingSoon": "Coming soon",
+  "datingPricingSubscribe": "Subscribe",
+  "datingPricingCheckoutError": "Checkout unavailable — try again later",
+  "trustActionUnmatch": "End match",
+  "trustActionUnmatchHint": "The match expires for both of you. You can still block later.",
+  "trustUnmatchConfirmTitle": "End this match?",
+  "trustUnmatchConfirmBody": "The 24h timer stops and this chat closes for both sides. This cannot be undone.",
+  "trustUnmatchConfirmCta": "Yes, end match"
 }

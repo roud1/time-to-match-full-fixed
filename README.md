@@ -102,6 +102,7 @@ Without these env vars, the cron still runs but skips unconfigured channels (log
 
 - **Report** — `POST /api/v1/report` (production DB; localStorage fallback in demo)
 - **Block** — `GET/POST /api/v1/block` — hides user from discover, expires active match
+- **Unmatch** — `POST /api/matches/:id/unmatch` — expire match without blocking (chat safety menu)
 - **Admin** — `GET /api/admin/reports` and `PUT /api/admin/verification/:id` with `x-admin-key` when `ADMIN_API_KEY` is set
 - Reports are stored in the `reports` table for admin review
 
@@ -114,6 +115,12 @@ Client events fire to `POST /api/v1/analytics/event` via `trackEvent()` (server 
 **Once-per-user milestones:** `register_complete`, `profile_complete`, `first_swipe`, `first_match`, `first_message`
 
 Set `NEXT_PUBLIC_ANALYTICS_DISABLED=1` to silence beacons in local dev.
+
+## Phase 3 (scale)
+
+- **Realtime** — polling `/api/realtime/*` for typing + presence; optional Ably/Pusher env (see `.env.example`)
+- **Billing** — Stripe Checkout for Premium/VIP when `STRIPE_*` keys are set; demo shows “Coming soon”
+- **Mobile** — shared types in `lib/shared`; Expo app post–Phase 3 ([docs/MOBILE_SHARED.md](docs/MOBILE_SHARED.md))
 
 ## Performance
 

@@ -369,12 +369,32 @@ export async function markMatchExpired(matchId: string): Promise<void> {
   const now = new Date()
   await db`
     UPDATE matches
-    SET status = 'expired', expired_at = ${now}
+    SET status = 'expired', expired_at = ${now}, urgency_level = 'expired'
     WHERE id = ${matchId}
   `
   await db`
     UPDATE likes SET is_expired = true WHERE match_id = ${matchId}
   `
+}
+
+/** Expire a match by likes row id (unmatch / close contact). */
+export async function expireMatchByLikeId(
+  likeId: string,
+  userId: string
+): Promise<{ ok: true } | { ok: false; code: "not_found" | "forbidden" | "already_expired" }> {
+  const ctx = await getMatchForUser(likeId, userId)
+  if (!ctx) {
+    const like = await findLikeContext(likeId, userId)
+    if (!like) return { ok: false, code: "not_found" }
+    return { ok: false, code: "not_found" }
+  }
+
+  if (ctx.match.status === "expired" || ctx.match.expires_at <= new Date()) {
+    return { ok: false, code: "already_expired" }
+  }
+
+  await markMatchExpired(ctx.match.id)
+  return { ok: true }
 }
 
 /** Ensure a likes row has a canonical engine match (lazy migration). */

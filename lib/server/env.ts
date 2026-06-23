@@ -17,12 +17,23 @@ const serverEnvSchema = z.object({
   RESEND_API_KEY: z.string().optional(),
   RESEND_FROM_EMAIL: z.string().optional(),
   CRON_SECRET: z.string().optional(),
+  /** Stripe — Premium / VIP checkout (server-only secret + webhook). */
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  /** Ably — optional managed realtime publish */
+  ABLY_API_KEY: z.string().optional(),
+  PUSHER_APP_ID: z.string().optional(),
+  PUSHER_KEY: z.string().optional(),
+  PUSHER_SECRET: z.string().optional(),
+  PUSHER_CLUSTER: z.string().optional(),
 })
 
 export type ServerEnv = z.infer<typeof serverEnvSchema> & {
   isDatabaseConfigured: boolean
   isAuthConfigured: boolean
   isOpenRouterConfigured: boolean
+  isStripeConfigured: boolean
+  isRealtimeManaged: boolean
 }
 
 export type ProductionEnvIssue = {
@@ -54,6 +65,15 @@ export function getServerEnv(): ServerEnv {
     isDatabaseConfigured: Boolean(data.DATABASE_URL),
     isAuthConfigured: Boolean(data.AUTH_SECRET && data.DATABASE_URL),
     isOpenRouterConfigured: Boolean(data.OPENROUTER_API_KEY && data.OPENROUTER_API_KEY.length > 8),
+    isStripeConfigured: Boolean(
+      data.STRIPE_SECRET_KEY &&
+        data.STRIPE_SECRET_KEY.length > 8 &&
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim()
+    ),
+    isRealtimeManaged: Boolean(
+      data.ABLY_API_KEY ||
+        (data.PUSHER_APP_ID && data.PUSHER_KEY && data.PUSHER_SECRET)
+    ),
   }
   return cached
 }

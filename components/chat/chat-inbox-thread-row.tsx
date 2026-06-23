@@ -43,6 +43,7 @@ export function ChatInboxThreadRow({
   compact = false,
   onOpen,
   onDelete,
+  peerOnline = false,
 }: {
   thread: ChatThread
   profile: SwipeProfile
@@ -55,6 +56,8 @@ export function ChatInboxThreadRow({
   compact?: boolean
   onOpen: (profileId: number) => void
   onDelete?: (profileId: number) => void
+  /** Server presence dot (Phase 3 polling) */
+  peerOnline?: boolean
 }) {
   const { t } = useI18n()
   const [deleteOpen, setDeleteOpen] = useState(false)
@@ -111,7 +114,7 @@ export function ChatInboxThreadRow({
             : undefined
         }
       >
-        <div className="ttm-chat-inbox__row-avatar shrink-0 flex items-center self-center">
+        <div className="ttm-chat-inbox__row-avatar shrink-0 flex items-center self-center relative">
           <ChatProfileAvatar
             src={profile.image}
             name={profile.name}
@@ -120,6 +123,12 @@ export function ChatInboxThreadRow({
             syncMetrics={syncMetrics}
             emotionalPresence={inboxPresence}
           />
+          {peerOnline && (
+            <span
+              className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-emerald-400 border-2 border-[var(--background)] ttm-presence-glow-emerald"
+              aria-label={t("chatOnline")}
+            />
+          )}
         </div>
         <div className="flex-1 min-w-0 overflow-hidden py-0.5 self-center">
           <div className="flex items-baseline justify-between gap-3 min-w-0">

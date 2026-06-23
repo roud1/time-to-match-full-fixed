@@ -1,28 +1,32 @@
 /**
- * Realtime layer for Time to Match is **not** embedded in this Next.js process.
+ * Realtime layer — Phase 3
  *
- * Recommended production patterns:
- * - **Managed:** Supabase Realtime, Ably, Pusher, or Liveblocks for presence/typing.
- * - **Self-hosted:** a small Node **Socket.IO** or **ws** service behind Redis adapter for horizontal scale.
- * - **Web + scale:** separate **API Gateway** (e.g. Kong) terminating WS and routing to message workers.
+ * **Default:** HTTP polling via `/api/realtime/state` and `/api/realtime/pulse`.
+ * Ephemeral state in Upstash Redis when `UPSTASH_REDIS_REST_*` is set, else in-memory per instance.
  *
- * Store authoritative message state in PostgreSQL (`messages` table); use Redis/pub-sub only for ephemeral
- * typing indicators and connection fan-out. Always reconcile delivery with DB writes + idempotent message IDs.
+ * **Optional managed providers** (publish only; clients still poll unless you add WS client):
+ * - `ABLY_API_KEY` — Ably REST publish to `match:{matchId}`
+ * - `PUSHER_APP_ID`, `PUSHER_KEY`, `PUSHER_SECRET`, `PUSHER_CLUSTER` — Pusher trigger
+ *
+ * Authoritative chat remains PostgreSQL (`match_messages`). Reconcile delivery with DB + idempotent IDs.
  */
 
-/** Phase 18 — presence channel (client: `lib/presence/realtime-presence.ts`). */
-export type PresenceRealtimeFrame = {
-  type: "presence_update"
-  profileId: number
-  kind: string
-  proximity?: number
-  shared?: boolean
-  at: number
-}
+export type { ConnectionRealtimeFrame, PresenceRealtimeFrame } from "@/lib/server/realtime/types"
 
-export type ConnectionRealtimeFrame =
-  | PresenceRealtimeFrame
-  | { type: "message"; connectionId: string; at: number }
-  | { type: "sync_surge"; profileId: number; at: number }
+export {
+  isRealtimeRedisConfigured,
+  setUserTyping,
+  clearUserTyping,
+  isUserTyping,
+  heartbeatPresence,
+  isUserOnline,
+  getOnlineMap,
+} from "@/lib/server/realtime/ephemeral"
+
+export {
+  getRealtimeProvider,
+  isManagedRealtimeConfigured,
+  publishTypingEvent,
+} from "@/lib/server/realtime/provider"
 
 export const REALTIME_ARCHITECTURE_NOTES = true as const

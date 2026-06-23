@@ -21,6 +21,7 @@
     "check:env:strict": "node scripts/check-env.mjs --strict",
     "smoke-test": "node scripts/smoke-test.mjs",
     "i18n:extract-ru": "node scripts/i18n-extract-ru.mjs",
+    "i18n:sync": "node scripts/i18n-sync-from-en.mjs",
     "i18n:translate": "node scripts/i18n-translate-from-ru.mjs en uk de es pl fr it tr"
   },
   "dependencies": {
@@ -87,6 +88,7 @@
     "recharts": "2.15.0",
     "resend": "^6.12.3",
     "sonner": "^1.7.1",
+    "stripe": "^22.2.3",
     "tailwind-merge": "^3.3.1",
     "vaul": "^1.1.2",
     "web-push": "^3.6.7",

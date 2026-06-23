@@ -40,6 +40,7 @@ export function ChatInboxScreen({
   onOpen,
   onDeleteThread,
   labels,
+  onlineByUserId = {},
 }: {
   threads: ChatThread[]
   locale: Locale
@@ -67,6 +68,7 @@ export function ChatInboxScreen({
     memoryFaded: string
     memoryExpired: string
   }
+  onlineByUserId?: Record<string, boolean>
 }) {
   const isSidebar = variant === "sidebar"
 
@@ -177,6 +179,7 @@ export function ChatInboxScreen({
                 compact={isSidebar}
                 onOpen={onOpen}
                 onDelete={onDeleteThread}
+                peerOnline={profile.userId ? Boolean(onlineByUserId[profile.userId]) : false}
               />
             )
           })}

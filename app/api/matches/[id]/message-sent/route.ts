@@ -6,6 +6,7 @@ import type { MessageSentResponse } from "@/lib/server/matches/types"
 import { checkAndGrantAchievements } from "@/lib/server/gamification/check"
 import { recordMessageSentForMatch } from "@/lib/server/repositories/match-stats"
 import { findMatchByIdForUser } from "@/lib/server/repositories/likes"
+import { maybeQueueConnectionAnalysis } from "@/lib/server/connection-ai-worker"
 
 export const runtime = "nodejs"
 
@@ -54,6 +55,8 @@ export async function POST(request: Request, context: RouteContext) {
     prolongCount: result.payload.prolongCount,
     at: new Date(),
   })
+
+  maybeQueueConnectionAnalysis(session.sub, matchId.trim(), result.payload.totalMessages)
 
   const payload: MessageSentResponse = {
     ...result.payload,

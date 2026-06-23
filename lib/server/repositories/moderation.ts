@@ -59,6 +59,19 @@ export async function blockUserPair(blockerId: string, blockedId: string): Promi
       )
   `
 
+  await db`
+    UPDATE matches m
+    SET status = 'expired', expired_at = COALESCE(m.expired_at, now()), urgency_level = 'expired'
+    FROM likes l
+    WHERE l.match_id = m.id
+      AND l.is_match = true
+      AND m.status <> 'expired'
+      AND (
+        (l.from_user = ${blockerId} AND l.to_user = ${blockedId})
+        OR (l.from_user = ${blockedId} AND l.to_user = ${blockerId})
+      )
+  `
+
   return true
 }
 
