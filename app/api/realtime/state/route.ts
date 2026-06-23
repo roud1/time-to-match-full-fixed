@@ -3,6 +3,7 @@ import { getSessionFromRequest } from "@/lib/server/auth/session-request"
 import { jsonError, jsonOk, withCors } from "@/lib/server/http"
 import { getMatchForUser } from "@/lib/server/match-engine/repository"
 import { heartbeatPresence, isUserOnline, isUserTyping } from "@/lib/server/realtime/ephemeral"
+import { publishPresenceEvent } from "@/lib/server/realtime/broadcast"
 import { getRealtimeProvider } from "@/lib/server/realtime/provider"
 
 export const runtime = "nodejs"
@@ -29,6 +30,7 @@ export async function GET(request: Request) {
   }
 
   await heartbeatPresence(session.sub)
+  void publishPresenceEvent({ matchId, userId: session.sub, online: true })
 
   const peerId = ctx.match.user1_id === session.sub ? ctx.match.user2_id : ctx.match.user1_id
   const [partnerTyping, partnerOnline] = await Promise.all([

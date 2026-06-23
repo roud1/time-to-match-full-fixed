@@ -10,6 +10,7 @@ import {
   isUserTyping,
   setUserTyping,
 } from "@/lib/server/realtime/ephemeral"
+import { publishPresenceEvent, publishTypingEvent } from "@/lib/server/realtime/broadcast"
 import { getRealtimeProvider } from "@/lib/server/realtime/provider"
 
 export const runtime = "nodejs"
@@ -47,11 +48,14 @@ export async function POST(request: Request) {
   }
 
   await heartbeatPresence(session.sub)
+  void publishPresenceEvent({ matchId, userId: session.sub, online: true })
 
   if (typing === true) {
     await setUserTyping(matchId, session.sub)
+    void publishTypingEvent({ matchId, userId: session.sub, typing: true })
   } else if (typing === false) {
     await clearUserTyping(matchId, session.sub)
+    void publishTypingEvent({ matchId, userId: session.sub, typing: false })
   }
 
   const peerId = ctx.match.user1_id === session.sub ? ctx.match.user2_id : ctx.match.user1_id

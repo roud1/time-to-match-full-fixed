@@ -71,11 +71,15 @@ export function ChatPanel() {
   const [messagesLoading, setMessagesLoading] = useState(false)
   const { data: serverMatches } = useMatches()
 
-  const peerUserIds = useMemo(
-    () => (serverMatches ?? []).map((m) => m.peerUserId).filter(Boolean),
+  const presenceEntries = useMemo(
+    () =>
+      (serverMatches ?? []).map((m) => ({
+        peerUserId: m.peerUserId,
+        matchId: m.id,
+      })),
     [serverMatches]
   )
-  const onlineByUserId = useMatchPresence(peerUserIds)
+  const onlineByUserId = useMatchPresence(presenceEntries)
 
   const activeId = useMemo(() => parseWithParam(withParam), [withParam])
   const isPulseActive = activeId != null && isPulseProfileId(activeId)

@@ -70,6 +70,8 @@ import {
 import { MatchUrgencySnackbar } from "@/components/chat/match-urgency-snackbar"
 import { useChatMatchExpiry } from "@/hooks/use-chat-match-expiry"
 import { useChatRealtime } from "@/hooks/use-chat-realtime"
+import { useMatches } from "@/hooks/use-matches"
+import { discoverIdToNumeric } from "@/lib/discover/map-profile"
 import { useMatchBond } from "@/hooks/use-match-bond"
 import { ChatArea } from "@/components/chat/chat-area"
 import { ChatFooter } from "@/components/chat/chat-footer"
@@ -142,8 +144,14 @@ export function ChatRoomScreen({
   })
   const reduce = useReducedMotion()
   const matchExpiry = useChatMatchExpiry(profile.id)
+  const { data: serverMatches } = useMatches()
+  const peerUserId = useMemo(() => {
+    const match = serverMatches?.find((m) => discoverIdToNumeric(m.peerUserId) === profile.id)
+    return match?.peerUserId ?? null
+  }, [serverMatches, profile.id])
   const { partnerTyping, partnerOnline, reportDraftChange, reportStoppedTyping } = useChatRealtime(
-    matchExpiry?.matchId ?? null
+    matchExpiry?.matchId ?? null,
+    { peerUserId }
   )
   const [replySnippet, setReplySnippet] = useState<string | null>(null)
   const [safetyOpen, setSafetyOpen] = useState(false)

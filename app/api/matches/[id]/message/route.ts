@@ -8,6 +8,7 @@ import {
 } from "@/lib/server/match-engine/repository"
 import { checkAndGrantAchievements } from "@/lib/server/gamification/check"
 import type { MessageSentResponse } from "@/lib/server/matches/types"
+import { publishMessageEvent } from "@/lib/server/realtime/broadcast"
 import { recordMessageSentForMatch } from "@/lib/server/repositories/match-stats"
 import { matchMessageBodySchema } from "@/lib/server/validation/match-message"
 
@@ -89,6 +90,8 @@ export async function POST(request: Request, context: RouteContext) {
   const bondResult = await recordMessageSentForMatch(trimmedId, session.sub)
   const bondPayload: MessageSentResponse | undefined =
     bondResult.ok ? bondResult.payload : undefined
+
+  void publishMessageEvent({ matchId: trimmedId, userId: session.sub })
 
   const gamification = await checkAndGrantAchievements(session.sub, {
     event: "message_sent",

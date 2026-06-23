@@ -1,21 +1,58 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "motion/react"
 import { fetchRealtimeState, sendRealtimePulse, type RealtimeState } from "@/lib/chat-realtime-client"
+import { isRealtimeWebSocketConfigured } from "@/lib/realtime/client"
+import { REALTIME_EVENTS } from "@/lib/realtime/types"
+import { useRealtimeChannel } from "@/hooks/use-realtime-channel"
 
 const POLL_MS = 2500
+const POLL_WS_MS = 12_000
 const TYPING_DEBOUNCE_MS = 350
 
+type UseChatRealtimeOptions = {
+  peerUserId?: string | null
+}
+
 /**
- * Polling fallback for partner typing + presence (Phase 3).
- * When Ably/Pusher env is set, server still stores ephemeral state; clients may add WS later.
+ * Partner typing + presence — WebSocket when configured, HTTP polling fallback.
  */
-export function useChatRealtime(matchId: string | null | undefined) {
+export function useChatRealtime(
+  matchId: string | null | undefined,
+  options: UseChatRealtimeOptions = {}
+) {
+  const { peerUserId } = options
   const reduceMotion = useReducedMotion()
   const [state, setState] = useState<RealtimeState>({ partnerTyping: false, partnerOnline: false })
   const typingTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const lastTypingSent = useRef(false)
+  const peerRef = useRef(peerUserId)
+
+  useEffect(() => {
+    peerRef.current = peerUserId
+  }, [peerUserId])
+
+  const onRealtimeEvent = useCallback(
+    (event: string, payload: { userId: string; typing?: boolean; online?: boolean }) => {
+      const peer = peerRef.current
+      if (peer && payload.userId !== peer) return
+
+      if (event === REALTIME_EVENTS.typing) {
+        setState((prev) => ({ ...prev, partnerTyping: Boolean(payload.typing) }))
+        return
+      }
+      if (event === REALTIME_EVENTS.presence) {
+        setState((prev) => ({ ...prev, partnerOnline: Boolean(payload.online) }))
+      }
+    },
+    []
+  )
+
+  const { connected: wsConnected } = useRealtimeChannel(
+    isRealtimeWebSocketConfigured() ? matchId : null,
+    onRealtimeEvent
+  )
 
   useEffect(() => {
     if (!matchId || matchId.startsWith("local:")) {
@@ -24,6 +61,8 @@ export function useChatRealtime(matchId: string | null | undefined) {
     }
 
     let cancelled = false
+    const basePoll = reduceMotion ? POLL_MS * 2 : POLL_MS
+    const intervalMs = wsConnected ? POLL_WS_MS : basePoll
 
     const poll = async () => {
       const next = await fetchRealtimeState(matchId)
@@ -31,7 +70,7 @@ export function useChatRealtime(matchId: string | null | undefined) {
     }
 
     void poll()
-    const id = window.setInterval(poll, reduceMotion ? POLL_MS * 2 : POLL_MS)
+    const id = window.setInterval(poll, intervalMs)
 
     const onVis = () => {
       if (document.visibilityState === "visible") void poll()
@@ -43,7 +82,7 @@ export function useChatRealtime(matchId: string | null | undefined) {
       clearInterval(id)
       document.removeEventListener("visibilitychange", onVis)
     }
-  }, [matchId, reduceMotion])
+  }, [matchId, reduceMotion, wsConnected])
 
   const reportDraftChange = (draft: string) => {
     if (!matchId || matchId.startsWith("local:")) return
@@ -70,6 +109,7 @@ export function useChatRealtime(matchId: string | null | undefined) {
   return {
     partnerTyping: state.partnerTyping,
     partnerOnline: state.partnerOnline,
+    wsConnected,
     reportDraftChange,
     reportStoppedTyping,
   }
