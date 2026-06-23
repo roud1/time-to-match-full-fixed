@@ -4,6 +4,7 @@ import { sendEmail } from "@/server/email/send-email"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { log } from "@/server/log"
 import { checkRateLimit, getClientIp } from "@/server/rate-limit"
+import { AUTH_RATE_LIMITS } from "@/server/auth/rate-limits"
 import { findUserForAuthByEmail } from "@/server/repositories/users"
 import { createPasswordResetToken } from "@/server/repositories/password-reset"
 import { forgotPasswordBodySchema } from "@/server/validation/auth"
@@ -27,7 +28,8 @@ export async function POST(request: Request) {
   }
 
   const ip = getClientIp(request)
-  const rl = await checkRateLimit(`auth:forgot:${ip}`, 5, 15 * 60 * 1000)
+  const { max, windowMs } = AUTH_RATE_LIMITS.forgotPassword
+  const rl = await checkRateLimit(`auth:forgot:${ip}`, max, windowMs)
   if (!rl.ok) {
     return withCors(
       request,

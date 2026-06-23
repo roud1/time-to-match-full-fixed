@@ -1,6 +1,7 @@
 import type { GamificationSnapshot } from "@/server/gamification/types"
 import type { MatchStatus } from "@/server/match-engine/types"
 import type { MatchBondStats, MessageSentResponse } from "@/server/matches/types"
+import { authFetch } from "@/client/lib/auth/fetch"
 
 const REQUEST_TIMEOUT_MS = 15_000
 
@@ -59,7 +60,7 @@ async function fetchWithTimeout(url: string, init?: RequestInit): Promise<Respon
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
   try {
-    return await fetch(url, { ...init, signal: controller.signal, credentials: "include" })
+    return await authFetch(url, { ...init, signal: controller.signal })
   } finally {
     clearTimeout(timeout)
   }

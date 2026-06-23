@@ -1,9 +1,2 @@
-import { cookies } from "next/headers"
-import { AUTH_COOKIE_NAME, verifySessionToken, type SessionClaims } from "@/server/auth/jwt"
-
-export async function getSessionFromRequest(): Promise<SessionClaims | null> {
-  const jar = await cookies()
-  const token = jar.get(AUTH_COOKIE_NAME)?.value
-  if (!token) return null
-  return verifySessionToken(token)
-}
+/** @deprecated Import from @/server/auth/require-auth */
+export { getSessionFromRequest } from "@/server/auth/require-auth"

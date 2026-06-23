@@ -4,6 +4,7 @@ import { getServerEnv } from "@/config/env"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { log } from "@/server/log"
 import { checkRateLimit, getClientIp } from "@/server/rate-limit"
+import { AUTH_RATE_LIMITS } from "@/server/auth/rate-limits"
 import {
   consumePasswordResetToken,
   updateUserPassword,
@@ -29,7 +30,8 @@ export async function POST(request: Request) {
   }
 
   const ip = getClientIp(request)
-  const rl = await checkRateLimit(`auth:reset:${ip}`, 10, 15 * 60 * 1000)
+  const { max, windowMs } = AUTH_RATE_LIMITS.resetPassword
+  const rl = await checkRateLimit(`auth:reset:${ip}`, max, windowMs)
   if (!rl.ok) {
     return withCors(
       request,

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
-import { AUTH_COOKIE_NAME, authCookieOptions, signSessionToken } from "@/server/auth/jwt"
 import { hashPassword } from "@/server/auth/password"
+import { issueAuthCookies } from "@/server/auth/refresh"
+import { AUTH_RATE_LIMITS } from "@/server/auth/rate-limits"
 import { getServerEnv } from "@/config/env"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { log } from "@/server/log"
@@ -32,7 +33,8 @@ export async function POST(request: Request) {
   }
 
   const ip = getClientIp(request)
-  const rl = await checkRateLimit(`auth:register:${ip}`, 8, 15 * 60 * 1000)
+  const { max, windowMs } = AUTH_RATE_LIMITS.register
+  const rl = await checkRateLimit(`auth:register:${ip}`, max, windowMs)
   if (!rl.ok) {
     return withCors(
       request,
@@ -73,9 +75,8 @@ export async function POST(request: Request) {
       return withCors(request, jsonError(500, { error: "create_failed", message: "Could not create user" }))
     }
 
-    const token = await signSessionToken({ sub: id, email })
     const res = jsonOk({ user: { id, email, name } })
-    res.cookies.set(AUTH_COOKIE_NAME, token, authCookieOptions())
+    await issueAuthCookies(res, { sub: id, email }, { userAgent: request.headers.get("user-agent"), ip })
     log.info("auth_register_ok", { userId: id })
     return withCors(request, res)
   } catch (e) {

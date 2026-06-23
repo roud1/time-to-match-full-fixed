@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { isProtectedAppPath, isRequestAuthenticated } from "@/server/auth/session-edge"
+import {
+  isProtectedAppPath,
+  isProtectedApiPath,
+  isRequestAuthenticated,
+  hasRefreshCookie,
+  buildRefreshRedirectUrl,
+  isDemoModeEnv,
+} from "@/server/auth/middleware-auth"
 
 function corsHeaders(request: NextRequest): Record<string, string> {
   const origin = request.headers.get("origin")
@@ -32,6 +39,20 @@ function applySecurityHeaders(res: NextResponse, request: NextRequest) {
   }
 }
 
+function unauthorizedApiResponse(request: NextRequest): NextResponse {
+  const res = NextResponse.json(
+    { error: "unauthenticated", message: "Invalid or expired session" },
+    { status: 401 }
+  )
+  applySecurityHeaders(res, request)
+  return res
+}
+
+/**
+ * Edge middleware auth:
+ * - Protected pages: require valid access JWT (or demo session); auto-refresh via redirect when refresh cookie exists.
+ * - Protected API routes: require valid access JWT (or demo); clients call POST /api/v1/auth/refresh on 401.
+ */
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
 
@@ -39,13 +60,21 @@ export async function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 204, headers: corsHeaders(request) })
   }
 
-  if (isProtectedAppPath(path)) {
-    const authenticated = await isRequestAuthenticated(request)
-    if (!authenticated) {
-      const login = new URL("/login", request.url)
-      login.searchParams.set("next", `${path}${request.nextUrl.search}`)
-      return NextResponse.redirect(login)
+  const demoMode = isDemoModeEnv()
+  const authenticated = await isRequestAuthenticated(request)
+
+  if (isProtectedAppPath(path) && !authenticated) {
+    if (!demoMode && hasRefreshCookie(request)) {
+      const returnPath = `${path}${request.nextUrl.search}`
+      return NextResponse.redirect(buildRefreshRedirectUrl(request, returnPath))
     }
+    const login = new URL("/login", request.url)
+    login.searchParams.set("next", `${path}${request.nextUrl.search}`)
+    return NextResponse.redirect(login)
+  }
+
+  if (isProtectedApiPath(path) && !authenticated) {
+    return unauthorizedApiResponse(request)
   }
 
   const res = NextResponse.next()

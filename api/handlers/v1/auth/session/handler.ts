@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { AUTH_COOKIE_NAME, verifySessionToken } from "@/server/auth/jwt"
+import { ACCESS_COOKIE_NAME } from "@/server/auth/cookies"
+import { verifyAccessToken } from "@/server/auth/jwt"
 import { getServerEnv } from "@/config/env"
 import { jsonError, jsonOk, withCors } from "@/server/http"
 import { findUserById } from "@/server/repositories/users"
@@ -24,12 +25,12 @@ export async function GET(request: Request) {
   }
 
   const jar = await cookies()
-  const token = jar.get(AUTH_COOKIE_NAME)?.value
+  const token = jar.get(ACCESS_COOKIE_NAME)?.value
   if (!token) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const claims = await verifySessionToken(token)
+  const claims = await verifyAccessToken(token)
   if (!claims) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "Invalid or expired session" }))
   }

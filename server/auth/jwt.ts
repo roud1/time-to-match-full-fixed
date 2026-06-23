@@ -1,8 +1,10 @@
 import { SignJWT, jwtVerify } from "jose"
 import { getServerEnv } from "@/config/env"
+import { ACCESS_COOKIE_NAME, accessCookieOptions, AUTH_COOKIE_NAME, authCookieOptions } from "@/server/auth/cookies"
 
-const COOKIE = "ttm_session"
 const ALG = "HS256"
+const ACCESS_TTL = "15m"
+const SOCKET_TTL = "5m"
 
 function getSecret() {
   const s = getServerEnv().AUTH_SECRET
@@ -15,7 +17,17 @@ export type SessionClaims = {
   email: string
 }
 
-export async function signSessionToken(claims: SessionClaims, expiresIn = "7d") {
+export async function signAccessToken(claims: SessionClaims) {
+  return await new SignJWT({ email: claims.email })
+    .setProtectedHeader({ alg: ALG })
+    .setSubject(claims.sub)
+    .setIssuedAt()
+    .setExpirationTime(ACCESS_TTL)
+    .sign(getSecret())
+}
+
+/** @deprecated Use signAccessToken */
+export async function signSessionToken(claims: SessionClaims, expiresIn = ACCESS_TTL) {
   return await new SignJWT({ email: claims.email })
     .setProtectedHeader({ alg: ALG })
     .setSubject(claims.sub)
@@ -26,10 +38,10 @@ export async function signSessionToken(claims: SessionClaims, expiresIn = "7d") 
 
 /** Short-lived token for cross-origin Socket.io handshake auth. */
 export async function signSocketToken(claims: SessionClaims) {
-  return signSessionToken(claims, "5m")
+  return signSessionToken(claims, SOCKET_TTL)
 }
 
-export async function verifySessionToken(token: string): Promise<SessionClaims | null> {
+export async function verifyAccessToken(token: string): Promise<SessionClaims | null> {
   try {
     const { payload } = await jwtVerify(token, getSecret(), { algorithms: [ALG] })
     const sub = typeof payload.sub === "string" ? payload.sub : null
@@ -41,21 +53,9 @@ export async function verifySessionToken(token: string): Promise<SessionClaims |
   }
 }
 
-export const AUTH_COOKIE_NAME = COOKIE
-
-export function authCookieOptions(): {
-  httpOnly: true
-  sameSite: "lax"
-  secure: boolean
-  path: string
-  maxAge: number
-} {
-  const secure = process.env.NODE_ENV === "production" || process.env.VERCEL === "1"
-  return {
-    httpOnly: true,
-    sameSite: "lax",
-    secure,
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  }
+/** @deprecated Use verifyAccessToken */
+export async function verifySessionToken(token: string): Promise<SessionClaims | null> {
+  return verifyAccessToken(token)
 }
+
+export { ACCESS_COOKIE_NAME, AUTH_COOKIE_NAME, accessCookieOptions, authCookieOptions }

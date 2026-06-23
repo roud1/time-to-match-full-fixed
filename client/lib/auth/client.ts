@@ -96,6 +96,19 @@ export async function logoutOnServer(): Promise<void> {
   }
 }
 
+export async function refreshSessionOnServer(): Promise<boolean> {
+  try {
+    const res = await fetch("/api/v1/auth/refresh", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 export async function requestPasswordReset(email: string): Promise<
   | { ok: true; message?: string }
   | { ok: false; status: number; message?: string; demoFallback?: boolean }
