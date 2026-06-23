@@ -16,6 +16,7 @@ import { PulseCharacter } from "@/components/landing/pulse-character"
 import { markFirstMatchCelebrated } from "@/lib/product-experience"
 import { PushPromptBanner } from "@/components/pwa/push-prompt-banner"
 import { trackProductEvent } from "@/lib/analytics-client"
+import { trackFunnelOnce } from "@/lib/analytics-funnel"
 import "@/app/match-celebration.css"
 
 type MatchCelebrationScreenProps = {
@@ -39,6 +40,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
   useEffect(() => {
     if (open) {
       trackProductEvent("match_created", { first: isFirstMatch })
+      if (isFirstMatch) trackFunnelOnce("first_match")
     }
   }, [open, isFirstMatch])
 

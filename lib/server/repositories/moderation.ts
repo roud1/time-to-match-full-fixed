@@ -84,6 +84,82 @@ export async function listBlockedUserIds(viewerId: string): Promise<string[]> {
   return rows.map((r) => r.blocked_id)
 }
 
+export async function listPendingReports(limit = 50): Promise<
+  {
+    id: string
+    reporterId: string
+    reportedUserId: string
+    reason: ReportReason
+    comment: string | null
+    status: string
+    createdAt: Date
+    reporterName: string | null
+    reportedName: string | null
+  }[]
+> {
+  const db = getDb()
+  if (!db) return []
+
+  const rows = await db<
+    {
+      id: string
+      reporter_id: string
+      reported_user_id: string
+      reason: ReportReason
+      comment: string | null
+      status: string
+      created_at: Date
+      reporter_name: string | null
+      reported_name: string | null
+    }[]
+  >`
+    SELECT
+      r.id,
+      r.reporter_id,
+      r.reported_user_id,
+      r.reason,
+      r.comment,
+      r.status,
+      r.created_at,
+      reporter.name AS reporter_name,
+      reported.name AS reported_name
+    FROM reports r
+    LEFT JOIN users reporter ON reporter.id = r.reporter_id
+    LEFT JOIN users reported ON reported.id = r.reported_user_id
+    WHERE r.status = 'pending'
+    ORDER BY r.created_at ASC
+    LIMIT ${limit}
+  `
+
+  return rows.map((r) => ({
+    id: r.id,
+    reporterId: r.reporter_id,
+    reportedUserId: r.reported_user_id,
+    reason: r.reason,
+    comment: r.comment,
+    status: r.status,
+    createdAt: r.created_at,
+    reporterName: r.reporter_name,
+    reportedName: r.reported_name,
+  }))
+}
+
+export async function reviewReport(input: {
+  reportId: string
+  status: "reviewed" | "dismissed"
+}): Promise<boolean> {
+  const db = getDb()
+  if (!db) return false
+
+  const rows = await db<{ id: string }[]>`
+    UPDATE reports
+    SET status = ${input.status}
+    WHERE id = ${input.reportId} AND status = 'pending'
+    RETURNING id
+  `
+  return rows.length > 0
+}
+
 export async function isEitherBlocked(userA: string, userB: string): Promise<boolean> {
   const db = getDb()
   if (!db) return false

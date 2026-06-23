@@ -14,6 +14,7 @@ import {
   CommunicationStylePicker,
   ConnectionPrefPicker,
 } from "@/components/product/identity-product-pickers"
+import { PROFILE_READY_STRENGTH } from "@/lib/profile-completion-hints"
 import { computeProfileStrength } from "@/lib/profile-completion"
 import { enableDemoSwipeDeck } from "@/lib/demo-profiles"
 import { getProfilePhotos } from "@/lib/profile-photos"
@@ -60,6 +61,7 @@ import { useDesktopAppNav } from "@/hooks/use-desktop-app-nav"
 import { recordProfileActivity, reviveProfilePresence } from "@/lib/profile-life-store"
 import type { DatingPurpose } from "@/lib/interests/types"
 import { DEFAULT_MAX_DISTANCE_KM } from "@/lib/interests/types"
+import { trackFunnelOnce } from "@/lib/analytics-funnel"
 
 type Gender = StoredUserProfile["gender"]
 type LookingFor = StoredUserProfile["lookingFor"]
@@ -283,8 +285,13 @@ export function ProfileScreen() {
           }),
     }
 
+    const prevStrength = computeProfileStrength(profile)
     const next = updateUserProfile(patch)
     if (next) {
+      const nextStrength = computeProfileStrength(next)
+      if (prevStrength < PROFILE_READY_STRENGTH && nextStrength >= PROFILE_READY_STRENGTH) {
+        trackFunnelOnce("profile_complete", { strength: nextStrength })
+      }
       recordProfileActivity()
       dispatchProfileDatingSync()
       setProfile(next)

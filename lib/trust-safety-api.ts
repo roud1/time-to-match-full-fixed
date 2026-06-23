@@ -45,6 +45,46 @@ export async function blockUserOnServer(input: {
   }
 }
 
+export async function unblockUserOnServer(blockedUserId: string): Promise<{ ok: boolean; demo?: boolean }> {
+  return blockUserOnServer({ blockedUserId, action: "unblock" })
+}
+
+export type BlockedUserEntry = {
+  blockedUserId: string
+  blockedProfileId: number
+}
+
+export async function fetchBlockedUsersOnServer(): Promise<{
+  ok: boolean
+  blocked: BlockedUserEntry[]
+  demo?: boolean
+}> {
+  const mode = await getAppMode()
+  if (mode === "demo") {
+    return { ok: true, blocked: [], demo: true }
+  }
+
+  try {
+    const res = await fetch("/api/v1/block", { credentials: "include" })
+    if (!res.ok) return { ok: false, blocked: [] }
+    const data = (await res.json()) as {
+      blockedUserIds?: string[]
+      blockedProfileIds?: number[]
+    }
+    const ids = data.blockedUserIds ?? []
+    const profileIds = data.blockedProfileIds ?? ids.map((id) => discoverIdToNumeric(id))
+    return {
+      ok: true,
+      blocked: ids.map((blockedUserId, i) => ({
+        blockedUserId,
+        blockedProfileId: profileIds[i] ?? discoverIdToNumeric(blockedUserId),
+      })),
+    }
+  } catch {
+    return { ok: false, blocked: [] }
+  }
+}
+
 /** Resolve server UUID from swipe profile id when userId is missing (demo profiles). */
 export function profileIdToServerUserId(profileId: number, userId?: string | null): string | null {
   if (userId) return userId

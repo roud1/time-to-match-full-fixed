@@ -101,15 +101,15 @@ Without these env vars, the cron still runs but skips unconfigured channels (log
 ## Moderation
 
 - **Report** — `POST /api/v1/report` (production DB; localStorage fallback in demo)
-- **Block** — `POST /api/v1/block` — hides user from discover, expires active match
-- **Admin** — `PUT /api/admin/verification/:id` with `x-admin-key` header when `ADMIN_API_KEY` is set
+- **Block** — `GET/POST /api/v1/block` — hides user from discover, expires active match
+- **Admin** — `GET /api/admin/reports` and `PUT /api/admin/verification/:id` with `x-admin-key` when `ADMIN_API_KEY` is set
 - Reports are stored in the `reports` table for admin review
 
 ## Analytics funnel
 
 Client events fire to `POST /api/v1/analytics/event` (server logs + Vercel Analytics in production):
 
-`register_complete`, `first_swipe`, `match_created`, `first_message`, `match_expired`
+`register_complete`, `profile_complete`, `first_swipe`, `first_match`, `match_created`, `first_message`, `match_expired`
 
 ## Performance
 

@@ -10,6 +10,8 @@ import { computeProfileStrength } from "@/lib/profile-completion"
 import { strengthHintKey } from "@/components/profile/profile-strength-utils"
 import { getUserProfile, isLoggedIn } from "@/lib/user-profile"
 import { isWelcomeSeen, markWelcomeSeen } from "@/lib/welcome-seen"
+import { shouldSkipWelcome } from "@/lib/welcome-routing"
+import { WelcomeGuidedFlow, shouldRunGuidedFlow } from "@/components/welcome/welcome-guided-flow"
 import { ProfilePresenceCard } from "@/components/profile/profile-presence-card"
 import { WelcomeMatchTimer } from "@/components/welcome/welcome-match-timer"
 import { WelcomeCompletionChecklist } from "@/components/welcome/welcome-completion-checklist"
@@ -92,7 +94,7 @@ export function WelcomeScreen() {
       router.replace("/login")
       return
     }
-    if (!forceStay && isWelcomeSeen()) {
+    if (!forceStay && shouldSkipWelcome(stored)) {
       router.replace("/app")
       return
     }
@@ -111,6 +113,14 @@ export function WelcomeScreen() {
   const strength = computeProfileStrength(profile)
   const hintKey = strengthHintKey(strength)
   const displayName = profile.name.split(/\s+/)[0] || profile.name
+
+  if (!forceStay && shouldRunGuidedFlow(profile)) {
+    return (
+      <div className="ttm-welcome-page max-w-lg mx-auto w-full">
+        <WelcomeGuidedFlow profile={profile} />
+      </div>
+    )
+  }
 
   return (
     <WelcomeOnboardingShell>

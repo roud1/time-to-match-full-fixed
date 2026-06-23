@@ -4,7 +4,8 @@ import { getServerEnv } from "@/lib/server/env"
 import { getSessionFromRequest } from "@/lib/server/auth/session-request"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/lib/server/http"
 import { checkRateLimit } from "@/lib/server/rate-limit"
-import { blockUserPair, unblockUserPair } from "@/lib/server/repositories/moderation"
+import { blockUserPair, unblockUserPair, listBlockedUserIds } from "@/lib/server/repositories/moderation"
+import { discoverIdToNumeric } from "@/lib/discover/map-profile"
 import { findUserById } from "@/lib/server/repositories/users"
 
 export const runtime = "nodejs"
@@ -16,6 +17,28 @@ const bodySchema = z.object({
 
 export async function OPTIONS(request: Request) {
   return withCors(request, new NextResponse(null, { status: 204 }))
+}
+
+/** GET /api/v1/block — list blocked user ids for current session */
+export async function GET(request: Request) {
+  const env = getServerEnv()
+  if (!env.isDatabaseConfigured) {
+    return withCors(request, jsonOk({ blockedUserIds: [], mode: "demo" as const }))
+  }
+
+  const session = await getSessionFromRequest()
+  if (!session) {
+    return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
+  }
+
+  const ids = await listBlockedUserIds(session.sub)
+  return withCors(
+    request,
+    jsonOk({
+      blockedUserIds: ids,
+      blockedProfileIds: ids.map((id) => discoverIdToNumeric(id)),
+    })
+  )
 }
 
 /** POST /api/v1/block — block or unblock a user */

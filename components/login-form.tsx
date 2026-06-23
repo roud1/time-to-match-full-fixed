@@ -17,7 +17,7 @@ import {
 import { fetchMe } from "@/lib/user/api"
 import { loginOnServer, localProfileFromAuthUser } from "@/lib/auth/client"
 import { recordProfileActivity } from "@/lib/profile-life-store"
-import { isWelcomeSeen } from "@/lib/welcome-seen"
+import { postAuthPath } from "@/lib/welcome-routing"
 import { CinematicButton } from "@/components/ui/cinematic-button"
 import { CinematicCard } from "@/components/ui/cinematic-card"
 import { CinematicField } from "@/components/ui/cinematic-field"
@@ -46,7 +46,7 @@ export function LoginForm() {
     remember: false,
   })
 
-  const postAuthPath = () => (isWelcomeSeen() ? "/app" : "/welcome")
+  const resolvePostAuthPath = () => postAuthPath(getUserProfile())
 
   useEffect(() => {
     if (!hydrated) return
@@ -56,7 +56,7 @@ export function LoginForm() {
       const me = await fetchMe()
       if (cancelled || !me) return
       setRedirecting(true)
-      const target = postAuthPath()
+      const target = resolvePostAuthPath()
       router.replace(target)
       window.setTimeout(() => {
         if (window.location.pathname === "/login") window.location.assign(target)
@@ -115,7 +115,7 @@ export function LoginForm() {
         }
         setSession(form.email.trim(), form.remember)
         recordProfileActivity()
-        router.replace(postAuthPath())
+        router.replace(resolvePostAuthPath())
         return
       }
 
@@ -132,7 +132,7 @@ export function LoginForm() {
 
         setSession(form.email, form.remember)
         recordProfileActivity()
-        router.replace(postAuthPath())
+        router.replace(resolvePostAuthPath())
         return
       }
 
