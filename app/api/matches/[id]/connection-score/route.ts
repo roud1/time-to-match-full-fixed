@@ -9,6 +9,7 @@ import {
 } from "@/lib/server/repositories/ai-analysis"
 import { findMatchByIdForUser } from "@/lib/server/repositories/likes"
 import { isConnectionAnalyzing } from "@/lib/server/realtime/ephemeral"
+import { isValidMatchRouteId, resolveMatchRouteId } from "@/lib/server/matches/resolve-id"
 
 export const runtime = "nodejs"
 
@@ -33,20 +34,26 @@ export async function GET(request: Request, context: RouteContext) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const { id: matchId } = await context.params
-  if (!matchId?.trim() || matchId.startsWith("local:")) {
+  const { id } = await context.params
+  if (!isValidMatchRouteId(id)) {
     return withCors(request, jsonError(400, { error: "invalid_id", message: "Match id required" }))
   }
 
-  const like = await findMatchByIdForUser(matchId.trim(), session.sub)
+  const resolved = await resolveMatchRouteId(id, session.sub)
+  if (!resolved) {
+    return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
+  }
+
+  const likeId = resolved.likeId
+  const like = await findMatchByIdForUser(likeId, session.sub)
   if (!like) {
     return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
   }
 
   const [score, analyzing, pending] = await Promise.all([
-    getLatestConnectionScore(matchId.trim()),
-    isConnectionAnalyzing(matchId.trim()),
-    hasPendingAiAnalysisJob(matchId.trim()),
+    getLatestConnectionScore(likeId),
+    isConnectionAnalyzing(likeId),
+    hasPendingAiAnalysisJob(likeId),
   ])
 
   return withCors(

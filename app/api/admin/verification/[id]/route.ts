@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
 import { getServerEnv } from "@/lib/server/env"
-import { isAdminRequest, adminNotConfigured } from "@/lib/server/auth/admin"
+import { isAdminRequestAsync, adminNotConfigured } from "@/lib/server/auth/admin"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/lib/server/http"
 import {
   findVerificationRequestById,
@@ -38,7 +38,7 @@ export async function PUT(
     )
   }
 
-  if (!isAdminRequest(request)) {
+  if (!(await isAdminRequestAsync(request))) {
     return withCors(request, jsonError(403, { error: "forbidden", message: "Admin access required" }))
   }
 

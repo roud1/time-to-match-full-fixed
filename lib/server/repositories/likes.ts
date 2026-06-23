@@ -86,6 +86,42 @@ export async function findMatchByIdForUser(
   return rows[0] ?? null
 }
 
+/** Resolve a user's like row when the client passed engine `matches.id` instead of `likes.id`. */
+export async function findLikeByEngineMatchIdForUser(
+  engineMatchId: string,
+  userId: string
+): Promise<(DbLikeWithBond & { peer_name: string | null }) | null> {
+  const db = getDb()
+  if (!db) return null
+
+  const rows = await db<(DbLikeWithBond & { peer_name: string | null })[]>`
+    SELECT
+      l.id,
+      l.from_user,
+      l.to_user,
+      l.created_at,
+      l.expires_at,
+      l.is_match,
+      l.is_expired,
+      l.is_frozen,
+      l.match_id,
+      ms.total_messages AS stat_total_messages,
+      ms.prolong_count AS stat_prolong_count,
+      ms.last_prolonged_at AS stat_last_prolonged_at,
+      m.status AS engine_status,
+      peer.name AS peer_name
+    FROM likes l
+    LEFT JOIN users peer ON peer.id = l.to_user
+    LEFT JOIN match_stats ms ON ms.match_id = l.id
+    LEFT JOIN matches m ON m.id = l.match_id
+    WHERE l.match_id = ${engineMatchId}
+      AND l.from_user = ${userId}
+      AND l.is_match = true
+    LIMIT 1
+  `
+  return rows[0] ?? null
+}
+
 export async function listActiveMatchesForUser(userId: string): Promise<MatchDto[]> {
   const db = getDb()
   if (!db) return []

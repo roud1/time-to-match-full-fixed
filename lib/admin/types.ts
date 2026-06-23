@@ -16,5 +16,3 @@ export type AdminReportsResponse = {
   reports: AdminReport[]
   count: number
 }
-
-export const ADMIN_KEY_STORAGE = "ttm_admin_key"

@@ -3,12 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { useI18n } from "@/lib/i18n"
 import type { TranslationKey } from "@/lib/i18n"
-import {
-  ADMIN_KEY_STORAGE,
-  type AdminReport,
-  type AdminReportsResponse,
-  type ReportReason,
-} from "@/lib/admin/types"
+import { type AdminReport, type AdminReportsResponse, type ReportReason } from "@/lib/admin/types"
 import { CinematicButton } from "@/components/ui/cinematic-button"
 import { cn } from "@/lib/utils"
 import "@/app/admin/admin.css"
@@ -21,15 +16,35 @@ const REASON_KEYS: Record<ReportReason, TranslationKey> = {
   other: "adminReasonOther",
 }
 
-type FetchError = "invalid_key" | "not_configured" | "no_database" | "fetch_failed"
+type FetchError = "invalid_key" | "not_configured" | "no_database" | "fetch_failed" | "unauthenticated"
 
-async function loadReports(key: string): Promise<AdminReportsResponse> {
-  const res = await fetch("/api/admin/reports", {
-    headers: { "x-admin-key": key },
-    cache: "no-store",
+async function createAdminSession(apiKey: string): Promise<void> {
+  const res = await fetch("/api/admin/session", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ apiKey }),
   })
 
   if (res.status === 403) throw new Error("invalid_key")
+  if (!res.ok) {
+    const body = (await res.json().catch(() => null)) as { error?: string } | null
+    if (body?.error === "admin_not_configured") throw new Error("not_configured")
+    throw new Error("fetch_failed")
+  }
+}
+
+async function clearAdminSession(): Promise<void> {
+  await fetch("/api/admin/session", { method: "DELETE", credentials: "include" })
+}
+
+async function loadReports(): Promise<AdminReportsResponse> {
+  const res = await fetch("/api/admin/reports", {
+    credentials: "include",
+    cache: "no-store",
+  })
+
+  if (res.status === 403) throw new Error("unauthenticated")
 
   if (!res.ok) {
     const body = (await res.json().catch(() => null)) as { error?: string } | null
@@ -170,7 +185,7 @@ function ReportCard({ report, locale }: { report: AdminReport; locale: string })
 
 export function AdminReportsExperience() {
   const { t, locale } = useI18n()
-  const [adminKey, setAdminKey] = useState<string | null>(null)
+  const [authenticated, setAuthenticated] = useState(false)
   const [reports, setReports] = useState<AdminReport[]>([])
   const [count, setCount] = useState(0)
   const [loading, setLoading] = useState(true)
@@ -179,26 +194,31 @@ export function AdminReportsExperience() {
 
   const dateLocale = locale === "ru" ? "ru-RU" : locale === "uk" ? "uk-UA" : "en-GB"
 
-  const refresh = useCallback(async (key: string, silent = false) => {
+  const refresh = useCallback(async (silent = false) => {
     if (!silent) setLoading(true)
     else setRefreshing(true)
     setError(null)
 
     try {
-      const data = await loadReports(key)
+      const data = await loadReports()
       setReports(data.reports)
       setCount(data.count)
-      sessionStorage.setItem(ADMIN_KEY_STORAGE, key)
-      setAdminKey(key)
+      setAuthenticated(true)
     } catch (err) {
       const code = (err as Error).message as FetchError
-      if (code === "invalid_key") {
-        sessionStorage.removeItem(ADMIN_KEY_STORAGE)
-        setAdminKey(null)
+      if (code === "unauthenticated") {
+        setAuthenticated(false)
         setReports([])
         setCount(0)
+        setError(null)
+      } else if (code === "invalid_key") {
+        setAuthenticated(false)
+        setReports([])
+        setCount(0)
+        setError("invalid_key")
+      } else {
+        setError(code as FetchError)
       }
-      setError(code === "invalid_key" ? "invalid_key" : (code as FetchError))
     } finally {
       setLoading(false)
       setRefreshing(false)
@@ -206,27 +226,36 @@ export function AdminReportsExperience() {
   }, [])
 
   useEffect(() => {
-    const saved = sessionStorage.getItem(ADMIN_KEY_STORAGE)
-    if (saved) void refresh(saved)
-    else setLoading(false)
+    void refresh()
   }, [refresh])
 
-  const handleLogin = (key: string) => {
-    void refresh(key)
+  const handleLogin = async (key: string) => {
+    setLoading(true)
+    setError(null)
+    try {
+      await createAdminSession(key)
+      await refresh()
+    } catch (err) {
+      const code = (err as Error).message as FetchError
+      setError(code === "invalid_key" ? "invalid_key" : (code as FetchError))
+      setAuthenticated(false)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleLogout = () => {
-    sessionStorage.removeItem(ADMIN_KEY_STORAGE)
-    setAdminKey(null)
+  const handleLogout = async () => {
+    await clearAdminSession()
+    setAuthenticated(false)
     setReports([])
     setCount(0)
     setError(null)
   }
 
-  if (!adminKey) {
+  if (!authenticated) {
     return (
       <div className="ttm-admin">
-        <AdminLoginForm onSubmit={handleLogin} error={error} loading={loading} />
+        <AdminLoginForm onSubmit={(key) => void handleLogin(key)} error={error} loading={loading} />
       </div>
     )
   }
@@ -246,11 +275,11 @@ export function AdminReportsExperience() {
             variant="secondary"
             size="compact"
             disabled={refreshing}
-            onClick={() => void refresh(adminKey, true)}
+            onClick={() => void refresh(true)}
           >
             {refreshing ? t("adminLoading") : t("adminRefresh")}
           </CinematicButton>
-          <CinematicButton variant="ghost" size="compact" onClick={handleLogout}>
+          <CinematicButton variant="ghost" size="compact" onClick={() => void handleLogout()}>
             {t("adminLogout")}
           </CinematicButton>
         </div>

@@ -77,7 +77,7 @@ export async function fetchMatchDetail(matchId: string): Promise<FetchMatchDetai
     if (!data.match) return { ok: false, status: res.status }
     return { ok: true, match: data.match }
   } catch {
-    return { ok: false, demoFallback: true }
+    return { ok: false, status: 0 }
   }
 }
 
@@ -107,6 +107,6 @@ export async function sendMatchMessage(
     }
     return (await res.json()) as SendMatchMessageResult & { ok: true }
   } catch {
-    return { ok: false, demoFallback: true }
+    return { ok: false, status: 0 }
   }
 }

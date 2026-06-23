@@ -4,6 +4,7 @@ import { getSessionFromRequest } from "@/lib/server/auth/session-request"
 import { jsonError, jsonOk, withCors } from "@/lib/server/http"
 import { checkAndGrantAchievements } from "@/lib/server/gamification/check"
 import { freezeMatchForUser } from "@/lib/server/repositories/likes"
+import { isValidMatchRouteId, resolveMatchRouteId } from "@/lib/server/matches/resolve-id"
 
 export const runtime = "nodejs"
 
@@ -29,12 +30,18 @@ export async function POST(request: Request, context: RouteContext) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const { id: matchId } = await context.params
-  if (!matchId?.trim()) {
+  const { id } = await context.params
+  if (!isValidMatchRouteId(id)) {
     return withCors(request, jsonError(400, { error: "invalid_id", message: "Match id required" }))
   }
 
-  const result = await freezeMatchForUser(matchId.trim(), session.sub)
+  const resolved = await resolveMatchRouteId(id, session.sub)
+  if (!resolved) {
+    return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
+  }
+
+  const likeId = resolved.likeId
+  const result = await freezeMatchForUser(likeId, session.sub)
 
   if (!result.ok) {
     switch (result.code) {
@@ -62,7 +69,7 @@ export async function POST(request: Request, context: RouteContext) {
 
   const gamification = await checkAndGrantAchievements(session.sub, {
     event: "freeze_used",
-    matchId: matchId.trim(),
+    matchId: likeId,
   })
 
   return withCors(

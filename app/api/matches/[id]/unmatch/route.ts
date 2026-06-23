@@ -4,6 +4,7 @@ import { getSessionFromRequest } from "@/lib/server/auth/session-request"
 import { jsonError, jsonOk, withCors } from "@/lib/server/http"
 import { checkRateLimit } from "@/lib/server/rate-limit"
 import { expireMatchByLikeId } from "@/lib/server/match-engine/repository"
+import { isValidMatchRouteId, resolveMatchRouteId } from "@/lib/server/matches/resolve-id"
 
 export const runtime = "nodejs"
 
@@ -25,9 +26,14 @@ export async function POST(request: Request, context: RouteContext) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const { id: likeId } = await context.params
-  if (!likeId?.trim() || likeId.startsWith("local:")) {
+  const { id } = await context.params
+  if (!isValidMatchRouteId(id)) {
     return withCors(request, jsonError(400, { error: "invalid_id", message: "Match id required" }))
+  }
+
+  const resolved = await resolveMatchRouteId(id, session.sub)
+  if (!resolved) {
+    return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
   }
 
   const rl = await checkRateLimit(`unmatch:${session.sub}`, 20, 60 * 60 * 1000)
@@ -35,7 +41,7 @@ export async function POST(request: Request, context: RouteContext) {
     return withCors(request, jsonError(429, { error: "rate_limited", message: "Too many unmatch requests" }))
   }
 
-  const result = await expireMatchByLikeId(likeId.trim(), session.sub)
+  const result = await expireMatchByLikeId(resolved.likeId, session.sub)
   if (!result.ok) {
     const status = result.code === "not_found" ? 404 : result.code === "forbidden" ? 403 : 400
     return withCors(

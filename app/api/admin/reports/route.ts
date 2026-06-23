@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getServerEnv } from "@/lib/server/env"
-import { isAdminRequest, adminNotConfigured } from "@/lib/server/auth/admin"
+import { isAdminRequestAsync, adminNotConfigured } from "@/lib/server/auth/admin"
 import { jsonError, jsonOk, withCors } from "@/lib/server/http"
 import { listPendingReports } from "@/lib/server/repositories/moderation"
 
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     )
   }
 
-  if (!isAdminRequest(request)) {
+  if (!(await isAdminRequestAsync(request))) {
     return withCors(request, jsonError(403, { error: "forbidden", message: "Admin access required" }))
   }
 

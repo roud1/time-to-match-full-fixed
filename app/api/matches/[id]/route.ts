@@ -8,6 +8,7 @@ import {
 } from "@/lib/server/match-engine/repository"
 import { findMatchByIdForUser } from "@/lib/server/repositories/likes"
 import { bondStatsFromRow } from "@/lib/server/repositories/match-stats"
+import { isValidMatchRouteId, resolveMatchRouteId } from "@/lib/server/matches/resolve-id"
 
 export const runtime = "nodejs"
 
@@ -32,16 +33,23 @@ export async function GET(request: Request, context: RouteContext) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const { id: likeId } = await context.params
-  if (!likeId?.trim() || likeId.startsWith("local:")) {
+  const { id } = await context.params
+  if (!isValidMatchRouteId(id)) {
     return withCors(request, jsonError(400, { error: "invalid_id", message: "Match id required" }))
   }
 
-  await ensureEngineMatchForLike(likeId.trim(), session.sub)
+  const resolved = await resolveMatchRouteId(id, session.sub)
+  if (!resolved) {
+    return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
+  }
 
-  const detail = await getMatchDetailForUser(likeId.trim(), session.sub)
+  const likeId = resolved.likeId
+
+  await ensureEngineMatchForLike(likeId, session.sub)
+
+  const detail = await getMatchDetailForUser(likeId, session.sub)
   if (!detail) {
-    const like = await findMatchByIdForUser(likeId.trim(), session.sub)
+    const like = await findMatchByIdForUser(likeId, session.sub)
     if (!like) {
       return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
     }
@@ -70,7 +78,7 @@ export async function GET(request: Request, context: RouteContext) {
     )
   }
 
-  const like = await findMatchByIdForUser(likeId.trim(), session.sub)
+  const like = await findMatchByIdForUser(likeId, session.sub)
 
   return withCors(
     request,

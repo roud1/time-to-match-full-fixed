@@ -11,6 +11,7 @@ import type { MessageSentResponse } from "@/lib/server/matches/types"
 import { publishMessageEvent } from "@/lib/server/realtime/broadcast"
 import { recordMessageSentForMatch } from "@/lib/server/repositories/match-stats"
 import { matchMessageBodySchema } from "@/lib/server/validation/match-message"
+import { isValidMatchRouteId, resolveMatchRouteId } from "@/lib/server/matches/resolve-id"
 
 export const runtime = "nodejs"
 
@@ -38,10 +39,17 @@ export async function POST(request: Request, context: RouteContext) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const { id: likeId } = await context.params
-  if (!likeId?.trim() || likeId.startsWith("local:")) {
+  const { id } = await context.params
+  if (!isValidMatchRouteId(id)) {
     return withCors(request, jsonError(400, { error: "invalid_id", message: "Match id required" }))
   }
+
+  const resolved = await resolveMatchRouteId(id, session.sub)
+  if (!resolved) {
+    return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
+  }
+
+  const likeId = resolved.likeId
 
   let body: unknown
   try {
@@ -55,7 +63,7 @@ export async function POST(request: Request, context: RouteContext) {
     return withCors(request, jsonFromZodError(parsed.error))
   }
 
-  const trimmedId = likeId.trim()
+  const trimmedId = likeId
   await ensureEngineMatchForLike(trimmedId, session.sub)
 
   const sent = await sendMatchMessage({

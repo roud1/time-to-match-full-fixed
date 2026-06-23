@@ -7,6 +7,7 @@ import { checkAndGrantAchievements } from "@/lib/server/gamification/check"
 import { recordMessageSentForMatch } from "@/lib/server/repositories/match-stats"
 import { findMatchByIdForUser } from "@/lib/server/repositories/likes"
 import { maybeQueueConnectionAnalysis } from "@/lib/server/connection-ai-worker"
+import { isValidMatchRouteId, resolveMatchRouteId } from "@/lib/server/matches/resolve-id"
 
 export const runtime = "nodejs"
 
@@ -33,12 +34,18 @@ export async function POST(request: Request, context: RouteContext) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const { id: matchId } = await context.params
-  if (!matchId?.trim() || matchId.startsWith("local:")) {
+  const { id } = await context.params
+  if (!isValidMatchRouteId(id)) {
     return withCors(request, jsonError(400, { error: "invalid_id", message: "Match id required" }))
   }
 
-  const result = await recordMessageSentForMatch(matchId.trim(), session.sub)
+  const resolved = await resolveMatchRouteId(id, session.sub)
+  if (!resolved) {
+    return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
+  }
+
+  const likeId = resolved.likeId
+  const result = await recordMessageSentForMatch(likeId, session.sub)
 
   if (!result.ok) {
     if (result.code === "expired") {
@@ -49,7 +56,7 @@ export async function POST(request: Request, context: RouteContext) {
 
   const gamification = await checkAndGrantAchievements(session.sub, {
     event: "message_sent",
-    matchId: matchId.trim(),
+    matchId: likeId,
     messageCount: result.payload.totalMessages,
     bondProlonged: result.payload.prolonged,
     prolongCount: result.payload.prolongCount,
@@ -58,7 +65,7 @@ export async function POST(request: Request, context: RouteContext) {
 
   const analysisQueued = maybeQueueConnectionAnalysis(
     session.sub,
-    matchId.trim(),
+    likeId,
     result.payload.totalMessages
   )
 
@@ -70,7 +77,7 @@ export async function POST(request: Request, context: RouteContext) {
   }
 
   if (result.payload.prolonged && !payload.newExpiresAt) {
-    const refreshed = await findMatchByIdForUser(matchId.trim(), session.sub)
+    const refreshed = await findMatchByIdForUser(likeId, session.sub)
     payload.newExpiresAt = refreshed?.expires_at?.toISOString()
   }
 

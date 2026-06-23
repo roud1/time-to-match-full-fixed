@@ -10,6 +10,10 @@ import {
   getUserIdByStripeSubscriptionId,
   upsertUserSubscription,
 } from "@/lib/server/billing/repository"
+import {
+  claimStripeWebhookEvent,
+  releaseStripeWebhookEvent,
+} from "@/lib/server/billing/webhook-events"
 
 export const runtime = "nodejs"
 
@@ -29,28 +33,7 @@ async function resolveUserId(sub: Stripe.Subscription): Promise<string | null> {
   return getUserIdByStripeSubscriptionId(sub.id)
 }
 
-/** POST /api/billing/webhook — activate subscription after Stripe checkout */
-export async function POST(request: Request) {
-  const secret = getStripeSecretKey()
-  const webhookSecret = getStripeWebhookSecret()
-  if (!secret || !webhookSecret) {
-    return withCors(request, jsonError(503, { error: "not_configured", message: "Stripe webhook not configured" }))
-  }
-
-  const stripe = new Stripe(secret)
-  const signature = request.headers.get("stripe-signature")
-  if (!signature) {
-    return withCors(request, jsonError(400, { error: "missing_signature", message: "No stripe-signature header" }))
-  }
-
-  const raw = await request.text()
-  let event: Stripe.Event
-  try {
-    event = stripe.webhooks.constructEvent(raw, signature, webhookSecret)
-  } catch {
-    return withCors(request, jsonError(400, { error: "invalid_signature", message: "Webhook signature invalid" }))
-  }
-
+async function processStripeEvent(event: Stripe.Event): Promise<void> {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session
@@ -102,6 +85,42 @@ export async function POST(request: Request) {
     }
     default:
       break
+  }
+}
+
+/** POST /api/billing/webhook — activate subscription after Stripe checkout */
+export async function POST(request: Request) {
+  const secret = getStripeSecretKey()
+  const webhookSecret = getStripeWebhookSecret()
+  if (!secret || !webhookSecret) {
+    return withCors(request, jsonError(503, { error: "not_configured", message: "Stripe webhook not configured" }))
+  }
+
+  const stripe = new Stripe(secret)
+  const signature = request.headers.get("stripe-signature")
+  if (!signature) {
+    return withCors(request, jsonError(400, { error: "missing_signature", message: "No stripe-signature header" }))
+  }
+
+  const raw = await request.text()
+  let event: Stripe.Event
+  try {
+    event = stripe.webhooks.constructEvent(raw, signature, webhookSecret)
+  } catch {
+    return withCors(request, jsonError(400, { error: "invalid_signature", message: "Webhook signature invalid" }))
+  }
+
+  const claimed = await claimStripeWebhookEvent(event.id)
+  if (!claimed) {
+    return withCors(request, jsonOk({ received: true, duplicate: true }))
+  }
+
+  try {
+    await processStripeEvent(event)
+  } catch (err) {
+    await releaseStripeWebhookEvent(event.id)
+    console.error("[billing/webhook] processing failed", event.id, err)
+    return withCors(request, jsonError(500, { error: "processing_failed", message: "Webhook processing failed" }))
   }
 
   return withCors(request, jsonOk({ received: true }))
