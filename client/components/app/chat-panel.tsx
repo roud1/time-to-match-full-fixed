@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useI18n } from "@/client/lib/i18n"
 import {
   appendSystemMessage,
+  appendServerMessage,
   deleteChatThread,
   getChatsWithServerSync,
   loadServerMessagesForProfile,
@@ -38,6 +39,10 @@ import { useDesktopAppNav } from "@/client/hooks/use-desktop-app-nav"
 import { isPulseProfileId } from "@/client/lib/pulse/constants"
 import { getPulseThread, subscribePulseChat } from "@/client/lib/pulse/chat-store"
 import { useMatchPresence } from "@/client/hooks/use-match-presence"
+import { isSocketRealtimeConfigured } from "@/client/lib/realtime/client"
+import { useSocketChat } from "@/client/lib/realtime/socket/use-socket-chat"
+import type { ChatRealtimeProps } from "@/client/hooks/use-chat-realtime"
+import type { GamificationSnapshot } from "@/server/gamification/types"
 import { cn } from "@/client/lib/utils"
 
 function parseWithParam(withParam: string | null): number | null {
@@ -158,6 +163,41 @@ export function ChatPanel() {
   const queryClient = useQueryClient()
   const invalidateMatches = useInvalidateMatches()
 
+  const activePeerUserId = useMemo(() => {
+    if (activeId == null) return null
+    const match = serverMatches?.find((m) => discoverIdToNumeric(m.peerUserId) === activeId)
+    return match?.peerUserId ?? null
+  }, [activeId, serverMatches])
+
+  const socketChat = useSocketChat(
+    isSocketRealtimeConfigured() ? (matchExpiry?.matchId ?? null) : null,
+    {
+      peerUserId: activePeerUserId,
+      onMessage: (msg) => {
+        if (activeId == null || isPulseActive || msg.from !== "them") return
+        if (
+          appendServerMessage(
+            activeId,
+            { id: msg.id, from: "them", text: msg.text, at: msg.at },
+            locale,
+            location.position
+          )
+        ) {
+          refresh()
+        }
+      },
+    }
+  )
+
+  const socketRealtime: ChatRealtimeProps | undefined = isSocketRealtimeConfigured()
+    ? {
+        partnerTyping: socketChat.partnerTyping,
+        partnerOnline: socketChat.isPartnerOnline,
+        reportDraftChange: socketChat.reportDraftChange,
+        reportStoppedTyping: socketChat.reportStoppedTyping,
+      }
+    : undefined
+
   useEffect(() => {
     if (activeId == null || isPulseProfileId(activeId)) return
     let cancelled = false
@@ -267,6 +307,55 @@ export function ChatPanel() {
     const body = text.trim()
     setSending(true)
     setSendError(null)
+
+    const finishSocketSend = async () => {
+      const ack = await socketChat.sendMessage(body)
+      setSending(false)
+      if (!ack.ok) {
+        setSendError(ack.message ?? ack.code)
+        return
+      }
+      if (ack.message) {
+        appendServerMessage(
+          activeId,
+          {
+            id: ack.message.id,
+            from: "me",
+            text: ack.message.body,
+            at: new Date(ack.message.createdAt).getTime(),
+          },
+          locale,
+          location.position
+        )
+        refresh()
+      }
+      if (ack.bond && matchExpiry?.matchId) {
+        applyBondPayload(
+          {
+            prolonged: ack.bond.prolonged,
+            newExpiresAt: ack.bond.newExpiresAt,
+            bondLevel: ack.bond.bondLevel,
+            totalMessages: ack.bond.totalMessages,
+            bondProgress: ack.bond.bondProgress,
+            prolongCount: ack.bond.prolongCount,
+            messagesUntilNext: ack.bond.messagesUntilNext,
+            addedHours: ack.bond.addedHours,
+            systemMessage: ack.bond.systemMessage,
+            gamification: ack.gamification as GamificationSnapshot | undefined,
+          },
+          matchExpiry.matchId
+        )
+      } else if (ack.gamification) {
+        applyGamificationSnapshot(queryClient, ack.gamification as GamificationSnapshot)
+      }
+      trackEvent("message_sent")
+      trackFunnelOnce("first_message")
+    }
+
+    if (isSocketRealtimeConfigured() && matchExpiry?.matchId && socketChat.connected) {
+      void finishSocketSend()
+      return
+    }
 
     void sendChatMessage(activeId, body, locale, location.position).then(async (result) => {
       setSending(false)
@@ -387,6 +476,7 @@ export function ChatPanel() {
         onSendText={handleSendIcebreaker}
         composerMuted={isProfileMuted(activeId)}
         labels={roomLabels}
+        realtime={socketRealtime}
       />
     ) : null
 
@@ -468,6 +558,7 @@ export function ChatPanel() {
             onSendText={handleSendIcebreaker}
             composerMuted={isProfileMuted(activeId)}
             labels={roomLabels}
+            realtime={socketRealtime}
           />
         )}
       </ChatThreadTransition>

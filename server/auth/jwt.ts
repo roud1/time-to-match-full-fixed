@@ -24,6 +24,11 @@ export async function signSessionToken(claims: SessionClaims, expiresIn = "7d") 
     .sign(getSecret())
 }
 
+/** Short-lived token for cross-origin Socket.io handshake auth. */
+export async function signSocketToken(claims: SessionClaims) {
+  return signSessionToken(claims, "5m")
+}
+
 export async function verifySessionToken(token: string): Promise<SessionClaims | null> {
   try {
     const { payload } = await jwtVerify(token, getSecret(), { algorithms: [ALG] })

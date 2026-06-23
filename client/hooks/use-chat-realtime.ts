@@ -16,7 +16,8 @@ type UseChatRealtimeOptions = {
 }
 
 /**
- * Partner typing + presence — WebSocket when configured, HTTP polling fallback.
+ * Partner typing + presence — Pusher WebSocket or HTTP polling fallback.
+ * When Socket.io is configured, pass `realtime` from `useSocketChat` into ChatRoomScreen instead.
  */
 export function useChatRealtime(
   matchId: string | null | undefined,
@@ -113,4 +114,11 @@ export function useChatRealtime(
     reportDraftChange,
     reportStoppedTyping,
   }
+}
+
+export type ChatRealtimeProps = {
+  partnerTyping: boolean
+  partnerOnline: boolean
+  reportDraftChange: (draft: string) => void
+  reportStoppedTyping: () => void
 }

@@ -411,6 +411,48 @@ export function receiveMessage(
   pushMessage(load(), profileId, "them", text, locale, position)
 }
 
+/** Append a server message by id (Socket.io / REST sync); skips duplicates. */
+export function appendServerMessage(
+  profileId: number,
+  message: { id: string; from: "me" | "them"; text: string; at: number },
+  locale: Locale,
+  position: GeoPosition | null
+): boolean {
+  if (profileId <= 0) return false
+  const state = load()
+  const thread = state.chats.find((c) => c.profileId === profileId)
+  if (thread?.messages.some((m) => m.id === message.id)) return false
+
+  const now = Date.now()
+  let next = ensureSeeded(state, locale, position)
+  let existing = next.chats.find((c) => c.profileId === profileId)
+
+  if (!existing) {
+    existing = { profileId, messages: [], updatedAt: now }
+    next = { ...next, chats: [...next.chats, existing] }
+  }
+
+  const updatedThread: ChatThread = {
+    ...existing,
+    messages: [...existing.messages, message],
+    updatedAt: message.at,
+  }
+
+  next = {
+    ...next,
+    chats: next.chats.map((c) => (c.profileId === profileId ? updatedThread : c)),
+  }
+
+  save(next)
+  recordConnectionMessage(profileId, message.from === "me" ? "me" : "them")
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("ttm-social-updated"))
+    if (message.from === "them") emitActivityBump("chats")
+    broadcastPresenceUpdate({ profileId, source: "social" })
+  }
+  return true
+}
+
 export function getUnreadLikesCount(locale: Locale, position: GeoPosition | null): number {
   const { likedYou, yourLikes, matches } = getSocialState(locale, position)
   return likedYou.filter((id) => !yourLikes.includes(id) && !matches.includes(id)).length

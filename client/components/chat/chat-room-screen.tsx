@@ -70,7 +70,7 @@ import {
 } from "@/client/lib/shared"
 import { MatchUrgencySnackbar } from "@/client/components/chat/match-urgency-snackbar"
 import { useChatMatchExpiry } from "@/client/hooks/use-chat-match-expiry"
-import { useChatRealtime } from "@/client/hooks/use-chat-realtime"
+import { useChatRealtime, type ChatRealtimeProps } from "@/client/hooks/use-chat-realtime"
 import { useMatches } from "@/client/hooks/use-matches"
 import { discoverIdToNumeric } from "@/client/lib/discover/map-profile"
 import { useMatchBond } from "@/client/hooks/use-match-bond"
@@ -120,6 +120,8 @@ type ChatRoomScreenProps = {
       cancelReply: string
     }
   }
+  /** Socket.io realtime (typing/presence) — skips internal Pusher/polling hook when set. */
+  realtime?: ChatRealtimeProps
 }
 
 export function ChatRoomScreen({
@@ -134,6 +136,7 @@ export function ChatRoomScreen({
   showBack = true,
   layout = "fullscreen",
   labels,
+  realtime: realtimeOverride,
 }: ChatRoomScreenProps) {
   const isEmbedded = layout === "embedded"
   const { locale, t, location } = useI18n()
@@ -150,10 +153,11 @@ export function ChatRoomScreen({
     const match = serverMatches?.find((m) => discoverIdToNumeric(m.peerUserId) === profile.id)
     return match?.peerUserId ?? null
   }, [serverMatches, profile.id])
-  const { partnerTyping, partnerOnline, reportDraftChange, reportStoppedTyping } = useChatRealtime(
-    matchExpiry?.matchId ?? null,
-    { peerUserId }
-  )
+  const internalRealtime = useChatRealtime(realtimeOverride ? null : (matchExpiry?.matchId ?? null), {
+    peerUserId,
+  })
+  const { partnerTyping, partnerOnline, reportDraftChange, reportStoppedTyping } =
+    realtimeOverride ?? internalRealtime
   const [replySnippet, setReplySnippet] = useState<string | null>(null)
   const [safetyOpen, setSafetyOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)

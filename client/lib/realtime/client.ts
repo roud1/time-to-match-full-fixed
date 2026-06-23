@@ -9,13 +9,20 @@ import type { RealtimeClientKind } from "@/client/lib/realtime/types"
 
 let pusherClient: Pusher | null = null
 
+export function isSocketRealtimeConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SOCKET_URL?.trim())
+}
+
 export function getClientRealtimeKind(): RealtimeClientKind {
+  if (isSocketRealtimeConfigured()) return "polling"
   if (process.env.NEXT_PUBLIC_PUSHER_KEY?.trim()) return "pusher"
   if (process.env.NEXT_PUBLIC_ABLY_KEY?.trim()) return "ably"
   return "polling"
 }
 
+/** True when Socket.io or Pusher/Ably WebSocket is available (not HTTP-only polling). */
 export function isRealtimeWebSocketConfigured(): boolean {
+  if (isSocketRealtimeConfigured()) return true
   return getClientRealtimeKind() !== "polling"
 }
 
