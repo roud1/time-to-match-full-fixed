@@ -27,6 +27,8 @@ import { getUserProfile, isPremiumActive } from "@/client/lib/user-profile"
 import { usePremiumUpgrade } from "@/client/components/premium/premium-upgrade-context"
 import { ProfileLifeDiscoverGate } from "@/client/components/profile/profile-life-presence"
 import { useProfileLife } from "@/client/hooks/use-profile-life"
+import { fetchSubscriptionSummary, activateProfileBoost } from "@/client/lib/monetization/api"
+import type { SubscriptionApiResponse } from "@/client/lib/monetization/types"
 import { reviveProfilePresence } from "@/client/lib/profile-life-store"
 export function DiscoverPanel() {
   const { t, locale, location } = useI18n()
@@ -40,6 +42,13 @@ export function DiscoverPanel() {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [deckEmptyReason, setDeckEmptyReason] = useState<"swiped" | "filters" | null>(null)
   const [deckRefreshing, setDeckRefreshing] = useState(false)
+  const [subscription, setSubscription] = useState<SubscriptionApiResponse | null>(null)
+
+  const loadSubscription = useCallback(async () => {
+    const summary = await fetchSubscriptionSummary()
+    setSubscription(summary)
+    return summary
+  }, [])
 
   const loadDeck = useCallback(
     async (activeFilters: DiscoverFilters = filters) => {
@@ -97,8 +106,19 @@ export function DiscoverPanel() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!hydrated) return
+    void loadSubscription()
+  }, [hydrated, loadSubscription, profileTick])
+
   const user = getUserProfile()
-  const premium = Boolean(user && isPremiumActive(user))
+  const premium = Boolean(
+    subscription?.subscription.isPremium || (user && isPremiumActive(user))
+  )
+  const boostActive = Boolean(subscription?.boost.active)
+  const likesRemaining = subscription?.limits.unlimited
+    ? null
+    : subscription?.limits.remaining ?? null
   const profileLife = useProfileLife()
   const displayName = useMemo(() => {
     const name = user?.name?.trim()
@@ -146,11 +166,26 @@ export function DiscoverPanel() {
     setProfileTick((x) => x + 1)
   }
 
+  const handleBoost = async () => {
+    const result = await activateProfileBoost()
+    if (result.activated) {
+      await loadSubscription()
+      return
+    }
+    if ("url" in result && result.url) {
+      window.location.href = result.url
+      return
+    }
+    openUpgrade("boost")
+  }
+
   const toolbar = (
     <DiscoverToolbar
       compactRow
       premium={premium}
-      onBoost={() => openUpgrade("boost")}
+      boostActive={boostActive}
+      likesRemaining={likesRemaining}
+      onBoost={() => void handleBoost()}
       onOpenFilters={() => setFiltersOpen(true)}
     />
   )

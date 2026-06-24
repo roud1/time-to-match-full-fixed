@@ -63,7 +63,7 @@ export type DiscoverFeedProfile = ScoredCandidate & {
 export type LikeResult =
   | { ok: true; liked: true; matched: false }
   | { ok: true; liked: true; matched: true; matchId: string }
-  | { ok: false; code: "not_found" | "self" | "blocked" }
+  | { ok: false; code: "not_found" | "self" | "blocked" | "like_limit_reached"; remaining?: number }
 
 export type PassResult =
   | { ok: true; passed: true }

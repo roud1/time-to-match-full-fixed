@@ -5,6 +5,8 @@ export type ApiErrorBody = {
   error: string
   message?: string
   details?: unknown
+  code?: string
+  remaining?: number
 }
 
 export function jsonOk<T>(data: T, init?: ResponseInit) {

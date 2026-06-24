@@ -13,6 +13,7 @@ import {
 import { xpProgressInLevel } from "@/server/gamification/xp"
 import { getUserBehaviorMetrics } from "@/server/engines/behavior/behavior.service"
 import { getProfile } from "@/server/profile"
+import { getSubscriptionSummary, serializeSubscription } from "@/server/monetization"
 
 export const runtime = "nodejs"
 
@@ -51,6 +52,7 @@ export async function GET(request: Request) {
   const interests = catalog.filter((i) => interestIds.includes(i.id))
   const behavior = await getUserBehaviorMetrics(user.id)
   const fullProfile = await getProfile(user.id)
+  const monetization = await getSubscriptionSummary(user.id)
 
   return withCors(
     request,
@@ -97,6 +99,17 @@ export async function GET(request: Request) {
               conversationDepth: behavior.conversationDepth,
             }
           : null,
+        subscription: {
+          ...serializeSubscription(monetization.subscription),
+          limits: {
+            unlimited: monetization.limits.unlimited,
+            dailyLimit: monetization.limits.unlimited ? null : monetization.limits.dailyLimit,
+            usedToday: monetization.limits.usedToday,
+            remaining: monetization.limits.unlimited ? null : monetization.limits.remaining,
+            resetsAt: monetization.limits.resetsAt,
+          },
+          boost: monetization.boost,
+        },
       },
     })
   )

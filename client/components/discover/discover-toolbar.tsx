@@ -10,13 +10,22 @@ import {
 
 type DiscoverToolbarProps = {
   premium: boolean
+  boostActive?: boolean
+  likesRemaining?: number | null
   onBoost: () => void
   onOpenFilters: () => void
   /** Single-row actions bar under the card — filters/boost only */
   compactRow?: boolean
 }
 
-export function DiscoverToolbar({ premium, onBoost, onOpenFilters, compactRow }: DiscoverToolbarProps) {
+export function DiscoverToolbar({
+  premium,
+  boostActive = false,
+  likesRemaining = null,
+  onBoost,
+  onOpenFilters,
+  compactRow,
+}: DiscoverToolbarProps) {
   const { t } = useI18n()
   const [matchHintVisible, setMatchHintVisible] = useState(false)
 
@@ -51,6 +60,16 @@ export function DiscoverToolbar({ premium, onBoost, onOpenFilters, compactRow }:
         ) : null}
 
         <div className="ttm-discover-toolbar__actions">
+          {!premium && likesRemaining != null ? (
+            <span className="ttm-discover-toolbar__likes text-xs text-muted-foreground tabular-nums px-2">
+              {likesRemaining} ♥
+            </span>
+          ) : premium ? (
+            <span className="ttm-discover-toolbar__premium-badge text-[10px] uppercase tracking-wide text-amber-600/90 px-2 font-medium">
+              Premium
+            </span>
+          ) : null}
+
           <button
             type="button"
             onClick={onOpenFilters}
@@ -67,7 +86,7 @@ export function DiscoverToolbar({ premium, onBoost, onOpenFilters, compactRow }:
             </svg>
           </button>
 
-          {premium ? (
+          {boostActive ? (
             <span className="ttm-discover-toolbar__boost ttm-discover-toolbar__boost--active">
               <span className="ttm-discover-toolbar__boost-dot" aria-hidden />
               {t("premiumBoostActive")}

@@ -53,6 +53,17 @@ export async function POST(request: Request) {
 
   const result = await matchingService.recordLike(session.sub, parsed.data.targetUserId)
   if (!result.ok) {
+    if (result.code === "like_limit_reached") {
+      return withCors(
+        request,
+        jsonError(429, {
+          error: "LIKE_LIMIT_REACHED",
+          code: "LIKE_LIMIT_REACHED",
+          message: "Daily like limit reached",
+          remaining: result.remaining ?? 0,
+        })
+      )
+    }
     const status = result.code === "blocked" ? 403 : 404
     return withCors(
       request,

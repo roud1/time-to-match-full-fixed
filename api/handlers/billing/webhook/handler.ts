@@ -10,6 +10,7 @@ import {
   getUserIdByStripeSubscriptionId,
   upsertUserSubscription,
 } from "@/server/billing/repository"
+import { activateBoost } from "@/server/monetization/boost.service"
 import {
   claimStripeWebhookEvent,
   releaseStripeWebhookEvent,
@@ -39,6 +40,12 @@ async function processStripeEvent(event: Stripe.Event): Promise<void> {
       const session = event.data.object as Stripe.Checkout.Session
       const userId = session.metadata?.userId ?? session.client_reference_id
       if (!userId) break
+
+      if (session.metadata?.type === "boost") {
+        await activateBoost(userId)
+        break
+      }
+
       const plan = planFromMetadata(session.metadata)
       await upsertUserSubscription({
         userId,

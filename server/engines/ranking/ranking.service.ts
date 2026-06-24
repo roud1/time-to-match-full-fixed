@@ -1,6 +1,8 @@
 import { getDb } from "@/server/db"
 import { priorityLevelFromPairScores } from "@/server/engines/behavior/scoring"
 import { getBehaviorUser } from "@/server/engines/behavior/repository"
+import { getActiveBoostUserIds } from "@/server/monetization/repository"
+import { BOOST_SCORE_MULTIPLIER } from "@/server/monetization/constants"
 import type { RankingTier } from "@/server/engines/types"
 import type { DiscoverProfile } from "@/client/lib/discover/types"
 
@@ -47,13 +49,14 @@ export async function rankDiscoverProfiles(input: {
 
   const db = getDb()
   const tierByUser = new Map<string, RankingTier>()
+  const profileIds = input.profiles.map((p) => p.id)
+  const boostedUsers = await getActiveBoostUserIds(profileIds)
 
-  if (db && input.profiles.length > 0) {
-    const ids = input.profiles.map((p) => p.id)
+  if (db && profileIds.length > 0) {
     const rows = await db<{ id: string; ranking_tier: RankingTier; behavior_score: number; discover_visibility: number }[]>`
       SELECT id, ranking_tier, behavior_score, discover_visibility
       FROM users
-      WHERE id = ANY(${ids})
+      WHERE id = ANY(${profileIds})
     `
     for (const r of rows) tierByUser.set(r.id, r.ranking_tier)
   }
@@ -74,6 +77,10 @@ export async function rankDiscoverProfiles(input: {
     if (viewerTier === "low" && tier === "hot") rankingScore -= 0.2
 
     rankingScore *= viewerVisibility
+
+    if (boostedUsers.has(p.id)) {
+      rankingScore *= BOOST_SCORE_MULTIPLIER
+    }
 
     return {
       ...p,

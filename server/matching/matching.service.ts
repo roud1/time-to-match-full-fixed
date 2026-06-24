@@ -16,6 +16,8 @@ import type {
   PassResult,
   UserProfile,
 } from "@/server/matching/types"
+import { canUserLike, consumeLike } from "@/server/monetization"
+import { getDb } from "@/server/db"
 import { recordLikeForUser, recordPassForUser } from "@/server/repositories/likes"
 import { findUserById } from "@/server/repositories/users"
 
@@ -66,9 +68,35 @@ async function buildViewerProfile(
   }
 }
 
+async function hasPriorLike(actorId: string, targetUserId: string): Promise<boolean> {
+  const db = getDb()
+  if (!db) return false
+  const rows = await db<{ n: number }[]>`
+    SELECT 1 AS n FROM likes
+    WHERE from_user = ${actorId} AND to_user = ${targetUserId}
+    LIMIT 1
+  `
+  return rows.length > 0
+}
+
 export async function recordLike(actorId: string, targetUserId: string): Promise<LikeResult> {
+  const hadPrior = await hasPriorLike(actorId, targetUserId)
+  if (!hadPrior) {
+    const access = await canUserLike(actorId)
+    if (!access.allowed) {
+      return {
+        ok: false,
+        code: "like_limit_reached",
+        remaining: access.remaining,
+      }
+    }
+  }
+
   const result = await recordLikeForUser(actorId, targetUserId)
   if (result.ok) {
+    if (!hadPrior) {
+      await consumeLike(actorId)
+    }
     await touchUserActivity(actorId)
   }
   return result

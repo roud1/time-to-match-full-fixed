@@ -1,6 +1,7 @@
 import type { AchievementListItem, UnlockedAchievement } from "@/client/lib/gamification/types"
 import type { Interest } from "@/client/lib/interests/types"
 import type { ProfileLocation, ProfilePhoto } from "@/client/lib/profile/api"
+import type { UserSubscriptionInfo } from "@/client/lib/monetization/types"
 
 export type User = {
   id: string
@@ -33,6 +34,7 @@ export type User = {
   xpProgress?: number
   achievements?: UnlockedAchievement[]
   achievementCatalog?: AchievementListItem[]
+  subscription?: UserSubscriptionInfo
 }
 
 export type MeResponse = {
