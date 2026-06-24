@@ -12,6 +12,7 @@ import {
 } from "@/server/gamification/repository"
 import { xpProgressInLevel } from "@/server/gamification/xp"
 import { getUserBehaviorMetrics } from "@/server/engines/behavior/behavior.service"
+import { getProfile } from "@/server/profile"
 
 export const runtime = "nodejs"
 
@@ -49,6 +50,7 @@ export async function GET(request: Request) {
   const catalog = await listAllInterests()
   const interests = catalog.filter((i) => interestIds.includes(i.id))
   const behavior = await getUserBehaviorMetrics(user.id)
+  const fullProfile = await getProfile(user.id)
 
   return withCors(
     request,
@@ -70,6 +72,11 @@ export async function GET(request: Request) {
         latitude: user.latitude ?? null,
         longitude: user.longitude ?? null,
         maxDistance: user.max_distance ?? 50,
+        bio: fullProfile?.bio ?? null,
+        birthDate: fullProfile?.birthDate ?? null,
+        age: fullProfile?.age ?? null,
+        photos: fullProfile?.photos ?? [],
+        location: fullProfile?.location ?? null,
         interests,
         interestIds,
         xp,

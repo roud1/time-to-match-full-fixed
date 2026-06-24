@@ -1,5 +1,6 @@
 import type { AchievementListItem, UnlockedAchievement } from "@/client/lib/gamification/types"
 import type { Interest } from "@/client/lib/interests/types"
+import type { ProfileLocation, ProfilePhoto } from "@/client/lib/profile/api"
 
 export type User = {
   id: string
@@ -18,6 +19,11 @@ export type User = {
   latitude?: number | null
   longitude?: number | null
   maxDistance?: number
+  bio?: string | null
+  birthDate?: string | null
+  age?: number | null
+  photos?: ProfilePhoto[]
+  location?: ProfileLocation | null
   interests?: Interest[]
   interestIds?: number[]
   xp?: number

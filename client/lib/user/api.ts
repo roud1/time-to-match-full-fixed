@@ -25,6 +25,12 @@ function syncLocalFromServerUser(user: MeResponse["user"]): void {
     ageMax: user.ageMax,
     maxDistance: user.maxDistance,
     dbInterestIds: user.interestIds,
+    bio: user.bio ?? undefined,
+    birthdate: user.birthDate ?? undefined,
+    latitude: user.latitude ?? user.location?.latitude ?? undefined,
+    longitude: user.longitude ?? user.location?.longitude ?? undefined,
+    customCity: user.location?.city ?? undefined,
+    photoUrls: user.photos?.map((p) => p.url),
   })
   if (!isLoggedIn()) setSession(user.email, true)
 }

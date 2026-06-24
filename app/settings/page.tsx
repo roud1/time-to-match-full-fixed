@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "motion/react"
 import { Navbar } from "@/client/components/navbar"
@@ -12,6 +12,8 @@ import { SettingsBlockedList } from "@/client/components/settings/settings-block
 import { SettingsSubscriptionCard } from "@/client/components/settings/settings-subscription-card"
 import { CinematicInviteFlow } from "@/client/components/network/cinematic-invite-flow"
 import { pushConnectionSync } from "@/client/lib/connection-sync-client"
+import { getUserProfile, getAgeFromBirthdate } from "@/client/lib/user-profile"
+import { getProfilePhotos } from "@/client/lib/profile-photos"
 
 type Section = "account" | "security" | "privacy" | "notifications"
 
@@ -19,6 +21,17 @@ export default function SettingsPage() {
   const { t } = useI18n()
   const [section, setSection] = useState<Section>("account")
   const [saved, setSaved] = useState(false)
+  const [localProfile, setLocalProfile] = useState(() => getUserProfile())
+
+  useEffect(() => {
+    const sync = () => setLocalProfile(getUserProfile())
+    window.addEventListener("ttm-auth-changed", sync)
+    window.addEventListener("ttm-user-profile-changed", sync)
+    return () => {
+      window.removeEventListener("ttm-auth-changed", sync)
+      window.removeEventListener("ttm-user-profile-changed", sync)
+    }
+  }, [])
 
   const nav: { id: Section; label: string }[] = [
     { id: "account", label: t("settingsAccount") },
@@ -114,11 +127,49 @@ export default function SettingsPage() {
                 <>
                   <SettingsSubscriptionCard />
                   <CinematicInviteFlow />
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-3">
+                    <p className="p9-register-step-label">{t("profileDetailsTitle")}</p>
+                    <p className="text-sm font-light text-white/70">
+                      {localProfile?.name ?? "—"}
+                      {localProfile?.birthdate && (
+                        <span className="text-white/45">
+                          {" "}
+                          · {getAgeFromBirthdate(localProfile.birthdate)} {t("profileYears")}
+                        </span>
+                      )}
+                    </p>
+                    {localProfile?.bio ? (
+                      <p className="text-xs font-light text-white/50 line-clamp-3">{localProfile.bio}</p>
+                    ) : null}
+                    {(localProfile?.customCity || localProfile?.cityId) && (
+                      <p className="text-xs font-light text-white/45">
+                        {localProfile.customCity ?? localProfile.cityId}
+                        {localProfile.latitude != null && localProfile.longitude != null && (
+                          <span className="tabular-nums">
+                            {" "}
+                            ({localProfile.latitude.toFixed(2)}, {localProfile.longitude.toFixed(2)})
+                          </span>
+                        )}
+                      </p>
+                    )}
+                    {getProfilePhotos(localProfile ?? {}).length > 0 && (
+                      <p className="text-xs text-indigo-200/70 font-light">
+                        {getProfilePhotos(localProfile ?? {}).length} photo(s)
+                      </p>
+                    )}
+                    <Link
+                      href="/profile?edit=1"
+                      className="inline-block text-xs text-indigo-200/80 hover:text-indigo-100 font-light"
+                    >
+                      {t("profileEdit")} →
+                    </Link>
+                  </div>
                   <label className="block">
                     <span className="p9-register-step-label block mb-2">{t("settingsDisplayName")}</span>
                     <input
                       type="text"
                       disabled
+                      value={localProfile?.name ?? ""}
                       className="w-full rounded-2xl bg-white/[0.04] border border-white/10 px-4 py-3 text-white/50 font-light outline-none"
                       placeholder="—"
                     />

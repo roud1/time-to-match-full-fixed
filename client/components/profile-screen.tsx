@@ -62,6 +62,7 @@ import { recordProfileActivity, reviveProfilePresence } from "@/client/lib/profi
 import type { DatingPurpose } from "@/client/lib/interests/types"
 import { DEFAULT_MAX_DISTANCE_KM } from "@/client/lib/interests/types"
 import { trackFunnelOnce } from "@/client/lib/analytics-funnel"
+import { syncProfileFormToServer } from "@/client/lib/profile/api"
 
 type Gender = StoredUserProfile["gender"]
 type LookingFor = StoredUserProfile["lookingFor"]
@@ -294,6 +295,15 @@ export function ProfileScreen() {
       }
       recordProfileActivity()
       dispatchProfileDatingSync()
+      void syncProfileFormToServer({
+        bio: patch.bio,
+        birthdate: profile.birthdate,
+        dbInterestIds: patch.dbInterestIds ?? [],
+        photoUrls: patch.photoUrls ?? [],
+        latitude: patch.latitude,
+        longitude: patch.longitude,
+        city: isManual ? form.customCity.trim() : undefined,
+      })
       setProfile(next)
       setForm(profileToForm(next))
       setEditing(false)
