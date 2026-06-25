@@ -17,7 +17,16 @@ import { markFirstMatchCelebrated } from "@/client/lib/product-experience"
 import { PushPromptBanner } from "@/client/components/pwa/push-prompt-banner"
 import { trackProductEvent } from "@/client/lib/analytics-client"
 import { trackFunnelOnce } from "@/client/lib/analytics-funnel"
+import { DatingTimerBadge } from "@/client/components/dating/dating-timer-badge"
+import { formatExpiryCountdown } from "@/client/lib/expiry"
+import { parseTimeLeftToMs } from "@/client/lib/profile-timer-mood"
 import "@/app/match-celebration.css"
+
+function formatMatchTimer(timeLeft: string): string {
+  const ms = parseTimeLeftToMs(timeLeft)
+  if (ms <= 0) return "00:00:00"
+  return formatExpiryCountdown(ms)
+}
 
 type MatchCelebrationScreenProps = {
   profile: SwipeProfile | null
@@ -134,7 +143,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                 transition={{ delay: 0.18 }}
                 className="match-moment__title"
               >
-                {isFirstMatch ? t("matchFirstTitle") : t("matchModalTitle")}
+                {isFirstMatch ? t("matchFirstTitle") : t("datingMatchTitle")}
               </motion.h1>
 
               <motion.p
@@ -143,8 +152,20 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
                 transition={{ delay: 0.24 }}
                 className="match-moment__subtitle"
               >
-                {isFirstMatch ? t("matchFirstSubtitle") : t("matchModalSubtitle")}
+                {isFirstMatch ? t("matchFirstSubtitle") : t("datingMatchSubtitle")}
               </motion.p>
+
+              <motion.div
+                initial={reduce ? false : { opacity: 0, scale: 0.94 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.28 }}
+                className="mt-4"
+              >
+                <DatingTimerBadge
+                  value={formatMatchTimer(profile.timeLeft)}
+                  label={t("datingMatchTimerLabel")}
+                />
+              </motion.div>
 
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 6 }}

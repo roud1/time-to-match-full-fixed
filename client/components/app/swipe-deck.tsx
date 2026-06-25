@@ -555,7 +555,7 @@ export function SwipeDeck({
   }
 
   return (
-    <div className="flex flex-row flex-1 min-h-0 w-full gap-3 sm:gap-5 px-0.5 pb-safe">
+    <div className="flex flex-row flex-1 min-h-0 w-full gap-3 sm:gap-5 px-0.5 pb-safe ttm-swipe-deck--mobile-stack">
       {dialogs}
       {cardColumn}
       <div className={actionsWrapClass}>{actionButtons}</div>

@@ -120,6 +120,14 @@ export function SwipeProfilePresenceCard({
             </div>
           </div>
 
+          <div className="swipe-profile-presence__bio-overlay">
+            <p className="profile-presence__identity-name text-sm font-extralight">
+              {profile.name}
+              <span className="profile-presence__identity-age">, {profile.age}</span>
+            </p>
+            <p>{about}</p>
+          </div>
+
           {onOpenSafety && (
             <button
               type="button"

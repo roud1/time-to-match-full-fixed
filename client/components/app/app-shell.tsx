@@ -175,7 +175,7 @@ export function AppShell() {
         <EmotionalWorldRoot
           ambient
           className={cn(
-            "ttm-native-app ttm-with-desktop-nav",
+            "ttm-native-app ttm-dating-ui ttm-with-desktop-nav",
             immersiveTab && "ttm-native-app--discover",
             likesTab && "ttm-native-app--likes",
             chatTab && "ttm-native-app--chat",

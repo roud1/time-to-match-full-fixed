@@ -77,15 +77,16 @@ export function PaywallModal() {
         if (!o) closePaywall()
       }}
     >
-      <DialogContent className="z-[95] max-w-md border border-amber-500/25 bg-[#050506]/98 backdrop-blur-2xl p-0 overflow-hidden gap-0">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-400/50 to-transparent pointer-events-none" />
+      <DialogContent className="ttm-dating-paywall z-[95] max-w-md border border-[rgba(255,46,99,0.28)] bg-[#070a0f]/98 backdrop-blur-2xl p-0 overflow-hidden gap-0">
+        <div className="ttm-dating-paywall__accent-line absolute inset-x-0 top-0 h-px pointer-events-none" />
         <DialogHeader className="px-5 pt-5 pb-3 text-left space-y-1 border-b border-white/5">
-          <DialogTitle className="text-lg font-extralight tracking-tight text-foreground/95">
+          <DialogTitle className="text-lg font-bold tracking-tight text-foreground/95">
             {t("paywallTitle")}
           </DialogTitle>
           <DialogDescription className="text-xs font-light text-muted-foreground/90 leading-relaxed">
             {t(hintKey)}
           </DialogDescription>
+          <p className="ttm-dating-paywall__urgency">{t("paywallUrgency")}</p>
         </DialogHeader>
         <AnimatePresence>
           {open && (

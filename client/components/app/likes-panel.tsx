@@ -15,6 +15,7 @@ import { usePremiumUpgrade } from "@/client/components/premium/premium-upgrade-c
 import { fetchIncomingLikes, incomingLikeToProfileId } from "@/client/lib/likes/api"
 import { fetchSubscriptionSummary } from "@/client/lib/monetization/api"
 import { CinematicButton } from "@/client/components/ui/cinematic-button"
+import { cn } from "@/client/lib/utils"
 
 function LikesProfileCard({
   profile,
@@ -23,6 +24,7 @@ function LikesProfileCard({
   likeBackLabel,
   presenceLabels,
   blurred = false,
+  grid = false,
 }: {
   profile: SwipeProfile
   onLikeBack: (profile: SwipeProfile) => void
@@ -30,10 +32,17 @@ function LikesProfileCard({
   likeBackLabel: string
   presenceLabels: { online: string; recent: string; today: string }
   blurred?: boolean
+  grid?: boolean
 }) {
   return (
-    <li className="ttm-likes-card ttm-surface-tile ttm-brand-glass ttm-brand-interactive relative">
-      {blurred ? (
+    <li
+      className={cn(
+        "ttm-likes-card ttm-surface-tile ttm-brand-glass ttm-brand-interactive relative",
+        grid && "ttm-likes-card--grid",
+        blurred && "ttm-likes-card--blurred"
+      )}
+    >
+      {blurred && !grid ? (
         <div className="absolute inset-0 z-10 backdrop-blur-md bg-black/30 rounded-[inherit] pointer-events-none" aria-hidden />
       ) : null}
       <div className="ttm-likes-card__media">
@@ -41,7 +50,7 @@ function LikesProfileCard({
           src={profile.image}
           alt={blurred ? "" : profile.name}
           fill
-          className={cnImage(blurred)}
+          className={cnImage(blurred, grid)}
           sizes="(max-width: 640px) 72px, (max-width: 1024px) 33vw, 20vw"
         />
         {!blurred ? (
@@ -86,7 +95,8 @@ function LikesProfileCard({
   )
 }
 
-function cnImage(blurred: boolean) {
+function cnImage(blurred: boolean, grid?: boolean) {
+  if (grid && blurred) return "object-cover"
   return blurred ? "object-cover scale-110 blur-xl opacity-60" : "object-cover"
 }
 
@@ -240,9 +250,12 @@ export function LikesPanel() {
 
           <div className="ttm-likes-page__main relative">
             {!premium ? (
-              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 px-6 text-center pointer-events-none">
-                <Lock className="w-8 h-8 text-amber-400/80" aria-hidden />
-                <p className="text-sm font-light text-white/80">{t("likesPaywallOverlay")}</p>
+              <div className="ttm-likes-blur-overlay pointer-events-none">
+                <Lock className="w-9 h-9 text-[#ff2e63]" aria-hidden />
+                <p className="ttm-likes-blur-overlay__title">{t("likesPaywallTitle")}</p>
+                <p className="ttm-likes-blur-overlay__body">
+                  {t("likesPaywallBody").replace("{count}", String(displayCount))}
+                </p>
                 <CinematicButton
                   variant="primary"
                   className="pointer-events-auto"
@@ -252,7 +265,7 @@ export function LikesPanel() {
                 </CinematicButton>
               </div>
             ) : null}
-            <ul className="ttm-likes-page__grid">
+            <ul className="ttm-likes-page__grid ttm-likes-page__grid--dating">
               {likes.map((profile) => (
                 <LikesProfileCard
                   key={profile.userId ?? profile.id}
@@ -262,6 +275,7 @@ export function LikesPanel() {
                   likeBackLabel={t("likesLikeBack")}
                   presenceLabels={presenceLabels}
                   blurred={!premium}
+                  grid
                 />
               ))}
             </ul>

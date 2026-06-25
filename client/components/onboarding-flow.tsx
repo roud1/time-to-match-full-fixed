@@ -4,15 +4,15 @@ import { useState } from "react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"
 import { CinematicButton } from "@/client/components/ui/cinematic-button"
-import { OnboardingSyncVisual } from "@/client/components/product/onboarding-sync-visual"
+import { DatingOnboardingVisual } from "@/client/components/dating/dating-onboarding-visual"
 import { cn } from "@/client/lib/utils"
 
 import type { TranslationKey } from "@/client/lib/i18n"
 
-const SLIDES: { title: TranslationKey; sub: TranslationKey; visual: "sync" | "pulse" | "moment" }[] = [
-  { title: "mvpOnboard1Title", sub: "mvpOnboard1Sub", visual: "sync" as const },
-  { title: "mvpOnboard2Title", sub: "mvpOnboard2Sub", visual: "pulse" as const },
-  { title: "mvpOnboard3Title", sub: "mvpOnboard3Sub", visual: "moment" as const },
+const SLIDES: { title: TranslationKey; sub: TranslationKey; visual: "timer" | "rules" | "start" }[] = [
+  { title: "mvpOnboard1Title", sub: "mvpOnboard1Sub", visual: "timer" as const },
+  { title: "mvpOnboard2Title", sub: "mvpOnboard2Sub", visual: "rules" as const },
+  { title: "mvpOnboard3Title", sub: "mvpOnboard3Sub", visual: "start" as const },
 ]
 
 type OnboardingFlowProps = {
@@ -28,14 +28,14 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
   const slide = SLIDES[step]
 
   return (
-    <div className={cn("p9-onboarding w-full max-w-lg mx-auto", className)}>
-      <div className="p9-onboarding__glow" />
+    <div className={cn("ttm-dating-onboarding w-full max-w-lg mx-auto", className)}>
+      <div className="ttm-dating-onboarding__glow" />
       <div className="relative px-5 pt-8 pb-8 md:px-10 md:pt-10 md:pb-10 min-h-[380px] flex flex-col">
-        <div className="flex gap-1.5 mb-6">
+        <div className="ttm-dating-onboarding__progress flex gap-1.5 mb-6">
           {SLIDES.map((_, i) => (
-            <div key={i} className="flex-1 h-1 rounded-full bg-white/[0.08] overflow-hidden">
+            <div key={i} className="flex-1 h-1 rounded-full overflow-hidden">
               <motion.div
-                className="h-full rounded-full cin-progress"
+                className="ttm-dating-onboarding__progress-fill h-full rounded-full"
                 initial={false}
                 animate={{ width: i <= step ? "100%" : "0%" }}
                 transition={{ duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -53,23 +53,13 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
             transition={{ duration: reduce ? 0.2 : 0.52, ease: [0.22, 1, 0.36, 1] }}
             className="flex-1 flex flex-col items-center text-center"
           >
-            {slide.visual === "sync" && (
-              <OnboardingSyncVisual className="mb-8" intensity="soft" />
-            )}
-            {slide.visual === "pulse" && (
-              <div className="mb-8 w-24 h-24 rounded-full border border-white/12 bg-gradient-to-br from-indigo-500/25 to-violet-600/15 flex items-center justify-center shadow-[0_0_40px_-8px_var(--ttm-glow-chemistry)]">
-                <span className="w-3 h-3 rounded-full bg-white/80 animate-pulse" />
-              </div>
-            )}
-            {slide.visual === "moment" && (
-              <OnboardingSyncVisual className="mb-8" intensity="vivid" />
-            )}
+            <DatingOnboardingVisual variant={slide.visual} />
 
             <span className="ttm-badge-brand mb-4">{t("onboardEyebrow")}</span>
             <span className="p9-register-step-label mb-3 block">
               {step + 1} / {SLIDES.length}
             </span>
-            <h2 className="ttm-brand-gradient-text text-[1.55rem] sm:text-3xl font-extralight tracking-tight text-balance mb-4 leading-[1.12]">
+            <h2 className="ttm-dating-onboarding__title text-balance mb-4 leading-[1.12]">
               {t(slide.title)}
             </h2>
             <p className="text-sm sm:text-base text-white/55 font-light leading-relaxed max-w-md">
