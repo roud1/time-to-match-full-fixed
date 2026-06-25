@@ -8,10 +8,11 @@ import type {
 } from "@/server/matching/types"
 
 const WEIGHTS = {
-  interests: 0.4,
-  age: 0.2,
-  geo: 0.25,
+  interests: 0.35,
+  age: 0.18,
+  geo: 0.22,
   activity: 0.15,
+  attractiveness: 0.1,
 } as const
 
 /** Jaccard similarity on interest tag IDs, scaled 0–100. */
@@ -76,6 +77,11 @@ export function scoreActivity(
   return Math.round(completeness * 0.45 + activity * 0.55)
 }
 
+/** Likes received in 30d as attractiveness proxy (0–100). */
+export function scoreAttractiveness(likesReceivedSignal: number): number {
+  return Math.round(Math.min(1, Math.max(0, likesReceivedSignal)) * 100)
+}
+
 export function computeCompatibility(
   viewer: UserProfile,
   candidate: UserProfile
@@ -85,13 +91,15 @@ export function computeCompatibility(
     age: scoreAge(candidate.age, viewer.ageMin, viewer.ageMax),
     geo: scoreGeo(viewer, candidate),
     activity: scoreActivity(candidate.profileCompleteness, candidate.activitySignal),
+    attractiveness: scoreAttractiveness(candidate.likesReceivedSignal ?? 0),
   }
 
   const total = Math.round(
     breakdown.interests * WEIGHTS.interests +
       breakdown.age * WEIGHTS.age +
       breakdown.geo * WEIGHTS.geo +
-      breakdown.activity * WEIGHTS.activity
+      breakdown.activity * WEIGHTS.activity +
+      breakdown.attractiveness * WEIGHTS.attractiveness
   )
 
   return { total, breakdown }
@@ -103,7 +111,12 @@ export function rankCandidates<T extends { compatibilityScore: number }>(candida
 
 export function scoreCandidateProfiles(
   viewer: UserProfile,
-  candidates: Array<CandidateProfile & Pick<UserProfile, "profileCompleteness" | "activitySignal">>
+  candidates: Array<
+    CandidateProfile &
+      Pick<UserProfile, "profileCompleteness" | "activitySignal"> & {
+        likesReceivedSignal?: number
+      }
+  >
 ): ScoredCandidate[] {
   return candidates.map((candidate) => {
     const candidateProfile: UserProfile = {
@@ -117,6 +130,7 @@ export function scoreCandidateProfiles(
       maxDistance: null,
       profileCompleteness: candidate.profileCompleteness,
       activitySignal: candidate.activitySignal,
+      likesReceivedSignal: candidate.likesReceivedSignal ?? 0,
     }
     const scored = computeCompatibility(viewer, candidateProfile)
     return {

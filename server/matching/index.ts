@@ -6,6 +6,7 @@ export {
   scoreAge,
   scoreGeo,
   scoreActivity,
+  scoreAttractiveness,
 } from "@/server/matching/compatibility"
 export type {
   UserProfile,

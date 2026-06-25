@@ -53,6 +53,12 @@ export function CountdownTimer({
 
   const urgency = getTimerUrgency(remainingMs)
   const display = formatExpiryCountdown(remainingMs)
+  const urgencyLabel =
+    urgency === "critical"
+      ? t("timeRunningOutCritical")
+      : urgency === "warning"
+        ? t("timeRunningOutWarning")
+        : null
   const ariaTime = formatExpiryAriaTime(remainingMs)
   const ariaLabel =
     context === "profile"
@@ -77,7 +83,7 @@ export function CountdownTimer({
     <span
       title={tooltip}
       className={cn(
-        "ttm-countdown-timer inline-flex items-center tabular-nums font-light",
+        "ttm-countdown-timer inline-flex items-center gap-1 tabular-nums font-light",
         compact ? "text-[10px]" : "text-xs",
         urgency === "critical" && "ttm-countdown-timer--critical",
         urgency === "warning" && "ttm-countdown-timer--warning",
@@ -89,8 +95,13 @@ export function CountdownTimer({
       role="timer"
       aria-live="polite"
       aria-atomic="true"
-      aria-label={ariaLabel}
+      aria-label={urgencyLabel ? `${urgencyLabel}. ${ariaLabel}` : ariaLabel}
     >
+      {urgencyLabel ? (
+        <span className="ttm-countdown-timer__urgency hidden sm:inline text-[9px] uppercase tracking-wider opacity-90">
+          {urgencyLabel}
+        </span>
+      ) : null}
       <span
         key={`${tickPulse}-${flashKey}`}
         className="ttm-countdown-timer__digits inline-block"

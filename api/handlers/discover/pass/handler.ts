@@ -3,6 +3,7 @@ import { getServerEnv } from "@/config/env"
 import { getSessionFromRequest } from "@/server/auth/session-request"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { checkRateLimit } from "@/server/rate-limit"
+import { checkUserActionRate } from "@/server/rate-limit-actions"
 import { matchingService } from "@/server/matching"
 import { discoverSwipeBodySchema } from "@/server/validation/discover-swipe"
 
@@ -35,6 +36,18 @@ export async function POST(request: Request) {
         429,
         { error: "rate_limited", message: "Too many swipe requests" },
         { headers: { "Retry-After": String(rl.retryAfterSec) } }
+      )
+    )
+  }
+
+  const actionRl = await checkUserActionRate(session.sub)
+  if (!actionRl.ok) {
+    return withCors(
+      request,
+      jsonError(
+        429,
+        { error: "rate_limited", message: "Too many actions per minute" },
+        { headers: { "Retry-After": String(actionRl.retryAfterSec) } }
       )
     )
   }

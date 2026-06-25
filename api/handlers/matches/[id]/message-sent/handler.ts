@@ -8,6 +8,7 @@ import { recordMessageSentForMatch } from "@/server/repositories/match-stats"
 import { findMatchByIdForUser } from "@/server/repositories/likes"
 import { maybeQueueConnectionAnalysis } from "@/server/connection-ai-worker"
 import { isValidMatchRouteId, resolveMatchRouteId } from "@/server/matches/resolve-id"
+import { trackServerEvent } from "@/server/analytics/track"
 
 export const runtime = "nodejs"
 
@@ -80,6 +81,11 @@ export async function POST(request: Request, context: RouteContext) {
     const refreshed = await findMatchByIdForUser(likeId, session.sub)
     payload.newExpiresAt = refreshed?.expires_at?.toISOString()
   }
+
+  void trackServerEvent("message_sent", {
+    userId: session.sub,
+    properties: { matchId: likeId, prolonged: result.payload.prolonged },
+  })
 
   return withCors(request, jsonOk(payload))
 }

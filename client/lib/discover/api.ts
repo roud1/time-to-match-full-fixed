@@ -65,6 +65,7 @@ export type DiscoverLikeResponse =
   | { ok: true; liked: true; matched: false }
   | { ok: true; liked: true; matched: true; matchId: string }
   | { ok: false; demoFallback: true }
+  | { ok: false; likeLimitReached: true }
   | { ok: false; status: number; serverError: true }
 
 export type DiscoverPassResponse =
@@ -88,9 +89,14 @@ export async function postDiscoverLike(targetUserId: string): Promise<DiscoverLi
     liked?: boolean
     matched?: boolean
     matchId?: string
+    error?: string
+    code?: string
   }
 
   if (!res.ok) {
+    if (res.status === 429 && (data.code === "LIKE_LIMIT_REACHED" || data.error === "LIKE_LIMIT_REACHED")) {
+      return { ok: false, likeLimitReached: true }
+    }
     return { ok: false, status: res.status, serverError: true }
   }
 

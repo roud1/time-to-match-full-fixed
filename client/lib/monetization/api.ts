@@ -123,7 +123,7 @@ export async function activateProfileBoost(): Promise<BoostApiResponse & { demo?
       return { activated: false, url: data.url }
     }
     if (mode === "demo" || !res.ok) {
-      const until = Date.now() + 60 * 60 * 1000
+      const until = Date.now() + 30 * 60 * 1000
       localStorage.setItem(DEMO_BOOST_KEY, String(until))
       return {
         activated: true,
@@ -133,7 +133,7 @@ export async function activateProfileBoost(): Promise<BoostApiResponse & { demo?
     }
   } catch {
     if (mode === "demo") {
-      const until = Date.now() + 60 * 60 * 1000
+      const until = Date.now() + 30 * 60 * 1000
       localStorage.setItem(DEMO_BOOST_KEY, String(until))
       return {
         activated: true,

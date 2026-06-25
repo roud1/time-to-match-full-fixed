@@ -18,6 +18,7 @@ import { ThemeToggle } from "@/client/components/theme/theme-toggle"
 import { PremiumUpgradeProvider } from "@/client/components/premium/premium-upgrade-context"
 import { ConnectionExtensionToastStack } from "@/client/components/connection/connection-extension-toast"
 import { PremiumUpgradeSheet } from "@/client/components/premium/premium-upgrade-sheet"
+import { PaywallModal } from "@/client/components/premium/paywall-modal"
 import { PremiumBadgeLink } from "@/client/components/premium/premium-badge"
 import { AppTabTransition } from "@/client/components/mobile/app-tab-transition"
 import { useI18n } from "@/client/lib/i18n"
@@ -280,6 +281,7 @@ export function AppShell() {
         <EvolutionEventCelebration />
         <ConnectionExtensionToastStack />
         <PremiumUpgradeSheet />
+        <PaywallModal />
       </PremiumUpgradeProvider>
     </ActivityFeedProvider>
   )

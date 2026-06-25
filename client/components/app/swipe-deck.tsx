@@ -150,7 +150,12 @@ export function SwipeDeck({
         }
         await xAnimRef.current
 
-        const { matched } = await recordSwipe(top, direction, locale, location.position)
+        const { matched, likeLimitReached } = await recordSwipe(top, direction, locale, location.position)
+        if (likeLimitReached) {
+          openUpgrade("likes")
+          x.set(0)
+          return
+        }
         trackEvent(direction === "right" ? "swipe_like" : "swipe_pass")
         trackFunnelOnce("first_swipe", { direction })
         if (matched && direction === "right") {
@@ -163,7 +168,12 @@ export function SwipeDeck({
         onProfilesChange((prev) => prev.filter((p) => p.id !== top.id))
         x.set(0)
       } catch {
-        const { matched } = await recordSwipe(top, direction, locale, location.position)
+        const { matched, likeLimitReached } = await recordSwipe(top, direction, locale, location.position)
+        if (likeLimitReached) {
+          openUpgrade("likes")
+          x.set(0)
+          return
+        }
         trackEvent(direction === "right" ? "swipe_like" : "swipe_pass")
         trackFunnelOnce("first_swipe", { direction })
         if (matched && direction === "right") {
@@ -178,7 +188,7 @@ export function SwipeDeck({
         exitLockRef.current = false
       }
     },
-    [profiles, locale, location.position, onProfilesChange, reduceMotion, x, cancelXAnim]
+    [profiles, locale, location.position, onProfilesChange, reduceMotion, x, cancelXAnim, openUpgrade]
   )
 
   const onDragEnd = useCallback(

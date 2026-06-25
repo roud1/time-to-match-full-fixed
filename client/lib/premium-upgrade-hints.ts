@@ -3,6 +3,7 @@ export const PREMIUM_UPGRADE_HINTS = [
   "rewind",
   "boost",
   "likes",
+  "likedYou",
   "map",
   "timer",
 ] as const

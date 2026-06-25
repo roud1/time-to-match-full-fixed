@@ -17,6 +17,7 @@ import { deriveSyncMetrics } from "@/client/lib/sync-system"
 import { getConnection } from "@/client/lib/connection-store"
 import { resolveEmotionalPresence } from "@/client/lib/world"
 import { ConnectionTimer } from "@/client/components/connection/connection-timer"
+import { CountdownTimer } from "@/client/components/ui/countdown-timer"
 import { useMatchForProfile } from "@/client/hooks/use-matches"
 import { getLocalBondState } from "@/client/lib/match-bond-local"
 import { BOND_PROLONG_HOURS } from "@/server/matches/bond-constants"
@@ -195,7 +196,15 @@ export function ChatInboxThreadRow({
         </div>
         {connectionView ? (
           <div className="ttm-chat-inbox__row-timer flex flex-col items-end justify-end shrink-0 self-center pl-2 pr-0.5">
-            <ConnectionTimer view={connectionView} compact stableLabel={copy.stableLabel} />
+            {serverMatch?.expiresAt ? (
+              <CountdownTimer expiresAt={serverMatch.expiresAt} compact context="match" />
+            ) : (
+              <ConnectionTimer view={connectionView} compact stableLabel={copy.stableLabel} />
+            )}
+          </div>
+        ) : serverMatch?.expiresAt ? (
+          <div className="ttm-chat-inbox__row-timer flex flex-col items-end justify-end shrink-0 self-center pl-2 pr-0.5">
+            <CountdownTimer expiresAt={serverMatch.expiresAt} compact context="match" />
           </div>
         ) : null}
       </button>

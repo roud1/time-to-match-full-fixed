@@ -60,9 +60,11 @@ function inboxRowToItem(
     href:
       row.type === "profile_expiring"
         ? "/profile"
-        : row.reference_id
-          ? `/app?tab=chat&with=${discoverIdToNumeric(row.reference_id)}`
-          : "/app?tab=chat",
+        : row.type === "someone_liked_you"
+          ? "/app?tab=likes"
+          : row.reference_id
+            ? `/app?tab=chat&with=${discoverIdToNumeric(row.reference_id)}`
+            : "/app?tab=chat",
   }
 }
 
@@ -200,6 +202,22 @@ export async function scheduleNewMatchNotifications(userA: string, userB: string
     RETURNING id
   `
   return insertedA.length + insertedB.length
+}
+
+export async function scheduleSomeoneLikedYouNotification(
+  recipientUserId: string,
+  likerUserId: string
+): Promise<boolean> {
+  const db = getDb()
+  if (!db) return false
+
+  const inserted = await db<{ id: string }[]>`
+    INSERT INTO notifications (user_id, type, reference_id, lead_hours, scheduled_for)
+    VALUES (${recipientUserId}, 'someone_liked_you', ${likerUserId}, 0, now())
+    ON CONFLICT DO NOTHING
+    RETURNING id
+  `
+  return inserted.length > 0
 }
 
 export async function fetchPendingForDelivery(limit = 200): Promise<PendingNotificationRow[]> {

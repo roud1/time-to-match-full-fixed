@@ -5,6 +5,7 @@ import { AUTH_RATE_LIMITS } from "@/server/auth/rate-limits"
 import { getServerEnv } from "@/config/env"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { log } from "@/server/log"
+import { trackServerEvent } from "@/server/analytics/track"
 import { checkRateLimit, getClientIp } from "@/server/rate-limit"
 import { createUser, findUserByEmail } from "@/server/repositories/users"
 import { registerBodySchema, sanitizeDisplayName } from "@/server/validation/auth"
@@ -78,6 +79,7 @@ export async function POST(request: Request) {
     const res = jsonOk({ user: { id, email, name } })
     await issueAuthCookies(res, { sub: id, email }, { userAgent: request.headers.get("user-agent"), ip })
     log.info("auth_register_ok", { userId: id })
+    void trackServerEvent("signup", { userId: id })
     return withCors(request, res)
   } catch (e) {
     if (isPgUniqueViolation(e)) {

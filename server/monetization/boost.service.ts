@@ -1,5 +1,5 @@
 import {
-  BOOST_DURATION_HOURS,
+  BOOST_DURATION_MINUTES,
   BOOST_SCORE_MULTIPLIER,
 } from "@/server/monetization/constants"
 import { getBoostExpiresAt, setBoostExpiresAt } from "@/server/monetization/repository"
@@ -24,11 +24,14 @@ export function getBoostMultiplier(active: boolean): number {
   return active ? BOOST_SCORE_MULTIPLIER : 1
 }
 
-export async function activateBoost(userId: string, durationHours = BOOST_DURATION_HOURS): Promise<BoostStatus> {
+export async function activateBoost(
+  userId: string,
+  durationMinutes = BOOST_DURATION_MINUTES
+): Promise<BoostStatus> {
   const current = await getBoostExpiresAt(userId)
   const now = Date.now()
   const base = current && current.getTime() > now ? current.getTime() : now
-  const expiresAt = new Date(base + durationHours * 60 * 60 * 1000)
+  const expiresAt = new Date(base + durationMinutes * 60 * 1000)
   await setBoostExpiresAt(userId, expiresAt)
   return {
     active: true,

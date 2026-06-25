@@ -22,6 +22,8 @@ type DiscoverCandidateRow = {
 export type ActivitySignals = {
   profileCompleteness: number
   activitySignal: number
+  /** 0–1 attractiveness proxy from likes received (30d). */
+  likesReceivedSignal: number
 }
 
 function readString(v: unknown): string | undefined {
@@ -161,6 +163,22 @@ export async function listEligibleCandidates(input: {
   `
 }
 
+export async function getLikesReceivedCounts(userIds: string[]): Promise<Map<string, number>> {
+  const db = getDb()
+  const result = new Map<string, number>()
+  if (!db || userIds.length === 0) return result
+
+  const rows = await db<{ to_user: string; like_count: number }[]>`
+    SELECT to_user, COUNT(*)::int AS like_count
+    FROM likes
+    WHERE to_user = ANY(${userIds})
+      AND created_at > now() - interval '30 days'
+    GROUP BY to_user
+  `
+  for (const row of rows) result.set(row.to_user, row.like_count)
+  return result
+}
+
 export async function getRecentSwipeCounts(userIds: string[]): Promise<Map<string, number>> {
   const db = getDb()
   const result = new Map<string, number>()
@@ -195,6 +213,7 @@ export async function buildCandidateProfiles(input: {
   const viewerInterestRows = viewerInterestMap.get(input.viewerId) ?? []
   const interestByUser = await getInterestsForUsers(rows.map((r) => r.id))
   const swipeCounts = await getRecentSwipeCounts(rows.map((r) => r.id))
+  const likesReceived = await getLikesReceivedCounts(rows.map((r) => r.id))
 
   const viewerPos =
     input.viewerLat != null &&
@@ -243,6 +262,8 @@ export async function buildCandidateProfiles(input: {
       activityScore: row.activity_score,
       recentSwipes: swipeCounts.get(row.id) ?? 0,
     })
+    const received = likesReceived.get(row.id) ?? 0
+    const likesReceivedSignal = Math.min(1, received / 20)
 
     result.push({
       id: row.id,
@@ -263,6 +284,7 @@ export async function buildCandidateProfiles(input: {
       photoVerified: row.photo_verified ?? false,
       profileCompleteness,
       activitySignal,
+      likesReceivedSignal,
     })
   }
 

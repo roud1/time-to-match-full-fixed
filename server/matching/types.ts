@@ -15,6 +15,8 @@ export type UserProfile = {
   profileCompleteness: number
   /** 0–1 recent activity signal. */
   activitySignal: number
+  /** 0–1 likes received in last 30 days (attractiveness proxy). */
+  likesReceivedSignal?: number
 }
 
 export type CompatibilityBreakdown = {
@@ -22,6 +24,7 @@ export type CompatibilityBreakdown = {
   age: number
   geo: number
   activity: number
+  attractiveness: number
 }
 
 export type CompatibilityScore = {

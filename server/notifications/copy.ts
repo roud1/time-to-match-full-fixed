@@ -13,6 +13,7 @@ const COPY: Record<
   {
     profileExpiring: (leadHours: number) => { title: string; body: string }
     newMatch: (name: string) => { title: string; body: string }
+    someoneLikedYou: (name: string) => { title: string; body: string }
     matchUrgency: (name: string, leadHours: number) => { title: string; body: string }
     matchExpiring: (name: string, leadHours: number) => { title: string; body: string }
     peerFallback: string
@@ -51,6 +52,10 @@ const COPY: Record<
     newMatch: (name) => ({
       title: `Новый мэтч с ${name}!`,
       body: "У вас 24 часа, чтобы зажечь диалог. Напишите первым.",
+    }),
+    someoneLikedYou: (name) => ({
+      title: "Кто-то поставил вам лайк",
+      body: `${name} заинтересован(а) в вас. Откройте раздел «Лайки», чтобы ответить взаимностью.`,
     }),
     matchUrgency: (name, leadHours) =>
       leadHours <= 1
@@ -112,6 +117,10 @@ const COPY: Record<
     newMatch: (name) => ({
       title: `New match with ${name}!`,
       body: "You have 24 hours to spark a conversation. Send the first message.",
+    }),
+    someoneLikedYou: (name) => ({
+      title: "Someone liked you",
+      body: `${name} is interested in you. Open Likes to match back.`,
     }),
     matchUrgency: (name, leadHours) =>
       leadHours <= 1
@@ -185,6 +194,18 @@ export function buildNotificationContent(input: {
       href,
       tag: `new-match-${referenceId ?? "unknown"}`,
       html: `<p>${body}</p><p><a href="${href}">${strings.openChat}</a></p>`,
+    }
+  }
+
+  if (type === "someone_liked_you") {
+    const likesHref = `${origin}/app?tab=likes`
+    const { title, body } = strings.someoneLikedYou(name)
+    return {
+      title,
+      body,
+      href: likesHref,
+      tag: `liked-you-${referenceId ?? "unknown"}`,
+      html: `<p>${body}</p><p><a href="${likesHref}">${strings.openChat}</a></p>`,
     }
   }
 

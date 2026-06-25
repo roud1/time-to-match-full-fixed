@@ -254,6 +254,10 @@ export async function recordLikeForUser(
     const expiresAt = matchExpiresAt()
     await createMutualMatchLikes({ userA: fromUserId, userB: targetUserId, expiresAt })
 
+    const { trackServerEvent } = await import("@/server/analytics/track")
+    void trackServerEvent("match", { userId: fromUserId, properties: { peerId: targetUserId } })
+    void trackServerEvent("match", { userId: targetUserId, properties: { peerId: fromUserId } })
+
     const likeRow = await db<{ id: string }[]>`
       SELECT id FROM likes
       WHERE from_user = ${fromUserId} AND to_user = ${targetUserId} AND is_match = true
@@ -272,7 +276,113 @@ export async function recordLikeForUser(
       is_expired = false
   `
 
+  const { scheduleSomeoneLikedYouNotification } = await import("@/server/notifications/repository")
+  await scheduleSomeoneLikedYouNotification(targetUserId, fromUserId)
+
   return { ok: true, liked: true, matched: false }
+}
+
+export type IncomingLikeProfile = {
+  userId: string
+  name: string
+  age: number
+  gender: "male" | "female"
+  image: string
+  location: string
+  likedAt: string
+}
+
+/** Users who liked the viewer but have no mutual match yet. */
+export async function listIncomingLikesForUser(viewerId: string): Promise<IncomingLikeProfile[]> {
+  const db = getDb()
+  if (!db) return []
+
+  type Row = {
+    from_user: string
+    name: string
+    profile: Record<string, unknown>
+    gender: string | null
+    created_at: Date
+  }
+
+  const rows = await db<Row[]>`
+    SELECT u.id AS from_user, u.name, u.profile, u.gender, l.created_at
+    FROM likes l
+    INNER JOIN users u ON u.id = l.from_user
+    WHERE l.to_user = ${viewerId}
+      AND l.is_match = false
+      AND l.is_expired = false
+      AND u.is_active = true
+      AND COALESCE(u.is_blocked, false) = false
+      AND NOT EXISTS (
+        SELECT 1 FROM likes back
+        WHERE back.from_user = ${viewerId} AND back.to_user = l.from_user
+      )
+      AND NOT EXISTS (
+        SELECT 1 FROM user_blocks b
+        WHERE (b.blocker_id = ${viewerId} AND b.blocked_id = l.from_user)
+           OR (b.blocker_id = l.from_user AND b.blocked_id = ${viewerId})
+      )
+    ORDER BY l.created_at DESC
+    LIMIT 50
+  `
+
+  return rows.map((row) => {
+    const profile = row.profile ?? {}
+    const birthdate = typeof profile.birthdate === "string" ? profile.birthdate : null
+    let age = 25
+    if (birthdate) {
+      const birth = new Date(birthdate)
+      if (!Number.isNaN(birth.getTime())) {
+        const today = new Date()
+        age = today.getFullYear() - birth.getFullYear()
+        const m = today.getMonth() - birth.getMonth()
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--
+      }
+    }
+    const photoUrls = profile.photoUrls
+    const image =
+      Array.isArray(photoUrls) && typeof photoUrls[0] === "string"
+        ? photoUrls[0]
+        : typeof profile.photoUrl === "string"
+          ? profile.photoUrl
+          : "/placeholder-profile.jpg"
+    const location =
+      (typeof profile.customCity === "string" && profile.customCity) ||
+      (typeof profile.cityId === "string" && profile.cityId) ||
+      "—"
+    const gender = row.gender === "male" || row.gender === "female" ? row.gender : "female"
+
+    return {
+      userId: row.from_user,
+      name: row.name,
+      age,
+      gender,
+      image,
+      location,
+      likedAt: row.created_at.toISOString(),
+    }
+  })
+}
+
+export async function countIncomingLikesForUser(viewerId: string): Promise<number> {
+  const db = getDb()
+  if (!db) return 0
+  const rows = await db<{ count: string }[]>`
+    SELECT COUNT(*)::text AS count
+    FROM likes l
+    INNER JOIN users u ON u.id = l.from_user
+    WHERE l.to_user = ${viewerId}
+      AND l.is_match = false
+      AND l.is_expired = false
+      AND u.is_active = true
+      AND COALESCE(u.is_blocked, false) = false
+      AND NOT EXISTS (
+        SELECT 1 FROM likes back
+        WHERE back.from_user = ${viewerId} AND back.to_user = l.from_user
+      )
+  `
+  return Number.parseInt(rows[0]?.count ?? "0", 10)
 }
 
 export async function recordPassForUser(

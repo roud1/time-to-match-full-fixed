@@ -5,8 +5,11 @@ import type { PremiumUpgradeHint } from "@/client/lib/premium-upgrade-hints"
 
 type PremiumUpgradeContextValue = {
   openUpgrade: (hint?: PremiumUpgradeHint) => void
+  openPaywall: (hint?: PremiumUpgradeHint) => void
   closeUpgrade: () => void
+  closePaywall: () => void
   sheetOpen: boolean
+  modalOpen: boolean
   hint: PremiumUpgradeHint | null
   profileVersion: number
 }
@@ -15,6 +18,7 @@ const PremiumUpgradeContext = createContext<PremiumUpgradeContextValue | null>(n
 
 export function PremiumUpgradeProvider({ children }: { children: React.ReactNode }) {
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
   const [hint, setHint] = useState<PremiumUpgradeHint | null>(null)
   const [profileVersion, setProfileVersion] = useState(0)
 
@@ -24,9 +28,24 @@ export function PremiumUpgradeProvider({ children }: { children: React.ReactNode
     return () => window.removeEventListener("ttm-user-profile-changed", bump)
   }, [])
 
+  const openPaywall = useCallback((h?: PremiumUpgradeHint) => {
+    setHint(h ?? "likes")
+    setModalOpen(true)
+    setSheetOpen(false)
+  }, [])
+
+  const closePaywall = useCallback(() => setModalOpen(false), [])
+
   const openUpgrade = useCallback((h?: PremiumUpgradeHint) => {
-    setHint(h ?? "default")
-    setSheetOpen(true)
+    const next = h ?? "default"
+    setHint(next)
+    if (next === "likes" || next === "likedYou") {
+      setModalOpen(true)
+      setSheetOpen(false)
+    } else {
+      setSheetOpen(true)
+      setModalOpen(false)
+    }
   }, [])
 
   const closeUpgrade = useCallback(() => setSheetOpen(false), [])
@@ -34,12 +53,15 @@ export function PremiumUpgradeProvider({ children }: { children: React.ReactNode
   const value = useMemo(
     () => ({
       openUpgrade,
+      openPaywall,
       closeUpgrade,
+      closePaywall,
       sheetOpen,
+      modalOpen,
       hint,
       profileVersion,
     }),
-    [openUpgrade, closeUpgrade, sheetOpen, hint, profileVersion]
+    [openUpgrade, openPaywall, closeUpgrade, closePaywall, sheetOpen, modalOpen, hint, profileVersion]
   )
 
   return <PremiumUpgradeContext.Provider value={value}>{children}</PremiumUpgradeContext.Provider>

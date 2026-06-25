@@ -230,7 +230,7 @@ function finalizeSwipeSideEffects(
 async function tryServerSwipe(
   profile: SwipeProfile,
   direction: "left" | "right"
-): Promise<{ matched: boolean; matchId?: string } | { serverError: true } | null> {
+): Promise<{ matched: boolean; matchId?: string } | { serverError: true } | { likeLimitReached: true } | null> {
   if (!profile.userId || typeof window === "undefined") return null
 
   const mode = await getAppMode()
@@ -239,6 +239,7 @@ async function tryServerSwipe(
   if (direction === "right") {
     const res = await postDiscoverLike(profile.userId)
     if (!res.ok) {
+      if ("likeLimitReached" in res && res.likeLimitReached) return { likeLimitReached: true }
       if ("demoFallback" in res && res.demoFallback) return null
       return { serverError: true }
     }
@@ -309,8 +310,11 @@ export async function recordSwipe(
   direction: "left" | "right",
   locale: Locale,
   position: GeoPosition | null
-): Promise<{ matched: boolean; serverError?: boolean }> {
+): Promise<{ matched: boolean; serverError?: boolean; likeLimitReached?: boolean }> {
   const serverResult = await tryServerSwipe(profile, direction)
+  if (serverResult && "likeLimitReached" in serverResult) {
+    return { matched: false, likeLimitReached: true }
+  }
   if (serverResult && "serverError" in serverResult) {
     return { matched: false, serverError: true }
   }

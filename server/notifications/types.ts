@@ -3,6 +3,7 @@ export type NotificationType =
   | "match_expiring"
   | "match_urgency_warning"
   | "new_match"
+  | "someone_liked_you"
   | "achievement_unlocked"
 
 export type DbNotificationRow = {

@@ -52,7 +52,7 @@ Subscription tier/status and Stripe IDs remain in `user_subscriptions` (migratio
 
 ```
 server/monetization/
-├── constants.ts           # FREE_LIKES_PER_DAY=20, BOOST_DURATION_HOURS=1
+├── constants.ts           # FREE_LIKES_PER_DAY=20, BOOST_DURATION_MINUTES=30
 ├── types.ts
 ├── repository.ts          # DB: daily likes, boost_expires_at
 ├── subscription.service.ts  # isPremium, getSubscription
@@ -93,7 +93,7 @@ API returns **429** with `{ code: "LIKE_LIMIT_REACHED", remaining: 0 }` from `ap
 ### Profile boost
 
 - Stored on `users.boost_expires_at`
-- Default duration: **1 hour** (`BOOST_DURATION_HOURS`)
+- Default duration: **30 minutes** (`BOOST_DURATION_MINUTES`)
 - Discover ranking multiplies boosted profiles by **1.5×** in `server/engines/ranking/ranking.service.ts`
 - Premium users activate boost free via `POST /api/subscription/boost`
 - Free users get a Stripe one-time checkout; webhook activates boost on `checkout.session.completed` with `metadata.type=boost`
@@ -142,6 +142,6 @@ curl -X POST -b cookies.txt https://localhost:3000/api/subscription/boost
 ```typescript
 // server/monetization/constants.ts
 FREE_LIKES_PER_DAY = 20
-BOOST_DURATION_HOURS = 1
+BOOST_DURATION_MINUTES = 30
 BOOST_SCORE_MULTIPLIER = 1.5
 ```

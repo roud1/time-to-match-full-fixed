@@ -11,6 +11,7 @@ import {
   upsertUserSubscription,
 } from "@/server/billing/repository"
 import { activateBoost } from "@/server/monetization/boost.service"
+import { trackServerEvent } from "@/server/analytics/track"
 import {
   claimStripeWebhookEvent,
   releaseStripeWebhookEvent,
@@ -43,6 +44,7 @@ async function processStripeEvent(event: Stripe.Event): Promise<void> {
 
       if (session.metadata?.type === "boost") {
         await activateBoost(userId)
+        void trackServerEvent("purchase", { userId, properties: { product: "boost" } })
         break
       }
 
@@ -58,6 +60,7 @@ async function processStripeEvent(event: Stripe.Event): Promise<void> {
             : session.subscription?.id ?? null,
         currentPeriodEnd: null,
       })
+      void trackServerEvent("purchase", { userId, properties: { product: plan } })
       break
     }
     case "customer.subscription.updated":
