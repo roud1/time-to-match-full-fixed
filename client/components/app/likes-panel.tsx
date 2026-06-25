@@ -141,6 +141,28 @@ export function LikesPanel() {
       return
     }
 
+    if (!isPremium && incoming.teasers && incoming.teasers.length > 0) {
+      const mapped: SwipeProfile[] = incoming.teasers.map((p) => ({
+        id: incomingLikeToProfileId(p.userId),
+        userId: p.userId,
+        name: "•••",
+        age: 0,
+        gender: "female" as const,
+        location: "—",
+        distance: "—",
+        image: p.image,
+        images: [p.image],
+        bio: "",
+        interests: [],
+        timeLeft: "23:59:59",
+        purpose: null,
+        lat: 0,
+        lng: 0,
+      }))
+      setLikes(mapped)
+      return
+    }
+
     const state = getSocialState(locale, location.position)
     const all = getLikedYouProfiles(locale, location.position)
     setLikes(all.filter((p) => !state.matches.includes(p.id)))

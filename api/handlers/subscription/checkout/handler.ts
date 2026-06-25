@@ -12,6 +12,7 @@ import {
   isStripeConfigured,
   type BillingPlan,
 } from "@/server/billing/config"
+import { trackServerEvent } from "@/server/analytics/track"
 import { getServerEnv } from "@/config/env"
 
 export const runtime = "nodejs"
@@ -89,6 +90,11 @@ export async function POST(request: Request) {
   if (!checkout.url) {
     return withCors(request, jsonError(500, { error: "stripe_error", message: "No checkout URL" }))
   }
+
+  void trackServerEvent("checkout_start", {
+    userId: auth.session.sub,
+    properties: { plan },
+  })
 
   return withCors(
     request,

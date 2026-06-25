@@ -43,6 +43,7 @@ import { GeolocationBootstrap } from "@/client/components/geolocation-bootstrap"
 import { LocationBanner } from "@/client/components/location-control"
 import { DesktopAppNav } from "@/client/components/layout/desktop-app-nav"
 import { useDesktopAppNav } from "@/client/hooks/use-desktop-app-nav"
+import { isEmotionalOsEnabled } from "@/client/lib/feature-flags"
 
 const PAGE_MAX_WIDE = "max-w-[min(1200px,100%)]"
 const PAGE_MAX_NARROW = "max-w-lg"
@@ -122,6 +123,7 @@ export function AppShell() {
   }, [])
 
   const reality = useEmotionalRealityExpansion({ locale, position: location.position })
+  const emotionalOs = isEmotionalOsEnabled()
   const energyWhisper = useEnergyFeed()
   const platformInsight = useMemo(
     () =>
@@ -224,7 +226,7 @@ export function AppShell() {
             </header>
           )}
 
-          {showHeader && !immersiveTab && !desktopChatThread && (
+          {showHeader && !immersiveTab && !desktopChatThread && emotionalOs && (
             <>
               <PlatformInsightWhisper
                 insight={platformInsight}
@@ -278,7 +280,7 @@ export function AppShell() {
 
           {showDock && <BottomNavBar />}
         </EmotionalWorldRoot>
-        <EvolutionEventCelebration />
+        {emotionalOs ? <EvolutionEventCelebration /> : null}
         <ConnectionExtensionToastStack />
         <PremiumUpgradeSheet />
         <PaywallModal />

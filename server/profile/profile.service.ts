@@ -11,6 +11,7 @@ import {
   updateProfileFields,
   type DbUserPhotoRow,
 } from "@/server/profile/profile.repository"
+import { isPhotoUrlAllowed, photoUrlValidationError } from "@/server/photos/url-validation"
 import type {
   AddPhotoInput,
   UpdateLocationInput,
@@ -171,6 +172,9 @@ export async function listPhotos(userId: string): Promise<UserPhoto[]> {
 export async function addPhoto(userId: string, input: AddPhotoInput): Promise<UserPhoto | null> {
   const url = input.url.trim()
   if (!url) return null
+  if (!isPhotoUrlAllowed(url)) {
+    throw new Error(photoUrlValidationError())
+  }
 
   const count = await countPhotosByUserId(userId)
   if (count >= MAX_USER_PHOTOS) return null

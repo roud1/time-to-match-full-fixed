@@ -1,6 +1,6 @@
 import { checkLikeLimit, consumeLike } from "@/server/monetization/limits.service"
 import { activateBoost, getBoostStatus, isBoostActive } from "@/server/monetization/boost.service"
-import { getSubscription, isPremium } from "@/server/monetization/subscription.service"
+import { getSubscription, isPremium, isVip } from "@/server/monetization/subscription.service"
 import type { BoostAccess, LikeAccess } from "@/server/monetization/types"
 
 export class LikeLimitError extends Error {
@@ -77,4 +77,4 @@ export async function getSubscriptionSummary(userId: string) {
   return { subscription, limits, boost }
 }
 
-export { activateBoost, getSubscription, isPremium }
+export { activateBoost, getSubscription, isPremium, isVip }

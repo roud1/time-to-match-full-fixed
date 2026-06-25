@@ -10,8 +10,15 @@ export type IncomingLikeProfile = {
   likedAt: string
 }
 
+export type IncomingLikeTeaser = {
+  userId: string
+  image: string
+  likedAt: string
+}
+
 export type IncomingLikesResponse = {
   profiles: IncomingLikeProfile[]
+  teasers?: IncomingLikeTeaser[]
   count: number
   premiumRequired: boolean
   code?: "premium_required"

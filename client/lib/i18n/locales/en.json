@@ -368,6 +368,13 @@
     "8 kilometers"
   ],
   "swipeTitle": "Not everyone stays",
+  "discoverGateTitle": "Complete your profile first",
+  "discoverGateBody": "Add a photo, gender, and city so others can see you in Discover.",
+  "discoverGateNeedPhoto": "Add at least one photo",
+  "discoverGateNeedGender": "Set your gender",
+  "discoverGateNeedCity": "Set your city",
+  "discoverGateCta": "Finish profile",
+  "matchModalWriteNow": "Write now — time is ticking",
   "swipeSubtitle": "Swipe right - chance. To the left - and the connection may disappear forever.",
   "remaining": "Left:",
   "like": "YES",

@@ -1,7 +1,14 @@
 import { getDb } from "@/server/db"
 import { log } from "@/server/log"
 
-export type AnalyticsEventName = "signup" | "like" | "match" | "message_sent" | "purchase"
+export type AnalyticsEventName =
+  | "signup"
+  | "like"
+  | "match"
+  | "message_sent"
+  | "purchase"
+  | "paywall_view"
+  | "checkout_start"
 
 export type TrackEventInput = {
   userId?: string | null

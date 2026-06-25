@@ -38,6 +38,7 @@ export function isProtectedApiPath(pathname: string): boolean {
 }
 
 export function isDemoModeEnv(): boolean {
+  if (process.env.NODE_ENV === "production") return false
   return !process.env.DATABASE_URL?.trim()
 }
 
@@ -73,6 +74,7 @@ export function hasRefreshCookie(request: NextRequest): boolean {
 }
 
 export function hasDemoSession(request: NextRequest): boolean {
+  if (process.env.NODE_ENV === "production" || process.env.DATABASE_URL?.trim()) return false
   if (request.cookies.get(DEMO_SESSION_COOKIE)?.value === "1") return true
   return request.headers.get(DEMO_SESSION_HEADER) === "1"
 }

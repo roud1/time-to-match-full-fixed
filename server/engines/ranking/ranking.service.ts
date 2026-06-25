@@ -2,7 +2,7 @@ import { getDb } from "@/server/db"
 import { priorityLevelFromPairScores } from "@/server/engines/behavior/scoring"
 import { getBehaviorUser } from "@/server/engines/behavior/repository"
 import { getActiveBoostUserIds } from "@/server/monetization/repository"
-import { BOOST_SCORE_MULTIPLIER } from "@/server/monetization/constants"
+import { BOOST_SCORE_MULTIPLIER, VIP_RANKING_BOOST } from "@/server/monetization/constants"
 import type { RankingTier } from "@/server/engines/types"
 import type { DiscoverProfile } from "@/client/lib/discover/types"
 
@@ -49,6 +49,7 @@ export async function rankDiscoverProfiles(input: {
 
   const db = getDb()
   const tierByUser = new Map<string, RankingTier>()
+  const vipUsers = new Set<string>()
   const profileIds = input.profiles.map((p) => p.id)
   const boostedUsers = await getActiveBoostUserIds(profileIds)
 
@@ -59,6 +60,14 @@ export async function rankDiscoverProfiles(input: {
       WHERE id = ANY(${profileIds})
     `
     for (const r of rows) tierByUser.set(r.id, r.ranking_tier)
+
+    const vipRows = await db<{ user_id: string }[]>`
+      SELECT user_id FROM user_subscriptions
+      WHERE user_id = ANY(${profileIds})
+        AND plan = 'vip'
+        AND status IN ('active', 'trialing')
+    `
+    for (const row of vipRows) vipUsers.add(row.user_id)
   }
 
   const ranked: RankedDiscoverProfile[] = input.profiles.map((p) => {
@@ -80,6 +89,10 @@ export async function rankDiscoverProfiles(input: {
 
     if (boostedUsers.has(p.id)) {
       rankingScore *= BOOST_SCORE_MULTIPLIER
+    }
+
+    if (vipUsers.has(p.id)) {
+      rankingScore *= VIP_RANKING_BOOST
     }
 
     return {

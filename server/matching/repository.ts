@@ -122,9 +122,14 @@ export async function touchUserActivity(userId: string): Promise<void> {
 export async function listEligibleCandidates(input: {
   viewerId: string
   filters: DiscoverFilters
+  cursor?: string | null
+  limit?: number
 }): Promise<DiscoverCandidateRow[]> {
   const db = getDb()
   if (!db) return []
+
+  const pageLimit = Math.min(Math.max(input.limit ?? 40, 1), 120)
+  const cursor = input.cursor?.trim() || null
 
   return db<DiscoverCandidateRow[]>`
     SELECT
@@ -146,6 +151,7 @@ export async function listEligibleCandidates(input: {
       AND COALESCE(u.is_blocked, false) = false
       AND u.profile_expires_at IS NOT NULL
       AND u.profile_expires_at > now()
+      AND (${cursor}::uuid IS NULL OR u.id > ${cursor})
       AND NOT EXISTS (
         SELECT 1 FROM likes l
         WHERE l.from_user = ${input.viewerId} AND l.to_user = u.id
@@ -159,7 +165,8 @@ export async function listEligibleCandidates(input: {
         WHERE (b.blocker_id = ${input.viewerId} AND b.blocked_id = u.id)
            OR (b.blocker_id = u.id AND b.blocked_id = ${input.viewerId})
       )
-    LIMIT 120
+    ORDER BY u.id ASC
+    LIMIT ${pageLimit}
   `
 }
 
@@ -205,8 +212,15 @@ export async function buildCandidateProfiles(input: {
   filters: DiscoverFilters
   viewerLat?: number | null
   viewerLng?: number | null
+  cursor?: string | null
+  limit?: number
 }): Promise<Array<CandidateProfile & ActivitySignals>> {
-  const rows = await listEligibleCandidates({ viewerId: input.viewerId, filters: input.filters })
+  const rows = await listEligibleCandidates({
+    viewerId: input.viewerId,
+    filters: input.filters,
+    cursor: input.cursor,
+    limit: input.limit,
+  })
   if (rows.length === 0) return []
 
   const viewerInterestMap = await getInterestsForUsers([input.viewerId])

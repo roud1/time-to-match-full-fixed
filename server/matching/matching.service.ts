@@ -17,6 +17,7 @@ import type {
   UserProfile,
 } from "@/server/matching/types"
 import { canUserLike, consumeLike } from "@/server/monetization"
+import { canUserSuperLike, consumeSuperLike } from "@/server/monetization/super-like.service"
 import { getDb } from "@/server/db"
 import { recordLikeForUser, recordPassForUser } from "@/server/repositories/likes"
 import { findUserById } from "@/server/repositories/users"
@@ -79,7 +80,22 @@ async function hasPriorLike(actorId: string, targetUserId: string): Promise<bool
   return rows.length > 0
 }
 
-export async function recordLike(actorId: string, targetUserId: string): Promise<LikeResult> {
+export async function recordLike(
+  actorId: string,
+  targetUserId: string,
+  options?: { superLike?: boolean }
+): Promise<LikeResult> {
+  if (options?.superLike) {
+    const superAccess = await canUserSuperLike(actorId)
+    if (!superAccess.allowed) {
+      return {
+        ok: false,
+        code: "super_like_limit_reached",
+        remaining: superAccess.remaining,
+      }
+    }
+  }
+
   const hadPrior = await hasPriorLike(actorId, targetUserId)
   if (!hadPrior) {
     const access = await canUserLike(actorId)
@@ -92,10 +108,15 @@ export async function recordLike(actorId: string, targetUserId: string): Promise
     }
   }
 
-  const result = await recordLikeForUser(actorId, targetUserId)
+  const result = await recordLikeForUser(actorId, targetUserId, {
+    isSuper: options?.superLike,
+  })
   if (result.ok) {
     if (!hadPrior) {
       await consumeLike(actorId)
+    }
+    if (options?.superLike) {
+      await consumeSuperLike(actorId)
     }
     await touchUserActivity(actorId)
   }
@@ -123,6 +144,8 @@ export async function getDiscoverFeed(options: DiscoverFeedOptions): Promise<Dis
     filters: options.filters,
     viewerLat: options.viewerLat,
     viewerLng: options.viewerLng,
+    cursor: options.cursor,
+    limit: options.limit,
   })
 
   if (candidates.length === 0) return []

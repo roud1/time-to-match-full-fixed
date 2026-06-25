@@ -39,6 +39,11 @@ export async function isPremium(userId: string): Promise<boolean> {
   return sub.isPremium
 }
 
+export async function isVip(userId: string): Promise<boolean> {
+  const sub = await getSubscription(userId)
+  return sub.isPremium && sub.tier === "vip"
+}
+
 export async function syncFromStripe(input: {
   userId: string
   plan: BillingPlan | "free"

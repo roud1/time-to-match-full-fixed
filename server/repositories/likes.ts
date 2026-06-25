@@ -208,7 +208,8 @@ export type RecordPassResult =
 
 export async function recordLikeForUser(
   fromUserId: string,
-  targetUserId: string
+  targetUserId: string,
+  options?: { isSuper?: boolean }
 ): Promise<RecordLikeResult> {
   if (fromUserId === targetUserId) return { ok: false, code: "self" }
 
@@ -268,12 +269,15 @@ export async function recordLikeForUser(
     return { ok: true, liked: true, matched: true, matchId }
   }
 
+  const isSuper = Boolean(options?.isSuper)
+
   await db`
-    INSERT INTO likes (from_user, to_user, is_match, is_frozen, is_expired)
-    VALUES (${fromUserId}, ${targetUserId}, false, false, false)
+    INSERT INTO likes (from_user, to_user, is_match, is_frozen, is_expired, is_super)
+    VALUES (${fromUserId}, ${targetUserId}, false, false, false, ${isSuper})
     ON CONFLICT (from_user, to_user) DO UPDATE SET
       is_match = CASE WHEN likes.is_match THEN true ELSE false END,
-      is_expired = false
+      is_expired = false,
+      is_super = CASE WHEN ${isSuper} THEN true ELSE likes.is_super END
   `
 
   const { scheduleSomeoneLikedYouNotification } = await import("@/server/notifications/repository")
@@ -365,6 +369,60 @@ export async function listIncomingLikesForUser(viewerId: string): Promise<Incomi
   })
 }
 
+export type IncomingLikeTeaser = {
+  userId: string
+  image: string
+  likedAt: string
+}
+
+/** Blurred FOMO teasers for free users — image only, no PII. */
+export async function listIncomingLikeTeasers(
+  viewerId: string,
+  limit = 8
+): Promise<IncomingLikeTeaser[]> {
+  const db = getDb()
+  if (!db) return []
+
+  type Row = {
+    from_user: string
+    profile: Record<string, unknown>
+    created_at: Date
+  }
+
+  const rows = await db<Row[]>`
+    SELECT u.id AS from_user, u.profile, l.created_at
+    FROM likes l
+    INNER JOIN users u ON u.id = l.from_user
+    WHERE l.to_user = ${viewerId}
+      AND l.is_match = false
+      AND l.is_expired = false
+      AND u.is_active = true
+      AND COALESCE(u.is_blocked, false) = false
+      AND NOT EXISTS (
+        SELECT 1 FROM likes back
+        WHERE back.from_user = ${viewerId} AND back.to_user = l.from_user
+      )
+    ORDER BY l.created_at DESC
+    LIMIT ${limit}
+  `
+
+  return rows.map((row) => {
+    const profile = row.profile ?? {}
+    const photoUrls = profile.photoUrls
+    const image =
+      Array.isArray(photoUrls) && typeof photoUrls[0] === "string"
+        ? photoUrls[0]
+        : typeof profile.photoUrl === "string"
+          ? profile.photoUrl
+          : "/placeholder-profile.jpg"
+    return {
+      userId: row.from_user,
+      image,
+      likedAt: row.created_at.toISOString(),
+    }
+  })
+}
+
 export async function countIncomingLikesForUser(viewerId: string): Promise<number> {
   const db = getDb()
   if (!db) return 0
@@ -416,6 +474,36 @@ export async function recordPassForUser(
   `
 
   return { ok: true, passed: true }
+}
+
+export type UndoPassResult =
+  | { ok: true }
+  | { ok: false; code: "not_found" | "self" | "blocked" | "nothing_to_rewind" }
+
+/** Premium rewind — remove a discover pass so the profile can appear again. */
+export async function undoDiscoverPass(
+  fromUserId: string,
+  targetUserId: string
+): Promise<UndoPassResult> {
+  if (fromUserId === targetUserId) return { ok: false, code: "self" }
+
+  const db = getDb()
+  if (!db) return { ok: false, code: "not_found" }
+
+  const viewer = await findUserById(fromUserId)
+  if (!viewer || viewer.is_blocked) return { ok: false, code: "blocked" }
+
+  const target = await findUserById(targetUserId)
+  if (!target) return { ok: false, code: "not_found" }
+
+  const removed = await db<{ n: number }[]>`
+    DELETE FROM discover_passes
+    WHERE from_user = ${fromUserId} AND to_user = ${targetUserId}
+    RETURNING 1 AS n
+  `
+
+  if (!removed.length) return { ok: false, code: "nothing_to_rewind" }
+  return { ok: true }
 }
 
 export type FreezeMatchResult =

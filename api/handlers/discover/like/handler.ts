@@ -65,7 +65,9 @@ export async function POST(request: Request) {
     return withCors(request, jsonFromZodError(parsed.error))
   }
 
-  const result = await matchingService.recordLike(session.sub, parsed.data.targetUserId)
+  const result = await matchingService.recordLike(session.sub, parsed.data.targetUserId, {
+    superLike: parsed.data.superLike,
+  })
   if (!result.ok) {
     if (result.code === "like_limit_reached") {
       return withCors(
@@ -74,6 +76,17 @@ export async function POST(request: Request) {
           error: "LIKE_LIMIT_REACHED",
           code: "LIKE_LIMIT_REACHED",
           message: "Daily like limit reached",
+          remaining: result.remaining ?? 0,
+        })
+      )
+    }
+    if (result.code === "super_like_limit_reached") {
+      return withCors(
+        request,
+        jsonError(403, {
+          error: "SUPER_LIKE_LIMIT_REACHED",
+          code: "SUPER_LIKE_LIMIT_REACHED",
+          message: "Daily super like limit reached",
           remaining: result.remaining ?? 0,
         })
       )

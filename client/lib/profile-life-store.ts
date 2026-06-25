@@ -1,5 +1,6 @@
 import { getUserProfile, updateUserProfile } from "@/client/lib/user-profile"
 import { computeProfileLife, type ProfileLifeView } from "@/client/lib/profile-life"
+import { syncProfileActivityToServer } from "@/client/lib/profile-life/api"
 
 const LIFE_KEY = "ttm-profile-life"
 
@@ -42,6 +43,7 @@ export function recordProfileActivity(): ProfileLifeView {
   const meta: ProfileLifeMeta = { lastActiveAt: now, revivedAt: now }
   saveMeta(meta)
   dispatch()
+  void syncProfileActivityToServer()
   return computeProfileLife(now, now)
 }
 

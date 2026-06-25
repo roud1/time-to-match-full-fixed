@@ -373,6 +373,13 @@
     "8 км"
   ],
   "swipeTitle": "Не все остаются",
+  "discoverGateTitle": "Сначала заполни профиль",
+  "discoverGateBody": "Добавь фото, пол и город — тогда тебя увидят в Discover.",
+  "discoverGateNeedPhoto": "Добавь хотя бы одно фото",
+  "discoverGateNeedGender": "Укажи пол",
+  "discoverGateNeedCity": "Укажи город",
+  "discoverGateCta": "Заполнить профиль",
+  "matchModalWriteNow": "Напиши сейчас — время идёт",
   "swipeSubtitle": "Свайп вправо — шанс. Влево — и связь может исчезнуть навсегда.",
   "remaining": "Осталось:",
   "like": "ДА",

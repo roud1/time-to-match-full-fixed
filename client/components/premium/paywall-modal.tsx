@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/client/components/ui/dialog"
 import { motion, AnimatePresence } from "motion/react"
+import { trackProductEvent } from "@/client/lib/analytics-client"
 import { usePremiumUpgrade } from "@/client/components/premium/premium-upgrade-context"
 
 function hintCopyKey(
@@ -65,10 +66,15 @@ export function PaywallModal() {
 
   const hintKey = hintCopyKey(hint)
   void profileVersion
+  const open = Boolean(profile && modalOpen && !premium)
+
+  useEffect(() => {
+    if (open) {
+      trackProductEvent("paywall_view", { hint: hint ?? "default" })
+    }
+  }, [open, hint])
 
   if (!profile) return null
-
-  const open = modalOpen && !premium
 
   return (
     <Dialog

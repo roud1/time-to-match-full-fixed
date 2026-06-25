@@ -39,8 +39,9 @@ export async function updateUserDiscoveryProfile(body: {
 
 export async function fetchDiscoverProfiles(
   filters: DiscoverFilters,
-  coords?: { lat: number; lng: number } | null
-): Promise<DiscoverProfile[]> {
+  coords?: { lat: number; lng: number } | null,
+  pagination?: { cursor?: string | null; limit?: number }
+): Promise<{ profiles: DiscoverProfile[]; nextCursor: string | null }> {
   const params = new URLSearchParams()
   if (filters.purpose) params.set("purpose", filters.purpose)
   if (filters.gender) params.set("gender", filters.gender)
@@ -53,12 +54,17 @@ export async function fetchDiscoverProfiles(
     params.set("lat", String(coords.lat))
     params.set("lng", String(coords.lng))
   }
+  if (pagination?.cursor) params.set("cursor", pagination.cursor)
+  if (pagination?.limit != null) params.set("limit", String(pagination.limit))
 
   const qs = params.toString()
   const res = await fetch(`/api/discover${qs ? `?${qs}` : ""}`, { credentials: "include" })
-  if (!res.ok) return []
-  const data = (await res.json()) as { profiles?: DiscoverProfile[] }
-  return data.profiles ?? []
+  if (!res.ok) return { profiles: [], nextCursor: null }
+  const data = (await res.json()) as { profiles?: DiscoverProfile[]; nextCursor?: string | null }
+  return {
+    profiles: data.profiles ?? [],
+    nextCursor: data.nextCursor ?? null,
+  }
 }
 
 export type DiscoverLikeResponse =
@@ -73,12 +79,15 @@ export type DiscoverPassResponse =
   | { ok: false; demoFallback: true }
   | { ok: false; status: number; serverError: true }
 
-export async function postDiscoverLike(targetUserId: string): Promise<DiscoverLikeResponse> {
+export async function postDiscoverLike(
+  targetUserId: string,
+  options?: { superLike?: boolean }
+): Promise<DiscoverLikeResponse> {
   const res = await fetch("/api/discover/like", {
     method: "POST",
     credentials: "include",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ targetUserId }),
+    body: JSON.stringify({ targetUserId, superLike: options?.superLike }),
   })
 
   if (res.status === 503) {
@@ -124,4 +133,29 @@ export async function postDiscoverPass(targetUserId: string): Promise<DiscoverPa
   }
 
   return { ok: true, passed: true }
+}
+
+export type DiscoverRewindResponse =
+  | { ok: true; rewound: true }
+  | { ok: false; premiumRequired: true }
+  | { ok: false; status: number; serverError: true }
+
+export async function postDiscoverRewind(targetUserId: string): Promise<DiscoverRewindResponse> {
+  const res = await fetch("/api/discover/rewind", {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ targetUserId }),
+  })
+
+  if (res.status === 403) {
+    const data = (await res.json().catch(() => ({}))) as { code?: string }
+    if (data.code === "premium_required") return { ok: false, premiumRequired: true }
+  }
+
+  if (!res.ok) {
+    return { ok: false, status: res.status, serverError: true }
+  }
+
+  return { ok: true, rewound: true }
 }

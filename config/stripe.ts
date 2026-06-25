@@ -2,12 +2,27 @@ import { getServerEnv } from "@/config/env"
 
 export type BillingPlan = "premium" | "vip"
 
+function centsFromEnv(key: string, fallback: number): number {
+  const raw = process.env[key]?.trim()
+  if (!raw) return fallback
+  const n = Number.parseInt(raw, 10)
+  return Number.isFinite(n) && n > 0 ? n : fallback
+}
+
 export const BILLING_PLANS: Record<
   BillingPlan,
   { label: string; unitAmountCents: number; currency: string }
 > = {
-  premium: { label: "Time to Match Premium", unitAmountCents: 900, currency: "usd" },
-  vip: { label: "Time to Match VIP", unitAmountCents: 1900, currency: "usd" },
+  premium: {
+    label: "Time to Match Premium",
+    unitAmountCents: centsFromEnv("STRIPE_PREMIUM_CENTS", 1499),
+    currency: "usd",
+  },
+  vip: {
+    label: "Time to Match VIP",
+    unitAmountCents: centsFromEnv("STRIPE_VIP_CENTS", 2999),
+    currency: "usd",
+  },
 }
 
 export function isStripeConfigured(): boolean {

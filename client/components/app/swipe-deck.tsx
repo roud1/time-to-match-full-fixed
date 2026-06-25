@@ -23,6 +23,7 @@ import Link from "next/link"
 import { Button } from "@/client/components/ui/button"
 import { useTopCardSwipe } from "@/client/hooks/use-top-card-swipe"
 import { cn } from "@/client/lib/utils"
+import { postDiscoverRewind } from "@/client/lib/discover/api"
 
 const STACK_VISIBLE = 3
 
@@ -133,7 +134,7 @@ export function SwipeDeck({
   }, [])
 
   const flyOff = useCallback(
-    async (direction: "left" | "right") => {
+    async (direction: "left" | "right", superLike = false) => {
       const top = profiles[0]
       if (!top || exitLockRef.current) return
       exitLockRef.current = true
@@ -150,7 +151,13 @@ export function SwipeDeck({
         }
         await xAnimRef.current
 
-        const { matched, likeLimitReached } = await recordSwipe(top, direction, locale, location.position)
+        const { matched, likeLimitReached } = await recordSwipe(
+          top,
+          direction,
+          locale,
+          location.position,
+          superLike ? { superLike: true } : undefined
+        )
         if (likeLimitReached) {
           openUpgrade("likes")
           x.set(0)
@@ -168,7 +175,13 @@ export function SwipeDeck({
         onProfilesChange((prev) => prev.filter((p) => p.id !== top.id))
         x.set(0)
       } catch {
-        const { matched, likeLimitReached } = await recordSwipe(top, direction, locale, location.position)
+        const { matched, likeLimitReached } = await recordSwipe(
+          top,
+          direction,
+          locale,
+          location.position,
+          superLike ? { superLike: true } : undefined
+        )
         if (likeLimitReached) {
           openUpgrade("likes")
           x.set(0)
@@ -218,16 +231,32 @@ export function SwipeDeck({
       openUpgrade("rewind")
       return
     }
-    onProfilesChange((prev) => [last, ...prev])
-    lastRemovedRef.current = null
-    setCanRewind(false)
-  }, [canRewind, onProfilesChange, profiles, openUpgrade])
+    const targetUserId = last.userId
+    if (!targetUserId) return
+
+    void postDiscoverRewind(targetUserId).then((res) => {
+      if (!res.ok) {
+        if ("premiumRequired" in res && res.premiumRequired) {
+          openUpgrade("rewind")
+        }
+        return
+      }
+      onProfilesChange((prev) => [last, ...prev])
+      lastRemovedRef.current = null
+      setCanRewind(false)
+    })
+  }, [canRewind, onProfilesChange, openUpgrade])
 
   const superLike = useCallback(() => {
+    const user = getUserProfile()
+    if (!user || !isPremiumActive(user)) {
+      openUpgrade("likes")
+      return
+    }
     setSuperRipple(true)
     setTimeout(() => setSuperRipple(false), 520)
-    void flyOff("right")
-  }, [flyOff])
+    void flyOff("right", true)
+  }, [flyOff, openUpgrade])
 
   const labels: SwipeCardLabels = {
     like: t("discoverConnectLabel"),

@@ -35,7 +35,7 @@ async function resolveUserId(sub: Stripe.Subscription): Promise<string | null> {
   return getUserIdByStripeSubscriptionId(sub.id)
 }
 
-async function processStripeEvent(event: Stripe.Event): Promise<void> {
+async function processStripeEvent(event: Stripe.Event, stripe: Stripe): Promise<void> {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session
@@ -49,17 +49,35 @@ async function processStripeEvent(event: Stripe.Event): Promise<void> {
       }
 
       const plan = planFromMetadata(session.metadata)
+      let currentPeriodEnd: Date | null = null
+      const subId =
+        typeof session.subscription === "string"
+          ? session.subscription
+          : session.subscription?.id ?? null
+      if (subId) {
+        try {
+          const sub = await stripe.subscriptions.retrieve(subId)
+          currentPeriodEnd = subscriptionPeriodEnd(sub)
+        } catch {
+          /* non-blocking */
+        }
+      }
+
       await upsertUserSubscription({
         userId,
         plan,
         status: "active",
         stripeCustomerId: typeof session.customer === "string" ? session.customer : session.customer?.id ?? null,
-        stripeSubscriptionId:
-          typeof session.subscription === "string"
-            ? session.subscription
-            : session.subscription?.id ?? null,
-        currentPeriodEnd: null,
+        stripeSubscriptionId: subId,
+        currentPeriodEnd,
       })
+
+      if (plan === "vip") {
+        const { addFreezeBalance } = await import("@/server/repositories/users")
+        const { VIP_MONTHLY_FREEZE_GRANT } = await import("@/server/monetization/constants")
+        await addFreezeBalance(userId, VIP_MONTHLY_FREEZE_GRANT)
+      }
+
       void trackServerEvent("purchase", { userId, properties: { product: plan } })
       break
     }
@@ -126,7 +144,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    await processStripeEvent(event)
+    await processStripeEvent(event, stripe)
   } catch (err) {
     await releaseStripeWebhookEvent(event.id)
     console.error("[billing/webhook] processing failed", event.id, err)

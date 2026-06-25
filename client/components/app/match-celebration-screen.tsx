@@ -203,6 +203,14 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
               transition={{ delay: 0.32 }}
               className="match-moment__foot shrink-0 w-full max-w-md mx-auto space-y-3"
             >
+              <button
+                type="button"
+                onClick={() => goToChat()}
+                className="match-moment__cta match-moment__cta--primary w-full"
+              >
+                {t("matchModalWriteNow")} · {formatMatchTimer(profile.timeLeft)}
+              </button>
+
               <p className="match-moment__starters-label">{t("matchModalStartersTitle")}</p>
               <ul className="match-moment__starters ttm-chat-scroll">
                 {starters.map((text) => (

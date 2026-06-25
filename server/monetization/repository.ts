@@ -69,3 +69,29 @@ export async function getPremiumUntil(userId: string): Promise<Date | null> {
   `
   return rows[0]?.premium_until ?? null
 }
+
+export async function getDailySuperLikesUsed(userId: string, likeDate: string): Promise<number> {
+  const db = getDb()
+  if (!db) return 0
+
+  const rows = await db<{ super_likes_used: number }[]>`
+    SELECT super_likes_used FROM user_daily_super_likes
+    WHERE user_id = ${userId} AND like_date = ${likeDate}::date
+    LIMIT 1
+  `
+  return rows[0]?.super_likes_used ?? 0
+}
+
+export async function incrementDailySuperLikes(userId: string, likeDate: string): Promise<number> {
+  const db = getDb()
+  if (!db) return 0
+
+  const rows = await db<{ super_likes_used: number }[]>`
+    INSERT INTO user_daily_super_likes (user_id, like_date, super_likes_used)
+    VALUES (${userId}, ${likeDate}::date, 1)
+    ON CONFLICT (user_id, like_date) DO UPDATE SET
+      super_likes_used = user_daily_super_likes.super_likes_used + 1
+    RETURNING super_likes_used
+  `
+  return rows[0]?.super_likes_used ?? 1
+}

@@ -1,4 +1,4 @@
-export const BOND_MESSAGES_PER_PROLONG = 50
+export const BOND_MESSAGES_PER_PROLONG = 5
 export const BOND_PROLONG_HOURS = 6
 export const BOND_PROLONG_COOLDOWN_MS = 60 * 60 * 1000
 

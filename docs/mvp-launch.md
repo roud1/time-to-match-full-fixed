@@ -18,7 +18,7 @@ Required migrations: `015` (match engine), `026` (monetization), `027` (analytic
 | `STRIPE_WEBHOOK_SECRET` | Webhook verification |
 | `STRIPE_PRICE_PREMIUM` | Premium plan price id |
 | `STRIPE_PRICE_BOOST` | Boost one-time price id |
-| `UPSTASH_REDIS_REST_URL` / `TOKEN` | Production rate limits (optional) |
+| `UPSTASH_REDIS_REST_URL` / `TOKEN` | **Required** on multi-instance Vercel — in-memory rate limits do not scale horizontally |
 | `CRON_SECRET` | `/api/v1/cron/*` auth |
 
 Run `npm run check:env:strict` before deploy.

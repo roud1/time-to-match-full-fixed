@@ -3,7 +3,7 @@ import { getServerEnv } from "@/config/env"
 import { getSessionFromRequest } from "@/server/auth/session-request"
 import { jsonError, jsonOk, withCors } from "@/server/http"
 import { requirePremium } from "@/server/monetization/access"
-import { countIncomingLikesForUser, listIncomingLikesForUser } from "@/server/repositories/likes"
+import { countIncomingLikesForUser, listIncomingLikesForUser, listIncomingLikeTeasers } from "@/server/repositories/likes"
 
 export const runtime = "nodejs"
 
@@ -27,10 +27,12 @@ export async function GET(request: Request) {
   const count = await countIncomingLikesForUser(session.sub)
 
   if (!premium.ok) {
+    const teasers = await listIncomingLikeTeasers(session.sub, 8)
     return withCors(
       request,
       jsonOk({
         profiles: [],
+        teasers,
         count,
         premiumRequired: true,
         code: "premium_required",

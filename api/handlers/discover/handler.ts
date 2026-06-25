@@ -69,7 +69,11 @@ export async function GET(request: Request) {
     filters,
     viewerLat: Number.isFinite(viewerLat) ? viewerLat : null,
     viewerLng: Number.isFinite(viewerLng) ? viewerLng : null,
+    cursor: searchParams.get("cursor"),
+    limit: parseIntParam(searchParams.get("limit")),
   })
 
-  return withCors(request, jsonOk({ profiles }))
+  const nextCursor = profiles.length > 0 ? profiles[profiles.length - 1]?.id ?? null : null
+
+  return withCors(request, jsonOk({ profiles, nextCursor }))
 }

@@ -26,6 +26,8 @@ import { useHydrated } from "@/client/hooks/use-hydrated"
 import { getUserProfile, isPremiumActive } from "@/client/lib/user-profile"
 import { usePremiumUpgrade } from "@/client/components/premium/premium-upgrade-context"
 import { ProfileLifeDiscoverGate } from "@/client/components/profile/profile-life-presence"
+import { DiscoverProfileGate } from "@/client/components/discover/discover-profile-gate"
+import { assessDiscoverProfileReadiness } from "@/client/lib/discover/profile-gate"
 import { useProfileLife } from "@/client/hooks/use-profile-life"
 import { fetchSubscriptionSummary, activateProfileBoost } from "@/client/lib/monetization/api"
 import type { SubscriptionApiResponse } from "@/client/lib/monetization/types"
@@ -58,12 +60,12 @@ export function DiscoverPanel() {
 
       let deck: SwipeProfile[] = []
       if (mode === "production") {
-        const fromApi = await fetchDiscoverProfiles(activeFilters, viewerPosition)
+        const { profiles: fromApi } = await fetchDiscoverProfiles(activeFilters, viewerPosition)
         deck = fromApi.map((c) => discoverProfileToSwipe(c, locale))
       } else {
         deck = getDiscoverDeckProfiles(locale, viewerPosition, activeFilters)
         try {
-          const fromApi = await fetchDiscoverProfiles(activeFilters, viewerPosition)
+          const { profiles: fromApi } = await fetchDiscoverProfiles(activeFilters, viewerPosition)
           if (fromApi.length > 0) {
             const apiCards = fromApi.map((c) => discoverProfileToSwipe(c, locale))
             const apiIds = new Set(apiCards.map((c) => c.id))
@@ -120,6 +122,7 @@ export function DiscoverPanel() {
     ? null
     : subscription?.limits.remaining ?? null
   const profileLife = useProfileLife()
+  const profileGate = useMemo(() => assessDiscoverProfileReadiness(user), [user, profileTick])
   const displayName = useMemo(() => {
     const name = user?.name?.trim()
     if (!name) return null
@@ -254,10 +257,10 @@ export function DiscoverPanel() {
       />
       {profileLife ? (
         <ProfileLifeDiscoverGate life={profileLife} onRevive={handleRevive}>
-          {deck}
+          <DiscoverProfileGate status={profileGate}>{deck}</DiscoverProfileGate>
         </ProfileLifeDiscoverGate>
       ) : (
-        deck
+        <DiscoverProfileGate status={profileGate}>{deck}</DiscoverProfileGate>
       )}
     </div>
   )

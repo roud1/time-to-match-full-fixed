@@ -7,6 +7,7 @@ import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { log } from "@/server/log"
 import { trackServerEvent } from "@/server/analytics/track"
 import { checkRateLimit, getClientIp } from "@/server/rate-limit"
+import { defaultProfileExpiresAt } from "@/server/profile-life/service"
 import { createUser, findUserByEmail } from "@/server/repositories/users"
 import { registerBodySchema, sanitizeDisplayName } from "@/server/validation/auth"
 
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
 
   const email = parsed.data.email.trim().toLowerCase()
   const passwordHash = await hashPassword(parsed.data.password)
-  const profileExpiresAt: Date | null = null
+  const profileExpiresAt = defaultProfileExpiresAt()
 
   try {
     if (await findUserByEmail(email)) {

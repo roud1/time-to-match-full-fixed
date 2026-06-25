@@ -77,6 +77,9 @@ export async function createUser(input: {
 }) {
   const db = getDb()
   if (!db) throw new Error("database_unavailable")
+  const expiresAt =
+    input.profileExpiresAt ?? new Date(Date.now() + 72 * 60 * 60 * 1000)
+
   const rows = await db<{ id: string }[]>`
     INSERT INTO users (email, password_hash, name, profile, profile_expires_at)
     VALUES (
@@ -84,7 +87,7 @@ export async function createUser(input: {
       ${input.passwordHash},
       ${input.name.trim()},
       ${db.json(JSON.parse(JSON.stringify(input.profile)))},
-      ${input.profileExpiresAt}
+      ${expiresAt}
     )
     RETURNING id
   `

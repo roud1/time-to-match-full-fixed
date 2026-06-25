@@ -16,7 +16,7 @@
     },
     {
       "path": "/api/v1/cron/ai-analysis",
-      "schedule": "* * * * *"
+      "schedule": "*/5 * * * *"
     }
   ]
 }
