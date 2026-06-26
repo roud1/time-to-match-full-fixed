@@ -8,7 +8,7 @@ import {
   type MotionValue,
   type TransformInputRange,
 } from "motion/react"
-import { useEffect, type RefObject } from "react"
+import { useLayoutEffect, type RefObject } from "react"
 import { useHydrated } from "@/client/hooks/use-hydrated"
 
 type ScrollRange = TransformInputRange
@@ -19,14 +19,14 @@ export function useParallaxIntensity(desktop = 1) {
   const hydrated = useHydrated()
   const intensity = useMotionValue(0)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!hydrated || reduce) {
       intensity.set(0)
       return
     }
 
     const mq = window.matchMedia("(max-width: 767px)")
-    const update = () => intensity.set(mq.matches ? desktop * 0.35 : desktop)
+    const update = () => intensity.set(mq.matches ? desktop * 0.5 : desktop)
     update()
     mq.addEventListener("change", update)
     return () => mq.removeEventListener("change", update)

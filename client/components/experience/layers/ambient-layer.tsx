@@ -12,31 +12,31 @@ const ORBS = [
   {
     id: "purple",
     className: "xp-ambient__orb xp-ambient__orb--purple xp-ambient__orb--1",
-    output: [0, 140] as [number, number],
+    output: [0, 220] as [number, number],
     delay: "0s",
   },
   {
     id: "pink",
     className: "xp-ambient__orb xp-ambient__orb--pink xp-ambient__orb--2",
-    output: [0, -100] as [number, number],
+    output: [0, -180] as [number, number],
     delay: "-2.4s",
   },
   {
     id: "green",
     className: "xp-ambient__orb xp-ambient__orb--green xp-ambient__orb--3",
-    output: [0, 80] as [number, number],
+    output: [0, 140] as [number, number],
     delay: "-4.8s",
   },
   {
     id: "violet",
     className: "xp-ambient__orb xp-ambient__orb--violet xp-ambient__orb--4",
-    output: [0, -60] as [number, number],
+    output: [0, -120] as [number, number],
     delay: "-1.6s",
   },
   {
     id: "mint",
     className: "xp-ambient__orb xp-ambient__orb--mint xp-ambient__orb--5",
-    output: [0, 110] as [number, number],
+    output: [0, 170] as [number, number],
     delay: "-3.2s",
   },
 ] as const
@@ -72,13 +72,13 @@ export function AmbientLayer() {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollY } = useScroll()
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] })
-  const meshY = useScrollParallaxY({ input: [0, 1000], output: [0, 90], scrollY })
-  const auroraY = useScrollParallaxY({ input: [0, 900], output: [0, 70], scrollY })
+  const meshY = useScrollParallaxY({ input: [0, 1000], output: [0, 160], scrollY })
+  const auroraY = useScrollParallaxY({ input: [0, 900], output: [0, 130], scrollY })
   const raysRotate = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 8])
   const { x: spotX, y: spotY } = useHeroParallax(24)
 
   return (
-    <div ref={ref} className="xp-ambient pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
+    <div ref={ref} className="xp-ambient pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
       <div className="xp-ambient__base" />
 
       <ParallaxLayer y={meshY}>

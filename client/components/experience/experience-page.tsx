@@ -12,7 +12,7 @@ import { ZoneCommit } from "@/client/components/experience/zones/zone-commit"
 
 export function ExperiencePage() {
   return (
-    <main className="xp-root relative">
+    <main className="xp-root xp-page ttm-experience relative">
       <AmbientLayer />
       <ExperienceFloatingChrome />
       <div className="xp-grid">
