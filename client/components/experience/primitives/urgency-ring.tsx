@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useReducedMotion } from "motion/react"
-import { useEffect, useId, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import { cn } from "@/client/lib/utils"
 
 type UrgencyRingProps = {
@@ -50,14 +50,19 @@ export function UrgencyRing({
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      setRemaining((prev) => {
-        const next = prev <= 0 ? totalSeconds : prev - 1
-        if (next <= criticalBelow && prev > criticalBelow) onCritical?.()
-        return next
-      })
+      setRemaining((prev) => (prev <= 0 ? totalSeconds : prev - 1))
     }, 1000)
     return () => window.clearInterval(id)
-  }, [totalSeconds, criticalBelow, onCritical])
+  }, [totalSeconds])
+
+  const prevRemainingRef = useRef(remaining)
+  useEffect(() => {
+    const prev = prevRemainingRef.current
+    if (remaining <= criticalBelow && prev > criticalBelow) {
+      onCritical?.()
+    }
+    prevRemainingRef.current = remaining
+  }, [remaining, criticalBelow, onCritical])
 
   return (
     <div className={cn("relative inline-flex flex-col items-center", className)}>

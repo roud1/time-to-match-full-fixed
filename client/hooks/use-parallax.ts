@@ -4,30 +4,33 @@ import {
   useReducedMotion,
   useScroll,
   useTransform,
+  useMotionValue,
   type MotionValue,
   type TransformInputRange,
 } from "motion/react"
-import { useEffect, useState, type RefObject } from "react"
+import { useEffect, type RefObject } from "react"
+import { useHydrated } from "@/client/hooks/use-hydrated"
 
 type ScrollRange = TransformInputRange
 
 /** 0 when reduced motion or mobile; scales parallax intensity on small screens. */
 export function useParallaxIntensity(desktop = 1) {
   const reduce = useReducedMotion()
-  const [intensity, setIntensity] = useState(reduce ? 0 : desktop)
+  const hydrated = useHydrated()
+  const intensity = useMotionValue(0)
 
   useEffect(() => {
-    if (reduce) {
-      setIntensity(0)
+    if (!hydrated || reduce) {
+      intensity.set(0)
       return
     }
 
     const mq = window.matchMedia("(max-width: 767px)")
-    const update = () => setIntensity(mq.matches ? desktop * 0.35 : desktop)
+    const update = () => intensity.set(mq.matches ? desktop * 0.35 : desktop)
     update()
     mq.addEventListener("change", update)
     return () => mq.removeEventListener("change", update)
-  }, [reduce, desktop])
+  }, [reduce, desktop, hydrated, intensity])
 
   return intensity
 }
@@ -47,13 +50,14 @@ export function useScrollParallaxY({
   scrollY: scrollYProp,
 }: UseScrollParallaxOptions) {
   const reduce = useReducedMotion()
+  const hydrated = useHydrated()
   const intensity = useParallaxIntensity(1)
   const { scrollY: defaultScrollY } = useScroll()
   const scrollY = scrollYProp ?? defaultScrollY
   const raw = useTransform(scrollY, input, output)
-  const y = useTransform(raw, (v) => v * intensity)
+  const y = useTransform([raw, intensity], ([v, i]) => (v as number) * (i as number))
 
-  if (reduce || intensity === 0) return undefined
+  if (!hydrated || reduce) return undefined
   return y
 }
 
@@ -64,14 +68,15 @@ export function useSectionParallaxY(
   intensityScale = 1
 ) {
   const reduce = useReducedMotion()
+  const hydrated = useHydrated()
   const mobileScale = useParallaxIntensity(intensityScale)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   })
   const raw = useTransform(scrollYProgress, [0, 1], output)
-  const y = useTransform(raw, (v) => v * mobileScale)
+  const y = useTransform([raw, mobileScale], ([v, i]) => (v as number) * (i as number))
 
-  if (reduce || mobileScale === 0) return undefined
+  if (!hydrated || reduce) return undefined
   return y
 }

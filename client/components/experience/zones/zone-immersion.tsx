@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import { GlassPanel } from "@/client/components/experience/primitives/glass-panel"
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
@@ -30,6 +30,15 @@ function PremiumAvatar({
   reduce: boolean | null
 }) {
   const [failed, setFailed] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const handleImageError = () => {
+    window.queueMicrotask(() => setFailed(true))
+  }
 
   return (
     <motion.div
@@ -45,14 +54,14 @@ function PremiumAvatar({
       transition={{ type: "spring", stiffness: 280, damping: 22 }}
     >
       <div className="relative h-[4.25rem] w-[4.25rem] overflow-hidden rounded-full ring-2 ring-[var(--xp-base)] sm:h-[5.25rem] sm:w-[5.25rem]">
-        {!failed ? (
+        {!failed && mounted ? (
           <Image
             src={src}
             alt=""
             fill
             className="object-cover object-[center_18%]"
             sizes="(max-width: 640px) 68px, 84px"
-            onError={() => setFailed(true)}
+            onError={handleImageError}
           />
         ) : (
           <div
