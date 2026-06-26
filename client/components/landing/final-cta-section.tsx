@@ -16,25 +16,32 @@ export function FinalCtaSection() {
   }, [])
 
   return (
-    <section className="ttm-landing-final" aria-labelledby="final-cta-title">
-      <div className="ttm-landing-container">
+    <section className="ttm-section ttm-final" aria-labelledby="final-cta-title">
+      <div className="ttm-container">
         <motion.div
-          className="ttm-landing-glass ttm-landing-glass--glow ttm-landing-final__card"
+          className="ttm-glass ttm-glass--glow ttm-final__card"
           initial={reduce ? false : { opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <h2
-            id="final-cta-title"
-            className="ttm-landing-title ttm-landing-title--section ttm-landing-final__title"
-          >
+          <h2 id="final-cta-title" className="ttm-title ttm-title--section ttm-final__title">
             {t("ttmLandingFinalTitle")}
           </h2>
-          <p className="ttm-landing-sub ttm-landing-final__sub">{t("ttmLandingFinalSub")}</p>
-          <Link href={ctaHref} className="ttm-landing-btn ttm-landing-btn--primary ttm-landing-btn--lg">
-            {t("datingHeroCta")}
-          </Link>
+          <p className="ttm-sub ttm-final__sub">{t("ttmLandingFinalSub")}</p>
+
+          <motion.div
+            className="ttm-final__cta-wrap"
+            whileHover={reduce ? undefined : { scale: 1.03 }}
+            whileTap={reduce ? undefined : { scale: 0.98 }}
+          >
+            <Link href={ctaHref} className="ttm-btn ttm-btn--primary ttm-btn--lg ttm-final__cta">
+              <span className="ttm-final__cta-shimmer" aria-hidden />
+              {t("ttmLandingFinalCta")}
+            </Link>
+          </motion.div>
+
+          <p className="ttm-final__note">{t("ttmLandingFinalNote")}</p>
         </motion.div>
       </div>
     </section>

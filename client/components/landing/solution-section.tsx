@@ -20,43 +20,49 @@ function useCountdown(initialSeconds: number) {
   const label = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
   const progress = seconds / initialSeconds
 
-  return { label, progress }
+  return { label, progress, seconds }
 }
 
 export function SolutionSection() {
   const { t } = useI18n()
   const reduce = useReducedMotion()
-  const { label, progress } = useCountdown(23 * 3600 + 41 * 60 + 8)
+  const { label, progress, seconds } = useCountdown(23 * 3600 + 41 * 60 + 8)
+  const urgent = seconds < 3600
 
   return (
-    <section id="solution" className="ttm-landing-section" aria-labelledby="solution-title">
-      <div className="ttm-landing-container ttm-landing-split">
+    <section id="solution" className="ttm-section" aria-labelledby="solution-title">
+      <div className="ttm-container ttm-split">
         <motion.div
-          className="ttm-landing-glass ttm-landing-glass--glow ttm-landing-countdown"
+          className={`ttm-glass ttm-glass--glow ttm-countdown${urgent ? " ttm-countdown--urgent" : ""}`}
           initial={reduce ? false : { opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="ttm-landing-countdown__label">{t("ttmLandingSolutionCountdownLabel")}</p>
-          <p className="ttm-landing-countdown__time" aria-live="polite">
+          <p className="ttm-countdown__label">{t("ttmLandingSolutionCountdownLabel")}</p>
+          <motion.p
+            className="ttm-countdown__time"
+            aria-live="polite"
+            animate={urgent && !reduce ? { scale: [1, 1.02, 1] } : {}}
+            transition={{ duration: 1, repeat: Infinity }}
+          >
             {label}
-          </p>
+          </motion.p>
           <div
-            className="ttm-landing-countdown__bar"
+            className="ttm-countdown__bar"
             role="progressbar"
             aria-valuenow={Math.round(progress * 100)}
             aria-valuemin={0}
             aria-valuemax={100}
           >
             <motion.div
-              className="ttm-landing-countdown__bar-fill"
+              className="ttm-countdown__bar-fill"
               animate={{ scaleX: progress }}
               transition={{ duration: 0.4, ease: "linear" }}
               style={{ width: "100%" }}
             />
           </div>
-          <p className="ttm-landing-countdown__hint">{t("ttmLandingSolutionCountdownHint")}</p>
+          <p className="ttm-countdown__hint">{t("ttmLandingSolutionCountdownHint")}</p>
         </motion.div>
 
         <motion.div
@@ -65,25 +71,25 @@ export function SolutionSection() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="ttm-landing-eyebrow">{t("ttmLandingSolutionEyebrow")}</p>
-          <h2 id="solution-title" className="ttm-landing-title ttm-landing-title--section">
+          <span className="ttm-eyebrow">{t("ttmLandingSolutionEyebrow")}</span>
+          <h2 id="solution-title" className="ttm-title ttm-title--section">
             {t("ttmLandingSolutionTitle")}
           </h2>
-          <p className="ttm-landing-sub" style={{ marginTop: "1rem" }}>
+          <p className="ttm-sub" style={{ marginTop: "1rem" }}>
             {t("ttmLandingSolutionSub")}
           </p>
-          <ul className="ttm-landing-pain-list" style={{ marginTop: "1.5rem" }}>
-            <li className="ttm-landing-pain-item">
-              <span className="ttm-landing-pain-item__icon" aria-hidden>
+          <ul className="ttm-pain-list" style={{ marginTop: "1.5rem" }}>
+            <li className="ttm-pain-item ttm-pain-item--positive">
+              <span className="ttm-pain-item__icon ttm-pain-item__icon--green" aria-hidden>
                 ⏱
               </span>
-              <p className="ttm-landing-pain-item__text">{t("ttmLandingSolutionPoint1")}</p>
+              <p className="ttm-pain-item__text">{t("ttmLandingSolutionPoint1")}</p>
             </li>
-            <li className="ttm-landing-pain-item">
-              <span className="ttm-landing-pain-item__icon" aria-hidden>
+            <li className="ttm-pain-item ttm-pain-item--positive">
+              <span className="ttm-pain-item__icon ttm-pain-item__icon--green" aria-hidden>
                 🔥
               </span>
-              <p className="ttm-landing-pain-item__text">{t("ttmLandingSolutionPoint2")}</p>
+              <p className="ttm-pain-item__text">{t("ttmLandingSolutionPoint2")}</p>
             </li>
           </ul>
         </motion.div>

@@ -3,6 +3,7 @@
 import Image from "next/image"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useCallback, useEffect, useState } from "react"
+import { useI18n } from "@/client/lib/i18n"
 
 type SwipeProfile = {
   name: string
@@ -42,6 +43,7 @@ const PROFILES: SwipeProfile[] = [
 const SWIPE_INTERVAL_MS = 3200
 
 export function AnimatedSwipeCards() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   const [index, setIndex] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)
@@ -86,11 +88,11 @@ export function AnimatedSwipeCards() {
             {stamp && (
               <motion.span
                 className={`ttm-swipe-card__stamp ttm-swipe-card__stamp--${stamp === "like" ? "like" : "nope"}`}
-                initial={{ scale: 0.6, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                initial={{ scale: 0.6, opacity: 0, rotate: stamp === "like" ? -12 : 12 }}
+                animate={{ scale: 1, opacity: 1, rotate: stamp === "like" ? -8 : 8 }}
                 transition={{ duration: 0.25 }}
               >
-                {stamp === "like" ? "Match" : "Pass"}
+                {stamp === "like" ? t("ttmLandingSwipeMatch") : t("ttmLandingSwipePass")}
               </motion.span>
             )}
           </div>
