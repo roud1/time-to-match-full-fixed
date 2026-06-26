@@ -1,5 +1,5 @@
-import { LandingPage } from "@/client/components/landing/landing-page"
+import { ExperiencePage } from "@/client/components/experience/experience-page"
 
 export function HomePage() {
-  return <LandingPage />
+  return <ExperiencePage />
 }
