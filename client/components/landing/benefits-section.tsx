@@ -1,46 +1,52 @@
 "use client"
 
 import { motion, useReducedMotion } from "motion/react"
+import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 
 const BENEFITS = [
   {
     icon: "🚫",
-    title: "No ghosting",
-    desc: "Matches expire in 24 hours. Nobody sits in your inbox forever pretending they'll reply.",
+    titleKey: "ttmLandingBenefit1Title",
+    descKey: "ttmLandingBenefit1Desc",
   },
   {
     icon: "💬",
-    title: "Real conversations",
-    desc: "Urgency cuts through small talk. People show up ready to connect, not just collect matches.",
+    titleKey: "ttmLandingBenefit2Title",
+    descKey: "ttmLandingBenefit2Desc",
   },
   {
     icon: "🛡",
-    title: "Less spam",
-    desc: "Dead matches disappear automatically. Your feed stays fresh with people who actually engage.",
+    titleKey: "ttmLandingBenefit3Title",
+    descKey: "ttmLandingBenefit3Desc",
   },
-] as const
+] as const satisfies ReadonlyArray<{
+  icon: string
+  titleKey: TranslationKey
+  descKey: TranslationKey
+}>
 
 export function BenefitsSection() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
 
   return (
     <section id="benefits" className="ttm-landing-section" aria-labelledby="benefits-title">
       <div className="ttm-landing-container">
         <div className="ttm-landing-section__header" style={{ textAlign: "center", marginInline: "auto" }}>
-          <p className="ttm-landing-eyebrow">Why Time to Match</p>
+          <p className="ttm-landing-eyebrow">{t("ttmLandingBenefitsEyebrow")}</p>
           <h2
             id="benefits-title"
             className="ttm-landing-title ttm-landing-title--section"
             style={{ maxWidth: "none", marginInline: "auto" }}
           >
-            Dating that respects your time
+            {t("ttmLandingBenefitsTitle")}
           </h2>
         </div>
 
         <div className="ttm-landing-benefits">
           {BENEFITS.map((benefit, i) => (
             <motion.article
-              key={benefit.title}
+              key={benefit.titleKey}
               className="ttm-landing-glass ttm-landing-benefit"
               initial={reduce ? false : { opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -50,8 +56,8 @@ export function BenefitsSection() {
               <span className="ttm-landing-benefit__icon" aria-hidden>
                 {benefit.icon}
               </span>
-              <h3 className="ttm-landing-benefit__title">{benefit.title}</h3>
-              <p className="ttm-landing-benefit__desc">{benefit.desc}</p>
+              <h3 className="ttm-landing-benefit__title">{t(benefit.titleKey)}</h3>
+              <p className="ttm-landing-benefit__desc">{t(benefit.descKey)}</p>
             </motion.article>
           ))}
         </div>

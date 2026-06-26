@@ -4,9 +4,11 @@ import Link from "next/link"
 import { motion, useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"
 import { AnimatedSwipeCards } from "@/client/components/landing/animated-swipe-cards"
+import { useI18n } from "@/client/lib/i18n"
 import { isLoggedIn } from "@/client/lib/user-profile"
 
 export function HeroSection() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   const [ctaHref, setCtaHref] = useState("/register")
 
@@ -28,25 +30,24 @@ export function HeroSection() {
       <div className="ttm-landing-container ttm-landing-hero__grid">
         <div>
           <motion.p className="ttm-landing-eyebrow" {...fade(0)}>
-            Time to Match
+            {t("ttmLandingHeroEyebrow")}
           </motion.p>
 
           <motion.h1 id="landing-hero-title" className="ttm-landing-title" {...fade(0.08)}>
-            Match.
-            <span className="ttm-landing-title__accent">24 Hours. Or Gone.</span>
+            {t("ttmLandingHeroTitle")}
+            <span className="ttm-landing-title__accent">{t("ttmLandingHeroTitleAccent")}</span>
           </motion.h1>
 
           <motion.p className="ttm-landing-sub" style={{ marginTop: "1.25rem" }} {...fade(0.18)}>
-            No ghosting. Only real conversations. Every mutual match gets a 24-hour window — use it
-            or lose it forever.
+            {t("ttmLandingHeroSub")}
           </motion.p>
 
           <motion.div className="ttm-landing-hero__actions" {...fade(0.28)}>
             <Link href={ctaHref} className="ttm-landing-btn ttm-landing-btn--primary ttm-landing-btn--lg">
-              Start Matching
+              {t("datingHeroCta")}
             </Link>
             <Link href="/login" className="ttm-landing-btn ttm-landing-btn--ghost">
-              Log in
+              {t("login")}
             </Link>
           </motion.div>
         </div>

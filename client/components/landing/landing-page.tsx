@@ -11,20 +11,22 @@ import { HowItWorksSection } from "@/client/components/landing/how-it-works-sect
 import { ProblemSection } from "@/client/components/landing/problem-section"
 import { SolutionSection } from "@/client/components/landing/solution-section"
 import { Logo } from "@/client/components/logo"
+import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 import { fontLandingBody, fontLandingDisplay } from "@/client/lib/fonts"
 import { isLoggedIn } from "@/client/lib/user-profile"
 import { cn } from "@/client/lib/utils"
 import "@/client/styles/landing.css"
 
 const NAV_LINKS = [
-  { href: "#how-it-works", label: "How it works" },
-  { href: "#problem", label: "Problem" },
-  { href: "#solution", label: "Solution" },
-  { href: "#chat", label: "Chat" },
-  { href: "#benefits", label: "Benefits" },
-] as const
+  { href: "#how-it-works", key: "ttmLandingNavHow" as const },
+  { href: "#problem", key: "ttmLandingNavProblem" as const },
+  { href: "#solution", key: "ttmLandingNavSolution" as const },
+  { href: "#chat", key: "ttmLandingNavChat" as const },
+  { href: "#benefits", key: "ttmLandingNavBenefits" as const },
+] satisfies ReadonlyArray<{ href: string; key: TranslationKey }>
 
 export function LandingPage() {
+  const { t } = useI18n()
   const [loggedIn, setLoggedIn] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -68,7 +70,7 @@ export function LandingPage() {
           <div className="ttm-landing-nav__links">
             {NAV_LINKS.map((link) => (
               <a key={link.href} href={link.href} className="ttm-landing-nav__link">
-                {link.label}
+                {t(link.key)}
               </a>
             ))}
           </div>
@@ -76,15 +78,15 @@ export function LandingPage() {
           <div className="ttm-landing-nav__actions">
             {loggedIn ? (
               <Link href="/app" className="ttm-landing-btn ttm-landing-btn--primary">
-                Open app
+                {t("datingNavOpenApp")}
               </Link>
             ) : (
               <>
                 <Link href="/login" className="ttm-landing-btn ttm-landing-btn--ghost">
-                  Log in
+                  {t("login")}
                 </Link>
                 <Link href="/register" className="ttm-landing-btn ttm-landing-btn--primary">
-                  Sign up
+                  {t("register")}
                 </Link>
               </>
             )}
@@ -103,14 +105,14 @@ export function LandingPage() {
       <footer className="ttm-landing-footer">
         <div className="ttm-landing-container ttm-landing-footer__inner">
           <p className="ttm-landing-footer__copy">
-            © {new Date().getFullYear()} Time to Match. All rights reserved.
+            © {new Date().getFullYear()} Time to Match. {t("ttmLandingFooterRights")}
           </p>
           <div className="ttm-landing-footer__links">
             <Link href="/login" className="ttm-landing-footer__link">
-              Log in
+              {t("login")}
             </Link>
             <Link href="/register" className="ttm-landing-footer__link">
-              Sign up
+              {t("register")}
             </Link>
           </div>
         </div>

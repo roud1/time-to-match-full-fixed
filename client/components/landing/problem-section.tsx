@@ -1,23 +1,16 @@
 "use client"
 
 import { motion, useReducedMotion } from "motion/react"
+import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 
 const PAINS = [
-  {
-    icon: "👻",
-    text: "You match, send a message, and hear nothing back — for days, weeks, or ever.",
-  },
-  {
-    icon: "💬",
-    text: "Conversations die after \"hey\" because there's zero urgency to actually connect.",
-  },
-  {
-    icon: "📥",
-    text: "Your inbox fills with ignored matches while real connections get buried.",
-  },
-] as const
+  { icon: "👻", key: "ttmLandingProblemPain1" as const },
+  { icon: "💬", key: "ttmLandingProblemPain2" as const },
+  { icon: "📥", key: "ttmLandingProblemPain3" as const },
+] satisfies ReadonlyArray<{ icon: string; key: TranslationKey }>
 
 export function ProblemSection() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
 
   return (
@@ -34,13 +27,12 @@ export function ProblemSection() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="ttm-landing-eyebrow">The problem</p>
+          <p className="ttm-landing-eyebrow">{t("ttmLandingProblemEyebrow")}</p>
           <h2 id="problem-title" className="ttm-landing-title ttm-landing-title--section">
-            Tired of being ghosted?
+            {t("ttmLandingProblemTitle")}
           </h2>
           <p className="ttm-landing-sub" style={{ marginTop: "1rem" }}>
-            Traditional dating apps let matches sit forever. No pressure, no momentum — just endless
-            unread messages and fading hope.
+            {t("ttmLandingProblemSub")}
           </p>
         </motion.div>
 
@@ -52,11 +44,11 @@ export function ProblemSection() {
           transition={{ duration: 0.65, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
         >
           {PAINS.map((pain) => (
-            <li key={pain.icon} className="ttm-landing-pain-item">
+            <li key={pain.key} className="ttm-landing-pain-item">
               <span className="ttm-landing-pain-item__icon" aria-hidden>
                 {pain.icon}
               </span>
-              <p className="ttm-landing-pain-item__text">{pain.text}</p>
+              <p className="ttm-landing-pain-item__text">{t(pain.key)}</p>
             </li>
           ))}
         </motion.ul>

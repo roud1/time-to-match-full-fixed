@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"
+import { useI18n } from "@/client/lib/i18n"
 
 function useCountdown(initialSeconds: number) {
   const [seconds, setSeconds] = useState(initialSeconds)
@@ -23,6 +24,7 @@ function useCountdown(initialSeconds: number) {
 }
 
 export function SolutionSection() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   const { label, progress } = useCountdown(23 * 3600 + 41 * 60 + 8)
 
@@ -36,11 +38,17 @@ export function SolutionSection() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="ttm-landing-countdown__label">Match expires in</p>
+          <p className="ttm-landing-countdown__label">{t("ttmLandingSolutionCountdownLabel")}</p>
           <p className="ttm-landing-countdown__time" aria-live="polite">
             {label}
           </p>
-          <div className="ttm-landing-countdown__bar" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-valuemin={0} aria-valuemax={100}>
+          <div
+            className="ttm-landing-countdown__bar"
+            role="progressbar"
+            aria-valuenow={Math.round(progress * 100)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
             <motion.div
               className="ttm-landing-countdown__bar-fill"
               animate={{ scaleX: progress }}
@@ -48,9 +56,7 @@ export function SolutionSection() {
               style={{ width: "100%" }}
             />
           </div>
-          <p className="ttm-landing-countdown__hint">
-            When the timer hits zero, this match is gone — no second chances.
-          </p>
+          <p className="ttm-landing-countdown__hint">{t("ttmLandingSolutionCountdownHint")}</p>
         </motion.div>
 
         <motion.div
@@ -59,30 +65,25 @@ export function SolutionSection() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="ttm-landing-eyebrow">The solution</p>
+          <p className="ttm-landing-eyebrow">{t("ttmLandingSolutionEyebrow")}</p>
           <h2 id="solution-title" className="ttm-landing-title ttm-landing-title--section">
-            24 hours to make it count
+            {t("ttmLandingSolutionTitle")}
           </h2>
           <p className="ttm-landing-sub" style={{ marginTop: "1rem" }}>
-            Every match comes with a live countdown. The urgency isn't a gimmick — it's the feature
-            that turns matches into conversations and conversations into connections.
+            {t("ttmLandingSolutionSub")}
           </p>
           <ul className="ttm-landing-pain-list" style={{ marginTop: "1.5rem" }}>
             <li className="ttm-landing-pain-item">
               <span className="ttm-landing-pain-item__icon" aria-hidden>
                 ⏱
               </span>
-              <p className="ttm-landing-pain-item__text">
-                Real-time timer visible on every match — you always know how much time is left.
-              </p>
+              <p className="ttm-landing-pain-item__text">{t("ttmLandingSolutionPoint1")}</p>
             </li>
             <li className="ttm-landing-pain-item">
               <span className="ttm-landing-pain-item__icon" aria-hidden>
                 🔥
               </span>
-              <p className="ttm-landing-pain-item__text">
-                Urgency creates momentum. People actually reply when the clock is ticking.
-              </p>
+              <p className="ttm-landing-pain-item__text">{t("ttmLandingSolutionPoint2")}</p>
             </li>
           </ul>
         </motion.div>

@@ -3,9 +3,11 @@
 import Link from "next/link"
 import { motion, useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"
+import { useI18n } from "@/client/lib/i18n"
 import { isLoggedIn } from "@/client/lib/user-profile"
 
 export function FinalCtaSection() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   const [ctaHref, setCtaHref] = useState("/register")
 
@@ -27,14 +29,11 @@ export function FinalCtaSection() {
             id="final-cta-title"
             className="ttm-landing-title ttm-landing-title--section ttm-landing-final__title"
           >
-            Don&apos;t miss your match
+            {t("ttmLandingFinalTitle")}
           </h2>
-          <p className="ttm-landing-sub ttm-landing-final__sub">
-            Join thousands who are done waiting for replies. Your next real conversation starts with
-            one swipe — and 24 hours on the clock.
-          </p>
+          <p className="ttm-landing-sub ttm-landing-final__sub">{t("ttmLandingFinalSub")}</p>
           <Link href={ctaHref} className="ttm-landing-btn ttm-landing-btn--primary ttm-landing-btn--lg">
-            Start Matching
+            {t("datingHeroCta")}
           </Link>
         </motion.div>
       </div>

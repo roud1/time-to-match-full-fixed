@@ -3,12 +3,15 @@
 import Image from "next/image"
 import { motion, useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"
+import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 
-const MESSAGES = [
-  { from: "them" as const, text: "Hey! Love your profile — that hiking photo is amazing 🏔" },
-  { from: "you" as const, text: "Thanks! Just got back from Yosemite actually. You into trails?" },
-  { from: "them" as const, text: "Absolutely. We should plan one before our timer runs out 😄" },
-] as const
+const MESSAGE_KEYS = [
+  "ttmLandingChatMsg1",
+  "ttmLandingChatMsg2",
+  "ttmLandingChatMsg3",
+] as const satisfies readonly TranslationKey[]
+
+const MESSAGE_FROM = ["them", "you", "them"] as const
 
 function useChatTimer(initialSeconds: number) {
   const [seconds, setSeconds] = useState(initialSeconds)
@@ -27,6 +30,7 @@ function useChatTimer(initialSeconds: number) {
 }
 
 export function ChatPreviewSection() {
+  const { t } = useI18n()
   const reduce = useReducedMotion()
   const timer = useChatTimer(6 * 3600 + 14 * 60 + 22)
 
@@ -39,13 +43,12 @@ export function ChatPreviewSection() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="ttm-landing-eyebrow">Live chat</p>
+          <p className="ttm-landing-eyebrow">{t("ttmLandingChatEyebrow")}</p>
           <h2 id="chat-title" className="ttm-landing-title ttm-landing-title--section">
-            Conversations with a deadline
+            {t("ttmLandingChatTitle")}
           </h2>
           <p className="ttm-landing-sub" style={{ marginTop: "1rem" }}>
-            The timer lives right in your chat. When time's running low, you'll feel it — and so will
-            they. That's what turns a match into a date.
+            {t("ttmLandingChatSub")}
           </p>
         </motion.div>
 
@@ -66,12 +69,12 @@ export function ChatPreviewSection() {
                 className="ttm-landing-chat__avatar"
               />
               <div>
-                <p className="ttm-landing-chat__name">Mia, 25</p>
-                <p className="ttm-landing-chat__status">Online now</p>
+                <p className="ttm-landing-chat__name">{t("ttmLandingChatPeerName")}</p>
+                <p className="ttm-landing-chat__status">{t("ttmLandingChatOnline")}</p>
               </div>
             </div>
             <div className="ttm-landing-chat__timer-badge">
-              <span className="ttm-landing-chat__timer-label">Expires in</span>
+              <span className="ttm-landing-chat__timer-label">{t("ttmLandingChatExpiresIn")}</span>
               <span className="ttm-landing-chat__timer-value" aria-live="polite">
                 {timer}
               </span>
@@ -79,23 +82,21 @@ export function ChatPreviewSection() {
           </header>
 
           <div className="ttm-landing-chat__messages">
-            {MESSAGES.map((msg, i) => (
+            {MESSAGE_KEYS.map((key, i) => (
               <motion.div
-                key={i}
-                className={`ttm-landing-chat__bubble ttm-landing-chat__bubble--${msg.from}`}
+                key={key}
+                className={`ttm-landing-chat__bubble ttm-landing-chat__bubble--${MESSAGE_FROM[i]}`}
                 initial={reduce ? false : { opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: 0.2 + i * 0.12 }}
               >
-                {msg.text}
+                {t(key)}
               </motion.div>
             ))}
           </div>
 
-          <p className="ttm-landing-chat__urgency">
-            ⚡ Less than 7 hours left — don&apos;t let this one slip away
-          </p>
+          <p className="ttm-landing-chat__urgency">{t("ttmLandingChatUrgency")}</p>
         </motion.div>
       </div>
     </section>

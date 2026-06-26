@@ -17,14 +17,12 @@ function FloatingChromeInner() {
   const chatThreadOpen = isApp && searchParams.get("with") != null
   const aboveDock = isApp && !chatThreadOpen
 
-  if (isHome) return null
-
   return (
     <div
       className={cn("ttm-floating-chrome", aboveDock && "ttm-floating-chrome--above-dock")}
       aria-label="Settings"
     >
-      {!isAuth && !isApp && <ThemeToggle compact className="ttm-floating-chrome__theme" />}
+      {!isAuth && !isApp && !isHome && <ThemeToggle compact className="ttm-floating-chrome__theme" />}
       <LanguageSwitcher />
     </div>
   )
