@@ -52,45 +52,49 @@ async function reverseGeocode(
     format: "json",
   })
 
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?${params}`,
-    {
-      headers: {
-        Accept: "application/json",
-        "Accept-Language": localeToBcp47(locale),
-        "User-Agent": "TimeToMatch/1.0 (dating app; contact: support@timetomatch.app)",
-      },
-      signal: AbortSignal.timeout(8_000),
-    }
-  )
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?${params}`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Accept-Language": localeToBcp47(locale),
+          "User-Agent": "TimeToMatch/1.0 (dating app; contact: support@timetomatch.app)",
+        },
+        signal: AbortSignal.timeout(8_000),
+      }
+    )
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return { city: null, countryCode: null }
+    }
+
+    const data = (await response.json()) as {
+      address?: {
+        city?: string
+        town?: string
+        village?: string
+        municipality?: string
+        state?: string
+        country_code?: string
+      }
+    }
+
+    const address = data.address
+    const city =
+      address?.city ??
+      address?.town ??
+      address?.village ??
+      address?.municipality ??
+      address?.state ??
+      null
+
+    return {
+      city,
+      countryCode: address?.country_code?.toUpperCase() ?? null,
+    }
+  } catch {
     return { city: null, countryCode: null }
-  }
-
-  const data = (await response.json()) as {
-    address?: {
-      city?: string
-      town?: string
-      village?: string
-      municipality?: string
-      state?: string
-      country_code?: string
-    }
-  }
-
-  const address = data.address
-  const city =
-    address?.city ??
-    address?.town ??
-    address?.village ??
-    address?.municipality ??
-    address?.state ??
-    null
-
-  return {
-    city,
-    countryCode: address?.country_code?.toUpperCase() ?? null,
   }
 }
 
@@ -219,13 +223,15 @@ export function useUserLocation({
 
   useEffect(() => {
     if (!position) return
-    void reverseGeocode(position, locale).then(({ city: resolvedCity, countryCode: code }) => {
-      if (resolvedCity) setCity(resolvedCity)
-      if (code) {
-        setCountryCode(code)
-        storeCountryCode(code)
-      }
-    })
+    void reverseGeocode(position, locale)
+      .then(({ city: resolvedCity, countryCode: code }) => {
+        if (resolvedCity) setCity(resolvedCity)
+        if (code) {
+          setCountryCode(code)
+          storeCountryCode(code)
+        }
+      })
+      .catch(() => {})
   }, [locale, position])
 
   const syncFromProfile = useCallback(() => {
