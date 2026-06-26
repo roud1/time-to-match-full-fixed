@@ -89,7 +89,7 @@ export function ZoneImmersion() {
   }
 
   return (
-    <section className="xp-zone xp-zone--offset-right" aria-label={t("ttmXpImmersionLive")}>
+    <section id="xp-immersion" className="xp-zone xp-zone--offset-right" aria-label={t("ttmXpImmersionLive")}>
       <ZoneGlow variant="green" position="top-right" size="lg" />
       <p className="xp-label mb-[var(--xp-3)]">{t("ttmXpImmersionLive")}</p>
 
@@ -99,7 +99,7 @@ export function ZoneImmersion() {
         onClick={handleTap}
         className="group w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--xp-green)]"
       >
-        <GlassPanel depth={2} className="relative overflow-hidden p-[var(--xp-5)] sm:p-[var(--xp-6)]">
+        <GlassPanel depth={2} immediate className="relative overflow-hidden p-[var(--xp-5)] sm:p-[var(--xp-6)]">
           <div className="xp-asymmetric">
             <div className="relative flex min-h-[200px] items-center justify-center sm:min-h-[240px]">
               <motion.div

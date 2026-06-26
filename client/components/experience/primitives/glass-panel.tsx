@@ -8,6 +8,8 @@ type GlassPanelProps = {
   className?: string
   depth?: 1 | 2 | 3
   tilt?: boolean
+  /** Skip scroll-reveal — use for above-the-fold panels */
+  immediate?: boolean
 }
 
 const DEPTH_CLASS = {
@@ -16,8 +18,9 @@ const DEPTH_CLASS = {
   3: "bg-[rgba(34,34,51,0.78)] border-white/12 shadow-[var(--xp-glow-purple),var(--xp-glow-pink),0_24px_80px_rgba(0,0,0,0.45)]",
 } as const
 
-export function GlassPanel({ children, className, depth = 1, tilt }: GlassPanelProps) {
+export function GlassPanel({ children, className, depth = 1, tilt, immediate }: GlassPanelProps) {
   const reduce = useReducedMotion()
+  const skipReveal = reduce || immediate
 
   return (
     <motion.div
@@ -26,9 +29,10 @@ export function GlassPanel({ children, className, depth = 1, tilt }: GlassPanelP
         DEPTH_CLASS[depth],
         className
       )}
-      initial={reduce ? false : { opacity: 0, y: 16 }}
-      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-8%" }}
+      initial={skipReveal ? false : { opacity: 0, y: 16 }}
+      animate={immediate && !reduce ? { opacity: 1, y: 0 } : undefined}
+      whileInView={skipReveal ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-4%" }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       whileHover={tilt && !reduce ? { rotateX: 2, rotateY: -2, scale: 1.01 } : undefined}
       style={{ transformPerspective: 900 }}
