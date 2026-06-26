@@ -17,6 +17,7 @@
 @import './light-theme-overrides.css';
 @import './dark-theme-overrides.css';
 @import './site-ambient.css';
+@import './floating-chrome.css';
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 

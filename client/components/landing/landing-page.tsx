@@ -10,6 +10,7 @@ import { HeroSection } from "@/client/components/landing/hero-section"
 import { HowItWorksSection } from "@/client/components/landing/how-it-works-section"
 import { ProblemSection } from "@/client/components/landing/problem-section"
 import { SolutionSection } from "@/client/components/landing/solution-section"
+import { LanguageSwitcher } from "@/client/components/language-switcher"
 import { Logo } from "@/client/components/logo"
 import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 import { fontLandingBody, fontLandingDisplay } from "@/client/lib/fonts"
@@ -76,6 +77,7 @@ export function LandingPage() {
           </div>
 
           <div className="ttm-landing-nav__actions">
+            <LanguageSwitcher embedded className="ttm-landing-nav__lang" />
             {loggedIn ? (
               <Link href="/app" className="ttm-landing-btn ttm-landing-btn--primary">
                 {t("datingNavOpenApp")}

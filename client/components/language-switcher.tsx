@@ -7,7 +7,13 @@ import { useI18n, type Locale } from "@/client/lib/i18n"
 import { LOCALES, localeNames, localeShortNames } from "@/client/lib/i18n/config"
 import { cn } from "@/client/lib/utils"
 
-function LanguageSwitcherInner() {
+type LanguageSwitcherProps = {
+  /** Inline in a header/nav — no fixed bottom-right positioning */
+  embedded?: boolean
+  className?: string
+}
+
+function LanguageSwitcherInner({ embedded = false, className }: LanguageSwitcherProps) {
   const { locale, setLocale } = useI18n()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -16,11 +22,16 @@ function LanguageSwitcherInner() {
   const locales: Locale[] = [...LOCALES]
   const inApp = pathname === "/app" || pathname.startsWith("/app/")
   const chatThreadOpen = inApp && searchParams.get("with") != null
-  const aboveDock = inApp && !chatThreadOpen
+  const aboveDock = inApp && !chatThreadOpen && !embedded
 
   return (
     <div
-      className={cn("ttm-lang-switcher", aboveDock && "ttm-lang-switcher--above-dock")}
+      className={cn(
+        "ttm-lang-switcher",
+        embedded && "ttm-lang-switcher--embedded",
+        aboveDock && "ttm-lang-switcher--above-dock",
+        className
+      )}
       aria-label="Язык"
     >
       <div className="relative">
@@ -54,12 +65,15 @@ function LanguageSwitcherInner() {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: embedded ? -8 : 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 8 }}
+              exit={{ opacity: 0, y: embedded ? -8 : 8 }}
               transition={{ duration: 0.15 }}
               role="listbox"
-              className="absolute bottom-full right-0 mb-2 py-1 glass rounded-xl border border-foreground/10 overflow-hidden min-w-[148px] max-h-[min(320px,50vh)] overflow-y-auto shadow-xl backdrop-blur-xl"
+              className={cn(
+                "absolute right-0 py-1 glass rounded-xl border border-foreground/10 overflow-hidden min-w-[148px] max-h-[min(320px,50vh)] overflow-y-auto shadow-xl backdrop-blur-xl",
+                embedded ? "top-full mt-2 z-[60]" : "bottom-full mb-2"
+              )}
             >
               {locales.map((loc) => (
                 <button
@@ -93,10 +107,10 @@ function LanguageSwitcherInner() {
   )
 }
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher(props: LanguageSwitcherProps) {
   return (
     <Suspense fallback={null}>
-      <LanguageSwitcherInner />
+      <LanguageSwitcherInner {...props} />
     </Suspense>
   )
 }

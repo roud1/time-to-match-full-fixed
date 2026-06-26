@@ -153,6 +153,34 @@
   gap: 0.625rem;
 }
 
+.ttm-landing-nav__lang button {
+  min-height: 2.5rem;
+  padding-inline: 0.75rem;
+  color: var(--lp-text);
+  border-color: var(--lp-border);
+  background: var(--lp-surface);
+  box-shadow: none;
+}
+
+.ttm-landing-nav__lang button:hover {
+  background: var(--lp-surface-hover);
+  color: var(--lp-text);
+}
+
+.ttm-landing-nav__lang .ttm-lang-switcher {
+  position: static;
+  right: auto;
+  bottom: auto;
+  z-index: auto;
+  pointer-events: auto;
+}
+
+.ttm-landing-nav__lang .ttm-lang-switcher button {
+  border-color: var(--lp-border);
+  background: var(--lp-surface);
+  color: var(--lp-text);
+}
+
 /* Typography */
 .ttm-landing-eyebrow {
   margin: 0 0 0.75rem;
