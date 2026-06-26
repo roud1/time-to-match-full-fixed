@@ -27,11 +27,11 @@ export function ZonePressure() {
           </p>
         </div>
 
-        <GlassPanel depth={3} className={`order-1 flex justify-center p-[var(--xp-6)] md:order-2 ${shake ? "xp-shake" : ""}`}>
+        <GlassPanel depth={3} className={`order-1 flex justify-center p-[var(--xp-5)] sm:p-[var(--xp-6)] md:order-2 ${shake ? "xp-shake" : ""}`}>
           <UrgencyRing
             totalSeconds={24 * 3600}
             label={t("ttmXpPressureRingLabel")}
-            size={260}
+            size={240}
             criticalBelow={3600}
             onCritical={() => setShake(true)}
           />

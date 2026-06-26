@@ -148,3 +148,51 @@
 .xp-dissolve {
   animation: xp-dissolve 2.8s ease-in-out infinite alternate;
 }
+
+/* Header chrome */
+.xp-header {
+  background: linear-gradient(180deg, rgba(11, 11, 16, 0.92) 0%, rgba(11, 11, 16, 0.72) 100%);
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
+}
+
+/* Language switcher — experience theme */
+.xp-root .ttm-lang-switcher button {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(18, 18, 26, 0.75);
+  color: var(--xp-text);
+  backdrop-filter: blur(16px);
+  min-height: 36px;
+  padding-inline: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.xp-root .ttm-lang-switcher button:hover {
+  background: rgba(26, 26, 38, 0.9);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Premium avatars */
+.xp-avatar {
+  will-change: transform;
+}
+
+/* Footer */
+.xp-footer {
+  padding-bottom: max(var(--xp-6), env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-width: 639px) {
+  .xp-zone--offset-right,
+  .xp-zone--offset-left {
+    margin-inline: 0;
+  }
+
+  .xp-grid {
+    gap: var(--xp-6);
+    padding-inline: var(--xp-4);
+  }
+
+  .xp-asymmetric {
+    gap: var(--xp-4);
+  }
+}

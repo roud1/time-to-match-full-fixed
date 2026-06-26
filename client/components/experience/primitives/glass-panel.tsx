@@ -11,9 +11,9 @@ type GlassPanelProps = {
 }
 
 const DEPTH_CLASS = {
-  1: "bg-[var(--xp-glass)] border-[var(--xp-glass-border)] shadow-[var(--xp-glow-purple)]",
-  2: "bg-[rgba(26,26,38,0.72)] border-white/10 shadow-[var(--xp-glow-pink)]",
-  3: "bg-[rgba(34,34,51,0.78)] border-white/12 shadow-[0_24px_80px_rgba(0,0,0,0.45)]",
+  1: "bg-[var(--xp-glass)] border-[var(--xp-glass-border)] shadow-[var(--xp-glow-purple),0_8px_32px_rgba(0,0,0,0.25)]",
+  2: "bg-[rgba(26,26,38,0.72)] border-white/10 shadow-[var(--xp-glow-pink),0_12px_40px_rgba(0,0,0,0.3)]",
+  3: "bg-[rgba(34,34,51,0.78)] border-white/12 shadow-[var(--xp-glow-purple),var(--xp-glow-pink),0_24px_80px_rgba(0,0,0,0.45)]",
 } as const
 
 export function GlassPanel({ children, className, depth = 1, tilt }: GlassPanelProps) {

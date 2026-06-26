@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { useI18n } from "@/client/lib/i18n"
+import { Logo } from "@/client/components/logo"
 import { GlassPanel } from "@/client/components/experience/primitives/glass-panel"
 import { GlowButton } from "@/client/components/experience/primitives/glow-button"
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
@@ -51,11 +52,18 @@ export function ZoneCommit() {
         </form>
 
         <p className="mt-[var(--xp-4)] text-center text-xs text-[var(--xp-text-dim)]">
-          <Link href="/login" className="text-[var(--xp-purple)] hover:underline">
+          <Link href="/login" className="text-[var(--xp-purple)] transition-colors hover:text-[var(--xp-pink)] hover:underline">
             {t("ttmXpCommitLogin")}
           </Link>
         </p>
       </GlassPanel>
+
+      <footer className="xp-footer mt-[var(--xp-6)] flex flex-col items-center gap-[var(--xp-3)] text-center sm:mt-[var(--xp-7)]">
+        <Logo variant="full" size="sm" theme="dark" showTagline className="opacity-90" />
+        <p className="max-w-xs text-[0.65rem] leading-relaxed text-[var(--xp-text-dim)]">
+          {t("ttmXpCommitSubtitle")}
+        </p>
+      </footer>
     </section>
   )
 }
