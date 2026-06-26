@@ -1,8 +1,9 @@
 "use client"
 
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
+import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react"
 import { useRef } from "react"
 import { useHeroParallax } from "@/client/hooks/use-hero-parallax"
+import { useHydrated } from "@/client/hooks/use-hydrated"
 import { useScrollParallaxY } from "@/client/hooks/use-parallax"
 import { ParallaxLayer } from "@/client/components/experience/primitives/parallax-layer"
 import { cn } from "@/client/lib/utils"
@@ -45,13 +46,15 @@ function AmbientOrb({
   output,
   delay,
   reduce,
+  scrollY,
 }: {
   className: string
   output: [number, number]
   delay: string
   reduce: boolean | null
+  scrollY: MotionValue<number>
 }) {
-  const y = useScrollParallaxY({ input: [0, 1200], output })
+  const y = useScrollParallaxY({ input: [0, 1200], output, scrollY })
 
   return (
     <ParallaxLayer y={y}>
@@ -65,10 +68,12 @@ function AmbientOrb({
 
 export function AmbientLayer() {
   const reduce = useReducedMotion()
+  const hydrated = useHydrated()
   const ref = useRef<HTMLDivElement>(null)
+  const { scrollY } = useScroll()
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] })
-  const meshY = useScrollParallaxY({ input: [0, 1000], output: [0, 90] })
-  const auroraY = useScrollParallaxY({ input: [0, 900], output: [0, 70] })
+  const meshY = useScrollParallaxY({ input: [0, 1000], output: [0, 90], scrollY })
+  const auroraY = useScrollParallaxY({ input: [0, 900], output: [0, 70], scrollY })
   const raysRotate = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 8])
   const { x: spotX, y: spotY } = useHeroParallax(24)
 
@@ -94,6 +99,7 @@ export function AmbientLayer() {
             output={orb.output}
             delay={orb.delay}
             reduce={reduce}
+            scrollY={scrollY}
           />
         ))}
       </div>
@@ -105,7 +111,7 @@ export function AmbientLayer() {
         <div className={cn("xp-ambient__rays", !reduce && "xp-ambient__rays--live")} />
       </ParallaxLayer>
 
-      {!reduce ? (
+      {hydrated && !reduce ? (
         <motion.div
           className="xp-ambient__spotlight hidden md:block"
           style={{ x: spotX, y: spotY }}
