@@ -5,6 +5,8 @@ import { useEffect, useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import { GlassPanel } from "@/client/components/experience/primitives/glass-panel"
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
+import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
+import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
 
 export function ZoneConnection() {
   const { t } = useI18n()
@@ -28,8 +30,10 @@ export function ZoneConnection() {
 
   return (
     <section className="xp-zone xp-zone--offset-right" aria-labelledby="xp-connection-title">
+      <ZoneGlow variant="purple" position="bottom-right" size="md" />
       <p className="xp-label mb-[var(--xp-3)]">{t("ttmXpConnectionTitle")}</p>
 
+      <ParallaxDepth depth={2}>
       <GlassPanel depth={2} className="overflow-hidden">
         <div
           className={`flex items-center justify-between border-b border-white/8 px-[var(--xp-4)] py-[var(--xp-3)] ${urgent ? "bg-[var(--xp-pink)]/10" : "bg-white/[0.03]"}`}
@@ -78,6 +82,7 @@ export function ZoneConnection() {
           </div>
         </div>
       </GlassPanel>
+      </ParallaxDepth>
     </section>
   )
 }

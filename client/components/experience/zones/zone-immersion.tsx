@@ -6,7 +6,9 @@ import { useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import { GlassPanel } from "@/client/components/experience/primitives/glass-panel"
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
+import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
 import { UrgencyRing } from "@/client/components/experience/primitives/urgency-ring"
+import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
 import { cn } from "@/client/lib/utils"
 
 const AVATARS = [
@@ -79,8 +81,10 @@ export function ZoneImmersion() {
 
   return (
     <section className="xp-zone xp-zone--offset-right" aria-label={t("ttmXpImmersionLive")}>
+      <ZoneGlow variant="green" position="top-right" size="lg" />
       <p className="xp-label mb-[var(--xp-3)]">{t("ttmXpImmersionLive")}</p>
 
+      <ParallaxDepth depth={2}>
       <button
         type="button"
         onClick={handleTap}
@@ -131,6 +135,7 @@ export function ZoneImmersion() {
           </div>
         </GlassPanel>
       </button>
+      </ParallaxDepth>
     </section>
   )
 }

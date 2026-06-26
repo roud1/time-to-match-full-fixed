@@ -5,6 +5,8 @@ import { useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import { GlassPanel } from "@/client/components/experience/primitives/glass-panel"
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
+import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
+import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
 
 const DECK = [
   { id: 1, vibe: "92%", hue: "from-[#ff2e63] to-[#6c5ce7]" },
@@ -40,6 +42,7 @@ export function ZoneMotion() {
 
   return (
     <section className="xp-zone" aria-labelledby="xp-motion-title">
+      <ZoneGlow variant="purple" position="top-left" size="md" />
       <div className="mb-[var(--xp-5)] flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="xp-label mb-[var(--xp-2)]">{t("ttmXpMotionTitle")}</p>
@@ -52,6 +55,7 @@ export function ZoneMotion() {
         </span>
       </div>
 
+      <ParallaxDepth depth={2}>
       <GlassPanel depth={2} className="relative mx-auto max-w-sm overflow-hidden p-[var(--xp-5)]">
         <div className="relative mx-auto h-[340px] w-full max-w-[280px]">
           {left === 0 ? (
@@ -110,6 +114,7 @@ export function ZoneMotion() {
           </button>
         </div>
       </GlassPanel>
+      </ParallaxDepth>
     </section>
   )
 }

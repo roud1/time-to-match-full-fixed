@@ -2,39 +2,125 @@
 
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useRef } from "react"
+import { useHeroParallax } from "@/client/hooks/use-hero-parallax"
+import { useScrollParallaxY } from "@/client/hooks/use-parallax"
+import { ParallaxLayer } from "@/client/components/experience/primitives/parallax-layer"
+import { cn } from "@/client/lib/utils"
+
+const ORBS = [
+  {
+    id: "purple",
+    className: "xp-ambient__orb xp-ambient__orb--purple xp-ambient__orb--1",
+    output: [0, 140] as [number, number],
+    delay: "0s",
+  },
+  {
+    id: "pink",
+    className: "xp-ambient__orb xp-ambient__orb--pink xp-ambient__orb--2",
+    output: [0, -100] as [number, number],
+    delay: "-2.4s",
+  },
+  {
+    id: "green",
+    className: "xp-ambient__orb xp-ambient__orb--green xp-ambient__orb--3",
+    output: [0, 80] as [number, number],
+    delay: "-4.8s",
+  },
+  {
+    id: "violet",
+    className: "xp-ambient__orb xp-ambient__orb--violet xp-ambient__orb--4",
+    output: [0, -60] as [number, number],
+    delay: "-1.6s",
+  },
+  {
+    id: "mint",
+    className: "xp-ambient__orb xp-ambient__orb--mint xp-ambient__orb--5",
+    output: [0, 110] as [number, number],
+    delay: "-3.2s",
+  },
+] as const
+
+function AmbientOrb({
+  className,
+  output,
+  delay,
+  reduce,
+}: {
+  className: string
+  output: [number, number]
+  delay: string
+  reduce: boolean | null
+}) {
+  const y = useScrollParallaxY({ input: [0, 1200], output })
+
+  return (
+    <ParallaxLayer y={y}>
+      <div
+        className={cn(className, !reduce && "xp-ambient__orb--live")}
+        style={{ animationDelay: delay }}
+      />
+    </ParallaxLayer>
+  )
+}
 
 export function AmbientLayer() {
   const reduce = useReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] })
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 120])
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -80])
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 60])
+  const meshY = useScrollParallaxY({ input: [0, 1000], output: [0, 90] })
+  const auroraY = useScrollParallaxY({ input: [0, 900], output: [0, 70] })
+  const raysRotate = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 8])
+  const { x: spotX, y: spotY } = useHeroParallax(24)
 
   return (
-    <div ref={ref} className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
-      <div className="absolute inset-0 bg-[var(--xp-base)]" />
-      <motion.div
-        style={{ y: y1 }}
-        className="absolute -left-[20%] top-[8%] h-[55vh] w-[55vh] rounded-full bg-[radial-gradient(circle,rgba(108,92,231,0.22)_0%,transparent_68%)] blur-3xl"
-      />
-      <motion.div
-        style={{ y: y2 }}
-        className="absolute -right-[15%] top-[35%] h-[48vh] w-[48vh] rounded-full bg-[radial-gradient(circle,rgba(255,46,99,0.18)_0%,transparent_70%)] blur-3xl"
-      />
-      <motion.div
-        style={{ y: y3 }}
-        className="absolute bottom-[5%] left-[25%] h-[40vh] w-[40vh] rounded-full bg-[radial-gradient(circle,rgba(0,255,163,0.12)_0%,transparent_72%)] blur-3xl"
-      />
+    <div ref={ref} className="xp-ambient pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
+      <div className="xp-ambient__base" />
+
+      <ParallaxLayer y={meshY}>
+        <div className={cn("xp-ambient__mesh", !reduce && "xp-ambient__mesh--live")} />
+      </ParallaxLayer>
+
+      <ParallaxLayer y={auroraY}>
+        <div className={cn("xp-ambient__aurora", !reduce && "xp-ambient__aurora--live")} />
+      </ParallaxLayer>
+
+      <div className={cn("xp-ambient__aurora-band", !reduce && "xp-ambient__aurora-band--live")} />
+
+      <div className="xp-ambient__orbs">
+        {ORBS.map((orb) => (
+          <AmbientOrb
+            key={orb.id}
+            className={orb.className}
+            output={orb.output}
+            delay={orb.delay}
+            reduce={reduce}
+          />
+        ))}
+      </div>
+
+      <div className={cn("xp-ambient__stars", !reduce && "xp-ambient__stars--live")} />
+      <div className={cn("xp-ambient__stars xp-ambient__stars--far", !reduce && "xp-ambient__stars--live")} />
+
+      <ParallaxLayer style={{ rotate: raysRotate }}>
+        <div className={cn("xp-ambient__rays", !reduce && "xp-ambient__rays--live")} />
+      </ParallaxLayer>
+
+      {!reduce ? (
+        <motion.div
+          className="xp-ambient__spotlight hidden md:block"
+          style={{ x: spotX, y: spotY }}
+        />
+      ) : null}
+
       <div
-        className="absolute inset-0 opacity-[0.04]"
+        className="xp-ambient__grid opacity-[0.04]"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
           maskImage: "radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent)",
         }}
       />
+
+      <div className="xp-ambient__vignette" />
+      <div className="xp-ambient__grain" />
     </div>
   )
 }

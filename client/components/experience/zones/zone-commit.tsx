@@ -8,6 +8,8 @@ import { Logo } from "@/client/components/logo"
 import { GlassPanel } from "@/client/components/experience/primitives/glass-panel"
 import { GlowButton } from "@/client/components/experience/primitives/glow-button"
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
+import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
+import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
 
 export function ZoneCommit() {
   const { t } = useI18n()
@@ -26,6 +28,8 @@ export function ZoneCommit() {
 
   return (
     <section className="xp-zone pb-[var(--xp-8)]" aria-labelledby="xp-commit-title">
+      <ZoneGlow variant="pink" position="top-right" size="lg" />
+      <ParallaxDepth depth={3}>
       <GlassPanel depth={3} className="mx-auto max-w-lg p-[var(--xp-6)] sm:p-[var(--xp-7)]">
         <NeonText as="h2" id="xp-commit-title" variant="pink" className="text-2xl font-bold sm:text-3xl">
           {t("ttmXpCommitTitle")}
@@ -57,6 +61,7 @@ export function ZoneCommit() {
           </Link>
         </p>
       </GlassPanel>
+      </ParallaxDepth>
 
       <footer className="xp-footer mt-[var(--xp-6)] flex flex-col items-center gap-[var(--xp-3)] text-center sm:mt-[var(--xp-7)]">
         <Logo variant="full" size="sm" theme="dark" showTagline className="opacity-90" />

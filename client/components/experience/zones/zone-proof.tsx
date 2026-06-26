@@ -5,6 +5,8 @@ import { useEffect, useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import { GlassPanel } from "@/client/components/experience/primitives/glass-panel"
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
+import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
+import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
 
 function useLiveCount(base: number, variance: number) {
   const [n, setN] = useState(base)
@@ -26,11 +28,13 @@ export function ZoneProof() {
 
   return (
     <section className="xp-zone" aria-labelledby="xp-proof-title">
+      <ZoneGlow variant="green" position="center" size="lg" />
       <NeonText as="h2" id="xp-proof-title" variant="green" className="mb-[var(--xp-5)] text-2xl font-bold">
         {t("ttmXpProofWindow")}
       </NeonText>
 
       <div className="grid gap-[var(--xp-4)] sm:grid-cols-3">
+        <ParallaxDepth depth={1}>
         <GlassPanel depth={1} className="p-[var(--xp-4)]">
           <motion.p
             className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-green)]"
@@ -41,14 +45,18 @@ export function ZoneProof() {
           </motion.p>
           <p className="mt-1 text-xs text-[var(--xp-text-muted)]">{t("ttmXpProofActive")}</p>
         </GlassPanel>
+        </ParallaxDepth>
 
+        <ParallaxDepth depth={2}>
         <GlassPanel depth={1} className="p-[var(--xp-4)]">
           <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-purple)]">
             {nearby}
           </p>
           <p className="mt-1 text-xs text-[var(--xp-text-muted)]">{t("ttmXpProofNearby")}</p>
         </GlassPanel>
+        </ParallaxDepth>
 
+        <ParallaxDepth depth={3}>
         <GlassPanel depth={2} className="border-[var(--xp-pink)]/20 p-[var(--xp-4)]">
           <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-pink)]">
             {slots}
@@ -65,6 +73,7 @@ export function ZoneProof() {
             ))}
           </div>
         </GlassPanel>
+        </ParallaxDepth>
       </div>
     </section>
   )
