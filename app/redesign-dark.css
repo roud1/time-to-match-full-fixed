@@ -1,0 +1,1222 @@
+/**
+ * TIME TO MATCH — Full Dark Premium Redesign
+ * Style: Tinder/Hinge-inspired dark — deep blacks, rose/fuchsia gradient accents,
+ * frosted glass cards, sharp typography, cinematic depth.
+ *
+ * Strategy: force dark theme site-wide, override all tokens, elevate every surface.
+ */
+
+/* ─────────────────────────────────────────────
+   1. FORCE DARK EVERYWHERE (override light defaults)
+   ───────────────────────────────────────────── */
+
+:root,
+html,
+html[data-theme="light"],
+html:not([data-theme="dark"]),
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Core surfaces */
+  --bg-primary:    #080b10;
+  --bg-secondary:  #0d1117;
+  --bg-header:     rgba(8, 11, 16, 0.92);
+
+  /* Text */
+  --text-primary:   #f5f5f7;
+  --text-secondary: rgba(245, 245, 247, 0.55);
+
+  /* Signature accent: rose → fuchsia gradient */
+  --accent:          #f72585;
+  --accent-2:        #b5179e;
+  --accent-3:        #7209b7;
+  --accent-gradient: linear-gradient(135deg, #f72585 0%, #b5179e 50%, #7209b7 100%);
+  --hero-highlight-gradient: linear-gradient(135deg, #f72585 0%, #b5179e 50%, #3a0ca3 100%);
+
+  /* Borders */
+  --border:              rgba(255, 255, 255, 0.07);
+  --border-strong:       rgba(247, 37, 133, 0.28);
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-md:  0 8px 32px rgba(0, 0, 0, 0.7);
+  --shadow-lg:  0 24px 64px rgba(0, 0, 0, 0.8);
+  --shadow-xl:  0 40px 80px rgba(0, 0, 0, 0.85);
+
+  /* Glows */
+  --glow-rose:    rgba(247, 37, 133, 0.4);
+  --glow-fuchsia: rgba(181, 23, 158, 0.35);
+  --glow-purple:  rgba(114, 9, 183, 0.3);
+
+  /* Radius */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-full: 9999px;
+
+  /* Glass */
+  --glass-bg:     rgba(13, 17, 23, 0.82);
+  --glass-strong: rgba(8, 11, 16, 0.94);
+  --glass-blur:   24px;
+
+  /* ── Tailwind/shadcn token map ── */
+  --background:             var(--bg-primary);
+  --foreground:             var(--text-primary);
+  --card:                   var(--bg-secondary);
+  --card-foreground:        var(--text-primary);
+  --popover:                #0d1117;
+  --popover-foreground:     var(--text-primary);
+  --primary:                var(--accent);
+  --primary-foreground:     #fff;
+  --secondary:              rgba(255,255,255,0.05);
+  --secondary-foreground:   var(--text-primary);
+  --muted:                  rgba(255,255,255,0.04);
+  --muted-foreground:       var(--text-secondary);
+  --accent-foreground:      #fff;
+  --destructive:            #ef4444;
+  --destructive-foreground: #fff;
+  --input:                  rgba(255,255,255,0.06);
+  --ring:                   rgba(247, 37, 133, 0.45);
+  --radius:                 var(--radius-md);
+
+  /* ── Brand token overrides ── */
+  --saas-bg:               #080b10;
+  --saas-bg-deep:          #050709;
+  --saas-surface:          #0d1117;
+  --saas-surface-elevated: #131920;
+  --saas-border:           rgba(255,255,255,0.07);
+  --saas-border-strong:    rgba(247, 37, 133, 0.28);
+  --saas-text:             #f5f5f7;
+  --saas-muted:            rgba(245,245,247,0.52);
+  --saas-muted-dim:        rgba(245,245,247,0.32);
+  --neon-pink:             #f72585;
+  --neon-purple:           #7209b7;
+  --neon-blue:             #4361ee;
+  --accent-copper:         #f72585;
+  --accent-copper-deep:    #b5179e;
+  --saas-glow-pink:        rgba(247, 37, 133, 0.45);
+  --saas-glow-purple:      rgba(114, 9, 183, 0.38);
+  --saas-neon-gradient:    linear-gradient(135deg, #f72585 0%, #b5179e 50%, #7209b7 100%);
+  --saas-cta-gradient:     linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+  --saas-ambient-mesh:
+    radial-gradient(ellipse 80% 60% at 20% 5%,  rgba(247, 37, 133, 0.12), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 80% 20%, rgba(114, 9, 183, 0.09), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 50% 95%, rgba(67, 97, 238, 0.07), transparent 55%);
+
+  /* TTM brand tokens */
+  --ttm-brand-void:         #080b10;
+  --ttm-brand-deep:         #050709;
+  --ttm-brand-graphite:     #0d1117;
+  --ttm-brand-surface:      #0d1117;
+  --ttm-brand-elevated:     #131920;
+  --ttm-brand-mist:         rgba(245,245,247,0.58);
+  --ttm-brand-fog:          rgba(245,245,247,0.24);
+  --ttm-brand-whisper:      rgba(245,245,247,0.1);
+  --ttm-brand-line:         rgba(255,255,255,0.07);
+  --ttm-brand-line-strong:  rgba(255,255,255,0.13);
+  --ttm-brand-accent:       #f72585;
+  --ttm-brand-accent-soft:  #b5179e;
+  --ttm-brand-accent-muted: #7209b7;
+  --ttm-brand-gradient-sync: linear-gradient(135deg, rgba(247,37,133,0.55) 0%, rgba(181,23,158,0.48) 50%, rgba(114,9,183,0.28) 100%);
+
+  --ttm-glow-sync:           rgba(247, 37, 133, 0.32);
+  --ttm-glow-sync-soft:      rgba(247, 37, 133, 0.16);
+  --ttm-glow-chemistry:      rgba(181, 23, 158, 0.22);
+  --ttm-glow-chemistry-peak: rgba(247, 37, 133, 0.42);
+  --ttm-glow-bond:           rgba(114, 9, 183, 0.16);
+  --ttm-glow-bond-deep:      rgba(67, 97, 238, 0.24);
+  --ttm-glow-aura:           rgba(247, 37, 133, 0.12);
+  --ttm-glow-cinematic:      rgba(114, 9, 183, 0.1);
+
+  --ttm-glass-bg:          rgba(13, 17, 23, 0.84);
+  --ttm-glass-bg-strong:   rgba(8, 11, 16, 0.94);
+  --ttm-glass-blur:        24px;
+  --ttm-glass-blur-deep:   36px;
+  --ttm-glass-border:      rgba(255,255,255,0.08);
+  --ttm-glass-highlight:   rgba(255,255,255,0.04);
+
+  --ttm-depth-0:    0 0 0 1px rgba(255,255,255,0.06);
+  --ttm-depth-1:    0 0 0 1px rgba(255,255,255,0.06), 0 12px 40px -20px rgba(0,0,0,0.8);
+  --ttm-depth-2:    0 0 0 1px rgba(255,255,255,0.06), 0 20px 56px -24px rgba(0,0,0,0.85);
+  --ttm-depth-float:0 0 0 1px rgba(255,255,255,0.06), 0 28px 72px -28px rgba(0,0,0,0.9);
+
+  --ttm-icon-color:         rgba(245,245,247,0.48);
+  --ttm-icon-color-active:  #f72585;
+
+  --cin-bg:           #080b10;
+  --cin-bg-elevated:  #0d1117;
+  --cin-graphite:     rgba(255,255,255,0.07);
+  --cin-muted:        rgba(245,245,247,0.48);
+  --cin-faint:        rgba(247, 37, 133, 0.4);
+  --cin-border:       rgba(255,255,255,0.07);
+
+  /* Tile */
+  --tile-surface:          #0d1117;
+  --tile-surface-elevated: #131920;
+  --tile-border:           rgba(255,255,255,0.07);
+  --tile-border-strong:    rgba(247, 37, 133, 0.28);
+  --tile-text:             #f5f5f7;
+  --tile-text-muted:       rgba(245,245,247,0.52);
+
+  /* App scope */
+  --app-bg:           #080b10;
+  --app-bg-soft:      #050709;
+  --app-surface:      rgba(255,255,255,0.025);
+  --app-surface-strong: rgba(255,255,255,0.055);
+  --app-border:       rgba(255,255,255,0.07);
+  --app-border-strong:rgba(247, 37, 133, 0.28);
+  --app-text:         #f5f5f7;
+  --app-muted:        rgba(245,245,247,0.52);
+  --app-rose:         #f72585;
+  --app-rose-deep:    #b5179e;
+  --app-coral:        #7209b7;
+  --app-amber:        #f72585;
+  --app-glass:        rgba(8, 11, 16, 0.84);
+  --app-glass-strong: rgba(8, 11, 16, 0.96);
+}
+
+/* ─────────────────────────────────────────────
+   2. GLOBAL BASE
+   ───────────────────────────────────────────── */
+
+html, body {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Ambient background mesh */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--saas-ambient-mesh);
+  opacity: 1;
+}
+
+/* ─────────────────────────────────────────────
+   3. TYPOGRAPHY
+   ───────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+p, span, div {
+  color: inherit;
+}
+
+/* Gradient text for headings */
+.ttm-hero-accent-line,
+.rd-gradient-text {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+/* ─────────────────────────────────────────────
+   4. BUTTONS
+   ───────────────────────────────────────────── */
+
+/* Primary CTA */
+button[class*="bg-primary"],
+a[class*="bg-primary"],
+.ttm-brand-cta,
+.landing-nav__cta,
+[class*="ttm-cta"] {
+  background: var(--accent-gradient) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 20px rgba(247, 37, 133, 0.4), 0 0 0 1px rgba(247, 37, 133, 0.2) !important;
+  border-radius: var(--radius-full) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.01em !important;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+button[class*="bg-primary"]:hover,
+a[class*="bg-primary"]:hover,
+.ttm-brand-cta:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 32px rgba(247, 37, 133, 0.55), 0 0 0 1px rgba(247, 37, 133, 0.3) !important;
+}
+
+/* Secondary / ghost */
+button[class*="variant-outline"],
+button[class*="variant-ghost"] {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-full) !important;
+}
+
+button[class*="variant-outline"]:hover,
+button[class*="variant-ghost"]:hover {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(247, 37, 133, 0.3) !important;
+}
+
+/* ─────────────────────────────────────────────
+   5. CARDS / SURFACES
+   ───────────────────────────────────────────── */
+
+/* All card surfaces — deep dark glass */
+[class*="card"],
+[class*="Card"],
+.p9-onboarding,
+[class*="glass"],
+[class*="Glass"] {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--border) !important;
+  backdrop-filter: blur(var(--glass-blur)) saturate(1.1) !important;
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.1) !important;
+}
+
+/* Elevated cards get subtle gradient top highlight */
+[class*="surface-elevated"],
+[class*="surfaceElevated"],
+.tile-surface-elevated {
+  background: linear-gradient(160deg, rgba(247,37,133,0.04) 0%, rgba(13,17,23,0.92) 40%) !important;
+}
+
+/* ─────────────────────────────────────────────
+   6. INPUTS
+   ───────────────────────────────────────────── */
+
+input, textarea, select {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: var(--text-primary) !important;
+  border-radius: var(--radius-md) !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  border-color: rgba(247, 37, 133, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(247, 37, 133, 0.12) !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: rgba(245,245,247,0.3) !important;
+}
+
+/* ─────────────────────────────────────────────
+   7. BOTTOM NAVIGATION DOCK
+   ───────────────────────────────────────────── */
+
+.ttm-floating-dock {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 50 !important;
+  padding: 0 1rem env(safe-area-inset-bottom, 12px) !important;
+  pointer-events: none !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.ttm-floating-dock__inner {
+  pointer-events: auto !important;
+  display: flex !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: 26rem !important;
+  height: 64px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgba(8, 11, 16, 0.92) !important;
+  backdrop-filter: blur(28px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.2) !important;
+  box-shadow:
+    0 0 0 1px rgba(247, 37, 133, 0.08) inset,
+    0 -1px 0 rgba(255,255,255,0.04) inset,
+    0 16px 48px rgba(0,0,0,0.7),
+    0 4px 16px rgba(0,0,0,0.5) !important;
+  margin-bottom: 8px !important;
+  overflow: hidden !important;
+}
+
+.ttm-dock-tab {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  padding: 8px 4px !important;
+  border-radius: 16px !important;
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  text-decoration: none !important;
+}
+
+.ttm-dock-tab--idle {
+  color: rgba(245,245,247,0.38) !important;
+}
+
+.ttm-dock-tab--idle:hover {
+  color: rgba(245,245,247,0.65) !important;
+  background: rgba(255,255,255,0.04) !important;
+}
+
+.ttm-dock-tab--active {
+  color: #f72585 !important;
+  background: rgba(247, 37, 133, 0.1) !important;
+  box-shadow:
+    0 0 0 1px rgba(247, 37, 133, 0.2) inset,
+    0 0 24px -4px rgba(247, 37, 133, 0.35) !important;
+}
+
+.ttm-dock-tab__icon-wrap {
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+}
+
+.ttm-dock-tab__label {
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
+  line-height: 1 !important;
+}
+
+/* ─────────────────────────────────────────────
+   8. SWIPE / PROFILE CARDS
+   ───────────────────────────────────────────── */
+
+/* Profile card container */
+.p9-onboarding {
+  background: linear-gradient(
+    165deg,
+    rgba(19, 25, 32, 0.96) 0%,
+    rgba(8, 11, 16, 0.99) 100%
+  ) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 24px !important;
+  box-shadow:
+    0 0 0 1px rgba(247, 37, 133, 0.06) inset,
+    0 32px 80px -16px rgba(0,0,0,0.85),
+    0 8px 32px rgba(0,0,0,0.6) !important;
+  overflow: hidden !important;
+}
+
+/* Card photo area */
+.profile-presence__identity--cover {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+/* Card gradient overlay (name/info at bottom) */
+.profile-presence__identity-body--cover {
+  background: linear-gradient(
+    to top,
+    rgba(5, 7, 9, 0.96) 0%,
+    rgba(5, 7, 9, 0.7) 35%,
+    transparent 65%
+  ) !important;
+}
+
+/* Name, age, distance */
+.profile-presence__name,
+[class*="profile-name"],
+[class*="profileName"] {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  color: #fff !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5) !important;
+}
+
+/* Interest tags on card */
+[class*="interest-tag"],
+[class*="interestTag"],
+.swipe-profile-presence__interest {
+  background: rgba(247, 37, 133, 0.12) !important;
+  border: 1px solid rgba(247, 37, 133, 0.22) !important;
+  color: #f72585 !important;
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  padding: 4px 10px !important;
+}
+
+/* Like / Nope labels on swipe */
+[class*="like-label"],
+[class*="likeLabel"],
+.swipe-like-label {
+  color: #4ade80 !important;
+  border: 3px solid #4ade80 !important;
+  border-radius: 8px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-shadow: 0 0 20px rgba(74, 222, 128, 0.6) !important;
+}
+
+[class*="nope-label"],
+[class*="nopeLabel"],
+.swipe-nope-label {
+  color: #f72585 !important;
+  border: 3px solid #f72585 !important;
+  border-radius: 8px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.1em !important;
+  text-shadow: 0 0 20px rgba(247, 37, 133, 0.6) !important;
+}
+
+/* ─────────────────────────────────────────────
+   9. SWIPE ACTION BUTTONS
+   ───────────────────────────────────────────── */
+
+/* Pass (X) button */
+[class*="btn-pass"],
+[class*="btnPass"],
+.swipe-btn-pass {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  color: rgba(245,245,247,0.7) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+  border-radius: var(--radius-full) !important;
+  transition: all 0.2s !important;
+}
+
+[class*="btn-pass"]:hover,
+[class*="btnPass"]:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #ef4444 !important;
+}
+
+/* Like (heart) button */
+[class*="btn-like"],
+[class*="btnLike"],
+.swipe-btn-like {
+  background: var(--accent-gradient) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 0 4px 24px rgba(247, 37, 133, 0.5) !important;
+  border-radius: var(--radius-full) !important;
+  transition: all 0.2s !important;
+}
+
+[class*="btn-like"]:hover,
+[class*="btnLike"]:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 8px 36px rgba(247, 37, 133, 0.65) !important;
+}
+
+/* ─────────────────────────────────────────────
+   10. CHAT UI
+   ───────────────────────────────────────────── */
+
+/* Chat background */
+.ttm-chat-bg,
+[class*="chat-bg"],
+[class*="chatBg"] {
+  background: #080b10 !important;
+}
+
+/* Messages — them */
+.ttm-chat-bubble--them,
+.chat-bubble-them,
+[class*="bubble-them"],
+[class*="bubbleThem"] {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  color: var(--text-primary) !important;
+  border-radius: 18px 18px 18px 4px !important;
+}
+
+/* Messages — me */
+.ttm-chat-bubble--me,
+.chat-bubble-me,
+[class*="bubble-me"],
+[class*="bubbleMe"] {
+  background: var(--accent-gradient) !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 18px 18px 4px 18px !important;
+  box-shadow: 0 2px 12px rgba(247, 37, 133, 0.35) !important;
+}
+
+/* Chat header */
+[class*="chat-header"],
+[class*="chatHeader"],
+.ttm-chat-header {
+  background: var(--glass-bg) !important;
+  border-bottom: 1px solid var(--border) !important;
+  backdrop-filter: blur(24px) !important;
+}
+
+/* Chat composer */
+[class*="chat-composer"],
+[class*="chatComposer"],
+.chat-composer {
+  background: rgba(8, 11, 16, 0.92) !important;
+  border-top: 1px solid var(--border) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+[class*="chat-composer"] input,
+[class*="chatComposer"] input {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 20px !important;
+}
+
+/* Match expiry bar */
+[class*="expiry-bar"],
+[class*="expiryBar"],
+.chat-match-expiry-bar {
+  background: linear-gradient(90deg, #f72585, #7209b7) !important;
+  height: 2px !important;
+  box-shadow: 0 0 8px rgba(247, 37, 133, 0.5) !important;
+}
+
+/* ─────────────────────────────────────────────
+   11. NAVIGATION / HEADER
+   ───────────────────────────────────────────── */
+
+.ttm-floating-header,
+[class*="floating-header"],
+[class*="app-header"],
+nav[class*="landing-nav"],
+.landing-nav {
+  background: rgba(8, 11, 16, 0.86) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(24px) saturate(1.15) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(1.15) !important;
+}
+
+.landing-nav__logo,
+[class*="nav-logo"],
+[class*="navLogo"] {
+  color: var(--text-primary) !important;
+}
+
+.landing-nav__link,
+[class*="nav-link"],
+[class*="navLink"] {
+  color: rgba(245,245,247,0.65) !important;
+  transition: color 0.15s !important;
+}
+
+.landing-nav__link:hover,
+[class*="nav-link"]:hover {
+  color: var(--text-primary) !important;
+}
+
+/* ─────────────────────────────────────────────
+   12. LANDING PAGE
+   ───────────────────────────────────────────── */
+
+.landing-experience,
+[class*="landing-page"],
+[class*="landingPage"],
+[class*="dating-landing"] {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Hero headline */
+[class*="hero-title"],
+[class*="heroTitle"],
+.dating-landing__title,
+.landing-hero__title {
+  font-size: clamp(2.5rem, 7vw, 5rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.05 !important;
+  color: #fff !important;
+}
+
+/* Hero subtext */
+[class*="hero-sub"],
+[class*="heroSub"],
+.landing-hero__sub {
+  color: rgba(245,245,247,0.65) !important;
+  font-size: clamp(1rem, 2.5vw, 1.2rem) !important;
+  font-weight: 400 !important;
+  line-height: 1.6 !important;
+}
+
+/* Stat/proof numbers */
+[class*="stat-number"],
+[class*="statNumber"],
+.landing-stat__number {
+  font-size: 3rem !important;
+  font-weight: 800 !important;
+  background: var(--accent-gradient) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* Section dividers / overlines */
+[class*="overline"],
+[class*="eyebrow"],
+.cin-overline {
+  color: #f72585 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+}
+
+/* Feature cards */
+[class*="feature-card"],
+[class*="featureCard"],
+.landing-feature {
+  background: rgba(13,17,23,0.7) !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  border-radius: 20px !important;
+  backdrop-filter: blur(20px) !important;
+  transition: border-color 0.25s, box-shadow 0.25s !important;
+}
+
+[class*="feature-card"]:hover,
+[class*="featureCard"]:hover,
+.landing-feature:hover {
+  border-color: rgba(247, 37, 133, 0.25) !important;
+  box-shadow: 0 0 40px rgba(247, 37, 133, 0.08) !important;
+}
+
+/* Pricing cards */
+[class*="pricing-card"],
+[class*="pricingCard"],
+.pricing-tier {
+  background: rgba(13,17,23,0.85) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 24px !important;
+}
+
+[class*="pricing-popular"],
+[class*="pricingPopular"],
+.pricing-tier--popular {
+  border-color: rgba(247, 37, 133, 0.4) !important;
+  box-shadow: 0 0 60px rgba(247, 37, 133, 0.12), 0 0 0 1px rgba(247, 37, 133, 0.2) inset !important;
+  background: linear-gradient(160deg, rgba(247,37,133,0.06) 0%, rgba(13,17,23,0.92) 50%) !important;
+}
+
+/* ─────────────────────────────────────────────
+   13. PROFILE PAGE
+   ───────────────────────────────────────────── */
+
+.ttm-profile-page {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Profile photo ring */
+.p9-profile-avatar-ring {
+  background: var(--accent-gradient) !important;
+  box-shadow: 0 0 32px rgba(247, 37, 133, 0.4) !important;
+}
+
+/* Profile aura */
+.p9-profile-aura {
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(247, 37, 133, 0.28), transparent 65%) !important;
+}
+
+/* Profile stat pills */
+[class*="profile-stat"],
+[class*="profileStat"] {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+}
+
+/* ─────────────────────────────────────────────
+   14. MATCH CELEBRATION
+   ───────────────────────────────────────────── */
+
+[class*="match-celebration"],
+[class*="matchCelebration"],
+.match-burst {
+  background: radial-gradient(circle at 50% 40%, rgba(247,37,133,0.2), transparent 60%) !important;
+}
+
+[class*="match-title"],
+[class*="matchTitle"] {
+  background: var(--accent-gradient) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+}
+
+/* ─────────────────────────────────────────────
+   15. PREMIUM / PAYWALL BADGE
+   ───────────────────────────────────────────── */
+
+[class*="premium-badge"],
+[class*="premiumBadge"],
+.premium-badge {
+  background: var(--accent-gradient) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: var(--radius-full) !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  letter-spacing: 0.05em !important;
+}
+
+[class*="premium-upgrade"],
+[class*="premiumUpgrade"],
+.premium-upgrade-sheet {
+  background: rgba(8, 11, 16, 0.96) !important;
+  border: 1px solid rgba(247, 37, 133, 0.2) !important;
+  border-radius: 28px 28px 0 0 !important;
+}
+
+/* ─────────────────────────────────────────────
+   16. SETTINGS PAGE
+   ───────────────────────────────────────────── */
+
+[class*="settings-section"],
+[class*="settingsSection"] {
+  background: rgba(13,17,23,0.7) !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  border-radius: 16px !important;
+}
+
+/* Settings rows */
+[class*="settings-row"],
+[class*="settingsRow"] {
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Toggle / switch */
+[class*="switch-thumb"],
+[class*="switchThumb"] {
+  background: #fff !important;
+}
+
+[class*="switch-root"][data-state="checked"],
+[class*="switchRoot"][data-state="checked"] {
+  background: var(--accent-gradient) !important;
+}
+
+/* ─────────────────────────────────────────────
+   17. NOTIFICATIONS
+   ───────────────────────────────────────────── */
+
+[class*="notification-item"],
+[class*="notificationItem"],
+.notify-item {
+  background: rgba(13,17,23,0.8) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  border-radius: 14px !important;
+  color: var(--text-primary) !important;
+  transition: border-color 0.2s, background 0.2s !important;
+}
+
+[class*="notification-item"]:hover,
+[class*="notificationItem"]:hover {
+  background: rgba(247, 37, 133, 0.05) !important;
+  border-color: rgba(247, 37, 133, 0.2) !important;
+}
+
+/* Notification badge */
+.notify-badge,
+[class*="notify-badge"],
+[class*="notifyBadge"] {
+  background: #f72585 !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 8px rgba(247, 37, 133, 0.6) !important;
+}
+
+/* ─────────────────────────────────────────────
+   18. MATCHES LIST / THREAD ROWS
+   ───────────────────────────────────────────── */
+
+[class*="thread-row"],
+[class*="threadRow"],
+.chat-inbox-thread-row {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+  transition: background 0.15s !important;
+}
+
+[class*="thread-row"]:hover,
+[class*="threadRow"]:hover,
+.chat-inbox-thread-row:hover {
+  background: rgba(247, 37, 133, 0.04) !important;
+}
+
+/* Avatar ring — active chat */
+[class*="thread-avatar"],
+[class*="threadAvatar"] {
+  border-radius: 50% !important;
+}
+
+/* Unread indicator */
+[class*="unread-dot"],
+[class*="unreadDot"] {
+  background: #f72585 !important;
+  box-shadow: 0 0 8px rgba(247, 37, 133, 0.6) !important;
+}
+
+/* ─────────────────────────────────────────────
+   19. ONBOARDING / AUTH
+   ───────────────────────────────────────────── */
+
+[class*="auth-card"],
+[class*="authCard"],
+[class*="login-card"],
+[class*="loginCard"],
+.ttm-auth-card {
+  background: rgba(13,17,23,0.9) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 24px !important;
+  backdrop-filter: blur(24px) !important;
+}
+
+/* Auth background */
+[class*="auth-bg"],
+[class*="authBg"],
+.auth-shell {
+  background: var(--bg-primary) !important;
+}
+
+/* ─────────────────────────────────────────────
+   20. MATCH TIMER / EXPIRY CHIP
+   ───────────────────────────────────────────── */
+
+[class*="expiry-chip"],
+[class*="expiryChip"],
+.swipe-profile-expiry-chip {
+  background: rgba(247, 37, 133, 0.12) !important;
+  border: 1px solid rgba(247, 37, 133, 0.28) !important;
+  color: #f72585 !important;
+  border-radius: var(--radius-full) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+
+[class*="expiry-chip--urgent"],
+[class*="expiryChipUrgent"],
+.swipe-profile-expiry-chip--urgent {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
+  color: #ef4444 !important;
+  animation: rd-pulse-urgent 1.5s ease-in-out infinite !important;
+}
+
+@keyframes rd-pulse-urgent {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3); }
+  50%       { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+}
+
+/* ─────────────────────────────────────────────
+   21. COMPATIBILITY / BOND METER
+   ───────────────────────────────────────────── */
+
+[class*="bond-meter"],
+[class*="bondMeter"],
+.bond-meter {
+  background: rgba(255,255,255,0.05) !important;
+  border-radius: var(--radius-full) !important;
+  overflow: hidden !important;
+}
+
+[class*="bond-fill"],
+[class*="bondFill"],
+.bond-meter__fill {
+  background: var(--accent-gradient) !important;
+  box-shadow: 0 0 12px rgba(247, 37, 133, 0.5) !important;
+}
+
+/* Chemistry badge */
+[class*="chemistry-badge"],
+[class*="chemistryBadge"],
+.chemistry-badge {
+  background: rgba(247, 37, 133, 0.1) !important;
+  border: 1px solid rgba(247, 37, 133, 0.25) !important;
+  color: #f72585 !important;
+  border-radius: var(--radius-full) !important;
+}
+
+/* ─────────────────────────────────────────────
+   22. VERIFIED BADGE
+   ───────────────────────────────────────────── */
+
+[class*="verified-badge"],
+[class*="verifiedBadge"],
+.verified-badge {
+  color: #4ade80 !important;
+}
+
+/* ─────────────────────────────────────────────
+   23. TOASTS / SONNER
+   ───────────────────────────────────────────── */
+
+[data-sonner-toast] {
+  background: rgba(19, 25, 32, 0.96) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  color: var(--text-primary) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+[data-sonner-toast][data-type="success"] {
+  border-color: rgba(74, 222, 128, 0.25) !important;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.1) !important;
+}
+
+[data-sonner-toast][data-type="error"] {
+  border-color: rgba(247, 37, 133, 0.3) !important;
+  box-shadow: 0 0 20px rgba(247, 37, 133, 0.1) !important;
+}
+
+/* ─────────────────────────────────────────────
+   24. SHEETS / DIALOGS / MODALS
+   ───────────────────────────────────────────── */
+
+[role="dialog"],
+[data-radix-dialog-content],
+[class*="sheet-content"],
+[class*="sheetContent"],
+[class*="modal-content"],
+[class*="modalContent"] {
+  background: rgba(13, 17, 23, 0.98) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 24px !important;
+  color: var(--text-primary) !important;
+}
+
+/* Dialog overlay */
+[data-radix-dialog-overlay],
+[class*="dialog-overlay"],
+[class*="dialogOverlay"] {
+  background: rgba(5, 7, 9, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   25. SCROLLBARS
+   ───────────────────────────────────────────── */
+
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(247, 37, 133, 0.2) transparent !important;
+}
+
+*::-webkit-scrollbar { width: 4px; height: 4px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(247, 37, 133, 0.2);
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(247, 37, 133, 0.4);
+}
+
+/* ─────────────────────────────────────────────
+   26. SITE BACKGROUND OVERRIDE
+   ───────────────────────────────────────────── */
+
+.ttm-site-bg,
+[class*="site-bg"],
+[class*="siteBg"] {
+  background: var(--bg-primary) !important;
+}
+
+/* Ambient orbs */
+[class*="ambient-orb"],
+[class*="ambientOrb"],
+.site-orb {
+  opacity: 0.18 !important;
+  filter: blur(80px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   27. SELECTION & FOCUS
+   ───────────────────────────────────────────── */
+
+::selection {
+  background: rgba(247, 37, 133, 0.25) !important;
+  color: #fff !important;
+}
+
+:focus-visible {
+  outline: 2px solid rgba(247, 37, 133, 0.6) !important;
+  outline-offset: 2px !important;
+}
+
+/* ─────────────────────────────────────────────
+   28. WELCOME / ONBOARDING SCREEN
+   ───────────────────────────────────────────── */
+
+[class*="welcome-screen"],
+[class*="welcomeScreen"],
+.welcome-screen {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+[class*="onboarding-step"],
+[class*="onboardingStep"] {
+  background: rgba(13,17,23,0.8) !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  border-radius: 20px !important;
+}
+
+/* Progress steps */
+[class*="progress-step"],
+[class*="progressStep"] {
+  background: rgba(255,255,255,0.1) !important;
+  border-radius: var(--radius-full) !important;
+}
+
+[class*="progress-step--active"],
+[class*="progressStepActive"] {
+  background: var(--accent-gradient) !important;
+  box-shadow: 0 0 12px rgba(247, 37, 133, 0.4) !important;
+}
+
+/* ─────────────────────────────────────────────
+   29. ADMIN PANEL
+   ───────────────────────────────────────────── */
+
+[class*="admin-"],
+[class*="admin"] {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ─────────────────────────────────────────────
+   30. LOADING / SKELETON
+   ───────────────────────────────────────────── */
+
+[class*="skeleton"],
+[class*="Skeleton"] {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.08) 50%,
+    rgba(255,255,255,0.04) 100%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: rd-shimmer 1.5s ease-in-out infinite !important;
+  border-radius: var(--radius-md) !important;
+}
+
+@keyframes rd-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─────────────────────────────────────────────
+   31. APP SHELL LAYOUT POLISH
+   ───────────────────────────────────────────── */
+
+/* Safe area for devices with notch */
+.ttm-native-app {
+  --app-safe-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: calc(64px + var(--app-safe-bottom)) !important;
+}
+
+/* Discover panel — ensure dark bg */
+[class*="discover-panel"],
+[class*="discoverPanel"] {
+  background: var(--bg-primary) !important;
+}
+
+/* Map panel */
+[class*="map-panel"],
+[class*="mapPanel"] {
+  background: #0a0d14 !important;
+}
+
+/* ─────────────────────────────────────────────
+   32. HOVER DEPTH EFFECTS
+   ───────────────────────────────────────────── */
+
+[class*="interactive"],
+[class*="Interactive"],
+.ttm-brand-interactive {
+  transition: transform 0.2s cubic-bezier(0.22,1,0.36,1), box-shadow 0.2s !important;
+}
+
+[class*="interactive"]:hover,
+.ttm-brand-interactive:hover {
+  transform: translateY(-1px) !important;
+}
+
+/* ─────────────────────────────────────────────
+   33. MISC OVERRIDES
+   ───────────────────────────────────────────── */
+
+/* Separator / dividers */
+[role="separator"],
+hr,
+[class*="separator"],
+[class*="Separator"] {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+
+/* Tooltips */
+[class*="tooltip"],
+[class*="Tooltip"] {
+  background: rgba(19, 25, 32, 0.96) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: var(--text-primary) !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+}
+
+/* Badges / chips */
+[class*="badge"],
+[class*="Badge"],
+[class*="chip"],
+[class*="Chip"] {
+  background: rgba(255,255,255,0.06) !important;
+  color: var(--text-secondary) !important;
+  border-radius: var(--radius-full) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+}
+
+/* Activity feed items */
+[class*="activity-item"],
+[class*="activityItem"] {
+  background: rgba(13,17,23,0.7) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+  border-radius: 14px !important;
+}
+
+/* P9 first match burst glow: rose */
+.p9-first-match-burst {
+  background: radial-gradient(circle at 50% 42%, rgba(247, 37, 133, 0.3), transparent 55%) !important;
+}
+
+/* P9 empty state icon */
+.p9-empty__icon {
+  background: var(--accent-gradient) !important;
+  box-shadow: 0 0 32px rgba(247, 37, 133, 0.4) !important;
+}
+
+/* Sync hero ring */
+.p9-sync-visual__node {
+  background: var(--accent-gradient) !important;
+  box-shadow: 0 0 24px rgba(247, 37, 133, 0.4) !important;
+}
+
+.p9-sync-visual__line {
+  background: linear-gradient(90deg, transparent, rgba(247,37,133,0.35), transparent) !important;
+}
