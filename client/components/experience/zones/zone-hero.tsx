@@ -36,13 +36,25 @@ export function ZoneHero() {
         <p className="xp-label xp-hero__eyebrow">{t("ttmXpBrand")}</p>
 
         <h1 id="xp-hero-title" className="xp-hero__headline">
-          <NeonText as="span" variant="pink" className="block">
+          {/* Line 1 — gradient: the hero statement */}
+          <span
+            className="block"
+            style={{
+              background: "var(--xp-gradient-text)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+              filter: "drop-shadow(0 0 32px rgba(247,37,133,0.35))",
+            }}
+          >
             {t("ttmXpHeroHeadline1")}
-          </NeonText>
-          <NeonText as="span" variant="purple" className="block">
+          </span>
+          {/* Line 2 — white, slightly dimmed */}
+          <NeonText as="span" variant="white" className="block opacity-90">
             {t("ttmXpHeroHeadline2")}
           </NeonText>
-          <NeonText as="span" variant="green" className="block">
+          {/* Line 3 — pink accent, smaller visual weight */}
+          <NeonText as="span" variant="pink" className="block text-[0.82em]">
             {t("ttmXpHeroHeadline3")}
           </NeonText>
         </h1>

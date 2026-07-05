@@ -26,12 +26,23 @@ export function GlowButton({
   const reduce = useReducedMotion()
 
   const base = cn(
-    "relative inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors",
+    "relative inline-flex items-center justify-center gap-2 rounded-full text-sm font-semibold",
     "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--xp-pink)]",
-    variant === "pink" &&
-      "bg-[var(--xp-pink)] text-[#0b0b10] shadow-[var(--xp-glow-pink)] hover:brightness-110",
-    variant === "ghost" &&
-      "border border-white/15 bg-white/5 text-[var(--xp-text)] hover:bg-white/10",
+    "transition-all duration-200",
+    variant === "pink" && [
+      "px-7 py-3.5",
+      "bg-gradient-to-r from-[var(--xp-pink)] via-[var(--xp-mid)] to-[var(--xp-purple)]",
+      "text-white",
+      "shadow-[0_4px_24px_rgba(247,37,133,0.45),0_0_0_1px_rgba(247,37,133,0.2)]",
+      "hover:shadow-[0_8px_36px_rgba(247,37,133,0.6),0_0_0_1px_rgba(247,37,133,0.3)]",
+      "hover:brightness-110",
+    ],
+    variant === "ghost" && [
+      "px-5 py-2.5",
+      "border border-white/12 bg-white/[0.04]",
+      "text-[var(--xp-text-muted)]",
+      "hover:bg-white/[0.08] hover:border-white/20 hover:text-[var(--xp-text)]",
+    ],
     disabled && "pointer-events-none opacity-50",
     className
   )

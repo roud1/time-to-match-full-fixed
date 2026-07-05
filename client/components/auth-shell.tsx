@@ -45,8 +45,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
             <Logo variant="icon" size="sm" className="sm:hidden" />
           </Link>
           <div className="ttm-auth-nav__actions">
-            <ThemeToggle compact className="ttm-auth-nav__theme" />
-            <LocationControl />
+            {/* ThemeToggle removed from auth — dark only, no distraction */}
           </div>
         </nav>
       </header>

@@ -11,10 +11,10 @@ type NeonTextProps = {
 }
 
 const VARIANT_CLASS = {
-  pink: "text-[var(--xp-pink)] drop-shadow-[0_0_24px_rgba(255,46,99,0.55)]",
-  purple: "text-[var(--xp-purple)] drop-shadow-[0_0_24px_rgba(108,92,231,0.5)]",
-  green: "text-[var(--xp-green)] drop-shadow-[0_0_20px_rgba(0,255,163,0.45)]",
-  white: "text-[var(--xp-text)]",
+  pink:   "text-[var(--xp-pink)]   drop-shadow-[0_0_28px_rgba(247,37,133,0.6)]",
+  purple: "text-[var(--xp-purple)] drop-shadow-[0_0_28px_rgba(114,9,183,0.55)]",
+  green:  "text-[var(--xp-green)]  drop-shadow-[0_0_20px_rgba(0,255,163,0.42)]",
+  white:  "text-[var(--xp-text)]",
 } as const
 
 export function NeonText({

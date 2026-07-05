@@ -13,26 +13,39 @@ html:has(.ttm-experience) {
   color-scheme: dark;
 }
 
+.xp-root,
+.xp-zone,
+.xp-ambient {
+  overflow-x: hidden !important;
+}
+
 .xp-root {
-  --xp-base: #0b0b10;
-  --xp-surface-1: #12121a;
-  --xp-surface-2: #1a1a26;
-  --xp-surface-3: #222233;
+  /* ── Unified palette — synced with redesign-dark.css ── */
+  --xp-base: #080b10;
+  --xp-surface-1: #0d1117;
+  --xp-surface-2: #131920;
+  --xp-surface-3: #1a2130;
 
-  --xp-pink: #ff2e63;
-  --xp-purple: #6c5ce7;
-  --xp-green: #00ffa3;
-  --xp-amber: #ffb347;
+  /* ONE dominant accent: rose→fuchsia→purple gradient */
+  --xp-pink:   #f72585;   /* was #ff2e63 — now matches --accent */
+  --xp-purple: #7209b7;   /* was #6c5ce7 — now matches --accent-3 */
+  --xp-mid:    #b5179e;   /* gradient midpoint — new */
+  --xp-green:  #00ffa3;   /* keep for 'live / online' signals only */
+  --xp-amber:  #ffb347;   /* keep for urgency / scarcity only */
 
-  --xp-text: #f4f4f8;
-  --xp-text-muted: rgba(244, 244, 248, 0.62);
-  --xp-text-dim: rgba(244, 244, 248, 0.42);
+  /* Gradient — used for headlines & CTAs */
+  --xp-gradient: linear-gradient(135deg, #f72585 0%, #b5179e 50%, #7209b7 100%);
+  --xp-gradient-text: linear-gradient(135deg, #f72585 0%, #b5179e 55%, #a21caf 100%);
 
-  --xp-glass: rgba(18, 18, 26, 0.62);
-  --xp-glass-border: rgba(255, 255, 255, 0.08);
-  --xp-glow-pink: 0 0 40px rgba(255, 46, 99, 0.35);
-  --xp-glow-purple: 0 0 48px rgba(108, 92, 231, 0.3);
-  --xp-glow-green: 0 0 36px rgba(0, 255, 163, 0.28);
+  --xp-text: #f5f5f7;
+  --xp-text-muted: rgba(245, 245, 247, 0.58);
+  --xp-text-dim: rgba(245, 245, 247, 0.38);
+
+  --xp-glass: rgba(13, 17, 23, 0.78);
+  --xp-glass-border: rgba(255, 255, 255, 0.07);
+  --xp-glow-pink:   0 0 40px rgba(247, 37, 133, 0.38);
+  --xp-glow-purple: 0 0 48px rgba(114, 9, 183, 0.30);
+  --xp-glow-green:  0 0 36px rgba(0, 255, 163, 0.24);
 
   --xp-1: 0.25rem;
   --xp-2: 0.5rem;
@@ -371,10 +384,10 @@ html:has(.ttm-experience) {
   position: absolute;
   inset: -20%;
   background:
-    radial-gradient(ellipse 55% 45% at 18% 22%, rgba(108, 92, 231, 0.38) 0%, transparent 58%),
-    radial-gradient(ellipse 48% 52% at 82% 18%, rgba(255, 46, 99, 0.32) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 40% at 55% 78%, rgba(0, 255, 163, 0.24) 0%, transparent 52%),
-    radial-gradient(ellipse 35% 35% at 72% 62%, rgba(108, 92, 231, 0.28) 0%, transparent 50%);
+    radial-gradient(ellipse 55% 45% at 18% 22%, rgba(114, 9, 183, 0.28) 0%, transparent 58%),
+    radial-gradient(ellipse 48% 52% at 82% 18%, rgba(247, 37, 133, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 55% 78%, rgba(181, 23, 158, 0.16) 0%, transparent 52%),
+    radial-gradient(ellipse 35% 35% at 72% 62%, rgba(114, 9, 183, 0.18) 0%, transparent 50%);
   opacity: 1;
 }
 
@@ -463,8 +476,8 @@ html:has(.ttm-experience) {
 .xp-ambient__orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(56px);
-  opacity: 0.78;
+  filter: blur(90px);
+  opacity: 0.38; /* was 0.78 — much quieter so content breathes */
 }
 
 .xp-ambient__orb--live {
@@ -484,43 +497,33 @@ html:has(.ttm-experience) {
 }
 
 .xp-ambient__orb--purple {
-  top: 6%;
-  left: -12%;
-  width: min(58vh, 520px);
-  height: min(58vh, 520px);
-  background: radial-gradient(circle, rgba(108, 92, 231, 0.52) 0%, transparent 68%);
+  top: 4%;
+  left: -10%;
+  width: min(52vh, 480px);
+  height: min(52vh, 480px);
+  background: radial-gradient(circle, rgba(114, 9, 183, 0.42) 0%, transparent 68%);
 }
 
 .xp-ambient__orb--pink {
-  top: 32%;
-  right: -14%;
-  width: min(50vh, 460px);
-  height: min(50vh, 460px);
-  background: radial-gradient(circle, rgba(255, 46, 99, 0.44) 0%, transparent 70%);
+  top: 28%;
+  right: -12%;
+  width: min(46vh, 420px);
+  height: min(46vh, 420px);
+  background: radial-gradient(circle, rgba(247, 37, 133, 0.36) 0%, transparent 70%);
 }
 
 .xp-ambient__orb--green {
-  bottom: 8%;
-  left: 22%;
-  width: min(42vh, 380px);
-  height: min(42vh, 380px);
-  background: radial-gradient(circle, rgba(0, 255, 163, 0.34) 0%, transparent 72%);
+  bottom: 10%;
+  left: 24%;
+  width: min(36vh, 320px);
+  height: min(36vh, 320px);
+  background: radial-gradient(circle, rgba(0, 255, 163, 0.22) 0%, transparent 72%);
 }
 
-.xp-ambient__orb--violet {
-  top: 55%;
-  left: 8%;
-  width: min(32vh, 280px);
-  height: min(32vh, 280px);
-  background: radial-gradient(circle, rgba(140, 100, 255, 0.36) 0%, transparent 70%);
-}
-
+/* violet and mint removed — too much noise */
+.xp-ambient__orb--violet,
 .xp-ambient__orb--mint {
-  top: 18%;
-  right: 28%;
-  width: min(28vh, 240px);
-  height: min(28vh, 240px);
-  background: radial-gradient(circle, rgba(0, 255, 163, 0.28) 0%, transparent 68%);
+  display: none;
 }
 
 .xp-ambient__stars {

@@ -29,8 +29,32 @@ export function ZoneCommit() {
   return (
     <section className="xp-zone pb-[var(--xp-8)]" aria-labelledby="xp-commit-title">
       <ZoneGlow variant="pink" position="top-right" size="lg" />
+      <ZoneGlow variant="purple" position="bottom-left" size="md" />
       <ParallaxDepth depth={3}>
-      <GlassPanel depth={3} className="mx-auto max-w-lg p-[var(--xp-6)] sm:p-[var(--xp-7)]">
+      <GlassPanel
+        depth={3}
+        className="mx-auto max-w-lg p-[var(--xp-6)] sm:p-[var(--xp-8)]"
+        style={{
+          borderColor: "rgba(247,37,133,0.22)",
+          boxShadow: "0 0 80px rgba(247,37,133,0.12), 0 32px 80px rgba(0,0,0,0.6)",
+        } as React.CSSProperties}
+      >
+        {/* Social proof row */}
+        <div className="mb-[var(--xp-4)] flex items-center gap-2">
+          <div className="flex -space-x-2">
+            {[1,2,3].map(i => (
+              <div
+                key={i}
+                className="h-7 w-7 rounded-full border-2 border-[var(--xp-surface-1)] bg-gradient-to-br from-[var(--xp-pink)] to-[var(--xp-purple)]"
+                style={{ zIndex: 4 - i }}
+              />
+            ))}
+          </div>
+          <span className="text-xs font-medium text-[var(--xp-text-muted)]">
+            <span className="text-[var(--xp-green)] font-bold">1 847</span> уже нашли пару
+          </span>
+        </div>
+
         <NeonText as="h2" id="xp-commit-title" variant="pink" className="text-2xl font-bold sm:text-3xl">
           {t("ttmXpCommitTitle")}
         </NeonText>

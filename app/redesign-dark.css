@@ -339,8 +339,39 @@ input::placeholder, textarea::placeholder {
     0 -1px 0 rgba(255,255,255,0.04) inset,
     0 16px 48px rgba(0,0,0,0.7),
     0 4px 16px rgba(0,0,0,0.5) !important;
-  margin-bottom: 8px !important;
+  /* fixed: no margin-bottom, safe-area handled by parent padding */
   overflow: hidden !important;
+}
+
+/* Safe area fix for iPhone home bar */
+.ttm-floating-dock {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 50 !important;
+  /* safe-area + 8px gap above bar */
+  padding: 0 1rem calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+  pointer-events: none !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+/* Touch targets: min 44×44px (iOS HIG) */
+.ttm-dock-tab {
+  min-width: 44px !important;
+  min-height: 44px !important;
+}
+
+/* Chat composer buttons — min 44px tap targets */
+[class*="chat-composer"] button,
+[class*="chatComposer"] button,
+.chat-composer button {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .ttm-dock-tab {
@@ -366,10 +397,11 @@ input::placeholder, textarea::placeholder {
 
 .ttm-dock-tab--active {
   color: #f72585 !important;
-  background: rgba(247, 37, 133, 0.1) !important;
+  background: rgba(247, 37, 133, 0.14) !important;
   box-shadow:
-    0 0 0 1px rgba(247, 37, 133, 0.2) inset,
-    0 0 24px -4px rgba(247, 37, 133, 0.35) !important;
+    0 0 0 1px rgba(247, 37, 133, 0.28) inset,
+    0 0 36px -4px rgba(247, 37, 133, 0.5),
+    0 0 12px -2px rgba(247, 37, 133, 0.25) !important;
 }
 
 .ttm-dock-tab__icon-wrap {
@@ -494,22 +526,58 @@ input::placeholder, textarea::placeholder {
   color: #ef4444 !important;
 }
 
-/* Like (heart) button */
+/* Like (heart) button — primary action, must dominate visually */
 [class*="btn-like"],
 [class*="btnLike"],
 .swipe-btn-like {
   background: var(--accent-gradient) !important;
   border: none !important;
   color: #fff !important;
-  box-shadow: 0 4px 24px rgba(247, 37, 133, 0.5) !important;
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  min-height: 64px !important;
   border-radius: var(--radius-full) !important;
-  transition: all 0.2s !important;
+  box-shadow:
+    0 6px 28px rgba(247, 37, 133, 0.55),
+    0 2px 8px rgba(247, 37, 133, 0.35),
+    0 0 0 2px rgba(247, 37, 133, 0.15) !important;
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
 
 [class*="btn-like"]:hover,
-[class*="btnLike"]:hover {
-  transform: scale(1.08) !important;
-  box-shadow: 0 8px 36px rgba(247, 37, 133, 0.65) !important;
+[class*="btnLike"]:hover,
+[class*="btn-like"]:active,
+[class*="btnLike"]:active {
+  transform: scale(1.12) !important;
+  box-shadow:
+    0 10px 40px rgba(247, 37, 133, 0.7),
+    0 4px 16px rgba(247, 37, 133, 0.5),
+    0 0 0 3px rgba(247, 37, 133, 0.2) !important;
+}
+
+/* Pass (X) button — secondary, smaller */
+[class*="btn-pass"],
+[class*="btnPass"],
+.swipe-btn-pass {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.14) !important;
+  color: rgba(245,245,247,0.6) !important;
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  min-height: 52px !important;
+  border-radius: var(--radius-full) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3) !important;
+  transition: all 0.18s !important;
+}
+
+[class*="btn-pass"]:hover,
+[class*="btnPass"]:hover {
+  background: rgba(239,68,68,0.12) !important;
+  border-color: rgba(239,68,68,0.32) !important;
+  color: #ef4444 !important;
+  transform: scale(1.06) !important;
 }
 
 /* ─────────────────────────────────────────────
@@ -1219,4 +1287,78 @@ hr,
 
 .p9-sync-visual__line {
   background: linear-gradient(90deg, transparent, rgba(247,37,133,0.35), transparent) !important;
+}
+
+/* ─────────────────────────────────────────────
+   UNIFIED BORDER-RADIUS SCALE
+   8 / 12 / 16 / 24 / 28 / full
+   ───────────────────────────────────────────── */
+
+/* Tags, badges, chips → 8px */
+[class*="interest-tag"],
+[class*="interestTag"],
+[class*="expiry-chip"],
+[class*="expiryChip"],
+[class*="chemistry-badge"],
+.verified-badge {
+  border-radius: 8px !important;
+}
+
+/* Pills (status, live, premium) → full */
+[class*="premium-badge"],
+[class*="premiumBadge"],
+.ttm-login-live,
+[class*="live-status"] {
+  border-radius: 9999px !important;
+}
+
+/* Small cards → 12px */
+[class*="notification-item"],
+[class*="notificationItem"],
+[class*="activity-item"],
+[class*="activityItem"] {
+  border-radius: 12px !important;
+}
+
+/* Standard cards → 16px */
+[class*="feature-card"],
+[class*="featureCard"],
+[class*="settings-section"],
+[class*="settingsSection"] {
+  border-radius: 16px !important;
+}
+
+/* Large cards → 24px */
+[class*="pricing-card"],
+[class*="pricingCard"],
+.p9-onboarding {
+  border-radius: 24px !important;
+}
+
+/* Modals, sheets → 28px */
+[role="dialog"],
+[data-radix-dialog-content],
+[class*="premium-upgrade"],
+[class*="premiumUpgrade"] {
+  border-radius: 28px !important;
+}
+
+/* ─────────────────────────────────────────────
+   UNIFIED ANIMATION TIMING
+   micro: 150ms | transition: 250ms
+   ───────────────────────────────────────────── */
+
+button,
+a[class],
+[class*="dock-tab"],
+[class*="interactive"] {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+[class*="sheet-content"],
+[class*="sheetContent"],
+[class*="modal-content"],
+[class*="modalContent"] {
+  transition-duration: 250ms !important;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1) !important;
 }
