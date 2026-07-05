@@ -34,6 +34,37 @@ function applySecurityHeaders(res: NextResponse, request: NextRequest) {
     res.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")
   }
 
+  // Content-Security-Policy
+  // Covers: Pusher (ws + api), Stripe (js + checkout), Sentry, S3/R2 media
+  const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER || "eu"
+  const photoCdn = [
+    process.env.S3_PUBLIC_URL,
+    process.env.AWS_S3_PUBLIC_URL,
+    process.env.PHOTO_CDN_HOST,
+  ]
+    .filter(Boolean)
+    .join(" ")
+
+  const csp = [
+    `default-src 'self'`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://browser.sentry-cdn.com`,
+    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
+    `font-src 'self' https://fonts.gstatic.com data:`,
+    `img-src 'self' data: blob: https://images.unsplash.com ${photoCdn}`,
+    `connect-src 'self' https://api.stripe.com https://*.sentry.io https://sentry.io`
+      + ` wss://ws-${pusherCluster}.pusher.com wss://ws-${pusherCluster}.pusher.com`
+      + ` https://sockjs-${pusherCluster}.pusher.com https://api-${pusherCluster}.pusher.com`,
+    `frame-src https://js.stripe.com https://hooks.stripe.com`,
+    `worker-src 'self' blob:`,
+    `media-src 'self' blob: ${photoCdn}`,
+    `object-src 'none'`,
+    `base-uri 'self'`,
+    `form-action 'self'`,
+    `upgrade-insecure-requests`,
+  ].join("; ")
+
+  res.headers.set("Content-Security-Policy", csp)
+
   for (const [k, v] of Object.entries(corsHeaders(request))) {
     res.headers.set(k, v)
   }

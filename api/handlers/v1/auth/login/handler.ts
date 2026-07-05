@@ -59,6 +59,31 @@ export async function POST(request: Request) {
     )
   }
 
+  // Block check — must happen AFTER password verify to avoid user enumeration
+  if (row.is_blocked) {
+    log.warn("auth_login_blocked", { userId: row.id, reason: row.block_reason })
+    return withCors(
+      request,
+      jsonError(403, {
+        error: "account_blocked",
+        message: row.block_reason
+          ? `Your account has been suspended: ${row.block_reason}`
+          : "Your account has been suspended. Contact support for more information.",
+      })
+    )
+  }
+
+  if (!row.is_active) {
+    log.warn("auth_login_inactive", { userId: row.id })
+    return withCors(
+      request,
+      jsonError(403, {
+        error: "account_inactive",
+        message: "This account is inactive. Please contact support.",
+      })
+    )
+  }
+
   const res = jsonOk({ user: { id: row.id, email: row.email, name: row.name } })
   await issueAuthCookies(
     res,
