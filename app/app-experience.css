@@ -231,7 +231,7 @@ html[data-theme="light"] .ttm-profile-page {
   box-shadow: 0 0 12px -4px rgba(234, 88, 12, 0.45);
 }
 
-/* Match / countdown timer — landing pill style */
+/* Match / countdown timer — expiry bar base */
 .ttm-native-app .ttm-match-expiry-bar,
 .ttm-native-app .ttm-match-expiry-bar--header {
   border: 1px solid rgba(251, 113, 133, 0.28);
@@ -239,17 +239,49 @@ html[data-theme="light"] .ttm-profile-page {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 999px;
+  transition: border-color 0.8s ease, background 0.8s ease;
 }
 
+/* normal (>6h): subtle green tint — alive */
+.ttm-native-app .ttm-countdown-timer[data-urgency="normal"] {
+  color: rgba(74, 222, 128, 0.9);
+}
+
+/* warning (1–6h): amber — time is moving */
 .ttm-native-app .ttm-countdown-timer--warning,
 .ttm-native-app .ttm-countdown-timer[data-urgency="warning"] {
-  color: var(--app-coral);
+  color: #f59e0b;
+  text-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+  transition: color 1s ease;
 }
 
+.ttm-native-app .ttm-match-expiry-bar:has(.ttm-countdown-timer[data-urgency="warning"]) {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: color-mix(in srgb, rgba(245,158,11,0.06) 100%, transparent);
+}
+
+/* critical (<1h): red pulse — almost gone */
 .ttm-native-app .ttm-countdown-timer--critical,
 .ttm-native-app .ttm-countdown-timer[data-urgency="critical"] {
-  color: var(--app-amber);
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+  color: #f72585;
+  text-shadow: 0 0 20px rgba(247, 37, 133, 0.55);
+  animation: expiry-critical-pulse 1.4s ease-in-out infinite;
+}
+
+.ttm-native-app .ttm-match-expiry-bar:has(.ttm-countdown-timer[data-urgency="critical"]) {
+  border-color: rgba(247, 37, 133, 0.5);
+  background: color-mix(in srgb, rgba(247,37,133,0.1) 100%, transparent);
+  animation: expiry-bar-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes expiry-critical-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+@keyframes expiry-bar-pulse {
+  0%, 100% { box-shadow: none; }
+  50%       { box-shadow: 0 0 16px -4px rgba(247, 37, 133, 0.45); }
 }
 
 .ttm-native-app .ttm-countdown-timer__digits {

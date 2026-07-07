@@ -1680,5 +1680,7 @@
   "ttmXpCommitStart": "Begin",
   "ttmXpCommitLogin": "Already have an account? Sign in",
   "matchVanishLine": "After 24 hours this conversation disappears forever.",
-  "memoryArchiveEpigraph": "Maybe it's better to have gotten it right and been happy for one day instead of living a lifetime of wrongs."
+  "memoryArchiveEpigraph": "Maybe it's better to have gotten it right and been happy for one day instead of living a lifetime of wrongs.",
+  "chatCoolingBanner": "The connection is cooling… You haven't spoken in a while.",
+  "chatSayNowBanner": "30 minutes left. Say what matters."
 }

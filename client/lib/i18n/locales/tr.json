@@ -1672,5 +1672,7 @@
   "datingMatchTimerLabel": "bu kaybolana kadar",
   "matchModalWriteNow": "Gerçek bir şey söyle",
   "matchVanishLine": "24 saat sonra bu konuşma sonsuza dek kaybolur.",
-  "memoryArchiveEpigraph": "Belki bir günü doğru yaşamak, yanlışlarla dolu bir ömürden daha iyidir."
+  "memoryArchiveEpigraph": "Belki bir günü doğru yaşamak, yanlışlarla dolu bir ömürden daha iyidir.",
+  "chatCoolingBanner": "Bağlantı soğuyor… Bir süredir konuşmadınız.",
+  "chatSayNowBanner": "30 dakika kaldı. Önemli olanı söyle."
 }

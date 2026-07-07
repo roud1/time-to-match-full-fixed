@@ -80,6 +80,7 @@ import { ChatMessagesPane } from "@/client/components/chat/chat-messages-pane"
 import { ChatRoomHeader } from "@/client/components/chat/chat-room-header"
 import { IcebreakerPanel } from "@/client/components/chat/icebreaker-panel"
 import { SyncStatsSheet } from "@/client/components/chat/sync-stats-sheet"
+import { ChatFadingBanners } from "@/client/components/chat/chat-fading-banners"
 import { cn } from "@/client/lib/utils"
 
 type ChatRoomScreenProps = {
@@ -437,6 +438,10 @@ export function ChatRoomScreen({
           urgencySignal={matchExpiry.flashKey}
         />
       )}
+      <ChatFadingBanners
+        expiresAt={matchExpiry?.expiresAt}
+        lastMessageAt={lastMsg?.createdAt ?? lastMsg?.ts}
+      />
       <ChatMessagesPane
         scrollRef={scrollRef}
         className="flex-1 min-h-0"
@@ -541,6 +546,10 @@ export function ChatRoomScreen({
               />
             )
           )}
+          <ChatFadingBanners
+            expiresAt={matchExpiry?.expiresAt}
+            lastMessageAt={lastMsg?.createdAt ?? lastMsg?.ts}
+          />
           <ChatMessagesPane
             scrollRef={scrollRef}
             className={cn(syncMetrics && "ttm-chat-emotional-space")}

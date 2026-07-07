@@ -1672,5 +1672,7 @@
   "datingMatchTimerLabel": "bis das hier verschwindet",
   "matchModalWriteNow": "Sag etwas Echtes",
   "matchVanishLine": "Nach 24 Stunden verschwindet dieses Gespräch für immer.",
-  "memoryArchiveEpigraph": "Vielleicht ist es besser, einen Tag richtig gelebt zu haben, als ein Leben lang falsch."
+  "memoryArchiveEpigraph": "Vielleicht ist es besser, einen Tag richtig gelebt zu haben, als ein Leben lang falsch.",
+  "chatCoolingBanner": "Die Verbindung kühlt ab… Ihr habt lange nicht geredet.",
+  "chatSayNowBanner": "Noch 30 Minuten. Sag, was wichtig ist."
 }

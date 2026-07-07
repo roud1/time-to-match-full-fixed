@@ -1672,5 +1672,7 @@
   "datingMatchTimerLabel": "hasta que esto desaparezca",
   "matchModalWriteNow": "Di algo real",
   "matchVanishLine": "Después de 24 horas esta conversación desaparece para siempre.",
-  "memoryArchiveEpigraph": "Quizás es mejor haber tenido un día real que vivir toda una vida de falsedades."
+  "memoryArchiveEpigraph": "Quizás es mejor haber tenido un día real que vivir toda una vida de falsedades.",
+  "chatCoolingBanner": "La conexión se enfría… Lleváis un tiempo sin hablar.",
+  "chatSayNowBanner": "30 minutos restantes. Di lo que importa."
 }

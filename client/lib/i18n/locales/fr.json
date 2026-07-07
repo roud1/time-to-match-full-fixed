@@ -1672,5 +1672,7 @@
   "datingMatchTimerLabel": "avant que ça disparaisse",
   "matchModalWriteNow": "Dis quelque chose de vrai",
   "matchVanishLine": "Après 24 heures, cette conversation disparaît pour toujours.",
-  "memoryArchiveEpigraph": "Peut-être vaut-il mieux avoir vécu un jour vraiment que toute une vie de faux-semblants."
+  "memoryArchiveEpigraph": "Peut-être vaut-il mieux avoir vécu un jour vraiment que toute une vie de faux-semblants.",
+  "chatCoolingBanner": "La connexion refroidit… Vous n'avez pas parlé depuis un moment.",
+  "chatSayNowBanner": "30 minutes restantes. Dis ce qui compte."
 }
