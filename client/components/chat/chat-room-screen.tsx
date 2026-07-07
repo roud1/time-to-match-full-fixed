@@ -440,7 +440,7 @@ export function ChatRoomScreen({
       )}
       <ChatFadingBanners
         expiresAt={matchExpiry?.expiresAt}
-        lastMessageAt={lastMsg?.createdAt ?? lastMsg?.ts}
+        lastMessageAt={lastMsg?.at}
       />
       <ChatMessagesPane
         scrollRef={scrollRef}
@@ -548,7 +548,7 @@ export function ChatRoomScreen({
           )}
           <ChatFadingBanners
             expiresAt={matchExpiry?.expiresAt}
-            lastMessageAt={lastMsg?.createdAt ?? lastMsg?.ts}
+            lastMessageAt={lastMsg?.at}
           />
           <ChatMessagesPane
             scrollRef={scrollRef}

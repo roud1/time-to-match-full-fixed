@@ -25,6 +25,9 @@ export function Footer() {
           </motion.div>
 
           <motion.div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+            <Link href="/story" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light min-h-[44px] inline-flex items-center">
+              {t("storyOverline")}
+            </Link>
             <Link href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors font-light min-h-[44px] inline-flex items-center">
               {t("privacy")}
             </Link>
