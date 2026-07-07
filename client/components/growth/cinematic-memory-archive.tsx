@@ -189,7 +189,7 @@ export function CinematicMemoryArchive({ profileId, limit = 6, className }: Cine
               {/* First message — ghost of the conversation */}
               {item.firstMessage && (
                 <p className="relative text-xs italic text-white/28 leading-relaxed border-l border-white/[0.08] pl-2.5 mb-2">
-                  "{item.firstMessage}"
+                  &ldquo;{item.firstMessage}&rdquo;
                 </p>
               )}
 
