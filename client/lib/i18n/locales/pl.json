@@ -783,7 +783,7 @@
   "matchExpiryLabel": "Mecz będzie wypalony",
   "matchFirstBurst": "Wykryto rezonans",
   "matchFirstSubtitle": "To dopiero początek – połączenie będzie rosło z każdą wiadomością",
-  "matchFirstTitle": "Twoja pierwsza synchronizacja",
+  "matchFirstTitle": "Tak to się zaczyna.",
   "matchFlash": "To jest mecz z",
   "matchFreezeAction": "Zatrzymaj chwilę",
   "matchFreezeAria": "Zamroź chwilę - zamroź zapałkę na jeden dzień",
@@ -799,8 +799,8 @@
   "matchFreezeFrozenAria": "Ta chwila już się zatrzymała",
   "matchFreezePaid": "Daj meczowi inny dzień (1 ⛄)",
   "matchFreezeSuccess": "Zatrzymana chwila – kolejny wspólny dzień",
-  "matchModalBody": "Odkryto nową synchronizację emocjonalną",
-  "matchModalContinue": "Kontynuuj wyszukiwanie",
+  "matchModalBody": "Po 24 godzinach ta rozmowa znika na zawsze.",
+  "matchModalContinue": "Dalej swipe'ować",
   "matchModalOpenChat": "Otwarty dialog",
   "matchModalStartersTitle": "Od czego zacząć rozmowę",
   "matchModalSubtitle": "Twoja energia pasuje",
@@ -1666,5 +1666,10 @@
   "ttmXpCommitSubtitle": "Dołącz do 1 847 osób, które przestały czekać na odpowiedni moment.",
   "ttmXpCommitEmail": "Email",
   "ttmXpCommitStart": "Zacznij",
-  "ttmXpCommitLogin": "Masz konto? Zaloguj się"
+  "ttmXpCommitLogin": "Masz konto? Zaloguj się",
+  "datingMatchTitle": "To jest match.",
+  "datingMatchSubtitle": "Twoje 24 godziny właśnie się zaczęły.",
+  "datingMatchTimerLabel": "zanim to zniknie",
+  "matchModalWriteNow": "Powiedz coś prawdziwego",
+  "matchVanishLine": "Po 24 godzinach ta rozmowa znika na zawsze."
 }

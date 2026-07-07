@@ -34,17 +34,39 @@ type MatchCelebrationScreenProps = {
   isFirstMatch?: boolean
 }
 
-export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false }: MatchCelebrationScreenProps) {
+/** 12 CSS-driven particles that burst outward on mount */
+function ParticleBurst() {
+  return (
+    <div className="match-moment__particles" aria-hidden>
+      {Array.from({ length: 12 }, (_, i) => (
+        <div key={i} className="match-moment__particle" />
+      ))}
+    </div>
+  )
+}
+
+export function MatchCelebrationScreen({
+  profile,
+  onClose,
+  isFirstMatch = false,
+}: MatchCelebrationScreenProps) {
   const { t, locale, location } = useI18n()
   const router = useRouter()
   const reduce = useReducedMotion()
   const open = profile != null
   const [mounted, setMounted] = useState(false)
+  const [showParticles, setShowParticles] = useState(false)
   const [pushPromptDismissed, setPushPromptDismissed] = useState(false)
 
+  useEffect(() => { setMounted(true) }, [])
+
+  // Fire particles once on open
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    if (!open || reduce) return
+    setShowParticles(false)
+    const t = setTimeout(() => setShowParticles(true), 80)
+    return () => clearTimeout(t)
+  }, [open, reduce])
 
   useEffect(() => {
     if (open) {
@@ -61,9 +83,7 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
     if (!open) return
     const prev = document.documentElement.style.overflow
     document.documentElement.style.overflow = "hidden"
-    return () => {
-      document.documentElement.style.overflow = prev
-    }
+    return () => { document.documentElement.style.overflow = prev }
   }, [open])
 
   const me = getUserProfile()
@@ -82,6 +102,8 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
 
   if (!mounted) return null
 
+  const timerValue = profile ? formatMatchTimer(profile.timeLeft) : "24:00:00"
+
   return createPortal(
     <AnimatePresence>
       {open && profile && (
@@ -94,138 +116,183 @@ export function MatchCelebrationScreen({ profile, onClose, isFirstMatch = false 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduce ? 0.15 : 0.4 }}
+          transition={{ duration: reduce ? 0.15 : 0.38 }}
         >
+          {/* Ambient glow */}
           <div className="match-moment__glow" aria-hidden />
-          {isFirstMatch && !reduce && <div className="match-moment__burst p9-first-match-burst" aria-hidden />}
+
+          {/* First match ambient burst */}
+          {isFirstMatch && !reduce && (
+            <div className="match-moment__burst p9-first-match-burst" aria-hidden />
+          )}
+
+          {/* Particle burst */}
+          {showParticles && <ParticleBurst />}
 
           <div className="match-moment__content relative z-[1] flex flex-1 flex-col min-h-0 w-full px-5 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+            {/* Skip / keep swiping */}
             <button type="button" onClick={onClose} className="match-moment__continue">
               {t("matchModalContinue")}
             </button>
 
+            {/* ── Main content ── */}
             <div className="flex-1 flex flex-col items-center justify-center min-h-0 py-4">
+
+              {/* Avatars */}
               <motion.div
-                initial={reduce ? false : { scale: 0.92, opacity: 0 }}
+                initial={reduce ? false : { scale: 0.88, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 280, damping: 26, delay: 0.08 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24, delay: 0.06 }}
                 className="match-moment__avatars"
               >
+                {/* Me */}
                 <div className="match-moment__avatar match-moment__avatar--me">
                   {myPhoto ? (
-                    <Image src={myPhoto} alt="" fill className="object-cover" sizes="84px" priority />
+                    <Image src={myPhoto} alt="" fill className="object-cover" sizes="88px" priority />
                   ) : (
-                    <div className="h-full w-full bg-gradient-to-br from-white/10 to-white/25" />
+                    <div className="h-full w-full bg-gradient-to-br from-[#7209b7]/30 to-[#f72585]/20" />
                   )}
                 </div>
 
+                {/* Them */}
                 <div className="match-moment__avatar match-moment__avatar--them">
                   <Image
                     src={profile.image}
                     alt={profile.name}
                     fill
                     className="object-cover"
-                    sizes="84px"
+                    sizes="88px"
                     priority
                   />
                 </div>
 
+                {/* Pulse center */}
                 <div className="match-moment__pulse-wrap" aria-hidden>
                   {!reduce && <span className="match-moment__pulse-rings" />}
                   <PulseCharacter size="mini" />
                 </div>
               </motion.div>
 
+              {/* Eyebrow — "A MATCH" */}
+              <motion.p
+                aria-hidden
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.16 }}
+                className="match-moment__eyebrow"
+              >
+                {isFirstMatch ? t("matchFirstBurst") : "✦ match"}
+              </motion.p>
+
+              {/* Big title */}
               <motion.h1
                 id="match-celebration-title"
-                initial={reduce ? false : { opacity: 0, y: 12 }}
+                initial={reduce ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.18 }}
-                className="match-moment__title"
+                transition={{ delay: 0.22 }}
+                className={`match-moment__title${isFirstMatch ? " match-moment__title--first" : ""}`}
               >
                 {isFirstMatch ? t("matchFirstTitle") : t("datingMatchTitle")}
               </motion.h1>
 
+              {/* Subtitle */}
               <motion.p
-                initial={reduce ? false : { opacity: 0, y: 8 }}
+                initial={reduce ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.24 }}
+                transition={{ delay: 0.28 }}
                 className="match-moment__subtitle"
               >
                 {isFirstMatch ? t("matchFirstSubtitle") : t("datingMatchSubtitle")}
               </motion.p>
 
+              {/* Countdown timer — starts ticking right on the match screen */}
               <motion.div
-                initial={reduce ? false : { opacity: 0, scale: 0.94 }}
+                initial={reduce ? false : { opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.28 }}
-                className="mt-4"
+                transition={{ delay: 0.34 }}
+                className="mt-4 flex flex-col items-center gap-1"
               >
                 <DatingTimerBadge
-                  value={formatMatchTimer(profile.timeLeft)}
+                  value={timerValue}
                   label={t("datingMatchTimerLabel")}
                 />
               </motion.div>
 
+              {/* Their name */}
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.38 }}
                 className="match-moment__name"
               >
                 {profile.name}
               </motion.p>
 
+              {/* Shared interest — personalisation */}
               {compatibility && (
                 <motion.p
                   initial={reduce ? false : { opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.36 }}
-                  className="match-moment__hint"
+                  transition={{ delay: 0.44 }}
+                  className="match-moment__shared"
                 >
                   {getCompatibilityHintLabel(compatibility.chemistryHint, t)}
                 </motion.p>
               )}
 
+              {/* Stakes line — the key emotional beat */}
               <motion.p
                 initial={reduce ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="match-moment__body"
+                transition={{ delay: 0.52 }}
+                className="match-moment__vanish"
               >
-                {t("matchModalBody")}
+                {t("matchVanishLine")}
               </motion.p>
             </div>
 
+            {/* ── Footer actions ── */}
             <motion.div
-              initial={reduce ? false : { opacity: 0, y: 16 }}
+              initial={reduce ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.32 }}
+              transition={{ delay: 0.36 }}
               className="match-moment__foot shrink-0 w-full max-w-md mx-auto space-y-3"
             >
+              {/* Primary CTA */}
               <button
                 type="button"
                 onClick={() => goToChat()}
-                className="match-moment__cta match-moment__cta--primary w-full"
+                className="match-moment__cta w-full"
               >
-                {t("matchModalWriteNow")} · {formatMatchTimer(profile.timeLeft)}
+                {t("matchModalWriteNow")} · {timerValue}
               </button>
 
+              {/* Conversation starters */}
               <p className="match-moment__starters-label">{t("matchModalStartersTitle")}</p>
               <ul className="match-moment__starters ttm-chat-scroll">
                 {starters.map((text) => (
                   <li key={text}>
-                    <button type="button" onClick={() => goToChat(text)} className="match-moment__starter">
+                    <button
+                      type="button"
+                      onClick={() => goToChat(text)}
+                      className="match-moment__starter"
+                    >
                       {text}
                     </button>
                   </li>
                 ))}
               </ul>
 
-              <button type="button" onClick={() => goToChat()} className="match-moment__cta">
+              {/* Secondary CTA */}
+              <button
+                type="button"
+                onClick={() => goToChat()}
+                className="match-moment__cta match-moment__cta--secondary w-full"
+              >
                 {t("matchModalOpenChat")}
               </button>
 
+              {/* Push prompt (first match only) */}
               {isFirstMatch && !pushPromptDismissed && (
                 <PushPromptBanner
                   className="mt-2"

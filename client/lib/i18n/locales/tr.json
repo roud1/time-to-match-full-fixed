@@ -783,7 +783,7 @@
   "matchExpiryLabel": "Maç alevlenecek",
   "matchFirstBurst": "Rezonans algılandı",
   "matchFirstSubtitle": "Bu sadece başlangıç; her mesajla bağlantı daha da büyüyecek",
-  "matchFirstTitle": "İlk senkronizasyonunuz",
+  "matchFirstTitle": "İşte böyle başlar.",
   "matchFlash": "Bu bir maç",
   "matchFreezeAction": "Anı dondur",
   "matchFreezeAria": "Bir anı dondurun - bir maçı bir gün dondurun",
@@ -799,8 +799,8 @@
   "matchFreezeFrozenAria": "O an çoktan durdu",
   "matchFreezePaid": "Maçı başka bir gün ver (1 ⛄)",
   "matchFreezeSuccess": "O an durduruldu; birlikte başka bir gün",
-  "matchModalBody": "Yeni duygusal senkronizasyon keşfedildi",
-  "matchModalContinue": "Aramaya devam et",
+  "matchModalBody": "24 saat sonra bu konuşma sonsuza dek kaybolur.",
+  "matchModalContinue": "Swipe'lamaya devam et",
   "matchModalOpenChat": "Diyaloğu aç",
   "matchModalStartersTitle": "Konuşmaya nereden başlamalı",
   "matchModalSubtitle": "Enerjiniz eşleşiyor",
@@ -1666,5 +1666,10 @@
   "ttmXpCommitSubtitle": "Doğru anı beklemeyi bırakan 1.847 kişiye katıl.",
   "ttmXpCommitEmail": "E-posta",
   "ttmXpCommitStart": "Başla",
-  "ttmXpCommitLogin": "Zaten hesabın var mı? Giriş yap"
+  "ttmXpCommitLogin": "Zaten hesabın var mı? Giriş yap",
+  "datingMatchTitle": "Bu bir eşleşme.",
+  "datingMatchSubtitle": "24 saatin az önce başladı.",
+  "datingMatchTimerLabel": "bu kaybolana kadar",
+  "matchModalWriteNow": "Gerçek bir şey söyle",
+  "matchVanishLine": "24 saat sonra bu konuşma sonsuza dek kaybolur."
 }

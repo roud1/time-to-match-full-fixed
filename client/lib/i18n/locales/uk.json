@@ -783,7 +783,7 @@
   "matchExpiryLabel": "Метч догорить через",
   "matchFirstBurst": "Резонанс зафіксовано",
   "matchFirstSubtitle": "Це тільки початок - зв'язок зростатиме з кожним повідомленням",
-  "matchFirstTitle": "Ваша перша синхронізація",
+  "matchFirstTitle": "Ось як це починається.",
   "matchFlash": "Це матч з",
   "matchFreezeAction": "Зупинити мить",
   "matchFreezeAria": "Зупинити мить - заморозити метч на добу",
@@ -799,8 +799,8 @@
   "matchFreezeFrozenAria": "Миттю вже зупинено",
   "matchFreezePaid": "Подарувати метчу ще добу (1 ⛄)",
   "matchFreezeSuccess": "Миттю зупинено ще добу разом",
-  "matchModalBody": "Виявлено нову емоційну синхронізацію",
-  "matchModalContinue": "Продовжити пошук",
+  "matchModalBody": "Через 24 години ця розмова зникне назавжди.",
+  "matchModalContinue": "Продовжити свайпати",
   "matchModalOpenChat": "Відкрити діалог",
   "matchModalStartersTitle": "З чого почати розмову",
   "matchModalSubtitle": "Ваша енергія збіглася",
@@ -1666,5 +1666,10 @@
   "ttmXpCommitSubtitle": "Приєднайся до 1 847 людей які перестали чекати на слушний момент.",
   "ttmXpCommitEmail": "Email",
   "ttmXpCommitStart": "Почати",
-  "ttmXpCommitLogin": "Вже є акаунт? Увійти"
+  "ttmXpCommitLogin": "Вже є акаунт? Увійти",
+  "datingMatchTitle": "Це мэтч.",
+  "datingMatchSubtitle": "Твої 24 години щойно почались.",
+  "datingMatchTimerLabel": "до зникнення цього",
+  "matchModalWriteNow": "Скажи щось справжнє",
+  "matchVanishLine": "Через 24 години ця розмова зникне назавжди."
 }

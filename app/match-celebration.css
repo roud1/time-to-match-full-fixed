@@ -1,103 +1,144 @@
-/* Match celebration — full-screen like / mutual match moment */
+/* ─────────────────────────────────────────────────────────────────────────────
+   MATCH CELEBRATION — full-screen mutual match moment
+   Palette: deep void → rose/fuchsia/purple gradient
+   Philosophy: this is THE moment. It must feel like a scene from the book.
+   ───────────────────────────────────────────────────────────────────────────── */
 
+/* ── Background ── */
 .match-moment {
   width: 100%;
   min-height: 100dvh;
   min-height: 100svh;
   background:
-    radial-gradient(ellipse 120% 85% at 50% -15%, rgba(124, 58, 237, 0.22), transparent 52%),
-    radial-gradient(ellipse 90% 60% at 50% 105%, rgba(219, 39, 119, 0.16), transparent 50%),
-    linear-gradient(175deg, #0a0814 0%, #030304 42%, #06050a 100%);
+    radial-gradient(ellipse 110% 70% at 50% -10%, rgba(181, 23, 158, 0.28), transparent 55%),
+    radial-gradient(ellipse 80%  55% at 50% 108%, rgba(247, 37, 133, 0.18), transparent 52%),
+    radial-gradient(ellipse 60%  40% at 18%  30%, rgba(114, 9, 183, 0.14),  transparent 55%),
+    linear-gradient(178deg, #080611 0%, #030206 45%, #060409 100%);
 }
 
+/* ── Ambient glow layers ── */
 .match-moment__glow {
   pointer-events: none;
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 70% 45% at 50% 22%, rgba(168, 85, 247, 0.12), transparent 62%),
-    radial-gradient(ellipse 55% 40% at 50% 88%, rgba(236, 72, 153, 0.1), transparent 58%);
+    radial-gradient(ellipse 65% 42% at 50% 20%, rgba(181, 23, 158, 0.18), transparent 65%),
+    radial-gradient(ellipse 50% 38% at 50% 90%, rgba(247, 37, 133, 0.13), transparent 60%);
 }
 
+/* ── Particle burst — sparks fly out on match ── */
+.match-moment__particles {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.match-moment__particle {
+  position: absolute;
+  left: 50%;
+  top: 38%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  transform-origin: center center;
+  animation: particle-burst 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* 12 particles at different angles */
+.match-moment__particle:nth-child(1)  { background: #f72585; animation-delay: 0.05s; --px: -120px; --py: -90px;  --size: 5px; }
+.match-moment__particle:nth-child(2)  { background: #b5179e; animation-delay: 0.08s; --px:  110px; --py: -100px; --size: 4px; }
+.match-moment__particle:nth-child(3)  { background: #f72585; animation-delay: 0.03s; --px: -80px;  --py: -130px; --size: 6px; }
+.match-moment__particle:nth-child(4)  { background: #7209b7; animation-delay: 0.10s; --px:  90px;  --py: -80px;  --size: 3px; }
+.match-moment__particle:nth-child(5)  { background: #f72585; animation-delay: 0.06s; --px: -140px; --py: -30px;  --size: 4px; }
+.match-moment__particle:nth-child(6)  { background: #b5179e; animation-delay: 0.12s; --px:  130px; --py: -40px;  --size: 5px; }
+.match-moment__particle:nth-child(7)  { background: #f72585; animation-delay: 0.04s; --px: -60px;  --py:  100px; --size: 3px; }
+.match-moment__particle:nth-child(8)  { background: #7209b7; animation-delay: 0.09s; --px:  70px;  --py:  90px;  --size: 4px; }
+.match-moment__particle:nth-child(9)  { background: #f72585; animation-delay: 0.07s; --px: -100px; --py:  60px;  --size: 5px; }
+.match-moment__particle:nth-child(10) { background: #b5179e; animation-delay: 0.11s; --px:  95px;  --py:  55px;  --size: 3px; }
+.match-moment__particle:nth-child(11) { background: #f72585; animation-delay: 0.02s; --px: -30px;  --py: -150px; --size: 4px; }
+.match-moment__particle:nth-child(12) { background: #7209b7; animation-delay: 0.13s; --px:  40px;  --py: -140px; --size: 6px; }
+
+@keyframes particle-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+    width: var(--size, 4px);
+    height: var(--size, 4px);
+  }
+  60% { opacity: 0.9; }
+  100% {
+    opacity: 0;
+    transform: translate(var(--px, 80px), var(--py, -80px)) scale(0.2);
+  }
+}
+
+/* ── First match special burst ── */
+.match-moment__burst {
+  opacity: 0.45;
+  mix-blend-mode: screen;
+}
+
+/* ── Avatar pair ── */
 .match-moment__avatars {
   position: relative;
   width: 10.5rem;
   height: 6.25rem;
   margin-inline: auto;
-  margin-bottom: 2.25rem;
+  margin-bottom: 2rem;
   overflow: visible;
-  background: transparent;
 }
 
 .match-moment__avatar {
   position: absolute;
   top: 50%;
-  width: 5.25rem;
-  height: 5.25rem;
-  margin-top: -2.625rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin-top: -2.75rem;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.18);
+  border: 2.5px solid rgba(247, 37, 133, 0.35);
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.06),
-    0 16px 40px -12px rgba(0, 0, 0, 0.65);
+    0 0 28px rgba(247, 37, 133, 0.3),
+    0 16px 40px -12px rgba(0, 0, 0, 0.75);
 }
 
-.match-moment__avatar--me {
-  left: 0;
-  z-index: 1;
-}
+.match-moment__avatar--me   { left: 0;  z-index: 1; border-color: rgba(114, 9, 183, 0.4); box-shadow: 0 0 28px rgba(114, 9, 183, 0.3), 0 16px 40px -12px rgba(0,0,0,0.75); }
+.match-moment__avatar--them { right: 0; z-index: 2; border-color: rgba(247, 37, 133, 0.4); }
 
-.match-moment__avatar--them {
-  right: 0;
-  z-index: 2;
-}
-
+/* ── Pulse wrap ── */
 .match-moment__pulse-wrap {
   position: absolute;
   left: 50%;
   top: 50%;
   z-index: 4;
-  width: auto;
-  height: auto;
-  margin: 0;
   transform: translate(-50%, -50%);
   display: grid;
   place-items: center;
   pointer-events: none;
   overflow: visible;
-  background: transparent;
 }
 
 .match-moment__pulse-wrap .ttm-pulse,
 .match-moment__pulse-wrap .ttm-pulse--mini {
   width: 4.25rem;
-  background: transparent;
 }
 
 .match-moment .ttm-pulse__blob {
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.14) inset,
-    0 0 40px rgba(168, 85, 247, 0.55),
-    0 0 72px rgba(236, 72, 153, 0.28);
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+    0 0 40px rgba(247, 37, 133, 0.65),
+    0 0 72px rgba(181, 23, 158, 0.35);
 }
 
-.match-moment .ttm-pulse__aura--far {
-  filter: blur(16px);
-  opacity: 0.85;
-}
-
-.match-moment .ttm-pulse__aura--near {
-  filter: blur(10px);
-  opacity: 0.9;
-}
-
+/* ── Pulse rings ── */
 .match-moment__pulse-rings {
   position: absolute;
   inset: -18%;
   border-radius: 50%;
-  border: 1px solid rgba(196, 181, 253, 0.22);
-  animation: match-pulse-ring 2.8s ease-in-out infinite;
+  border: 1px solid rgba(247, 37, 133, 0.3);
+  animation: match-pulse-ring 2.4s ease-in-out infinite;
 }
 
 .match-moment__pulse-rings::before,
@@ -106,198 +147,249 @@
   position: absolute;
   inset: 12%;
   border-radius: 50%;
-  border: 1px solid rgba(236, 72, 153, 0.18);
+  border: 1px solid rgba(181, 23, 158, 0.22);
 }
 
 .match-moment__pulse-rings::after {
   inset: 24%;
-  border-color: rgba(168, 85, 247, 0.28);
-  animation: match-pulse-ring 2.8s ease-in-out infinite reverse;
+  border-color: rgba(114, 9, 183, 0.32);
+  animation: match-pulse-ring 2.4s ease-in-out infinite reverse;
 }
 
 @keyframes match-pulse-ring {
-  0%,
-  100% {
-    transform: scale(0.92);
-    opacity: 0.45;
-  }
-  50% {
-    transform: scale(1.06);
-    opacity: 0.9;
-  }
+  0%, 100% { transform: scale(0.9);  opacity: 0.4; }
+  50%       { transform: scale(1.08); opacity: 1;   }
+}
+
+/* ── Typography ── */
+.match-moment__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  /* rose gradient text */
+  background: linear-gradient(90deg, #f72585, #b5179e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .match-moment__title {
   margin: 0;
-  font-family: var(--saas-font-display, inherit);
-  font-size: clamp(1.45rem, 4.5vw, 1.65rem);
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.65rem, 5vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
   text-align: center;
-  color: var(--saas-text, var(--foreground));
-  text-shadow: 0 0 32px rgba(240, 169, 136, 0.18);
+  /* gradient text for the big title */
+  background: linear-gradient(135deg, #f5f5f7 0%, rgba(245,245,247,0.82) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 24px rgba(247, 37, 133, 0.25));
+}
+
+/* First match: extra glow */
+.match-moment__title--first {
+  background: linear-gradient(135deg, #f72585 0%, #b5179e 50%, #f5f5f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 32px rgba(247, 37, 133, 0.4));
 }
 
 .match-moment__subtitle {
-  margin: 0.5rem 0 0;
-  font-size: 0.875rem;
+  margin: 0.55rem 0 0;
+  font-size: 0.9rem;
   font-weight: 400;
+  line-height: 1.55;
   text-align: center;
-  color: var(--muted-foreground);
+  color: rgba(245, 245, 247, 0.62);
 }
 
 .match-moment__name {
-  margin: 0.85rem 0 0;
-  font-size: 1.35rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  margin: 1rem 0 0;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   text-align: center;
-  color: var(--foreground);
+  color: #f5f5f7;
+}
+
+.match-moment__shared {
+  margin: 0.5rem auto 0;
+  max-width: 18rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  color: rgba(247, 37, 133, 0.9);
+  letter-spacing: 0.02em;
 }
 
 .match-moment__hint {
-  margin: 0.65rem auto 0;
+  margin: 0.55rem auto 0;
   max-width: 18rem;
   font-size: 0.62rem;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   text-align: center;
-  color: color-mix(in srgb, var(--ttm-brand-accent) 88%, var(--muted-foreground));
+  color: rgba(247, 37, 133, 0.75);
 }
 
 .match-moment__body {
-  margin: 0.5rem auto 0;
+  margin: 0.55rem auto 0;
   max-width: 17rem;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.55;
+  text-align: center;
+  color: rgba(245, 245, 247, 0.42);
+}
+
+/* ── Vanish reminder — the stakes line ── */
+.match-moment__vanish {
+  margin: 0.75rem auto 0;
+  max-width: 18rem;
+  font-size: 0.72rem;
+  font-style: italic;
   font-weight: 300;
   line-height: 1.5;
   text-align: center;
-  color: var(--muted-foreground);
+  color: rgba(245, 245, 247, 0.3);
+  letter-spacing: 0.01em;
 }
 
+/* ── Timer display ── */
+.match-moment__timer-label {
+  margin: 0.35rem 0 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: rgba(245, 245, 247, 0.35);
+}
+
+/* ── Action buttons ── */
+.match-moment__cta {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 1rem 1.25rem;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: linear-gradient(135deg, #f72585 0%, #b5179e 55%, #7209b7 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 6px 28px rgba(247, 37, 133, 0.45),
+    0 2px 8px  rgba(181, 23, 158, 0.3);
+  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  touch-action: manipulation;
+}
+
+.match-moment__cta:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+    0 10px 36px rgba(247, 37, 133, 0.58),
+    0 4px 16px  rgba(181, 23, 158, 0.4);
+}
+
+.match-moment__cta:active { transform: scale(0.98); }
+
+/* Secondary (outline) CTA */
+.match-moment__cta--secondary {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(245, 245, 247, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+  font-weight: 400;
+}
+
+.match-moment__cta--secondary:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(245, 245, 247, 0.9);
+  border-color: rgba(247, 37, 133, 0.25);
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Conversation starters ── */
 .match-moment__starters-label {
   margin: 0 0 0.65rem;
   font-size: 0.62rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   text-align: center;
-  color: var(--muted-foreground);
+  color: rgba(245, 245, 247, 0.35);
 }
 
 .match-moment__starters {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-height: min(28dvh, 220px);
+  gap: 0.45rem;
+  max-height: min(26dvh, 210px);
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(192, 132, 252, 0.35) transparent;
+  scrollbar-color: rgba(247, 37, 133, 0.25) transparent;
 }
 
-.match-moment__starters::-webkit-scrollbar {
-  width: 4px;
-}
-
-.match-moment__starters::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(192, 132, 252, 0.35);
-}
-
-.match-moment__starters::-webkit-scrollbar-track {
-  background: transparent;
-}
+.match-moment__starters::-webkit-scrollbar        { width: 3px; }
+.match-moment__starters::-webkit-scrollbar-thumb  { border-radius: 999px; background: rgba(247, 37, 133, 0.25); }
+.match-moment__starters::-webkit-scrollbar-track  { background: transparent; }
 
 .match-moment__starter {
   width: 100%;
-  padding: 0.8rem 1rem;
-  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
   text-align: left;
   font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.35;
-  color: color-mix(in srgb, var(--foreground) 94%, transparent);
-  background: color-mix(in srgb, #a855f7 14%, rgba(255, 255, 255, 0.04));
-  border: 1px solid color-mix(in srgb, #c084fc 32%, transparent);
+  color: rgba(245, 245, 247, 0.88);
+  background: rgba(247, 37, 133, 0.07);
+  border: 1px solid rgba(247, 37, 133, 0.18);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: all 0.18s ease;
   touch-action: manipulation;
 }
 
 .match-moment__starter:hover {
-  border-color: color-mix(in srgb, #e879f9 45%, transparent);
-  background: color-mix(in srgb, #a855f7 20%, rgba(255, 255, 255, 0.06));
+  background: rgba(247, 37, 133, 0.13);
+  border-color: rgba(247, 37, 133, 0.32);
+  color: #f5f5f7;
 }
 
-.match-moment__starter:active {
-  transform: scale(0.99);
-}
+.match-moment__starter:active { transform: scale(0.99); }
 
-.match-moment__cta {
-  width: 100%;
-  margin-top: 0.25rem;
-  padding: 0.95rem 1.25rem;
-  border: none;
-  border-radius: 9999px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #0b0f14;
-  background: var(--saas-cta-gradient, linear-gradient(135deg, #f0a988 0%, #d97a5e 100%));
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.12) inset,
-    0 12px 36px -10px rgba(240, 169, 136, 0.55),
-    0 0 40px -12px rgba(168, 85, 247, 0.35);
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  touch-action: manipulation;
-}
-
-.match-moment__cta:hover {
-  opacity: 0.96;
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.16) inset,
-    0 16px 44px -8px rgba(240, 169, 136, 0.5),
-    0 0 48px -8px rgba(236, 72, 153, 0.4);
-}
-
-.match-moment__cta:active {
-  transform: scale(0.98);
-}
-
+/* ── Continue / skip button ── */
 .match-moment__continue {
   align-self: flex-end;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   font-weight: 400;
-  color: var(--muted-foreground);
+  color: rgba(245, 245, 247, 0.35);
   transition: color 0.2s ease;
   touch-action: manipulation;
 }
 
-.match-moment__continue:hover {
-  color: var(--foreground);
-}
+.match-moment__continue:hover { color: rgba(245, 245, 247, 0.65); }
 
-.match-moment__burst {
-  opacity: 0.55;
-  mix-blend-mode: screen;
-}
-
+/* ── Content layout ── */
 .match-moment__content,
-.match-moment__foot {
-  background: transparent;
-}
+.match-moment__foot { background: transparent; }
 
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .match-moment__pulse-rings,
-  .match-moment__pulse-rings::after {
-    animation: none !important;
-  }
+  .match-moment__pulse-rings::after,
+  .match-moment__particle { animation: none !important; }
 }

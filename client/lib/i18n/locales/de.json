@@ -783,7 +783,7 @@
   "matchExpiryLabel": "Das Match wird ausbrennen",
   "matchFirstBurst": "Resonanz erkannt",
   "matchFirstSubtitle": "Das ist erst der Anfang – die Verbindung wird mit jeder Nachricht wachsen",
-  "matchFirstTitle": "Ihre erste Synchronisierung",
+  "matchFirstTitle": "So fängt es an.",
   "matchFlash": "Dies ist eine Übereinstimmung mit",
   "matchFreezeAction": "Den Moment einfrieren",
   "matchFreezeAria": "Einen Moment einfrieren – ein Streichholz für einen Tag einfrieren",
@@ -799,8 +799,8 @@
   "matchFreezeFrozenAria": "Der Moment ist bereits stehen geblieben",
   "matchFreezePaid": "Spiel an einem anderen Tag verschenken (1 ⛄)",
   "matchFreezeSuccess": "Der Moment ist gestoppt – ein weiterer gemeinsamer Tag",
-  "matchModalBody": "Neue emotionale Synchronisation entdeckt",
-  "matchModalContinue": "Suche fortsetzen",
+  "matchModalBody": "Nach 24 Stunden verschwindet dieses Gespräch für immer.",
+  "matchModalContinue": "Weiter swipen",
   "matchModalOpenChat": "Offener Dialog",
   "matchModalStartersTitle": "Wo soll das Gespräch beginnen?",
   "matchModalSubtitle": "Deine Energie passt",
@@ -1666,5 +1666,10 @@
   "ttmXpCommitSubtitle": "Schließ dich 1.847 Menschen an, die aufgehört haben, auf den richtigen Moment zu warten.",
   "ttmXpCommitEmail": "E-Mail",
   "ttmXpCommitStart": "Loslegen",
-  "ttmXpCommitLogin": "Schon ein Konto? Anmelden"
+  "ttmXpCommitLogin": "Schon ein Konto? Anmelden",
+  "datingMatchTitle": "Es ist ein Match.",
+  "datingMatchSubtitle": "Deine 24 Stunden haben gerade begonnen.",
+  "datingMatchTimerLabel": "bis das hier verschwindet",
+  "matchModalWriteNow": "Sag etwas Echtes",
+  "matchVanishLine": "Nach 24 Stunden verschwindet dieses Gespräch für immer."
 }
