@@ -44,11 +44,24 @@ jobs:
       - name: Start server for smoke tests
         run: |
           npm run start &
-          sleep 8
+          echo $! > .server.pid
         env:
           NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
           TTM_STRICT_ENV: "0"
           AUTH_SECRET: ci-test-auth-secret-min-32-chars-long!!
+
+      - name: Wait for server to be ready
+        run: |
+          echo "Waiting for /api/ready..."
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:3000/api/ready > /dev/null 2>&1; then
+              echo "Server is ready after ${i}s"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Server did not become ready in 60s"
+          exit 1
 
       - name: E2E smoke tests (demo mode)
         run: npm run test:e2e -- tests/e2e/smoke.spec.ts
