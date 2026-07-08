@@ -41,10 +41,21 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
+      - name: Start server for smoke tests
+        run: |
+          npm run start &
+          sleep 8
+        env:
+          NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+          TTM_STRICT_ENV: "0"
+          AUTH_SECRET: ci-test-auth-secret-min-32-chars-long!!
+
       - name: E2E smoke tests (demo mode)
         run: npm run test:e2e -- tests/e2e/smoke.spec.ts
         env:
           NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+          PLAYWRIGHT_SKIP_WEBSERVER: "1"
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:3000
 
   e2e:
     runs-on: ubuntu-latest
