@@ -6,7 +6,6 @@ import { Navbar } from "@/client/components/navbar"
 import { Footer } from "@/client/components/footer"
 import { TtmButton } from "@/client/components/ds/ttm-button"
 import { useI18n } from "@/client/lib/i18n"
-import type { Metadata } from "next"
 
 const FADE_UP = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -50,40 +49,6 @@ export default function StoryPage() {
         </motion.p>
       </section>
 
-      {/* ── Book section ── */}
-      <section className="max-w-2xl mx-auto px-6 pb-16">
-        <motion.div
-          {...IN_VIEW()}
-          className="rounded-2xl p-6 sm:p-8"
-          style={{
-            background: "rgba(13,17,23,0.75)",
-            border: "0.5px solid rgba(247,37,133,0.2)",
-            backdropFilter: "blur(20px)",
-            boxShadow: "0 0 60px -20px rgba(247,37,133,0.15)",
-          }}
-        >
-          {/* Epigraph */}
-          <div className="mb-6 pl-4 border-l-2 border-[rgba(247,37,133,0.4)]">
-            <p className="text-sm italic text-white/50 leading-relaxed">
-              {t("storyEpigraph")}
-            </p>
-            <p className="text-xs text-white/30 mt-2 font-medium tracking-wide">
-              — Adam Silvera, <em>They Both Die at the End</em>
-            </p>
-          </div>
-
-          <h2 className="text-xl font-semibold text-white/90 mb-3">
-            {t("storyBookTitle")}
-          </h2>
-          <p className="text-sm text-white/55 leading-relaxed mb-4">
-            {t("storyBookBody1")}
-          </p>
-          <p className="text-sm text-white/55 leading-relaxed">
-            {t("storyBookBody2")}
-          </p>
-        </motion.div>
-      </section>
-
       {/* ── Why 24 hours ── */}
       <section className="max-w-2xl mx-auto px-6 pb-16">
         <motion.h2
@@ -99,7 +64,7 @@ export default function StoryPage() {
           {t("storyWhyTitle")}
         </motion.h2>
 
-        <div className="space-y-6">
+        <div className="space-y-8">
           {[
             { num: "01", titleKey: "storyWhy1Title", bodyKey: "storyWhy1Body" },
             { num: "02", titleKey: "storyWhy2Title", bodyKey: "storyWhy2Body" },
@@ -111,13 +76,13 @@ export default function StoryPage() {
               className="flex gap-5 items-start"
             >
               <span
-                className="shrink-0 text-xs font-bold tabular-nums mt-1"
+                className="shrink-0 text-xs font-bold tabular-nums mt-1.5"
                 style={{ color: "rgba(247,37,133,0.6)" }}
               >
                 {item.num}
               </span>
               <div>
-                <h3 className="text-base font-semibold text-white/90 mb-1.5">
+                <h3 className="text-base font-semibold text-white/90 mb-2">
                   {t(item.titleKey as Parameters<typeof t>[0])}
                 </h3>
                 <p className="text-sm text-white/50 leading-relaxed">
@@ -129,23 +94,24 @@ export default function StoryPage() {
         </div>
       </section>
 
-      {/* ── What happened ── */}
+      {/* ── What we built ── */}
       <section className="max-w-2xl mx-auto px-6 pb-16">
         <motion.div
           {...IN_VIEW()}
           className="rounded-2xl p-6 sm:p-8 space-y-4"
           style={{
-            background: "rgba(8,11,16,0.8)",
+            background: "rgba(13,17,23,0.75)",
             border: "0.5px solid rgba(255,255,255,0.07)",
+            backdropFilter: "blur(20px)",
           }}
         >
           <h2 className="text-xl font-semibold text-white/90">
             {t("storyBuiltTitle")}
           </h2>
-          <p className="text-sm text-white/50 leading-relaxed">
+          <p className="text-sm text-white/55 leading-relaxed">
             {t("storyBuiltBody1")}
           </p>
-          <p className="text-sm text-white/50 leading-relaxed">
+          <p className="text-sm text-white/55 leading-relaxed">
             {t("storyBuiltBody2")}
           </p>
         </motion.div>

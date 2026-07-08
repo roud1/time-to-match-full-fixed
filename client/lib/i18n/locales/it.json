@@ -1676,12 +1676,8 @@
   "chatCoolingBanner": "La connessione si raffredda… Non parlate da un po'.",
   "chatSayNowBanner": "30 minuti rimasti. Di' ciò che conta.",
   "storyOverline": "La nostra storia",
-  "storyHeroTitle": "Un libro ci ha dato questa idea.",
-  "storyHeroSub": "Time to Match è nato da una domanda semplice: e se la pressione del tempo rendesse le persone più oneste tra loro?",
-  "storyEpigraph": "Forse è meglio aver vissuto un giorno vero che toute una vita di finzioni.",
-  "storyBookTitle": "La fine e tutto il resto",
-  "storyBookBody1": "Il romanzo di Adam Silvera segue due sconosciuti — Mateo e Rufus — che ricevono una chiamata che dice loro che oggi è il loro ultimo giorno. Si trovano tramite un'app chiamata Last Friend e in 24 ore diventano più importanti l'uno per l'altro di chiunque abbiano conosciuto per anni.",
-  "storyBookBody2": "Il libro non parla di morte. Parla di cosa succede quando il tempo diventa reale. Questa idea è rimasta con noi — ed è diventata Time to Match.",
+  "storyHeroTitle": "Perché l'abbiamo costruito diversamente.",
+  "storyHeroSub": "Le app di incontri sono rotte. Non perché la tecnologia sia cattiva — ma perché niente forza le persone a mostrarsi davvero.",
   "storyWhyTitle": "Perché 24 ore?",
   "storyWhy1Title": "Le scadenze rendono le persone oneste.",
   "storyWhy1Body": "Senza una scadenza, 'risponderò domani' diventa la norma. Domani diventa mai. La finestra di 24 ore elimina questa scappatoia.",
@@ -1691,9 +1687,10 @@
   "storyWhy3Body": "Il timer è nella stanza con voi. Lo vedete entrambi. Quella consapevolezza condivisa cambia tutto — le chiacchiere crollano, la vera conversazione inizia.",
   "storyBuiltTitle": "Cosa abbiamo costruito",
   "storyBuiltBody1": "Time to Match è un'app di incontri dove i like reciproci scadono dopo 24 ore. Niente ghosting. Niente limbo.",
-  "storyBuiltBody2": "L'abbiamo costruito perché credevamo che il libro avesse ragione. Che un giorno vero possa valere più di tutta una vita di niente sicuro e comodo.",
+  "storyBuiltBody2": "L'abbiamo costruito perché credevamo in una cosa: la pressione giusta non uccide la connessione — la rivela.",
   "storyCtaTitle": "Le tue 24 ore iniziano ora.",
   "storyCtaSub": "Un match. Un giorno. È tutto ciò che serve.",
   "storyCtaButton": "Inizia le tue 24 ore",
-  "storyBackHome": "Torna alla home"
+  "storyBackHome": "Torna alla home",
+  "icebreakerSharedHint": "Vi piace a entrambi"
 }

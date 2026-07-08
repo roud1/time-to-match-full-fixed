@@ -87,7 +87,11 @@ export function MatchCelebrationScreen({
   }, [open])
 
   const me = getUserProfile()
-  const starters = getMatchConversationStarters(locale, me?.gender)
+  // Find shared interests between me and the match
+  const sharedInterests = (me?.interests ?? []).filter((i) =>
+    profile?.interests?.includes(i)
+  )
+  const starters = getMatchConversationStarters(locale, me?.gender, sharedInterests)
   const myPhoto = me ? getProfilePhotos(me)[0] : null
   const compatibility = profile ? computeDiscoverCompatibility(profile) : null
 

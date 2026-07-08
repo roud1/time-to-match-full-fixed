@@ -12,6 +12,8 @@ type IcebreakerPanelProps = {
   onDismiss: () => void
   className?: string
   variant?: "default" | "compact"
+  /** Shared interests between both users — shown as context pill */
+  sharedInterestHint?: string[]
 }
 
 export function IcebreakerPanel({
@@ -19,6 +21,7 @@ export function IcebreakerPanel({
   onDismiss,
   className,
   variant = "default",
+  sharedInterestHint = [],
 }: IcebreakerPanelProps) {
   const { t } = useI18n()
   const [items, setItems] = useState<Icebreaker[]>([])
@@ -37,6 +40,13 @@ export function IcebreakerPanel({
 
   const suggestions = loading && items.length === 0 ? null : items
 
+  // Shared interest pill — shown when there are common interests
+  const SharedHint = sharedInterestHint.length > 0 ? (
+    <p className="text-[10px] text-[rgba(247,37,133,0.7)] font-medium mb-2 leading-relaxed">
+      ✦ {t("icebreakerSharedHint")} {sharedInterestHint.join(", ")}
+    </p>
+  ) : null
+
   if (variant === "compact") {
     return (
       <AnimatePresence>
@@ -47,7 +57,10 @@ export function IcebreakerPanel({
           className={cn("ttm-chat-icebreaker--compact w-full", className)}
         >
           <div className="flex items-center justify-between gap-2 mb-2">
-            <p className="text-[11px] font-light text-[var(--text-secondary)]">{t("icebreakerTitle")}</p>
+            <div>
+              {SharedHint}
+              <p className="text-[11px] font-light text-[var(--text-secondary)]">{t("icebreakerTitle")}</p>
+            </div>
             <button
               type="button"
               onClick={onDismiss}
@@ -64,7 +77,7 @@ export function IcebreakerPanel({
                 onClick={() => onPick(item.text)}
                 className="shrink-0 max-w-[14rem] rounded-full border border-[var(--border)] bg-[var(--bg-primary)] px-3 py-1.5 text-left text-[11px] font-light italic text-[var(--text-primary)] hover:border-[var(--accent-soft-border)] active:scale-[0.99]"
               >
-                «{item.text}»
+                &laquo;{item.text}&raquo;
               </button>
             ))}
           </div>
@@ -88,6 +101,7 @@ export function IcebreakerPanel({
             "shadow-[0_12px_40px_-20px_rgba(0,0,0,0.35)]"
           )}
         >
+          {SharedHint}
           <p className="text-sm font-light text-[var(--text-primary)]">{t("icebreakerTitle")}</p>
 
           <div className="space-y-2">
@@ -110,7 +124,7 @@ export function IcebreakerPanel({
                     💬
                   </span>
                   <span className="text-sm font-light italic text-[var(--text-primary)] leading-snug">
-                    «{item.text}»
+                    &laquo;{item.text}&raquo;
                   </span>
                 </button>
               ))

@@ -1676,12 +1676,8 @@
   "chatCoolingBanner": "Połączenie stygnie… Dawno nie rozmawialiście.",
   "chatSayNowBanner": "Zostało 30 minut. Powiedz to, co ważne.",
   "storyOverline": "Nasza historia",
-  "storyHeroTitle": "Książka dała nam ten pomysł.",
-  "storyHeroSub": "Time to Match narodził się z prostego pytania: co jeśli presja czasu sprawi, że ludzie będą ze sobą szczersi?",
-  "storyEpigraph": "Może lepiej przeżyć jeden prawdziwy dzień niż całe życie w udawaniu.",
-  "storyBookTitle": "Oni oboje umrą na końcu",
-  "storyBookBody1": "Powieść Adama Silvery śledzi dwóch nieznajomych — Mateo i Rufusa — którzy otrzymują telefon mówiący, że dziś jest ich ostatni dzień. Znajdują się nawzajem przez aplikację Last Friend i w 24 godziny stają się dla siebie ważniejsi niż ktokolwiek, kogo znali przez lata.",
-  "storyBookBody2": "Książka nie jest o śmierci. Dotyczy tego, co dzieje się gdy czas staje się realny. Gdy wiesz, że okno się zamknie, przestajesz marnować chwile. Ta idea pozostała z nami — i stała się Time to Match.",
+  "storyHeroTitle": "Dlaczego zbudowaliśmy to inaczej.",
+  "storyHeroSub": "Aplikacje randkowe są zepsute. Nie dlatego, że technologia jest zła — bo nic nie zmusza ludzi, żeby naprawdę się pojawili.",
   "storyWhyTitle": "Dlaczego 24 godziny?",
   "storyWhy1Title": "Terminy sprawiają, że ludzie są szczerzy.",
   "storyWhy1Body": "Bez terminu 'odpiszę jutro' staje się normą. Jutro zamienia się w nigdy. Okno 24 godzin usuwa tę ucieczkę.",
@@ -1691,9 +1687,10 @@
   "storyWhy3Body": "Timer jest w pokoju razem z wami. Oboje go widzicie. Ta wspólna świadomość zmienia wszystko — small talk odpada, zaczyna się prawdziwa rozmowa.",
   "storyBuiltTitle": "Co zbudowaliśmy",
   "storyBuiltBody1": "Time to Match to aplikacja randkowa, w której wzajemne polubienia wygasają po 24 godzinach. Żadnego ghostingu. Żadnego limbusa.",
-  "storyBuiltBody2": "Zbudowaliśmy to, bo uwierzyliśmy, że książka miała rację. Że jeden prawdziwy dzień może być wart więcej niż całe życie bezpiecznego, wygodnego niczego.",
+  "storyBuiltBody2": "Zbudowaliśmy to, bo wierzyliśmy w jedno: odpowiednia presja nie niszczy połączenia — ją ujawnia.",
   "storyCtaTitle": "Twoje 24 godziny zaczynają się teraz.",
   "storyCtaSub": "Jeden match. Jeden dzień. To wszystko.",
   "storyCtaButton": "Zacznij swoje 24 godziny",
-  "storyBackHome": "Wróć do strony głównej"
+  "storyBackHome": "Wróć do strony głównej",
+  "icebreakerSharedHint": "Oboje lubicie"
 }
