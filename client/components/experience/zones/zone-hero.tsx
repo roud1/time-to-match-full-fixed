@@ -27,16 +27,22 @@ export function ZoneHero() {
       <ZoneGlow variant="purple" position="top-left" size="lg" />
       <ZoneGlow variant="pink" position="bottom-right" size="md" />
 
+      {/* Signature: oversized clipped 24 — time already leaving */}
+      <div
+        aria-hidden
+        className="ttm-signature-24 absolute right-0 top-[50%] -translate-y-[55%] select-none pointer-events-none"
+      />
+
       <motion.div
-        className="xp-hero__inner"
+        className="xp-hero__inner relative z-10"
         initial={reduce ? false : { opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       >
         <p className="xp-label xp-hero__eyebrow">{t("ttmXpBrand")}</p>
 
-        <h1 id="xp-hero-title" className="xp-hero__headline">
-          {/* Line 1 — gradient: the hero statement */}
+        <h1 id="xp-hero-title" className="xp-hero__headline" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>
+          {/* Line 1 — gradient serif */}
           <span
             className="block"
             style={{
@@ -44,17 +50,17 @@ export function ZoneHero() {
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
-              filter: "drop-shadow(0 0 32px rgba(247,37,133,0.35))",
+              filter: "drop-shadow(0 0 32px rgba(247,37,133,0.28))",
             }}
           >
             {t("ttmXpHeroHeadline1")}
           </span>
-          {/* Line 2 — white, slightly dimmed */}
-          <NeonText as="span" variant="white" className="block opacity-90">
+          {/* Line 2 — white */}
+          <NeonText as="span" variant="white" className="block opacity-88">
             {t("ttmXpHeroHeadline2")}
           </NeonText>
-          {/* Line 3 — pink accent, smaller visual weight */}
-          <NeonText as="span" variant="pink" className="block text-[0.82em]">
+          {/* Line 3 — rose, smaller */}
+          <NeonText as="span" variant="pink" className="block text-[0.78em] opacity-90">
             {t("ttmXpHeroHeadline3")}
           </NeonText>
         </h1>

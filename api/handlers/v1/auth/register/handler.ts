@@ -10,6 +10,7 @@ import { checkRateLimit, getClientIp } from "@/server/rate-limit"
 import { defaultProfileExpiresAt } from "@/server/profile-life/service"
 import { createUser, findUserByEmail } from "@/server/repositories/users"
 import { registerBodySchema, sanitizeDisplayName } from "@/server/validation/auth"
+import { sendVerificationEmail } from "@/server/email/verification"
 
 function isPgUniqueViolation(e: unknown) {
   return typeof e === "object" && e !== null && "code" in e && (e as { code: string }).code === "23505"
@@ -81,6 +82,8 @@ export async function POST(request: Request) {
     await issueAuthCookies(res, { sub: id, email }, { userAgent: request.headers.get("user-agent"), ip })
     log.info("auth_register_ok", { userId: id })
     void trackServerEvent("signup", { userId: id })
+    // Send email verification (non-blocking — don't fail registration if email fails)
+    void sendVerificationEmail(id, email, name)
     return withCors(request, res)
   } catch (e) {
     if (isPgUniqueViolation(e)) {
