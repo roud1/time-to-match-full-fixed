@@ -60,8 +60,7 @@ export function ZoneCommit() {
         <TextReveal
           text={t("ttmXpCommitTitle")}
           as="h2"
-          className="text-2xl font-bold sm:text-3xl"
-          style={{ color: "var(--xp-pink)", textShadow: "0 0 28px rgba(247,37,133,0.4)" } as React.CSSProperties}
+          className="text-2xl font-bold sm:text-3xl text-[var(--xp-pink)]"
         />
         <p className="mt-[var(--xp-3)] text-sm text-[var(--xp-text-muted)] sm:text-base">
           {t("ttmXpCommitSubtitle")}

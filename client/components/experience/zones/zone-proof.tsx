@@ -42,7 +42,7 @@ export function ZoneProof() {
           <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-green)]">
             <CountUp to={online} duration={1.4} className="ttm-live-number" />
           </p>
-          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofStat1")}</p>
+          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofActive")}</p>
         </GlassPanel>
         </SpotlightCard>
         </ParallaxDepth>
@@ -53,7 +53,7 @@ export function ZoneProof() {
           <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-pink)]">
             <CountUp to={nearby} duration={1.6} delay={0.2} className="ttm-live-number" />
           </p>
-          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofStat2")}</p>
+          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofNearby")}</p>
         </GlassPanel>
         </SpotlightCard>
         </ParallaxDepth>
@@ -64,7 +64,7 @@ export function ZoneProof() {
           <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-purple)]">
             <CountUp to={slots} duration={0.9} delay={0.35} />
           </p>
-          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofStat3")}</p>
+          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofScarcity")}</p>
         </GlassPanel>
         </SpotlightCard>
         </ParallaxDepth>
