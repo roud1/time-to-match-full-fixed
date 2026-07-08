@@ -1,6 +1,7 @@
 "use client"
 
 import "./experience-tokens.css"
+import { useEffect } from "react"
 import { AmbientLayer } from "@/client/components/experience/layers/ambient-layer"
 import { ExperienceFloatingChrome } from "@/client/components/experience/layers/floating-chrome"
 import { ZoneConnector } from "@/client/components/experience/primitives/zone-connector"
@@ -12,12 +13,14 @@ import { ZoneConnection } from "@/client/components/experience/zones/zone-connec
 import { ZoneProof } from "@/client/components/experience/zones/zone-proof"
 import { ZoneCommit } from "@/client/components/experience/zones/zone-commit"
 import { useI18n } from "@/client/lib/i18n"
+import { useScrollReveal } from "@/client/hooks/use-scroll-reveal"
 
 export function ExperiencePage() {
   const { t } = useI18n()
+  useScrollReveal()
 
   return (
-    <main className="xp-root xp-page ttm-experience relative">
+    <main className="xp-root xp-page ttm-experience ttm-page-enter relative">
       <AmbientLayer />
       <ExperienceFloatingChrome />
       <div className="xp-grid">

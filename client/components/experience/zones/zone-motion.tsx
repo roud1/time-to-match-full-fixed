@@ -7,6 +7,7 @@ import { GlassPanel } from "@/client/components/experience/primitives/glass-pane
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
 import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
 import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
+import { SpotlightCard } from "@/client/components/experience/primitives/spotlight-card"
 
 const DECK = [
   { id: 1, vibe: "92%", hue: "from-[#ff2e63] to-[#6c5ce7]" },
@@ -56,7 +57,8 @@ export function ZoneMotion() {
       </div>
 
       <ParallaxDepth depth={2}>
-      <GlassPanel depth={2} className="relative mx-auto max-w-sm overflow-hidden p-[var(--xp-5)]">
+      <SpotlightCard className="mx-auto max-w-sm">
+      <GlassPanel depth={2} className="relative mx-auto max-w-sm overflow-hidden p-[var(--xp-5)] xp-float-card">
         <div className="relative mx-auto h-[340px] w-full max-w-[280px]">
           {left === 0 ? (
             <div className="xp-dissolve flex h-full flex-col items-center justify-center text-center">
@@ -114,6 +116,7 @@ export function ZoneMotion() {
           </button>
         </div>
       </GlassPanel>
+      </SpotlightCard>
       </ParallaxDepth>
     </section>
   )

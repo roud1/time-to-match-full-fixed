@@ -19,6 +19,7 @@
 @import './site-ambient.css';
 @import './floating-chrome.css';
 @import './redesign-dark.css';
+@import './animations.css';
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 

@@ -10,6 +10,8 @@ import { GlowButton } from "@/client/components/experience/primitives/glow-butto
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
 import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
 import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
+import { TextReveal } from "@/client/components/experience/primitives/text-reveal"
+import { MagneticCTA } from "@/client/components/experience/primitives/magnetic-cta"
 
 export function ZoneCommit() {
   const { t } = useI18n()
@@ -55,9 +57,12 @@ export function ZoneCommit() {
           </span>
         </div>
 
-        <NeonText as="h2" id="xp-commit-title" variant="pink" className="text-2xl font-bold sm:text-3xl">
-          {t("ttmXpCommitTitle")}
-        </NeonText>
+        <TextReveal
+          text={t("ttmXpCommitTitle")}
+          as="h2"
+          className="text-2xl font-bold sm:text-3xl"
+          style={{ color: "var(--xp-pink)", textShadow: "0 0 28px rgba(247,37,133,0.4)" } as React.CSSProperties}
+        />
         <p className="mt-[var(--xp-3)] text-sm text-[var(--xp-text-muted)] sm:text-base">
           {t("ttmXpCommitSubtitle")}
         </p>
@@ -74,9 +79,11 @@ export function ZoneCommit() {
               className="rounded-[var(--xp-radius-md)] border border-white/12 bg-black/30 px-4 py-3 text-[var(--xp-text)] placeholder:text-[var(--xp-text-dim)] focus:border-[var(--xp-pink)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--xp-pink)]/25"
             />
           </label>
-          <GlowButton type="submit" variant="pink" className="w-full">
-            {t("ttmXpCommitStart")}
-          </GlowButton>
+          <MagneticCTA>
+            <GlowButton type="submit" variant="pink" className="w-full">
+              {t("ttmXpCommitStart")}
+            </GlowButton>
+          </MagneticCTA>
         </form>
 
         <p className="mt-[var(--xp-4)] text-center text-xs text-[var(--xp-text-dim)]">

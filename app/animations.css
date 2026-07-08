@@ -1,0 +1,289 @@
+/**
+ * TIME TO MATCH — Global Animations
+ * Scroll reveals, ambient floats, glows, signature 24 entrance.
+ * All animations respect prefers-reduced-motion.
+ */
+
+/* ─────────────────────────────────────────────
+   SCROLL REVEAL — элементы появляются при скролле
+   Используй класс .ttm-reveal на любом элементе
+   ───────────────────────────────────────────── */
+
+.ttm-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ttm-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.ttm-reveal--delay-1 { transition-delay: 0.1s; }
+.ttm-reveal--delay-2 { transition-delay: 0.2s; }
+.ttm-reveal--delay-3 { transition-delay: 0.3s; }
+.ttm-reveal--delay-4 { transition-delay: 0.4s; }
+.ttm-reveal--delay-5 { transition-delay: 0.5s; }
+
+/* ─────────────────────────────────────────────
+   SIGNATURE 24 — появляется вместе с hero
+   ───────────────────────────────────────────── */
+
+.ttm-signature-24 {
+  font-family: Georgia, "Times New Roman", "Noto Serif", serif;
+  font-size: clamp(180px, 32vw, 340px);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  color: transparent;
+  background: linear-gradient(
+    160deg,
+    rgba(247, 37, 133, 0.13) 0%,
+    rgba(181, 23, 158, 0.08) 40%,
+    rgba(114, 9, 183, 0.04) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  user-select: none;
+  pointer-events: none;
+  clip-path: inset(0 8% 0 0);
+  /* Slow float animation */
+  animation: signature-float 12s ease-in-out infinite;
+}
+
+@keyframes signature-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-8px) rotate(0.3deg); }
+  66%       { transform: translateY(5px) rotate(-0.2deg); }
+}
+
+/* ─────────────────────────────────────────────
+   HERO HEADLINE — строки влетают снизу
+   ───────────────────────────────────────────── */
+
+.xp-hero__headline span {
+  display: block;
+  animation: line-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.xp-hero__headline span:nth-child(1) { animation-delay: 0.05s; }
+.xp-hero__headline span:nth-child(2) { animation-delay: 0.18s; }
+.xp-hero__headline span:nth-child(3) { animation-delay: 0.28s; }
+
+@keyframes line-rise {
+  from { opacity: 0; transform: translateY(32px) skewY(1deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─────────────────────────────────────────────
+   HERO SUBTITLE + STATS — fade in после headline
+   ───────────────────────────────────────────── */
+
+.xp-hero__subtitle {
+  animation: fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.42s both;
+}
+
+.xp-hero__actions {
+  animation: fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.52s both;
+}
+
+.xp-hero__stats {
+  animation: fade-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.62s both;
+}
+
+.xp-label.xp-hero__eyebrow {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0s both;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─────────────────────────────────────────────
+   GLOW BUTTON — pulsing glow на hover
+   ───────────────────────────────────────────── */
+
+.ttm-glow-btn-wrap:hover .ttm-glow-halo {
+  opacity: 1;
+  animation: btn-glow-pulse 2s ease-in-out infinite;
+}
+
+.ttm-glow-halo {
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 100% 100% at 50% 50%,
+    rgba(247, 37, 133, 0.3) 0%,
+    transparent 65%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+@keyframes btn-glow-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(1.12); opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────
+   STAT DOTS — пульс по очереди
+   ───────────────────────────────────────────── */
+
+.xp-hero__stat-dot {
+  display: inline-block;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  animation: dot-pulse 3s ease-in-out infinite;
+}
+
+.xp-hero__stat:nth-child(1) .xp-hero__stat-dot { animation-delay: 0s; }
+.xp-hero__stat:nth-child(2) .xp-hero__stat-dot { animation-delay: 0.8s; }
+.xp-hero__stat:nth-child(3) .xp-hero__stat-dot { animation-delay: 1.6s; }
+
+@keyframes dot-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.4); }
+}
+
+/* ─────────────────────────────────────────────
+   GLASS CARDS — float on hover
+   ───────────────────────────────────────────── */
+
+.xp-float-card {
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.xp-float-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow:
+    0 0 0 1px rgba(247, 37, 133, 0.14),
+    0 24px 64px -16px rgba(0, 0, 0, 0.7),
+    0 0 40px -16px rgba(247, 37, 133, 0.12) !important;
+}
+
+/* ─────────────────────────────────────────────
+   MATCH CELEBRATION — spark particles entrance
+   (already in match-celebration.css — here for reference)
+   ───────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────
+   AMBIENT GRID — тонкая сетка на фоне (опционально)
+   ───────────────────────────────────────────── */
+
+.ttm-grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
+
+/* ─────────────────────────────────────────────
+   PROFILE CARD ENTRANCE (app discover screen)
+   ───────────────────────────────────────────── */
+
+.p9-onboarding {
+  animation: card-entrance 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes card-entrance {
+  from { opacity: 0; transform: scale(0.94) translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─────────────────────────────────────────────
+   MATCH ICON — heartbeat
+   ───────────────────────────────────────────── */
+
+.ttm-heartbeat {
+  animation: heartbeat 1.8s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%   { transform: scale(1); }
+  14%  { transform: scale(1.22); }
+  28%  { transform: scale(1); }
+  42%  { transform: scale(1.14); }
+  70%  { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+/* ─────────────────────────────────────────────
+   URGENCY RING — critical flash
+   ───────────────────────────────────────────── */
+
+.xp-urgency-critical circle {
+  animation: ring-critical-flash 1.2s ease-in-out infinite;
+}
+
+@keyframes ring-critical-flash {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(247, 37, 133, 0.4)); }
+  50%       { filter: drop-shadow(0 0 18px rgba(247, 37, 133, 0.8)); }
+}
+
+/* ─────────────────────────────────────────────
+   LIVE COUNTER — slide update
+   ───────────────────────────────────────────── */
+
+.ttm-live-number {
+  display: inline-block;
+  animation: number-update 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes number-update {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────
+   BOTTOM NAV — active indicator slide
+   ───────────────────────────────────────────── */
+
+.ttm-dock-tab--active {
+  animation: tab-activate 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tab-activate {
+  from { transform: scale(0.92); }
+  to   { transform: none; }
+}
+
+/* ─────────────────────────────────────────────
+   PAGE TRANSITION — вся страница появляется
+   ───────────────────────────────────────────── */
+
+.ttm-page-enter {
+  animation: page-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ─────────────────────────────────────────────
+   REDUCED MOTION — уважаем пользователя
+   ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .ttm-signature-24 { animation: none !important; }
+  .xp-hero__headline span { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .xp-hero__subtitle,
+  .xp-hero__actions,
+  .xp-hero__stats,
+  .xp-label.xp-hero__eyebrow { animation: none !important; opacity: 1 !important; }
+  .xp-hero__stat-dot { animation: none !important; }
+  .p9-onboarding { animation: none !important; }
+  .ttm-heartbeat { animation: none !important; }
+  .ttm-reveal { transition: none !important; opacity: 1 !important; transform: none !important; }
+  .xp-float-card:hover { transform: none !important; }
+}

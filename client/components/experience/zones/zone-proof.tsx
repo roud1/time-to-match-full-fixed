@@ -7,6 +7,8 @@ import { GlassPanel } from "@/client/components/experience/primitives/glass-pane
 import { NeonText } from "@/client/components/experience/primitives/neon-text"
 import { ParallaxDepth } from "@/client/components/experience/primitives/parallax-depth"
 import { ZoneGlow } from "@/client/components/experience/primitives/zone-glow"
+import { CountUp } from "@/client/components/experience/primitives/count-up"
+import { SpotlightCard } from "@/client/components/experience/primitives/spotlight-card"
 
 function useLiveCount(base: number, variance: number) {
   const [n, setN] = useState(base)
@@ -35,44 +37,36 @@ export function ZoneProof() {
 
       <div className="grid gap-[var(--xp-4)] sm:grid-cols-3">
         <ParallaxDepth depth={1}>
-        <GlassPanel depth={1} className="p-[var(--xp-4)]">
-          <motion.p
-            className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-green)]"
-            animate={reduce ? undefined : { scale: [1, 1.03, 1] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-          >
-            {online}
-          </motion.p>
-          <p className="mt-1 text-xs text-[var(--xp-text-muted)]">{t("ttmXpProofActive")}</p>
+        <SpotlightCard>
+        <GlassPanel depth={1} className="p-[var(--xp-4)] xp-float-card">
+          <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-green)]">
+            <CountUp to={online} duration={1.4} className="ttm-live-number" />
+          </p>
+          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofStat1")}</p>
         </GlassPanel>
+        </SpotlightCard>
         </ParallaxDepth>
 
         <ParallaxDepth depth={2}>
-        <GlassPanel depth={1} className="p-[var(--xp-4)]">
-          <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-purple)]">
-            {nearby}
+        <SpotlightCard>
+        <GlassPanel depth={2} className="p-[var(--xp-4)] xp-float-card">
+          <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-pink)]">
+            <CountUp to={nearby} duration={1.6} delay={0.2} className="ttm-live-number" />
           </p>
-          <p className="mt-1 text-xs text-[var(--xp-text-muted)]">{t("ttmXpProofNearby")}</p>
+          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofStat2")}</p>
         </GlassPanel>
+        </SpotlightCard>
         </ParallaxDepth>
 
-        <ParallaxDepth depth={3}>
-        <GlassPanel depth={2} className="border-[var(--xp-pink)]/20 p-[var(--xp-4)]">
-          <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-pink)]">
-            {slots}
+        <ParallaxDepth depth={1}>
+        <SpotlightCard>
+        <GlassPanel depth={1} className="p-[var(--xp-4)] xp-float-card">
+          <p className="font-[family-name:var(--xp-font-display)] text-3xl font-bold tabular-nums text-[var(--xp-purple)]">
+            <CountUp to={slots} duration={0.9} delay={0.35} />
           </p>
-          <p className="mt-1 text-xs text-[var(--xp-text-muted)]">{t("ttmXpProofScarcity")}</p>
-          <div className="mt-3 flex gap-1">
-            {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="h-1.5 flex-1 rounded-full bg-[var(--xp-pink)]/80"
-                animate={reduce ? undefined : { opacity: [1, 0.35, 1] }}
-                transition={{ duration: 1.8, delay: i * 0.25, repeat: Infinity }}
-              />
-            ))}
-          </div>
+          <p className="mt-1 text-sm text-[var(--xp-text-muted)]">{t("ttmXpProofStat3")}</p>
         </GlassPanel>
+        </SpotlightCard>
         </ParallaxDepth>
       </div>
     </section>
