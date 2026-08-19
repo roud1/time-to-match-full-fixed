@@ -21,7 +21,7 @@
 
 .ttm-landing {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--dark);
   color: var(--text);
   overflow-x: hidden;
@@ -304,7 +304,7 @@
 
 .ttm-hero {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   padding-top: 5rem;

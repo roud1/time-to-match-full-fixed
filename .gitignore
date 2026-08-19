@@ -22,3 +22,6 @@ lib/i18n/locales/.cache/
 # User-uploaded verification selfies (keep folder marker)
 public/uploads/verification/*
 !public/uploads/verification/.gitkeep
+# Playwright test artifacts
+test-results/
+playwright-report/

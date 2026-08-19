@@ -1700,5 +1700,11 @@
   "storyCtaSub": "One match. One day. That's all it takes.",
   "storyCtaButton": "Start your 24 hours",
   "storyBackHome": "Back to home",
-  "icebreakerSharedHint": "You both like"
+  "icebreakerSharedHint": "You both like",
+  "verifyEmailTitle": "Confirm your email",
+  "verifyEmailBody": "We sent a confirmation link to your address. Check your inbox and spam folder.",
+  "verifyEmailResend": "Resend email",
+  "verifyEmailResendCooldown": "Resend in",
+  "verifyEmailBack": "← Back to login",
+  "discoverEmptyExpandSearch": "Expand search settings"
 }

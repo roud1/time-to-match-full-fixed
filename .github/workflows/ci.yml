@@ -41,27 +41,25 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
-      - name: Start server for smoke tests
+      - name: Copy static files into standalone
         run: |
-          npm run start &
-          echo $! > .server.pid
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+
+      - name: Start server for smoke tests
+        run: node .next/standalone/server.js &
         env:
+          PORT: "3000"
+          HOSTNAME: "127.0.0.1"
           NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
           TTM_STRICT_ENV: "0"
           AUTH_SECRET: ci-test-auth-secret-min-32-chars-long!!
 
       - name: Wait for server to be ready
-        run: |
-          echo "Waiting for /api/ready..."
-          for i in $(seq 1 30); do
-            if curl -sf http://127.0.0.1:3000/api/ready > /dev/null 2>&1; then
-              echo "Server is ready after ${i}s"
-              exit 0
-            fi
-            sleep 2
-          done
-          echo "Server did not become ready in 60s"
-          exit 1
+        run: node scripts/wait-ready-demo.mjs
+        env:
+          NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+          WAIT_READY_MS: "90000"
 
       - name: E2E smoke tests (demo mode)
         run: npm run test:e2e -- tests/e2e/smoke.spec.ts
@@ -113,11 +111,18 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
+      - name: Copy static files into standalone
+        run: |
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+
       - name: Start Next.js server
         run: |
-          npm run start > .next-server.log 2>&1 &
+          node .next/standalone/server.js > .next-server.log 2>&1 &
           echo $! > .next-server.pid
         env:
+          PORT: "3000"
+          HOSTNAME: "127.0.0.1"
           DATABASE_URL: ${{ env.CI_DATABASE_URL }}
           AUTH_SECRET: ${{ env.CI_AUTH_SECRET }}
           CRON_SECRET: ${{ env.CI_CRON_SECRET }}

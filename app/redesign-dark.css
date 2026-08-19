@@ -1076,3 +1076,53 @@ button, a[class], [class*="dock-tab"] {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ─────────────────────────────────────────────
+   P0 LAUNCH FIXES
+   ───────────────────────────────────────────── */
+
+/* iOS input zoom prevention: font-size >= 16px on touch devices.
+   Safari zooms the page when a focused input has font-size < 16px. */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Typography floor: no user-facing text below 11px.
+   Overrides the micro-sizes (0.58–0.68rem) from legacy CSS. */
+@media (max-width: 768px) {
+  [class*="__hint"], [class*="__caption"], [class*="__meta"],
+  [class*="overline"], .xp-label, .ttm-overline,
+  small, .text-caption {
+    font-size: 11px !important;
+  }
+}
+
+/* Touch targets: interactive elements minimum 44x44 on touch. */
+@media (pointer: coarse) {
+  button:not([disabled]),
+  a[role="button"],
+  [role="tab"],
+  .ttm-dock-tab {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  /* Exception: inline text links keep natural size */
+  p a, li a, span a { min-height: 0; min-width: 0; }
+}
+
+/* Signature 24: on small screens push further off-edge and dim
+   so it never fights the headline for legibility. */
+@media (max-width: 640px) {
+  .ttm-signature-24 {
+    opacity: 0.45;
+    right: -12% !important;
+    font-size: clamp(140px, 38vw, 200px);
+  }
+}
+
+/* Overflow guard on landing zones */
+.xp-root, .xp-zone { overflow-x: clip; }

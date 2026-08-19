@@ -27,12 +27,15 @@ export default defineConfig({
   webServer: skipWebServer
     ? undefined
     : {
-        command: "npm run start",
+        command: "node .next/standalone/server.js",
         url: `${baseURL}/api/ready`,
         reuseExistingServer: !process.env.CI,
         timeout: 120_000,
         env: {
+          PORT: "3000",
+          HOSTNAME: "127.0.0.1",
           NEXT_PUBLIC_APP_URL: baseURL,
+          TTM_STRICT_ENV: "0",
           ...(process.env.DATABASE_URL ? { DATABASE_URL: process.env.DATABASE_URL } : {}),
           ...(process.env.AUTH_SECRET ? { AUTH_SECRET: process.env.AUTH_SECRET } : {}),
           ...(process.env.CRON_SECRET ? { CRON_SECRET: process.env.CRON_SECRET } : {}),

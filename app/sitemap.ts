@@ -1,23 +1,15 @@
 import type { MetadataRoute } from "next"
 
-function baseUrl() {
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-}
-
-const routes = [
-  { path: "", priority: 1, changeFrequency: "daily" as const },
-  { path: "/login", priority: 0.7, changeFrequency: "monthly" as const },
-  { path: "/register", priority: 0.9, changeFrequency: "monthly" as const },
-  { path: "/forgot-password", priority: 0.3, changeFrequency: "yearly" as const },
-]
+const BASE = process.env.NEXT_PUBLIC_APP_URL?.trim() || "https://timetomatch.app"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const host = baseUrl().replace(/\/$/, "")
   const now = new Date()
-  return routes.map(({ path, priority, changeFrequency }) => ({
-    url: path === "" ? `${host}/` : `${host}${path}`,
-    lastModified: now,
-    changeFrequency,
-    priority,
-  }))
+  return [
+    { url: BASE, lastModified: now, changeFrequency: "daily", priority: 1 },
+    { url: `${BASE}/story`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/register`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${BASE}/login`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+    { url: `${BASE}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
+  ]
 }

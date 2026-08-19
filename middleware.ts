@@ -47,14 +47,15 @@ function applySecurityHeaders(res: NextResponse, request: NextRequest) {
 
   const csp = [
     `default-src 'self'`,
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://browser.sentry-cdn.com`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://browser.sentry-cdn.com https://pagead2.googlesyndication.com https://www.googletagmanager.com`,
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     `font-src 'self' https://fonts.gstatic.com data:`,
-    `img-src 'self' data: blob: https://images.unsplash.com ${photoCdn}`,
+    `img-src 'self' data: blob: https://images.unsplash.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net ${photoCdn}`,
     `connect-src 'self' https://api.stripe.com https://*.sentry.io https://sentry.io`
       + ` wss://ws-${pusherCluster}.pusher.com wss://ws-${pusherCluster}.pusher.com`
-      + ` https://sockjs-${pusherCluster}.pusher.com https://api-${pusherCluster}.pusher.com`,
-    `frame-src https://js.stripe.com https://hooks.stripe.com`,
+      + ` https://sockjs-${pusherCluster}.pusher.com https://api-${pusherCluster}.pusher.com`
+      + ` https://pagead2.googlesyndication.com`,
+    `frame-src https://js.stripe.com https://hooks.stripe.com https://googleads.g.doubleclick.net`,
     `worker-src 'self' blob:`,
     `media-src 'self' blob: ${photoCdn}`,
     `object-src 'none'`,
@@ -110,6 +111,13 @@ export async function middleware(request: NextRequest) {
 
   const res = NextResponse.next()
   applySecurityHeaders(res, request)
+
+  // Forward locale cookie as x-locale header so layout.tsx can set lang attr
+  const localeCookie = request.cookies.get("ttm-locale")?.value
+  if (localeCookie) {
+    res.headers.set("x-locale", localeCookie)
+  }
+
   return res
 }
 

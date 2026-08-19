@@ -26,6 +26,9 @@ export function ChatMessagesPane({
   return (
     <div
       ref={scrollRef}
+      role="log"
+      aria-live="polite"
+      aria-relevant="additions"
       className={cn("ttm-chat-area__scroll ttm-chat-scroll", className)}
     >
       {overlay}

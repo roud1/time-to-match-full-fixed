@@ -11,6 +11,15 @@ type ThemeToggleProps = {
 }
 
 export function ThemeToggle({ className, compact }: ThemeToggleProps) {
+  // P0 launch: dark-only. Light theme is overridden by redesign-dark.css,
+  // so a visible toggle that does nothing reads as broken. Re-enable later.
+  void className
+  void compact
+  return null
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function ThemeToggleDisabled({ className, compact }: ThemeToggleProps) {
   const { theme, toggleTheme } = useThemeMode()
   const { t } = useI18n()
   const isDark = theme === "dark"

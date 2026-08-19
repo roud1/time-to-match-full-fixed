@@ -1,7 +1,7 @@
 import { getDb } from "@/server/db"
 import { checkAndGrantAchievements } from "@/server/gamification/check"
 import { matchExpiresAt } from "@/server/match-engine/constants"
-import { createMatchForPair } from "@/server/match-engine/repository"
+import { orderedPair } from "@/server/match-engine/constants"
 import { findUserById } from "@/server/repositories/users"
 import type { MatchStatus } from "@/server/match-engine/types"
 import type { MatchDto } from "@/server/matches/types"
@@ -168,27 +168,76 @@ export async function createMutualMatchLikes(input: {
   const { userA, userB, expiresAt } = input
   const createdAt = new Date(expiresAt.getTime() - 24 * 60 * 60 * 1000)
 
-  await db`
-    INSERT INTO likes (from_user, to_user, expires_at, is_match, is_frozen)
-    VALUES (${userA}, ${userB}, ${expiresAt}, true, false)
-    ON CONFLICT (from_user, to_user) DO UPDATE SET
-      expires_at = EXCLUDED.expires_at,
-      is_match = true,
-      is_expired = false
-  `
+  // ── Atomic core: both likes + match row ──────────────────────────────────
+  // Uses a single transaction so a partial failure (e.g. crash between the
+  // two INSERTs) cannot leave one like with is_match=true and no match row.
+  //
+  // Race-condition safety:
+  //   likes PRIMARY KEY (from_user, to_user) → ON CONFLICT … DO UPDATE
+  //   matches UNIQUE (user1_id, user2_id)    → ON CONFLICT … DO UPDATE
+  //   Both are idempotent; concurrent identical requests converge to one match.
+  let engineMatchId: string
+  try {
+    const result = await db.begin(async (sql) => {
+      // INSERT A→B
+      await sql`
+        INSERT INTO likes (from_user, to_user, expires_at, is_match, is_frozen)
+        VALUES (${userA}, ${userB}, ${expiresAt}, true, false)
+        ON CONFLICT (from_user, to_user) DO UPDATE SET
+          expires_at = EXCLUDED.expires_at,
+          is_match   = true,
+          is_expired = false
+      `
 
-  await db`
-    INSERT INTO likes (from_user, to_user, expires_at, is_match, is_frozen)
-    VALUES (${userB}, ${userA}, ${expiresAt}, true, false)
-    ON CONFLICT (from_user, to_user) DO UPDATE SET
-      expires_at = EXCLUDED.expires_at,
-      is_match = true,
-      is_expired = false
-  `
+      // INSERT B→A
+      await sql`
+        INSERT INTO likes (from_user, to_user, expires_at, is_match, is_frozen)
+        VALUES (${userB}, ${userA}, ${expiresAt}, true, false)
+        ON CONFLICT (from_user, to_user) DO UPDATE SET
+          expires_at = EXCLUDED.expires_at,
+          is_match   = true,
+          is_expired = false
+      `
 
-  const engineMatch = await createMatchForPair({ userA, userB, createdAt, expiresAt })
+      // CREATE MATCH ROW (ON CONFLICT keeps existing match if already present)
+      const { user1Id, user2Id } = orderedPair(userA, userB)
+      const rows = await sql<{ id: string }[]>`
+        INSERT INTO matches (user1_id, user2_id, created_at, expires_at, status)
+        VALUES (${user1Id}, ${user2Id}, ${createdAt}, ${expiresAt}, 'new_match')
+        ON CONFLICT (user1_id, user2_id) DO UPDATE SET
+          expires_at = CASE
+            WHEN matches.status = 'expired' THEN matches.expires_at
+            ELSE GREATEST(matches.expires_at, EXCLUDED.expires_at)
+          END
+        RETURNING id
+      `
+      const match = rows[0]
+      if (!match) throw new Error("Failed to upsert match row")
+
+      // Back-fill match_id on both likes
+      await sql`
+        UPDATE likes
+        SET match_id   = ${match.id},
+            expires_at = ${expiresAt},
+            is_match   = true,
+            is_expired = false
+        WHERE (from_user = ${userA} AND to_user = ${userB})
+           OR (from_user = ${userB} AND to_user = ${userA})
+      `
+
+      return match.id
+    })
+    engineMatchId = result
+  } catch (err) {
+    // Transaction rolled back — rethrow so caller knows match wasn't created
+    throw err
+  }
+  // ── End of atomic core ───────────────────────────────────────────────────
+
+  // Side effects run AFTER the commit so the match row is visible to them.
+  // They are idempotent and non-critical for data integrity.
   const { integrateMatchCreated } = await import("@/server/engines/integration")
-  await integrateMatchCreated(engineMatch.id, userA, userB)
+  await integrateMatchCreated(engineMatchId, userA, userB)
 
   await checkAndGrantAchievements(userA, { event: "match_created", activeMatchesCount: undefined })
   await checkAndGrantAchievements(userB, { event: "match_created", activeMatchesCount: undefined })

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next"
+import { headers } from "next/headers"
 import { fontBody, fontDisplay, fontLandingBody } from "@/client/lib/fonts"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -13,6 +14,7 @@ import { FloatingChrome } from "@/client/components/floating-chrome"
 import { ThemeProvider } from "@/client/components/theme/theme-provider"
 import { ThemeScript } from "@/client/components/theme/theme-script"
 import { Toaster } from "@/client/components/ui/sonner"
+import { AdSenseScript } from "@/client/components/ads/adsense-script"
 import { AchievementProvider } from "@/client/components/gamification/achievement-provider"
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
@@ -90,16 +92,23 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Read locale from middleware-forwarded header (set from ttm-locale cookie)
+  const headersList = await headers()
+  const localeHeader = headersList.get("x-locale")
+  const VALID_LOCALES = ["ru", "uk", "en", "de", "es", "pl", "fr", "it", "tr"]
+  const lang = localeHeader && VALID_LOCALES.includes(localeHeader) ? localeHeader : "ru"
+
   return (
-    <html lang="ru" suppressHydrationWarning className="bg-transparent">
+    <html lang={lang} suppressHydrationWarning className="bg-transparent">
       <head>
         <meta name="color-scheme" content="light dark" />
         <ThemeScript />
+        <AdSenseScript />
       </head>
       <body
         className={`${fontBody.variable} ${fontDisplay.variable} ${fontLandingBody.variable} font-sans antialiased ttm-root ttm-brand-universe`}

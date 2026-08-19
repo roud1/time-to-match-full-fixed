@@ -14,7 +14,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends ca-certifica
 
 FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 FROM base AS builder
 ARG NEXT_PUBLIC_APP_URL=http://localhost:3000

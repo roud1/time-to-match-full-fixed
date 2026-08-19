@@ -1716,5 +1716,11 @@
   "storyCtaSub": "Один мэтч. Один день. Этого достаточно.",
   "storyCtaButton": "Начать свои 24 часа",
   "storyBackHome": "На главную",
-  "icebreakerSharedHint": "Вы оба любите"
+  "icebreakerSharedHint": "Вы оба любите",
+  "verifyEmailTitle": "Подтверди email",
+  "verifyEmailBody": "Мы отправили письмо на твой адрес. Проверь входящие и папку спам.",
+  "verifyEmailResend": "Отправить письмо повторно",
+  "verifyEmailResendCooldown": "Повторно через",
+  "verifyEmailBack": "← Назад ко входу",
+  "discoverEmptyExpandSearch": "Расширить параметры поиска"
 }

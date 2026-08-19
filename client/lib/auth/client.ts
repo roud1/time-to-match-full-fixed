@@ -18,7 +18,7 @@ export type AuthUser = {
 
 type AuthResult =
   | { ok: true; user: AuthUser }
-  | { ok: false; status: number; message?: string; demoFallback?: boolean }
+  | { ok: false; status: number; message?: string; demoFallback?: boolean; errorCode?: string }
 
 let cachedMode: { mode: AppMode; at: number } | null = null
 
@@ -50,6 +50,7 @@ async function parseAuthResponse(res: Response): Promise<AuthResult> {
     return {
       ok: false,
       status: res.status,
+      errorCode: body.error,
       message: body.message ?? body.error ?? "Request failed",
     }
   }
@@ -202,5 +203,26 @@ export function localProfileFromAuthUser(
     lookingFor: patch.lookingFor ?? "all",
     registeredAt: patch.registeredAt ?? Date.now(),
     ...patch,
+  }
+}
+
+/** Resend email verification. Rate-limited server-side (3 per 15 min). */
+export async function resendVerificationEmail(input: {
+  email: string
+  password: string
+}): Promise<{ ok: boolean; message?: string }> {
+  try {
+    const res = await fetch("/api/v1/auth/resend-verification", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+    })
+    if (res.status === 429) {
+      return { ok: false, message: "rate_limited" }
+    }
+    if (!res.ok) return { ok: false }
+    return { ok: true }
+  } catch {
+    return { ok: false }
   }
 }

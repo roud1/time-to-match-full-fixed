@@ -1692,5 +1692,11 @@
   "storyCtaSub": "Bir eşleşme. Bir gün. Hepsi bu kadar.",
   "storyCtaButton": "24 saatini başlat",
   "storyBackHome": "Ana sayfaya dön",
-  "icebreakerSharedHint": "İkiniz de seviyorsunuz"
+  "icebreakerSharedHint": "İkiniz de seviyorsunuz",
+  "verifyEmailTitle": "E-postanı doğrula",
+  "verifyEmailBody": "Adresine bir doğrulama bağlantısı gönderdik. Gelen kutunu ve spam klasörünü kontrol et.",
+  "verifyEmailResend": "Tekrar gönder",
+  "verifyEmailResendCooldown": "Tekrar:",
+  "verifyEmailBack": "← Girişe dön",
+  "discoverEmptyExpandSearch": "Aramayı genişlet"
 }

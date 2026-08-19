@@ -132,6 +132,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const handleSetLocale = useCallback((newLocale: Locale) => {
     setLocale(newLocale)
     localStorage.setItem("locale", newLocale)
+    // Write cookie so server components (layout lang attr) can read the locale
+    if (typeof document !== "undefined") {
+      document.cookie = `ttm-locale=${newLocale};path=/;max-age=31536000;SameSite=Lax`
+    }
   }, [])
 
   const {

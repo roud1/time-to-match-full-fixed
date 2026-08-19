@@ -15,7 +15,7 @@ import {
   verifyLogin,
 } from "@/client/lib/user-profile"
 import { fetchMe } from "@/client/lib/user/api"
-import { loginOnServer, localProfileFromAuthUser } from "@/client/lib/auth/client"
+import { loginOnServer, localProfileFromAuthUser, resendVerificationEmail } from "@/client/lib/auth/client"
 import { recordProfileActivity } from "@/client/lib/profile-life-store"
 import { trackEvent } from "@/client/lib/analytics-client"
 import { trackFunnelOnce } from "@/client/lib/analytics-funnel"
@@ -41,6 +41,10 @@ export function LoginForm() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
   const [redirecting, setRedirecting] = useState(false)
+  // Email verification panel: shown when login returns email_not_verified
+  const [verifyPanel, setVerifyPanel] = useState<{ email: string; password: string } | null>(null)
+  const [resendState, setResendState] = useState<"idle" | "sending" | "sent" | "cooldown">("idle")
+  const [cooldownSec, setCooldownSec] = useState(0)
 
   const [form, setForm] = useState<FormData>({
     email: "",
@@ -142,6 +146,12 @@ export function LoginForm() {
         return
       }
 
+      // Email not verified: show dedicated panel with resend action
+      if (serverResult.errorCode === "email_not_verified") {
+        setVerifyPanel({ email: form.email.trim(), password: form.password })
+        return
+      }
+
       setErrors({ form: serverResult.message ?? t("loginErrorInvalid") })
     } finally {
       setLoading(false)
@@ -172,6 +182,67 @@ export function LoginForm() {
           <p className="ttm-brand-caption">{t("loginPageSubtitle")}</p>
         </div>
 
+        {/* Email verification panel — replaces the form when login says email_not_verified */}
+        {verifyPanel ? (
+          <div className="flex flex-col items-center gap-4 text-center px-2 py-4">
+            <span aria-hidden style={{ fontSize: 34 }}>✉️</span>
+            <p className="text-base font-semibold text-white/90">{t("verifyEmailTitle")}</p>
+            <p className="text-sm text-white/50 leading-relaxed max-w-xs">
+              {t("verifyEmailBody")}
+            </p>
+            <button
+              type="button"
+              disabled={resendState === "sending" || resendState === "cooldown"}
+              onClick={async () => {
+                setResendState("sending")
+                const r = await resendVerificationEmail(verifyPanel)
+                if (r.ok) {
+                  setResendState("cooldown")
+                  setCooldownSec(60)
+                  const timer = setInterval(() => {
+                    setCooldownSec((s) => {
+                      if (s <= 1) {
+                        clearInterval(timer)
+                        setResendState("idle")
+                        return 0
+                      }
+                      return s - 1
+                    })
+                  }, 1000)
+                } else {
+                  // Rate limited or failed — still show cooldown to avoid hammering
+                  setResendState("cooldown")
+                  setCooldownSec(r.message === "rate_limited" ? 900 : 30)
+                  const timer = setInterval(() => {
+                    setCooldownSec((s) => {
+                      if (s <= 1) {
+                        clearInterval(timer)
+                        setResendState("idle")
+                        return 0
+                      }
+                      return s - 1
+                    })
+                  }, 1000)
+                }
+              }}
+              className="min-h-[48px] px-8 rounded-full font-semibold text-sm text-white disabled:opacity-50"
+              style={{ background: "linear-gradient(135deg,#f72585,#b5179e,#7209b7)" }}
+            >
+              {resendState === "sending"
+                ? "…"
+                : resendState === "cooldown"
+                  ? `${t("verifyEmailResendCooldown")} ${cooldownSec}s`
+                  : t("verifyEmailResend")}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setVerifyPanel(null); setResendState("idle") }}
+              className="text-sm text-white/40 hover:text-white/70 min-h-[44px]"
+            >
+              {t("verifyEmailBack")}
+            </button>
+          </div>
+        ) : (
         <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
           {errors.form && (
             <p className="text-sm text-red-400/95 font-light text-center px-2 leading-relaxed">
@@ -233,6 +304,7 @@ export function LoginForm() {
             {loading ? t("loginLoading") : t("loginSubmit")}
           </CinematicButton>
         </form>
+        )}
 
         <p className="text-center ttm-type-muted mt-6">
           {t("loginNoAccount")}{" "}

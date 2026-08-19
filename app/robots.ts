@@ -1,17 +1,16 @@
 import type { MetadataRoute } from "next"
 
-const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+const BASE = process.env.NEXT_PUBLIC_APP_URL?.trim() || "https://timetomatch.app"
 
 export default function robots(): MetadataRoute.Robots {
-  const host = siteUrl.replace(/\/$/, "")
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/app", "/settings", "/notifications", "/memories"],
+        allow: ["/", "/story", "/register", "/login", "/privacy", "/terms"],
+        disallow: ["/admin", "/api/", "/app/", "/settings", "/profile", "/billing"],
       },
     ],
-    sitemap: `${host}/sitemap.xml`,
+    sitemap: `${BASE}/sitemap.xml`,
   }
 }

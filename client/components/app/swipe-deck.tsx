@@ -22,6 +22,7 @@ import { Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/client/components/ui/button"
 import { useTopCardSwipe } from "@/client/hooks/use-top-card-swipe"
+import { SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
 import { cn } from "@/client/lib/utils"
 import { postDiscoverRewind } from "@/client/lib/discover/api"
 
@@ -120,6 +121,10 @@ export function SwipeDeck({
   const [superRipple, setSuperRipple] = useState(false)
   const [canRewind, setCanRewind] = useState(false)
   const [safetyOpen, setSafetyOpen] = useState(false)
+  // Ad: show every AD_EVERY swipes for free users
+  const [swipeCount, setSwipeCount] = useState(0)
+  const [showAd, setShowAd] = useState(false)
+  const AD_EVERY = 5
   const lastRemovedRef = useRef<SwipeProfile | null>(null)
   const exitLockRef = useRef(false)
   const xAnimRef = useRef<ReturnType<typeof animate> | null>(null)
@@ -174,6 +179,15 @@ export function SwipeDeck({
         setCanRewind(true)
         onProfilesChange((prev) => prev.filter((p) => p.id !== top.id))
         x.set(0)
+        // Show ad every AD_EVERY swipes for free users
+        const adUser = getUserProfile()
+        if (!adUser || !isPremiumActive(adUser)) {
+          setSwipeCount((c) => {
+            const next = c + 1
+            if (next % AD_EVERY === 0) setShowAd(true)
+            return next
+          })
+        }
       } catch {
         const { matched, likeLimitReached } = await recordSwipe(
           top,
@@ -304,15 +318,27 @@ export function SwipeDeck({
               <Button
                 type="button"
                 variant="default"
-                className="rounded-full px-6"
+                className="rounded-full px-6 min-h-[44px]"
                 onClick={onResetFilters}
               >
                 {t("discoverEmptyFiltersReset")}
               </Button>
             ) : (
-              <Button asChild variant="default" className="rounded-full px-6">
-                <Link href="/profile">{t("discoverEmptyCreateProfile")}</Link>
-              </Button>
+              <div className="flex flex-col items-center gap-2 w-full">
+                {onResetFilters && (
+                  <Button
+                    type="button"
+                    variant="default"
+                    className="rounded-full px-6 min-h-[44px] w-full max-w-[240px]"
+                    onClick={onResetFilters}
+                  >
+                    {t("discoverEmptyExpandSearch")}
+                  </Button>
+                )}
+                <Button asChild variant="outline" className="rounded-full px-6 min-h-[44px] w-full max-w-[240px]">
+                  <Link href="/profile">{t("discoverEmptyCreateProfile")}</Link>
+                </Button>
+              </div>
             )
           }
         />
@@ -329,6 +355,43 @@ export function SwipeDeck({
   }
 
   const stack = profiles.slice(0, cardOnly ? 1 : STACK_VISIBLE)
+
+  // Ad interstitial: full card between profiles (never overlaps swipe area).
+  // Swiping is paused while visible; explicit "Continue" button dismisses.
+  const adBanner = showAd ? (
+    <div
+      style={{
+        position: "absolute", inset: 0, zIndex: 60,
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        gap: 16, padding: 20,
+        background: "rgba(6,5,9,0.97)",
+        borderRadius: "inherit",
+      }}
+    >
+      <span style={{ fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(245,245,247,0.35)" }}>
+        Реклама
+      </span>
+      <div style={{ width: "100%", maxWidth: "20rem" }}>
+        <SwipeAdBanner />
+      </div>
+      <button
+        type="button"
+        onClick={() => setShowAd(false)}
+        style={{
+          minWidth: 160, minHeight: 48,
+          padding: "12px 32px",
+          background: "linear-gradient(135deg,#f72585,#b5179e,#7209b7)",
+          color: "#fff", fontWeight: 600, fontSize: 15,
+          border: "none", borderRadius: 9999, cursor: "pointer",
+          boxShadow: "0 4px 20px rgba(247,37,133,0.35)",
+        }}
+        aria-label="Закрыть рекламу и продолжить"
+      >
+        Продолжить
+      </button>
+    </div>
+  ) : null
 
   const actionButtons = (
     <div className="ttm-swipe-actions shrink-0 flex flex-row lg:flex-col items-center justify-center gap-2.5 sm:gap-3 lg:gap-4 py-1 lg:py-0 safe-area-pb lg:pb-2 relative z-40 pointer-events-auto w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
@@ -418,6 +481,7 @@ export function SwipeDeck({
             : "h-full min-h-0 max-h-full"
         )}
       >
+        {adBanner}
         {[...stack].reverse().map((profile, reversedIdx) => {
           const index = stack.length - 1 - reversedIdx
           const isTop = index === 0

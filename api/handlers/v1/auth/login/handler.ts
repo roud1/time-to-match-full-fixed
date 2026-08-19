@@ -84,6 +84,22 @@ export async function POST(request: Request) {
     )
   }
 
+  // Email verification check — after blocked/inactive to maintain check order
+  if (!row.email_verified) {
+    log.warn("auth_login_unverified", { userId: row.id })
+    return withCors(
+      request,
+      jsonError(403, {
+        error: "email_not_verified",
+        message: "Please verify your email before logging in.",
+        details: {
+          action: "resend_verification",
+          hint: "Check your inbox or request a new verification email.",
+        },
+      })
+    )
+  }
+
   const res = jsonOk({ user: { id: row.id, email: row.email, name: row.name } })
   await issueAuthCookies(
     res,

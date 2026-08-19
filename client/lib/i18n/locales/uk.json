@@ -1692,5 +1692,11 @@
   "storyCtaSub": "Один мэтч. Один день. Цього досить.",
   "storyCtaButton": "Почати свої 24 години",
   "storyBackHome": "На головну",
-  "icebreakerSharedHint": "Ви обидва любите"
+  "icebreakerSharedHint": "Ви обидва любите",
+  "verifyEmailTitle": "Підтверди email",
+  "verifyEmailBody": "Ми надіслали листа на твою адресу. Перевір вхідні та папку спам.",
+  "verifyEmailResend": "Надіслати лист повторно",
+  "verifyEmailResendCooldown": "Повторно через",
+  "verifyEmailBack": "← Назад до входу",
+  "discoverEmptyExpandSearch": "Розширити параметри пошуку"
 }

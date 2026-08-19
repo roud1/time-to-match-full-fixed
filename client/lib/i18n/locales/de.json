@@ -1692,5 +1692,11 @@
   "storyCtaSub": "Ein Match. Ein Tag. Das ist alles.",
   "storyCtaButton": "Starte deine 24 Stunden",
   "storyBackHome": "Zurück zur Startseite",
-  "icebreakerSharedHint": "Ihr mögt beide"
+  "icebreakerSharedHint": "Ihr mögt beide",
+  "verifyEmailTitle": "Bestätige deine E-Mail",
+  "verifyEmailBody": "Wir haben dir einen Bestätigungslink geschickt. Prüfe Posteingang und Spam.",
+  "verifyEmailResend": "E-Mail erneut senden",
+  "verifyEmailResendCooldown": "Erneut in",
+  "verifyEmailBack": "← Zurück zum Login",
+  "discoverEmptyExpandSearch": "Suchfilter erweitern"
 }
