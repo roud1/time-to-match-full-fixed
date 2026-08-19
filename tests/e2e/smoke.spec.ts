@@ -32,7 +32,11 @@ test.describe("Auth", () => {
 test.describe("API readiness", () => {
   test("ready endpoint responds", async ({ request }) => {
     const res = await request.get("/api/ready")
-    expect(res.ok()).toBeTruthy()
+    // /api/ready correctly returns HTTP 503 in demo mode (no DATABASE_URL) —
+    // that's the expected response for the build/smoke job which has no
+    // database. We only assert the server answered with a valid body,
+    // not that it reports "fully ready" in the production sense.
+    expect([200, 503]).toContain(res.status())
     const body = await res.json()
     expect(body.mode).toMatch(/demo|production/)
   })
