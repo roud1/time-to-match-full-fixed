@@ -8,5 +8,6 @@
       "path": "/api/v1/cron/cleanup",
       "schedule": "0 3 * * 0"
     }
-  ]
+  ],
+  "installCommand": "npm install --legacy-peer-deps"
 }
