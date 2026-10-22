@@ -49,8 +49,8 @@ SELECT
   COALESCE(MAX(a.expires_at), MIN(a.created_at) + interval '24 hours') AS expires_at,
   CASE
     WHEN BOOL_OR(a.is_expired) OR COALESCE(MAX(a.expires_at), now()) <= now() THEN 'expired'
-    WHEN COALESCE(ms.total_messages, 0) >= 2 THEN 'active_chat'
-    WHEN COALESCE(ms.total_messages, 0) >= 1 THEN 'waiting_reply'
+    WHEN COALESCE(MAX(ms.total_messages), 0) >= 2 THEN 'active_chat'
+    WHEN COALESCE(MAX(ms.total_messages), 0) >= 1 THEN 'waiting_reply'
     ELSE 'new_match'
   END AS status,
   CASE
