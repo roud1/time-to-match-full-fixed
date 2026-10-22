@@ -28,7 +28,7 @@ function applySecurityHeaders(res: NextResponse, request: NextRequest) {
   res.headers.set("X-Content-Type-Options", "nosniff")
   res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin")
   res.headers.set("X-Frame-Options", "DENY")
-  res.headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=(self)")
+  res.headers.set("Permissions-Policy", "camera=(self), microphone=(self), geolocation=(self)")
 
   if (request.headers.get("x-forwarded-proto") === "https") {
     res.headers.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload")

@@ -62,8 +62,8 @@ export async function showEmotionalPush(payload: PushPayload): Promise<boolean> 
     const reg = await navigator.serviceWorker.ready
     await reg.showNotification(payload.title, {
       body: payload.body,
-      icon: "/icon.svg",
-      badge: "/icon.svg",
+      icon: "/icons/icon-192.png",
+      badge: "/icons/badge-96.png",
       tag: payload.tag ?? "ttm-emotional",
       data: { url: payload.url ?? "/app" },
       ...( { vibrate: [80, 40, 80] } as NotificationOptions ),
@@ -71,7 +71,7 @@ export async function showEmotionalPush(payload: PushPayload): Promise<boolean> 
     return true
   } catch {
     try {
-      new Notification(payload.title, { body: payload.body, icon: "/icon.svg", tag: payload.tag })
+      new Notification(payload.title, { body: payload.body, icon: "/icons/icon-192.png", tag: payload.tag })
       return true
     } catch {
       return false
