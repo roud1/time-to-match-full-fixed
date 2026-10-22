@@ -1,15 +1,21 @@
 # Render Blueprint — https://render.com/docs/blueprint-spec
-# Adjust region/plan and wire a managed PostgreSQL instance; set DATABASE_URL + AUTH_SECRET in the dashboard.
+# Free plan for testing. For real users switch `plan: free` -> `plan: starter` (no sleep).
+# Free instances sleep after ~15 min idle; the GitHub Actions "Scheduled jobs" workflow pings every 5 min.
 
 services:
   - type: web
     name: time-to-match-web
     runtime: node
     region: frankfurt
-    plan: starter
-    buildCommand: npm ci && npm run build
-    preDeployCommand: npm run db:migrate
-    startCommand: npm run start
+    plan: free
+    # Migrations run during build (pre-deploy commands are not available on the free plan).
+    buildCommand: >-
+      npm install --legacy-peer-deps &&
+      npm run build &&
+      cp -r public .next/standalone/public &&
+      cp -r .next/static .next/standalone/.next/static &&
+      npm run db:migrate
+    startCommand: node .next/standalone/server.js
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
@@ -18,12 +24,16 @@ services:
         value: production
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
-      # Set in dashboard (secrets):
-      # DATABASE_URL, AUTH_SECRET, NEXT_PUBLIC_APP_URL, CORS_ORIGINS, CRON_SECRET
-      #
-      # External cron (Render has no built-in scheduler): hit every minute
-      # curl -X POST https://<your-service>/api/v1/cron/expire-matches \
-      #   -H "Authorization: Bearer $CRON_SECRET"
-      # Notify cron every 15 min:
-      # curl -X POST https://<your-service>/api/v1/cron/notify \
-      #   -H "Authorization: Bearer $CRON_SECRET"
+      - key: HOSTNAME
+        value: 0.0.0.0
+      - key: DATABASE_POOL_MAX
+        value: "2"
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: CRON_SECRET
+        generateValue: true
+      # Enter in the Render dashboard when prompted:
+      - key: DATABASE_URL        # Neon connection string, ending with ?sslmode=require
+        sync: false
+      - key: NEXT_PUBLIC_APP_URL # https://time-to-match-web.onrender.com (must match the real URL; set before build)
+        sync: false
