@@ -1,22 +1,12 @@
 {
   "framework": "nextjs",
-  "regions": ["fra1"],
+  "regions": [
+    "fra1"
+  ],
   "crons": [
-    {
-      "path": "/api/v1/cron/notify",
-      "schedule": "*/15 * * * *"
-    },
-    {
-      "path": "/api/v1/cron/expire-matches",
-      "schedule": "* * * * *"
-    },
     {
       "path": "/api/v1/cron/cleanup",
       "schedule": "0 3 * * 0"
-    },
-    {
-      "path": "/api/v1/cron/ai-analysis",
-      "schedule": "*/5 * * * *"
     }
   ]
 }
