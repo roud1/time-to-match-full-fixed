@@ -8,9 +8,10 @@ services:
     runtime: node
     region: frankfurt
     plan: free
+    # --include=dev: NODE_ENV=production would otherwise skip devDependencies (tailwind/typescript are needed to build).
     # Migrations run during build (pre-deploy commands are not available on the free plan).
     buildCommand: >-
-      npm install --legacy-peer-deps &&
+      npm install --legacy-peer-deps --include=dev &&
       npm run build &&
       cp -r public .next/standalone/public &&
       cp -r .next/static .next/standalone/.next/static &&
