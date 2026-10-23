@@ -19,6 +19,7 @@
     "test:e2e:ci": "node scripts/e2e-ci.mjs",
     "test:e2e:full": "node scripts/e2e-full.mjs",
     "db:migrate": "node scripts/db-migrate.mjs",
+    "db:seed-demo": "node scripts/db-seed-demo.mjs",
     "db:setup": "node scripts/db-setup.mjs",
     "db:cleanup": "node scripts/db-cleanup.mjs",
     "check:env": "node scripts/check-env.mjs",

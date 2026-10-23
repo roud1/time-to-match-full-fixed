@@ -15,7 +15,8 @@ services:
       npm run build &&
       cp -r public .next/standalone/public &&
       cp -r .next/static .next/standalone/.next/static &&
-      npm run db:migrate
+      npm run db:migrate &&
+      npm run db:seed-demo
     startCommand: node .next/standalone/server.js
     healthCheckPath: /api/health
     envVars:
@@ -24,6 +25,9 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      # TEST DATA: demo profiles + incoming likes. Set to 0 (or delete) before real launch.
+      - key: SEED_DEMO_PROFILES
         value: "1"
       - key: HOSTNAME
         value: 0.0.0.0
