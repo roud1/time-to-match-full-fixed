@@ -587,7 +587,7 @@
 
 .ttm-dating-mockup__action--like {
   background: linear-gradient(135deg, var(--accent-copper), var(--neon-pink));
-  color: #0b0f14;
+  color: #ffffff;
   box-shadow: 0 0 20px -4px rgba(236, 72, 153, 0.5);
 }
 
@@ -801,7 +801,7 @@
 
 .ttm-dating-preview__swipe-btn--yes {
   background: linear-gradient(135deg, var(--accent-copper), var(--neon-pink));
-  color: #0b0f14;
+  color: #ffffff;
 }
 
 .ttm-dating-preview__chat-ui {
@@ -988,7 +988,7 @@
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--accent-copper), var(--neon-pink));
-  color: #0b0f14;
+  color: #ffffff;
   font-size: 0.6875rem;
   font-weight: 700;
   text-transform: uppercase;
