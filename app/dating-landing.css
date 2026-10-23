@@ -285,7 +285,8 @@
 
 @media (max-width: 479px) {
   .ttm-dating-nav__sign {
-    display: none;
+    font-size: 0.75rem;
+    color: var(--saas-text);
   }
 
   .ttm-dating-nav__inner {
