@@ -1,0 +1,73 @@
+name: Android APK
+
+# Builds a debug APK that loads the hosted web app (see mobile/capacitor.config.js).
+# Run it from the Actions tab ("Run workflow"). The APK is published as a pre-release
+# named "android-latest" — open the release page on your phone and tap the .apk file.
+#
+# Optional repository secret: APP_URL (e.g. https://time-to-match-web.onrender.com)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install Capacitor
+        run: npm install --no-audit --no-fund
+
+      - name: Create Android project
+        run: npx cap add android
+
+      - name: Configure (permissions, icons, signing)
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+        run: node scripts/configure-android.mjs
+
+      - name: Sync web config
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: mobile/android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk TimeToMatch.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TimeToMatch-apk
+          path: mobile/TimeToMatch.apk
+
+      - name: Publish release (direct .apk download)
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete android-latest --yes --cleanup-tag || true
+          gh release create android-latest mobile/TimeToMatch.apk \
+            --prerelease \
+            --title "Android test build #${{ github.run_number }}" \
+            --notes "Debug build #${{ github.run_number }} of commit ${{ github.sha }}. Download TimeToMatch.apk and install it."
