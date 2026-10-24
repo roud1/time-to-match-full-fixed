@@ -28,15 +28,7 @@ export const metadata: Metadata = {
   },
   description:
     "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
-  keywords: [
-    "знакомства",
-    "dating",
-    "премиум",
-    "24 часа",
-    "Time to Match",
-    "match",
-    "отношения",
-  ],
+  keywords: ["знакомства", "dating", "премиум", "24 часа", "Time to Match", "match", "отношения"],
   authors: [{ name: "Time to Match" }],
   creator: "Time to Match",
   openGraph: {
@@ -111,6 +103,12 @@ export default async function RootLayout({
       <head>
         <meta name="color-scheme" content="light dark" />
         <ThemeScript />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){try{var d=document.documentElement;if(/TTMApp/.test(navigator.userAgent||"")||navigator.standalone===true||(window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)){d.setAttribute("data-ttm-app","1")}}catch(e){}})();',
+          }}
+        />
         <AdSenseScript />
       </head>
       <body

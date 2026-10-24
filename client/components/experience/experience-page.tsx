@@ -4,6 +4,7 @@ import "./experience-tokens.css"
 import { useEffect } from "react"
 import { AmbientLayer } from "@/client/components/experience/layers/ambient-layer"
 import { ExperienceFloatingChrome } from "@/client/components/experience/layers/floating-chrome"
+import { MobileAppHome } from "@/client/components/experience/mobile-app-home"
 import { ZoneConnector } from "@/client/components/experience/primitives/zone-connector"
 import { ZoneHero } from "@/client/components/experience/zones/zone-hero"
 import { ZoneImmersion } from "@/client/components/experience/zones/zone-immersion"
@@ -22,21 +23,24 @@ export function ExperiencePage() {
   return (
     <main className="xp-root xp-page ttm-experience ttm-page-enter relative">
       <AmbientLayer />
-      <ExperienceFloatingChrome />
-      <div className="xp-grid">
-        <ZoneHero />
-        <ZoneConnector label={t("ttmXpFlowMatch")} />
-        <ZoneImmersion />
-        <ZoneConnector label={t("ttmXpFlowTimer")} />
-        <ZonePressure />
-        <ZoneConnector label={t("ttmXpFlowDecide")} />
-        <ZoneMotion />
-        <ZoneConnector label={t("ttmXpFlowConnect")} />
-        <ZoneConnection />
-        <ZoneConnector label={t("ttmXpFlowProof")} />
-        <ZoneProof />
-        <ZoneConnector label={t("ttmXpFlowJoin")} />
-        <ZoneCommit />
+      <MobileAppHome />
+      <div className="xp-desktop-only">
+        <ExperienceFloatingChrome />
+        <div className="xp-grid">
+          <ZoneHero />
+          <ZoneConnector label={t("ttmXpFlowMatch")} />
+          <ZoneImmersion />
+          <ZoneConnector label={t("ttmXpFlowTimer")} />
+          <ZonePressure />
+          <ZoneConnector label={t("ttmXpFlowDecide")} />
+          <ZoneMotion />
+          <ZoneConnector label={t("ttmXpFlowConnect")} />
+          <ZoneConnection />
+          <ZoneConnector label={t("ttmXpFlowProof")} />
+          <ZoneProof />
+          <ZoneConnector label={t("ttmXpFlowJoin")} />
+          <ZoneCommit />
+        </div>
       </div>
     </main>
   )

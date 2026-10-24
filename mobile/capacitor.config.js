@@ -8,11 +8,13 @@ module.exports = {
   webDir: "www",
   backgroundColor: "#0B0F14",
   server: {
-    url: `${base}/app`,
+    url: `${base}/`,
     cleartext: false,
     androidScheme: "https",
   },
   android: {
     allowMixedContent: false,
+    // Lets the website recognise the native app (see app/layout.tsx -> data-ttm-app).
+    appendUserAgent: "TTMApp/1",
   },
 }
