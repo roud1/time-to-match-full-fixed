@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { withCors, jsonError, jsonOk } from "@/server/http"
 import { verifyEmailToken } from "@/server/email/verification"
 import { getServerEnv } from "@/config/env"
+import { publicUrl } from "@/server/http/public-url"
 
 export const runtime = "nodejs"
 
@@ -33,13 +34,13 @@ export async function GET(request: Request) {
     }
     const message = msgs[result.error ?? ""] ?? "Verification failed."
     // Redirect to login with error param
-    const url = new URL("/login", request.url)
+    const url = publicUrl(request, "/login")
     url.searchParams.set("verify_error", result.error ?? "unknown")
     return NextResponse.redirect(url)
   }
 
   // Redirect to app with success flag
-  const url = new URL("/app", request.url)
+  const url = publicUrl(request, "/app")
   url.searchParams.set("email_verified", "1")
   return NextResponse.redirect(url)
 }

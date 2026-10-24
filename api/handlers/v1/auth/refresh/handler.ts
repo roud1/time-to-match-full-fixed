@@ -9,6 +9,7 @@ import { AUTH_RATE_LIMITS } from "@/server/auth/rate-limits"
 import { applyRotatedAuthCookies, rotateAuthSession } from "@/server/auth/refresh"
 import { findUserById } from "@/server/repositories/users"
 import { verifyCsrfOrigin } from "@/server/auth/require-auth"
+import { publicUrl } from "@/server/http/public-url"
 
 export const runtime = "nodejs"
 
@@ -108,12 +109,12 @@ export async function GET(request: Request) {
 
   const result = await performRefresh(request)
   if (!result.ok) {
-    const login = new URL("/login", request.url)
+    const login = publicUrl(request, "/login")
     login.searchParams.set("next", safeRedirect)
     return NextResponse.redirect(login)
   }
 
-  const res = NextResponse.redirect(new URL(safeRedirect, request.url))
+  const res = NextResponse.redirect(publicUrl(request, safeRedirect))
   await applyRotatedAuthCookies(res, result.claims, authMeta(request))
   log.info("auth_refresh_redirect_ok", { userId: result.user.id })
   return res
