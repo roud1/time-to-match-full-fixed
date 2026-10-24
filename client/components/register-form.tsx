@@ -533,7 +533,7 @@ export function RegisterForm() {
           </motion.div>
         </AnimatePresence>
 
-        <div className="flex gap-3 mt-8">
+        <div className="ttm-reg-actions flex gap-3 mt-8">
           {step > 1 && (
             <CinematicButton
               type="button"

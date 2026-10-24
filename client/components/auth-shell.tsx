@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react"
 import Link from "next/link"
+import { AppBackButton } from "@/client/components/app-mode/app-back-button"
 import { Logo } from "@/client/components/logo"
 import { GeolocationBootstrap } from "@/client/components/geolocation-bootstrap"
 import { LocationBanner, LocationControl } from "@/client/components/location-control"
@@ -40,6 +41,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
       <LocationBanner className="ttm-location-banner--auth" />
       <header className="ttm-auth-nav">
         <nav className="ttm-auth-nav__inner" aria-label="Main">
+          <AppBackButton />
           <Link href="/" className="ttm-auth-nav__brand">
             <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
             <Logo variant="icon" size="sm" className="sm:hidden" />
