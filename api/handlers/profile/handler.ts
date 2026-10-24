@@ -4,6 +4,7 @@ import { getServerEnv } from "@/config/env"
 import { requireAuth } from "@/server/auth/require-auth"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { getProfile, updateProfile } from "@/server/profile"
+import { isAdultBirthDate } from "@/server/profile/age"
 
 export const runtime = "nodejs"
 
@@ -12,11 +13,13 @@ const patchSchema = z.object({
   birthDate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Expected YYYY-MM-DD")
+    .refine(isAdultBirthDate, "You must be at least 18 years old")
     .nullable()
     .optional(),
   birth_date: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Expected YYYY-MM-DD")
+    .refine(isAdultBirthDate, "You must be at least 18 years old")
     .nullable()
     .optional(),
   interestIds: z.array(z.number().int().positive()).optional(),
