@@ -10,7 +10,7 @@ export function Footer() {
 
   return (
     <footer
-      className="relative py-12 sm:py-16 px-4 sm:px-8 border-t border-[var(--border)]"
+      className="ttm-site-footer relative py-12 sm:py-16 px-4 sm:px-8 border-t border-[var(--border)]"
       style={{ paddingBottom: "max(3rem, env(safe-area-inset-bottom, 0px))" }}
     >
       <div className="max-w-6xl mx-auto">

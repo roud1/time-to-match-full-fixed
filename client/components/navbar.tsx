@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import { useI18n } from "@/client/lib/i18n"
+import { AppBackButton } from "@/client/components/app-mode/app-back-button"
 import { Logo } from "@/client/components/logo"
 import { getUserProfile } from "@/client/lib/user-profile"
 import { fetchMe } from "@/client/lib/user/api"
@@ -75,7 +76,7 @@ export function Navbar({ variant = "default" }: NavbarProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 px-3 py-3 sm:px-4 sm:py-4 md:px-8 transition-all duration-700",
+        "ttm-nav-bar fixed top-0 left-0 right-0 z-50 px-3 py-3 sm:px-4 sm:py-4 md:px-8 transition-all duration-700",
         scrolled && "py-2 sm:py-3"
       )}
       style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top, 0px))" }}
@@ -101,9 +102,10 @@ export function Navbar({ variant = "default" }: NavbarProps) {
         )}
         aria-label="Main"
       >
+        <AppBackButton />
         <Link
           href="/"
-          className="group flex items-center gap-2 sm:gap-3 rounded-lg min-w-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[rgba(124,58,237,0.35)]"
+          className="ttm-nav-brand group flex items-center gap-2 sm:gap-3 rounded-lg min-w-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[rgba(124,58,237,0.35)]"
         >
           <span className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.02] shrink-0">
             <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
@@ -127,7 +129,7 @@ export function Navbar({ variant = "default" }: NavbarProps) {
           ))}
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 shrink-0">
+        <div className="ttm-nav-actions flex items-center gap-1.5 sm:gap-2 md:gap-3 shrink-0">
           {loggedIn ? (
             <>
               <Link
@@ -179,7 +181,7 @@ export function Navbar({ variant = "default" }: NavbarProps) {
 
           <button
             type="button"
-            className="md:hidden inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] touch-manipulation"
+            className="ttm-nav-menu-btn md:hidden inline-flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] touch-manipulation"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-menu"
             onClick={() => setMobileOpen((o) => !o)}
@@ -198,7 +200,7 @@ export function Navbar({ variant = "default" }: NavbarProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden mx-auto mt-2 max-w-6xl rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] backdrop-blur-xl px-2 py-2 shadow-[var(--shadow-lg)]"
+            className="ttm-nav-menu md:hidden mx-auto mt-2 max-w-6xl rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] backdrop-blur-xl px-2 py-2 shadow-[var(--shadow-lg)]"
           >
             {!isMinimalLanding &&
               NAV_LINKS.map((link) => (
