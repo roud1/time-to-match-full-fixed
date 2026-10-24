@@ -2,6 +2,7 @@ import { jwtVerify } from "jose"
 import type { NextRequest } from "next/server"
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from "@/server/auth/cookies"
 import type { SessionClaims } from "@/server/auth/jwt"
+import { publicUrl } from "@/server/http/public-url"
 
 export const DEMO_SESSION_COOKIE = "ttm_demo_session"
 export const DEMO_SESSION_HEADER = "x-ttm-demo-session"
@@ -87,7 +88,7 @@ export async function isRequestAuthenticated(request: NextRequest): Promise<bool
 }
 
 export function buildRefreshRedirectUrl(request: NextRequest, returnPath: string): URL {
-  const url = new URL("/api/v1/auth/refresh", request.url)
+  const url = publicUrl(request, "/api/v1/auth/refresh")
   url.searchParams.set("redirect", returnPath)
   return url
 }

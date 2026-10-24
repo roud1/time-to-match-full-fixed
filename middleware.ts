@@ -8,6 +8,7 @@ import {
   buildRefreshRedirectUrl,
   isDemoModeEnv,
 } from "@/server/auth/middleware-auth"
+import { publicUrl } from "@/server/http/public-url"
 
 function corsHeaders(request: NextRequest): Record<string, string> {
   const origin = request.headers.get("origin")
@@ -100,7 +101,7 @@ export async function middleware(request: NextRequest) {
       const returnPath = `${path}${request.nextUrl.search}`
       return NextResponse.redirect(buildRefreshRedirectUrl(request, returnPath))
     }
-    const login = new URL("/login", request.url)
+    const login = publicUrl(request, "/login")
     login.searchParams.set("next", `${path}${request.nextUrl.search}`)
     return NextResponse.redirect(login)
   }
