@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
     lang: "ru",
     dir: "ltr",
-    start_url: "/app",
+    start_url: "/",
     scope: "/",
     display: "standalone",
     orientation: "portrait-primary",
