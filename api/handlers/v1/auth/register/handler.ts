@@ -11,6 +11,8 @@ import { defaultProfileExpiresAt } from "@/server/profile-life/service"
 import { createUser, findUserByEmail } from "@/server/repositories/users"
 import { registerBodySchema, sanitizeDisplayName } from "@/server/validation/auth"
 import { sendVerificationEmail } from "@/server/email/verification"
+import { shouldAutoVerifyEmail } from "@/server/email/auto-verify"
+import { getDb } from "@/server/db"
 
 function isPgUniqueViolation(e: unknown) {
   return typeof e === "object" && e !== null && "code" in e && (e as { code: string }).code === "23505"
@@ -76,6 +78,11 @@ export async function POST(request: Request) {
     })
     if (!id) {
       return withCors(request, jsonError(500, { error: "create_failed", message: "Could not create user" }))
+    }
+
+    if (shouldAutoVerifyEmail()) {
+      const db = getDb()
+      if (db) await db`UPDATE users SET email_verified = true WHERE id = ${id}`
     }
 
     const res = jsonOk({ user: { id, email, name } })

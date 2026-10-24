@@ -26,6 +26,9 @@ services:
         value: production
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
+      # TEST STAGE: accounts are auto-verified while RESEND_API_KEY is not set. Delete once Resend works.
+      - key: AUTO_VERIFY_EMAIL
+        value: "1"
       # TEST DATA: demo profiles + incoming likes. Set to 0 (or delete) before real launch.
       - key: SEED_DEMO_PROFILES
         value: "1"

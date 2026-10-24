@@ -107,6 +107,10 @@ try {
       likes += res.length
     }
   }
+  if (process.env.AUTO_VERIFY_EMAIL === "1" && !process.env.RESEND_API_KEY) {
+    const verified = await sql`UPDATE users SET email_verified = true WHERE email_verified IS NOT TRUE RETURNING 1`
+    console.log(`seed-demo: auto-verified ${verified.length} existing account(s) (AUTO_VERIFY_EMAIL=1, no RESEND_API_KEY)`)
+  }
   console.log(`seed-demo: ${ids.length} demo profiles ready, ${real.length} real user(s), ${likes} new incoming like(s)`)
 } finally {
   await sql.end()
