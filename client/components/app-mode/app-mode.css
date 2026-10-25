@@ -146,3 +146,58 @@ html[data-ttm-app] .ttm-location-banner__close {
   line-height: 1;
   color: rgba(255, 255, 255, 0.6);
 }
+
+/* Settings tabs: one scrollable row, no overlapping labels. */
+html[data-ttm-app] .ttm-settings-tabs {
+  flex-wrap: nowrap;
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+html[data-ttm-app] .ttm-settings-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-settings-tabs > * {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding-inline: 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+html[data-ttm-app] .ttm-settings-tabs button[aria-current="page"] {
+  background: linear-gradient(135deg, rgba(247, 37, 133, 0.22), rgba(114, 9, 183, 0.3));
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Profile header: avatar and name side by side, edit button on the right. */
+html[data-ttm-app] .profile-presence__identity:not(.profile-presence__identity--cover) {
+  gap: 0.75rem;
+}
+
+html[data-ttm-app]
+  .profile-presence__identity:not(.profile-presence__identity--cover)
+  .profile-presence__identity-body {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+html[data-ttm-app] .profile-presence__identity-name {
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+html[data-ttm-app] .profile-presence__identity-city {
+  font-size: 0.8rem;
+}
+
+html[data-ttm-app] .profile-presence__identity-sync {
+  font-size: 0.65rem;
+}

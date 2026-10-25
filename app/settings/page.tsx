@@ -53,7 +53,7 @@ export default function SettingsPage() {
     <main className="min-h-screen bg-transparent ttm-brand-universe">
       <Navbar />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-28 pb-20 flex flex-col md:flex-row gap-8">
-        <nav className="flex md:flex-col gap-2 md:min-w-[180px] p-1 rounded-2xl ttm-brand-glass h-fit" aria-label="Settings">
+        <nav className="ttm-settings-tabs flex md:flex-col gap-2 md:min-w-[180px] p-1 rounded-2xl ttm-brand-glass h-fit" aria-label="Settings">
           {nav.map((item) => (
             <button
               key={item.id}
