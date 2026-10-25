@@ -1,3 +1,4 @@
+import "@/client/components/app-mode/app-mode.css"
 import type { Metadata, Viewport } from "next"
 import { headers } from "next/headers"
 import { fontBody, fontDisplay, fontLandingBody } from "@/client/lib/fonts"
@@ -102,13 +103,13 @@ export default async function RootLayout({
     <html lang={lang} suppressHydrationWarning className="bg-transparent">
       <head>
         <meta name="color-scheme" content="light dark" />
-        <ThemeScript />
         <script
           dangerouslySetInnerHTML={{
             __html:
               '(function(){try{var d=document.documentElement;if(/TTMApp/.test(navigator.userAgent||"")||navigator.standalone===true||(window.matchMedia&&window.matchMedia("(display-mode: standalone)").matches)){d.setAttribute("data-ttm-app","1")}}catch(e){}})();',
           }}
         />
+        <ThemeScript />
         <AdSenseScript />
       </head>
       <body

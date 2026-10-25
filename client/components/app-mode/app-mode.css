@@ -89,3 +89,60 @@ html[data-ttm-app] .ttm-nav-bar {
 html[data-ttm-app] .ttm-nav-brand {
   gap: 0.25rem;
 }
+
+/* Language: compact switcher in the auth header; the floating one is hidden everywhere in the app. */
+.ttm-auth-nav__lang {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-auth-nav__lang {
+  display: block;
+  margin-left: auto;
+}
+
+html[data-ttm-app] .ttm-floating-chrome {
+  display: none !important;
+}
+
+/* Location reminder: slim toast above the dock (never covers page titles), dismissible. */
+html[data-ttm-app] .ttm-location-banner {
+  top: auto;
+  bottom: calc(var(--ttm-dock-height, 4.75rem) + env(safe-area-inset-bottom, 0px) + 0.75rem);
+  padding-inline: 0.75rem;
+  max-width: 28rem;
+}
+
+html[data-ttm-app] .ttm-location-banner > div {
+  gap: 0.5rem;
+  padding: 0.5rem 0.4rem 0.5rem 0.9rem;
+  border-radius: 18px;
+  background: rgba(14, 14, 20, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html[data-ttm-app] .ttm-location-banner p {
+  flex: 1;
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+html[data-ttm-app] .ttm-location-banner .ttm-brand-cta {
+  min-height: 34px !important;
+  padding: 0.3rem 0.85rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+}
+
+html[data-ttm-app] .ttm-location-banner__close {
+  min-width: 32px !important;
+  min-height: 32px !important;
+  width: 32px;
+  height: 32px;
+  padding: 0 !important;
+  border: 0;
+  background: transparent !important;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.6);
+}

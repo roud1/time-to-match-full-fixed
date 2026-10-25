@@ -3,6 +3,7 @@
 import { ReactNode } from "react"
 import Link from "next/link"
 import { AppBackButton } from "@/client/components/app-mode/app-back-button"
+import { LanguageSwitcher } from "@/client/components/language-switcher"
 import { Logo } from "@/client/components/logo"
 import { GeolocationBootstrap } from "@/client/components/geolocation-bootstrap"
 import { LocationBanner, LocationControl } from "@/client/components/location-control"
@@ -46,6 +47,9 @@ export function AuthShell({ children }: { children: ReactNode }) {
             <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
             <Logo variant="icon" size="sm" className="sm:hidden" />
           </Link>
+          <div className="ttm-auth-nav__lang">
+            <LanguageSwitcher embedded />
+          </div>
           <div className="ttm-auth-nav__actions">
             {/* ThemeToggle removed from auth — dark only, no distraction */}
           </div>
