@@ -551,13 +551,31 @@ html {
   gap: 4px;
 }
 
-.ttm-map-pin-inner img {
+.ttm-map-pin-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
   width: 44px;
   height: 44px;
+  overflow: hidden;
   border-radius: 50%;
-  object-fit: cover;
   border: 2px solid #ec4899;
+  background: linear-gradient(135deg, #f72585, #7209b7);
   box-shadow: 0 4px 14px rgba(236, 72, 153, 0.45);
+}
+
+.ttm-map-pin-avatar b {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ttm-map-pin-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .ttm-map-pin-inner span {

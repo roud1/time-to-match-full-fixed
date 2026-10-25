@@ -9,12 +9,17 @@ import type { GeoPosition } from "@/client/lib/geo"
 
 import "leaflet/dist/leaflet.css"
 
+const escapeHtml = (value: string) =>
+  value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;")
+
 function pinIcon(imageUrl: string, label: string, selected = false) {
-  const safeLabel = label.replace(/</g, "")
+  const safeLabel = escapeHtml(label)
+  const initial = escapeHtml(Array.from(label.trim())[0] ?? "")
   const selectedClass = selected ? " ttm-map-pin-inner--selected" : ""
+  // The gradient + initial sit under the photo, so a slow or failed image never leaves an empty pin.
   return L.divIcon({
     className: "ttm-map-pin",
-    html: `<div class="ttm-map-pin-inner${selectedClass}"><img src="${imageUrl}" alt="" /><span>${safeLabel}</span></div>`,
+    html: `<div class="ttm-map-pin-inner${selectedClass}"><div class="ttm-map-pin-avatar"><b>${initial}</b><img src="${escapeHtml(imageUrl)}" alt="" loading="lazy" onerror="this.remove()" /></div><span>${safeLabel}</span></div>`,
     iconSize: [52, 62],
     iconAnchor: [26, 62],
     popupAnchor: [0, -58],
