@@ -16,6 +16,7 @@ import {
   persistTheme,
   readStoredTheme,
   resolveTheme,
+  isAppMode,
   type Theme,
 } from "@/client/lib/theme"
 
@@ -52,7 +53,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const mq = window.matchMedia("(prefers-color-scheme: dark)")
     const onSystemChange = () => {
       if (readStoredTheme()) return
-      const next = getSystemTheme()
+      const next = isAppMode() ? "dark" : getSystemTheme()
       applyTheme(next)
       setThemeState(next)
     }

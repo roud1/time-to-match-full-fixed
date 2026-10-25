@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { motion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"
 import { isLocationSettled } from "@/client/lib/location-settled"
@@ -65,8 +66,17 @@ type LocationBannerProps = {
 
 export function LocationBanner({ className }: LocationBannerProps) {
   const { t, location } = useI18n()
+  const [dismissed, setDismissed] = useState(false)
 
-  if (isLocationSettled()) {
+  useEffect(() => {
+    try {
+      setDismissed(sessionStorage.getItem("ttm-location-banner-dismissed") === "1")
+    } catch {
+      /* ignore */
+    }
+  }, [])
+
+  if (dismissed || isLocationSettled()) {
     return null
   }
 
@@ -83,7 +93,7 @@ export function LocationBanner({ className }: LocationBannerProps) {
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        "fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 w-full max-w-md",
+        "ttm-location-banner fixed top-20 left-1/2 -translate-x-1/2 z-40 px-4 w-full max-w-md",
         className
       )}
     >
@@ -97,6 +107,21 @@ export function LocationBanner({ className }: LocationBannerProps) {
           className="ttm-brand-cta shrink-0 px-3 py-1.5 text-xs font-extralight whitespace-nowrap min-h-0"
         >
           {t("locationEnable")}
+        </button>
+        <button
+          type="button"
+          aria-label="Close"
+          onClick={() => {
+            setDismissed(true)
+            try {
+              sessionStorage.setItem("ttm-location-banner-dismissed", "1")
+            } catch {
+              /* ignore */
+            }
+          }}
+          className="ttm-location-banner__close shrink-0 text-muted-foreground"
+        >
+          ×
         </button>
       </motion.div>
     </motion.div>

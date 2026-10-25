@@ -285,11 +285,11 @@ export function LoginForm() {
                 checked={form.remember}
                 onCheckedChange={(checked) => update("remember", checked === true)}
               />
-              <label htmlFor="remember" className="ttm-type-muted cursor-pointer">
+              <label htmlFor="remember" className="ttm-type-muted cursor-pointer whitespace-nowrap">
                 {t("loginRemember")}
               </label>
             </div>
-            <Link href="/forgot-password" className="ttm-type-muted text-white/60 hover:underline">
+            <Link href="/forgot-password" className="ttm-type-muted ttm-auth-forgot whitespace-nowrap hover:underline">
               {t("loginForgotPassword")}
             </Link>
           </div>
