@@ -101,6 +101,10 @@ export async function middleware(request: NextRequest) {
       const returnPath = `${path}${request.nextUrl.search}`
       return NextResponse.redirect(buildRefreshRedirectUrl(request, returnPath))
     }
+    // Native app launched at /app without a session: show the welcome screen instead of the login form.
+    if (path === "/app" && (request.headers.get("user-agent") ?? "").includes("TTMApp")) {
+      return NextResponse.redirect(publicUrl(request, "/"))
+    }
     const login = publicUrl(request, "/login")
     login.searchParams.set("next", `${path}${request.nextUrl.search}`)
     return NextResponse.redirect(login)
