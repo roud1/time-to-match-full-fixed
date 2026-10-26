@@ -235,3 +235,62 @@ html[data-ttm-app] .leaflet-container .leaflet-control-attribution {
 html[data-ttm-app] .leaflet-control-attribution a {
   color: rgba(255, 255, 255, 0.6);
 }
+
+/* Likes (free plan): the locked-likes message is a sticky bottom card, so the CTA is always visible and the blurred cards stay as a teaser. */
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay {
+  position: sticky;
+  inset: auto;
+  bottom: 0.75rem;
+  margin: 0.75rem 0.25rem 0;
+  z-index: 30;
+  gap: 0.3rem;
+  padding: 1rem 1.1rem 1.1rem;
+  border-radius: 24px;
+  border: 1px solid rgba(247, 37, 133, 0.28);
+  background: rgba(12, 12, 18, 0.94);
+  box-shadow:
+    0 -12px 48px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(247, 37, 133, 0.12);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay > svg {
+  width: 26px;
+  height: 26px;
+}
+
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay__body {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 0.4rem;
+}
+
+/* Locked likes: the hidden name becomes a soft skeleton bar instead of a bordered "•••" box. */
+html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__name {
+  width: 58%;
+  height: 14px;
+  margin: 0.15rem 0 0.35rem;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: transparent;
+  text-shadow: none;
+}
+
+html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__body::after {
+  content: "";
+  display: block;
+  width: 36%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
