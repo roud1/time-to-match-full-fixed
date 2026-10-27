@@ -56,7 +56,7 @@ export default function NotificationsPage() {
         </h1>
         <p className="ttm-type-muted text-sm mb-8">{t("notificationsLiveSubtitle")}</p>
 
-        <div className="flex gap-2 mb-8 p-1 rounded-full ttm-brand-glass">
+        <div className="ttm-notif-tabs flex gap-2 mb-8 p-1 rounded-full ttm-brand-glass">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -81,13 +81,13 @@ export default function NotificationsPage() {
             icon={Bell}
           />
         ) : (
-          <ul className="space-y-3">
+          <ul className="ttm-notif-list space-y-3">
             {filtered.map((n, i) => {
               const Icon = n.icon
               const href = n.profileId ? `/app?tab=chat&with=${n.profileId}` : undefined
               const inner = (
                 <>
-                  <div className="shrink-0 w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-200/90">
+                  <div className="ttm-notif-icon shrink-0 w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-200/90">
                     <Icon className="w-4 h-4" strokeWidth={1.35} />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -114,7 +114,7 @@ export default function NotificationsPage() {
                       <div className="flex gap-3 items-start">{inner}</div>
                     </Link>
                   ) : (
-                    <article className={cn("p9-notif-card", n.unread && "p9-notif-card--unread")}>
+                    <article className={cn("p9-notif-card flex gap-3 items-start", n.unread && "p9-notif-card--unread")}>
                       {inner}
                     </article>
                   )}

@@ -19,6 +19,8 @@ const PUBLIC_API_EXACT = new Set([
   "/api/v1/auth/logout",
   "/api/v1/auth/forgot-password",
   "/api/v1/auth/reset-password",
+  "/api/v1/auth/verify-email",
+  "/api/v1/auth/resend-verification",
   "/api/billing/webhook",
   "/api/realtime/auth",
 ])

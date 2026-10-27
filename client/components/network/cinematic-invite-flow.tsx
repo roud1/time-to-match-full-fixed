@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"
 import { buildInvitePayload, copyInviteLink, shareInviteNative } from "@/client/lib/network"
@@ -16,7 +16,11 @@ export function CinematicInviteFlow({ className }: CinematicInviteFlowProps) {
   const { t } = useI18n()
   const reduce = useReducedMotion()
   const [copied, setCopied] = useState(false)
-  const payload = buildInvitePayload()
+  // The code comes from local storage, so it must not be part of the server render (hydration mismatch).
+  const [payload, setPayload] = useState<ReturnType<typeof buildInvitePayload> | null>(null)
+  useEffect(() => {
+    setPayload(buildInvitePayload())
+  }, [])
 
   const handleCopy = async () => {
     const ok = await copyInviteLink()
@@ -43,7 +47,7 @@ export function CinematicInviteFlow({ className }: CinematicInviteFlowProps) {
       <p className="p13-invite-flow__eyebrow">{t("netInviteEyebrow")}</p>
       <h2 className="p13-invite-flow__title">{t("netInviteTitle")}</h2>
       <p className="p13-invite-flow__body">{t("netInviteBody")}</p>
-      <p className="p13-invite-flow__code tabular-nums">{payload.code}</p>
+      <p className="p13-invite-flow__code tabular-nums">{payload?.code ?? "\u00a0"}</p>
       <div className="flex flex-col gap-2 mt-6">
         <CinematicButton variant="primary" className="w-full min-h-[44px]" onClick={() => void handleShare()}>
           {t("netInviteCta")}

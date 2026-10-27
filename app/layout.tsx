@@ -1,4 +1,5 @@
 import "@/client/components/app-mode/app-mode.css"
+import { AppModeSync } from "@/client/components/app-mode/app-mode-sync"
 import type { Metadata, Viewport } from "next"
 import { headers } from "next/headers"
 import { fontBody, fontDisplay, fontLandingBody } from "@/client/lib/fonts"
@@ -116,6 +117,7 @@ export default async function RootLayout({
         className={`${fontBody.variable} ${fontDisplay.variable} ${fontLandingBody.variable} font-sans antialiased ttm-root ttm-brand-universe`}
       >
         <ThemeProvider>
+          <AppModeSync />
           <I18nProvider>
             <QueryProvider>
               <AchievementProvider>

@@ -271,6 +271,20 @@ export function LikesPanel() {
           </aside>
 
           <div className="ttm-likes-page__main relative">
+            <ul className="ttm-likes-page__grid ttm-likes-page__grid--dating">
+              {likes.map((profile) => (
+                <LikesProfileCard
+                  key={profile.userId ?? profile.id}
+                  profile={profile}
+                  onLikeBack={handleLikeBack}
+                  likedYouLabel={t("likesLikedYou")}
+                  likeBackLabel={t("likesLikeBack")}
+                  presenceLabels={presenceLabels}
+                  blurred={!premium}
+                  grid
+                />
+              ))}
+            </ul>
             {!premium ? (
               <div className="ttm-likes-blur-overlay pointer-events-none">
                 <Lock className="w-9 h-9 text-[#ff2e63]" aria-hidden />
@@ -287,20 +301,6 @@ export function LikesPanel() {
                 </CinematicButton>
               </div>
             ) : null}
-            <ul className="ttm-likes-page__grid ttm-likes-page__grid--dating">
-              {likes.map((profile) => (
-                <LikesProfileCard
-                  key={profile.userId ?? profile.id}
-                  profile={profile}
-                  onLikeBack={handleLikeBack}
-                  likedYouLabel={t("likesLikedYou")}
-                  likeBackLabel={t("likesLikeBack")}
-                  presenceLabels={presenceLabels}
-                  blurred={!premium}
-                  grid
-                />
-              ))}
-            </ul>
           </div>
         </div>
       )}

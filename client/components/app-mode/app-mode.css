@@ -146,3 +146,240 @@ html[data-ttm-app] .ttm-location-banner__close {
   line-height: 1;
   color: rgba(255, 255, 255, 0.6);
 }
+
+/* Settings tabs: one scrollable row, no overlapping labels. */
+html[data-ttm-app] .ttm-settings-tabs {
+  flex-wrap: nowrap;
+  gap: 0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+html[data-ttm-app] .ttm-settings-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-settings-tabs > * {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding-inline: 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+html[data-ttm-app] .ttm-settings-tabs button[aria-current="page"] {
+  background: linear-gradient(135deg, rgba(247, 37, 133, 0.22), rgba(114, 9, 183, 0.3));
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Profile header: avatar and name side by side, edit button on the right. */
+html[data-ttm-app] .profile-presence__identity:not(.profile-presence__identity--cover) {
+  gap: 0.75rem;
+}
+
+html[data-ttm-app]
+  .profile-presence__identity:not(.profile-presence__identity--cover)
+  .profile-presence__identity-body {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+html[data-ttm-app] .profile-presence__identity-name {
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+html[data-ttm-app] .profile-presence__identity-city {
+  font-size: 0.8rem;
+}
+
+html[data-ttm-app] .profile-presence__identity-sync {
+  font-size: 0.65rem;
+}
+
+/* Map: dark, compact controls and attribution (Leaflet defaults are bright white and oversized on phones). */
+html[data-ttm-app] .leaflet-bar {
+  border: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+html[data-ttm-app] .leaflet-bar a,
+html[data-ttm-app] .leaflet-bar a:hover {
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  min-width: 0;
+  min-height: 0;
+  background: rgba(14, 14, 20, 0.92);
+  color: #fff;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+html[data-ttm-app] .leaflet-container .leaflet-control-attribution {
+  padding: 2px 8px;
+  border-radius: 10px 0 0 0;
+  background: rgba(14, 14, 20, 0.7);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 9px;
+}
+
+html[data-ttm-app] .leaflet-control-attribution a {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Likes (free plan): the locked-likes message is a sticky bottom card, so the CTA is always visible and the blurred cards stay as a teaser. */
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay {
+  position: sticky;
+  inset: auto;
+  bottom: 0.75rem;
+  margin: 0.75rem 0.25rem 0;
+  z-index: 30;
+  gap: 0.3rem;
+  padding: 1rem 1.1rem 1.1rem;
+  border-radius: 24px;
+  border: 1px solid rgba(247, 37, 133, 0.28);
+  background: rgba(12, 12, 18, 0.94);
+  box-shadow:
+    0 -12px 48px rgba(0, 0, 0, 0.55),
+    0 0 40px rgba(247, 37, 133, 0.12);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay > svg {
+  width: 26px;
+  height: 26px;
+}
+
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay__body {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 0.4rem;
+}
+
+/* Locked likes: the hidden name becomes a soft skeleton bar instead of a bordered "•••" box. */
+html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__name {
+  width: 58%;
+  height: 14px;
+  margin: 0.15rem 0 0.35rem;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: transparent;
+  text-shadow: none;
+}
+
+html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__body::after {
+  content: "";
+  display: block;
+  width: 36%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Chat room: the location reminder must never cover the message field. */
+html[data-ttm-app]:has(.ttm-chat-immersive) .ttm-location-banner {
+  display: none !important;
+}
+
+/* Chat room header: less height before the conversation starts. */
+html[data-ttm-app] .ttm-chat-room-header__foot,
+html[data-ttm-app] .ttm-chat-room-header__foot--indented {
+  padding-left: 0.25rem;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__row {
+  flex-wrap: wrap;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__rail {
+  flex: 1 1 100%;
+  justify-content: space-between;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__toolbar {
+  min-height: 2.5rem;
+}
+
+/* Chat composer: wider message field (the send button no longer takes half the row). */
+html[data-ttm-app] .ttm-chat-composer__row {
+  gap: 0.4rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__row .ttm-brand-cta {
+  min-width: 0 !important;
+  padding: 0 0.85rem !important;
+  min-height: 2.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+html[data-ttm-app] .ttm-chat-composer__input {
+  flex: 1 1 8rem;
+  min-height: 2.5rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__input {
+  padding-inline: 0.75rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__input::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
+  width: 2.25rem;
+  height: 2.5rem;
+}
+
+/* Developer-facing notice ("cloud storage not configured") is not for end users in the app. */
+html[data-ttm-app] .ttm-photo-s3-notice {
+  display: none;
+}
+
+/* Notifications: brand colours (not indigo) and rounded glass cards. */
+html[data-ttm-app] .ttm-notif-tabs button[class*="bg-indigo-500"] {
+  background: linear-gradient(135deg, rgba(247, 37, 133, 0.22), rgba(114, 9, 183, 0.3));
+  color: #fff;
+  font-weight: 500;
+}
+
+html[data-ttm-app] .ttm-notif-icon {
+  background: rgba(247, 37, 133, 0.14);
+  color: #ff5fa2;
+}
+
+html[data-ttm-app] .ttm-notif-list .p9-notif-card {
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+html[data-ttm-app] .ttm-notif-list .p9-notif-card--unread {
+  border-color: rgba(247, 37, 133, 0.35);
+  box-shadow: 0 0 24px rgba(247, 37, 133, 0.1);
+}

@@ -27,7 +27,7 @@ export function ExperienceFloatingChrome() {
         <LanguageSwitcher embedded />
         <Link
           href="/login"
-          className="hidden text-xs font-medium text-[var(--xp-text-muted)] transition-colors hover:text-[var(--xp-text)] min-[400px]:inline sm:text-sm"
+          className="inline px-1 py-2 text-xs font-semibold text-[var(--xp-text)] transition-colors hover:text-white sm:text-sm"
         >
           {t("ttmXpNavLogin")}
         </Link>
