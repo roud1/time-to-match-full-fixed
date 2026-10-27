@@ -355,3 +355,8 @@ html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
   width: 2.25rem;
   height: 2.5rem;
 }
+
+/* Developer-facing notice ("cloud storage not configured") is not for end users in the app. */
+html[data-ttm-app] .ttm-photo-s3-notice {
+  display: none;
+}

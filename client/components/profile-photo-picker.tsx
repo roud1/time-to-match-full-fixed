@@ -98,7 +98,7 @@ export function ProfilePhotoPicker({
       </div>
 
       {s3Configured === false && !uploading && (
-        <p className="text-[11px] text-amber-200/75 font-light border border-amber-500/20 rounded-xl px-3 py-2 bg-amber-500/[0.06]">
+        <p className="ttm-photo-s3-notice text-[11px] text-amber-200/75 font-light border border-amber-500/20 rounded-xl px-3 py-2 bg-amber-500/[0.06]">
           {t("photoUploadS3Unavailable")}
         </p>
       )}
