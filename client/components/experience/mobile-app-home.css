@@ -52,8 +52,8 @@ html[data-ttm-app] .xp-mobile-home__center {
 
 html[data-ttm-app] .xp-mobile-home__orb {
   position: relative;
-  width: clamp(96px, 17dvh, 132px);
-  height: clamp(96px, 17dvh, 132px);
+  width: clamp(84px, 13.5dvh, 116px);
+  height: clamp(84px, 13.5dvh, 116px);
   display: grid;
   place-items: center;
   margin-bottom: 0.15rem;
@@ -109,7 +109,7 @@ html[data-ttm-app] .xp-mobile-home__title {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
   line-height: 1.12;
-  font-size: clamp(1.65rem, 5dvh + 0.6rem, 2.35rem);
+  font-size: clamp(1.45rem, 3.4dvh + 0.5rem, 1.9rem);
   color: var(--xp-text);
 }
 
@@ -128,13 +128,9 @@ html[data-ttm-app] .xp-mobile-home__title-rose {
 html[data-ttm-app] .xp-mobile-home__sub {
   margin: 0;
   max-width: 22rem;
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   line-height: 1.45;
   color: var(--xp-text-muted);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 html[data-ttm-app] .xp-mobile-home__chips {
@@ -186,13 +182,13 @@ html[data-ttm-app] .xp-mobile-home__login {
 }
 
 /* Short screens (small phones, browser chrome): drop the nice-to-haves. */
-@media (max-height: 700px) {
+@media (max-height: 840px) {
   html[data-ttm-app] .xp-mobile-home__chips {
     display: none;
   }
 }
 
-@media (max-height: 600px) {
+@media (max-height: 640px) {
   html[data-ttm-app] .xp-mobile-home__timer,
   html[data-ttm-app] .xp-mobile-home__sub {
     display: none;
@@ -214,4 +210,24 @@ html[data-ttm-app] .xp-mobile-home__login {
     animation: none;
     opacity: 0.35;
   }
+}
+
+/* Never leave a black strip under the home indicator: paint the page and extend the ambient layer. */
+html[data-ttm-app],
+html[data-ttm-app] body {
+  background-color: #0b0f14;
+}
+
+html[data-ttm-app] .xp-ambient {
+  bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+  min-height: 100lvh;
+}
+
+/* Tighter vertical rhythm so nothing is clipped on shorter iPhones. */
+html[data-ttm-app] .xp-mobile-home__center {
+  gap: 0.65rem;
+}
+
+html[data-ttm-app] .xp-mobile-home__bottom {
+  padding-top: 0.75rem;
 }
