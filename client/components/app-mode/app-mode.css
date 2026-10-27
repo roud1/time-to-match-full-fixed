@@ -360,3 +360,26 @@ html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
 html[data-ttm-app] .ttm-photo-s3-notice {
   display: none;
 }
+
+/* Notifications: brand colours (not indigo) and rounded glass cards. */
+html[data-ttm-app] .ttm-notif-tabs button[class*="bg-indigo-500"] {
+  background: linear-gradient(135deg, rgba(247, 37, 133, 0.22), rgba(114, 9, 183, 0.3));
+  color: #fff;
+  font-weight: 500;
+}
+
+html[data-ttm-app] .ttm-notif-icon {
+  background: rgba(247, 37, 133, 0.14);
+  color: #ff5fa2;
+}
+
+html[data-ttm-app] .ttm-notif-list .p9-notif-card {
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+html[data-ttm-app] .ttm-notif-list .p9-notif-card--unread {
+  border-color: rgba(247, 37, 133, 0.35);
+  box-shadow: 0 0 24px rgba(247, 37, 133, 0.1);
+}
