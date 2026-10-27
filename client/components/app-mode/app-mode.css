@@ -294,3 +294,64 @@ html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__body::after {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
 }
+
+/* Chat room: the location reminder must never cover the message field. */
+html[data-ttm-app]:has(.ttm-chat-immersive) .ttm-location-banner {
+  display: none !important;
+}
+
+/* Chat room header: less height before the conversation starts. */
+html[data-ttm-app] .ttm-chat-room-header__foot,
+html[data-ttm-app] .ttm-chat-room-header__foot--indented {
+  padding-left: 0.25rem;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__row {
+  flex-wrap: wrap;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__rail {
+  flex: 1 1 100%;
+  justify-content: space-between;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__toolbar {
+  min-height: 2.5rem;
+}
+
+/* Chat composer: wider message field (the send button no longer takes half the row). */
+html[data-ttm-app] .ttm-chat-composer__row {
+  gap: 0.4rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__row .ttm-brand-cta {
+  min-width: 0 !important;
+  padding: 0 0.85rem !important;
+  min-height: 2.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+html[data-ttm-app] .ttm-chat-composer__input {
+  flex: 1 1 8rem;
+  min-height: 2.5rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__input {
+  padding-inline: 0.75rem;
+}
+
+html[data-ttm-app] .ttm-chat-composer__input::placeholder {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
+  width: 2.25rem;
+  height: 2.5rem;
+}
