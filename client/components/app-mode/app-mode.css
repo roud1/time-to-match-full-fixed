@@ -69,8 +69,8 @@ html[data-ttm-app] .ttm-reg-actions {
   bottom: -0.5rem;
   z-index: 5;
   margin-top: 1.25rem;
-  padding: 0.75rem 0 0.25rem;
-  background: linear-gradient(to top, rgba(8, 11, 16, 0.96) 70%, rgba(8, 11, 16, 0));
+  padding: 1.4rem 0 0.25rem;
+  background: linear-gradient(to top, rgb(9, 9, 14) 62%, rgba(9, 9, 14, 0));
 }
 
 /* ── Info + in-app pages that use the website Navbar / Footer ─────────────── */
@@ -382,4 +382,34 @@ html[data-ttm-app] .ttm-notif-list .p9-notif-card {
 html[data-ttm-app] .ttm-notif-list .p9-notif-card--unread {
   border-color: rgba(247, 37, 133, 0.35);
   box-shadow: 0 0 24px rgba(247, 37, 133, 0.1);
+}
+
+/* Birth date: input and calendar button are the same comfortable size (44px); 16px text avoids iOS zoom. */
+html[data-ttm-app] .ttm-birthdate-picker__row {
+  align-items: center;
+  gap: 0.5rem;
+}
+
+html[data-ttm-app] .ttm-birthdate-picker__input.ttm-input {
+  height: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  font-size: 1rem;
+}
+
+html[data-ttm-app] .ttm-birthdate-picker__input.ttm-input::placeholder {
+  font-size: 1rem;
+}
+
+html[data-ttm-app] .ttm-birthdate-picker__cal-btn {
+  width: 2.75rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+  border-radius: 14px;
+}
+
+html[data-ttm-app] .ttm-birthdate-picker__icon {
+  width: 1.2rem;
+  height: 1.2rem;
 }
