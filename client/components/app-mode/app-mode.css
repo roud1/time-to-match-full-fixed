@@ -413,3 +413,18 @@ html[data-ttm-app] .ttm-birthdate-picker__icon {
   width: 1.2rem;
   height: 1.2rem;
 }
+
+/* Registration step 3: selected options use the brand pink (like steps 1-2), not indigo/violet. */
+html[data-ttm-app] .ttm-choice[class*="border-indigo-400"],
+html[data-ttm-app] .ttm-choice[class*="border-violet-400"] {
+  border-color: #f72585;
+  background: rgba(247, 37, 133, 0.1);
+  color: #fff;
+}
+
+/* Multi-line fields show their whole placeholder / 3 lines (global .ttm-input min-height overrode min-h-[88px]). */
+html[data-ttm-app] textarea.ttm-input {
+  min-height: 5.75rem;
+  padding: 0.7rem 0.9rem;
+  line-height: 1.4;
+}
