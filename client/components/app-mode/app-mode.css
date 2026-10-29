@@ -428,3 +428,52 @@ html[data-ttm-app] textarea.ttm-input {
   padding: 0.7rem 0.9rem;
   line-height: 1.4;
 }
+
+/* Registration actions: the primary button gets the larger share so "Создать профиль" never overflows. */
+html[data-ttm-app] .ttm-reg-actions {
+  gap: 0.6rem;
+}
+
+html[data-ttm-app] .ttm-reg-actions > button,
+html[data-ttm-app] .ttm-reg-actions > a {
+  white-space: nowrap;
+  font-size: 0.95rem;
+  padding-inline: 0.9rem;
+}
+
+html[data-ttm-app] .ttm-reg-actions > button:first-child:not(:last-child) {
+  flex: 0 0 34%;
+}
+
+html[data-ttm-app] .ttm-reg-actions > button:last-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Feed (swipe screen): compact greeting so the card AND the like/pass buttons fit above the dock. */
+html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__eyebrow,
+html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__lead,
+html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__chips {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__title {
+  margin: 0.1rem 0 0.4rem;
+  font-size: 1.3rem;
+  line-height: 1.2;
+}
+
+html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__title > * {
+  display: inline;
+}
+
+html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page,
+html[data-ttm-app] .ttm-welcome-page {
+  padding-bottom: calc(var(--ttm-dock-height, 4.75rem) + 0.5rem);
+}
+
+/* The swipe card leaves room for the greeting and the like/pass row inside the visible area. */
+html[data-ttm-app] .ttm-welcome-page__card .ttm-swipe-deck-stack--welcome {
+  min-height: 18rem;
+  max-height: calc(100dvh - 22rem);
+}
