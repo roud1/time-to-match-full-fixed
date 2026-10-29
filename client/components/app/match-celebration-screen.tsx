@@ -22,10 +22,13 @@ import { formatExpiryCountdown } from "@/client/lib/expiry"
 import { parseTimeLeftToMs } from "@/client/lib/profile-timer-mood"
 import "@/app/match-celebration.css"
 
+const MATCH_WINDOW_MS = 24 * 60 * 60 * 1000
+
 function formatMatchTimer(timeLeft: string): string {
   const ms = parseTimeLeftToMs(timeLeft)
-  if (ms <= 0) return "00:00:00"
-  return formatExpiryCountdown(ms)
+  // A brand-new match always starts a full 24h window; an unparsable or expired profile timer must not show 00:00:00.
+  if (ms <= 0) return formatExpiryCountdown(MATCH_WINDOW_MS)
+  return formatExpiryCountdown(Math.min(ms, MATCH_WINDOW_MS))
 }
 
 type MatchCelebrationScreenProps = {

@@ -475,5 +475,27 @@ html[data-ttm-app] .ttm-welcome-page {
 /* The swipe card leaves room for the greeting and the like/pass row inside the visible area. */
 html[data-ttm-app] .ttm-welcome-page__card .ttm-swipe-deck-stack--welcome {
   min-height: 18rem;
-  max-height: calc(100dvh - 22rem);
+  max-height: calc(100dvh - 24.5rem);
+}
+
+/* Swipe row: like/pass buttons on one line, Filters/Boost on their own line (they used to overlap on phones). */
+html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page__actions-bar {
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 0;
+  padding-inline: 0;
+}
+
+html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page__actions-bar-tools {
+  position: static;
+  transform: none;
+}
+
+html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page__actions-bar-tools .ttm-discover-toolbar__row {
+  justify-content: center;
+}
+
+/* First-match screen: breathing room between the avatars and the "spark" label. */
+html[data-ttm-app] .match-moment__avatars {
+  margin-bottom: 2.75rem;
 }
