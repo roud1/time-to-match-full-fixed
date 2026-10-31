@@ -312,7 +312,24 @@ html[data-ttm-app] .ttm-chat-room-header__row {
 
 html[data-ttm-app] .ttm-chat-room-header__rail {
   flex: 1 1 100%;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
   justify-content: space-between;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__rail > * {
+  min-width: 0;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__rail > button {
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__toolbar {
+  flex: 1 1 0;
+  overflow: hidden;
 }
 
 html[data-ttm-app] .ttm-chat-room-header__toolbar {
@@ -498,4 +515,23 @@ html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page__actions-bar-tool
 /* First-match screen: breathing room between the avatars and the "spark" label. */
 html[data-ttm-app] .match-moment__avatars {
   margin-bottom: 2.75rem;
+}
+
+/* ── Chat room: the conversation gets the space ─────────────────────────────── */
+
+/* Full screen: the app root reserves 64px for the bottom dock, but the chat room has no dock. */
+html[data-ttm-app]:has(.ttm-chat-immersive) .ttm-native-app {
+  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+}
+
+/* Status panels that repeat information from the header toolbar are dropped on phones. */
+html[data-ttm-app] .ttm-chat-immersive .eco-space-header,
+html[data-ttm-app] .ttm-chat-immersive .eco-stage-ribbon,
+html[data-ttm-app] .ttm-chat-immersive .connection-header-v2 {
+  display: none;
+}
+
+/* Header foot: keep the "N messages until extension" meter, drop the extra status lines. */
+html[data-ttm-app] .ttm-chat-immersive .ttm-chat-room-header__status {
+  display: none;
 }
