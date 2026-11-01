@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
+import { SendHorizontal } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useReducedMotion } from "motion/react"
 import { ChatVoiceNoteDemo } from "@/client/components/chat/chat-voice-note-demo"
@@ -175,13 +176,15 @@ export function ChatComposer({
             whileTap={reduce ? undefined : { scale: 0.94 }}
             onClick={handleSend}
             disabled={!draft.trim()}
+            aria-label={labels.send}
             className={cn(
-              "shrink-0 min-h-[44px] px-4 rounded-2xl text-sm font-light text-white touch-manipulation",
+              "ttm-chat-send shrink-0 min-h-[44px] px-4 rounded-2xl text-sm font-light text-white touch-manipulation",
               "ttm-brand-cta rounded-2xl min-h-0 border-0",
               !draft.trim() && "opacity-40 pointer-events-none"
             )}
           >
-            {labels.send}
+            <span className="ttm-chat-send__label">{labels.send}</span>
+            <SendHorizontal className="ttm-chat-send__icon" aria-hidden />
           </motion.button>
         </div>
         </div>

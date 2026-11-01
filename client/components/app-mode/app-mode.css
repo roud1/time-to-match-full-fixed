@@ -535,3 +535,29 @@ html[data-ttm-app] .ttm-chat-immersive .connection-header-v2 {
 html[data-ttm-app] .ttm-chat-immersive .ttm-chat-room-header__status {
   display: none;
 }
+
+/* Send button: round arrow in the app, so the message field gets the width. */
+.ttm-chat-send__icon {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-chat-send {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem !important;
+  min-width: 2.75rem !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+}
+
+html[data-ttm-app] .ttm-chat-send .ttm-chat-send__label {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-chat-send .ttm-chat-send__icon {
+  display: block;
+  width: 1.3rem;
+  height: 1.3rem;
+}
