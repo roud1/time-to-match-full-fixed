@@ -1722,5 +1722,6 @@
   "verifyEmailResend": "Отправить письмо повторно",
   "verifyEmailResendCooldown": "Повторно через",
   "verifyEmailBack": "← Назад ко входу",
-  "discoverEmptyExpandSearch": "Расширить параметры поиска"
+  "discoverEmptyExpandSearch": "Расширить параметры поиска",
+  "chatHeaderMenuAria": "Меню чата"
 }

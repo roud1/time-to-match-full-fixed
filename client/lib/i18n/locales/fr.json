@@ -1698,5 +1698,6 @@
   "verifyEmailResend": "Renvoyer l'email",
   "verifyEmailResendCooldown": "Renvoyer dans",
   "verifyEmailBack": "← Retour à la connexion",
-  "discoverEmptyExpandSearch": "Élargir la recherche"
+  "discoverEmptyExpandSearch": "Élargir la recherche",
+  "chatHeaderMenuAria": "Menu du chat"
 }

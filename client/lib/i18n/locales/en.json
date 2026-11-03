@@ -1706,5 +1706,6 @@
   "verifyEmailResend": "Resend email",
   "verifyEmailResendCooldown": "Resend in",
   "verifyEmailBack": "← Back to login",
-  "discoverEmptyExpandSearch": "Expand search settings"
+  "discoverEmptyExpandSearch": "Expand search settings",
+  "chatHeaderMenuAria": "Chat menu"
 }

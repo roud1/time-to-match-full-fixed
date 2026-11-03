@@ -1698,5 +1698,6 @@
   "verifyEmailResend": "Tekrar gönder",
   "verifyEmailResendCooldown": "Tekrar:",
   "verifyEmailBack": "← Girişe dön",
-  "discoverEmptyExpandSearch": "Aramayı genişlet"
+  "discoverEmptyExpandSearch": "Aramayı genişlet",
+  "chatHeaderMenuAria": "Sohbet menüsü"
 }

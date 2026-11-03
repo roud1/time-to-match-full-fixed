@@ -1,5 +1,7 @@
 "use client"
 
+import { useState } from "react"
+import { Menu as MenuIcon, X as CloseIcon } from "lucide-react"
 import { useI18n } from "@/client/lib/i18n"
 import type { SwipeProfile } from "@/client/lib/demo-profiles"
 import { ChatProfileAvatar } from "@/client/components/chat/chat-profile-avatar"
@@ -83,9 +85,13 @@ export function ChatRoomHeader({
   const { t } = useI18n()
   const showPresenceBadge = !showTyping && Boolean(emotionalPresence)
   const showStatusText = showTyping || !showPresenceBadge
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className={cn("ttm-chat-room-header", compact && "ttm-chat-room-header--compact")}>
+    <header
+      className={cn("ttm-chat-room-header", compact && "ttm-chat-room-header--compact")}
+      data-menu={menuOpen ? "open" : "closed"}
+    >
       <div className="ttm-chat-room-header__row">
         <div className="ttm-chat-room-header__lead">
           {showBack ? (
@@ -139,6 +145,25 @@ export function ChatRoomHeader({
                 </p>
               )}
             </div>
+          </button>
+        </div>
+
+        {/* App only (shown via html[data-ttm-app]): match timer + burger that opens the SYNC panel. */}
+        <div className="ttm-chat-room-header__app-actions">
+          <ChatMatchExpiryBar
+            profileId={profile.id}
+            compact
+            variant="header"
+            className="ttm-chat-room-header__expiry-inline"
+          />
+          <button
+            type="button"
+            className="ttm-chat-room-header__burger"
+            aria-expanded={menuOpen}
+            aria-label={t("chatHeaderMenuAria")}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? <CloseIcon className="h-5 w-5" aria-hidden /> : <MenuIcon className="h-5 w-5" aria-hidden />}
           </button>
         </div>
 

@@ -561,3 +561,71 @@ html[data-ttm-app] .ttm-chat-send .ttm-chat-send__icon {
   width: 1.3rem;
   height: 1.3rem;
 }
+
+/* ── Chat header: SYNC panel lives behind a burger button ─────────────────── */
+.ttm-chat-room-header__app-actions {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-chat-room-header {
+  position: relative;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__app-actions {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.5rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Name block leaves room for the burger (and for the timer chip when a match timer exists). */
+html[data-ttm-app] .ttm-chat-room-header__lead {
+  flex: 1 1 100%;
+  min-width: 0;
+  padding-right: 3.25rem;
+}
+
+html[data-ttm-app] .ttm-chat-room-header:has(.ttm-match-expiry-bar--header) .ttm-chat-room-header__lead {
+  padding-right: 9.5rem;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__burger {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  touch-action: manipulation;
+}
+
+/* Collapsed: only name + timer + burger. Open: SYNC toolbar, share and safety appear below. */
+html[data-ttm-app] .ttm-chat-room-header[data-menu="closed"] .ttm-chat-room-header__rail {
+  display: none;
+}
+
+/* The timer is always visible in the top row, so the copy inside the SYNC toolbar is dropped. */
+html[data-ttm-app] .ttm-chat-room-header__toolbar .ttm-chat-room-header__expiry {
+  display: none;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__expiry-inline {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header {
+  padding: 0.3rem 0.6rem;
+}
+
+html[data-ttm-app] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header > span:first-child {
+  display: none;
+}

@@ -1698,5 +1698,6 @@
   "verifyEmailResend": "Invia di nuovo",
   "verifyEmailResendCooldown": "Di nuovo tra",
   "verifyEmailBack": "← Torna al login",
-  "discoverEmptyExpandSearch": "Amplia la ricerca"
+  "discoverEmptyExpandSearch": "Amplia la ricerca",
+  "chatHeaderMenuAria": "Menu della chat"
 }
