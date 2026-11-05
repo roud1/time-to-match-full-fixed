@@ -629,3 +629,14 @@ html[data-ttm-app] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--h
 html[data-ttm-app] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header > span:first-child {
   display: none;
 }
+
+/* Own profile photo card: the name block sits at the bottom of the photo (it used to hang at the top, leaving a hard edge). */
+html[data-ttm-app] .profile-presence--own .profile-presence__identity--cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+html[data-ttm-app] .profile-presence--own .profile-presence__identity-body--cover {
+  margin-top: auto;
+}
