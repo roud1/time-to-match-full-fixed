@@ -127,8 +127,6 @@ jobs:
           AUTH_SECRET: ${{ env.CI_AUTH_SECRET }}
           CRON_SECRET: ${{ env.CI_CRON_SECRET }}
           NEXT_PUBLIC_APP_URL: ${{ env.CI_APP_URL }}
-          # No email provider in CI: let tests sign in right after registering (login requires a verified email).
-          AUTO_VERIFY_EMAIL: "1"
 
       - name: Wait for /api/ready (production)
         run: node scripts/wait-ready.mjs
