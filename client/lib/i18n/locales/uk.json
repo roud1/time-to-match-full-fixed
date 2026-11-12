@@ -1699,5 +1699,10 @@
   "verifyEmailResendCooldown": "Повторно через",
   "verifyEmailBack": "← Назад до входу",
   "discoverEmptyExpandSearch": "Розширити параметри пошуку",
-  "chatHeaderMenuAria": "Меню чату"
+  "chatHeaderMenuAria": "Меню чату",
+  "appHomeTagline": "Знайди свою людину раніше, ніж закінчиться час.",
+  "appHomeStart": "Почати",
+  "appHomeTrustSafe": "Безпечно",
+  "appHomeTrustModeration": "Модерація",
+  "appHomeTrustLocation": "Контроль геолокації"
 }

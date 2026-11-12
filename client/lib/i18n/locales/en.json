@@ -1707,5 +1707,10 @@
   "verifyEmailResendCooldown": "Resend in",
   "verifyEmailBack": "← Back to login",
   "discoverEmptyExpandSearch": "Expand search settings",
-  "chatHeaderMenuAria": "Chat menu"
+  "chatHeaderMenuAria": "Chat menu",
+  "appHomeTagline": "Find your person before time runs out.",
+  "appHomeStart": "Start",
+  "appHomeTrustSafe": "Safe",
+  "appHomeTrustModeration": "Moderation",
+  "appHomeTrustLocation": "Location control"
 }

@@ -1699,5 +1699,10 @@
   "verifyEmailResendCooldown": "Di nuovo tra",
   "verifyEmailBack": "← Torna al login",
   "discoverEmptyExpandSearch": "Amplia la ricerca",
-  "chatHeaderMenuAria": "Menu della chat"
+  "chatHeaderMenuAria": "Menu della chat",
+  "appHomeTagline": "Trova la tua persona prima che il tempo finisca.",
+  "appHomeStart": "Inizia",
+  "appHomeTrustSafe": "Sicuro",
+  "appHomeTrustModeration": "Moderazione",
+  "appHomeTrustLocation": "Controllo della posizione"
 }

@@ -1723,5 +1723,10 @@
   "verifyEmailResendCooldown": "Повторно через",
   "verifyEmailBack": "← Назад ко входу",
   "discoverEmptyExpandSearch": "Расширить параметры поиска",
-  "chatHeaderMenuAria": "Меню чата"
+  "chatHeaderMenuAria": "Меню чата",
+  "appHomeTagline": "Найди человека раньше, чем время закончится.",
+  "appHomeStart": "Начать",
+  "appHomeTrustSafe": "Безопасно",
+  "appHomeTrustModeration": "Модерация",
+  "appHomeTrustLocation": "Контроль геолокации"
 }
