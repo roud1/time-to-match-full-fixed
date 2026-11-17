@@ -1728,5 +1728,9 @@
   "appHomeStart": "Начать",
   "appHomeTrustSafe": "Безопасно",
   "appHomeTrustModeration": "Модерация",
-  "appHomeTrustLocation": "Контроль геолокации"
+  "appHomeTrustLocation": "Контроль геолокации",
+  "appLoginSubtitle": "С возвращением! Продолжи искать свою связь.",
+  "appLoginRegister": "Зарегистрироваться",
+  "appShowPassword": "Показать пароль",
+  "appHidePassword": "Скрыть пароль"
 }

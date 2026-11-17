@@ -667,3 +667,14 @@ html[data-ttm-app] .er-reality-root,
 html[data-ttm-app] .world-root {
   background: transparent !important;
 }
+
+/* Auth screens show the same brand picture: no opaque shell, header floats over it without a bar. */
+html[data-ttm-app] .ttm-auth-shell {
+  background: transparent !important;
+}
+html[data-ttm-app] .ttm-auth-nav {
+  background: transparent;
+  border-bottom-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}

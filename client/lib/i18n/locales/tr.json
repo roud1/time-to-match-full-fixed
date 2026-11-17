@@ -1704,5 +1704,9 @@
   "appHomeStart": "Başla",
   "appHomeTrustSafe": "Güvenli",
   "appHomeTrustModeration": "Moderasyon",
-  "appHomeTrustLocation": "Konum kontrolü"
+  "appHomeTrustLocation": "Konum kontrolü",
+  "appLoginSubtitle": "Tekrar hoş geldin! Bağlantını aramaya devam et.",
+  "appLoginRegister": "Kayıt ol",
+  "appShowPassword": "Şifreyi göster",
+  "appHidePassword": "Şifreyi gizle"
 }

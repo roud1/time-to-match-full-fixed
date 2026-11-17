@@ -1712,5 +1712,9 @@
   "appHomeStart": "Start",
   "appHomeTrustSafe": "Safe",
   "appHomeTrustModeration": "Moderation",
-  "appHomeTrustLocation": "Location control"
+  "appHomeTrustLocation": "Location control",
+  "appLoginSubtitle": "Welcome back! Keep looking for your connection.",
+  "appLoginRegister": "Sign up",
+  "appShowPassword": "Show password",
+  "appHidePassword": "Hide password"
 }

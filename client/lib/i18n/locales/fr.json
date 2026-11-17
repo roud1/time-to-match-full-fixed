@@ -1704,5 +1704,9 @@
   "appHomeStart": "Commencer",
   "appHomeTrustSafe": "Sécurisé",
   "appHomeTrustModeration": "Modération",
-  "appHomeTrustLocation": "Contrôle de la position"
+  "appHomeTrustLocation": "Contrôle de la position",
+  "appLoginSubtitle": "Bon retour ! Continue à chercher ton lien.",
+  "appLoginRegister": "S'inscrire",
+  "appShowPassword": "Afficher le mot de passe",
+  "appHidePassword": "Masquer le mot de passe"
 }

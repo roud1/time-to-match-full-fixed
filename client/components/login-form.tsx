@@ -25,6 +25,8 @@ import { CinematicCard } from "@/client/components/ui/cinematic-card"
 import { CinematicField } from "@/client/components/ui/cinematic-field"
 import { Input } from "@/client/components/ui/input"
 import { Checkbox } from "@/client/components/ui/checkbox"
+import { AppLoginView } from "@/client/components/auth/app-login-view"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
 
 type FormData = {
   email: string
@@ -38,6 +40,7 @@ export function LoginForm() {
   const { t } = useI18n()
   const router = useRouter()
   const hydrated = useHydrated()
+  const inApp = useTtmApp()
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
   const [redirecting, setRedirecting] = useState(false)
@@ -119,7 +122,8 @@ export function LoginForm() {
         if (!getUserProfile()) {
           saveUserProfile(localProfileFromAuthUser(serverResult.user))
         }
-        setSession(form.email.trim(), form.remember)
+        // Inside the app the session is always remembered (no checkbox on the app screen).
+        setSession(form.email.trim(), form.remember || inApp)
         recordProfileActivity()
         trackEvent("login")
         trackFunnelOnce("login_complete")
@@ -138,7 +142,7 @@ export function LoginForm() {
           return
         }
 
-        setSession(form.email, form.remember)
+        setSession(form.email, form.remember || inApp)
         recordProfileActivity()
         trackEvent("login")
         trackFunnelOnce("login_complete")
@@ -152,7 +156,13 @@ export function LoginForm() {
         return
       }
 
-      setErrors({ form: serverResult.message ?? t("loginErrorInvalid") })
+      // The app always shows the localized text for wrong credentials (the server message is English).
+      setErrors({
+        form:
+          inApp && (serverResult.status === 401 || serverResult.status === 400)
+            ? t("loginErrorInvalid")
+            : serverResult.message ?? t("loginErrorInvalid"),
+      })
     } finally {
       setLoading(false)
     }
@@ -165,6 +175,20 @@ export function LoginForm() {
           <p className="ttm-type-muted">{t("loginLoading")}</p>
         </CinematicCard>
       </div>
+    )
+  }
+
+  if (inApp && !verifyPanel) {
+    return (
+      <AppLoginView
+        email={form.email}
+        password={form.password}
+        errors={errors}
+        loading={loading}
+        onEmailChange={(v) => update("email", v)}
+        onPasswordChange={(v) => update("password", v)}
+        onSubmit={handleSubmit}
+      />
     )
   }
 

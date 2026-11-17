@@ -1704,5 +1704,9 @@
   "appHomeStart": "Zacznij",
   "appHomeTrustSafe": "Bezpiecznie",
   "appHomeTrustModeration": "Moderacja",
-  "appHomeTrustLocation": "Kontrola lokalizacji"
+  "appHomeTrustLocation": "Kontrola lokalizacji",
+  "appLoginSubtitle": "Witaj ponownie! Szukaj dalej swojej więzi.",
+  "appLoginRegister": "Zarejestruj się",
+  "appShowPassword": "Pokaż hasło",
+  "appHidePassword": "Ukryj hasło"
 }

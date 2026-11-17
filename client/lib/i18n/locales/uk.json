@@ -1704,5 +1704,9 @@
   "appHomeStart": "Почати",
   "appHomeTrustSafe": "Безпечно",
   "appHomeTrustModeration": "Модерація",
-  "appHomeTrustLocation": "Контроль геолокації"
+  "appHomeTrustLocation": "Контроль геолокації",
+  "appLoginSubtitle": "З поверненням! Продовжуй шукати свій зв'язок.",
+  "appLoginRegister": "Зареєструватися",
+  "appShowPassword": "Показати пароль",
+  "appHidePassword": "Сховати пароль"
 }

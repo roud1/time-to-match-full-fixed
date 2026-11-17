@@ -1,0 +1,144 @@
+"use client"
+
+import "./app-login.css"
+import { useId, useState, type FormEvent } from "react"
+import Link from "next/link"
+import { Eye, EyeOff, Lock, Mail } from "lucide-react"
+import { useI18n } from "@/client/lib/i18n"
+
+type AppLoginViewProps = {
+  email: string
+  password: string
+  errors: { email?: string; password?: string; form?: string }
+  loading: boolean
+  onEmailChange: (value: string) => void
+  onPasswordChange: (value: string) => void
+  onSubmit: (e: FormEvent) => void
+}
+
+function HeartMark() {
+  const id = useId()
+  return (
+    <svg className="ttm-app-login__mark" viewBox="0 0 48 44" fill="none" aria-hidden>
+      <defs>
+        <linearGradient id={`${id}-h`} x1="4" y1="4" x2="44" y2="40" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#e9d5ff" />
+          <stop offset="1" stopColor="#a855f7" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M24 40 7.5 23.6A10.2 10.2 0 0 1 22 9.2l2 2 2-2a10.2 10.2 0 0 1 14.5 14.4Z"
+        stroke={`url(#${id}-h)`}
+        strokeWidth="4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+/** Sign-in screen of the native app / installed PWA (rendered only when html[data-ttm-app] is set). */
+export function AppLoginView({
+  email,
+  password,
+  errors,
+  loading,
+  onEmailChange,
+  onPasswordChange,
+  onSubmit,
+}: AppLoginViewProps) {
+  const { t } = useI18n()
+  const [showPassword, setShowPassword] = useState(false)
+  const emailErrId = useId()
+  const passErrId = useId()
+
+  return (
+    <div className="ttm-app-login">
+      <div className="ttm-app-login__brand">
+        <HeartMark />
+        <span className="ttm-app-login__brand-name">Time to Match</span>
+      </div>
+
+      <h1 className="ttm-app-login__title">{t("loginPageTitle")}</h1>
+      <p className="ttm-app-login__subtitle">{t("appLoginSubtitle")}</p>
+
+      <form onSubmit={onSubmit} noValidate className="ttm-app-login__form">
+        {errors.form && (
+          <p className="ttm-app-login__form-error" role="alert">
+            {errors.form}
+          </p>
+        )}
+
+        <div>
+          <label className="ttm-app-login__field" data-invalid={errors.email ? "" : undefined}>
+            <Mail aria-hidden className="ttm-app-login__icon" strokeWidth={1.6} />
+            <input
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              value={email}
+              onChange={(e) => onEmailChange(e.target.value)}
+              placeholder={t("regEmail")}
+              aria-label={t("regEmail")}
+              aria-invalid={errors.email ? true : undefined}
+              aria-describedby={errors.email ? emailErrId : undefined}
+            />
+          </label>
+          {errors.email && (
+            <p id={emailErrId} className="ttm-app-login__error">
+              {errors.email}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="ttm-app-login__field" data-invalid={errors.password ? "" : undefined}>
+            <Lock aria-hidden className="ttm-app-login__icon" strokeWidth={1.6} />
+            <input
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => onPasswordChange(e.target.value)}
+              placeholder={t("regPassword")}
+              aria-label={t("regPassword")}
+              aria-invalid={errors.password ? true : undefined}
+              aria-describedby={errors.password ? passErrId : undefined}
+            />
+            <button
+              type="button"
+              className="ttm-app-login__eye"
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? t("appHidePassword") : t("appShowPassword")}
+              aria-pressed={showPassword}
+            >
+              {showPassword ? (
+                <EyeOff aria-hidden strokeWidth={1.6} />
+              ) : (
+                <Eye aria-hidden strokeWidth={1.6} />
+              )}
+            </button>
+          </label>
+          {errors.password && (
+            <p id={passErrId} className="ttm-app-login__error">
+              {errors.password}
+            </p>
+          )}
+        </div>
+
+        <Link href="/forgot-password" className="ttm-app-login__forgot">
+          {t("loginForgotPassword")}
+        </Link>
+
+        <button type="submit" className="ttm-app-login__submit" disabled={loading}>
+          {loading ? t("loginLoading") : t("loginSubmit")}
+        </button>
+      </form>
+
+      <p className="ttm-app-login__signup">
+        <span>{t("loginNoAccount")}</span>{" "}
+        <Link href="/register">{t("appLoginRegister")}</Link>
+      </p>
+    </div>
+  )
+}
