@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
+import { Lock, Mail, User } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import { useReducedMotion } from "motion/react"
@@ -40,6 +42,9 @@ import {
   ConnectionPrefPicker,
 } from "@/client/components/product/identity-product-pickers"
 import { MIN_ENERGY_TAGS } from "@/client/lib/profile-identity"
+import { AppAuthField } from "@/client/components/auth/app-auth-field"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import "@/client/components/auth/app-register.css"
 
 type Gender = "male" | "female" | "other"
 type LookingFor = "men" | "women" | "all"
@@ -85,6 +90,7 @@ export function RegisterForm() {
   const { t, locale, location } = useI18n()
   const router = useRouter()
   const reduce = useReducedMotion()
+  const inApp = useTtmApp()
   const [step, setStep] = useState<(typeof STEPS)[number]>(1)
   const [errors, setErrors] = useState<FormErrors>({})
   const [photos, setPhotos] = useState<string[]>([])
@@ -277,13 +283,32 @@ export function RegisterForm() {
   const stepLabels = [t("regStepAccount"), t("regStepRoots"), t("regStepSoul"), t("regStepReveal")]
 
   return (
-    <div className="w-full">
-      <CinematicCard variant="glass" className="ttm-brand-glass p-6 md:p-8 border border-white/10">
-        <div className="text-center mb-8">
-          <span className="ttm-badge-brand mb-4 block mx-auto w-fit">SYNC</span>
-          <h1 className="ttm-brand-title text-foreground mb-2">{t("regPageTitle")}</h1>
-          <p className="ttm-type-muted">{t("regPageSubtitle")}</p>
-        </div>
+    <div className={cn("w-full", inApp && "ttm-app-login ttm-app-reg")}>
+      <CinematicCard
+        variant="glass"
+        className={cn("ttm-brand-glass p-6 md:p-8 border border-white/10", inApp && "ttm-app-reg__card")}
+      >
+        {inApp ? (
+          <div className="ttm-app-reg__head">
+            <Image
+              className="ttm-app-login__logo"
+              src="/brand/luvia/logo.svg"
+              alt="Luvia"
+              width={719}
+              height={200}
+              priority
+              unoptimized
+            />
+            <h1 className="ttm-app-login__title">{t("regPageTitle")}</h1>
+            <p className="ttm-app-login__subtitle">{t("regPageSubtitle")}</p>
+          </div>
+        ) : (
+          <div className="text-center mb-8">
+            <span className="ttm-badge-brand mb-4 block mx-auto w-fit">SYNC</span>
+            <h1 className="ttm-brand-title text-foreground mb-2">{t("regPageTitle")}</h1>
+            <p className="ttm-type-muted">{t("regPageSubtitle")}</p>
+          </div>
+        )}
 
         <div className="flex items-center gap-2 mb-2" role="progressbar" aria-valuenow={step} aria-valuemin={1} aria-valuemax={4}>
           {STEPS.map((s, i) => (
@@ -312,7 +337,50 @@ export function RegisterForm() {
             transition={{ duration: reduce ? 0.15 : 0.32, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col gap-5"
           >
-            {step === 1 && (
+            {step === 1 && inApp && (
+              <div className="ttm-app-reg__fields">
+                <AppAuthField
+                  icon={User}
+                  label={t("regName")}
+                  autoComplete="given-name"
+                  value={form.name}
+                  onChange={(e) => update("name", e.target.value)}
+                  error={errors.name}
+                />
+                <AppAuthField
+                  icon={Mail}
+                  label={t("regEmail")}
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  value={form.email}
+                  onChange={(e) => update("email", e.target.value)}
+                  error={errors.email}
+                />
+                <AppAuthField
+                  icon={Lock}
+                  label={t("regPassword")}
+                  type="password"
+                  autoComplete="new-password"
+                  value={form.password}
+                  onChange={(e) => update("password", e.target.value)}
+                  error={errors.password}
+                />
+                <AppAuthField
+                  icon={Lock}
+                  label={t("regConfirmPassword")}
+                  type="password"
+                  autoComplete="new-password"
+                  value={form.confirmPassword}
+                  onChange={(e) => update("confirmPassword", e.target.value)}
+                  error={errors.confirmPassword}
+                />
+              </div>
+            )}
+
+            {step === 1 && !inApp && (
               <>
                 <CinematicField label={t("regName")} error={errors.name}>
                   <Input
@@ -557,12 +625,18 @@ export function RegisterForm() {
           </CinematicButton>
         </div>
 
-        <p className="text-center ttm-type-muted mt-6">
-          {t("regHasAccount")}{" "}
-          <Link href="/login" className="text-white/60 hover:underline">
-            {t("regSignIn")}
-          </Link>
-        </p>
+        {inApp ? (
+          <p className="ttm-app-login__signup">
+            <span>{t("regHasAccount")}</span> <Link href="/login">{t("regSignIn")}</Link>
+          </p>
+        ) : (
+          <p className="text-center ttm-type-muted mt-6">
+            {t("regHasAccount")}{" "}
+            <Link href="/login" className="text-white/60 hover:underline">
+              {t("regSignIn")}
+            </Link>
+          </p>
+        )}
       </CinematicCard>
     </div>
   )
