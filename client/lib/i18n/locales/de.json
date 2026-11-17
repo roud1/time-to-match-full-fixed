@@ -1699,5 +1699,14 @@
   "verifyEmailResendCooldown": "Erneut in",
   "verifyEmailBack": "← Zurück zum Login",
   "discoverEmptyExpandSearch": "Suchfilter erweitern",
-  "chatHeaderMenuAria": "Chat-Menü"
+  "chatHeaderMenuAria": "Chat-Menü",
+  "appHomeTagline": "Finde deinen Menschen, bevor die Zeit abläuft.",
+  "appHomeStart": "Los geht's",
+  "appHomeTrustSafe": "Sicher",
+  "appHomeTrustModeration": "Moderation",
+  "appHomeTrustLocation": "Standortkontrolle",
+  "appLoginSubtitle": "Willkommen zurück! Such weiter nach deiner Verbindung.",
+  "appLoginRegister": "Registrieren",
+  "appShowPassword": "Passwort anzeigen",
+  "appHidePassword": "Passwort verbergen"
 }

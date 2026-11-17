@@ -1699,5 +1699,14 @@
   "verifyEmailResendCooldown": "Tekrar:",
   "verifyEmailBack": "← Girişe dön",
   "discoverEmptyExpandSearch": "Aramayı genişlet",
-  "chatHeaderMenuAria": "Sohbet menüsü"
+  "chatHeaderMenuAria": "Sohbet menüsü",
+  "appHomeTagline": "Zaman dolmadan kendi insanını bul.",
+  "appHomeStart": "Başla",
+  "appHomeTrustSafe": "Güvenli",
+  "appHomeTrustModeration": "Moderasyon",
+  "appHomeTrustLocation": "Konum kontrolü",
+  "appLoginSubtitle": "Tekrar hoş geldin! Bağlantını aramaya devam et.",
+  "appLoginRegister": "Kayıt ol",
+  "appShowPassword": "Şifreyi göster",
+  "appHidePassword": "Şifreyi gizle"
 }

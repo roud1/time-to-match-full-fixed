@@ -5,41 +5,30 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { GlowButton } from "@/client/components/experience/primitives/glow-button"
+import { ArrowRight, Lock, MapPin, ShieldCheck } from "lucide-react"
 import { LanguageSwitcher } from "@/client/components/language-switcher"
-import { Logo } from "@/client/components/logo"
 import { useI18n } from "@/client/lib/i18n"
 import { isLoggedIn } from "@/client/lib/user-profile"
 
-const STATS = ["ttmXpHeroStat1", "ttmXpHeroStat2", "ttmXpHeroStat3"] as const
-const DAY = 24 * 60 * 60
-
-const pad = (n: number) => String(n).padStart(2, "0")
-
-/** Decorative 24h countdown (starts at 24:00:00 so server and client markup match). */
-function useCountdown() {
-  const [left, setLeft] = useState(DAY)
-  useEffect(() => {
-    const id = window.setInterval(() => setLeft((s) => (s <= 1 ? DAY : s - 1)), 1000)
-    return () => window.clearInterval(id)
-  }, [])
-  return `${pad(Math.floor(left / 3600))}:${pad(Math.floor((left % 3600) / 60))}:${pad(left % 60)}`
-}
+const TRUST = [
+  { Icon: ShieldCheck, key: "appHomeTrustSafe" },
+  { Icon: Lock, key: "appHomeTrustModeration" },
+  { Icon: MapPin, key: "appHomeTrustLocation" },
+] as const
 
 /**
- * Single-screen, app-style home for phones (shown below 768px, see mobile-app-home.css).
- * No scrolling: brand, one idea, one primary action, a quiet login link.
+ * Start screen of the native app / installed PWA (shown only via html[data-ttm-app], see mobile-app-home.css).
+ * One screen, no scrolling: brand, one idea, one action.
  */
 export function MobileAppHome() {
   const { t } = useI18n()
-  const time = useCountdown()
   const router = useRouter()
   const [loggedIn, setLoggedIn] = useState(false)
 
   useEffect(() => {
     const logged = isLoggedIn()
     setLoggedIn(logged)
-    // Inside the app a signed-in user goes straight to the feed (like a native app would).
+    // Inside the app a signed-in user goes straight to the feed.
     if (logged && document.documentElement.hasAttribute("data-ttm-app")) {
       router.replace("/app")
     }
@@ -48,59 +37,50 @@ export function MobileAppHome() {
   return (
     <section className="xp-mobile-home" aria-labelledby="xp-mobile-title">
       <div className="xp-mobile-home__top">
-        <Logo variant="icon" size="sm" theme="dark" />
         <LanguageSwitcher embedded />
       </div>
 
-      <div className="xp-mobile-home__center">
-        <div className="xp-mobile-home__orb" aria-hidden>
-          <span className="xp-mobile-home__ring" />
-          <span className="xp-mobile-home__ring xp-mobile-home__ring--2" />
-          <Image
-            src="/icon.svg"
-            alt=""
-            width={112}
-            height={112}
-            priority
-            unoptimized
-            className="xp-mobile-home__icon"
-          />
-        </div>
-
-        <p className="xp-mobile-home__timer" aria-hidden>
-          {time}
-        </p>
-
-        <h1 id="xp-mobile-title" className="xp-mobile-home__title">
-          <span className="xp-mobile-home__title-grad">{t("ttmXpHeroHeadline1")}</span>
-          <span>{t("ttmXpHeroHeadline2")}</span>
-          <span className="xp-mobile-home__title-rose">{t("ttmXpHeroHeadline3")}</span>
+      <div className="xp-mobile-home__brand">
+        <Image
+          className="xp-mobile-home__mark"
+          src="/brand/luvia/symbol.svg"
+          alt=""
+          width={676}
+          height={500}
+          priority
+          unoptimized
+        />
+        <h1 id="xp-mobile-title" className="xp-mobile-home__wordmark">
+          <Image src="/brand/luvia/wordmark.svg" alt="Luvia" width={412} height={152} priority unoptimized />
         </h1>
-
-        <p className="xp-mobile-home__sub">{t("ttmXpHeroSubtitle")}</p>
-
-        <ul className="xp-mobile-home__chips" aria-label={t("ttmXpHeroStatsLabel")}>
-          {STATS.map((key) => (
-            <li key={key}>{t(key)}</li>
-          ))}
-        </ul>
+        <p className="xp-mobile-home__tagline">{t("appHomeTagline")}</p>
       </div>
 
       <div className="xp-mobile-home__bottom">
         {loggedIn ? (
-          <GlowButton href="/app" className="w-full">
-            {t("navApp")}
-          </GlowButton>
+          <Link href="/app" className="xp-mobile-home__cta">
+            <span>{t("navApp")}</span>
+            <ArrowRight aria-hidden className="h-5 w-5" />
+          </Link>
         ) : (
           <>
-            <GlowButton href="/register" className="w-full">
-              {t("ttmXpHeroCtaStart")}
-            </GlowButton>
+            <Link href="/register" className="xp-mobile-home__cta">
+              <span>{t("appHomeStart")}</span>
+              <ArrowRight aria-hidden className="h-5 w-5" />
+            </Link>
             <Link href="/login" className="xp-mobile-home__login">
               {t("ttmXpNavLogin")}
             </Link>
           </>
         )}
+        <ul className="xp-mobile-home__trust">
+          {TRUST.map(({ Icon, key }) => (
+            <li key={key}>
+              <Icon aria-hidden className="h-6 w-6" strokeWidth={1.5} />
+              <span>{t(key)}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   )

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 -78 676 676" fill="none">
+  <title>Luvia</title>
+  <defs>
+    <linearGradient id="fl" x1="60" y1="40" x2="370" y2="490" gradientUnits="userSpaceOnUse"><stop stop-color="#E08CFF"/><stop offset="1" stop-color="#9A3CFF"/></linearGradient>
+    <linearGradient id="fr" x1="680" y1="30" x2="310" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#F0C4FF"/><stop offset="1" stop-color="#B66CFF"/></linearGradient>
+  </defs>
+  <path fill="url(#fl)" d="M372 488C250 400 60 300 52 170C46 80 120 28 200 30C290 32 360 70 404 112C340 82 262 72 204 100C152 126 140 200 170 280C210 380 310 450 372 488Z"/>
+  <path fill="url(#fr)" d="M318 478C262 400 262 290 330 200C400 100 480 34 570 28C650 24 690 90 682 160C674 240 630 300 582 336C590 280 574 222 520 202C460 182 400 220 360 280C322 340 302 410 318 478Z"/>
+</svg>

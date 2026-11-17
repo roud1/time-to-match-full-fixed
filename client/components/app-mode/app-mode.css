@@ -640,3 +640,41 @@ html[data-ttm-app] .profile-presence--own .profile-presence__identity--cover {
 html[data-ttm-app] .profile-presence--own .profile-presence__identity-body--cover {
   margin-top: auto;
 }
+
+/* ---- App background: the brand picture behind every in-app screen (website unchanged) ---- */
+html[data-ttm-app] {
+  background-color: #05020a !important;
+  background-image: none !important;
+}
+html[data-ttm-app] body {
+  background: transparent !important;
+}
+html[data-ttm-app] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #05020a;
+  background-image: url("/brand/app-bg.jpg");
+  background-image: image-set(url("/brand/app-bg.webp") type("image/webp"), url("/brand/app-bg.jpg") type("image/jpeg"));
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: cover;
+}
+html[data-ttm-app] .eo-root,
+html[data-ttm-app] .er-reality-root,
+html[data-ttm-app] .world-root {
+  background: transparent !important;
+}
+
+/* Auth screens show the same brand picture: no opaque shell, header floats over it without a bar. */
+html[data-ttm-app] .ttm-auth-shell {
+  background: transparent !important;
+}
+html[data-ttm-app] .ttm-auth-nav {
+  background: transparent;
+  border-bottom-color: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
