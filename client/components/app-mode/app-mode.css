@@ -678,3 +678,15 @@ html[data-ttm-app] .ttm-auth-nav {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
 }
+
+/* iPhone notch / Dynamic Island: every in-app header starts below the status bar
+   (some screens set padding-block on the header and dropped the safe-area inset). */
+html[data-ttm-app] .ttm-floating-header {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem) !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Auth forms: the last link stays above the iPhone home indicator. */
+html[data-ttm-app] .ttm-auth-shell__content-wrap {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
+}

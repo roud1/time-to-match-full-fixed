@@ -10,6 +10,9 @@ import { getActivityCounts } from "@/client/lib/activity-metrics"
 import { tapScaleSoft } from "@/client/lib/motion-system"
 import { BrandIcon, type BrandIconName } from "@/client/components/brand/brand-icon"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { Heart, Map as MapIcon, MessageCircle, User } from "lucide-react"
+import "@/client/components/app/app-dock.css"
 
 export type AppTab = "discover" | "likes" | "chat" | "map"
 export type BottomNavId = AppTab | "profile"
@@ -28,6 +31,14 @@ const NAV_ITEMS: NavItem[] = [
   { id: "chat", href: "/app?tab=chat", labelKey: "tabChat", icon: "chat" },
   { id: "map", href: "/app?tab=map", labelKey: "tabMap", icon: "map" },
   { id: "profile", href: "/profile", labelKey: "tabProfile", icon: "profile" },
+]
+
+/** App only: four tabs as in the app mockup (likes open from the heart in the header). */
+const APP_NAV_ITEMS: Array<{ id: BottomNavId; href: string; labelKey: TranslationKey; Icon: typeof Heart }> = [
+  { id: "discover", href: "/app", labelKey: "appNavDiscover", Icon: Heart },
+  { id: "map", href: "/app?tab=map", labelKey: "tabMap", Icon: MapIcon },
+  { id: "chat", href: "/app?tab=chat", labelKey: "appNavChats", Icon: MessageCircle },
+  { id: "profile", href: "/profile", labelKey: "tabProfile", Icon: User },
 ]
 
 function isTabActive(id: BottomNavId, pathname: string, tabParam: string | null): boolean {
@@ -49,12 +60,40 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
   const reduce = useReducedMotion()
   const [likesBadge, setLikesBadge] = useState(0)
   const [chatBadge, setChatBadge] = useState(0)
+  const inApp = useTtmApp()
 
   useEffect(() => {
     const c = getActivityCounts(locale, location.position)
     setLikesBadge(c.likesUnread)
     setChatBadge(c.chatsUnread)
   }, [locale, location.position, pathname, tabParam])
+
+  if (inApp) {
+    return (
+      <nav className="ttm-app-dock" aria-label="App">
+        <div className="ttm-app-dock__inner">
+          {APP_NAV_ITEMS.map(({ id, href, labelKey, Icon }) => {
+            const isActive =
+              activeOverride !== undefined ? activeOverride === id : isTabActive(id, pathname, tabParam)
+            return (
+              <Link
+                key={id}
+                href={href}
+                className={cn("ttm-app-dock__tab", isActive && "is-active")}
+                aria-current={isActive ? "page" : undefined}
+              >
+                <span className="ttm-app-dock__icon">
+                  <Icon aria-hidden strokeWidth={isActive ? 2 : 1.6} />
+                  {id === "chat" && <NotifyBadge count={chatBadge} />}
+                </span>
+                <span className="ttm-app-dock__label">{t(labelKey)}</span>
+              </Link>
+            )
+          })}
+        </div>
+      </nav>
+    )
+  }
 
   return (
     <nav className="ttm-floating-dock" aria-label="App">

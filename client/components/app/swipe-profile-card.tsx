@@ -12,6 +12,8 @@ import { useI18n } from "@/client/lib/i18n"
 import { cn } from "@/client/lib/utils"
 import { demoPeerPresence } from "@/client/lib/profile-life"
 import { getTimerMoodCardClass, getTimerMoodFromMs, parseTimeLeftToMs } from "@/client/lib/profile-timer-mood"
+import { AppFeedCard } from "@/client/components/app/app-feed-card"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
 
 export type SwipeCardLabels = {
   like: string
@@ -61,11 +63,13 @@ export function SwipeProfileCard({
   nopeOpacity,
   trust,
   onOpenSafety,
+  onOpenProfile,
   onDragEnd,
   onSwipeLeft,
   onSwipeRight,
   stackLayout = "stack",
 }: SwipeProfileCardProps) {
+  const inApp = useTtmApp()
   const photos = getSwipeProfilePhotos(profile)
   const depth = stackIndex
   const compatibility = computeDiscoverCompatibility(profile)
@@ -100,7 +104,29 @@ export function SwipeProfileCard({
 
   const depthOpacity = depth === 0 ? 1 : depth === 1 ? 0.88 : 0.72
 
-  const cardBody = isTop ? (
+  const cardBody = inApp ? (
+    isTop ? (
+      <AppFeedCard
+        profile={profile}
+        likeLabel={labels.like}
+        nopeLabel={labels.nope}
+        safetyAria={labels.safetyAria}
+        likeOpacity={likeOpacity}
+        nopeOpacity={nopeOpacity}
+        onOpenSafety={onOpenSafety}
+        onOpenProfile={onOpenProfile}
+      />
+    ) : (
+      // Next cards in the app: photo only (no text that could show through the top card).
+      <div className="ttm-app-swipe ttm-app-swipe--behind" aria-hidden>
+        <ProfilePhotoImage
+          src={photos[0] ?? profile.image}
+          className="ttm-app-swipe__photo object-cover object-[center_20%]"
+          sizes="320px"
+        />
+      </div>
+    )
+  ) : isTop ? (
     <SwipeProfilePresenceCard
       profile={profile}
       labels={labels}
@@ -130,7 +156,7 @@ export function SwipeProfileCard({
         dragConstraints={false}
         onDragEnd={onDragEnd}
         className={cn(
-          welcomeFlow ? "relative w-full touch-pan-y" : "absolute inset-0 touch-pan-y",
+          welcomeFlow && !inApp ? "relative w-full touch-pan-y" : "absolute inset-0 touch-pan-y",
           onDragEnd && "cursor-grab active:cursor-grabbing"
         )}
       >

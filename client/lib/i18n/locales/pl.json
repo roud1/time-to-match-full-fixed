@@ -1708,5 +1708,11 @@
   "appLoginSubtitle": "Witaj ponownie! Szukaj dalej swojej więzi.",
   "appLoginRegister": "Zarejestruj się",
   "appShowPassword": "Pokaż hasło",
-  "appHidePassword": "Ukryj hasło"
+  "appHidePassword": "Ukryj hasło",
+  "appFeedOpenProfile": "Otwórz profil",
+  "appFeedAge": "Wiek",
+  "appFeedDistance": "Zasięg",
+  "appFeedPurpose": "Cele",
+  "appNavDiscover": "Poznawaj",
+  "appNavChats": "Czaty"
 }

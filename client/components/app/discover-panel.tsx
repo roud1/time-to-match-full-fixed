@@ -32,11 +32,16 @@ import { useProfileLife } from "@/client/hooks/use-profile-life"
 import { fetchSubscriptionSummary, activateProfileBoost } from "@/client/lib/monetization/api"
 import type { SubscriptionApiResponse } from "@/client/lib/monetization/types"
 import { reviveProfilePresence } from "@/client/lib/profile-life-store"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { ChevronDown, MapPin, SlidersHorizontal } from "lucide-react"
+import { cn } from "@/client/lib/utils"
+import "@/client/components/app/app-feed.css"
 export function DiscoverPanel() {
   const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
   const trustV = useTrustSafetyVersion()
   const hydrated = useHydrated()
+  const inApp = useTtmApp()
   const [profiles, setProfiles] = useState<SwipeProfile[]>([])
   const [deckBooted, setDeckBooted] = useState(false)
   const [profileTick, setProfileTick] = useState(0)
@@ -76,9 +81,7 @@ export function DiscoverPanel() {
         }
       }
 
-      setDeckEmptyReason(
-        deck.length === 0 ? (filteredEmpty ? "filters" : "swiped") : null
-      )
+      setDeckEmptyReason(deck.length === 0 ? (filteredEmpty ? "filters" : "swiped") : null)
       return deck
     },
     [locale, location.position, trustV, profileTick, filters]
@@ -114,13 +117,11 @@ export function DiscoverPanel() {
   }, [hydrated, loadSubscription, profileTick])
 
   const user = getUserProfile()
-  const premium = Boolean(
-    subscription?.subscription.isPremium || (user && isPremiumActive(user))
-  )
+  const premium = Boolean(subscription?.subscription.isPremium || (user && isPremiumActive(user)))
   const boostActive = Boolean(subscription?.boost.active)
   const likesRemaining = subscription?.limits.unlimited
     ? null
-    : subscription?.limits.remaining ?? null
+    : (subscription?.limits.remaining ?? null)
   const profileLife = useProfileLife()
   const profileGate = useMemo(() => assessDiscoverProfileReadiness(user), [user, profileTick])
   const displayName = useMemo(() => {
@@ -159,7 +160,17 @@ export function DiscoverPanel() {
   useEffect(() => {
     if (!hydrated || !deckBooted || profiles.length > 0) return
     void loadDeck().then((deck) => {
-      setDeckEmptyReason(deck.length === 0 ? (isDiscoverFilteredEmpty(locale, resolveDiscoverViewerPosition(location.position), filters) ? "filters" : "swiped") : null)
+      setDeckEmptyReason(
+        deck.length === 0
+          ? isDiscoverFilteredEmpty(
+              locale,
+              resolveDiscoverViewerPosition(location.position),
+              filters
+            )
+            ? "filters"
+            : "swiped"
+          : null
+      )
       setProfiles(deck)
     })
   }, [hydrated, deckBooted, profiles.length, loadDeck, locale, location.position, filters])
@@ -206,38 +217,47 @@ export function DiscoverPanel() {
         void reloadDeck({})
       }}
     >
-      {({ card, actions, dialogs }) => (
-        <div className="ttm-welcome-page">
-          {dialogs}
-          <DiscoverPitch name={displayName} className="ttm-welcome-page__pitch--mobile" />
+      {({ card, actions, dialogs }) =>
+        inApp ? (
+          <div className="ttm-app-feed">
+            {dialogs}
+            <AppFeedFilterChips filters={filters} onOpen={() => setFiltersOpen(true)} />
+            <div className="ttm-app-feed__deck">{card}</div>
+            {actions}
+          </div>
+        ) : (
+          <div className="ttm-welcome-page">
+            {dialogs}
+            <DiscoverPitch name={displayName} className="ttm-welcome-page__pitch--mobile" />
 
-          <div className="ttm-welcome-page__grid">
-            <aside className="ttm-welcome-page__aside" aria-label={t("discoverAsideAria")}>
-              <DiscoverPitch name={displayName} className="ttm-welcome-page__pitch--desktop" />
-              <DiscoverAside />
-            </aside>
+            <div className="ttm-welcome-page__grid">
+              <aside className="ttm-welcome-page__aside" aria-label={t("discoverAsideAria")}>
+                <DiscoverPitch name={displayName} className="ttm-welcome-page__pitch--desktop" />
+                <DiscoverAside />
+              </aside>
 
-            <div className="ttm-welcome-page__card-col">
-              <div className="ttm-welcome-page__card">{card}</div>
-              <div
-                className="ttm-welcome-page__actions-bar"
-                aria-label={t("discoverSwipeActionsAria")}
-              >
-                {actions ? (
-                  <div className="ttm-welcome-page__actions-bar-swipe">{actions}</div>
-                ) : null}
-                <div className="ttm-welcome-page__actions-bar-tools">{toolbar}</div>
+              <div className="ttm-welcome-page__card-col">
+                <div className="ttm-welcome-page__card">{card}</div>
+                <div
+                  className="ttm-welcome-page__actions-bar"
+                  aria-label={t("discoverSwipeActionsAria")}
+                >
+                  {actions ? (
+                    <div className="ttm-welcome-page__actions-bar-swipe">{actions}</div>
+                  ) : null}
+                  <div className="ttm-welcome-page__actions-bar-tools">{toolbar}</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="ttm-welcome-page__footer--mobile">
-            <WelcomeMatchTimer />
-            <WelcomeTips />
-            <DiscoverAside compact />
+            <div className="ttm-welcome-page__footer--mobile">
+              <WelcomeMatchTimer />
+              <WelcomeTips />
+              <DiscoverAside compact />
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
     </SwipeDeck>
   )
 
@@ -262,6 +282,62 @@ export function DiscoverPanel() {
       ) : (
         <DiscoverProfileGate status={profileGate}>{deck}</DiscoverProfileGate>
       )}
+    </div>
+  )
+}
+
+/** App only: the active discover filters as chips (real values from the saved filters); each opens the filter sheet. */
+function AppFeedFilterChips({ filters, onOpen }: { filters: DiscoverFilters; onOpen: () => void }) {
+  const { t } = useI18n()
+  const ageMin = filters.ageMin ?? filters.minAge
+  const ageMax = filters.ageMax ?? filters.maxAge
+  const hasAge = ageMin != null || ageMax != null
+  const ageLabel = hasAge ? `${ageMin ?? 18}–${ageMax ?? 99}` : t("appFeedAge")
+  const hasDistance = filters.maxDistance != null
+  const distanceLabel = hasDistance
+    ? `${filters.maxDistance} ${t("discoverFiltersKm")}`
+    : t("appFeedDistance")
+  const hasPurpose = Boolean(filters.purpose)
+  const purposeLabel = hasPurpose
+    ? t(`datingPurpose_${filters.purpose}` as "datingPurpose_serious")
+    : t("appFeedPurpose")
+
+  return (
+    <div className="ttm-app-feed__chips" role="toolbar" aria-label={t("discoverFiltersTitle")}>
+      <div className="ttm-app-feed__chips-scroll">
+        <button
+          type="button"
+          onClick={onOpen}
+          className={cn("ttm-app-feed__chip", hasAge && "is-active")}
+        >
+          <span className="tabular-nums">{ageLabel}</span>
+          <ChevronDown aria-hidden strokeWidth={2} />
+        </button>
+        <button
+          type="button"
+          onClick={onOpen}
+          className={cn("ttm-app-feed__chip", hasDistance && "is-active")}
+        >
+          <MapPin aria-hidden strokeWidth={1.9} />
+          <span className="tabular-nums">{distanceLabel}</span>
+        </button>
+        <button
+          type="button"
+          onClick={onOpen}
+          className={cn("ttm-app-feed__chip", hasPurpose && "is-active")}
+        >
+          <span className="truncate">{purposeLabel}</span>
+          <ChevronDown aria-hidden strokeWidth={2} />
+        </button>
+      </div>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="ttm-app-feed__chip ttm-app-feed__chip--icon"
+        aria-label={t("discoverFiltersOpen")}
+      >
+        <SlidersHorizontal aria-hidden strokeWidth={1.9} />
+      </button>
     </div>
   )
 }

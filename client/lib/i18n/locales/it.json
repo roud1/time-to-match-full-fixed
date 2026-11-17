@@ -1708,5 +1708,11 @@
   "appLoginSubtitle": "Bentornato! Continua a cercare la tua connessione.",
   "appLoginRegister": "Registrati",
   "appShowPassword": "Mostra password",
-  "appHidePassword": "Nascondi password"
+  "appHidePassword": "Nascondi password",
+  "appFeedOpenProfile": "Apri profilo",
+  "appFeedAge": "Età",
+  "appFeedDistance": "Raggio",
+  "appFeedPurpose": "Obiettivi",
+  "appNavDiscover": "Scopri",
+  "appNavChats": "Chat"
 }

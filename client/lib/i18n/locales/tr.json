@@ -1708,5 +1708,11 @@
   "appLoginSubtitle": "Tekrar hoş geldin! Bağlantını aramaya devam et.",
   "appLoginRegister": "Kayıt ol",
   "appShowPassword": "Şifreyi göster",
-  "appHidePassword": "Şifreyi gizle"
+  "appHidePassword": "Şifreyi gizle",
+  "appFeedOpenProfile": "Profili aç",
+  "appFeedAge": "Yaş",
+  "appFeedDistance": "Mesafe",
+  "appFeedPurpose": "Hedefler",
+  "appNavDiscover": "Keşfet",
+  "appNavChats": "Sohbetler"
 }

@@ -25,6 +25,8 @@ import { useTopCardSwipe } from "@/client/hooks/use-top-card-swipe"
 import { SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
 import { cn } from "@/client/lib/utils"
 import { postDiscoverRewind } from "@/client/lib/discover/api"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { Heart, X } from "lucide-react"
 
 const STACK_VISIBLE = 3
 
@@ -114,6 +116,7 @@ export function SwipeDeck({
   const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
   const reduceMotion = useReducedMotion()
+  const inApp = useTtmApp()
   const [matchedProfile, setMatchedProfile] = useState<SwipeProfile | null>(null)
   const [firstMatchMode, setFirstMatchMode] = useState(false)
   const [detailProfile, setDetailProfile] = useState<SwipeProfile | null>(null)
@@ -393,7 +396,54 @@ export function SwipeDeck({
     </div>
   ) : null
 
-  const actionButtons = (
+  // App only: pass / hourglass (super like) / like, as in the app mockup.
+  const appActionButtons = (
+    <div className="ttm-app-feed-actions">
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.9 }}
+        disabled={!current}
+        onClick={() => void flyOff("left")}
+        aria-label={t("nope")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--nope"
+      >
+        <X aria-hidden strokeWidth={2.2} />
+      </motion.button>
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.9 }}
+        disabled={!current}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={superLike}
+        aria-label={t("swipeSuperLikeAria")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--super"
+      >
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M6 3h12M6 21h12M7.5 3c0 5 4.5 6.5 4.5 9s-4.5 4-4.5 9M16.5 3c0 5-4.5 6.5-4.5 9s4.5 4 4.5 9"
+            stroke="currentColor"
+            strokeWidth="1.9"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path d="M9.5 18.6c1.2-1.5 3.8-1.5 5 0l.5 1.4H9z" fill="currentColor" />
+        </svg>
+      </motion.button>
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.9 }}
+        disabled={!current}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={() => void flyOff("right")}
+        aria-label={t("like")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--like"
+      >
+        <Heart aria-hidden fill="currentColor" strokeWidth={0} />
+      </motion.button>
+    </div>
+  )
+
+  const actionButtons = inApp ? appActionButtons : (
     <div className="ttm-swipe-actions shrink-0 flex flex-row lg:flex-col items-center justify-center gap-2.5 sm:gap-3 lg:gap-4 py-1 lg:py-0 safe-area-pb lg:pb-2 relative z-40 pointer-events-auto w-full max-w-md lg:max-w-none mx-auto lg:mx-0">
       <motion.button
         type="button"

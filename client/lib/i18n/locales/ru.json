@@ -1732,5 +1732,11 @@
   "appLoginSubtitle": "С возвращением! Продолжи искать свою связь.",
   "appLoginRegister": "Зарегистрироваться",
   "appShowPassword": "Показать пароль",
-  "appHidePassword": "Скрыть пароль"
+  "appHidePassword": "Скрыть пароль",
+  "appFeedOpenProfile": "Открыть профиль",
+  "appFeedAge": "Возраст",
+  "appFeedDistance": "Радиус",
+  "appFeedPurpose": "Цели",
+  "appNavDiscover": "Знакомства",
+  "appNavChats": "Чаты"
 }
