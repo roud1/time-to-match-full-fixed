@@ -1722,5 +1722,6 @@
   "appFeedDistance": "Radius",
   "appFeedPurpose": "Goals",
   "appNavDiscover": "Discover",
-  "appNavChats": "Chats"
+  "appNavChats": "Chats",
+  "appFeedDemoProfile": "Test profile"
 }

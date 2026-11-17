@@ -30,6 +30,8 @@ export type SwipeProfile = {
   photoVerified?: boolean
   /** Longer about text for discover full card. */
   about?: string
+  /** Seeded test profile from the server (not a real person). */
+  isDemo?: boolean
 }
 
 const CITY_IDS: CityId[] = ["kyiv", "lviv", "odesa", "kharkiv", "dnipro", "lviv", "kyiv", "odesa"]

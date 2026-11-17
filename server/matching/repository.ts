@@ -296,6 +296,7 @@ export async function buildCandidateProfiles(input: {
       purpose: row.purpose,
       commonInterests: common.slice(0, 5),
       photoVerified: row.photo_verified ?? false,
+      isDemo: profile.demo === true,
       profileCompleteness,
       activitySignal,
       likesReceivedSignal,

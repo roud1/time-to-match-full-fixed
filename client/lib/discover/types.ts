@@ -32,6 +32,8 @@ export type DiscoverProfile = {
   compatibility: number
   commonInterests: CommonInterest[]
   photoVerified: boolean
+  /** Seeded test profile, not a real person. */
+  isDemo?: boolean
 }
 
 export type DiscoverFilters = {

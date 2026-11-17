@@ -38,5 +38,6 @@ export function discoverProfileToSwipe(
     commonInterests: card.commonInterests,
     userId: card.id,
     photoVerified: card.photoVerified,
+    isDemo: card.isDemo === true,
   }
 }

@@ -1714,5 +1714,6 @@
   "appFeedDistance": "Umkreis",
   "appFeedPurpose": "Ziele",
   "appNavDiscover": "Entdecken",
-  "appNavChats": "Chats"
+  "appNavChats": "Chats",
+  "appFeedDemoProfile": "Testprofil"
 }

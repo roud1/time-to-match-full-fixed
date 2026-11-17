@@ -171,6 +171,7 @@ export async function getDiscoverFeed(options: DiscoverFeedOptions): Promise<Dis
       compatibility: p.compatibilityScore,
       commonInterests: p.commonInterests,
       photoVerified: p.photoVerified,
+      isDemo: p.isDemo === true,
     })),
   })
 

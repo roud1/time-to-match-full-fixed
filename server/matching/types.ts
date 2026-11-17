@@ -49,6 +49,8 @@ export type CandidateProfile = {
   purpose: string | null
   commonInterests: CommonInterest[]
   photoVerified: boolean
+  /** Seeded test profile (scripts/db-seed-demo.mjs), not a real person. */
+  isDemo?: boolean
 }
 
 export type ScoredCandidate = CandidateProfile & {
