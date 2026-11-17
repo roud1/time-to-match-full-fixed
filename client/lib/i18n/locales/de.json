@@ -1715,5 +1715,15 @@
   "appFeedPurpose": "Ziele",
   "appNavDiscover": "Entdecken",
   "appNavChats": "Chats",
-  "appFeedDemoProfile": "Testprofil"
+  "appFeedDemoProfile": "Testprofil",
+  "appLikesMutualTitle": "Ihr mögt euch gegenseitig!",
+  "appLikesMutualBody": "Schreibt euch gleich",
+  "appLikesMutualWith": "Du und {name} mögt euch. Schreibt euch gleich",
+  "appLikesWrite": "Schreiben",
+  "appLikesAllChats": "Alle Chats",
+  "appLikesCount": "{count} Personen warten auf deine Antwort",
+  "appLikesPremiumTitle": "Premium bietet mehr",
+  "appLikesPremiumPerk1": "Wer dich geliked hat",
+  "appLikesPremiumPerk2": "Unbegrenzte Likes",
+  "appLikesPremiumPerk3": "Letzten Swipe zurücknehmen"
 }

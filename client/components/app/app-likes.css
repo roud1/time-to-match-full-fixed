@@ -1,0 +1,298 @@
+/* Likes screen of the native app / installed PWA (html[data-ttm-app] only — website unchanged).
+   Class names avoid "card" / "glass" / "header": legacy global rules target those substrings. */
+
+html[data-ttm-app] .ttm-app-likes {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 0.5rem 0 1.25rem;
+  color: #f5f3ff;
+}
+
+html[data-ttm-app] .ttm-app-likes__title {
+  margin: 0;
+  font-family: var(--font-sans, inherit);
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+
+html[data-ttm-app] .ttm-app-likes__subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.98rem;
+  color: rgba(237, 233, 254, 0.68);
+}
+
+html[data-ttm-app] .ttm-app-likes__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Fanned photos */
+html[data-ttm-app] .ttm-app-likes__stack {
+  position: relative;
+  width: 14.5rem;
+  height: clamp(9.5rem, 24dvh, 12.5rem);
+  margin: 0.25rem auto 0.9rem;
+}
+
+html[data-ttm-app] .ttm-app-likes__stack-photo {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  width: clamp(6.6rem, 16dvh, 8.6rem);
+  height: clamp(8.4rem, 21dvh, 11rem);
+  overflow: hidden;
+  border: 2px solid rgba(216, 180, 254, 0.75);
+  border-radius: 1.4rem;
+  background: #1a0c30;
+  box-shadow: 0 0 28px rgba(168, 85, 247, 0.5), 0 18px 30px -18px rgba(0, 0, 0, 0.9);
+  transform: translateX(-50%);
+}
+
+html[data-ttm-app] .ttm-app-likes__stack-photo--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html[data-ttm-app] .ttm-app-likes__stack-photo--2-0,
+html[data-ttm-app] .ttm-app-likes__stack-photo--3-0 {
+  transform: translateX(-95%) rotate(-12deg);
+}
+
+html[data-ttm-app] .ttm-app-likes__stack-photo--3-1 {
+  z-index: 2;
+  transform: translateX(-50%) translateY(-0.3rem);
+}
+
+html[data-ttm-app] .ttm-app-likes__stack-photo--2-1,
+html[data-ttm-app] .ttm-app-likes__stack-photo--3-2 {
+  z-index: 1;
+  transform: translateX(-5%) rotate(10deg);
+}
+
+html[data-ttm-app] .ttm-app-likes__blur {
+  filter: blur(14px) saturate(1.1);
+  transform: scale(1.15);
+}
+
+html[data-ttm-app] .ttm-app-likes__badge {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #fff;
+}
+
+html[data-ttm-app] .ttm-app-likes__badge--top {
+  top: 0;
+  right: 1.2rem;
+  width: 2.1rem;
+  height: 2.1rem;
+  background: linear-gradient(135deg, #f472b6, #c026d3);
+  box-shadow: 0 0 16px rgba(236, 72, 153, 0.7);
+}
+
+html[data-ttm-app] .ttm-app-likes__badge--bottom {
+  bottom: -0.4rem;
+  left: 50%;
+  width: 2.9rem;
+  height: 2.9rem;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: linear-gradient(135deg, #e879f9, #9333ea);
+  box-shadow: 0 0 20px rgba(192, 38, 211, 0.7);
+  transform: translateX(-50%);
+}
+
+html[data-ttm-app] .ttm-app-likes__badge svg {
+  width: 52%;
+  height: 52%;
+}
+
+html[data-ttm-app] .ttm-app-likes__hero-title {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-sans, inherit);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+html[data-ttm-app] .ttm-app-likes__hero-body {
+  max-width: 19rem;
+  margin: 0.4rem 0 1.1rem;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: rgba(237, 233, 254, 0.72);
+}
+
+html[data-ttm-app] .ttm-app-likes__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.4rem;
+  margin-top: 0.65rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html[data-ttm-app] .ttm-app-likes__btn:first-of-type {
+  margin-top: 0;
+}
+
+html[data-ttm-app] .ttm-app-likes__btn--primary {
+  border: 1px solid rgba(233, 213, 255, 0.5);
+  background: linear-gradient(90deg, #d946ef 0%, #a855f7 55%, #7c3aed 100%);
+  box-shadow: 0 0 24px rgba(192, 38, 211, 0.45);
+  color: #fff;
+}
+
+html[data-ttm-app] .ttm-app-likes__btn--ghost {
+  border: 1px solid rgba(196, 161, 255, 0.28);
+  background: rgba(20, 10, 38, 0.6);
+  color: #f5f3ff;
+}
+
+/* Premium: list of people who liked you */
+html[data-ttm-app] .ttm-app-likes__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+html[data-ttm-app] .ttm-app-likes__row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid rgba(196, 161, 255, 0.16);
+  border-radius: 1.2rem;
+  background: rgba(20, 10, 38, 0.6);
+}
+
+html[data-ttm-app] .ttm-app-likes__avatar {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 2px solid rgba(216, 180, 254, 0.6);
+  border-radius: 999px;
+}
+
+html[data-ttm-app] .ttm-app-likes__row-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+html[data-ttm-app] .ttm-app-likes__row-name {
+  overflow: hidden;
+  font-size: 1.02rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html[data-ttm-app] .ttm-app-likes__row-meta {
+  font-size: 0.85rem;
+  color: rgba(237, 233, 254, 0.6);
+}
+
+html[data-ttm-app] .ttm-app-likes__like-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #e879f9, #9333ea);
+  box-shadow: 0 0 16px rgba(192, 38, 211, 0.55);
+  color: #fff;
+}
+
+html[data-ttm-app] .ttm-app-likes__like-back svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+/* Premium teaser */
+html[data-ttm-app] .ttm-app-likes__premium {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid rgba(196, 161, 255, 0.22);
+  border-radius: 1.3rem;
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.45), rgba(20, 10, 38, 0.75));
+  color: #f5f3ff;
+  text-align: left;
+}
+
+html[data-ttm-app] .ttm-app-likes__crown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.14);
+  color: #fbbf24;
+}
+
+html[data-ttm-app] .ttm-app-likes__crown svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+html[data-ttm-app] .ttm-app-likes__premium-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+  min-width: 0;
+}
+
+html[data-ttm-app] .ttm-app-likes__premium-title {
+  margin-bottom: 0.15rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+html[data-ttm-app] .ttm-app-likes__perk {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: rgba(237, 233, 254, 0.75);
+}
+
+html[data-ttm-app] .ttm-app-likes__perk svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: #c084fc;
+}
+
+html[data-ttm-app] .ttm-app-likes__chevron {
+  width: 1.3rem;
+  height: 1.3rem;
+  flex-shrink: 0;
+  color: rgba(237, 233, 254, 0.6);
+}

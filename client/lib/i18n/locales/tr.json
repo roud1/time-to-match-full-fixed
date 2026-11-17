@@ -1715,5 +1715,15 @@
   "appFeedPurpose": "Hedefler",
   "appNavDiscover": "Keşfet",
   "appNavChats": "Sohbetler",
-  "appFeedDemoProfile": "Test profili"
+  "appFeedDemoProfile": "Test profili",
+  "appLikesMutualTitle": "Karşılıklı beğeni!",
+  "appLikesMutualBody": "Hemen sohbete başla",
+  "appLikesMutualWith": "Sen ve {name} birbirinizi beğendiniz. Hemen sohbete başla",
+  "appLikesWrite": "Mesaj yaz",
+  "appLikesAllChats": "Tüm sohbetler",
+  "appLikesCount": "{count} kişi cevabını bekliyor",
+  "appLikesPremiumTitle": "Premium daha fazlasını açar",
+  "appLikesPremiumPerk1": "Seni kim beğendi",
+  "appLikesPremiumPerk2": "Sınırsız beğeni",
+  "appLikesPremiumPerk3": "Son kaydırmayı geri al"
 }

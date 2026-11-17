@@ -1739,5 +1739,15 @@
   "appFeedPurpose": "Цели",
   "appNavDiscover": "Знакомства",
   "appNavChats": "Чаты",
-  "appFeedDemoProfile": "Тестовая анкета"
+  "appFeedDemoProfile": "Тестовая анкета",
+  "appLikesMutualTitle": "У вас взаимный лайк!",
+  "appLikesMutualBody": "Начните общение прямо сейчас",
+  "appLikesMutualWith": "Вы и {name} понравились друг другу. Начните общение прямо сейчас",
+  "appLikesWrite": "Написать",
+  "appLikesAllChats": "Все чаты",
+  "appLikesCount": "{count} человек ждут вашего ответа",
+  "appLikesPremiumTitle": "Premium открывает больше",
+  "appLikesPremiumPerk1": "Кто вас лайкнул",
+  "appLikesPremiumPerk2": "Лайки без лимита",
+  "appLikesPremiumPerk3": "Вернуть последний свайп"
 }

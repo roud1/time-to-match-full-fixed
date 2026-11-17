@@ -1715,5 +1715,15 @@
   "appFeedPurpose": "Objectifs",
   "appNavDiscover": "Découvrir",
   "appNavChats": "Chats",
-  "appFeedDemoProfile": "Profil de test"
+  "appFeedDemoProfile": "Profil de test",
+  "appLikesMutualTitle": "C'est un like mutuel !",
+  "appLikesMutualBody": "Commencez à discuter dès maintenant",
+  "appLikesMutualWith": "Vous et {name} vous plaisez. Commencez à discuter dès maintenant",
+  "appLikesWrite": "Écrire",
+  "appLikesAllChats": "Tous les chats",
+  "appLikesCount": "{count} personnes attendent votre réponse",
+  "appLikesPremiumTitle": "Premium en offre plus",
+  "appLikesPremiumPerk1": "Qui vous a liké",
+  "appLikesPremiumPerk2": "Likes illimités",
+  "appLikesPremiumPerk3": "Annuler le dernier swipe"
 }

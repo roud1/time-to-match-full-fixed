@@ -1715,5 +1715,15 @@
   "appFeedPurpose": "Obiettivi",
   "appNavDiscover": "Scopri",
   "appNavChats": "Chat",
-  "appFeedDemoProfile": "Profilo di prova"
+  "appFeedDemoProfile": "Profilo di prova",
+  "appLikesMutualTitle": "È un like reciproco!",
+  "appLikesMutualBody": "Inizia a chattare adesso",
+  "appLikesMutualWith": "Tu e {name} vi piacete. Inizia a chattare adesso",
+  "appLikesWrite": "Scrivi",
+  "appLikesAllChats": "Tutte le chat",
+  "appLikesCount": "{count} persone aspettano la tua risposta",
+  "appLikesPremiumTitle": "Premium sblocca di più",
+  "appLikesPremiumPerk1": "Chi ti ha messo like",
+  "appLikesPremiumPerk2": "Like illimitati",
+  "appLikesPremiumPerk3": "Annulla l'ultimo swipe"
 }

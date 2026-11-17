@@ -1715,5 +1715,15 @@
   "appFeedPurpose": "Цілі",
   "appNavDiscover": "Знайомства",
   "appNavChats": "Чати",
-  "appFeedDemoProfile": "Тестова анкета"
+  "appFeedDemoProfile": "Тестова анкета",
+  "appLikesMutualTitle": "У вас взаємний лайк!",
+  "appLikesMutualBody": "Почніть спілкування просто зараз",
+  "appLikesMutualWith": "Ви і {name} сподобалися одне одному. Почніть спілкування просто зараз",
+  "appLikesWrite": "Написати",
+  "appLikesAllChats": "Усі чати",
+  "appLikesCount": "{count} людей чекають на вашу відповідь",
+  "appLikesPremiumTitle": "Premium відкриває більше",
+  "appLikesPremiumPerk1": "Хто вас лайкнув",
+  "appLikesPremiumPerk2": "Лайки без ліміту",
+  "appLikesPremiumPerk3": "Повернути останній свайп"
 }

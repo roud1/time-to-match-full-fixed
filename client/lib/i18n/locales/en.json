@@ -1723,5 +1723,15 @@
   "appFeedPurpose": "Goals",
   "appNavDiscover": "Discover",
   "appNavChats": "Chats",
-  "appFeedDemoProfile": "Test profile"
+  "appFeedDemoProfile": "Test profile",
+  "appLikesMutualTitle": "It's a mutual like!",
+  "appLikesMutualBody": "Start chatting right now",
+  "appLikesMutualWith": "You and {name} liked each other. Start chatting right now",
+  "appLikesWrite": "Message",
+  "appLikesAllChats": "All chats",
+  "appLikesCount": "{count} people are waiting for your answer",
+  "appLikesPremiumTitle": "Premium unlocks more",
+  "appLikesPremiumPerk1": "Who liked you",
+  "appLikesPremiumPerk2": "Unlimited likes",
+  "appLikesPremiumPerk3": "Undo the last swipe"
 }

@@ -1715,5 +1715,15 @@
   "appFeedPurpose": "Cele",
   "appNavDiscover": "Poznawaj",
   "appNavChats": "Czaty",
-  "appFeedDemoProfile": "Profil testowy"
+  "appFeedDemoProfile": "Profil testowy",
+  "appLikesMutualTitle": "Wzajemne polubienie!",
+  "appLikesMutualBody": "Zacznij rozmowę już teraz",
+  "appLikesMutualWith": "Ty i {name} polubiliście się. Zacznij rozmowę już teraz",
+  "appLikesWrite": "Napisz",
+  "appLikesAllChats": "Wszystkie czaty",
+  "appLikesCount": "{count} osób czeka na Twoją odpowiedź",
+  "appLikesPremiumTitle": "Premium daje więcej",
+  "appLikesPremiumPerk1": "Kto Cię polubił",
+  "appLikesPremiumPerk2": "Nielimitowane polubienia",
+  "appLikesPremiumPerk3": "Cofnij ostatni swipe"
 }
