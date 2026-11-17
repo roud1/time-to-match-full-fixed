@@ -1,34 +1,14 @@
 "use client"
 
 import "./mobile-app-home.css"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useId, useState } from "react"
+import { useEffect, useState } from "react"
 import { ArrowRight, Lock, MapPin, ShieldCheck } from "lucide-react"
 import { LanguageSwitcher } from "@/client/components/language-switcher"
 import { useI18n } from "@/client/lib/i18n"
 import { isLoggedIn } from "@/client/lib/user-profile"
-
-function HourglassMark() {
-  const id = useId()
-  return (
-    <svg className="xp-mobile-home__mark" viewBox="0 0 64 88" fill="none" aria-hidden>
-      <defs>
-        <linearGradient id={`${id}-hg`} x1="8" y1="4" x2="56" y2="84" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#c4a1ff" />
-          <stop offset="1" stopColor="#7c3aed" />
-        </linearGradient>
-      </defs>
-      <g stroke={`url(#${id}-hg)`} strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 6h46M9 82h46" />
-        <path d="M14 6c0 24 13 30 18 38-5 8-18 14-18 38" />
-        <path d="M50 6c0 24-13 30-18 38 5 8 18 14 18 38" />
-        <path d="M25 24c4 3.5 10 3.5 14 0" />
-        <path d="M21 77c6-9 16-9 22 0" />
-      </g>
-    </svg>
-  )
-}
 
 const TRUST = [
   { Icon: ShieldCheck, key: "appHomeTrustSafe" },
@@ -61,10 +41,17 @@ export function MobileAppHome() {
       </div>
 
       <div className="xp-mobile-home__brand">
-        <HourglassMark />
+        <Image
+          className="xp-mobile-home__mark"
+          src="/brand/luvia/symbol.svg"
+          alt=""
+          width={676}
+          height={500}
+          priority
+          unoptimized
+        />
         <h1 id="xp-mobile-title" className="xp-mobile-home__wordmark">
-          <span className="xp-mobile-home__wordmark-top">TIME TO</span>
-          <span className="xp-mobile-home__wordmark-main">MATCH</span>
+          <Image src="/brand/luvia/wordmark.svg" alt="Luvia" width={412} height={152} priority unoptimized />
         </h1>
         <p className="xp-mobile-home__tagline">{t("appHomeTagline")}</p>
       </div>
