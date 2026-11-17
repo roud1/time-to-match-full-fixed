@@ -1708,5 +1708,9 @@
   "appLoginSubtitle": "¡Hola de nuevo! Sigue buscando tu conexión.",
   "appLoginRegister": "Regístrate",
   "appShowPassword": "Mostrar contraseña",
-  "appHidePassword": "Ocultar contraseña"
+  "appHidePassword": "Ocultar contraseña",
+  "appFeedOpenProfile": "Abrir perfil",
+  "appFeedAge": "Edad",
+  "appFeedDistance": "Radio",
+  "appFeedPurpose": "Objetivos"
 }

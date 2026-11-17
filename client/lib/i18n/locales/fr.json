@@ -1708,5 +1708,9 @@
   "appLoginSubtitle": "Bon retour ! Continue à chercher ton lien.",
   "appLoginRegister": "S'inscrire",
   "appShowPassword": "Afficher le mot de passe",
-  "appHidePassword": "Masquer le mot de passe"
+  "appHidePassword": "Masquer le mot de passe",
+  "appFeedOpenProfile": "Ouvrir le profil",
+  "appFeedAge": "Âge",
+  "appFeedDistance": "Rayon",
+  "appFeedPurpose": "Objectifs"
 }

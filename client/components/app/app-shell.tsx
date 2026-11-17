@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense, useEffect, useMemo, useState } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BottomNavBar } from "@/client/components/app/bottom-nav-bar"
@@ -44,6 +45,7 @@ import { LocationBanner } from "@/client/components/location-control"
 import { DesktopAppNav } from "@/client/components/layout/desktop-app-nav"
 import { useDesktopAppNav } from "@/client/hooks/use-desktop-app-nav"
 import { isEmotionalOsEnabled } from "@/client/lib/feature-flags"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
 
 const PAGE_MAX_WIDE = "max-w-[min(1200px,100%)]"
 const PAGE_MAX_NARROW = "max-w-lg"
@@ -58,6 +60,7 @@ export function AppShell() {
   const [ready, setReady] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const isDesktopNav = useDesktopAppNav()
+  const inApp = useTtmApp()
 
   useEffect(() => {
     document.documentElement.classList.add("ttm-native-scroll-lock")
@@ -208,10 +211,16 @@ export function AppShell() {
                   pageMax
                 )}
               >
-                <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile" aria-label="Time to Match">
-                  <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
-                  <Logo variant="icon" size="sm" className="sm:hidden" />
-                </Link>
+                {inApp ? (
+                  <Link href="/app" className="ttm-app-topbar-logo ttm-tactile" aria-label="Luvia">
+                    <Image src="/brand/luvia/logo.svg" alt="Luvia" width={719} height={200} priority unoptimized />
+                  </Link>
+                ) : (
+                  <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile" aria-label="Time to Match">
+                    <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
+                    <Logo variant="icon" size="sm" className="sm:hidden" />
+                  </Link>
+                )}
                 <div className="flex items-center gap-2 shrink-0 min-w-0">
                   {meUser?.level != null && meUser.id !== "local" && (
                     <LevelBadge level={meUser.level} />

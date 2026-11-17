@@ -1708,5 +1708,9 @@
   "appLoginSubtitle": "З поверненням! Продовжуй шукати свій зв'язок.",
   "appLoginRegister": "Зареєструватися",
   "appShowPassword": "Показати пароль",
-  "appHidePassword": "Сховати пароль"
+  "appHidePassword": "Сховати пароль",
+  "appFeedOpenProfile": "Відкрити профіль",
+  "appFeedAge": "Вік",
+  "appFeedDistance": "Радіус",
+  "appFeedPurpose": "Цілі"
 }

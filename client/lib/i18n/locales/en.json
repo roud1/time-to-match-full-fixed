@@ -1716,5 +1716,9 @@
   "appLoginSubtitle": "Welcome back! Keep looking for your connection.",
   "appLoginRegister": "Sign up",
   "appShowPassword": "Show password",
-  "appHidePassword": "Hide password"
+  "appHidePassword": "Hide password",
+  "appFeedOpenProfile": "Open profile",
+  "appFeedAge": "Age",
+  "appFeedDistance": "Radius",
+  "appFeedPurpose": "Goals"
 }
