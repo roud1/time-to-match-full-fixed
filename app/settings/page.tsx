@@ -21,6 +21,14 @@ export default function SettingsPage() {
   const { t } = useI18n()
   const [section, setSection] = useState<Section>("account")
   const [saved, setSaved] = useState(false)
+
+  // Deep link from the app profile: /settings?section=privacy | notifications | security
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("section")
+    if (requested === "privacy" || requested === "notifications" || requested === "security" || requested === "account") {
+      setSection(requested)
+    }
+  }, [])
   const [localProfile, setLocalProfile] = useState(() => getUserProfile())
 
   useEffect(() => {

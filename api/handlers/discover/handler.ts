@@ -14,6 +14,21 @@ function parseIntParam(v: string | null): number | undefined {
   return Number.isFinite(n) ? n : undefined
 }
 
+/**
+ * Who the viewer wants to see when the request has no explicit gender filter:
+ * profile.lookingFor ("men" / "women" / "all"), else the opposite of the viewer's gender.
+ */
+function defaultShowGender(user: { gender: "male" | "female" | null; profile: Record<string, unknown> }) {
+  const lookingFor = user.profile?.lookingFor
+  if (lookingFor === "men") return "male" as const
+  if (lookingFor === "women") return "female" as const
+  if (lookingFor === "all") return undefined
+  const own = user.gender ?? (user.profile?.gender === "male" || user.profile?.gender === "female" ? user.profile.gender : null)
+  if (own === "male") return "female" as const
+  if (own === "female") return "male" as const
+  return undefined
+}
+
 export async function OPTIONS(request: Request) {
   return withCors(request, new NextResponse(null, { status: 204 }))
 }
@@ -35,11 +50,15 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url)
+  const genderParam = searchParams.get("gender")
   const filters: DiscoverFilters = {
     purpose: searchParams.get("purpose") || user.purpose || undefined,
-    gender: searchParams.get("gender") === "male" || searchParams.get("gender") === "female"
-      ? searchParams.get("gender") as "male" | "female"
-      : undefined,
+    gender:
+      genderParam === "male" || genderParam === "female"
+        ? genderParam
+        : genderParam === "all"
+          ? undefined
+          : defaultShowGender(user),
     ageMin:
       parseIntParam(searchParams.get("ageMin")) ??
       parseIntParam(searchParams.get("minAge")) ??

@@ -13,6 +13,9 @@
 import bcrypt from "bcryptjs"
 import crypto from "node:crypto"
 import postgres from "postgres"
+import fs from "node:fs"
+import path from "node:path"
+import { fileURLToPath } from "node:url"
 
 if (process.env.SEED_DEMO_PROFILES !== "1") {
   console.log("seed-demo: SEED_DEMO_PROFILES is not 1 — skipping")
@@ -40,6 +43,25 @@ const DEMO = [
   { n: "Артём", g: "male", age: 34, city: "Москва", bio: "Инженер, путешествую по России на машине, люблю подкасты.", i: [14, 25, 5, 11] },
 ]
 
+// Photos of the test profiles: public/demo/people/demo-<N>.(jpg|jpeg|png|webp), extra ones demo-<N>-2, demo-<N>-3.
+// Only AI-generated faces of non-existent people (or people who agreed) belong there — see README.md in that folder.
+const PEOPLE_DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "public", "demo", "people")
+const PHOTO_EXT = ["webp", "jpg", "jpeg", "png"]
+
+function demoPhotos(n) {
+  const found = []
+  for (const suffix of ["", "-2", "-3"]) {
+    for (const ext of PHOTO_EXT) {
+      const file = `demo-${n}${suffix}.${ext}`
+      if (fs.existsSync(path.join(PEOPLE_DIR, file))) {
+        found.push(`/demo/people/${file}`)
+        break
+      }
+    }
+  }
+  return found.length > 0 ? found : [`/demo/avatar-${n}.svg`]
+}
+
 function birthdateForAge(age, idx) {
   const d = new Date()
   d.setFullYear(d.getFullYear() - age)
@@ -55,15 +77,15 @@ try {
   for (let idx = 0; idx < DEMO.length; idx++) {
     const p = DEMO[idx]
     const email = `demo${idx + 1}@${DOMAIN}`
-    const photo = `/demo/avatar-${idx + 1}.svg`
+    const photos = demoPhotos(idx + 1)
     const birthdate = birthdateForAge(p.age, idx)
     const profile = {
       gender: p.g,
       birthdate,
       bio: p.bio,
       customCity: p.city,
-      photoUrl: photo,
-      photoUrls: [photo],
+      photoUrl: photos[0],
+      photoUrls: photos,
       demo: true,
     }
     const [row] = await sql`

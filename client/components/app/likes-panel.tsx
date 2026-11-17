@@ -16,6 +16,9 @@ import { fetchIncomingLikes, incomingLikeToProfileId } from "@/client/lib/likes/
 import { fetchSubscriptionSummary } from "@/client/lib/monetization/api"
 import { CinematicButton } from "@/client/components/ui/cinematic-button"
 import { cn } from "@/client/lib/utils"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useMatches } from "@/client/hooks/use-matches"
+import { AppLikesView } from "@/client/components/app/app-likes-view"
 
 function LikesProfileCard({
   profile,
@@ -103,6 +106,8 @@ function cnImage(blurred: boolean, grid?: boolean) {
 export function LikesPanel() {
   const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
+  const inApp = useTtmApp()
+  const { data: serverMatches } = useMatches()
   const [likes, setLikes] = useState<SwipeProfile[]>([])
   const [incomingCount, setIncomingCount] = useState(0)
   const [premium, setPremium] = useState(false)
@@ -201,6 +206,34 @@ export function LikesPanel() {
   const displayCount = premium ? likes.length : Math.max(incomingCount, likes.length)
   const countLabel = t("likesCountLabel").replace("{count}", String(displayCount))
   const showPaywall = !premium && (premiumRequired || displayCount > 0)
+
+  if (inApp) {
+    // Newest active match nobody has written in yet → "mutual like" hero.
+    const freshMatch =
+      (serverMatches ?? [])
+        .filter((m) => !m.isExpired && (m.bond?.totalMessages ?? 0) === 0)
+        .sort((a, b) => b.expiresAt.localeCompare(a.expiresAt))[0] ?? null
+    return (
+      <>
+        <MatchCelebrationScreen
+          profile={matchedProfile}
+          isFirstMatch={firstMatchMode}
+          onClose={() => {
+            setMatchedProfile(null)
+            setFirstMatchMode(false)
+          }}
+        />
+        <AppLikesView
+          likes={likes}
+          count={displayCount}
+          premium={premium}
+          freshMatch={freshMatch}
+          onLikeBack={handleLikeBack}
+          onOpenPremium={() => openUpgrade("likedYou")}
+        />
+      </>
+    )
+  }
 
   return (
     <div className="ttm-likes-page">

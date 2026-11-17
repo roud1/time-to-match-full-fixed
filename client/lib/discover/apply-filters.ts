@@ -12,7 +12,7 @@ export function applyDiscoverFilters(
   const user = getUserProfile()
 
   return profiles.filter((p) => {
-    if (filters.gender && p.gender !== filters.gender) return false
+    if (filters.gender && filters.gender !== "all" && p.gender !== filters.gender) return false
     if (filters.minAge != null && p.age < filters.minAge) return false
     if (filters.maxAge != null && p.age > filters.maxAge) return false
 

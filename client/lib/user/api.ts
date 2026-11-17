@@ -21,6 +21,8 @@ function syncLocalFromServerUser(user: MeResponse["user"]): void {
     name: user.name,
     email: user.email,
     purpose: (user.purpose ?? undefined) as DatingPurpose | undefined,
+    gender: user.gender ?? undefined,
+    lookingFor: user.lookingFor ?? undefined,
     ageMin: user.ageMin,
     ageMax: user.ageMax,
     maxDistance: user.maxDistance,

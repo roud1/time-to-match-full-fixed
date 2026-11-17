@@ -47,6 +47,8 @@ import { ProfilePresenceCard } from "@/client/components/profile/profile-presenc
 import { strengthHintKey } from "@/client/components/profile/profile-strength-utils"
 import { getConnectionSummary } from "@/client/lib/connection-summary"
 import { getProfileTimeLeft } from "@/client/lib/user-profile"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { AppProfileHome } from "@/client/components/profile/app-profile-home"
 import { VibeCloudPicker, IntentionDeck, MoodOrbit } from "@/client/components/profile/identity-pickers"
 import { ProfileVoiceIntro } from "@/client/components/profile/profile-voice-intro"
 import { OwnTrustCenter } from "@/client/components/trust/own-trust-center"
@@ -158,6 +160,7 @@ function formatProfileTimer(h: number, m: number, s: number) {
 export function ProfileScreen() {
   const { user: meUser } = useUser()
   const { verified: photoVerified } = useVerificationStatus()
+  const inApp = useTtmApp()
   const { data: achievements = [] } = useAchievements(Boolean(meUser?.id && meUser.id !== "local"))
   const { t, locale } = useI18n()
   const router = useRouter()
@@ -724,6 +727,21 @@ export function ProfileScreen() {
       )}
     </div>
   )
+
+  if (inApp && section === "profile" && !editing) {
+    return (
+      <AppProfileHome
+        name={profile.name}
+        age={profile.birthdate ? getAgeFromBirthdate(profile.birthdate) : null}
+        photo={photos[0] ?? null}
+        verified={Boolean(photoVerified || meUser?.photo_verified)}
+        premium={isPremiumActive(profile)}
+        expiresAt={meUser?.profileExpiresAt}
+        onEdit={() => setEditing(true)}
+        onLogout={handleLogout}
+      />
+    )
+  }
 
   return (
     <motion.div

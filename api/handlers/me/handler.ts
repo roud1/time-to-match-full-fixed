@@ -69,6 +69,12 @@ export async function GET(request: Request) {
         profileExpiresAt: user.profile_expires_at?.toISOString() ?? null,
         purpose: user.purpose ?? null,
         gender: user.gender ?? null,
+        lookingFor:
+          user.profile?.lookingFor === "men" ||
+          user.profile?.lookingFor === "women" ||
+          user.profile?.lookingFor === "all"
+            ? user.profile.lookingFor
+            : null,
         ageMin: user.age_min ?? null,
         ageMax: user.age_max ?? null,
         latitude: user.latitude ?? null,

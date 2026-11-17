@@ -6,6 +6,15 @@ import { useI18n } from "@/client/lib/i18n"
 import type { DiscoverFilters } from "@/client/lib/discover/types"
 import { DATING_PURPOSES, type DatingPurpose } from "@/client/lib/interests/types"
 import { cn } from "@/client/lib/utils"
+import { getUserProfile } from "@/client/lib/user-profile"
+import { getSwipeGenderPreferences } from "@/client/lib/swipe-gender-filter"
+
+/** Who is shown when no gender filter is saved: "looking for" from the profile. */
+function profileShowGender(): "male" | "female" | "all" {
+  const prefs = getSwipeGenderPreferences(getUserProfile())
+  if (prefs?.length === 1) return prefs[0]
+  return "all"
+}
 
 type DiscoverFiltersModalProps = {
   open: boolean
@@ -60,19 +69,19 @@ export function DiscoverFiltersModal({
 
             <div className="space-y-4 max-h-[min(70vh,520px)] overflow-y-auto pr-1">
               <div className="space-y-2">
-                <span className="text-xs text-[var(--text-secondary)] font-light">{t("profileGender")}</span>
-                <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t("profileGender")}>
+                <span className="text-xs text-[var(--text-secondary)] font-light">{t("regLookingFor")}</span>
+                <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t("regLookingFor")}>
                   {(
                     [
-                      { value: "", label: t("discoverFiltersAny") },
-                      { value: "male", label: t("regGenderMale") },
-                      { value: "female", label: t("regGenderFemale") },
+                      { value: "female", label: t("regLookingWomen") },
+                      { value: "male", label: t("regLookingMen") },
+                      { value: "all", label: t("regLookingAll") },
                     ] as const
                   ).map((opt) => {
-                    const selected = (draft.gender ?? "") === opt.value
+                    const selected = (draft.gender ?? profileShowGender()) === opt.value
                     return (
                       <label
-                        key={opt.value || "all"}
+                        key={opt.value}
                         className={cn(
                           "inline-flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-light cursor-pointer touch-manipulation transition-colors",
                           selected
@@ -88,10 +97,7 @@ export function DiscoverFiltersModal({
                           onChange={() =>
                             setDraft((d) => ({
                               ...d,
-                              gender:
-                                opt.value === "male" || opt.value === "female"
-                                  ? opt.value
-                                  : undefined,
+                              gender: opt.value,
                             }))
                           }
                           className="sr-only"

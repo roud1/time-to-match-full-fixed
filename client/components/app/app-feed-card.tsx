@@ -101,6 +101,8 @@ export function AppFeedCard({
         </button>
       )}
 
+      {profile.isDemo && <span className="ttm-app-swipe__demo">{t("appFeedDemoProfile")}</span>}
+
       {likeOpacity && nopeOpacity && (
         <>
           <motion.span style={{ opacity: likeOpacity }} className="ttm-app-swipe__stamp ttm-app-swipe__stamp--like">
