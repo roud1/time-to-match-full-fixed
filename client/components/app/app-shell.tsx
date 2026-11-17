@@ -46,6 +46,9 @@ import { DesktopAppNav } from "@/client/components/layout/desktop-app-nav"
 import { useDesktopAppNav } from "@/client/hooks/use-desktop-app-nav"
 import { isEmotionalOsEnabled } from "@/client/lib/feature-flags"
 import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { Heart } from "lucide-react"
+import { NotifyBadge } from "@/client/components/ui/notify-badge"
+import { getActivityCounts } from "@/client/lib/activity-metrics"
 
 const PAGE_MAX_WIDE = "max-w-[min(1200px,100%)]"
 const PAGE_MAX_NARROW = "max-w-lg"
@@ -222,8 +225,10 @@ export function AppShell() {
                   </Link>
                 )}
                 <div className="flex items-center gap-2 shrink-0 min-w-0">
-                  {meUser?.level != null && meUser.id !== "local" && (
-                    <LevelBadge level={meUser.level} />
+                  {inApp ? (
+                    <AppLikesLink />
+                  ) : (
+                    meUser?.level != null && meUser.id !== "local" && <LevelBadge level={meUser.level} />
                   )}
                   <ActivityAppChrome />
                   <ThemeToggle compact className="shrink-0" />
@@ -295,5 +300,20 @@ export function AppShell() {
         <PaywallModal />
       </PremiumUpgradeProvider>
     </ActivityFeedProvider>
+  )
+}
+
+/** App only: the likes screen is not a tab in the app — it opens from this heart (with the unread count). */
+function AppLikesLink() {
+  const { t, locale, location } = useI18n()
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    setCount(getActivityCounts(locale, location.position).likesUnread)
+  }, [locale, location.position])
+  return (
+    <Link href="/app?tab=likes" className="ttm-app-likes-link" aria-label={t("tabLikes")}>
+      <Heart aria-hidden strokeWidth={1.8} />
+      <NotifyBadge count={count} />
+    </Link>
   )
 }

@@ -67,9 +67,9 @@ html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck-stack {
   border-radius: 28px;
 }
 
-/* The floating dock overlays the bottom of the screen: keep only a small gap above it on the feed. */
+/* Small gap between the action buttons and the bottom navigation. */
 html[data-ttm-app] .ttm-native-app--discover .ttm-native-app__main {
-  padding-bottom: calc(var(--ttm-dock-height, 4.75rem) - 3.6rem + env(safe-area-inset-bottom, 0px)) !important;
+  padding-bottom: calc(var(--ttm-dock-height) + 0.6rem) !important;
 }
 
 /* ── Filter chips (real saved filters) ──────────────────────────────────────── */

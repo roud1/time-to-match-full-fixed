@@ -1712,5 +1712,7 @@
   "appFeedOpenProfile": "Ouvrir le profil",
   "appFeedAge": "Âge",
   "appFeedDistance": "Rayon",
-  "appFeedPurpose": "Objectifs"
+  "appFeedPurpose": "Objectifs",
+  "appNavDiscover": "Découvrir",
+  "appNavChats": "Chats"
 }

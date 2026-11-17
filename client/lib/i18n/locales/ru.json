@@ -1736,5 +1736,7 @@
   "appFeedOpenProfile": "Открыть профиль",
   "appFeedAge": "Возраст",
   "appFeedDistance": "Радиус",
-  "appFeedPurpose": "Цели"
+  "appFeedPurpose": "Цели",
+  "appNavDiscover": "Знакомства",
+  "appNavChats": "Чаты"
 }
