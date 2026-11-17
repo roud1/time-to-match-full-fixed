@@ -61,7 +61,7 @@ def paper_boat(name, size=1.0, color=(0.98, 0.95, 0.88), coll=None):
 
 def star_pickup(name, size=0.25, coll=None):
     root = G.empty(name, coll=coll)
-    G.finish(f"{name}_Star", G.star3d(size, size * 0.45, size * 0.35), MAT.basic("TikoTailStar", (1.0, 0.8, 0.3)), parent=root, coll=coll)
+    G.finish(f"{name}_Star", G.star3d(size, size * 0.45, size * 0.35), MAT.basic("PropStarGlow", (1.0, 0.78, 0.25), rough=0.35, emit=(1.0, 0.75, 0.25), estr=2.5), parent=root, coll=coll)
     return root
 
 

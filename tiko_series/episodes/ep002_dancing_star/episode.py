@@ -6,18 +6,18 @@
 10–16 s The star bounces around him to the beat; Tiko jumps up and dances along. "I can dance!"
 16–20 s The star lands on his tail tip and both stars glow; Tiko giggles and winks. "Dance with me!"
 """
-STAR_PATH = [(0, (0.9, -0.2, 3.5)), (14, (0.9, -0.2, 0.25)), (22, (1.1, -0.2, 0.8)), (32, (1.4, -0.2, 0.25)),
-             (90, (1.6, -0.1, 0.25)), (102, (2.3, 0, 0.9)), (114, (3.0, 0, 0.25)), (126, (3.7, 0, 0.9)),
-             (138, (4.4, 0, 0.25)), (150, (5.1, 0, 0.9)), (162, (5.8, 0, 0.25)), (230, (5.9, 0, 0.25))]
+STAR_PATH = [(0, (0.9, -0.2, 3.5)), (14, (0.9, -0.2, 0.34)), (22, (1.1, -0.2, 0.8)), (32, (1.4, -0.2, 0.34)),
+             (90, (1.6, -0.1, 0.34)), (102, (2.3, 0, 0.9)), (114, (3.0, 0, 0.34)), (126, (3.7, 0, 0.9)),
+             (138, (4.4, 0, 0.34)), (150, (5.1, 0, 0.9)), (162, (5.8, 0, 0.34)), (230, (5.9, 0, 0.34))]
 # dancing bounce around Tiko on the beat (15 frames per beat)
 for k in range(12):
     f = 300 + k * 15
-    STAR_PATH.append((f, (5.1 + 0.8 * (1 if k % 2 else -1), -0.4, 0.3 if k % 2 == 0 else 1.0)))
+    STAR_PATH.append((f, (5.1 + 0.8 * (1 if k % 2 else -1), -0.4, 0.36 if k % 2 == 0 else 1.05)))
 STAR_PATH += [(486, (4.6, 0.3, 1.2)), (500, (4.86, 0.42, 0.95))]
 
 EPISODE = {
     "id": "ep002", "title": "Tiko and the Dancing Star", "frames": 600,
-    "set": "meadow", "set_params": {"seed": 23, "x_range": (-6, 14), "flower_beds": [(5.1, 0.9, 1.0)]},
+    "set": "meadow", "set_params": {"seed": 23, "x_range": (-6, 14), "flower_beds": [(5.6, 2.3, 0.8)]},
     "lighting": "day",
     "lines": [
         {"id": "01_ooh", "start": 20, "text": "Ooh! A star!"},
@@ -28,7 +28,7 @@ EPISODE = {
         {"id": "06_withme", "start": 548, "text": "Dance with me!"},
     ],
     "props": {
-        "star": {"type": "star", "build": {"size": 0.16}, "path": STAR_PATH, "yaw": [(0, 0), (600, 1440)], "bob": 0.0},
+        "star": {"type": "star", "build": {"size": 0.3}, "path": STAR_PATH, "yaw": [(0, 0), (600, 1440)], "bob": 0.0},
     },
     "tiko": {
         "path": [(0, (0, 0, 0)), (90, (0.1, 0, 0)), (102, (0.8, 0, 0)), (126, (2.0, 0, 0)), (150, (3.2, 0, 0)),
