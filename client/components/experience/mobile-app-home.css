@@ -78,16 +78,16 @@ html[data-ttm-app] .xp-mobile-home__wordmark {
 }
 
 html[data-ttm-app] .xp-mobile-home__wordmark img {
-  width: clamp(140px, 20dvh, 180px);
-  max-width: 50vw;
+  width: clamp(116px, 16.5dvh, 150px);
+  max-width: 42vw;
   height: auto;
   filter: drop-shadow(0 0 18px rgba(182, 108, 255, 0.35));
 }
 
 html[data-ttm-app] .xp-mobile-home__tagline {
   margin: clamp(0.8rem, 2.6dvh, 1.4rem) 0 0;
-  max-width: 15.5rem;
-  font-size: clamp(1rem, 2.5dvh, 1.2rem);
+  max-width: 15rem;
+  font-size: clamp(0.94rem, 2.2dvh, 1.06rem);
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.88);
 }
