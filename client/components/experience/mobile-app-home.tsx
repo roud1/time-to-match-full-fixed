@@ -30,50 +30,6 @@ function HourglassMark() {
   )
 }
 
-/** Horizon of a planet with a couple standing on it (decorative). */
-function HorizonScene() {
-  const id = useId()
-  return (
-    <svg
-      className="xp-mobile-home__scene-svg"
-      viewBox="0 0 375 520"
-      preserveAspectRatio="xMidYMax slice"
-      fill="none"
-      aria-hidden
-    >
-      <defs>
-        <radialGradient id={`${id}-halo`} cx="187.5" cy="210" r="215" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#a855f7" stopOpacity=".55" />
-          <stop offset=".5" stopColor="#6d28d9" stopOpacity=".2" />
-          <stop offset="1" stopColor="#6d28d9" stopOpacity="0" />
-        </radialGradient>
-        <linearGradient id={`${id}-rim`} x1="0" y1="0" x2="375" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#7c3aed" stopOpacity=".15" />
-          <stop offset=".5" stopColor="#d8b4fe" />
-          <stop offset="1" stopColor="#7c3aed" stopOpacity=".15" />
-        </linearGradient>
-        <radialGradient id={`${id}-body`} cx="187" cy="230" r="380" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#1b0b36" />
-          <stop offset=".55" stopColor="#0a0414" />
-          <stop offset="1" stopColor="#050209" />
-        </radialGradient>
-        <filter id={`${id}-blur`} x="-20%" y="-50%" width="140%" height="200%">
-          <feGaussianBlur stdDeviation="7" />
-        </filter>
-      </defs>
-      <rect width="375" height="520" fill={`url(#${id}-halo)`} />
-      <circle cx="187.5" cy="700" r="500" stroke={`url(#${id}-rim)`} strokeWidth="6" filter={`url(#${id}-blur)`} />
-      <circle cx="187.5" cy="700" r="500" fill={`url(#${id}-body)`} stroke={`url(#${id}-rim)`} strokeWidth="1.6" />
-      <g fill="#05020a" stroke="#c4a1ff" strokeOpacity=".35" strokeWidth=".5" transform="translate(190 164) scale(1.5) translate(-190 -164)">
-        <circle cx="178" cy="172" r="4.6" />
-        <path d="M172.6 180.5c0-2.4 2.4-3.6 5.4-3.6s5.4 1.2 5.4 3.6V200l-1.2 22h-2.6l-1.6-18-1.6 18h-2.6l-1.2-22z" />
-        <circle cx="198" cy="176" r="4.2" />
-        <path d="M193 184c0-2.2 2.2-3.3 5-3.3s5 1.1 5 3.3v15l-1 23h-2.4l-1.6-17-1.6 17H194l-1-23z" />
-      </g>
-    </svg>
-  )
-}
-
 const TRUST = [
   { Icon: ShieldCheck, key: "appHomeTrustSafe" },
   { Icon: Lock, key: "appHomeTrustModeration" },
@@ -100,10 +56,6 @@ export function MobileAppHome() {
 
   return (
     <section className="xp-mobile-home" aria-labelledby="xp-mobile-title">
-      <div className="xp-mobile-home__scene" aria-hidden>
-        <HorizonScene />
-      </div>
-
       <div className="xp-mobile-home__top">
         <LanguageSwitcher embedded />
       </div>
