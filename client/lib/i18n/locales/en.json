@@ -1733,5 +1733,9 @@
   "appLikesPremiumTitle": "Premium unlocks more",
   "appLikesPremiumPerk1": "Who liked you",
   "appLikesPremiumPerk2": "Unlimited likes",
-  "appLikesPremiumPerk3": "Undo the last swipe"
+  "appLikesPremiumPerk3": "Undo the last swipe",
+  "appChatsSearch": "Search by name",
+  "appChatsNothingFound": "No one found",
+  "appChatsSayHi": "Say hi first",
+  "appChatsPremium": "Premium: priority extension of the connection timer"
 }

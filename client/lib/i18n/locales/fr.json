@@ -1725,5 +1725,9 @@
   "appLikesPremiumTitle": "Premium en offre plus",
   "appLikesPremiumPerk1": "Qui vous a liké",
   "appLikesPremiumPerk2": "Likes illimités",
-  "appLikesPremiumPerk3": "Annuler le dernier swipe"
+  "appLikesPremiumPerk3": "Annuler le dernier swipe",
+  "appChatsSearch": "Rechercher par nom",
+  "appChatsNothingFound": "Personne trouvé",
+  "appChatsSayHi": "Écrivez en premier",
+  "appChatsPremium": "Premium : prolongation prioritaire du minuteur"
 }

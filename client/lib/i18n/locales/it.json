@@ -1725,5 +1725,9 @@
   "appLikesPremiumTitle": "Premium sblocca di più",
   "appLikesPremiumPerk1": "Chi ti ha messo like",
   "appLikesPremiumPerk2": "Like illimitati",
-  "appLikesPremiumPerk3": "Annulla l'ultimo swipe"
+  "appLikesPremiumPerk3": "Annulla l'ultimo swipe",
+  "appChatsSearch": "Cerca per nome",
+  "appChatsNothingFound": "Nessuno trovato",
+  "appChatsSayHi": "Scrivi per primo",
+  "appChatsPremium": "Premium: proroga prioritaria del timer"
 }

@@ -1725,5 +1725,9 @@
   "appLikesPremiumTitle": "Premium daha fazlasını açar",
   "appLikesPremiumPerk1": "Seni kim beğendi",
   "appLikesPremiumPerk2": "Sınırsız beğeni",
-  "appLikesPremiumPerk3": "Son kaydırmayı geri al"
+  "appLikesPremiumPerk3": "Son kaydırmayı geri al",
+  "appChatsSearch": "İsme göre ara",
+  "appChatsNothingFound": "Kimse bulunamadı",
+  "appChatsSayHi": "İlk sen yaz",
+  "appChatsPremium": "Premium: bağlantı süresini öncelikli uzat"
 }

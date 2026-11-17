@@ -1725,5 +1725,9 @@
   "appLikesPremiumTitle": "Premium відкриває більше",
   "appLikesPremiumPerk1": "Хто вас лайкнув",
   "appLikesPremiumPerk2": "Лайки без ліміту",
-  "appLikesPremiumPerk3": "Повернути останній свайп"
+  "appLikesPremiumPerk3": "Повернути останній свайп",
+  "appChatsSearch": "Пошук за ім'ям",
+  "appChatsNothingFound": "Нікого не знайшли",
+  "appChatsSayHi": "Напишіть першим",
+  "appChatsPremium": "Premium: пріоритетне продовження таймера зв'язку"
 }

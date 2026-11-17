@@ -12,6 +12,8 @@ import { EmptyState } from "@/client/components/ui/empty-state"
 import { MessageCircle } from "lucide-react"
 import { PremiumButton } from "@/client/components/ui/premium-button"
 import { cn } from "@/client/lib/utils"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { AppChatsList } from "@/client/components/chat/app-chats-list"
 
 export function ChatThreadSkeleton({ rows = 5 }: { rows?: number }) {
   return (
@@ -71,6 +73,22 @@ export function ChatInboxScreen({
   onlineByUserId?: Record<string, boolean>
 }) {
   const isSidebar = variant === "sidebar"
+  const inApp = useTtmApp()
+
+  if (inApp && !isSidebar) {
+    return (
+      <AppChatsList
+        threads={threads}
+        profilesByThread={profilesByThread}
+        pulseThread={pulseThread}
+        locale={locale}
+        loading={loading}
+        onlineByUserId={onlineByUserId}
+        onOpen={onOpen}
+        onDeleteThread={onDeleteThread}
+      />
+    )
+  }
 
   return (
     <div

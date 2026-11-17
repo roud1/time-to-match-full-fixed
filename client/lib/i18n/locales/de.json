@@ -1725,5 +1725,9 @@
   "appLikesPremiumTitle": "Premium bietet mehr",
   "appLikesPremiumPerk1": "Wer dich geliked hat",
   "appLikesPremiumPerk2": "Unbegrenzte Likes",
-  "appLikesPremiumPerk3": "Letzten Swipe zurücknehmen"
+  "appLikesPremiumPerk3": "Letzten Swipe zurücknehmen",
+  "appChatsSearch": "Nach Namen suchen",
+  "appChatsNothingFound": "Niemand gefunden",
+  "appChatsSayHi": "Schreib als Erste:r",
+  "appChatsPremium": "Premium: bevorzugte Verlängerung des Verbindungs-Timers"
 }
