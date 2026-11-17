@@ -36,7 +36,8 @@ export type DiscoverProfile = {
 
 export type DiscoverFilters = {
   purpose?: string
-  gender?: "male" | "female"
+  /** Who to show. Not set = use "looking for" from the viewer's profile; "all" = everyone. */
+  gender?: "male" | "female" | "all"
   ageMin?: number
   ageMax?: number
   minAge?: number

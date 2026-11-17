@@ -15,6 +15,8 @@ export type User = {
   profileExpiresAt?: string | null
   purpose?: string | null
   gender?: "male" | "female" | null
+  /** Who the user wants to see (registration "Ищу"). */
+  lookingFor?: "men" | "women" | "all" | null
   ageMin?: number | null
   ageMax?: number | null
   latitude?: number | null
