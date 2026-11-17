@@ -1729,5 +1729,11 @@
   "appChatsSearch": "Nach Namen suchen",
   "appChatsNothingFound": "Niemand gefunden",
   "appChatsSayHi": "Schreib als Erste:r",
-  "appChatsPremium": "Premium: bevorzugte Verlängerung des Verbindungs-Timers"
+  "appChatsPremium": "Premium: bevorzugte Verlängerung des Verbindungs-Timers",
+  "appMapEmptyTitle": "Noch niemand in der Nähe",
+  "appMapEmptyBody": "Hier erscheinen Menschen, die ihren Standort teilen und zu deinen Filtern passen",
+  "appMapNoLocationTitle": "Standort benötigt",
+  "appMapNoLocationBody": "Erlaube den Standortzugriff oder gib deine Stadt im Profil an",
+  "appMapLocate": "Meinen Standort aktualisieren",
+  "appMapOpen": "Öffnen"
 }

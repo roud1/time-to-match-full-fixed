@@ -1729,5 +1729,11 @@
   "appChatsSearch": "Пошук за ім'ям",
   "appChatsNothingFound": "Нікого не знайшли",
   "appChatsSayHi": "Напишіть першим",
-  "appChatsPremium": "Premium: пріоритетне продовження таймера зв'язку"
+  "appChatsPremium": "Premium: пріоритетне продовження таймера зв'язку",
+  "appMapEmptyTitle": "Поруч поки нікого",
+  "appMapEmptyBody": "Тут з'являться люди, які увімкнули геолокацію і підходять під ваші фільтри",
+  "appMapNoLocationTitle": "Потрібна геолокація",
+  "appMapNoLocationBody": "Дозвольте доступ до місцезнаходження або вкажіть місто в профілі",
+  "appMapLocate": "Оновити моє місцезнаходження",
+  "appMapOpen": "Відкрити"
 }

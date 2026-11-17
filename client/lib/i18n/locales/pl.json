@@ -1729,5 +1729,11 @@
   "appChatsSearch": "Szukaj po imieniu",
   "appChatsNothingFound": "Nikogo nie znaleziono",
   "appChatsSayHi": "Napisz pierwszy",
-  "appChatsPremium": "Premium: priorytetowe przedłużanie licznika"
+  "appChatsPremium": "Premium: priorytetowe przedłużanie licznika",
+  "appMapEmptyTitle": "Na razie nikogo w pobliżu",
+  "appMapEmptyBody": "Tu pojawią się osoby, które udostępniają lokalizację i pasują do Twoich filtrów",
+  "appMapNoLocationTitle": "Potrzebna lokalizacja",
+  "appMapNoLocationBody": "Zezwól na dostęp do lokalizacji lub podaj miasto w profilu",
+  "appMapLocate": "Zaktualizuj moją lokalizację",
+  "appMapOpen": "Otwórz"
 }

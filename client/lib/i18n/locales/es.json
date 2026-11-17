@@ -1729,5 +1729,11 @@
   "appChatsSearch": "Buscar por nombre",
   "appChatsNothingFound": "No se encontró a nadie",
   "appChatsSayHi": "Escribe primero",
-  "appChatsPremium": "Premium: prórroga prioritaria del temporizador"
+  "appChatsPremium": "Premium: prórroga prioritaria del temporizador",
+  "appMapEmptyTitle": "Aún no hay nadie cerca",
+  "appMapEmptyBody": "Aquí aparecerán personas que comparten su ubicación y encajan con tus filtros",
+  "appMapNoLocationTitle": "Se necesita la ubicación",
+  "appMapNoLocationBody": "Permite el acceso a la ubicación o indica tu ciudad en el perfil",
+  "appMapLocate": "Actualizar mi ubicación",
+  "appMapOpen": "Abrir"
 }

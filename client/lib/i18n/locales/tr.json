@@ -1729,5 +1729,11 @@
   "appChatsSearch": "İsme göre ara",
   "appChatsNothingFound": "Kimse bulunamadı",
   "appChatsSayHi": "İlk sen yaz",
-  "appChatsPremium": "Premium: bağlantı süresini öncelikli uzat"
+  "appChatsPremium": "Premium: bağlantı süresini öncelikli uzat",
+  "appMapEmptyTitle": "Yakında henüz kimse yok",
+  "appMapEmptyBody": "Konumunu paylaşan ve filtrelerine uyan kişiler burada görünecek",
+  "appMapNoLocationTitle": "Konum gerekli",
+  "appMapNoLocationBody": "Konum erişimine izin ver veya profilinde şehrini belirt",
+  "appMapLocate": "Konumumu güncelle",
+  "appMapOpen": "Aç"
 }

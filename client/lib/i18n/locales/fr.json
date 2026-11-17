@@ -1729,5 +1729,11 @@
   "appChatsSearch": "Rechercher par nom",
   "appChatsNothingFound": "Personne trouvé",
   "appChatsSayHi": "Écrivez en premier",
-  "appChatsPremium": "Premium : prolongation prioritaire du minuteur"
+  "appChatsPremium": "Premium : prolongation prioritaire du minuteur",
+  "appMapEmptyTitle": "Personne à proximité pour l'instant",
+  "appMapEmptyBody": "Ici apparaîtront les personnes qui partagent leur position et correspondent à vos filtres",
+  "appMapNoLocationTitle": "Position requise",
+  "appMapNoLocationBody": "Autorisez l'accès à la position ou indiquez votre ville dans le profil",
+  "appMapLocate": "Mettre à jour ma position",
+  "appMapOpen": "Ouvrir"
 }

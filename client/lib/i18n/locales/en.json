@@ -1737,5 +1737,11 @@
   "appChatsSearch": "Search by name",
   "appChatsNothingFound": "No one found",
   "appChatsSayHi": "Say hi first",
-  "appChatsPremium": "Premium: priority extension of the connection timer"
+  "appChatsPremium": "Premium: priority extension of the connection timer",
+  "appMapEmptyTitle": "No one nearby yet",
+  "appMapEmptyBody": "People who share their location and match your filters will appear here",
+  "appMapNoLocationTitle": "Location needed",
+  "appMapNoLocationBody": "Allow location access or set your city in the profile",
+  "appMapLocate": "Update my location",
+  "appMapOpen": "Open"
 }

@@ -1729,5 +1729,11 @@
   "appChatsSearch": "Cerca per nome",
   "appChatsNothingFound": "Nessuno trovato",
   "appChatsSayHi": "Scrivi per primo",
-  "appChatsPremium": "Premium: proroga prioritaria del timer"
+  "appChatsPremium": "Premium: proroga prioritaria del timer",
+  "appMapEmptyTitle": "Ancora nessuno vicino",
+  "appMapEmptyBody": "Qui appariranno le persone che condividono la posizione e corrispondono ai tuoi filtri",
+  "appMapNoLocationTitle": "Serve la posizione",
+  "appMapNoLocationBody": "Consenti l'accesso alla posizione o indica la tua città nel profilo",
+  "appMapLocate": "Aggiorna la mia posizione",
+  "appMapOpen": "Apri"
 }
