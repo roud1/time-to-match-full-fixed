@@ -1772,5 +1772,14 @@
   "appAiAnalyzingBody": "Это займёт до минуты. Можно вернуться в чат — результат сохранится.",
   "appAiWaitingTitle": "Анализа пока нет",
   "appAiWaitingBody": "AI оценит вашу связь, когда в переписке появится ещё {count} сообщ.",
-  "appAiContinue": "Продолжить"
+  "appAiContinue": "Продолжить",
+  "appMeEdit": "Редактировать профиль",
+  "appMePrivacy": "Настройки приватности",
+  "appMeLanguage": "Язык приложения",
+  "appMeSupport": "Поддержка",
+  "appMeAbout": "О приложении",
+  "appMeActive": "Профиль активен",
+  "appMeHidden": "Профиль скрыт из ленты",
+  "appMePremiumBody": "Больше возможностей",
+  "appMePremiumActive": "Подписка активна"
 }

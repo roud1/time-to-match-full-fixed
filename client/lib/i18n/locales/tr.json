@@ -1748,5 +1748,14 @@
   "appAiAnalyzingBody": "Bu bir dakikaya kadar sürer. Sohbete dönebilirsin, sonuç kaydedilecek.",
   "appAiWaitingTitle": "Henüz analiz yok",
   "appAiWaitingBody": "Yapay zekâ {count} mesaj daha sonra bağlantınızı değerlendirecek",
-  "appAiContinue": "Devam et"
+  "appAiContinue": "Devam et",
+  "appMeEdit": "Profili düzenle",
+  "appMePrivacy": "Gizlilik ayarları",
+  "appMeLanguage": "Uygulama dili",
+  "appMeSupport": "Destek",
+  "appMeAbout": "Uygulama hakkında",
+  "appMeActive": "Profil aktif",
+  "appMeHidden": "Profil akışta gizli",
+  "appMePremiumBody": "Daha fazla olanak",
+  "appMePremiumActive": "Abonelik aktif"
 }

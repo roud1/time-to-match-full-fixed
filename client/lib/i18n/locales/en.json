@@ -1756,5 +1756,14 @@
   "appAiAnalyzingBody": "This takes up to a minute. You can go back to the chat — the result will be saved.",
   "appAiWaitingTitle": "No analysis yet",
   "appAiWaitingBody": "AI will rate your connection after {count} more message(s)",
-  "appAiContinue": "Continue"
+  "appAiContinue": "Continue",
+  "appMeEdit": "Edit profile",
+  "appMePrivacy": "Privacy settings",
+  "appMeLanguage": "App language",
+  "appMeSupport": "Support",
+  "appMeAbout": "About the app",
+  "appMeActive": "Profile is active",
+  "appMeHidden": "Profile is hidden from the feed",
+  "appMePremiumBody": "More features",
+  "appMePremiumActive": "Subscription active"
 }

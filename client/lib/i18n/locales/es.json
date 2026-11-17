@@ -1748,5 +1748,14 @@
   "appAiAnalyzingBody": "Tarda hasta un minuto. Puedes volver al chat: el resultado se guardará.",
   "appAiWaitingTitle": "Aún no hay análisis",
   "appAiWaitingBody": "La IA valorará vuestra conexión tras {count} mensaje(s) más",
-  "appAiContinue": "Continuar"
+  "appAiContinue": "Continuar",
+  "appMeEdit": "Editar perfil",
+  "appMePrivacy": "Ajustes de privacidad",
+  "appMeLanguage": "Idioma de la app",
+  "appMeSupport": "Soporte",
+  "appMeAbout": "Acerca de la app",
+  "appMeActive": "Perfil activo",
+  "appMeHidden": "Perfil oculto del feed",
+  "appMePremiumBody": "Más funciones",
+  "appMePremiumActive": "Suscripción activa"
 }

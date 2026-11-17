@@ -1748,5 +1748,14 @@
   "appAiAnalyzingBody": "Cela prend jusqu'à une minute. Vous pouvez revenir au chat, le résultat sera enregistré.",
   "appAiWaitingTitle": "Pas encore d'analyse",
   "appAiWaitingBody": "L'IA évaluera votre lien après {count} message(s) de plus",
-  "appAiContinue": "Continuer"
+  "appAiContinue": "Continuer",
+  "appMeEdit": "Modifier le profil",
+  "appMePrivacy": "Paramètres de confidentialité",
+  "appMeLanguage": "Langue de l'app",
+  "appMeSupport": "Assistance",
+  "appMeAbout": "À propos de l'app",
+  "appMeActive": "Profil actif",
+  "appMeHidden": "Profil masqué du fil",
+  "appMePremiumBody": "Plus de possibilités",
+  "appMePremiumActive": "Abonnement actif"
 }

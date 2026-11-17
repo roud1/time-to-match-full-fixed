@@ -1748,5 +1748,14 @@
   "appAiAnalyzingBody": "To potrwa do minuty. Możesz wrócić do czatu — wynik zostanie zapisany.",
   "appAiWaitingTitle": "Na razie brak analizy",
   "appAiWaitingBody": "AI oceni Waszą więź po kolejnych {count} wiadomościach",
-  "appAiContinue": "Dalej"
+  "appAiContinue": "Dalej",
+  "appMeEdit": "Edytuj profil",
+  "appMePrivacy": "Ustawienia prywatności",
+  "appMeLanguage": "Język aplikacji",
+  "appMeSupport": "Pomoc",
+  "appMeAbout": "O aplikacji",
+  "appMeActive": "Profil jest aktywny",
+  "appMeHidden": "Profil ukryty w feedzie",
+  "appMePremiumBody": "Więcej możliwości",
+  "appMePremiumActive": "Subskrypcja aktywna"
 }

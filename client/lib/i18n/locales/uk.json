@@ -1748,5 +1748,14 @@
   "appAiAnalyzingBody": "Це займе до хвилини. Можна повернутися в чат — результат збережеться.",
   "appAiWaitingTitle": "Аналізу поки немає",
   "appAiWaitingBody": "AI оцінить ваш зв'язок, коли в листуванні з'явиться ще {count} повід.",
-  "appAiContinue": "Продовжити"
+  "appAiContinue": "Продовжити",
+  "appMeEdit": "Редагувати профіль",
+  "appMePrivacy": "Налаштування приватності",
+  "appMeLanguage": "Мова застосунку",
+  "appMeSupport": "Підтримка",
+  "appMeAbout": "Про застосунок",
+  "appMeActive": "Профіль активний",
+  "appMeHidden": "Профіль прихований зі стрічки",
+  "appMePremiumBody": "Більше можливостей",
+  "appMePremiumActive": "Підписка активна"
 }

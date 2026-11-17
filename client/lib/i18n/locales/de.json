@@ -1748,5 +1748,14 @@
   "appAiAnalyzingBody": "Das dauert bis zu einer Minute. Du kannst zum Chat zurück — das Ergebnis wird gespeichert.",
   "appAiWaitingTitle": "Noch keine Analyse",
   "appAiWaitingBody": "Die KI bewertet eure Verbindung nach {count} weiteren Nachricht(en)",
-  "appAiContinue": "Weiter"
+  "appAiContinue": "Weiter",
+  "appMeEdit": "Profil bearbeiten",
+  "appMePrivacy": "Datenschutz-Einstellungen",
+  "appMeLanguage": "App-Sprache",
+  "appMeSupport": "Support",
+  "appMeAbout": "Über die App",
+  "appMeActive": "Profil ist aktiv",
+  "appMeHidden": "Profil ist im Feed ausgeblendet",
+  "appMePremiumBody": "Mehr Möglichkeiten",
+  "appMePremiumActive": "Abo aktiv"
 }
