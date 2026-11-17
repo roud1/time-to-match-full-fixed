@@ -1737,5 +1737,16 @@
   "appMapLocate": "Meinen Standort aktualisieren",
   "appMapOpen": "Öffnen",
   "appProfileLike": "Gefällt mir",
-  "appProfileWrite": "Nachricht schreiben"
+  "appProfileWrite": "Nachricht schreiben",
+  "appAiSubtitle": "Deine Verbindung mit {name}",
+  "appAiReadyTitle": "Analyse eurer Verbindung",
+  "appAiWhy": "Was die KI bemerkt hat",
+  "appAiBasedOn": "Basierend auf {count} Nachrichten eures Chats",
+  "appAiUnavailableTitle": "KI-Analyse nicht verfügbar",
+  "appAiUnavailableBody": "Der KI-Dienst ist gerade nicht verbunden, daher zeigen wir keine Kompatibilität an. Sobald er läuft, erscheint hier eine Analyse eures Chats.",
+  "appAiAnalyzingTitle": "Wir analysieren euren Chat…",
+  "appAiAnalyzingBody": "Das dauert bis zu einer Minute. Du kannst zum Chat zurück — das Ergebnis wird gespeichert.",
+  "appAiWaitingTitle": "Noch keine Analyse",
+  "appAiWaitingBody": "Die KI bewertet eure Verbindung nach {count} weiteren Nachricht(en)",
+  "appAiContinue": "Weiter"
 }

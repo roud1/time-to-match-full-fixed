@@ -1737,5 +1737,16 @@
   "appMapLocate": "Aggiorna la mia posizione",
   "appMapOpen": "Apri",
   "appProfileLike": "Mi piace",
-  "appProfileWrite": "Invia un messaggio"
+  "appProfileWrite": "Invia un messaggio",
+  "appAiSubtitle": "La tua connessione con {name}",
+  "appAiReadyTitle": "Analisi della vostra connessione",
+  "appAiWhy": "Cosa ha notato l'IA",
+  "appAiBasedOn": "In base a {count} messaggi della vostra chat",
+  "appAiUnavailableTitle": "Analisi IA non disponibile",
+  "appAiUnavailableBody": "Il servizio IA non è collegato ora, quindi non mostriamo un punteggio. Quando funzionerà, qui apparirà l'analisi della vostra chat.",
+  "appAiAnalyzingTitle": "Stiamo analizzando la chat…",
+  "appAiAnalyzingBody": "Ci vuole fino a un minuto. Puoi tornare alla chat: il risultato verrà salvato.",
+  "appAiWaitingTitle": "Nessuna analisi ancora",
+  "appAiWaitingBody": "L'IA valuterà la connessione dopo altri {count} messaggi",
+  "appAiContinue": "Continua"
 }

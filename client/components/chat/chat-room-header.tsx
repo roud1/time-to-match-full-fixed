@@ -1,7 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { Menu as MenuIcon, X as CloseIcon } from "lucide-react"
+import { Menu as MenuIcon, Sparkles, X as CloseIcon } from "lucide-react"
+import { AppAiConnection } from "@/client/components/chat/app-ai-connection"
+import { useMatchForProfile } from "@/client/hooks/use-matches"
 import { useI18n } from "@/client/lib/i18n"
 import type { SwipeProfile } from "@/client/lib/demo-profiles"
 import { ChatProfileAvatar } from "@/client/components/chat/chat-profile-avatar"
@@ -86,6 +88,8 @@ export function ChatRoomHeader({
   const showPresenceBadge = !showTyping && Boolean(emotionalPresence)
   const showStatusText = showTyping || !showPresenceBadge
   const [menuOpen, setMenuOpen] = useState(false)
+  const [aiOpen, setAiOpen] = useState(false)
+  const serverMatch = useMatchForProfile(profile.id)
 
   return (
     <header
@@ -156,6 +160,14 @@ export function ChatRoomHeader({
             variant="header"
             className="ttm-chat-room-header__expiry-inline"
           />
+          <button
+            type="button"
+            className="ttm-chat-room-header__ai"
+            aria-label="AI Connection"
+            onClick={() => setAiOpen(true)}
+          >
+            <Sparkles className="h-5 w-5" aria-hidden />
+          </button>
           <button
             type="button"
             className="ttm-chat-room-header__burger"
@@ -278,6 +290,14 @@ export function ChatRoomHeader({
           </p>
         )}
       </div>
+      {aiOpen && (
+        <AppAiConnection
+          matchId={serverMatch?.id ?? null}
+          peerName={profile.name}
+          totalMessages={serverMatch?.bond.totalMessages ?? 0}
+          onClose={() => setAiOpen(false)}
+        />
+      )}
     </header>
   )
 }

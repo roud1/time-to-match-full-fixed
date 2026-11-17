@@ -1745,5 +1745,16 @@
   "appMapLocate": "Update my location",
   "appMapOpen": "Open",
   "appProfileLike": "Like",
-  "appProfileWrite": "Send a message"
+  "appProfileWrite": "Send a message",
+  "appAiSubtitle": "Your connection with {name}",
+  "appAiReadyTitle": "Your connection analysis",
+  "appAiWhy": "What AI noticed",
+  "appAiBasedOn": "Based on {count} messages of your chat",
+  "appAiUnavailableTitle": "AI analysis unavailable",
+  "appAiUnavailableBody": "The AI service isn't connected right now, so we don't show a compatibility score. Once it's on, an analysis of your chat will appear here.",
+  "appAiAnalyzingTitle": "Analyzing your chat…",
+  "appAiAnalyzingBody": "This takes up to a minute. You can go back to the chat — the result will be saved.",
+  "appAiWaitingTitle": "No analysis yet",
+  "appAiWaitingBody": "AI will rate your connection after {count} more message(s)",
+  "appAiContinue": "Continue"
 }

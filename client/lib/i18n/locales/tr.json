@@ -1737,5 +1737,16 @@
   "appMapLocate": "Konumumu güncelle",
   "appMapOpen": "Aç",
   "appProfileLike": "Beğen",
-  "appProfileWrite": "Mesaj gönder"
+  "appProfileWrite": "Mesaj gönder",
+  "appAiSubtitle": "{name} ile bağlantın",
+  "appAiReadyTitle": "Bağlantı analizin",
+  "appAiWhy": "Yapay zekânın fark ettikleri",
+  "appAiBasedOn": "Sohbetinizdeki {count} mesaja göre",
+  "appAiUnavailableTitle": "Yapay zekâ analizi kullanılamıyor",
+  "appAiUnavailableBody": "Yapay zekâ hizmeti şu an bağlı değil, bu yüzden uyum puanı göstermiyoruz. Çalıştığında sohbetinizin analizi burada görünecek.",
+  "appAiAnalyzingTitle": "Sohbetiniz analiz ediliyor…",
+  "appAiAnalyzingBody": "Bu bir dakikaya kadar sürer. Sohbete dönebilirsin, sonuç kaydedilecek.",
+  "appAiWaitingTitle": "Henüz analiz yok",
+  "appAiWaitingBody": "Yapay zekâ {count} mesaj daha sonra bağlantınızı değerlendirecek",
+  "appAiContinue": "Devam et"
 }

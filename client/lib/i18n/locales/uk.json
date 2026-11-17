@@ -1737,5 +1737,16 @@
   "appMapLocate": "Оновити моє місцезнаходження",
   "appMapOpen": "Відкрити",
   "appProfileLike": "Подобається",
-  "appProfileWrite": "Написати повідомлення"
+  "appProfileWrite": "Написати повідомлення",
+  "appAiSubtitle": "Ви і {name}",
+  "appAiReadyTitle": "Аналіз вашого зв'язку",
+  "appAiWhy": "Що помітив AI",
+  "appAiBasedOn": "За {count} повідомленнями вашого листування",
+  "appAiUnavailableTitle": "AI-аналіз недоступний",
+  "appAiUnavailableBody": "AI-сервіс зараз не підключений, тому ми не показуємо оцінку сумісності. Коли він запрацює, тут з'явиться аналіз вашого листування.",
+  "appAiAnalyzingTitle": "Аналізуємо листування…",
+  "appAiAnalyzingBody": "Це займе до хвилини. Можна повернутися в чат — результат збережеться.",
+  "appAiWaitingTitle": "Аналізу поки немає",
+  "appAiWaitingBody": "AI оцінить ваш зв'язок, коли в листуванні з'явиться ще {count} повід.",
+  "appAiContinue": "Продовжити"
 }

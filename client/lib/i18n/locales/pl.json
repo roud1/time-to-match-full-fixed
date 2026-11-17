@@ -1737,5 +1737,16 @@
   "appMapLocate": "Zaktualizuj moją lokalizację",
   "appMapOpen": "Otwórz",
   "appProfileLike": "Lubię",
-  "appProfileWrite": "Napisz wiadomość"
+  "appProfileWrite": "Napisz wiadomość",
+  "appAiSubtitle": "Twoja więź z {name}",
+  "appAiReadyTitle": "Analiza Waszej więzi",
+  "appAiWhy": "Co zauważyło AI",
+  "appAiBasedOn": "Na podstawie {count} wiadomości z Waszej rozmowy",
+  "appAiUnavailableTitle": "Analiza AI niedostępna",
+  "appAiUnavailableBody": "Usługa AI nie jest teraz podłączona, więc nie pokazujemy oceny dopasowania. Gdy zacznie działać, pojawi się tu analiza Waszej rozmowy.",
+  "appAiAnalyzingTitle": "Analizujemy rozmowę…",
+  "appAiAnalyzingBody": "To potrwa do minuty. Możesz wrócić do czatu — wynik zostanie zapisany.",
+  "appAiWaitingTitle": "Na razie brak analizy",
+  "appAiWaitingBody": "AI oceni Waszą więź po kolejnych {count} wiadomościach",
+  "appAiContinue": "Dalej"
 }

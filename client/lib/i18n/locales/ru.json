@@ -1761,5 +1761,16 @@
   "appMapLocate": "Обновить моё местоположение",
   "appMapOpen": "Открыть",
   "appProfileLike": "Нравится",
-  "appProfileWrite": "Написать сообщение"
+  "appProfileWrite": "Написать сообщение",
+  "appAiSubtitle": "Вы и {name}",
+  "appAiReadyTitle": "Анализ вашей связи",
+  "appAiWhy": "Что заметил AI",
+  "appAiBasedOn": "По {count} сообщениям вашей переписки",
+  "appAiUnavailableTitle": "AI-анализ недоступен",
+  "appAiUnavailableBody": "AI-сервис сейчас не подключён, поэтому мы не показываем оценку совместимости. Когда он заработает, здесь появится анализ вашей переписки.",
+  "appAiAnalyzingTitle": "Анализируем переписку…",
+  "appAiAnalyzingBody": "Это займёт до минуты. Можно вернуться в чат — результат сохранится.",
+  "appAiWaitingTitle": "Анализа пока нет",
+  "appAiWaitingBody": "AI оценит вашу связь, когда в переписке появится ещё {count} сообщ.",
+  "appAiContinue": "Продолжить"
 }
