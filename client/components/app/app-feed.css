@@ -67,6 +67,11 @@ html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck-stack {
   border-radius: 28px;
 }
 
+/* The app root also reserved space for the dock; on the feed only <main> does it (no double gap). */
+html[data-ttm-app] .ttm-native-app--discover {
+  padding-bottom: 0 !important;
+}
+
 /* Small gap between the action buttons and the bottom navigation. */
 html[data-ttm-app] .ttm-native-app--discover .ttm-native-app__main {
   padding-bottom: calc(var(--ttm-dock-height) + 0.6rem) !important;
