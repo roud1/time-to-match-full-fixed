@@ -1735,5 +1735,7 @@
   "appMapNoLocationTitle": "Serve la posizione",
   "appMapNoLocationBody": "Consenti l'accesso alla posizione o indica la tua città nel profilo",
   "appMapLocate": "Aggiorna la mia posizione",
-  "appMapOpen": "Apri"
+  "appMapOpen": "Apri",
+  "appProfileLike": "Mi piace",
+  "appProfileWrite": "Invia un messaggio"
 }

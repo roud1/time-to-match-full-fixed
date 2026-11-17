@@ -1735,5 +1735,7 @@
   "appMapNoLocationTitle": "Standort benötigt",
   "appMapNoLocationBody": "Erlaube den Standortzugriff oder gib deine Stadt im Profil an",
   "appMapLocate": "Meinen Standort aktualisieren",
-  "appMapOpen": "Öffnen"
+  "appMapOpen": "Öffnen",
+  "appProfileLike": "Gefällt mir",
+  "appProfileWrite": "Nachricht schreiben"
 }

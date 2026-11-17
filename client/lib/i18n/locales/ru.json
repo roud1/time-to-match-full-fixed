@@ -1759,5 +1759,7 @@
   "appMapNoLocationTitle": "Нужна геолокация",
   "appMapNoLocationBody": "Разрешите доступ к местоположению или укажите город в профиле",
   "appMapLocate": "Обновить моё местоположение",
-  "appMapOpen": "Открыть"
+  "appMapOpen": "Открыть",
+  "appProfileLike": "Нравится",
+  "appProfileWrite": "Написать сообщение"
 }

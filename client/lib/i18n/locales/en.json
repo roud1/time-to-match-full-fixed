@@ -1743,5 +1743,7 @@
   "appMapNoLocationTitle": "Location needed",
   "appMapNoLocationBody": "Allow location access or set your city in the profile",
   "appMapLocate": "Update my location",
-  "appMapOpen": "Open"
+  "appMapOpen": "Open",
+  "appProfileLike": "Like",
+  "appProfileWrite": "Send a message"
 }

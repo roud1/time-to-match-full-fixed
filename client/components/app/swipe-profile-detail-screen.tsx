@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { createPortal } from "react-dom"
 import Image from "next/image"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"
@@ -13,6 +14,8 @@ import type { PeerTrustSignals } from "@/client/lib/demo-trust-signals"
 import { PeerTrustChip } from "@/client/components/trust/peer-trust-chip"
 import { VerifiedBadge } from "@/client/components/ui/verified-badge"
 import { cn } from "@/client/lib/utils"
+import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { AppProfileDetail } from "@/client/components/app/app-profile-detail"
 
 type SwipeProfileDetailScreenProps = {
   profile: SwipeProfile | null
@@ -38,6 +41,7 @@ export function SwipeProfileDetailScreen({
 }: SwipeProfileDetailScreenProps) {
   const { t } = useI18n()
   const reduce = useReducedMotion()
+  const inApp = useTtmApp()
   const open = profile != null
   const photos = profile ? getSwipeProfilePhotos(profile) : []
 
@@ -57,6 +61,28 @@ export function SwipeProfileDetailScreen({
   const interestOverlap = profile ? computeInterestOverlapForProfile(profile) : null
   const matchPct = interestOverlap?.compatibility ?? compatibility?.resonancePercent ?? 0
   const highCompat = matchPct > 70
+
+  if (inApp) {
+    // Portal: the tab transition wrapper is transformed, which would trap position:fixed inside the feed area.
+    if (typeof document === "undefined") return null
+    return createPortal(
+      <AnimatePresence>
+        {open && profile && (
+          <AppProfileDetail
+            key={profile.id}
+            profile={profile}
+            initialPhotoIndex={_initialPhotoIndex}
+            context={context}
+            onClose={onClose}
+            onLike={onLike}
+            onNope={onNope}
+            onOpenSafety={onOpenSafety}
+          />
+        )}
+      </AnimatePresence>,
+      document.body
+    )
+  }
 
   return (
     <AnimatePresence>

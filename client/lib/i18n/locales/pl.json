@@ -1735,5 +1735,7 @@
   "appMapNoLocationTitle": "Potrzebna lokalizacja",
   "appMapNoLocationBody": "Zezwól na dostęp do lokalizacji lub podaj miasto w profilu",
   "appMapLocate": "Zaktualizuj moją lokalizację",
-  "appMapOpen": "Otwórz"
+  "appMapOpen": "Otwórz",
+  "appProfileLike": "Lubię",
+  "appProfileWrite": "Napisz wiadomość"
 }
