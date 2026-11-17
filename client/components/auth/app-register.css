@@ -187,8 +187,8 @@ html[data-ttm-app] .ttm-app-reg .ttm-app-login__signup {
   text-align: center;
 }
 
-/* Short screens (SE / mini): compact header so step 1 fits above the sticky "Далее". */
-@media (max-height: 700px) {
+/* Short screens (SE, iPhone X / XS / 11 Pro / 12 mini — 812pt minus notch and home indicator): compact header so step 1 fits. */
+@media (max-height: 820px) {
   html[data-ttm-app] .ttm-app-reg__head {
     margin-bottom: 0.9rem;
   }
@@ -225,4 +225,15 @@ html[data-ttm-app] .ttm-app-reg .ttm-app-login__signup {
   html[data-ttm-app] .ttm-app-reg .ttm-app-login__field input {
     font-size: 1rem;
   }
+}
+
+/* Sticky Back / Next reaches the screen bottom (covers the scroll padding under it);
+   the buttons stay above the iPhone home indicator. */
+html[data-ttm-app] .ttm-app-reg .ttm-reg-actions {
+  bottom: calc(-1 * (env(safe-area-inset-bottom, 0px) + 1.25rem));
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
+}
+
+html[data-ttm-app] .ttm-app-reg .ttm-app-login__signup {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
 }
