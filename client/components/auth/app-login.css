@@ -25,18 +25,10 @@ html[data-ttm-app] .ttm-app-login__brand {
   margin-bottom: clamp(1.25rem, 5dvh, 2.5rem);
 }
 
-html[data-ttm-app] .ttm-app-login__mark {
-  width: 2.4rem;
+html[data-ttm-app] .ttm-app-login__logo {
+  width: clamp(170px, 56vw, 230px);
   height: auto;
-  flex-shrink: 0;
-  filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.55));
-}
-
-html[data-ttm-app] .ttm-app-login__brand-name {
-  font-size: clamp(1.5rem, 7vw, 1.9rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
+  filter: drop-shadow(0 0 16px rgba(182, 108, 255, 0.35));
 }
 
 html[data-ttm-app] .ttm-app-login__title {
@@ -242,11 +234,8 @@ html[data-ttm-app] .ttm-auth-shell:has(.ttm-app-login) .ttm-app-back {
 
 /* Narrow phones (320px): tighten the vertical rhythm so the form fits without scrolling. */
 @media (max-width: 359px) {
-  html[data-ttm-app] .ttm-app-login__brand-name {
-    font-size: 1.35rem;
-  }
-  html[data-ttm-app] .ttm-app-login__mark {
-    width: 2rem;
+  html[data-ttm-app] .ttm-app-login__logo {
+    width: 160px;
   }
   html[data-ttm-app] .ttm-app-login__subtitle {
     font-size: 0.92rem;

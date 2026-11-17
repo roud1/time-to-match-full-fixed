@@ -2,6 +2,7 @@
 
 import "./app-login.css"
 import { useId, useState, type FormEvent } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { Eye, EyeOff, Lock, Mail } from "lucide-react"
 import { useI18n } from "@/client/lib/i18n"
@@ -14,26 +15,6 @@ type AppLoginViewProps = {
   onEmailChange: (value: string) => void
   onPasswordChange: (value: string) => void
   onSubmit: (e: FormEvent) => void
-}
-
-function HeartMark() {
-  const id = useId()
-  return (
-    <svg className="ttm-app-login__mark" viewBox="0 0 48 44" fill="none" aria-hidden>
-      <defs>
-        <linearGradient id={`${id}-h`} x1="4" y1="4" x2="44" y2="40" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#e9d5ff" />
-          <stop offset="1" stopColor="#a855f7" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M24 40 7.5 23.6A10.2 10.2 0 0 1 22 9.2l2 2 2-2a10.2 10.2 0 0 1 14.5 14.4Z"
-        stroke={`url(#${id}-h)`}
-        strokeWidth="4"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
 }
 
 /** Sign-in screen of the native app / installed PWA (rendered only when html[data-ttm-app] is set). */
@@ -54,8 +35,15 @@ export function AppLoginView({
   return (
     <div className="ttm-app-login">
       <div className="ttm-app-login__brand">
-        <HeartMark />
-        <span className="ttm-app-login__brand-name">Time to Match</span>
+        <Image
+          className="ttm-app-login__logo"
+          src="/brand/luvia/logo.svg"
+          alt="Luvia"
+          width={719}
+          height={200}
+          priority
+          unoptimized
+        />
       </div>
 
       <h1 className="ttm-app-login__title">{t("loginPageTitle")}</h1>
