@@ -10,7 +10,7 @@ html[data-ttm-app] .ttm-app-map {
   max-width: 32rem;
   margin-inline: auto;
   padding: 0.5rem 0 0.75rem;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-map__top {
@@ -33,7 +33,7 @@ html[data-ttm-app] .ttm-app-map__title {
 html[data-ttm-app] .ttm-app-map__title svg {
   width: 1.6rem;
   height: 1.6rem;
-  color: #e879f9;
+  color: var(--lv-pink);
   filter: drop-shadow(0 0 8px rgba(232, 121, 249, 0.6));
 }
 
@@ -46,7 +46,7 @@ html[data-ttm-app] .ttm-app-map__icon-btn {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-map__icon-btn svg {
@@ -60,7 +60,7 @@ html[data-ttm-app] .ttm-app-map__stage {
   flex: 1 1 auto;
   min-height: 18rem;
   overflow: hidden;
-  border: 1px solid rgba(196, 161, 255, 0.16);
+  border: 1px solid var(--lv-border);
   border-radius: 1.6rem;
   background:
     radial-gradient(60% 50% at 50% 50%, rgba(124, 58, 237, 0.22), transparent 70%),
@@ -74,7 +74,7 @@ html[data-ttm-app] .ttm-app-map__grid {
   background:
     repeating-linear-gradient(28deg, transparent 0 46px, rgba(196, 161, 255, 0.08) 46px 48px),
     repeating-linear-gradient(-62deg, transparent 0 64px, rgba(196, 161, 255, 0.07) 64px 66px),
-    repeating-linear-gradient(95deg, transparent 0 130px, rgba(196, 161, 255, 0.1) 130px 133px);
+    repeating-linear-gradient(95deg, transparent 0 130px, var(--lv-border) 130px 133px);
   transform: rotate(-6deg);
 }
 
@@ -107,9 +107,9 @@ html[data-ttm-app] .ttm-app-map__scale {
   left: 0.9rem;
   z-index: 2;
   padding: 0.35rem 0.9rem;
-  border: 1px solid rgba(196, 161, 255, 0.25);
+  border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: rgba(14, 8, 26, 0.85);
+  background: var(--lv-surface);
   font-size: 0.9rem;
   font-variant-numeric: tabular-nums;
 }
@@ -127,7 +127,7 @@ html[data-ttm-app] .ttm-app-map__me {
   border: 2px solid rgba(233, 213, 255, 0.85);
   border-radius: 999px;
   background: rgba(124, 58, 237, 0.35);
-  box-shadow: 0 0 22px rgba(168, 85, 247, 0.7);
+  box-shadow: var(--lv-shadow-cta);
   transform: translate(-50%, -50%);
 }
 
@@ -174,7 +174,7 @@ html[data-ttm-app] .ttm-app-map__pin {
   border: 2px solid rgba(216, 180, 254, 0.75);
   border-radius: 999px;
   background: #1a0c30;
-  box-shadow: 0 0 14px rgba(168, 85, 247, 0.45);
+  box-shadow: var(--lv-shadow-cta);
   transform: translate(-50%, -50%);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   -webkit-tap-highlight-color: transparent;
@@ -197,9 +197,9 @@ html[data-ttm-app] .ttm-app-map__locate {
   justify-content: center;
   width: 3rem;
   height: 3rem;
-  border: 1px solid rgba(196, 161, 255, 0.3);
+  border: 1px solid var(--lv-border-strong);
   border-radius: 999px;
-  background: rgba(14, 8, 26, 0.9);
+  background: var(--lv-surface);
   color: #fff;
 }
 
@@ -213,9 +213,9 @@ html[data-ttm-app] .ttm-app-map__empty {
   inset: auto 1.25rem 4.75rem;
   z-index: 2;
   padding: 0.9rem 1rem;
-  border: 1px solid rgba(196, 161, 255, 0.2);
+  border: 1px solid var(--lv-border);
   border-radius: 1.1rem;
-  background: rgba(14, 8, 26, 0.88);
+  background: var(--lv-surface);
   text-align: center;
 }
 
@@ -229,7 +229,7 @@ html[data-ttm-app] .ttm-app-map__empty-body {
   margin: 0.3rem 0 0;
   font-size: 0.85rem;
   line-height: 1.4;
-  color: rgba(237, 233, 254, 0.65);
+  color: var(--lv-text-2);
 }
 
 /* Selected person */
@@ -239,9 +239,9 @@ html[data-ttm-app] .ttm-app-map__person {
   gap: 0.8rem;
   flex-shrink: 0;
   padding: 0.7rem 0.75rem;
-  border: 1px solid rgba(196, 161, 255, 0.22);
+  border: 1px solid var(--lv-border);
   border-radius: 1.4rem;
-  background: rgba(20, 10, 38, 0.85);
+  background: var(--lv-surface);
 }
 
 html[data-ttm-app] .ttm-app-map__person-photo {
@@ -274,7 +274,7 @@ html[data-ttm-app] .ttm-app-map__person-name {
 html[data-ttm-app] .ttm-app-map__person-meta {
   overflow: hidden;
   font-size: 0.85rem;
-  color: rgba(237, 233, 254, 0.65);
+  color: var(--lv-text-2);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -288,8 +288,8 @@ html[data-ttm-app] .ttm-app-map__open {
   padding: 0 0.9rem 0 1.1rem;
   border: 1px solid rgba(233, 213, 255, 0.45);
   border-radius: 999px;
-  background: linear-gradient(90deg, #a855f7, #7c3aed);
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.45);
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   font-size: 0.95rem;
   font-weight: 600;

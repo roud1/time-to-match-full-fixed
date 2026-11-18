@@ -2,11 +2,11 @@
    every rule is scoped so the website is never affected. */
 
 html[data-ttm-app] .ttm-app-login {
-  --al-text: #f5f3ff;
-  --al-muted: rgba(237, 233, 254, 0.68);
-  --al-accent: #d8b4fe;
-  --al-field-bg: rgba(20, 10, 38, 0.62);
-  --al-field-border: rgba(196, 161, 255, 0.18);
+  --al-text: var(--lv-text);
+  --al-muted: var(--lv-text-2);
+  --al-accent: var(--lv-pink);
+  --al-field-bg: var(--lv-surface);
+  --al-field-border: var(--lv-border);
   width: 100%;
   max-width: 26rem;
   margin-inline: auto;
@@ -85,7 +85,7 @@ html[data-ttm-app] .ttm-app-login__icon {
   width: 1.4rem;
   height: 1.4rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.8);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-login .ttm-app-login__field input {
@@ -106,7 +106,7 @@ html[data-ttm-app] .ttm-app-login .ttm-app-login__field input {
 }
 
 html[data-ttm-app] .ttm-app-login__field input::placeholder {
-  color: rgba(237, 233, 254, 0.55);
+  color: var(--lv-text-2);
 }
 
 /* Keep autofill dark instead of the browser's yellow/blue. */
@@ -126,7 +126,7 @@ html[data-ttm-app] .ttm-app-login__eye {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: rgba(237, 233, 254, 0.8);
+  color: var(--lv-text-2);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -183,7 +183,7 @@ html[data-ttm-app] .ttm-app-login__submit {
   border-radius: 999px;
   background:
     radial-gradient(120% 140% at 50% 0%, rgba(233, 213, 255, 0.28), transparent 55%),
-    linear-gradient(90deg, #a855f7 0%, #7c3aed 50%, #a855f7 100%);
+    var(--lv-gradient);
   box-shadow:
     0 0 24px rgba(168, 85, 247, 0.55),
     0 10px 30px -10px rgba(124, 58, 237, 0.8),
@@ -227,9 +227,9 @@ html[data-ttm-app] .ttm-auth-shell:has(.ttm-app-login) .ttm-auth-nav__brand {
 
 html[data-ttm-app] .ttm-auth-shell:has(.ttm-app-login) .ttm-app-back {
   margin-left: 0;
-  border: 1px solid rgba(196, 161, 255, 0.16);
+  border: 1px solid var(--lv-border);
   border-radius: 0.9rem;
-  background: rgba(20, 10, 38, 0.55);
+  background: var(--lv-surface);
 }
 
 /* Narrow phones (320px): tighten the vertical rhythm so the form fits without scrolling. */
@@ -240,17 +240,6 @@ html[data-ttm-app] .ttm-auth-shell:has(.ttm-app-login) .ttm-app-back {
   html[data-ttm-app] .ttm-app-login__subtitle {
     font-size: 0.92rem;
   }
-}
-
-/* The couple from the brand picture would stand behind the form; dim the lower part so only the glowing horizon stays. */
-html[data-ttm-app]:has(.ttm-app-login) body::before {
-  background-image: linear-gradient(to bottom, rgba(5, 2, 10, 0) 42%, rgba(5, 2, 10, 0.9) 66%, rgba(5, 2, 10, 0.9) 100%),
-    url("/brand/app-bg.jpg");
-  background-image: linear-gradient(to bottom, rgba(5, 2, 10, 0) 42%, rgba(5, 2, 10, 0.9) 66%, rgba(5, 2, 10, 0.9) 100%),
-    image-set(url("/brand/app-bg.webp") type("image/webp"), url("/brand/app-bg.jpg") type("image/jpeg"));
-  background-repeat: no-repeat, no-repeat;
-  background-size: 100% 100%, cover;
-  background-position: center, center bottom;
 }
 
 /* Short screens (iPhone SE 1st gen, 568px): fit the whole form without scrolling. */

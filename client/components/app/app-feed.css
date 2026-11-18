@@ -109,12 +109,12 @@ html[data-ttm-app] .ttm-app-feed__chip {
   flex: 0 0 auto;
   height: 2.6rem;
   padding: 0 0.8rem;
-  border: 1px solid rgba(196, 161, 255, 0.2);
+  border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: rgba(20, 10, 38, 0.72);
+  background: var(--lv-surface);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  color: #f5f3ff;
+  color: var(--lv-text);
   font-size: 0.92rem;
   white-space: nowrap;
   -webkit-tap-highlight-color: transparent;
@@ -130,7 +130,7 @@ html[data-ttm-app] .ttm-app-feed__chip svg {
   width: 0.95rem;
   height: 0.95rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.75);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-feed__chip.is-active {
@@ -148,7 +148,7 @@ html[data-ttm-app] .ttm-app-feed__chip--icon {
 html[data-ttm-app] .ttm-app-feed__chip--icon svg {
   width: 1.2rem;
   height: 1.2rem;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-feed__chip:active {
@@ -162,7 +162,7 @@ html[data-ttm-app] .ttm-app-swipe {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 1px solid rgba(196, 161, 255, 0.38);
+  border: 1px solid var(--lv-border-strong);
   border-radius: 28px;
   background: #140a24;
   box-shadow:
@@ -263,7 +263,7 @@ html[data-ttm-app] .ttm-app-swipe__stamp {
 
 html[data-ttm-app] .ttm-app-swipe__stamp--like {
   left: 1.1rem;
-  color: #d8b4fe;
+  color: var(--lv-pink);
   transform: rotate(-12deg);
 }
 
@@ -307,14 +307,14 @@ html[data-ttm-app] .ttm-app-swipe__place {
   gap: 0.4rem;
   margin: 0.35rem 0 0;
   font-size: 0.98rem;
-  color: rgba(237, 233, 254, 0.88);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-swipe__place svg {
   width: 1.05rem;
   height: 1.05rem;
   flex-shrink: 0;
-  color: #c4a1ff;
+  color: var(--lv-pink);
 }
 
 html[data-ttm-app] .ttm-app-swipe__bio {
@@ -365,9 +365,9 @@ html[data-ttm-app] .ttm-app-feed-actions__btn {
   justify-content: center;
   width: 4rem;
   height: 4rem;
-  border: 1px solid rgba(196, 161, 255, 0.24);
+  border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: rgba(20, 10, 38, 0.72);
+  background: var(--lv-surface);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   color: #fff;
@@ -389,7 +389,7 @@ html[data-ttm-app] .ttm-app-feed-actions__btn--super {
   height: 4.9rem;
   border-color: rgba(233, 213, 255, 0.55);
   background:
-    radial-gradient(120% 120% at 50% 15%, #c084fc 0%, #9333ea 45%, #6d28d9 100%);
+    radial-gradient(120% 120% at 50% 15%, var(--lv-pink) 0%, #9333ea 45%, #6d28d9 100%);
   box-shadow:
     0 0 28px rgba(168, 85, 247, 0.65),
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
@@ -431,13 +431,13 @@ html[data-ttm-app] .ttm-app-feed-actions__btn:disabled {
 
 /* ── Filter sheet in the app: violet brand palette instead of pink ─────────── */
 html[data-ttm-app] .discover-panel-root [role="dialog"] {
-  --accent: #b66cff;
+  --accent: var(--lv-purple);
   --accent-soft-bg: rgba(182, 108, 255, 0.18);
-  --border: rgba(196, 161, 255, 0.2);
-  --bg-secondary: rgba(20, 10, 38, 0.7);
+  --border: var(--lv-border);
+  --bg-secondary: var(--lv-surface);
   --bg-primary: #0e0818;
-  --ttm-brand-gradient-sync: linear-gradient(90deg, #a855f7 0%, #7c3aed 50%, #a855f7 100%);
-  border-color: rgba(196, 161, 255, 0.22);
+  --ttm-brand-gradient-sync: var(--lv-gradient);
+  border-color: var(--lv-border);
 }
 
 html[data-ttm-app] .discover-panel-root [role="dialog"] h2 {
@@ -447,13 +447,13 @@ html[data-ttm-app] .discover-panel-root [role="dialog"] h2 {
 }
 
 html[data-ttm-app] .discover-panel-root [role="dialog"] input[type="range"] {
-  accent-color: #b66cff;
+  accent-color: var(--lv-purple);
 }
 
 /* Empty feed ("всех разобрали" / filters too narrow): violet primary action like the rest of the app. */
 html[data-ttm-app] .ttm-native-app--discover .ttm-empty-state button[data-slot="button"] {
   border: 1px solid rgba(233, 213, 255, 0.5) !important;
-  background: linear-gradient(90deg, #a855f7 0%, #7c3aed 50%, #a855f7 100%) !important;
+  background: var(--lv-gradient) !important;
   box-shadow: 0 0 22px rgba(168, 85, 247, 0.45) !important;
   color: #fff !important;
 }

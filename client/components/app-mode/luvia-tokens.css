@@ -1,0 +1,65 @@
+/* Luvia 2.0 design tokens (from Luvia_2_0_Claude/assets/tokens.css).
+   Applied only inside the native app / installed PWA (html[data-ttm-app]); the website is unchanged. */
+
+html[data-ttm-app] {
+  --lv-bg: #0d0a17;
+  --lv-surface: #171222;
+  --lv-surface-raised: #241b31;
+  --lv-text: #faf7ff;
+  --lv-text-2: #b9afc5;
+  --lv-text-3: #8d82a0;
+  --lv-pink: #f35ca8;
+  --lv-purple: #9b4dff;
+  --lv-border: rgba(255, 255, 255, 0.1);
+  --lv-border-strong: rgba(255, 255, 255, 0.18);
+  --lv-gradient: linear-gradient(105deg, #f35ca8, #9b4dff);
+  --lv-radius-card: 24px;
+  --lv-radius-control: 16px;
+  --lv-radius-pill: 999px;
+  /* Calm shadows instead of neon glows. */
+  --lv-shadow-cta: 0 10px 24px -12px rgba(243, 92, 168, 0.6);
+  --lv-shadow-raised: 0 18px 40px -24px rgba(0, 0, 0, 0.9);
+  --lv-focus: 0 0 0 3px rgba(243, 92, 168, 0.45);
+  --lv-tap: 44px;
+
+  color-scheme: dark;
+  background-color: var(--lv-bg) !important;
+}
+
+/* Keyboard focus is always visible on app controls. */
+html[data-ttm-app] :where(a, button, input, select, textarea, [role="button"]):focus-visible {
+  outline: 2px solid var(--lv-pink);
+  outline-offset: 2px;
+}
+
+/* Header: solid dark bar, thin divider, no glass glow. */
+html[data-ttm-app] .ttm-floating-header {
+  border-bottom: 1px solid var(--lv-border) !important;
+  background: rgba(13, 10, 23, 0.94) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  backdrop-filter: blur(14px) !important;
+  box-shadow: none !important;
+}
+
+/* Visually hidden but available to screen readers (icon-only tab bar). */
+html[data-ttm-app] .lv-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-ttm-app] *,
+  html[data-ttm-app] *::before,
+  html[data-ttm-app] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

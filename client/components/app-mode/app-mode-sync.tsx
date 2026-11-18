@@ -1,5 +1,6 @@
 "use client"
 
+import "./luvia-tokens.css"
 import { useEffect } from "react"
 import { applyTheme } from "@/client/lib/theme"
 

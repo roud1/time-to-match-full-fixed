@@ -11,7 +11,7 @@ html[data-ttm-app] .ttm-chat-room-header__ai {
   border: 1px solid rgba(233, 213, 255, 0.45);
   border-radius: 12px;
   background: linear-gradient(135deg, rgba(192, 132, 252, 0.35), rgba(124, 58, 237, 0.35));
-  box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   touch-action: manipulation;
 }
@@ -24,7 +24,7 @@ html[data-ttm-app] .ttm-app-ai {
   flex-direction: column;
   padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 1.25rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
   overflow-y: auto;
-  color: #f5f3ff;
+  color: var(--lv-text);
   background:
     radial-gradient(70% 45% at 50% 30%, rgba(124, 58, 237, 0.3), transparent 70%),
     #07030e;
@@ -95,7 +95,7 @@ html[data-ttm-app] .ttm-app-ai__chip {
 html[data-ttm-app] .ttm-app-ai__heading p {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
-  color: rgba(237, 233, 254, 0.65);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-ai__ring {
@@ -112,8 +112,8 @@ html[data-ttm-app] .ttm-app-ai__ring svg {
 }
 
 html[data-ttm-app] .ttm-app-ai__track {
-  fill: rgba(20, 10, 38, 0.65);
-  stroke: rgba(196, 161, 255, 0.18);
+  fill: var(--lv-surface);
+  stroke: var(--lv-border);
   stroke-width: 12;
 }
 
@@ -131,7 +131,7 @@ html[data-ttm-app] .ttm-app-ai__center {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(237, 233, 254, 0.75);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-ai__center svg {
@@ -175,7 +175,7 @@ html[data-ttm-app] .ttm-app-ai__text > p {
   margin: 0.5rem auto 0;
   font-size: 0.98rem;
   line-height: 1.5;
-  color: rgba(237, 233, 254, 0.75);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-ai__text h3 {
@@ -202,7 +202,7 @@ html[data-ttm-app] .ttm-app-ai__text li {
   align-items: center;
   gap: 0.65rem;
   font-size: 0.98rem;
-  color: rgba(237, 233, 254, 0.88);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-ai__text li svg {
@@ -211,14 +211,14 @@ html[data-ttm-app] .ttm-app-ai__text li svg {
   flex-shrink: 0;
   padding: 0.2rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #c084fc, #7c3aed);
+  background: var(--lv-gradient);
   color: #fff;
 }
 
 html[data-ttm-app] .ttm-app-ai__text .ttm-app-ai__note {
   margin-top: 1rem;
   font-size: 0.8rem;
-  color: rgba(237, 233, 254, 0.5);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-ai__actions {
@@ -231,8 +231,8 @@ html[data-ttm-app] .ttm-app-ai__primary {
   min-height: 3.5rem;
   border: 1px solid rgba(233, 213, 255, 0.5);
   border-radius: 999px;
-  background: linear-gradient(90deg, #d946ef 0%, #a855f7 55%, #7c3aed 100%);
-  box-shadow: 0 0 24px rgba(192, 38, 211, 0.45);
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;

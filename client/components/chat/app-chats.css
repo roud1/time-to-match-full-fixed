@@ -8,7 +8,7 @@ html[data-ttm-app] .ttm-app-chats {
   max-width: 32rem;
   margin-inline: auto;
   padding: 0.5rem 0 1.25rem;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-chats__top {
@@ -36,7 +36,7 @@ html[data-ttm-app] .ttm-app-chats__icon-btn {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-chats__icon-btn svg {
@@ -51,16 +51,16 @@ html[data-ttm-app] .ttm-app-chats__search {
   flex: 1;
   height: 2.9rem;
   padding: 0 0.4rem 0 0.95rem;
-  border: 1px solid rgba(196, 161, 255, 0.25);
+  border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: rgba(20, 10, 38, 0.7);
+  background: var(--lv-surface);
 }
 
 html[data-ttm-app] .ttm-app-chats__search svg {
   width: 1.15rem;
   height: 1.15rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.7);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-chats .ttm-app-chats__search input {
@@ -85,7 +85,7 @@ html[data-ttm-app] .ttm-app-chats__search button {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-chats__list {
@@ -120,8 +120,8 @@ html[data-ttm-app] .ttm-app-chats__row:active {
 }
 
 html[data-ttm-app] .ttm-app-chats__row.is-unread {
-  border-color: rgba(196, 161, 255, 0.16);
-  background: rgba(20, 10, 38, 0.55);
+  border-color: var(--lv-border);
+  background: var(--lv-surface);
 }
 
 html[data-ttm-app] .ttm-app-chats__row--skeleton {
@@ -154,8 +154,8 @@ html[data-ttm-app] .ttm-app-chats__avatar img {
 }
 
 html[data-ttm-app] .ttm-app-chats__avatar--ai {
-  background: radial-gradient(120% 120% at 50% 15%, #c084fc 0%, #7c3aed 100%);
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.55);
+  background: radial-gradient(120% 120% at 50% 15%, var(--lv-pink) 0%, #7c3aed 100%);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
 }
 
@@ -206,7 +206,7 @@ html[data-ttm-app] .ttm-app-chats__ai-chip {
 html[data-ttm-app] .ttm-app-chats__preview {
   overflow: hidden;
   font-size: 0.92rem;
-  color: rgba(237, 233, 254, 0.62);
+  color: var(--lv-text-2);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -227,7 +227,7 @@ html[data-ttm-app] .ttm-app-chats__meta {
 
 html[data-ttm-app] .ttm-app-chats__time {
   font-size: 0.78rem;
-  color: rgba(237, 233, 254, 0.55);
+  color: var(--lv-text-2);
   font-variant-numeric: tabular-nums;
 }
 
@@ -239,7 +239,7 @@ html[data-ttm-app] .ttm-app-chats__count {
   height: 1.4rem;
   padding: 0 0.35rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: var(--lv-gradient);
   color: #fff;
   font-size: 0.75rem;
   font-weight: 700;
@@ -260,10 +260,10 @@ html[data-ttm-app] .ttm-app-chats__empty-icon {
   width: 3.6rem;
   height: 3.6rem;
   margin-bottom: 0.9rem;
-  border: 1px solid rgba(196, 161, 255, 0.25);
+  border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: rgba(20, 10, 38, 0.7);
-  color: #d8b4fe;
+  background: var(--lv-surface);
+  color: var(--lv-pink);
 }
 
 html[data-ttm-app] .ttm-app-chats__empty-icon svg {
@@ -282,7 +282,7 @@ html[data-ttm-app] .ttm-app-chats__empty-body {
   margin: 0.4rem 0 1rem;
   font-size: 0.92rem;
   line-height: 1.45;
-  color: rgba(237, 233, 254, 0.65);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-chats__empty-cta {
@@ -292,7 +292,7 @@ html[data-ttm-app] .ttm-app-chats__empty-cta {
   min-height: 3rem;
   padding: 0 1.6rem;
   border-radius: 999px;
-  background: linear-gradient(90deg, #d946ef 0%, #a855f7 55%, #7c3aed 100%);
+  background: var(--lv-gradient);
   color: #fff;
   font-weight: 600;
   text-decoration: none;
@@ -305,10 +305,10 @@ html[data-ttm-app] .ttm-app-chats__premium {
   width: 100%;
   margin-top: 0.4rem;
   padding: 0.9rem 1rem;
-  border: 1px solid rgba(196, 161, 255, 0.3);
+  border: 1px solid var(--lv-border-strong);
   border-radius: 1.3rem;
-  background: linear-gradient(135deg, rgba(91, 33, 182, 0.5), rgba(20, 10, 38, 0.8));
-  color: #f5f3ff;
+  background: linear-gradient(135deg, rgba(91, 33, 182, 0.5), var(--lv-surface));
+  color: var(--lv-text);
   text-align: left;
 }
 
@@ -340,18 +340,18 @@ html[data-ttm-app] .ttm-app-chats__premium > svg {
   width: 1.25rem;
   height: 1.25rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.6);
+  color: var(--lv-text-2);
 }
 
 /* ── Conversation screen inside the app: Luvia violet instead of the old pink ── */
 html[data-ttm-app] .ttm-chat-room,
 html[data-ttm-app] .ttm-chat-area {
-  --rose: #b66cff;
+  --rose: var(--lv-purple);
   --rose-whisper: rgba(182, 108, 255, 0.08);
   --rose-border: rgba(182, 108, 255, 0.28);
   --rose-glow: rgba(168, 85, 247, 0.4);
-  --gradient: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #7c3aed 100%);
-  --saas-cta-gradient: linear-gradient(135deg, #c084fc 0%, #7c3aed 100%);
+  --gradient: linear-gradient(135deg, var(--lv-pink) 0%, #a855f7 50%, #7c3aed 100%);
+  --saas-cta-gradient: linear-gradient(135deg, var(--lv-pink) 0%, #7c3aed 100%);
   --shadow-rose: 0 8px 32px rgba(168, 85, 247, 0.3), 0 2px 8px rgba(168, 85, 247, 0.2);
   --ring: rgba(168, 85, 247, 0.45);
   --ttm-glow-sync-soft: rgba(168, 85, 247, 0.15);

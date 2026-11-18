@@ -27,7 +27,7 @@ function PhotoStack({ photos, blurred }: { photos: string[]; blurred: boolean })
     <div className="ttm-app-likes__stack" aria-hidden>
       {shown.length === 0 ? (
         <div className="ttm-app-likes__stack-photo ttm-app-likes__stack-photo--empty">
-          <Image src="/brand/luvia/symbol.svg" alt="" width={120} height={90} unoptimized />
+          <Image src="/brand/luvia/v2/mark.svg" alt="" width={100} height={89} unoptimized />
         </div>
       ) : (
         shown.map((src, i) => (

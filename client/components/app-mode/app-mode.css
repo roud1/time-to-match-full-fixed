@@ -641,9 +641,10 @@ html[data-ttm-app] .profile-presence--own .profile-presence__identity-body--cove
   margin-top: auto;
 }
 
-/* ---- App background: the brand picture behind every in-app screen (website unchanged) ---- */
+/* ---- App background (Luvia 2.0): solid #0D0A17 with a faint light; no picture behind text.
+   The start screen sets its own picture (mobile-app-home.css). Website unchanged. ---- */
 html[data-ttm-app] {
-  background-color: #05020a !important;
+  background-color: #0d0a17 !important;
   background-image: none !important;
 }
 html[data-ttm-app] body {
@@ -655,12 +656,11 @@ html[data-ttm-app] body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background-color: #05020a;
-  background-image: url("/brand/app-bg.jpg");
-  background-image: image-set(url("/brand/app-bg.webp") type("image/webp"), url("/brand/app-bg.jpg") type("image/jpeg"));
+  background-color: #0d0a17;
+  background-image:
+    radial-gradient(90% 45% at 50% -8%, rgba(155, 77, 255, 0.16), transparent 70%),
+    radial-gradient(70% 40% at 100% 105%, rgba(243, 92, 168, 0.08), transparent 70%);
   background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: cover;
 }
 html[data-ttm-app] .eo-root,
 html[data-ttm-app] .er-reality-root,

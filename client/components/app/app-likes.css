@@ -6,7 +6,7 @@ html[data-ttm-app] .ttm-app-likes {
   flex-direction: column;
   gap: 1.1rem;
   padding: 0.5rem 0 1.25rem;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-likes__title {
@@ -21,7 +21,7 @@ html[data-ttm-app] .ttm-app-likes__title {
 html[data-ttm-app] .ttm-app-likes__subtitle {
   margin: 0.25rem 0 0;
   font-size: 0.98rem;
-  color: rgba(237, 233, 254, 0.68);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-likes__hero {
@@ -96,7 +96,7 @@ html[data-ttm-app] .ttm-app-likes__badge--top {
   width: 2.1rem;
   height: 2.1rem;
   background: linear-gradient(135deg, #f472b6, #c026d3);
-  box-shadow: 0 0 16px rgba(236, 72, 153, 0.7);
+  box-shadow: var(--lv-shadow-cta);
 }
 
 html[data-ttm-app] .ttm-app-likes__badge--bottom {
@@ -105,8 +105,8 @@ html[data-ttm-app] .ttm-app-likes__badge--bottom {
   width: 2.9rem;
   height: 2.9rem;
   border: 2px solid rgba(255, 255, 255, 0.85);
-  background: linear-gradient(135deg, #e879f9, #9333ea);
-  box-shadow: 0 0 20px rgba(192, 38, 211, 0.7);
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
   transform: translateX(-50%);
 }
 
@@ -128,7 +128,7 @@ html[data-ttm-app] .ttm-app-likes__hero-body {
   margin: 0.4rem 0 1.1rem;
   font-size: 0.98rem;
   line-height: 1.45;
-  color: rgba(237, 233, 254, 0.72);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-likes__btn {
@@ -151,15 +151,15 @@ html[data-ttm-app] .ttm-app-likes__btn:first-of-type {
 
 html[data-ttm-app] .ttm-app-likes__btn--primary {
   border: 1px solid rgba(233, 213, 255, 0.5);
-  background: linear-gradient(90deg, #d946ef 0%, #a855f7 55%, #7c3aed 100%);
-  box-shadow: 0 0 24px rgba(192, 38, 211, 0.45);
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
 }
 
 html[data-ttm-app] .ttm-app-likes__btn--ghost {
-  border: 1px solid rgba(196, 161, 255, 0.28);
-  background: rgba(20, 10, 38, 0.6);
-  color: #f5f3ff;
+  border: 1px solid var(--lv-border);
+  background: var(--lv-surface);
+  color: var(--lv-text);
 }
 
 /* Premium: list of people who liked you */
@@ -177,9 +177,9 @@ html[data-ttm-app] .ttm-app-likes__row {
   align-items: center;
   gap: 0.8rem;
   padding: 0.6rem 0.7rem;
-  border: 1px solid rgba(196, 161, 255, 0.16);
+  border: 1px solid var(--lv-border);
   border-radius: 1.2rem;
-  background: rgba(20, 10, 38, 0.6);
+  background: var(--lv-surface);
 }
 
 html[data-ttm-app] .ttm-app-likes__avatar {
@@ -209,7 +209,7 @@ html[data-ttm-app] .ttm-app-likes__row-name {
 
 html[data-ttm-app] .ttm-app-likes__row-meta {
   font-size: 0.85rem;
-  color: rgba(237, 233, 254, 0.6);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-likes__like-back {
@@ -221,8 +221,8 @@ html[data-ttm-app] .ttm-app-likes__like-back {
   flex-shrink: 0;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, #e879f9, #9333ea);
-  box-shadow: 0 0 16px rgba(192, 38, 211, 0.55);
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
 }
 
@@ -238,10 +238,10 @@ html[data-ttm-app] .ttm-app-likes__premium {
   gap: 0.9rem;
   width: 100%;
   padding: 1rem;
-  border: 1px solid rgba(196, 161, 255, 0.22);
+  border: 1px solid var(--lv-border);
   border-radius: 1.3rem;
-  background: linear-gradient(135deg, rgba(76, 29, 149, 0.45), rgba(20, 10, 38, 0.75));
-  color: #f5f3ff;
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.45), var(--lv-surface));
+  color: var(--lv-text);
   text-align: left;
 }
 
@@ -281,18 +281,18 @@ html[data-ttm-app] .ttm-app-likes__perk {
   align-items: center;
   gap: 0.4rem;
   font-size: 0.85rem;
-  color: rgba(237, 233, 254, 0.75);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-likes__perk svg {
   width: 0.9rem;
   height: 0.9rem;
-  color: #c084fc;
+  color: var(--lv-pink);
 }
 
 html[data-ttm-app] .ttm-app-likes__chevron {
   width: 1.3rem;
   height: 1.3rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.6);
+  color: var(--lv-text-2);
 }

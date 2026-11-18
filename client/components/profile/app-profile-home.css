@@ -17,7 +17,7 @@ html[data-ttm-app] .ttm-app-me {
   max-width: 32rem;
   margin-inline: auto;
   padding-bottom: calc(var(--ttm-dock-height) + 1rem);
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
 html[data-ttm-app] .ttm-app-me__identity {
@@ -44,8 +44,8 @@ html[data-ttm-app] .ttm-app-me__avatar {
   border: 2px solid rgba(216, 180, 254, 0.7);
   border-radius: 999px;
   background: #1a0c30;
-  box-shadow: 0 0 22px rgba(168, 85, 247, 0.45);
-  color: rgba(237, 233, 254, 0.7);
+  box-shadow: var(--lv-shadow-cta);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-me__avatar svg {
@@ -74,7 +74,7 @@ html[data-ttm-app] .ttm-app-me__name {
 
 html[data-ttm-app] .ttm-app-me__status {
   font-size: 0.92rem;
-  color: rgba(237, 233, 254, 0.65);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-me__status.is-hidden {
@@ -89,7 +89,7 @@ html[data-ttm-app] .ttm-app-me__premium {
   border: 1px solid rgba(232, 121, 249, 0.45);
   border-radius: 1.3rem;
   background: linear-gradient(135deg, rgba(126, 34, 206, 0.6), rgba(46, 16, 101, 0.75));
-  box-shadow: 0 0 26px rgba(192, 38, 211, 0.3);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   text-decoration: none;
 }
@@ -125,15 +125,15 @@ html[data-ttm-app] .ttm-app-me__premium-title {
 
 html[data-ttm-app] .ttm-app-me__premium-body {
   font-size: 0.9rem;
-  color: rgba(237, 233, 254, 0.75);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-me__list {
   margin: 0;
   padding: 0.35rem 0;
-  border: 1px solid rgba(196, 161, 255, 0.16);
+  border: 1px solid var(--lv-border);
   border-radius: 1.3rem;
-  background: rgba(20, 10, 38, 0.6);
+  background: var(--lv-surface);
   list-style: none;
 }
 
@@ -146,7 +146,7 @@ html[data-ttm-app] .ttm-app-me__row {
   padding: 0 1rem;
   border: 0;
   background: transparent;
-  color: #f5f3ff;
+  color: var(--lv-text);
   font-size: 0.98rem;
   text-align: left;
   text-decoration: none;
@@ -161,7 +161,7 @@ html[data-ttm-app] .ttm-app-me__row-icon {
   width: 1.35rem;
   height: 1.35rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.8);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-me__row-label {
@@ -173,7 +173,7 @@ html[data-ttm-app] .ttm-app-me__row-chevron {
   width: 1.2rem;
   height: 1.2rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.5);
+  color: var(--lv-text-2);
 }
 
 html[data-ttm-app] .ttm-app-me__row--lang {
