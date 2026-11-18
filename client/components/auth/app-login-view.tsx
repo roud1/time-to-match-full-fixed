@@ -37,9 +37,9 @@ export function AppLoginView({
       <div className="ttm-app-login__brand">
         <Image
           className="ttm-app-login__logo"
-          src="/brand/luvia/v2/logo.svg"
+          src="/brand/luvia/logo.svg"
           alt="Luvia"
-          width={649}
+          width={719}
           height={200}
           priority
           unoptimized

@@ -54,7 +54,7 @@ API (selection): `discover`, `discover/like|pass|rewind`, `likes/incoming`, `mat
 ## 4. Gap vs. the Luvia 2.0 reference
 
 - Palette: current app uses violet `#a855f7/#7c3aed` + a full-screen illustrated background → reference uses solid `#0D0A17`, surfaces `#171222/#241B31`, gradient `#F35CA8 → #9B4DFF`, light glows, no images behind text.
-- Logo: current Luvia mark (two ribbons) → reference outline gradient heart (`luvia-logo.svg`).
+- Logo: keep the current Luvia mark (two ribbons) — owner decision; the package logo is not used.
 - Tab bar: 4 tabs with labels → icons only (flame / pin / chat / user); accessible names kept.
 - Discover: add rewind + super-like around pass / like, interest chips and info button on the card, centered logo header with filters.
 - Match screen: two photos in a heart, "Написать сообщение" / "Продолжить знакомства".

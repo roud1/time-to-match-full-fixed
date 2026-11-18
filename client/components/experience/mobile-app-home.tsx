@@ -43,15 +43,15 @@ export function MobileAppHome() {
       <div className="xp-mobile-home__brand">
         <Image
           className="xp-mobile-home__mark"
-          src="/brand/luvia/v2/mark.svg"
+          src="/brand/luvia/symbol.svg"
           alt=""
-          width={204}
-          height={182}
+          width={676}
+          height={500}
           priority
           unoptimized
         />
         <h1 id="xp-mobile-title" className="xp-mobile-home__wordmark">
-          <Image src="/brand/luvia/v2/wordmark.svg" alt="Luvia" width={393} height={146} priority unoptimized />
+          <Image src="/brand/luvia/wordmark.svg" alt="Luvia" width={412} height={152} priority unoptimized />
         </h1>
         <p className="xp-mobile-home__tagline">{t("appHomeTagline")}</p>
       </div>

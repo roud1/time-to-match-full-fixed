@@ -216,7 +216,7 @@ export function AppShell() {
               >
                 {inApp ? (
                   <Link href="/app" className="ttm-app-topbar-logo ttm-tactile" aria-label="Luvia">
-                    <Image src="/brand/luvia/v2/logo.svg" alt="Luvia" width={649} height={200} priority unoptimized />
+                    <Image src="/brand/luvia/logo.svg" alt="Luvia" width={719} height={200} priority unoptimized />
                   </Link>
                 ) : (
                   <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile" aria-label="Time to Match">
