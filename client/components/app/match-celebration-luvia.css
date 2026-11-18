@@ -1,0 +1,242 @@
+/* "It's a match!" (Luvia 2.0, reference screen 4). Shown only for real mutual likes (server says matched). */
+
+.lv-match {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: max(0.75rem, env(safe-area-inset-top, 0px)) 1.5rem max(1rem, env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  color: var(--lv-text, #faf7ff);
+  background:
+    radial-gradient(70% 40% at 50% 28%, rgba(155, 77, 255, 0.22), transparent 70%),
+    var(--lv-bg, #0d0a17);
+}
+
+/* Legacy global [role="dialog"] rule (translucent, framed) must not apply to this full-screen page. */
+html[data-lv] .lv-match[role="dialog"] {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background:
+    radial-gradient(70% 40% at 50% 28%, rgba(155, 77, 255, 0.22), transparent 70%),
+    var(--lv-bg, #0d0a17) !important;
+}
+
+.lv-match__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: -0.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--lv-text, #faf7ff);
+}
+
+.lv-match__close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lv-match__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 26rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Two photos inside a gradient heart outline */
+.lv-match__hearts {
+  position: relative;
+  width: min(15.5rem, 70vw, 30dvh);
+  aspect-ratio: 240 / 210;
+  margin-bottom: clamp(0.75rem, 2.5dvh, 1.5rem);
+}
+
+.lv-match__outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 6px 18px rgba(243, 92, 168, 0.35));
+}
+
+.lv-match__photo {
+  position: absolute;
+  top: 18%;
+  width: 46%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 999px;
+  background: var(--lv-surface-raised, #241b31);
+}
+
+.lv-match__photo--me {
+  left: 6%;
+}
+
+.lv-match__photo--them {
+  right: 6%;
+}
+
+.lv-match__photo-empty {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(243, 92, 168, 0.35), rgba(155, 77, 255, 0.35));
+}
+
+.lv-match__badge {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  border: 3px solid #fff;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  color: #fff;
+  transform: translateX(-50%);
+}
+
+.lv-match__badge svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.lv-match__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-family: var(--font-sans, inherit);
+  font-size: clamp(2rem, 9vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.lv-match__title-heart {
+  width: 1.7rem;
+  height: 1.7rem;
+  color: var(--lv-pink, #f35ca8);
+}
+
+.lv-match__subtitle {
+  max-width: 19rem;
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-match__time-left {
+  margin: 0.75rem 0 0;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: 999px;
+  background: var(--lv-surface, #171222);
+  font-family: var(--font-sans, inherit);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-match__starters {
+  width: 100%;
+  margin-top: clamp(1rem, 3dvh, 1.5rem);
+  text-align: left;
+}
+
+.lv-match__starters-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: var(--lv-text-3, #8d82a0);
+}
+
+.lv-match__starters ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lv-match__starters button {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--lv-radius-control, 16px);
+  background: var(--lv-surface, #171222);
+  color: var(--lv-text, #faf7ff);
+  font-size: 0.92rem;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.lv-match__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  max-width: 26rem;
+  margin: 1.25rem auto 0;
+}
+
+.lv-match__primary,
+.lv-match__secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 3.4rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.lv-match__primary {
+  border: 0;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  box-shadow: var(--lv-shadow-cta, none);
+  color: #fff;
+}
+
+.lv-match__primary svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.lv-match__secondary {
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  background: var(--lv-surface, #171222);
+  color: var(--lv-text, #faf7ff);
+}
+
+/* Short screens: hide the starter lines (they are also offered inside the chat). */
+/* Phones up to ~860pt tall: two starter lines; very short screens: none (they are also offered in the chat). */
+@media (max-height: 860px) {
+  .lv-match__starters li:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+@media (max-height: 700px) {
+  .lv-match__starters {
+    display: none;
+  }
+}

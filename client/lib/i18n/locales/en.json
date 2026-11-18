@@ -1765,5 +1765,14 @@
   "appMeActive": "Profile is active",
   "appMeHidden": "Profile is hidden from the feed",
   "appMePremiumBody": "More features",
-  "appMePremiumActive": "Subscription active"
+  "appMePremiumActive": "Subscription active",
+  "lvMatchTitle": "It's a match!",
+  "lvMatchSubtitle": "You liked each other. Start chatting right now!",
+  "lvMatchWrite": "Send a message",
+  "lvMatchKeepSwiping": "Keep discovering",
+  "lvMatchTimer": "Time to connect — {time}",
+  "lvMatchStarters": "Start with a line",
+  "lvClose": "Close",
+  "lvRewind": "Undo last swipe",
+  "lvProfileInfo": "Profile details"
 }

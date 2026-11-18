@@ -26,7 +26,7 @@ import { SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
 import { cn } from "@/client/lib/utils"
 import { postDiscoverRewind } from "@/client/lib/discover/api"
 import { useLuviaUi } from "@/client/hooks/use-ttm-app"
-import { Heart, X } from "lucide-react"
+import { Heart, RotateCcw, Star, X } from "lucide-react"
 
 const STACK_VISIBLE = 3
 
@@ -397,8 +397,20 @@ export function SwipeDeck({
   ) : null
 
   // App only: pass / hourglass (super like) / like, as in the app mockup.
+  // Luvia 2.0 (reference): rewind · pass · like (main) · super like. Rewind and super like are Premium (upgrade sheet otherwise).
   const appActionButtons = (
     <div className="ttm-app-feed-actions">
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.9 }}
+        disabled={!canRewind}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={rewind}
+        aria-label={t("lvRewind")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--small ttm-app-feed-actions__btn--rewind"
+      >
+        <RotateCcw aria-hidden strokeWidth={2} />
+      </motion.button>
       <motion.button
         type="button"
         whileTap={{ scale: 0.9 }}
@@ -414,31 +426,22 @@ export function SwipeDeck({
         whileTap={{ scale: 0.9 }}
         disabled={!current}
         onPointerDown={(e) => e.stopPropagation()}
-        onClick={superLike}
-        aria-label={t("swipeSuperLikeAria")}
-        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--super"
+        onClick={() => void flyOff("right")}
+        aria-label={t("like")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--like"
       >
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M6 3h12M6 21h12M7.5 3c0 5 4.5 6.5 4.5 9s-4.5 4-4.5 9M16.5 3c0 5-4.5 6.5-4.5 9s4.5 4 4.5 9"
-            stroke="currentColor"
-            strokeWidth="1.9"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path d="M9.5 18.6c1.2-1.5 3.8-1.5 5 0l.5 1.4H9z" fill="currentColor" />
-        </svg>
+        <Heart aria-hidden fill="currentColor" strokeWidth={0} />
       </motion.button>
       <motion.button
         type="button"
         whileTap={{ scale: 0.9 }}
         disabled={!current}
         onPointerDown={(e) => e.stopPropagation()}
-        onClick={() => void flyOff("right")}
-        aria-label={t("like")}
-        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--like"
+        onClick={superLike}
+        aria-label={t("swipeSuperLikeAria")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--small ttm-app-feed-actions__btn--super"
       >
-        <Heart aria-hidden fill="currentColor" strokeWidth={0} />
+        <Star aria-hidden fill="currentColor" strokeWidth={0} />
       </motion.button>
     </div>
   )

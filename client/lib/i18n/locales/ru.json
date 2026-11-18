@@ -1781,5 +1781,14 @@
   "appMeActive": "Профиль активен",
   "appMeHidden": "Профиль скрыт из ленты",
   "appMePremiumBody": "Больше возможностей",
-  "appMePremiumActive": "Подписка активна"
+  "appMePremiumActive": "Подписка активна",
+  "lvMatchTitle": "Это мэтч!",
+  "lvMatchSubtitle": "Вы понравились друг другу. Начните общение прямо сейчас!",
+  "lvMatchWrite": "Написать сообщение",
+  "lvMatchKeepSwiping": "Продолжить знакомства",
+  "lvMatchTimer": "На знакомство — {time}",
+  "lvMatchStarters": "Начать с фразы",
+  "lvClose": "Закрыть",
+  "lvRewind": "Вернуть предыдущую анкету",
+  "lvProfileInfo": "Подробнее о профиле"
 }

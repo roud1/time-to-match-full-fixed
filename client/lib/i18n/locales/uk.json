@@ -1757,5 +1757,14 @@
   "appMeActive": "Профіль активний",
   "appMeHidden": "Профіль прихований зі стрічки",
   "appMePremiumBody": "Більше можливостей",
-  "appMePremiumActive": "Підписка активна"
+  "appMePremiumActive": "Підписка активна",
+  "lvMatchTitle": "Це метч!",
+  "lvMatchSubtitle": "Ви сподобалися одне одному. Почніть спілкування просто зараз!",
+  "lvMatchWrite": "Написати повідомлення",
+  "lvMatchKeepSwiping": "Продовжити знайомства",
+  "lvMatchTimer": "На знайомство — {time}",
+  "lvMatchStarters": "Почати з фрази",
+  "lvClose": "Закрити",
+  "lvRewind": "Повернути попередню анкету",
+  "lvProfileInfo": "Детальніше про профіль"
 }

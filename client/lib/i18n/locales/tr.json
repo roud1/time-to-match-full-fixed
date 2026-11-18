@@ -1757,5 +1757,14 @@
   "appMeActive": "Profil aktif",
   "appMeHidden": "Profil akışta gizli",
   "appMePremiumBody": "Daha fazla olanak",
-  "appMePremiumActive": "Abonelik aktif"
+  "appMePremiumActive": "Abonelik aktif",
+  "lvMatchTitle": "Eşleştiniz!",
+  "lvMatchSubtitle": "Birbirinizi beğendiniz. Hemen sohbete başlayın!",
+  "lvMatchWrite": "Mesaj gönder",
+  "lvMatchKeepSwiping": "Keşfetmeye devam et",
+  "lvMatchTimer": "Tanışma süresi — {time}",
+  "lvMatchStarters": "Bir cümleyle başla",
+  "lvClose": "Kapat",
+  "lvRewind": "Son kaydırmayı geri al",
+  "lvProfileInfo": "Profil ayrıntıları"
 }

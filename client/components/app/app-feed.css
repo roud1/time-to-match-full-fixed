@@ -64,7 +64,7 @@ html[data-lv] .ttm-app-feed__deck .ttm-swipe-deck-stack {
   min-height: 0 !important;
   max-height: none !important;
   overflow: visible !important;
-  border-radius: 28px;
+  border-radius: var(--lv-radius-card);
 }
 
 /* The app root also reserved space for the dock; on the feed only <main> does it (no double gap). */
@@ -162,13 +162,10 @@ html[data-lv] .ttm-app-swipe {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 1px solid var(--lv-border-strong);
-  border-radius: 28px;
-  background: #140a24;
-  box-shadow:
-    0 0 0 1px rgba(168, 85, 247, 0.12),
-    0 0 32px -4px rgba(168, 85, 247, 0.45),
-    0 24px 48px -24px rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--lv-border);
+  border-radius: var(--lv-radius-card);
+  background: var(--lv-surface);
+  box-shadow: var(--lv-shadow-raised);
   isolation: isolate;
 }
 
@@ -348,13 +345,13 @@ html[data-lv] .ttm-app-swipe__open svg {
   height: 1.4rem;
 }
 
-/* ── Actions: pass / hourglass (super like) / like ─────────────────────────── */
+/* ── Actions (reference): rewind · pass · like (main, gradient) · super like ── */
 
 html[data-lv] .ttm-app-feed-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(1rem, 6vw, 1.6rem);
+  gap: clamp(0.9rem, 5vw, 1.4rem);
   flex-shrink: 0;
   padding: 0.15rem 0 0;
 }
@@ -367,9 +364,7 @@ html[data-lv] .ttm-app-feed-actions__btn {
   height: 4rem;
   border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: var(--lv-surface);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: var(--lv-surface-raised);
   color: #fff;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
@@ -380,28 +375,69 @@ html[data-lv] .ttm-app-feed-actions__btn svg {
   height: 1.75rem;
 }
 
-html[data-lv] .ttm-app-feed-actions__btn--like {
-  color: #ead5ff;
+/* Rewind and super like: smaller side buttons (still ≥ 44px tap target). */
+html[data-lv] .ttm-app-feed-actions__btn--small {
+  width: 2.9rem;
+  height: 2.9rem;
+  background: var(--lv-surface);
+}
+
+html[data-lv] .ttm-app-feed-actions__btn--small svg {
+  width: 1.3rem;
+  height: 1.3rem;
 }
 
 html[data-lv] .ttm-app-feed-actions__btn--super {
-  width: 4.9rem;
-  height: 4.9rem;
-  border-color: rgba(233, 213, 255, 0.55);
-  background:
-    radial-gradient(120% 120% at 50% 15%, var(--lv-pink) 0%, #9333ea 45%, #6d28d9 100%);
-  box-shadow:
-    0 0 28px rgba(168, 85, 247, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  border: 0;
+  background: var(--lv-gradient);
 }
 
-html[data-lv] .ttm-app-feed-actions__btn--super svg {
-  width: 2.1rem;
-  height: 2.1rem;
+html[data-lv] .ttm-app-feed-actions__btn--like {
+  width: 4.6rem;
+  height: 4.6rem;
+  border: 0;
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
+}
+
+html[data-lv] .ttm-app-feed-actions__btn--like svg {
+  width: 2rem;
+  height: 2rem;
 }
 
 html[data-lv] .ttm-app-feed-actions__btn:disabled {
   opacity: 0.4;
+}
+
+/* Interest tags on the card (real profile interests, max 3). */
+html[data-lv] .ttm-app-swipe__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+html[data-lv] .ttm-app-swipe__tags li {
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(13, 10, 23, 0.55);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  font-size: 0.82rem;
+  color: #fff;
+}
+
+/* Info button: a thin "i" circle as in the reference. */
+html[data-lv] .ttm-app-swipe__open {
+  width: 2.75rem !important;
+  height: 2.75rem !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.8) !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
 }
 
 /* Short screens (SE / mini): smaller buttons so the card keeps its height. */
@@ -420,9 +456,13 @@ html[data-lv] .ttm-app-feed-actions__btn:disabled {
     width: 3.4rem;
     height: 3.4rem;
   }
-  html[data-lv] .ttm-app-feed-actions__btn--super {
-    width: 4.1rem;
-    height: 4.1rem;
+  html[data-lv] .ttm-app-feed-actions__btn--like {
+    width: 4rem;
+    height: 4rem;
+  }
+  html[data-lv] .ttm-app-feed-actions__btn--small {
+    width: 2.75rem;
+    height: 2.75rem;
   }
   html[data-lv] .ttm-app-swipe__bio {
     -webkit-line-clamp: 1;

@@ -1757,5 +1757,14 @@
   "appMeActive": "Perfil activo",
   "appMeHidden": "Perfil oculto del feed",
   "appMePremiumBody": "Más funciones",
-  "appMePremiumActive": "Suscripción activa"
+  "appMePremiumActive": "Suscripción activa",
+  "lvMatchTitle": "¡Es un match!",
+  "lvMatchSubtitle": "Os habéis gustado. ¡Empezad a hablar ya!",
+  "lvMatchWrite": "Enviar mensaje",
+  "lvMatchKeepSwiping": "Seguir descubriendo",
+  "lvMatchTimer": "Tiempo para conectar — {time}",
+  "lvMatchStarters": "Empezar con una frase",
+  "lvClose": "Cerrar",
+  "lvRewind": "Deshacer el último swipe",
+  "lvProfileInfo": "Detalles del perfil"
 }
