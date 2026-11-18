@@ -1,0 +1,224 @@
+/* Onboarding after registration (Luvia 2.0, reference screen 2): progress bars + "Skip" on top,
+   left-aligned title and subtitle, content, gradient "Continue →" at the bottom. Website and app. */
+
+.lv-onboard {
+  color: var(--lv-text, #faf7ff);
+}
+
+/* The old glass card / glow around the slides is not part of Luvia. */
+.lv-onboard.ttm-dating-onboarding {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.lv-onboard__inner {
+  display: flex;
+  flex-direction: column;
+  min-height: min(38rem, calc(100dvh - 7rem));
+}
+
+.lv-onboard__top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.lv-onboard__bars {
+  display: flex;
+  gap: 0.4rem;
+  flex: 0 1 8.5rem;
+}
+
+.lv-onboard__bars > span,
+.lv-onboard__bars > div {
+  flex: 1;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.lv-onboard__bars > span.is-done,
+.lv-onboard__bars .ttm-dating-onboarding__progress-fill {
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+}
+
+.lv-onboard__skip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 0.25rem;
+  border: 0;
+  background: transparent;
+  color: var(--lv-text-2, #b9afc5);
+  font-size: 0.95rem;
+}
+
+.lv-onboard__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lv-onboard .lv-onboard__title,
+.lv-onboard .ttm-dating-onboarding__title {
+  margin: 0;
+  font-family: var(--font-sans, inherit);
+  font-size: clamp(1.6rem, 7vw, 1.9rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #fff;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+.lv-onboard .lv-onboard__sub {
+  margin: -0.4rem 0 0.4rem;
+  max-width: 26rem;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+/* Slides keep their centred illustration; the text block sits under it. */
+.lv-onboard.ttm-dating-onboarding .lv-onboard__title {
+  margin-top: 1.25rem;
+}
+
+.lv-onboard.ttm-dating-onboarding .lv-onboard__sub {
+  margin-top: 0.6rem;
+}
+
+.lv-onboard__label {
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-onboard .lv-onboard__field input {
+  min-height: 3.25rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1)) !important;
+  border-radius: var(--lv-radius-control, 16px) !important;
+  background: var(--lv-surface, #171222) !important;
+  font-size: 1rem;
+}
+
+.lv-onboard__actions {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding: 1.25rem 0 max(0.5rem, env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--lv-bg, #0d0a17) 70%, rgba(13, 10, 23, 0));
+}
+
+.lv-onboard__cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0 3.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  box-shadow: var(--lv-shadow-cta, none);
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.lv-onboard__cta svg {
+  position: absolute;
+  right: 1.4rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.lv-onboard__cta:disabled {
+  opacity: 0.45;
+}
+
+/* /welcome uses the auth shell: no card frame around the onboarding. */
+html[data-lv] .ttm-auth-shell:has(.lv-onboard) .ttm-auth-shell__panel,
+html[data-lv] .ttm-auth-shell:has(.lv-onboard) .ttm-auth-shell__mobile-pitch {
+  display: none;
+}
+
+html[data-lv] .ttm-auth-shell:has(.lv-onboard) .ttm-auth-shell__main {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+html[data-lv] .ttm-auth-shell:has(.lv-onboard) .ttm-auth-shell__content-wrap {
+  justify-self: center;
+  width: 100%;
+  max-width: 34rem;
+  margin-inline: auto;
+}
+
+html[data-lv] .ttm-auth-shell:has(.lv-onboard) .ttm-auth-shell__content {
+  margin-block: 0;
+}
+
+/* WelcomeOnboardingShell wraps the flow in a glass card (legacy); Luvia shows it flat on the background. */
+html[data-lv] .ttm-auth-shell__content > .ttm-card-shell:has(> .lv-onboard) {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Slide illustrations: a ring with the timer / icon inside (Luvia colours). */
+.lv-onboard .ttm-dating-onboarding__visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 11rem;
+  height: 11rem;
+  margin: 1rem auto 0.5rem;
+}
+
+.lv-onboard .ttm-dating-onboarding__ring {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid rgba(243, 92, 168, 0.45);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(155, 77, 255, 0.18), transparent 70%);
+}
+
+.lv-onboard .ttm-dating-onboarding__ring--inner {
+  inset: 1.6rem;
+  border-color: rgba(155, 77, 255, 0.4);
+  background: none;
+}
+
+.lv-onboard .ttm-dating-onboarding__clock {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.lv-onboard .ttm-dating-onboarding__clock-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.lv-onboard .ttm-dating-onboarding__clock-label {
+  font-size: 0.85rem;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-onboard .ttm-dating-onboarding__visual svg {
+  color: var(--lv-pink, #f35ca8);
+}

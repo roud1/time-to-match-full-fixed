@@ -74,7 +74,7 @@ html[data-lv] .ttm-app-login__field {
 
 html[data-lv] .ttm-app-login__field:focus-within {
   border-color: rgba(192, 132, 252, 0.7);
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.18);
+  box-shadow: var(--lv-focus);
 }
 
 html[data-lv] .ttm-app-login__field[data-invalid] {
@@ -179,15 +179,12 @@ html[data-lv] .ttm-app-login__submit {
   width: 100%;
   min-height: 3.6rem;
   margin-top: 0.15rem;
-  border: 1px solid rgba(233, 213, 255, 0.55);
+  border: 0;
   border-radius: 999px;
   background:
     radial-gradient(120% 140% at 50% 0%, rgba(233, 213, 255, 0.28), transparent 55%),
     var(--lv-gradient);
-  box-shadow:
-    0 0 24px rgba(168, 85, 247, 0.55),
-    0 10px 30px -10px rgba(124, 58, 237, 0.8),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   font-size: 1.15rem;
   font-weight: 600;
@@ -307,4 +304,26 @@ html[data-lv] .ttm-auth-shell:has(.ttm-app-login) .ttm-auth-shell__content-wrap 
   width: 100%;
   max-width: 34rem;
   margin-inline: auto;
+}
+
+/* Shared auth screen (password recovery / reset): nested form keeps the outer spacing. */
+html[data-lv] .ttm-app-login__form--flat {
+  margin-top: 0;
+}
+
+html[data-lv] .ttm-app-login__form-ok {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: 0.9rem;
+  background: rgba(6, 78, 59, 0.3);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: center;
+  color: #a7f3d0;
+}
+
+/* Auth screens that are not the sign-in form also lose the old marketing side panel on desktop. */
+html[data-lv] .ttm-auth-shell:has(.ttm-app-login) .ttm-auth-shell__mobile-pitch {
+  display: none;
 }

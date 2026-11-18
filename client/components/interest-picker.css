@@ -1,0 +1,60 @@
+/* Interest picker (Luvia 2.0): two-column tiles with an icon, as in the onboarding reference. */
+
+.lv-interests {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.lv-interests__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  min-height: 3.25rem;
+  padding: 0 0.9rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--lv-radius-control, 16px);
+  background: var(--lv-surface, #171222);
+  color: var(--lv-text, #faf7ff);
+  font-size: 0.95rem;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.lv-interests__item svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-interests__item span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lv-interests__item.is-selected {
+  border-color: var(--lv-pink, #f35ca8);
+  background:
+    linear-gradient(var(--lv-surface-raised, #241b31), var(--lv-surface-raised, #241b31)) padding-box,
+    var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff)) border-box;
+  border-color: transparent;
+  border-width: 1.5px;
+}
+
+.lv-interests__item.is-selected svg {
+  color: var(--lv-pink, #f35ca8);
+}
+
+.lv-interests__item:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.lv-interests__item:not(:disabled):active {
+  transform: scale(0.98);
+}

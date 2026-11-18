@@ -9,6 +9,53 @@ import {
   type InterestId,
 } from "@/client/lib/interests"
 import { cn } from "@/client/lib/utils"
+import {
+  BookOpen,
+  Briefcase,
+  Camera,
+  Clapperboard,
+  Coffee,
+  Dumbbell,
+  Gamepad2,
+  HeartPulse,
+  Mountain,
+  Music,
+  Music2,
+  Palette,
+  PartyPopper,
+  PawPrint,
+  PenTool,
+  Plane,
+  Shirt,
+  Sparkles,
+  UtensilsCrossed,
+  Wine,
+  type LucideIcon,
+} from "lucide-react"
+import "./interest-picker.css"
+
+const ICONS: Record<InterestId, LucideIcon> = {
+  travel: Plane,
+  coffee: Coffee,
+  photography: Camera,
+  art: Palette,
+  music: Music,
+  sports: Dumbbell,
+  fitness: HeartPulse,
+  yoga: Sparkles,
+  cooking: UtensilsCrossed,
+  movies: Clapperboard,
+  books: BookOpen,
+  nightlife: PartyPopper,
+  nature: Mountain,
+  design: PenTool,
+  business: Briefcase,
+  gaming: Gamepad2,
+  fashion: Shirt,
+  pets: PawPrint,
+  wine: Wine,
+  dance: Music2,
+}
 
 type InterestPickerProps = {
   value: InterestId[]
@@ -34,26 +81,23 @@ export function InterestPicker({ value, onChange, error }: InterestPickerProps) 
       <p className="text-xs text-muted-foreground font-light">
         {t("regInterestsHint")} ({value.length}/{MAX_INTERESTS})
       </p>
-      <div className="flex flex-wrap gap-2">
+      <div className="lv-interests" role="group" aria-label={t("regInterests")}>
         {options.map((option) => {
           const selected = value.includes(option.id)
           const disabled = !selected && value.length >= MAX_INTERESTS
+          const Icon = ICONS[option.id as InterestId] ?? Sparkles
 
           return (
             <button
               key={option.id}
               type="button"
               disabled={disabled}
+              aria-pressed={selected}
               onClick={() => toggle(option.id)}
-              className={cn(
-                "px-3 py-1.5 rounded-full text-xs font-medium border transition-all",
-                selected
-                  ? "border-[var(--accent)] bg-[var(--accent-soft-bg)] text-[var(--text-primary)] shadow-sm"
-                  : "border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:border-[var(--accent-soft-border)] hover:bg-[var(--accent-soft-bg)]/70",
-                disabled && "opacity-45 cursor-not-allowed hover:bg-[var(--bg-secondary)]"
-              )}
+              className={cn("lv-interests__item", selected && "is-selected")}
             >
-              {option.label}
+              <Icon aria-hidden strokeWidth={1.7} />
+              <span>{option.label}</span>
             </button>
           )
         })}

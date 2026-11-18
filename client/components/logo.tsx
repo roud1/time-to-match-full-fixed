@@ -120,45 +120,36 @@ function LogoWordmark({
   )
 }
 
+/** Luvia brand files (public/brand/luvia): symbol 676×500, wordmark 412×152 — height-driven sizes. */
+const LUVIA_H: Record<LogoSize, number> = { sm: 26, md: 32, lg: 46, xl: 64 }
+
 export function Logo({
   variant = "icon",
   size = "md",
-  theme = "dark",
-  showTagline = false,
-  glow = true,
   className,
 }: LogoProps) {
-  const gradId = useId().replace(/:/g, "")
-  const iconPx = ICON_PX[size]
+  const h = LUVIA_H[size]
+  const symbolW = Math.round((h * 676) / 500)
+  const wordH = Math.round(h * 0.82)
+  const wordW = Math.round((wordH * 412) / 152)
 
-  if (variant === "icon") {
-    return (
-      <span
-        className={cn("inline-flex items-center justify-center", className)}
-        role="img"
-        aria-label="Time to Match"
-      >
-        <LogoIcon size={iconPx} glow={glow} gradId={gradId} />
-      </span>
-    )
-  }
-
-  if (variant === "wordmark") {
-    return (
-      <span className={cn("inline-flex", className)} role="img" aria-label="Time to Match">
-        <LogoWordmark size={size} theme={theme} showTagline={showTagline} />
-      </span>
-    )
-  }
+  /* eslint-disable @next/next/no-img-element -- small static SVGs, no optimisation needed */
+  const symbol = (
+    <img src="/brand/luvia/symbol.svg" alt="" width={symbolW} height={h} style={{ height: h, width: "auto" }} />
+  )
+  const word = (
+    <img src="/brand/luvia/wordmark.svg" alt="" width={wordW} height={wordH} style={{ height: wordH, width: "auto" }} />
+  )
+  /* eslint-enable @next/next/no-img-element */
 
   return (
     <span
-      className={cn("inline-flex items-center gap-2.5 sm:gap-3", className)}
+      className={cn("inline-flex items-center gap-2 shrink-0", className)}
       role="img"
-      aria-label="Time to Match"
+      aria-label="Luvia"
     >
-      <LogoIcon size={iconPx} glow={glow} gradId={gradId} />
-      <LogoWordmark size={size} theme={theme} showTagline={showTagline} />
+      {variant !== "wordmark" && symbol}
+      {variant !== "icon" && word}
     </span>
   )
 }
