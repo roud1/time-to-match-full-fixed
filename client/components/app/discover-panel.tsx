@@ -32,7 +32,7 @@ import { useProfileLife } from "@/client/hooks/use-profile-life"
 import { fetchSubscriptionSummary, activateProfileBoost } from "@/client/lib/monetization/api"
 import type { SubscriptionApiResponse } from "@/client/lib/monetization/types"
 import { reviveProfilePresence } from "@/client/lib/profile-life-store"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { ChevronDown, MapPin, SlidersHorizontal } from "lucide-react"
 import { cn } from "@/client/lib/utils"
 import "@/client/components/app/app-feed.css"
@@ -41,7 +41,7 @@ export function DiscoverPanel() {
   const { openUpgrade } = usePremiumUpgrade()
   const trustV = useTrustSafetyVersion()
   const hydrated = useHydrated()
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   const [profiles, setProfiles] = useState<SwipeProfile[]>([])
   const [deckBooted, setDeckBooted] = useState(false)
   const [profileTick, setProfileTick] = useState(0)

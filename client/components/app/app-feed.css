@@ -1,14 +1,14 @@
 /* Swipe feed ("Знакомства") inside the native app / installed PWA. Rendered only when
-   html[data-ttm-app] is set; every rule is scoped so the website is never affected. */
+   html[data-lv] is set; every rule is scoped so the website is never affected. */
 
 /* Header: Luvia logo instead of the Time to Match mark (all app tabs). */
-html[data-ttm-app] .ttm-app-topbar-logo {
+html[data-lv] .ttm-app-topbar-logo {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
 }
 
-html[data-ttm-app] .ttm-app-topbar-logo img {
+html[data-lv] .ttm-app-topbar-logo img {
   width: 112px;
   height: auto;
   filter: drop-shadow(0 0 12px rgba(182, 108, 255, 0.35));
@@ -16,7 +16,7 @@ html[data-ttm-app] .ttm-app-topbar-logo img {
 
 /* ── Layout: chips / card (fills the space) / actions, above the dock ─────────── */
 
-html[data-ttm-app] .ttm-app-feed {
+html[data-lv] .ttm-app-feed {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -26,15 +26,15 @@ html[data-ttm-app] .ttm-app-feed {
 }
 
 /* Wrappers between the panel and the feed stretch so the card can take the free height. */
-html[data-ttm-app] .discover-panel-root,
-html[data-ttm-app] .discover-panel-root > div:has(.ttm-app-feed) {
+html[data-lv] .discover-panel-root,
+html[data-lv] .discover-panel-root > div:has(.ttm-app-feed) {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
 }
 
-html[data-ttm-app] .ttm-app-feed__deck {
+html[data-lv] .ttm-app-feed__deck {
   position: relative;
   flex: 1 1 auto;
   min-height: 0;
@@ -42,24 +42,24 @@ html[data-ttm-app] .ttm-app-feed__deck {
   flex-direction: column;
 }
 
-html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck--card-only,
-html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck--card-only > div,
-html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck--card-only > div > div,
-html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck--card-only > div > div > div {
+html[data-lv] .ttm-app-feed__deck .ttm-swipe-deck--card-only,
+html[data-lv] .ttm-app-feed__deck .ttm-swipe-deck--card-only > div,
+html[data-lv] .ttm-app-feed__deck .ttm-swipe-deck--card-only > div > div,
+html[data-lv] .ttm-app-feed__deck .ttm-swipe-deck--card-only > div > div > div {
   flex: 1 1 auto;
   min-height: 0 !important;
   height: 100%;
 }
 
 /* The legacy glass rule ([class*="card"]) must not paint the deck wrapper. */
-html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck--card-only {
+html[data-lv] .ttm-app-feed__deck .ttm-swipe-deck--card-only {
   border: 0 !important;
   background: transparent !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
 }
 
-html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck-stack {
+html[data-lv] .ttm-app-feed__deck .ttm-swipe-deck-stack {
   height: 100%;
   min-height: 0 !important;
   max-height: none !important;
@@ -68,25 +68,25 @@ html[data-ttm-app] .ttm-app-feed__deck .ttm-swipe-deck-stack {
 }
 
 /* The app root also reserved space for the dock; on the feed only <main> does it (no double gap). */
-html[data-ttm-app] .ttm-native-app--discover {
+html[data-lv] .ttm-native-app--discover {
   padding-bottom: 0 !important;
 }
 
 /* Small gap between the action buttons and the bottom navigation. */
-html[data-ttm-app] .ttm-native-app--discover .ttm-native-app__main {
+html[data-lv] .ttm-native-app--discover .ttm-native-app__main {
   padding-bottom: calc(var(--ttm-dock-height) + 0.6rem) !important;
 }
 
 /* ── Filter chips (real saved filters) ──────────────────────────────────────── */
 
-html[data-ttm-app] .ttm-app-feed__chips {
+html[data-lv] .ttm-app-feed__chips {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
 }
 
-html[data-ttm-app] .ttm-app-feed__chips-scroll {
+html[data-lv] .ttm-app-feed__chips-scroll {
   display: flex;
   gap: 0.5rem;
   flex: 1 1 auto;
@@ -98,11 +98,11 @@ html[data-ttm-app] .ttm-app-feed__chips-scroll {
   mask-image: linear-gradient(to right, #000 calc(100% - 1.25rem), transparent);
 }
 
-html[data-ttm-app] .ttm-app-feed__chips-scroll::-webkit-scrollbar {
+html[data-lv] .ttm-app-feed__chips-scroll::-webkit-scrollbar {
   display: none;
 }
 
-html[data-ttm-app] .ttm-app-feed__chip {
+html[data-lv] .ttm-app-feed__chip {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
@@ -120,44 +120,44 @@ html[data-ttm-app] .ttm-app-feed__chip {
   -webkit-tap-highlight-color: transparent;
 }
 
-html[data-ttm-app] .ttm-app-feed__chip > span {
+html[data-lv] .ttm-app-feed__chip > span {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-html[data-ttm-app] .ttm-app-feed__chip svg {
+html[data-lv] .ttm-app-feed__chip svg {
   width: 0.95rem;
   height: 0.95rem;
   flex-shrink: 0;
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-feed__chip.is-active {
+html[data-lv] .ttm-app-feed__chip.is-active {
   border-color: rgba(192, 132, 252, 0.65);
   background: rgba(124, 58, 237, 0.22);
 }
 
-html[data-ttm-app] .ttm-app-feed__chip--icon {
+html[data-lv] .ttm-app-feed__chip--icon {
   flex: 0 0 auto;
   width: 2.6rem;
   padding: 0;
   justify-content: center;
 }
 
-html[data-ttm-app] .ttm-app-feed__chip--icon svg {
+html[data-lv] .ttm-app-feed__chip--icon svg {
   width: 1.2rem;
   height: 1.2rem;
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-feed__chip:active {
+html[data-lv] .ttm-app-feed__chip:active {
   transform: scale(0.97);
 }
 
 /* ── Card ───────────────────────────────────────────────────────────────────── */
 
-html[data-ttm-app] .ttm-app-swipe {
+html[data-lv] .ttm-app-swipe {
   position: relative;
   width: 100%;
   height: 100%;
@@ -172,13 +172,13 @@ html[data-ttm-app] .ttm-app-swipe {
   isolation: isolate;
 }
 
-html[data-ttm-app] .ttm-app-swipe--behind {
+html[data-lv] .ttm-app-swipe--behind {
   transform: scale(0.96) translateY(10px);
   opacity: 0.55;
   box-shadow: none;
 }
 
-html[data-ttm-app] .ttm-app-swipe__scrim {
+html[data-lv] .ttm-app-swipe__scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -188,7 +188,7 @@ html[data-ttm-app] .ttm-app-swipe__scrim {
     linear-gradient(to bottom, rgba(8, 4, 16, 0.35) 0%, rgba(8, 4, 16, 0) 18%);
 }
 
-html[data-ttm-app] .ttm-app-swipe__tap {
+html[data-lv] .ttm-app-swipe__tap {
   position: absolute;
   top: 0;
   bottom: 42%;
@@ -199,15 +199,15 @@ html[data-ttm-app] .ttm-app-swipe__tap {
   -webkit-tap-highlight-color: transparent;
 }
 
-html[data-ttm-app] .ttm-app-swipe__tap--prev {
+html[data-lv] .ttm-app-swipe__tap--prev {
   left: 0;
 }
 
-html[data-ttm-app] .ttm-app-swipe__tap--next {
+html[data-lv] .ttm-app-swipe__tap--next {
   right: 0;
 }
 
-html[data-ttm-app] .ttm-app-swipe__counter {
+html[data-lv] .ttm-app-swipe__counter {
   position: absolute;
   top: 0.9rem;
   right: 0.9rem;
@@ -225,7 +225,7 @@ html[data-ttm-app] .ttm-app-swipe__counter {
   pointer-events: none;
 }
 
-html[data-ttm-app] .ttm-app-swipe__safety {
+html[data-lv] .ttm-app-swipe__safety {
   position: absolute;
   top: 0.75rem;
   left: 0.75rem;
@@ -243,12 +243,12 @@ html[data-ttm-app] .ttm-app-swipe__safety {
   color: rgba(255, 255, 255, 0.9);
 }
 
-html[data-ttm-app] .ttm-app-swipe__safety svg {
+html[data-lv] .ttm-app-swipe__safety svg {
   width: 1.2rem;
   height: 1.2rem;
 }
 
-html[data-ttm-app] .ttm-app-swipe__stamp {
+html[data-lv] .ttm-app-swipe__stamp {
   position: absolute;
   top: 3.5rem;
   z-index: 4;
@@ -261,19 +261,19 @@ html[data-ttm-app] .ttm-app-swipe__stamp {
   pointer-events: none;
 }
 
-html[data-ttm-app] .ttm-app-swipe__stamp--like {
+html[data-lv] .ttm-app-swipe__stamp--like {
   left: 1.1rem;
   color: var(--lv-pink);
   transform: rotate(-12deg);
 }
 
-html[data-ttm-app] .ttm-app-swipe__stamp--nope {
+html[data-lv] .ttm-app-swipe__stamp--nope {
   right: 1.1rem;
   color: #fca5a5;
   transform: rotate(12deg);
 }
 
-html[data-ttm-app] .ttm-app-swipe__info {
+html[data-lv] .ttm-app-swipe__info {
   position: absolute;
   inset: auto 0 0 0;
   z-index: 3;
@@ -283,12 +283,12 @@ html[data-ttm-app] .ttm-app-swipe__info {
   padding: 1rem 1.1rem 1.15rem;
 }
 
-html[data-ttm-app] .ttm-app-swipe__text {
+html[data-lv] .ttm-app-swipe__text {
   flex: 1;
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-app-swipe__name {
+html[data-lv] .ttm-app-swipe__name {
   display: flex;
   align-items: center;
   gap: 0.45rem;
@@ -301,7 +301,7 @@ html[data-ttm-app] .ttm-app-swipe__name {
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
 }
 
-html[data-ttm-app] .ttm-app-swipe__place {
+html[data-lv] .ttm-app-swipe__place {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -310,14 +310,14 @@ html[data-ttm-app] .ttm-app-swipe__place {
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-swipe__place svg {
+html[data-lv] .ttm-app-swipe__place svg {
   width: 1.05rem;
   height: 1.05rem;
   flex-shrink: 0;
   color: var(--lv-pink);
 }
 
-html[data-ttm-app] .ttm-app-swipe__bio {
+html[data-lv] .ttm-app-swipe__bio {
   display: -webkit-box;
   margin: 0.5rem 0 0;
   overflow: hidden;
@@ -328,7 +328,7 @@ html[data-ttm-app] .ttm-app-swipe__bio {
   color: rgba(255, 255, 255, 0.92);
 }
 
-html[data-ttm-app] .ttm-app-swipe__open {
+html[data-lv] .ttm-app-swipe__open {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -343,14 +343,14 @@ html[data-ttm-app] .ttm-app-swipe__open {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-swipe__open svg {
+html[data-lv] .ttm-app-swipe__open svg {
   width: 1.4rem;
   height: 1.4rem;
 }
 
 /* ── Actions: pass / hourglass (super like) / like ─────────────────────────── */
 
-html[data-ttm-app] .ttm-app-feed-actions {
+html[data-lv] .ttm-app-feed-actions {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -359,7 +359,7 @@ html[data-ttm-app] .ttm-app-feed-actions {
   padding: 0.15rem 0 0;
 }
 
-html[data-ttm-app] .ttm-app-feed-actions__btn {
+html[data-lv] .ttm-app-feed-actions__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -375,16 +375,16 @@ html[data-ttm-app] .ttm-app-feed-actions__btn {
   touch-action: manipulation;
 }
 
-html[data-ttm-app] .ttm-app-feed-actions__btn svg {
+html[data-lv] .ttm-app-feed-actions__btn svg {
   width: 1.75rem;
   height: 1.75rem;
 }
 
-html[data-ttm-app] .ttm-app-feed-actions__btn--like {
+html[data-lv] .ttm-app-feed-actions__btn--like {
   color: #ead5ff;
 }
 
-html[data-ttm-app] .ttm-app-feed-actions__btn--super {
+html[data-lv] .ttm-app-feed-actions__btn--super {
   width: 4.9rem;
   height: 4.9rem;
   border-color: rgba(233, 213, 255, 0.55);
@@ -395,42 +395,42 @@ html[data-ttm-app] .ttm-app-feed-actions__btn--super {
     inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
-html[data-ttm-app] .ttm-app-feed-actions__btn--super svg {
+html[data-lv] .ttm-app-feed-actions__btn--super svg {
   width: 2.1rem;
   height: 2.1rem;
 }
 
-html[data-ttm-app] .ttm-app-feed-actions__btn:disabled {
+html[data-lv] .ttm-app-feed-actions__btn:disabled {
   opacity: 0.4;
 }
 
 /* Short screens (SE / mini): smaller buttons so the card keeps its height. */
 @media (max-height: 700px) {
-  html[data-ttm-app] .ttm-app-feed {
+  html[data-lv] .ttm-app-feed {
     gap: 0.55rem;
   }
-  html[data-ttm-app] .ttm-app-feed__chip {
+  html[data-lv] .ttm-app-feed__chip {
     height: 2.3rem;
     font-size: 0.88rem;
   }
-  html[data-ttm-app] .ttm-app-feed__chip--icon {
+  html[data-lv] .ttm-app-feed__chip--icon {
     width: 2.3rem;
   }
-  html[data-ttm-app] .ttm-app-feed-actions__btn {
+  html[data-lv] .ttm-app-feed-actions__btn {
     width: 3.4rem;
     height: 3.4rem;
   }
-  html[data-ttm-app] .ttm-app-feed-actions__btn--super {
+  html[data-lv] .ttm-app-feed-actions__btn--super {
     width: 4.1rem;
     height: 4.1rem;
   }
-  html[data-ttm-app] .ttm-app-swipe__bio {
+  html[data-lv] .ttm-app-swipe__bio {
     -webkit-line-clamp: 1;
   }
 }
 
 /* ── Filter sheet in the app: violet brand palette instead of pink ─────────── */
-html[data-ttm-app] .discover-panel-root [role="dialog"] {
+html[data-lv] .discover-panel-root [role="dialog"] {
   --accent: var(--lv-purple);
   --accent-soft-bg: rgba(182, 108, 255, 0.18);
   --border: var(--lv-border);
@@ -440,18 +440,18 @@ html[data-ttm-app] .discover-panel-root [role="dialog"] {
   border-color: var(--lv-border);
 }
 
-html[data-ttm-app] .discover-panel-root [role="dialog"] h2 {
+html[data-lv] .discover-panel-root [role="dialog"] h2 {
   font-family: var(--font-sans, inherit);
   font-weight: 600;
   font-size: 1.25rem;
 }
 
-html[data-ttm-app] .discover-panel-root [role="dialog"] input[type="range"] {
+html[data-lv] .discover-panel-root [role="dialog"] input[type="range"] {
   accent-color: var(--lv-purple);
 }
 
 /* Empty feed ("всех разобрали" / filters too narrow): violet primary action like the rest of the app. */
-html[data-ttm-app] .ttm-native-app--discover .ttm-empty-state button[data-slot="button"] {
+html[data-lv] .ttm-native-app--discover .ttm-empty-state button[data-slot="button"] {
   border: 1px solid rgba(233, 213, 255, 0.5) !important;
   background: var(--lv-gradient) !important;
   box-shadow: 0 0 22px rgba(168, 85, 247, 0.45) !important;
@@ -459,7 +459,7 @@ html[data-ttm-app] .ttm-native-app--discover .ttm-empty-state button[data-slot="
 }
 
 /* Seeded test profiles are labelled so nobody mistakes them for real people. */
-html[data-ttm-app] .ttm-app-swipe__demo {
+html[data-lv] .ttm-app-swipe__demo {
   position: absolute;
   top: 0.9rem;
   left: 50%;
@@ -476,4 +476,13 @@ html[data-ttm-app] .ttm-app-swipe__demo {
   letter-spacing: 0.02em;
   white-space: nowrap;
   pointer-events: none;
+}
+
+/* Desktop / tablet: the swipe card keeps a phone-like portrait width. */
+@media (min-width: 768px) {
+  html[data-lv] .ttm-app-feed {
+    width: 100%;
+    max-width: 30rem;
+    margin-inline: auto;
+  }
 }

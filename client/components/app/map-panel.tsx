@@ -13,7 +13,7 @@ import { getPeerTrustSignals } from "@/client/lib/demo-trust-signals"
 import { SwipeProfileDetailScreen } from "@/client/components/app/swipe-profile-detail-screen"
 import { useDesktopAppNav } from "@/client/hooks/use-desktop-app-nav"
 import { cn } from "@/client/lib/utils"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { AppMapView } from "@/client/components/app/app-map-view"
 
 const NearbyMap = dynamic(() => import("@/client/components/app/nearby-map").then((m) => m.NearbyMap), {
@@ -26,7 +26,7 @@ const NearbyMap = dynamic(() => import("@/client/components/app/nearby-map").the
 })
 
 export function MapPanel() {
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   if (inApp) return <AppMapView />
   return <WebMapPanel />
 }

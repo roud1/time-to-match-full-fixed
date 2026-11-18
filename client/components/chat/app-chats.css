@@ -1,7 +1,7 @@
-/* Chat list of the native app / installed PWA (html[data-ttm-app] only — website unchanged).
+/* Chat list of the native app / installed PWA (html[data-lv] only — website unchanged).
    Class names avoid "card" / "glass" / "header" (legacy global rules target those substrings). */
 
-html[data-ttm-app] .ttm-app-chats {
+html[data-lv] .ttm-app-chats {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -11,7 +11,7 @@ html[data-ttm-app] .ttm-app-chats {
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-chats__top {
+html[data-lv] .ttm-app-chats__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,7 +19,7 @@ html[data-ttm-app] .ttm-app-chats__top {
   min-height: 3rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__title {
+html[data-lv] .ttm-app-chats__title {
   margin: 0;
   font-family: var(--font-sans, inherit);
   font-size: 1.9rem;
@@ -27,7 +27,7 @@ html[data-ttm-app] .ttm-app-chats__title {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-chats__icon-btn {
+html[data-lv] .ttm-app-chats__icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -39,12 +39,12 @@ html[data-ttm-app] .ttm-app-chats__icon-btn {
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-chats__icon-btn svg {
+html[data-lv] .ttm-app-chats__icon-btn svg {
   width: 1.45rem;
   height: 1.45rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__search {
+html[data-lv] .ttm-app-chats__search {
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -56,14 +56,14 @@ html[data-ttm-app] .ttm-app-chats__search {
   background: var(--lv-surface);
 }
 
-html[data-ttm-app] .ttm-app-chats__search svg {
+html[data-lv] .ttm-app-chats__search svg {
   width: 1.15rem;
   height: 1.15rem;
   flex-shrink: 0;
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-chats .ttm-app-chats__search input {
+html[data-lv] .ttm-app-chats .ttm-app-chats__search input {
   flex: 1;
   min-width: 0;
   height: 100%;
@@ -76,7 +76,7 @@ html[data-ttm-app] .ttm-app-chats .ttm-app-chats__search input {
   outline: 0;
 }
 
-html[data-ttm-app] .ttm-app-chats__search button {
+html[data-lv] .ttm-app-chats__search button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -88,7 +88,7 @@ html[data-ttm-app] .ttm-app-chats__search button {
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-chats__list {
+html[data-lv] .ttm-app-chats__list {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
@@ -97,7 +97,7 @@ html[data-ttm-app] .ttm-app-chats__list {
   list-style: none;
 }
 
-html[data-ttm-app] .ttm-app-chats__row {
+html[data-lv] .ttm-app-chats__row {
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -115,16 +115,16 @@ html[data-ttm-app] .ttm-app-chats__row {
   transition: background 0.15s ease;
 }
 
-html[data-ttm-app] .ttm-app-chats__row:active {
+html[data-lv] .ttm-app-chats__row:active {
   background: rgba(124, 58, 237, 0.14);
 }
 
-html[data-ttm-app] .ttm-app-chats__row.is-unread {
+html[data-lv] .ttm-app-chats__row.is-unread {
   border-color: var(--lv-border);
   background: var(--lv-surface);
 }
 
-html[data-ttm-app] .ttm-app-chats__row--skeleton {
+html[data-lv] .ttm-app-chats__row--skeleton {
   height: 4.6rem;
   background: rgba(255, 255, 255, 0.04);
   animation: ttm-app-chats-pulse 1.4s ease-in-out infinite;
@@ -136,7 +136,7 @@ html[data-ttm-app] .ttm-app-chats__row--skeleton {
   }
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar {
+html[data-lv] .ttm-app-chats__avatar {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -148,23 +148,23 @@ html[data-ttm-app] .ttm-app-chats__avatar {
   border-radius: 999px;
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar img {
+html[data-lv] .ttm-app-chats__avatar img {
   border: 2px solid rgba(216, 180, 254, 0.55);
   border-radius: 999px;
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar--ai {
+html[data-lv] .ttm-app-chats__avatar--ai {
   background: radial-gradient(120% 120% at 50% 15%, var(--lv-pink) 0%, #7c3aed 100%);
   box-shadow: var(--lv-shadow-cta);
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar--ai svg {
+html[data-lv] .ttm-app-chats__avatar--ai svg {
   width: 1.6rem;
   height: 1.6rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__online {
+html[data-lv] .ttm-app-chats__online {
   position: absolute;
   right: 0.1rem;
   bottom: 0.1rem;
@@ -176,7 +176,7 @@ html[data-ttm-app] .ttm-app-chats__online {
   background: #22c55e;
 }
 
-html[data-ttm-app] .ttm-app-chats__text {
+html[data-lv] .ttm-app-chats__text {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -184,7 +184,7 @@ html[data-ttm-app] .ttm-app-chats__text {
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-app-chats__name {
+html[data-lv] .ttm-app-chats__name {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -194,7 +194,7 @@ html[data-ttm-app] .ttm-app-chats__name {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-chats__ai-chip {
+html[data-lv] .ttm-app-chats__ai-chip {
   padding: 0.05rem 0.4rem;
   border-radius: 0.4rem;
   background: rgba(168, 85, 247, 0.3);
@@ -203,7 +203,7 @@ html[data-ttm-app] .ttm-app-chats__ai-chip {
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-chats__preview {
+html[data-lv] .ttm-app-chats__preview {
   overflow: hidden;
   font-size: 0.92rem;
   color: var(--lv-text-2);
@@ -211,11 +211,11 @@ html[data-ttm-app] .ttm-app-chats__preview {
   white-space: nowrap;
 }
 
-html[data-ttm-app] .ttm-app-chats__row.is-unread .ttm-app-chats__preview {
+html[data-lv] .ttm-app-chats__row.is-unread .ttm-app-chats__preview {
   color: rgba(255, 255, 255, 0.9);
 }
 
-html[data-ttm-app] .ttm-app-chats__meta {
+html[data-lv] .ttm-app-chats__meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -225,13 +225,13 @@ html[data-ttm-app] .ttm-app-chats__meta {
   justify-content: center;
 }
 
-html[data-ttm-app] .ttm-app-chats__time {
+html[data-lv] .ttm-app-chats__time {
   font-size: 0.78rem;
   color: var(--lv-text-2);
   font-variant-numeric: tabular-nums;
 }
 
-html[data-ttm-app] .ttm-app-chats__count {
+html[data-lv] .ttm-app-chats__count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -245,7 +245,7 @@ html[data-ttm-app] .ttm-app-chats__count {
   font-weight: 700;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty {
+html[data-lv] .ttm-app-chats__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -253,7 +253,7 @@ html[data-ttm-app] .ttm-app-chats__empty {
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-icon {
+html[data-lv] .ttm-app-chats__empty-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -266,18 +266,18 @@ html[data-ttm-app] .ttm-app-chats__empty-icon {
   color: var(--lv-pink);
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-icon svg {
+html[data-lv] .ttm-app-chats__empty-icon svg {
   width: 1.6rem;
   height: 1.6rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-title {
+html[data-lv] .ttm-app-chats__empty-title {
   margin: 0;
   font-size: 1.15rem;
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-body {
+html[data-lv] .ttm-app-chats__empty-body {
   max-width: 18rem;
   margin: 0.4rem 0 1rem;
   font-size: 0.92rem;
@@ -285,7 +285,7 @@ html[data-ttm-app] .ttm-app-chats__empty-body {
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-cta {
+html[data-lv] .ttm-app-chats__empty-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -298,7 +298,7 @@ html[data-ttm-app] .ttm-app-chats__empty-cta {
   text-decoration: none;
 }
 
-html[data-ttm-app] .ttm-app-chats__premium {
+html[data-lv] .ttm-app-chats__premium {
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -312,7 +312,7 @@ html[data-ttm-app] .ttm-app-chats__premium {
   text-align: left;
 }
 
-html[data-ttm-app] .ttm-app-chats__crown {
+html[data-lv] .ttm-app-chats__crown {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -324,19 +324,19 @@ html[data-ttm-app] .ttm-app-chats__crown {
   color: #fbbf24;
 }
 
-html[data-ttm-app] .ttm-app-chats__crown svg {
+html[data-lv] .ttm-app-chats__crown svg {
   width: 1.5rem;
   height: 1.5rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__premium-text {
+html[data-lv] .ttm-app-chats__premium-text {
   flex: 1;
   min-width: 0;
   font-size: 0.92rem;
   line-height: 1.35;
 }
 
-html[data-ttm-app] .ttm-app-chats__premium > svg {
+html[data-lv] .ttm-app-chats__premium > svg {
   width: 1.25rem;
   height: 1.25rem;
   flex-shrink: 0;
@@ -344,8 +344,8 @@ html[data-ttm-app] .ttm-app-chats__premium > svg {
 }
 
 /* ── Conversation screen inside the app: Luvia violet instead of the old pink ── */
-html[data-ttm-app] .ttm-chat-room,
-html[data-ttm-app] .ttm-chat-area {
+html[data-lv] .ttm-chat-room,
+html[data-lv] .ttm-chat-area {
   --rose: var(--lv-purple);
   --rose-whisper: rgba(182, 108, 255, 0.08);
   --rose-border: rgba(182, 108, 255, 0.28);

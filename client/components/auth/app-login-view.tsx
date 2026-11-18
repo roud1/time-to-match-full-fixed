@@ -12,6 +12,9 @@ type AppLoginViewProps = {
   password: string
   errors: { email?: string; password?: string; form?: string }
   loading: boolean
+  /** null = no checkbox (native app always remembers the session). */
+  remember: boolean | null
+  onRememberChange: (value: boolean) => void
   onEmailChange: (value: string) => void
   onPasswordChange: (value: string) => void
   onSubmit: (e: FormEvent) => void
@@ -23,6 +26,8 @@ export function AppLoginView({
   password,
   errors,
   loading,
+  remember,
+  onRememberChange,
   onEmailChange,
   onPasswordChange,
   onSubmit,
@@ -114,9 +119,17 @@ export function AppLoginView({
           )}
         </div>
 
-        <Link href="/forgot-password" className="ttm-app-login__forgot">
-          {t("loginForgotPassword")}
-        </Link>
+        <div className="ttm-app-login__row">
+          {remember !== null && (
+            <label className="ttm-app-login__remember">
+              <input type="checkbox" checked={remember} onChange={(e) => onRememberChange(e.target.checked)} />
+              <span>{t("loginRemember")}</span>
+            </label>
+          )}
+          <Link href="/forgot-password" className="ttm-app-login__forgot">
+            {t("loginForgotPassword")}
+          </Link>
+        </div>
 
         <button type="submit" className="ttm-app-login__submit" disabled={loading}>
           {loading ? t("loginLoading") : t("loginSubmit")}

@@ -1,7 +1,7 @@
-/* Map of the native app / installed PWA (html[data-ttm-app] only — website keeps the Leaflet map).
+/* Map of the native app / installed PWA (html[data-lv] only — website keeps the Leaflet map).
    Class names avoid "card" / "glass" / "header" (legacy global rules target those substrings). */
 
-html[data-ttm-app] .ttm-app-map {
+html[data-lv] .ttm-app-map {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
@@ -13,13 +13,13 @@ html[data-ttm-app] .ttm-app-map {
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-map__top {
+html[data-lv] .ttm-app-map__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-html[data-ttm-app] .ttm-app-map__title {
+html[data-lv] .ttm-app-map__title {
   display: flex;
   align-items: center;
   gap: 0.45rem;
@@ -30,14 +30,14 @@ html[data-ttm-app] .ttm-app-map__title {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-map__title svg {
+html[data-lv] .ttm-app-map__title svg {
   width: 1.6rem;
   height: 1.6rem;
   color: var(--lv-pink);
   filter: drop-shadow(0 0 8px rgba(232, 121, 249, 0.6));
 }
 
-html[data-ttm-app] .ttm-app-map__icon-btn {
+html[data-lv] .ttm-app-map__icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -49,13 +49,13 @@ html[data-ttm-app] .ttm-app-map__icon-btn {
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-map__icon-btn svg {
+html[data-lv] .ttm-app-map__icon-btn svg {
   width: 1.4rem;
   height: 1.4rem;
 }
 
 /* Stage: dark "city" with faint streets, rings and avatars. */
-html[data-ttm-app] .ttm-app-map__stage {
+html[data-lv] .ttm-app-map__stage {
   position: relative;
   flex: 1 1 auto;
   min-height: 18rem;
@@ -67,7 +67,7 @@ html[data-ttm-app] .ttm-app-map__stage {
     #0b0717;
 }
 
-html[data-ttm-app] .ttm-app-map__grid {
+html[data-lv] .ttm-app-map__grid {
   position: absolute;
   inset: -20%;
   opacity: 0.55;
@@ -78,7 +78,7 @@ html[data-ttm-app] .ttm-app-map__grid {
   transform: rotate(-6deg);
 }
 
-html[data-ttm-app] .ttm-app-map__ring {
+html[data-lv] .ttm-app-map__ring {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -87,21 +87,21 @@ html[data-ttm-app] .ttm-app-map__ring {
   pointer-events: none;
 }
 
-html[data-ttm-app] .ttm-app-map__ring--outer {
+html[data-lv] .ttm-app-map__ring--outer {
   width: min(84%, 30rem);
   aspect-ratio: 1;
   border: 1.5px solid rgba(192, 132, 252, 0.45);
   box-shadow: 0 0 30px rgba(168, 85, 247, 0.25), inset 0 0 30px rgba(168, 85, 247, 0.12);
 }
 
-html[data-ttm-app] .ttm-app-map__ring--inner {
+html[data-lv] .ttm-app-map__ring--inner {
   width: min(42%, 15rem);
   aspect-ratio: 1;
   border: 1px solid rgba(192, 132, 252, 0.35);
   background: radial-gradient(circle, rgba(124, 58, 237, 0.18), transparent 70%);
 }
 
-html[data-ttm-app] .ttm-app-map__scale {
+html[data-lv] .ttm-app-map__scale {
   position: absolute;
   top: 0.9rem;
   left: 0.9rem;
@@ -114,7 +114,7 @@ html[data-ttm-app] .ttm-app-map__scale {
   font-variant-numeric: tabular-nums;
 }
 
-html[data-ttm-app] .ttm-app-map__me {
+html[data-lv] .ttm-app-map__me {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -131,14 +131,14 @@ html[data-ttm-app] .ttm-app-map__me {
   transform: translate(-50%, -50%);
 }
 
-html[data-ttm-app] .ttm-app-map__me span {
+html[data-lv] .ttm-app-map__me span {
   width: 0.9rem;
   height: 0.9rem;
   border-radius: 999px;
   background: #fff;
 }
 
-html[data-ttm-app] .ttm-app-map__me::after {
+html[data-lv] .ttm-app-map__me::after {
   content: "";
   position: absolute;
   inset: -0.6rem;
@@ -159,12 +159,12 @@ html[data-ttm-app] .ttm-app-map__me::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-ttm-app] .ttm-app-map__me::after {
+  html[data-lv] .ttm-app-map__me::after {
     animation: none;
   }
 }
 
-html[data-ttm-app] .ttm-app-map__pin {
+html[data-lv] .ttm-app-map__pin {
   position: absolute;
   z-index: 2;
   width: 3.1rem;
@@ -180,14 +180,14 @@ html[data-ttm-app] .ttm-app-map__pin {
   -webkit-tap-highlight-color: transparent;
 }
 
-html[data-ttm-app] .ttm-app-map__pin.is-selected {
+html[data-lv] .ttm-app-map__pin.is-selected {
   z-index: 3;
   border-color: #fff;
   box-shadow: 0 0 0 3px rgba(232, 121, 249, 0.6), 0 0 24px rgba(232, 121, 249, 0.7);
   transform: translate(-50%, -50%) scale(1.15);
 }
 
-html[data-ttm-app] .ttm-app-map__locate {
+html[data-lv] .ttm-app-map__locate {
   position: absolute;
   right: 0.9rem;
   bottom: 0.9rem;
@@ -203,12 +203,12 @@ html[data-ttm-app] .ttm-app-map__locate {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-map__locate svg {
+html[data-lv] .ttm-app-map__locate svg {
   width: 1.3rem;
   height: 1.3rem;
 }
 
-html[data-ttm-app] .ttm-app-map__empty {
+html[data-lv] .ttm-app-map__empty {
   position: absolute;
   inset: auto 1.25rem 4.75rem;
   z-index: 2;
@@ -219,13 +219,13 @@ html[data-ttm-app] .ttm-app-map__empty {
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-app-map__empty-title {
+html[data-lv] .ttm-app-map__empty-title {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-map__empty-body {
+html[data-lv] .ttm-app-map__empty-body {
   margin: 0.3rem 0 0;
   font-size: 0.85rem;
   line-height: 1.4;
@@ -233,7 +233,7 @@ html[data-ttm-app] .ttm-app-map__empty-body {
 }
 
 /* Selected person */
-html[data-ttm-app] .ttm-app-map__person {
+html[data-lv] .ttm-app-map__person {
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -244,7 +244,7 @@ html[data-ttm-app] .ttm-app-map__person {
   background: var(--lv-surface);
 }
 
-html[data-ttm-app] .ttm-app-map__person-photo {
+html[data-lv] .ttm-app-map__person-photo {
   position: relative;
   width: 3.6rem;
   height: 3.6rem;
@@ -254,7 +254,7 @@ html[data-ttm-app] .ttm-app-map__person-photo {
   border-radius: 999px;
 }
 
-html[data-ttm-app] .ttm-app-map__person-text {
+html[data-lv] .ttm-app-map__person-text {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -262,7 +262,7 @@ html[data-ttm-app] .ttm-app-map__person-text {
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-app-map__person-name {
+html[data-lv] .ttm-app-map__person-name {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -271,7 +271,7 @@ html[data-ttm-app] .ttm-app-map__person-name {
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-map__person-meta {
+html[data-lv] .ttm-app-map__person-meta {
   overflow: hidden;
   font-size: 0.85rem;
   color: var(--lv-text-2);
@@ -279,7 +279,7 @@ html[data-ttm-app] .ttm-app-map__person-meta {
   white-space: nowrap;
 }
 
-html[data-ttm-app] .ttm-app-map__open {
+html[data-lv] .ttm-app-map__open {
   display: inline-flex;
   align-items: center;
   gap: 0.2rem;
@@ -295,7 +295,7 @@ html[data-ttm-app] .ttm-app-map__open {
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-map__open svg {
+html[data-lv] .ttm-app-map__open svg {
   width: 1.05rem;
   height: 1.05rem;
 }

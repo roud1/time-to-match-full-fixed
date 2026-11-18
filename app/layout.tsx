@@ -101,7 +101,7 @@ export default async function RootLayout({
   const lang = localeHeader && VALID_LOCALES.includes(localeHeader) ? localeHeader : "ru"
 
   return (
-    <html lang={lang} suppressHydrationWarning className="bg-transparent">
+    <html lang={lang} suppressHydrationWarning className="bg-transparent" data-lv="1">
       <head>
         <meta name="color-scheme" content="light dark" />
         <script

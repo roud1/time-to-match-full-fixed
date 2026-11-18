@@ -1,8 +1,8 @@
-/* AI Connection of the native app / installed PWA (html[data-ttm-app] only — website unchanged).
+/* AI Connection of the native app / installed PWA (html[data-lv] only — website unchanged).
    Class names avoid "card" / "glass" / "header" (legacy global rules target those substrings). */
 
 /* Button in the conversation header (the header actions block is app-only). */
-html[data-ttm-app] .ttm-chat-room-header__ai {
+html[data-lv] .ttm-chat-room-header__ai {
   display: grid;
   place-items: center;
   width: 2.5rem;
@@ -16,7 +16,7 @@ html[data-ttm-app] .ttm-chat-room-header__ai {
   touch-action: manipulation;
 }
 
-html[data-ttm-app] .ttm-app-ai {
+html[data-lv] .ttm-app-ai {
   position: fixed;
   inset: 0;
   z-index: 90;
@@ -30,7 +30,7 @@ html[data-ttm-app] .ttm-app-ai {
     #07030e;
 }
 
-html[data-ttm-app] .ttm-app-ai[role="dialog"] {
+html[data-lv] .ttm-app-ai[role="dialog"] {
   border: 0 !important;
   border-radius: 0 !important;
   background:
@@ -38,20 +38,20 @@ html[data-ttm-app] .ttm-app-ai[role="dialog"] {
     #07030e !important;
 }
 
-html[data-ttm-app] .ttm-app-ai__top {
+html[data-lv] .ttm-app-ai__top {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__back,
-html[data-ttm-app] .ttm-app-ai__spacer {
+html[data-lv] .ttm-app-ai__back,
+html[data-lv] .ttm-app-ai__spacer {
   width: 2.75rem;
   height: 2.75rem;
   flex-shrink: 0;
 }
 
-html[data-ttm-app] .ttm-app-ai__back {
+html[data-lv] .ttm-app-ai__back {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -62,17 +62,17 @@ html[data-ttm-app] .ttm-app-ai__back {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__back svg {
+html[data-lv] .ttm-app-ai__back svg {
   width: 1.6rem;
   height: 1.6rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__heading {
+html[data-lv] .ttm-app-ai__heading {
   flex: 1;
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-app-ai__heading h1 {
+html[data-lv] .ttm-app-ai__heading h1 {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -83,7 +83,7 @@ html[data-ttm-app] .ttm-app-ai__heading h1 {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__chip {
+html[data-lv] .ttm-app-ai__chip {
   padding: 0.1rem 0.4rem;
   border-radius: 0.4rem;
   background: rgba(168, 85, 247, 0.35);
@@ -92,32 +92,32 @@ html[data-ttm-app] .ttm-app-ai__chip {
   font-weight: 700;
 }
 
-html[data-ttm-app] .ttm-app-ai__heading p {
+html[data-lv] .ttm-app-ai__heading p {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__ring {
+html[data-lv] .ttm-app-ai__ring {
   position: relative;
   width: min(15rem, 62vw);
   aspect-ratio: 1;
   margin: clamp(1rem, 5dvh, 2.25rem) auto 0;
 }
 
-html[data-ttm-app] .ttm-app-ai__ring svg {
+html[data-lv] .ttm-app-ai__ring svg {
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
-html[data-ttm-app] .ttm-app-ai__track {
+html[data-lv] .ttm-app-ai__track {
   fill: var(--lv-surface);
   stroke: var(--lv-border);
   stroke-width: 12;
 }
 
-html[data-ttm-app] .ttm-app-ai__value {
+html[data-lv] .ttm-app-ai__value {
   fill: none;
   stroke: url(#ttm-app-ai-grad);
   stroke-width: 12;
@@ -125,7 +125,7 @@ html[data-ttm-app] .ttm-app-ai__value {
   filter: drop-shadow(0 0 10px rgba(217, 70, 239, 0.7));
 }
 
-html[data-ttm-app] .ttm-app-ai__center {
+html[data-lv] .ttm-app-ai__center {
   position: absolute;
   inset: 0;
   display: flex;
@@ -134,12 +134,12 @@ html[data-ttm-app] .ttm-app-ai__center {
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__center svg {
+html[data-lv] .ttm-app-ai__center svg {
   width: 3rem;
   height: 3rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__pct {
+html[data-lv] .ttm-app-ai__pct {
   font-family: var(--font-sans, inherit);
   font-size: 3.2rem;
   font-weight: 700;
@@ -147,7 +147,7 @@ html[data-ttm-app] .ttm-app-ai__pct {
   font-variant-numeric: tabular-nums;
 }
 
-html[data-ttm-app] .ttm-app-ai__spin {
+html[data-lv] .ttm-app-ai__spin {
   animation: ttm-app-ai-spin 1.2s linear infinite;
 }
 
@@ -157,12 +157,12 @@ html[data-ttm-app] .ttm-app-ai__spin {
   }
 }
 
-html[data-ttm-app] .ttm-app-ai__text {
+html[data-lv] .ttm-app-ai__text {
   margin-top: 1.5rem;
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-app-ai__text h2 {
+html[data-lv] .ttm-app-ai__text h2 {
   margin: 0;
   font-family: var(--font-sans, inherit);
   font-size: 1.45rem;
@@ -170,7 +170,7 @@ html[data-ttm-app] .ttm-app-ai__text h2 {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__text > p {
+html[data-lv] .ttm-app-ai__text > p {
   max-width: 20rem;
   margin: 0.5rem auto 0;
   font-size: 0.98rem;
@@ -178,7 +178,7 @@ html[data-ttm-app] .ttm-app-ai__text > p {
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__text h3 {
+html[data-lv] .ttm-app-ai__text h3 {
   margin: 1.4rem 0 0.6rem;
   font-family: var(--font-sans, inherit);
   font-size: 1.1rem;
@@ -187,7 +187,7 @@ html[data-ttm-app] .ttm-app-ai__text h3 {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__text ul {
+html[data-lv] .ttm-app-ai__text ul {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -197,7 +197,7 @@ html[data-ttm-app] .ttm-app-ai__text ul {
   text-align: left;
 }
 
-html[data-ttm-app] .ttm-app-ai__text li {
+html[data-lv] .ttm-app-ai__text li {
   display: flex;
   align-items: center;
   gap: 0.65rem;
@@ -205,7 +205,7 @@ html[data-ttm-app] .ttm-app-ai__text li {
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__text li svg {
+html[data-lv] .ttm-app-ai__text li svg {
   width: 1.35rem;
   height: 1.35rem;
   flex-shrink: 0;
@@ -215,18 +215,18 @@ html[data-ttm-app] .ttm-app-ai__text li svg {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__text .ttm-app-ai__note {
+html[data-lv] .ttm-app-ai__text .ttm-app-ai__note {
   margin-top: 1rem;
   font-size: 0.8rem;
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__actions {
+html[data-lv] .ttm-app-ai__actions {
   margin-top: auto;
   padding-top: 1.5rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__primary {
+html[data-lv] .ttm-app-ai__primary {
   width: 100%;
   min-height: 3.5rem;
   border: 1px solid rgba(233, 213, 255, 0.5);

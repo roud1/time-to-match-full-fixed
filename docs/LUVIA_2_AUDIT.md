@@ -28,6 +28,7 @@ API (selection): `discover`, `discover/like|pass|rewind`, `likes/incoming`, `mat
 | `npm ci` | OK (lockfile in sync since PR #14) |
 | `tsc --noEmit` | 0 errors |
 | `eslint .` | 0 errors, 17 warnings (pre-existing, react-hooks deps) |
+| Hydration warning on `/settings` | Pre-existing on `main` (server/client text mismatch), not introduced by Luvia 2.0 |
 | `next build` | Compiles all 87 pages. In this sandbox the first run stops with Next's own "known security vulnerability, upgrade Next.js" notice; the second run exits 0. Not caused by app code — see §6 |
 | e2e (CI) | Already failing on `main` since #14: register 429 rate limit and login 401 (email verification) in the CI job. Pre-existing, not touched |
 
@@ -71,7 +72,7 @@ API (selection): `discover`, `discover/like|pass|rewind`, `likes/incoming`, `mat
 6. **Subscription / extension screens** — show backend prices only.
 7. **QA** — before/after at 375 and 390, safe areas, keyboard, focus, reduced motion; e2e locally; Render deploy instructions. No production deploy without approval.
 
-Scope rule used so far: design changes only inside the app (`html[data-ttm-app]`); the website keeps its design unless approved otherwise.
+Scope (owner decision, stage 1b): Luvia 2.0 applies **everywhere** — website and app. `html[data-lv]` (always set in `app/layout.tsx`) carries the design; `html[data-ttm-app]` is kept only for native-shell behaviour (back button, hidden site nav/footer, start screen instead of the landing, always-remember session). Luvia is dark-only: the light theme switch is hidden.
 
 ## 6. Notes / risks
 

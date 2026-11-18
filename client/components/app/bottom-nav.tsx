@@ -10,7 +10,7 @@ import { getActivityCounts } from "@/client/lib/activity-metrics"
 import { tapScaleSoft } from "@/client/lib/motion-system"
 import { BrandIcon, type BrandIconName } from "@/client/components/brand/brand-icon"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { Flame, MapPin, MessageCircle, User } from "lucide-react"
 import "@/client/components/app/app-dock.css"
 
@@ -60,7 +60,7 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
   const reduce = useReducedMotion()
   const [likesBadge, setLikesBadge] = useState(0)
   const [chatBadge, setChatBadge] = useState(0)
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
 
   useEffect(() => {
     const c = getActivityCounts(locale, location.position)

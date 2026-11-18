@@ -1,7 +1,7 @@
-/* Likes screen of the native app / installed PWA (html[data-ttm-app] only — website unchanged).
+/* Likes screen of the native app / installed PWA (html[data-lv] only — website unchanged).
    Class names avoid "card" / "glass" / "header": legacy global rules target those substrings. */
 
-html[data-ttm-app] .ttm-app-likes {
+html[data-lv] .ttm-app-likes {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
@@ -9,7 +9,7 @@ html[data-ttm-app] .ttm-app-likes {
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-likes__title {
+html[data-lv] .ttm-app-likes__title {
   margin: 0;
   font-family: var(--font-sans, inherit);
   font-size: 1.9rem;
@@ -18,13 +18,13 @@ html[data-ttm-app] .ttm-app-likes__title {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-likes__subtitle {
+html[data-lv] .ttm-app-likes__subtitle {
   margin: 0.25rem 0 0;
   font-size: 0.98rem;
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-likes__hero {
+html[data-lv] .ttm-app-likes__hero {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,14 +32,14 @@ html[data-ttm-app] .ttm-app-likes__hero {
 }
 
 /* Fanned photos */
-html[data-ttm-app] .ttm-app-likes__stack {
+html[data-lv] .ttm-app-likes__stack {
   position: relative;
   width: 14.5rem;
   height: clamp(9.5rem, 24dvh, 12.5rem);
   margin: 0.25rem auto 0.9rem;
 }
 
-html[data-ttm-app] .ttm-app-likes__stack-photo {
+html[data-lv] .ttm-app-likes__stack-photo {
   position: absolute;
   top: 0.5rem;
   left: 50%;
@@ -53,34 +53,34 @@ html[data-ttm-app] .ttm-app-likes__stack-photo {
   transform: translateX(-50%);
 }
 
-html[data-ttm-app] .ttm-app-likes__stack-photo--empty {
+html[data-lv] .ttm-app-likes__stack-photo--empty {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-html[data-ttm-app] .ttm-app-likes__stack-photo--2-0,
-html[data-ttm-app] .ttm-app-likes__stack-photo--3-0 {
+html[data-lv] .ttm-app-likes__stack-photo--2-0,
+html[data-lv] .ttm-app-likes__stack-photo--3-0 {
   transform: translateX(-95%) rotate(-12deg);
 }
 
-html[data-ttm-app] .ttm-app-likes__stack-photo--3-1 {
+html[data-lv] .ttm-app-likes__stack-photo--3-1 {
   z-index: 2;
   transform: translateX(-50%) translateY(-0.3rem);
 }
 
-html[data-ttm-app] .ttm-app-likes__stack-photo--2-1,
-html[data-ttm-app] .ttm-app-likes__stack-photo--3-2 {
+html[data-lv] .ttm-app-likes__stack-photo--2-1,
+html[data-lv] .ttm-app-likes__stack-photo--3-2 {
   z-index: 1;
   transform: translateX(-5%) rotate(10deg);
 }
 
-html[data-ttm-app] .ttm-app-likes__blur {
+html[data-lv] .ttm-app-likes__blur {
   filter: blur(14px) saturate(1.1);
   transform: scale(1.15);
 }
 
-html[data-ttm-app] .ttm-app-likes__badge {
+html[data-lv] .ttm-app-likes__badge {
   position: absolute;
   z-index: 3;
   display: inline-flex;
@@ -90,7 +90,7 @@ html[data-ttm-app] .ttm-app-likes__badge {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-likes__badge--top {
+html[data-lv] .ttm-app-likes__badge--top {
   top: 0;
   right: 1.2rem;
   width: 2.1rem;
@@ -99,7 +99,7 @@ html[data-ttm-app] .ttm-app-likes__badge--top {
   box-shadow: var(--lv-shadow-cta);
 }
 
-html[data-ttm-app] .ttm-app-likes__badge--bottom {
+html[data-lv] .ttm-app-likes__badge--bottom {
   bottom: -0.4rem;
   left: 50%;
   width: 2.9rem;
@@ -110,12 +110,12 @@ html[data-ttm-app] .ttm-app-likes__badge--bottom {
   transform: translateX(-50%);
 }
 
-html[data-ttm-app] .ttm-app-likes__badge svg {
+html[data-lv] .ttm-app-likes__badge svg {
   width: 52%;
   height: 52%;
 }
 
-html[data-ttm-app] .ttm-app-likes__hero-title {
+html[data-lv] .ttm-app-likes__hero-title {
   margin: 0.4rem 0 0;
   font-family: var(--font-sans, inherit);
   font-size: 1.45rem;
@@ -123,7 +123,7 @@ html[data-ttm-app] .ttm-app-likes__hero-title {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-likes__hero-body {
+html[data-lv] .ttm-app-likes__hero-body {
   max-width: 19rem;
   margin: 0.4rem 0 1.1rem;
   font-size: 0.98rem;
@@ -131,7 +131,7 @@ html[data-ttm-app] .ttm-app-likes__hero-body {
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-likes__btn {
+html[data-lv] .ttm-app-likes__btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,25 +145,25 @@ html[data-ttm-app] .ttm-app-likes__btn {
   -webkit-tap-highlight-color: transparent;
 }
 
-html[data-ttm-app] .ttm-app-likes__btn:first-of-type {
+html[data-lv] .ttm-app-likes__btn:first-of-type {
   margin-top: 0;
 }
 
-html[data-ttm-app] .ttm-app-likes__btn--primary {
+html[data-lv] .ttm-app-likes__btn--primary {
   border: 1px solid rgba(233, 213, 255, 0.5);
   background: var(--lv-gradient);
   box-shadow: var(--lv-shadow-cta);
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-likes__btn--ghost {
+html[data-lv] .ttm-app-likes__btn--ghost {
   border: 1px solid var(--lv-border);
   background: var(--lv-surface);
   color: var(--lv-text);
 }
 
 /* Premium: list of people who liked you */
-html[data-ttm-app] .ttm-app-likes__list {
+html[data-lv] .ttm-app-likes__list {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
@@ -172,7 +172,7 @@ html[data-ttm-app] .ttm-app-likes__list {
   list-style: none;
 }
 
-html[data-ttm-app] .ttm-app-likes__row {
+html[data-lv] .ttm-app-likes__row {
   display: flex;
   align-items: center;
   gap: 0.8rem;
@@ -182,7 +182,7 @@ html[data-ttm-app] .ttm-app-likes__row {
   background: var(--lv-surface);
 }
 
-html[data-ttm-app] .ttm-app-likes__avatar {
+html[data-lv] .ttm-app-likes__avatar {
   position: relative;
   width: 3.5rem;
   height: 3.5rem;
@@ -192,14 +192,14 @@ html[data-ttm-app] .ttm-app-likes__avatar {
   border-radius: 999px;
 }
 
-html[data-ttm-app] .ttm-app-likes__row-text {
+html[data-lv] .ttm-app-likes__row-text {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-app-likes__row-name {
+html[data-lv] .ttm-app-likes__row-name {
   overflow: hidden;
   font-size: 1.02rem;
   font-weight: 600;
@@ -207,12 +207,12 @@ html[data-ttm-app] .ttm-app-likes__row-name {
   white-space: nowrap;
 }
 
-html[data-ttm-app] .ttm-app-likes__row-meta {
+html[data-lv] .ttm-app-likes__row-meta {
   font-size: 0.85rem;
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-likes__like-back {
+html[data-lv] .ttm-app-likes__like-back {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -226,13 +226,13 @@ html[data-ttm-app] .ttm-app-likes__like-back {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-likes__like-back svg {
+html[data-lv] .ttm-app-likes__like-back svg {
   width: 1.3rem;
   height: 1.3rem;
 }
 
 /* Premium teaser */
-html[data-ttm-app] .ttm-app-likes__premium {
+html[data-lv] .ttm-app-likes__premium {
   display: flex;
   align-items: center;
   gap: 0.9rem;
@@ -245,7 +245,7 @@ html[data-ttm-app] .ttm-app-likes__premium {
   text-align: left;
 }
 
-html[data-ttm-app] .ttm-app-likes__crown {
+html[data-lv] .ttm-app-likes__crown {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -257,12 +257,12 @@ html[data-ttm-app] .ttm-app-likes__crown {
   color: #fbbf24;
 }
 
-html[data-ttm-app] .ttm-app-likes__crown svg {
+html[data-lv] .ttm-app-likes__crown svg {
   width: 1.6rem;
   height: 1.6rem;
 }
 
-html[data-ttm-app] .ttm-app-likes__premium-text {
+html[data-lv] .ttm-app-likes__premium-text {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -270,13 +270,13 @@ html[data-ttm-app] .ttm-app-likes__premium-text {
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-app-likes__premium-title {
+html[data-lv] .ttm-app-likes__premium-title {
   margin-bottom: 0.15rem;
   font-size: 1rem;
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-likes__perk {
+html[data-lv] .ttm-app-likes__perk {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -284,15 +284,21 @@ html[data-ttm-app] .ttm-app-likes__perk {
   color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-likes__perk svg {
+html[data-lv] .ttm-app-likes__perk svg {
   width: 0.9rem;
   height: 0.9rem;
   color: var(--lv-pink);
 }
 
-html[data-ttm-app] .ttm-app-likes__chevron {
+html[data-lv] .ttm-app-likes__chevron {
   width: 1.3rem;
   height: 1.3rem;
   flex-shrink: 0;
   color: var(--lv-text-2);
+}
+
+html[data-lv] .ttm-app-likes {
+  width: 100%;
+  max-width: 32rem;
+  margin-inline: auto;
 }

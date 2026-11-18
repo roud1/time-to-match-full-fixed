@@ -1,11 +1,11 @@
 /* Bottom navigation of the native app / installed PWA: four tabs as in the mockup
-   (Знакомства, Карта, Чаты, Профиль). Scoped to html[data-ttm-app] — the website keeps its dock. */
+   (Знакомства, Карта, Чаты, Профиль). Scoped to html[data-lv] — the website keeps its dock. */
 
-html[data-ttm-app] {
+html[data-lv] {
   --ttm-dock-height: calc(3.9rem + env(safe-area-inset-bottom, 0px));
 }
 
-html[data-ttm-app] .ttm-app-dock {
+html[data-lv] .ttm-app-dock {
   position: fixed;
   inset: auto 0 0 0;
   z-index: 50;
@@ -16,7 +16,7 @@ html[data-ttm-app] .ttm-app-dock {
   backdrop-filter: blur(14px);
 }
 
-html[data-ttm-app] .ttm-app-dock__inner {
+html[data-lv] .ttm-app-dock__inner {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   max-width: 32rem;
@@ -24,7 +24,7 @@ html[data-ttm-app] .ttm-app-dock__inner {
   margin-inline: auto;
 }
 
-html[data-ttm-app] .ttm-app-dock__tab {
+html[data-lv] .ttm-app-dock__tab {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,34 +38,34 @@ html[data-ttm-app] .ttm-app-dock__tab {
   transition: color 0.15s ease;
 }
 
-html[data-ttm-app] .ttm-app-dock__tab.is-active {
+html[data-lv] .ttm-app-dock__tab.is-active {
   color: var(--lv-pink);
 }
 
-html[data-ttm-app] .ttm-app-dock__icon {
+html[data-lv] .ttm-app-dock__icon {
   position: relative;
   display: inline-flex;
 }
 
-html[data-ttm-app] .ttm-app-dock__icon svg {
+html[data-lv] .ttm-app-dock__icon svg {
   width: 1.65rem;
   height: 1.65rem;
 }
 
-html[data-ttm-app] .ttm-app-dock__label {
+html[data-lv] .ttm-app-dock__label {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-html[data-ttm-app] .ttm-app-dock .ttm-notify-badge {
+html[data-lv] .ttm-app-dock .ttm-notify-badge {
   top: -0.35rem;
   right: -0.6rem;
 }
 
 /* Header heart that opens the likes screen (likes are not a tab in the app). */
-html[data-ttm-app] .ttm-app-likes-link {
+html[data-lv] .ttm-app-likes-link {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -78,12 +78,12 @@ html[data-ttm-app] .ttm-app-likes-link {
   color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-likes-link svg {
+html[data-lv] .ttm-app-likes-link svg {
   width: 1.3rem;
   height: 1.3rem;
 }
 
-html[data-ttm-app] .ttm-app-likes-link .ttm-notify-badge {
+html[data-lv] .ttm-app-likes-link .ttm-notify-badge {
   top: -0.2rem;
   right: -0.2rem;
 }

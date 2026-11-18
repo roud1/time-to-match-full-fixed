@@ -1,14 +1,14 @@
-/* Profile gate: classic layout on the website, card layout in the app (html[data-ttm-app]). */
+/* Profile gate: classic layout on the website, card layout in the app (html[data-lv]). */
 
 .ttm-gate {
   display: none;
 }
 
-html[data-ttm-app] .ttm-gate-classic {
+html[data-lv] .ttm-gate-classic {
   display: none;
 }
 
-html[data-ttm-app] .ttm-gate {
+html[data-lv] .ttm-gate {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -22,14 +22,14 @@ html[data-ttm-app] .ttm-gate {
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-gate__bar {
+html[data-lv] .ttm-gate__bar {
   display: flex;
   gap: 0.4rem;
   margin: 0 auto 0.4rem;
   width: 8.5rem;
 }
 
-html[data-ttm-app] .ttm-gate__bar span {
+html[data-lv] .ttm-gate__bar span {
   flex: 1;
   height: 4px;
   border-radius: 999px;
@@ -37,11 +37,11 @@ html[data-ttm-app] .ttm-gate__bar span {
   transition: background 0.3s ease;
 }
 
-html[data-ttm-app] .ttm-gate__bar span.is-done {
+html[data-lv] .ttm-gate__bar span.is-done {
   background: linear-gradient(90deg, #f72585, #a855f7);
 }
 
-html[data-ttm-app] .ttm-gate__title {
+html[data-lv] .ttm-gate__title {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.6rem;
@@ -49,7 +49,7 @@ html[data-ttm-app] .ttm-gate__title {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-gate__body {
+html[data-lv] .ttm-gate__body {
   margin: 0 auto 0.4rem;
   max-width: 20rem;
   font-size: 0.92rem;
@@ -57,7 +57,7 @@ html[data-ttm-app] .ttm-gate__body {
   color: rgba(255, 255, 255, 0.6);
 }
 
-html[data-ttm-app] .ttm-gate__steps {
+html[data-lv] .ttm-gate__steps {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
@@ -66,7 +66,7 @@ html[data-ttm-app] .ttm-gate__steps {
   list-style: none;
 }
 
-html[data-ttm-app] .ttm-gate__step {
+html[data-lv] .ttm-gate__step {
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -77,7 +77,7 @@ html[data-ttm-app] .ttm-gate__step {
   text-align: left;
 }
 
-html[data-ttm-app] .ttm-gate__step-icon {
+html[data-lv] .ttm-gate__step-icon {
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -88,28 +88,28 @@ html[data-ttm-app] .ttm-gate__step-icon {
   background: rgba(247, 37, 133, 0.12);
 }
 
-html[data-ttm-app] .ttm-gate__step-label {
+html[data-lv] .ttm-gate__step-label {
   flex: 1;
   font-size: 0.95rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.92);
 }
 
-html[data-ttm-app] .ttm-gate__step.is-done {
+html[data-lv] .ttm-gate__step.is-done {
   border-color: rgba(52, 211, 153, 0.25);
 }
 
-html[data-ttm-app] .ttm-gate__step.is-done .ttm-gate__step-icon {
+html[data-lv] .ttm-gate__step.is-done .ttm-gate__step-icon {
   color: #34d399;
   background: rgba(52, 211, 153, 0.14);
 }
 
-html[data-ttm-app] .ttm-gate__step.is-done .ttm-gate__step-label {
+html[data-lv] .ttm-gate__step.is-done .ttm-gate__step-label {
   color: rgba(255, 255, 255, 0.45);
   text-decoration: line-through;
 }
 
-html[data-ttm-app] .ttm-gate__cta {
+html[data-lv] .ttm-gate__cta {
   display: flex;
   justify-content: center;
   width: 100%;

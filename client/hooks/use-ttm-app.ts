@@ -13,3 +13,11 @@ const getServerSnapshot = () => false
 export function useTtmApp(): boolean {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }
+
+/**
+ * Luvia design (html[data-lv]) is on for every page — website and native app — since Luvia 2.0.
+ * Components use this to pick the Luvia view; useTtmApp() stays for native-shell-only behaviour.
+ */
+export function useLuviaUi(): boolean {
+  return true
+}

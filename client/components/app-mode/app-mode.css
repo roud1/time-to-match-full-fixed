@@ -1,11 +1,11 @@
-/* Screens inside the native app / installed PWA (html[data-ttm-app], set in app/layout.tsx).
+/* Screens inside the native app / installed PWA (html[data-lv], set in app/layout.tsx).
    The website in a normal browser is NOT affected. */
 
 .ttm-app-back {
   display: none;
 }
 
-html[data-ttm-app] .ttm-app-back {
+html[data-lv] .ttm-app-back {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,29 +20,29 @@ html[data-ttm-app] .ttm-app-back {
   touch-action: manipulation;
 }
 
-html[data-ttm-app] .ttm-app-back:active {
+html[data-lv] .ttm-app-back:active {
   background: rgba(255, 255, 255, 0.08);
 }
 
 /* ── Auth screens: login / register / forgot / reset / welcome ─────────────── */
 
-html[data-ttm-app] .ttm-auth-shell {
+html[data-lv] .ttm-auth-shell {
   height: 100dvh;
   min-height: 0;
 }
 
-html[data-ttm-app] .ttm-auth-nav__inner {
+html[data-lv] .ttm-auth-nav__inner {
   padding-block: 0.25rem;
   gap: 0.25rem;
   justify-content: flex-start;
 }
 
-html[data-ttm-app] .ttm-auth-shell__main {
+html[data-lv] .ttm-auth-shell__main {
   padding-top: calc(3.25rem + env(safe-area-inset-top, 0px));
   overflow: hidden;
 }
 
-html[data-ttm-app] .ttm-auth-shell__content-wrap {
+html[data-lv] .ttm-auth-shell__content-wrap {
   height: 100%;
   min-height: 0;
   padding: 0.5rem 1.25rem max(1rem, env(safe-area-inset-bottom, 0px));
@@ -52,19 +52,19 @@ html[data-ttm-app] .ttm-auth-shell__content-wrap {
   -webkit-overflow-scrolling: touch;
 }
 
-html[data-ttm-app] .ttm-auth-shell__content {
+html[data-lv] .ttm-auth-shell__content {
   margin-block: auto;
 }
 
 /* The pitch, live counter and trust badges live on the home screen; keep forms focused. */
-html[data-ttm-app] .ttm-auth-shell__mobile-pitch,
-html[data-ttm-app] .ttm-login-live,
-html[data-ttm-app] .ttm-login-trust {
+html[data-lv] .ttm-auth-shell__mobile-pitch,
+html[data-lv] .ttm-login-live,
+html[data-lv] .ttm-login-trust {
   display: none;
 }
 
 /* Registration wizard: keep Back / Next within reach while a step scrolls. */
-html[data-ttm-app] .ttm-reg-actions {
+html[data-lv] .ttm-reg-actions {
   position: sticky;
   bottom: -0.5rem;
   z-index: 5;
@@ -95,7 +95,7 @@ html[data-ttm-app] .ttm-nav-brand {
   display: none;
 }
 
-html[data-ttm-app] .ttm-auth-nav__lang {
+html[data-lv] .ttm-auth-nav__lang {
   display: block;
   margin-left: auto;
 }
@@ -105,14 +105,14 @@ html[data-ttm-app] .ttm-floating-chrome {
 }
 
 /* Location reminder: slim toast above the dock (never covers page titles), dismissible. */
-html[data-ttm-app] .ttm-location-banner {
+html[data-lv] .ttm-location-banner {
   top: auto;
   bottom: calc(var(--ttm-dock-height, 4.75rem) + env(safe-area-inset-bottom, 0px) + 0.75rem);
   padding-inline: 0.75rem;
   max-width: 28rem;
 }
 
-html[data-ttm-app] .ttm-location-banner > div {
+html[data-lv] .ttm-location-banner > div {
   gap: 0.5rem;
   padding: 0.5rem 0.4rem 0.5rem 0.9rem;
   border-radius: 18px;
@@ -121,20 +121,20 @@ html[data-ttm-app] .ttm-location-banner > div {
   -webkit-backdrop-filter: blur(14px);
 }
 
-html[data-ttm-app] .ttm-location-banner p {
+html[data-lv] .ttm-location-banner p {
   flex: 1;
   font-size: 0.72rem;
   line-height: 1.3;
 }
 
-html[data-ttm-app] .ttm-location-banner .ttm-brand-cta {
+html[data-lv] .ttm-location-banner .ttm-brand-cta {
   min-height: 34px !important;
   padding: 0.3rem 0.85rem !important;
   font-size: 0.75rem !important;
   font-weight: 600 !important;
 }
 
-html[data-ttm-app] .ttm-location-banner__close {
+html[data-lv] .ttm-location-banner__close {
   min-width: 32px !important;
   min-height: 32px !important;
   width: 32px;
@@ -148,7 +148,7 @@ html[data-ttm-app] .ttm-location-banner__close {
 }
 
 /* Settings tabs: one scrollable row, no overlapping labels. */
-html[data-ttm-app] .ttm-settings-tabs {
+html[data-lv] .ttm-settings-tabs {
   flex-wrap: nowrap;
   gap: 0.25rem;
   overflow-x: auto;
@@ -156,11 +156,11 @@ html[data-ttm-app] .ttm-settings-tabs {
   -webkit-overflow-scrolling: touch;
 }
 
-html[data-ttm-app] .ttm-settings-tabs::-webkit-scrollbar {
+html[data-lv] .ttm-settings-tabs::-webkit-scrollbar {
   display: none;
 }
 
-html[data-ttm-app] .ttm-settings-tabs > * {
+html[data-lv] .ttm-settings-tabs > * {
   flex: 0 0 auto;
   white-space: nowrap;
   padding-inline: 0.95rem;
@@ -168,18 +168,18 @@ html[data-ttm-app] .ttm-settings-tabs > * {
   font-weight: 400;
 }
 
-html[data-ttm-app] .ttm-settings-tabs button[aria-current="page"] {
+html[data-lv] .ttm-settings-tabs button[aria-current="page"] {
   background: linear-gradient(135deg, rgba(247, 37, 133, 0.22), rgba(114, 9, 183, 0.3));
   color: #fff;
   font-weight: 500;
 }
 
 /* Profile header: avatar and name side by side, edit button on the right. */
-html[data-ttm-app] .profile-presence__identity:not(.profile-presence__identity--cover) {
+html[data-lv] .profile-presence__identity:not(.profile-presence__identity--cover) {
   gap: 0.75rem;
 }
 
-html[data-ttm-app]
+html[data-lv]
   .profile-presence__identity:not(.profile-presence__identity--cover)
   .profile-presence__identity-body {
   display: flex;
@@ -189,29 +189,29 @@ html[data-ttm-app]
   min-width: 0;
 }
 
-html[data-ttm-app] .profile-presence__identity-name {
+html[data-lv] .profile-presence__identity-name {
   font-size: 1.05rem;
   font-weight: 500;
 }
 
-html[data-ttm-app] .profile-presence__identity-city {
+html[data-lv] .profile-presence__identity-city {
   font-size: 0.8rem;
 }
 
-html[data-ttm-app] .profile-presence__identity-sync {
+html[data-lv] .profile-presence__identity-sync {
   font-size: 0.65rem;
 }
 
 /* Map: dark, compact controls and attribution (Leaflet defaults are bright white and oversized on phones). */
-html[data-ttm-app] .leaflet-bar {
+html[data-lv] .leaflet-bar {
   border: 0;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 
-html[data-ttm-app] .leaflet-bar a,
-html[data-ttm-app] .leaflet-bar a:hover {
+html[data-lv] .leaflet-bar a,
+html[data-lv] .leaflet-bar a:hover {
   width: 38px;
   height: 38px;
   line-height: 38px;
@@ -224,7 +224,7 @@ html[data-ttm-app] .leaflet-bar a:hover {
   backdrop-filter: blur(10px);
 }
 
-html[data-ttm-app] .leaflet-container .leaflet-control-attribution {
+html[data-lv] .leaflet-container .leaflet-control-attribution {
   padding: 2px 8px;
   border-radius: 10px 0 0 0;
   background: rgba(14, 14, 20, 0.7);
@@ -232,12 +232,12 @@ html[data-ttm-app] .leaflet-container .leaflet-control-attribution {
   font-size: 9px;
 }
 
-html[data-ttm-app] .leaflet-control-attribution a {
+html[data-lv] .leaflet-control-attribution a {
   color: rgba(255, 255, 255, 0.6);
 }
 
 /* Likes (free plan): the locked-likes message is a sticky bottom card, so the CTA is always visible and the blurred cards stay as a teaser. */
-html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay {
+html[data-lv] .ttm-dating-ui .ttm-likes-blur-overlay {
   position: sticky;
   inset: auto;
   bottom: 0.75rem;
@@ -255,25 +255,25 @@ html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay {
   backdrop-filter: blur(16px);
 }
 
-html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay > svg {
+html[data-lv] .ttm-dating-ui .ttm-likes-blur-overlay > svg {
   width: 26px;
   height: 26px;
 }
 
-html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay__body {
+html[data-lv] .ttm-dating-ui .ttm-likes-blur-overlay__body {
   font-size: 0.85rem;
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.65);
 }
 
-html[data-ttm-app] .ttm-dating-ui .ttm-likes-blur-overlay button {
+html[data-lv] .ttm-dating-ui .ttm-likes-blur-overlay button {
   width: 100%;
   min-height: 48px;
   margin-top: 0.4rem;
 }
 
 /* Locked likes: the hidden name becomes a soft skeleton bar instead of a bordered "•••" box. */
-html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__name {
+html[data-lv] .ttm-likes-card--blurred .ttm-likes-card__name {
   width: 58%;
   height: 14px;
   margin: 0.15rem 0 0.35rem;
@@ -286,7 +286,7 @@ html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__name {
   text-shadow: none;
 }
 
-html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__body::after {
+html[data-lv] .ttm-likes-card--blurred .ttm-likes-card__body::after {
   content: "";
   display: block;
   width: 36%;
@@ -296,129 +296,129 @@ html[data-ttm-app] .ttm-likes-card--blurred .ttm-likes-card__body::after {
 }
 
 /* Chat room: the location reminder must never cover the message field. */
-html[data-ttm-app]:has(.ttm-chat-immersive) .ttm-location-banner {
+html[data-lv]:has(.ttm-chat-immersive) .ttm-location-banner {
   display: none !important;
 }
 
 /* Chat room header: less height before the conversation starts. */
-html[data-ttm-app] .ttm-chat-room-header__foot,
-html[data-ttm-app] .ttm-chat-room-header__foot--indented {
+html[data-lv] .ttm-chat-room-header__foot,
+html[data-lv] .ttm-chat-room-header__foot--indented {
   padding-left: 0.25rem;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__row {
+html[data-lv] .ttm-chat-room-header__row {
   flex-wrap: wrap;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__rail {
+html[data-lv] .ttm-chat-room-header__rail {
   flex: 1 1 100%;
   flex-wrap: nowrap;
   gap: 0.4rem;
   justify-content: space-between;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__rail > * {
+html[data-lv] .ttm-chat-room-header__rail > * {
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__rail > button {
+html[data-lv] .ttm-chat-room-header__rail > button {
   flex: 0 0 auto;
   width: 2.5rem;
   height: 2.5rem;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__toolbar {
+html[data-lv] .ttm-chat-room-header__toolbar {
   flex: 1 1 0;
   overflow: hidden;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__toolbar {
+html[data-lv] .ttm-chat-room-header__toolbar {
   min-height: 2.5rem;
 }
 
 /* Chat composer: wider message field (the send button no longer takes half the row). */
-html[data-ttm-app] .ttm-chat-composer__row {
+html[data-lv] .ttm-chat-composer__row {
   gap: 0.4rem;
 }
 
-html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
+html[data-lv] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
   width: 2.5rem;
   height: 2.5rem;
 }
 
-html[data-ttm-app] .ttm-chat-composer__row .ttm-brand-cta {
+html[data-lv] .ttm-chat-composer__row .ttm-brand-cta {
   min-width: 0 !important;
   padding: 0 0.85rem !important;
   min-height: 2.5rem !important;
   font-size: 0.8rem !important;
 }
 
-html[data-ttm-app] .ttm-chat-composer__input {
+html[data-lv] .ttm-chat-composer__input {
   flex: 1 1 8rem;
   min-height: 2.5rem;
 }
 
-html[data-ttm-app] .ttm-chat-composer__input {
+html[data-lv] .ttm-chat-composer__input {
   padding-inline: 0.75rem;
 }
 
-html[data-ttm-app] .ttm-chat-composer__input::placeholder {
+html[data-lv] .ttm-chat-composer__input::placeholder {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-html[data-ttm-app] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
+html[data-lv] .ttm-chat-composer__row > button:not(.ttm-brand-cta) {
   width: 2.25rem;
   height: 2.5rem;
 }
 
 /* Developer-facing notice ("cloud storage not configured") is not for end users in the app. */
-html[data-ttm-app] .ttm-photo-s3-notice {
+html[data-lv] .ttm-photo-s3-notice {
   display: none;
 }
 
 /* Notifications: brand colours (not indigo) and rounded glass cards. */
-html[data-ttm-app] .ttm-notif-tabs button[class*="bg-indigo-500"] {
+html[data-lv] .ttm-notif-tabs button[class*="bg-indigo-500"] {
   background: linear-gradient(135deg, rgba(247, 37, 133, 0.22), rgba(114, 9, 183, 0.3));
   color: #fff;
   font-weight: 500;
 }
 
-html[data-ttm-app] .ttm-notif-icon {
+html[data-lv] .ttm-notif-icon {
   background: rgba(247, 37, 133, 0.14);
   color: #ff5fa2;
 }
 
-html[data-ttm-app] .ttm-notif-list .p9-notif-card {
+html[data-lv] .ttm-notif-list .p9-notif-card {
   padding: 0.85rem 1rem;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
 }
 
-html[data-ttm-app] .ttm-notif-list .p9-notif-card--unread {
+html[data-lv] .ttm-notif-list .p9-notif-card--unread {
   border-color: rgba(247, 37, 133, 0.35);
   box-shadow: 0 0 24px rgba(247, 37, 133, 0.1);
 }
 
 /* Birth date: input and calendar button are the same comfortable size (44px); 16px text avoids iOS zoom. */
-html[data-ttm-app] .ttm-birthdate-picker__row {
+html[data-lv] .ttm-birthdate-picker__row {
   align-items: center;
   gap: 0.5rem;
 }
 
-html[data-ttm-app] .ttm-birthdate-picker__input.ttm-input {
+html[data-lv] .ttm-birthdate-picker__input.ttm-input {
   height: 2.75rem;
   min-height: 2.75rem;
   padding: 0 0.9rem;
   font-size: 1rem;
 }
 
-html[data-ttm-app] .ttm-birthdate-picker__input.ttm-input::placeholder {
+html[data-lv] .ttm-birthdate-picker__input.ttm-input::placeholder {
   font-size: 1rem;
 }
 
-html[data-ttm-app] .ttm-birthdate-picker__cal-btn {
+html[data-lv] .ttm-birthdate-picker__cal-btn {
   width: 2.75rem;
   min-width: 2.75rem;
   height: 2.75rem;
@@ -426,113 +426,113 @@ html[data-ttm-app] .ttm-birthdate-picker__cal-btn {
   border-radius: 14px;
 }
 
-html[data-ttm-app] .ttm-birthdate-picker__icon {
+html[data-lv] .ttm-birthdate-picker__icon {
   width: 1.2rem;
   height: 1.2rem;
 }
 
 /* Registration step 3: selected options use the brand pink (like steps 1-2), not indigo/violet. */
-html[data-ttm-app] .ttm-choice[class*="border-indigo-400"],
-html[data-ttm-app] .ttm-choice[class*="border-violet-400"] {
+html[data-lv] .ttm-choice[class*="border-indigo-400"],
+html[data-lv] .ttm-choice[class*="border-violet-400"] {
   border-color: #f72585;
   background: rgba(247, 37, 133, 0.1);
   color: #fff;
 }
 
 /* Multi-line fields show their whole placeholder / 3 lines (global .ttm-input min-height overrode min-h-[88px]). */
-html[data-ttm-app] textarea.ttm-input {
+html[data-lv] textarea.ttm-input {
   min-height: 5.75rem;
   padding: 0.7rem 0.9rem;
   line-height: 1.4;
 }
 
 /* Registration actions: the primary button gets the larger share so "Создать профиль" never overflows. */
-html[data-ttm-app] .ttm-reg-actions {
+html[data-lv] .ttm-reg-actions {
   gap: 0.6rem;
 }
 
-html[data-ttm-app] .ttm-reg-actions > button,
-html[data-ttm-app] .ttm-reg-actions > a {
+html[data-lv] .ttm-reg-actions > button,
+html[data-lv] .ttm-reg-actions > a {
   white-space: nowrap;
   font-size: 0.95rem;
   padding-inline: 0.9rem;
 }
 
-html[data-ttm-app] .ttm-reg-actions > button:first-child:not(:last-child) {
+html[data-lv] .ttm-reg-actions > button:first-child:not(:last-child) {
   flex: 0 0 34%;
 }
 
-html[data-ttm-app] .ttm-reg-actions > button:last-child {
+html[data-lv] .ttm-reg-actions > button:last-child {
   flex: 1 1 auto;
   min-width: 0;
 }
 
 /* Feed (swipe screen): compact greeting so the card AND the like/pass buttons fit above the dock. */
-html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__eyebrow,
-html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__lead,
-html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__chips {
+html[data-lv] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__eyebrow,
+html[data-lv] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__lead,
+html[data-lv] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__chips {
   display: none;
 }
 
-html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__title {
+html[data-lv] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__title {
   margin: 0.1rem 0 0.4rem;
   font-size: 1.3rem;
   line-height: 1.2;
 }
 
-html[data-ttm-app] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__title > * {
+html[data-lv] .ttm-welcome-page__pitch--mobile .ttm-welcome-page__title > * {
   display: inline;
 }
 
-html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page,
-html[data-ttm-app] .ttm-welcome-page {
+html[data-lv] .ttm-native-app--discover .ttm-welcome-page,
+html[data-lv] .ttm-welcome-page {
   padding-bottom: calc(var(--ttm-dock-height, 4.75rem) + 0.5rem);
 }
 
 /* The swipe card leaves room for the greeting and the like/pass row inside the visible area. */
-html[data-ttm-app] .ttm-welcome-page__card .ttm-swipe-deck-stack--welcome {
+html[data-lv] .ttm-welcome-page__card .ttm-swipe-deck-stack--welcome {
   min-height: 18rem;
   max-height: calc(100dvh - 24.5rem);
 }
 
 /* Swipe row: like/pass buttons on one line, Filters/Boost on their own line (they used to overlap on phones). */
-html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page__actions-bar {
+html[data-lv] .ttm-native-app--discover .ttm-welcome-page__actions-bar {
   flex-direction: column;
   gap: 0.35rem;
   min-height: 0;
   padding-inline: 0;
 }
 
-html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page__actions-bar-tools {
+html[data-lv] .ttm-native-app--discover .ttm-welcome-page__actions-bar-tools {
   position: static;
   transform: none;
 }
 
-html[data-ttm-app] .ttm-native-app--discover .ttm-welcome-page__actions-bar-tools .ttm-discover-toolbar__row {
+html[data-lv] .ttm-native-app--discover .ttm-welcome-page__actions-bar-tools .ttm-discover-toolbar__row {
   justify-content: center;
 }
 
 /* First-match screen: breathing room between the avatars and the "spark" label. */
-html[data-ttm-app] .match-moment__avatars {
+html[data-lv] .match-moment__avatars {
   margin-bottom: 2.75rem;
 }
 
 /* ── Chat room: the conversation gets the space ─────────────────────────────── */
 
 /* Full screen: the app root reserves 64px for the bottom dock, but the chat room has no dock. */
-html[data-ttm-app]:has(.ttm-chat-immersive) .ttm-native-app {
+html[data-lv]:has(.ttm-chat-immersive) .ttm-native-app {
   padding-bottom: env(safe-area-inset-bottom, 0px) !important;
 }
 
 /* Status panels that repeat information from the header toolbar are dropped on phones. */
-html[data-ttm-app] .ttm-chat-immersive .eco-space-header,
-html[data-ttm-app] .ttm-chat-immersive .eco-stage-ribbon,
-html[data-ttm-app] .ttm-chat-immersive .connection-header-v2 {
+html[data-lv] .ttm-chat-immersive .eco-space-header,
+html[data-lv] .ttm-chat-immersive .eco-stage-ribbon,
+html[data-lv] .ttm-chat-immersive .connection-header-v2 {
   display: none;
 }
 
 /* Header foot: keep the "N messages until extension" meter, drop the extra status lines. */
-html[data-ttm-app] .ttm-chat-immersive .ttm-chat-room-header__status {
+html[data-lv] .ttm-chat-immersive .ttm-chat-room-header__status {
   display: none;
 }
 
@@ -541,7 +541,7 @@ html[data-ttm-app] .ttm-chat-immersive .ttm-chat-room-header__status {
   display: none;
 }
 
-html[data-ttm-app] .ttm-chat-send {
+html[data-lv] .ttm-chat-send {
   display: grid;
   place-items: center;
   width: 2.75rem;
@@ -552,11 +552,11 @@ html[data-ttm-app] .ttm-chat-send {
   border-radius: 999px !important;
 }
 
-html[data-ttm-app] .ttm-chat-send .ttm-chat-send__label {
+html[data-lv] .ttm-chat-send .ttm-chat-send__label {
   display: none;
 }
 
-html[data-ttm-app] .ttm-chat-send .ttm-chat-send__icon {
+html[data-lv] .ttm-chat-send .ttm-chat-send__icon {
   display: block;
   width: 1.3rem;
   height: 1.3rem;
@@ -567,11 +567,11 @@ html[data-ttm-app] .ttm-chat-send .ttm-chat-send__icon {
   display: none;
 }
 
-html[data-ttm-app] .ttm-chat-room-header {
+html[data-lv] .ttm-chat-room-header {
   position: relative;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__app-actions {
+html[data-lv] .ttm-chat-room-header__app-actions {
   position: absolute;
   top: 0.55rem;
   right: 0.5rem;
@@ -582,17 +582,17 @@ html[data-ttm-app] .ttm-chat-room-header__app-actions {
 }
 
 /* Name block leaves room for the burger (and for the timer chip when a match timer exists). */
-html[data-ttm-app] .ttm-chat-room-header__lead {
+html[data-lv] .ttm-chat-room-header__lead {
   flex: 1 1 100%;
   min-width: 0;
   padding-right: 3.25rem;
 }
 
-html[data-ttm-app] .ttm-chat-room-header:has(.ttm-match-expiry-bar--header) .ttm-chat-room-header__lead {
+html[data-lv] .ttm-chat-room-header:has(.ttm-match-expiry-bar--header) .ttm-chat-room-header__lead {
   padding-right: 9.5rem;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__burger {
+html[data-lv] .ttm-chat-room-header__burger {
   display: grid;
   place-items: center;
   width: 2.5rem;
@@ -608,49 +608,49 @@ html[data-ttm-app] .ttm-chat-room-header__burger {
 }
 
 /* Collapsed: only name + timer + burger. Open: SYNC toolbar, share and safety appear below. */
-html[data-ttm-app] .ttm-chat-room-header[data-menu="closed"] .ttm-chat-room-header__rail {
+html[data-lv] .ttm-chat-room-header[data-menu="closed"] .ttm-chat-room-header__rail {
   display: none;
 }
 
 /* The timer is always visible in the top row, so the copy inside the SYNC toolbar is dropped. */
-html[data-ttm-app] .ttm-chat-room-header__toolbar .ttm-chat-room-header__expiry {
+html[data-lv] .ttm-chat-room-header__toolbar .ttm-chat-room-header__expiry {
   display: none;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__expiry-inline {
+html[data-lv] .ttm-chat-room-header__expiry-inline {
   flex: 0 1 auto;
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header {
+html[data-lv] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header {
   padding: 0.3rem 0.6rem;
 }
 
-html[data-ttm-app] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header > span:first-child {
+html[data-lv] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header > span:first-child {
   display: none;
 }
 
 /* Own profile photo card: the name block sits at the bottom of the photo (it used to hang at the top, leaving a hard edge). */
-html[data-ttm-app] .profile-presence--own .profile-presence__identity--cover {
+html[data-lv] .profile-presence--own .profile-presence__identity--cover {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
 }
 
-html[data-ttm-app] .profile-presence--own .profile-presence__identity-body--cover {
+html[data-lv] .profile-presence--own .profile-presence__identity-body--cover {
   margin-top: auto;
 }
 
 /* ---- App background (Luvia 2.0): solid #0D0A17 with a faint light; no picture behind text.
    The start screen sets its own picture (mobile-app-home.css). Website unchanged. ---- */
-html[data-ttm-app] {
+html[data-lv] {
   background-color: #0d0a17 !important;
   background-image: none !important;
 }
-html[data-ttm-app] body {
+html[data-lv] body {
   background: transparent !important;
 }
-html[data-ttm-app] body::before {
+html[data-lv] body::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -662,17 +662,17 @@ html[data-ttm-app] body::before {
     radial-gradient(70% 40% at 100% 105%, rgba(243, 92, 168, 0.08), transparent 70%);
   background-repeat: no-repeat;
 }
-html[data-ttm-app] .eo-root,
-html[data-ttm-app] .er-reality-root,
-html[data-ttm-app] .world-root {
+html[data-lv] .eo-root,
+html[data-lv] .er-reality-root,
+html[data-lv] .world-root {
   background: transparent !important;
 }
 
 /* Auth screens show the same brand picture: no opaque shell, header floats over it without a bar. */
-html[data-ttm-app] .ttm-auth-shell {
+html[data-lv] .ttm-auth-shell {
   background: transparent !important;
 }
-html[data-ttm-app] .ttm-auth-nav {
+html[data-lv] .ttm-auth-nav {
   background: transparent;
   border-bottom-color: transparent;
   -webkit-backdrop-filter: none;
@@ -681,12 +681,23 @@ html[data-ttm-app] .ttm-auth-nav {
 
 /* iPhone notch / Dynamic Island: every in-app header starts below the status bar
    (some screens set padding-block on the header and dropped the safe-area inset). */
-html[data-ttm-app] .ttm-floating-header {
+html[data-lv] .ttm-floating-header {
   padding-top: calc(env(safe-area-inset-top, 0px) + 0.5rem) !important;
   padding-bottom: 0.5rem !important;
 }
 
 /* Auth forms: the last link stays above the iPhone home indicator. */
-html[data-ttm-app] .ttm-auth-shell__content-wrap {
+html[data-lv] .ttm-auth-shell__content-wrap {
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.25rem);
+}
+
+/* Light theme is not part of Luvia: the theme switch is hidden. */
+html[data-lv] .ttm-theme-toggle {
+  display: none !important;
+}
+
+/* Website: the floating language/theme chip would sit on top of the bottom tab bar or the auth header. */
+html[data-lv]:has(.ttm-app-dock) .ttm-floating-chrome,
+html[data-lv]:has(.ttm-auth-shell) .ttm-floating-chrome {
+  display: none !important;
 }

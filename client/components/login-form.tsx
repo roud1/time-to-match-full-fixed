@@ -26,7 +26,7 @@ import { CinematicField } from "@/client/components/ui/cinematic-field"
 import { Input } from "@/client/components/ui/input"
 import { Checkbox } from "@/client/components/ui/checkbox"
 import { AppLoginView } from "@/client/components/auth/app-login-view"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi, useTtmApp } from "@/client/hooks/use-ttm-app"
 
 type FormData = {
   email: string
@@ -40,7 +40,9 @@ export function LoginForm() {
   const { t } = useI18n()
   const router = useRouter()
   const hydrated = useHydrated()
+  // Native app: the session is always remembered (no checkbox there). Luvia view: website + app.
   const inApp = useTtmApp()
+  const luvia = useLuviaUi()
   const [errors, setErrors] = useState<FormErrors>({})
   const [loading, setLoading] = useState(false)
   const [redirecting, setRedirecting] = useState(false)
@@ -159,7 +161,7 @@ export function LoginForm() {
       // The app always shows the localized text for wrong credentials (the server message is English).
       setErrors({
         form:
-          inApp && (serverResult.status === 401 || serverResult.status === 400)
+          luvia && (serverResult.status === 401 || serverResult.status === 400)
             ? t("loginErrorInvalid")
             : serverResult.message ?? t("loginErrorInvalid"),
       })
@@ -178,11 +180,13 @@ export function LoginForm() {
     )
   }
 
-  if (inApp && !verifyPanel) {
+  if (luvia && !verifyPanel) {
     return (
       <AppLoginView
         email={form.email}
         password={form.password}
+        remember={inApp ? null : form.remember}
+        onRememberChange={(v) => update("remember", v)}
         errors={errors}
         loading={loading}
         onEmailChange={(v) => update("email", v)}

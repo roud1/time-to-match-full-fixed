@@ -25,7 +25,7 @@ import { useTopCardSwipe } from "@/client/hooks/use-top-card-swipe"
 import { SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
 import { cn } from "@/client/lib/utils"
 import { postDiscoverRewind } from "@/client/lib/discover/api"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { Heart, X } from "lucide-react"
 
 const STACK_VISIBLE = 3
@@ -116,7 +116,7 @@ export function SwipeDeck({
   const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
   const reduceMotion = useReducedMotion()
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   const [matchedProfile, setMatchedProfile] = useState<SwipeProfile | null>(null)
   const [firstMatchMode, setFirstMatchMode] = useState(false)
   const [detailProfile, setDetailProfile] = useState<SwipeProfile | null>(null)

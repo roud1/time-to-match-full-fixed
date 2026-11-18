@@ -11,9 +11,11 @@ export function getSystemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
 }
 
-/** Native app / installed PWA (flag set before first paint in app/layout.tsx): always dark. */
+/** Luvia design (html[data-lv], website and app) and the native app are dark-only. */
 export function isAppMode(): boolean {
-  return typeof document !== "undefined" && document.documentElement.hasAttribute("data-ttm-app")
+  if (typeof document === "undefined") return false
+  const root = document.documentElement
+  return root.hasAttribute("data-lv") || root.hasAttribute("data-ttm-app")
 }
 
 export function resolveTheme(stored: string | null): Theme {
@@ -54,4 +56,4 @@ export function getThemeFromDocument(): Theme {
 }
 
 /** Inline script for <head> — runs before paint to avoid flash */
-export const themeInitScript = `(function(){try{var k='${THEME_STORAGE_KEY}';var s=localStorage.getItem(k);var r=document.documentElement;var t=r.hasAttribute('data-ttm-app')?'dark':(s==='light'||s==='dark'?s:'dark');r.setAttribute('data-theme',t);if(t==='dark')r.classList.add('dark');else r.classList.remove('dark');r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.classList.add('dark');}})();`
+export const themeInitScript = `(function(){try{var k='${THEME_STORAGE_KEY}';var s=localStorage.getItem(k);var r=document.documentElement;var t=(r.hasAttribute('data-lv')||r.hasAttribute('data-ttm-app'))?'dark':(s==='light'||s==='dark'?s:'dark');r.setAttribute('data-theme',t);if(t==='dark')r.classList.add('dark');else r.classList.remove('dark');r.style.colorScheme=t;}catch(e){document.documentElement.setAttribute('data-theme','dark');document.documentElement.classList.add('dark');}})();`

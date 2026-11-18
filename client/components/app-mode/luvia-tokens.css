@@ -1,7 +1,7 @@
 /* Luvia 2.0 design tokens (from Luvia_2_0_Claude/assets/tokens.css).
-   Applied only inside the native app / installed PWA (html[data-ttm-app]); the website is unchanged. */
+   html[data-lv] is set on every page (app/layout.tsx): website and native app share the design. */
 
-html[data-ttm-app] {
+html[data-lv] {
   --lv-bg: #0d0a17;
   --lv-surface: #171222;
   --lv-surface-raised: #241b31;
@@ -27,13 +27,13 @@ html[data-ttm-app] {
 }
 
 /* Keyboard focus is always visible on app controls. */
-html[data-ttm-app] :where(a, button, input, select, textarea, [role="button"]):focus-visible {
+html[data-lv] :where(a, button, input, select, textarea, [role="button"]):focus-visible {
   outline: 2px solid var(--lv-pink);
   outline-offset: 2px;
 }
 
 /* Header: solid dark bar, thin divider, no glass glow. */
-html[data-ttm-app] .ttm-floating-header {
+html[data-lv] .ttm-floating-header {
   border-bottom: 1px solid var(--lv-border) !important;
   background: rgba(13, 10, 23, 0.94) !important;
   -webkit-backdrop-filter: blur(14px) !important;
@@ -42,7 +42,7 @@ html[data-ttm-app] .ttm-floating-header {
 }
 
 /* Visually hidden but available to screen readers (icon-only tab bar). */
-html[data-ttm-app] .lv-sr-only {
+html[data-lv] .lv-sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -55,9 +55,9 @@ html[data-ttm-app] .lv-sr-only {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html[data-ttm-app] *,
-  html[data-ttm-app] *::before,
-  html[data-ttm-app] *::after {
+  html[data-lv] *,
+  html[data-lv] *::before,
+  html[data-lv] *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
