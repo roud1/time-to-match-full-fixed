@@ -93,12 +93,14 @@ try {
                          location_city, email_verified, photo_verified, is_active,
                          profile_expires_at, last_active_at)
       VALUES (${email}, ${hash}, ${p.n}, ${sql.json(profile)}, ${p.g}, ${p.bio}, ${birthdate},
-              ${p.city}, true, ${idx % 2 === 0}, true,
+              ${p.city}, true, false, true,
               now() + interval '30 days', now())
       ON CONFLICT (email_normalized) DO UPDATE SET
         name = EXCLUDED.name, profile = EXCLUDED.profile, gender = EXCLUDED.gender,
         bio = EXCLUDED.bio, location_city = EXCLUDED.location_city,
         is_active = true, is_blocked = false,
+        -- Test profiles are never photo-verified (no fabricated verification badges).
+        photo_verified = false,
         profile_expires_at = now() + interval '30 days', last_active_at = now()
       RETURNING id
     `
