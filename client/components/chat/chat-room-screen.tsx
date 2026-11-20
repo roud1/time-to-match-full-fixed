@@ -453,7 +453,7 @@ export function ChatRoomScreen({
     </div>
   ) : (
     <>
-      <div className="shrink-0 px-4 py-2 border-b border-white/10 bg-[#050506]">
+      <div className="ttm-chat-reconnect shrink-0 px-4 py-2 border-b border-white/10 bg-[#050506]">
         <p className="text-[10px] text-center text-white/40 font-extralight">{labels.reconnect}</p>
       </div>
       <ChatMessagesPane scrollRef={scrollRef} className="flex-1 min-h-0" after={typingBlock}>
@@ -607,7 +607,7 @@ export function ChatRoomScreen({
         </TemporalAtmosphereLayer>
       ) : (
         <>
-          <div className="shrink-0 px-4 py-3 border-b border-white/10 bg-[#050506]">
+          <div className="ttm-chat-reconnect shrink-0 px-4 py-3 border-b border-white/10 bg-[#050506]">
             <p className="text-[10px] text-center text-white/40 font-extralight">{labels.reconnect}</p>
           </div>
           {connectionRecord && (

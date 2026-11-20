@@ -520,8 +520,16 @@ html[data-lv] .match-moment__avatars {
 /* ── Chat room: the conversation gets the space ─────────────────────────────── */
 
 /* Full screen: the app root reserves 64px for the bottom dock, but the chat room has no dock. */
+/* The chat room handles the home-indicator inset itself (.ttm-chat-immersive), so the root adds none. */
 html[data-lv]:has(.ttm-chat-immersive) .ttm-native-app {
-  padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  padding-bottom: 0 !important;
+}
+
+/* Edge to edge: no page gutter around the conversation on phones. */
+@media (max-width: 767px) {
+  html[data-lv]:has(.ttm-chat-immersive) .ttm-native-app__main {
+    padding-inline: 0 !important;
+  }
 }
 
 /* Status panels that repeat information from the header toolbar are dropped on phones. */

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import type { ChatMessage } from "@/client/lib/social-store"
 import type { Locale } from "@/client/lib/i18n"
 import type { SyncTier } from "@/client/lib/sync-system"
@@ -37,14 +37,8 @@ export function ChatMessageList({
     return null as string | null
   }, [messages])
 
-  const [receipt, setReceipt] = useState<"delivered" | "read">("delivered")
-
-  useEffect(() => {
-    if (!lastOwnId) return
-    setReceipt("delivered")
-    const t = window.setTimeout(() => setReceipt("read"), 1200)
-    return () => clearTimeout(t)
-  }, [lastOwnId])
+  // No read state on the server → no fake "read" ticks.
+  const receipt = "delivered" as const
 
   const lastId = messages[messages.length - 1]?.id
 

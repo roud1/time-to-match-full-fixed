@@ -1,10 +1,8 @@
 "use client"
 
-import { useRef, useState } from "react"
 import { SendHorizontal } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useReducedMotion } from "motion/react"
-import { ChatVoiceNoteDemo } from "@/client/components/chat/chat-voice-note-demo"
 import { cn } from "@/client/lib/utils"
 
 type ChatComposerProps = {
@@ -36,33 +34,17 @@ export function ChatComposer({
   onSend,
   replySnippet,
   onClearReply,
-  voiceSeed,
   disabled,
   disabledHint,
   labels,
 }: ChatComposerProps) {
   const reduce = useReducedMotion()
-  const fileRef = useRef<HTMLInputElement>(null)
-  const [showVoice, setShowVoice] = useState(false)
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const handleSend = () => {
     if (disabled) return
     if (!draft.trim()) return
     onSend()
-    setImagePreview(null)
     onClearReply()
-  }
-
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target.files?.[0]
-    e.target.value = ""
-    if (!f || !f.type.startsWith("image/")) return
-    const url = URL.createObjectURL(f)
-    setImagePreview((prev) => {
-      if (prev) URL.revokeObjectURL(prev)
-      return url
-    })
   }
 
   return (
@@ -92,68 +74,8 @@ export function ChatComposer({
           )}
         </AnimatePresence>
 
-        {imagePreview && (
-          <div className="relative rounded-2xl overflow-hidden border border-white/15">
-            {/* eslint-disable-next-line @next/next/no-img-element -- blob preview */}
-            <img src={imagePreview} alt="" className="w-full max-h-40 object-cover opacity-90" />
-            <button
-              type="button"
-              className="absolute top-2 right-2 h-8 w-8 rounded-full bg-black/60 text-white text-lg leading-none border border-white/20"
-              onClick={() => {
-                setImagePreview((prev) => {
-                  if (prev) URL.revokeObjectURL(prev)
-                  return null
-                })
-              }}
-              aria-label={labels.cancelReply}
-            >
-              ×
-            </button>
-            <p className="text-[10px] text-center text-muted-foreground py-1.5 bg-black/50 font-light">{labels.mediaDemo}</p>
-          </div>
-        )}
-
-        <AnimatePresence>
-          {showVoice && (
-            <motion.div
-              key="voice"
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="overflow-hidden"
-            >
-              <ChatVoiceNoteDemo seed={voiceSeed} durationLabel={labels.voiceDuration} demoLabel={labels.voiceDemo} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
+        {/* Photo and voice buttons were removed: they only showed a local preview / a fake waveform and sent nothing. */}
         <div className="ttm-chat-composer__row">
-          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onFile} />
-          <button
-            type="button"
-            onClick={() => fileRef.current?.click()}
-            className="shrink-0 h-11 w-11 rounded-2xl border border-white/12 bg-white/[0.05] flex items-center justify-center text-muted-foreground hover:text-foreground active:scale-95 transition-transform touch-manipulation"
-            aria-label={labels.attach}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowVoice((v) => !v)}
-            className={cn(
-              "shrink-0 h-11 w-11 rounded-2xl border flex items-center justify-center touch-manipulation active:scale-95 transition-all",
-              showVoice
-                ? "border-sky-400/50 bg-sky-500/20 text-sky-200"
-                : "border-white/12 bg-white/[0.05] text-muted-foreground hover:text-foreground"
-            )}
-            aria-label={labels.voiceHint}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 013-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-            </svg>
-          </button>
           <label className="flex-1 min-w-0 sr-only" htmlFor="chat-composer-input">
             {labels.placeholder}
           </label>

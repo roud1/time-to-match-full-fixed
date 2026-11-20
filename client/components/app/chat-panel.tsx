@@ -156,6 +156,13 @@ export function ChatPanel() {
   }, [visibleThreads, resolveProfile])
 
   const activeProfile = activeId != null ? resolveProfile(activeId) : undefined
+
+  // A link to a chat that no longer exists (expired match, old notification): go back to the list
+  // instead of showing it without the header and tab bar.
+  useEffect(() => {
+    if (activeId == null || isPulseActive || activeProfile || !listReady || serverMatches === undefined) return
+    setActiveChat(null)
+  }, [activeId, isPulseActive, activeProfile, listReady, serverMatches, setActiveChat])
   const activeThread = isPulseActive
     ? pulseThread
     : threads.find((th) => th.profileId === activeId)

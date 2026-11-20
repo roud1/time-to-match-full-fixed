@@ -4,39 +4,39 @@ import { PULSE_PROFILE_ID } from "@/client/lib/pulse/constants"
 
 const COPY: Record<Locale, { name: string; bio: string }> = {
   ru: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "AI-гид Time to Match — помогу с диалогами, идеями для сообщений и настроением связи.",
   },
   uk: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "AI-гід Time to Match — допоможу з діалогами, ідеями для повідомлень і настроєм зв'язку.",
   },
   en: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "Time to Match AI guide — here for conversation ideas, tone, and connection rhythm.",
   },
   de: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "Time to Match KI-Begleiter — für Gesprächsideen und Verbindungsrhythmus.",
   },
   es: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "Guía IA de Time to Match — ideas de conversación y ritmo de conexión.",
   },
   pl: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "AI-przewodnik Time to Match — pomysły na rozmowę i rytm relacji.",
   },
   fr: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "Guide IA Time to Match — idées de messages et rythme de connexion.",
   },
   it: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "Guida AI Time to Match — idee per i messaggi e il ritmo della connessione.",
   },
   tr: {
-    name: "Pulse",
+    name: "Luvia AI",
     bio: "Time to Match AI rehberi — sohbet fikirleri ve bağ ritmi.",
   },
 }

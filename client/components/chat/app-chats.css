@@ -356,3 +356,132 @@ html[data-lv] .ttm-chat-area {
   --ring: rgba(168, 85, 247, 0.45);
   --ttm-glow-sync-soft: rgba(168, 85, 247, 0.15);
 }
+
+/* ── Conversation (Luvia 2.0, reference screen 5) ───────────────────────────── */
+
+/* Full-bleed solid background (no inset dark card). */
+html[data-lv] .ttm-chat-immersive,
+html[data-lv] .ttm-chat-room,
+html[data-lv] .ttm-chat-area,
+html[data-lv] .ttm-chat-area__body {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--lv-bg) !important;
+  box-shadow: none !important;
+}
+
+html[data-lv] .ttm-chat-immersive {
+  padding-inline: 0 !important;
+}
+
+html[data-lv] .ttm-chat-area__header {
+  border-bottom: 1px solid var(--lv-border) !important;
+  background: var(--lv-bg) !important;
+}
+
+html[data-lv] .ttm-chat-room-header__name {
+  font-family: var(--font-sans, inherit);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+html[data-lv] .ttm-chat-room-header__age {
+  font-weight: 400;
+  color: var(--lv-text-2);
+}
+
+/* Decorative "one message and the flame comes back" strip. */
+html[data-lv] .ttm-chat-reconnect {
+  display: none !important;
+}
+
+/* Bubbles: incoming = raised surface, outgoing = brand gradient; time inside, bottom-right. */
+html[data-lv] .ttm-chat-bubble {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 0.6rem;
+  padding: 0.6rem 0.85rem 0.45rem !important;
+  border: 0 !important;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+  box-shadow: none !important;
+}
+
+html[data-lv] .ttm-chat-bubble--them {
+  border-radius: 18px 18px 18px 6px !important;
+  background: var(--lv-surface-raised) !important;
+  color: var(--lv-text) !important;
+}
+
+html[data-lv] .ttm-chat-bubble--me {
+  border-radius: 18px 18px 6px 18px !important;
+  background: linear-gradient(105deg, #b04ef0, #8a46f5) !important;
+  color: #fff !important;
+}
+
+html[data-lv] .ttm-chat-bubble__time {
+  margin-left: auto;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Composer: one pill field + round gradient send button. */
+html[data-lv] .ttm-chat-area__footer,
+html[data-lv] .ttm-chat-composer-wrap {
+  border-top: 1px solid var(--lv-border) !important;
+  background: var(--lv-bg) !important;
+}
+
+html[data-lv] .ttm-chat-composer__row {
+  align-items: center;
+  gap: 0.6rem;
+}
+
+html[data-lv] .ttm-chat-composer__input {
+  min-height: 2.9rem !important;
+  padding: 0.7rem 1.1rem !important;
+  border: 1px solid var(--lv-border) !important;
+  border-radius: 999px !important;
+  background: var(--lv-surface) !important;
+  color: var(--lv-text) !important;
+  font-size: 1rem !important;
+}
+
+html[data-lv] .ttm-chat-send {
+  width: 2.9rem !important;
+  height: 2.9rem !important;
+  border: 0 !important;
+  background: var(--lv-gradient) !important;
+  box-shadow: none !important;
+}
+
+/* Starter suggestions ("Не знаешь, с чего начать?") in Luvia surfaces. */
+html[data-lv] .ttm-chat-room button[class*="bg-[var(--bg-primary)]"] {
+  border-color: var(--lv-border) !important;
+  background: var(--lv-surface-raised) !important;
+  box-shadow: none !important;
+}
+
+html[data-lv] .ttm-chat-room div[class*="bg-[var(--bg-secondary)]"] {
+  border-color: var(--lv-border) !important;
+  background: var(--lv-surface) !important;
+  box-shadow: none !important;
+}
+
+/* Desktop: list column next to the open conversation. */
+html[data-lv] .ttm-app-chats--compact {
+  max-width: none;
+  padding: 0.75rem 0.75rem 1rem;
+}
+
+html[data-lv] .ttm-app-chats--compact .ttm-app-chats__title {
+  font-size: 1.5rem;
+}
+
+html[data-lv] .ttm-app-chats__row.is-active {
+  border-color: var(--lv-border-strong);
+  background: var(--lv-surface-raised);
+}

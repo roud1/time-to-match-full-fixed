@@ -75,9 +75,11 @@ export function ChatInboxScreen({
   const isSidebar = variant === "sidebar"
   const inApp = useLuviaUi()
 
-  if (inApp && !isSidebar) {
+  if (inApp) {
     return (
       <AppChatsList
+        compact={isSidebar}
+        activeProfileId={activeProfileId}
         threads={threads}
         profilesByThread={profilesByThread}
         pulseThread={pulseThread}

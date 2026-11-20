@@ -34,6 +34,9 @@ type AppChatsListProps = {
   onlineByUserId: Record<string, boolean>
   onOpen: (profileId: number) => void
   onDeleteThread?: (profileId: number) => void
+  /** Desktop: the list is the left column next to the open conversation. */
+  compact?: boolean
+  activeProfileId?: number | null
 }
 
 /** Messages from the other person after the last one I sent, if the thread is unread. */
@@ -62,6 +65,8 @@ export function AppChatsList({
   onlineByUserId,
   onOpen,
   onDeleteThread,
+  compact = false,
+  activeProfileId = null,
 }: AppChatsListProps) {
   const { t } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
@@ -93,10 +98,10 @@ export function AppChatsList({
   }
 
   const pulseLast = pulseThread?.messages[pulseThread.messages.length - 1]
-  const showPulse = Boolean(pulseThread) && (!query || "pulse".includes(query.trim().toLowerCase()))
+  const showPulse = Boolean(pulseThread) && (!query || "luvia ai".includes(query.trim().toLowerCase()))
 
   return (
-    <div className="ttm-app-chats">
+    <div className={cn("ttm-app-chats", compact && "ttm-app-chats--compact")}>
       <div className="ttm-app-chats__top">
         {searchOpen ? (
           <label className="ttm-app-chats__search">
@@ -163,7 +168,12 @@ export function AppChatsList({
               <li key={thread.profileId}>
                 <button
                   type="button"
-                  className={cn("ttm-app-chats__row", unread > 0 && "is-unread")}
+                  className={cn(
+                    "ttm-app-chats__row",
+                    unread > 0 && "is-unread",
+                    activeProfileId === thread.profileId && "is-active"
+                  )}
+                  aria-current={activeProfileId === thread.profileId ? "true" : undefined}
                   onClick={() => {
                     if (longPressed.current) return
                     onOpen(thread.profileId)
@@ -203,13 +213,17 @@ export function AppChatsList({
 
           {showPulse && pulseThread && (
             <li>
-              <button type="button" className="ttm-app-chats__row" onClick={() => onOpen(pulseThread.profileId)}>
+              <button
+                type="button"
+                className={cn("ttm-app-chats__row", activeProfileId === pulseThread.profileId && "is-active")}
+                onClick={() => onOpen(pulseThread.profileId)}
+              >
                 <span className="ttm-app-chats__avatar ttm-app-chats__avatar--ai" aria-hidden>
                   <Sparkles strokeWidth={1.8} />
                 </span>
                 <span className="ttm-app-chats__text">
                   <span className="ttm-app-chats__name">
-                    <span className="truncate">Pulse</span>
+                    <span className="truncate">Luvia AI</span>
                     <span className="ttm-app-chats__ai-chip">{t("pulseInboxBadge")}</span>
                   </span>
                   <span className="ttm-app-chats__preview">{pulseLast?.text ?? t("pulseInboxPreview")}</span>
