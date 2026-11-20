@@ -1,128 +1,106 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import "../settings/settings-luvia.css"
+import { useCallback, useEffect, useState } from "react"
 import Link from "next/link"
-import { motion } from "motion/react"
+import { Bell, ChevronRight, Clock, Heart, Sparkles, Trophy } from "lucide-react"
 import { Navbar } from "@/client/components/navbar"
 import { useI18n } from "@/client/lib/i18n"
-import { cn } from "@/client/lib/utils"
-import { getActiveConnections, runConnectionTicks } from "@/client/lib/connection-store"
-import { computeDailyReturnInsights } from "@/client/lib/shared/daily-return"
-import { buildEmotionalNotifications } from "@/client/lib/shared/emotional-notifications"
-import { EmotionalEmptyState } from "@/client/components/product/emotional-empty-state"
-import { Bell } from "lucide-react"
-import { useEffect } from "react"
+import {
+  fetchNotificationsInbox,
+  markAllNotificationsRead,
+  type NotificationsInboxResponse,
+} from "@/client/lib/notifications-client"
+import { formatNotificationMessage } from "@/client/lib/notification-inbox-copy"
+import { formatChatThreadPreviewTime } from "@/client/lib/format-chat-time"
+import type { NotificationType } from "@/server/notifications/types"
 
-type Filter = "all" | "unread" | "important"
+function iconFor(type: NotificationType) {
+  if (type === "new_match") return Sparkles
+  if (type === "someone_liked_you") return Heart
+  if (type === "achievement_unlocked") return Trophy
+  return Clock
+}
 
+/** Real server notifications (matches, likes, expiry reminders). Nothing is generated on the client. */
 export default function NotificationsPage() {
-  const { t } = useI18n()
-  const [filter, setFilter] = useState<Filter>("all")
-  const [tick, setTick] = useState(0)
+  const { t, locale } = useI18n()
+  const [data, setData] = useState<NotificationsInboxResponse | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
 
-  useEffect(() => {
-    runConnectionTicks()
-    const onUpdate = () => setTick((x) => x + 1)
-    window.addEventListener("ttm-connection-updated", onUpdate)
-    return () => window.removeEventListener("ttm-connection-updated", onUpdate)
+  const load = useCallback(async () => {
+    const next = await fetchNotificationsInbox()
+    setData(next)
+    setFailed(next === null)
+    setLoading(false)
   }, [])
 
-  void tick
+  useEffect(() => {
+    void load()
+  }, [load])
 
-  const items = useMemo(() => {
-    const connections = getActiveConnections()
-    const daily = computeDailyReturnInsights(connections)
-    return buildEmotionalNotifications(connections, daily)
-  }, [tick])
-
-  const filtered = useMemo(() => {
-    if (filter === "unread") return items.filter((n) => n.unread)
-    if (filter === "important") return items.filter((n) => n.important)
-    return items
-  }, [items, filter])
-
-  const tabs: { id: Filter; label: string }[] = [
-    { id: "all", label: t("notificationsAll") },
-    { id: "unread", label: t("notificationsUnread") },
-    { id: "important", label: t("notificationsImportant") },
-  ]
+  const items = data?.notifications ?? []
 
   return (
-    <main className="min-h-screen bg-transparent ttm-brand-universe">
+    <main className="lv-set-page">
       <Navbar />
-      <div className="max-w-xl mx-auto px-6 pt-28 pb-20">
-        <h1 className="ttm-brand-gradient-text text-3xl font-extralight tracking-tight mb-2">
-          {t("notificationsTitle")}
-        </h1>
-        <p className="ttm-type-muted text-sm mb-8">{t("notificationsLiveSubtitle")}</p>
-
-        <div className="ttm-notif-tabs flex gap-2 mb-8 p-1 rounded-full ttm-brand-glass">
-          {tabs.map((tab) => (
+      <div className="lv-set">
+        <div className="lv-set__head">
+          <h1 className="lv-set__title">{t("lvNotifTitle")}</h1>
+          {items.length > 0 && (
             <button
-              key={tab.id}
               type="button"
-              onClick={() => setFilter(tab.id)}
-              className={cn(
-                "flex-1 py-2 text-xs font-extralight rounded-full transition-colors",
-                filter === tab.id
-                  ? "bg-indigo-500/20 text-indigo-100/95"
-                  : "text-white/45 hover:text-white/70"
-              )}
+              className="lv-set__link"
+              onClick={() => void markAllNotificationsRead().then((ok) => { if (ok) void load() })}
             >
-              {tab.label}
+              {t("expiryNotifMarkAll")}
             </button>
-          ))}
+          )}
         </div>
 
-        {filtered.length === 0 ? (
-          <EmotionalEmptyState
-            title={t("notificationsEmptyTitle")}
-            body={t("notificationsEmptyBody")}
-            icon={Bell}
-          />
-        ) : (
-          <ul className="ttm-notif-list space-y-3">
-            {filtered.map((n, i) => {
-              const Icon = n.icon
-              const href = n.profileId ? `/app?tab=chat&with=${n.profileId}` : undefined
-              const inner = (
-                <>
-                  <div className="ttm-notif-icon shrink-0 w-10 h-10 rounded-xl bg-indigo-500/15 flex items-center justify-center text-indigo-200/90">
-                    <Icon className="w-4 h-4" strokeWidth={1.35} />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-sm font-extralight text-white/90">{t(n.titleKey)}</p>
-                    <p className="text-xs text-white/50 font-light mt-0.5 leading-relaxed">{t(n.bodyKey)}</p>
-                  </div>
-                  <span className="text-[10px] text-white/35 shrink-0 font-light tabular-nums">
-                    {t(n.timeKey)}
-                  </span>
-                </>
-              )
-              return (
-                <motion.li
-                  key={n.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.04 }}
-                >
-                  {href ? (
-                    <Link
-                      href={href}
-                      className={cn("p9-notif-card block", n.unread && "p9-notif-card--unread")}
-                    >
-                      <div className="flex gap-3 items-start">{inner}</div>
+        <div className="lv-set__body">
+          {loading ? (
+            <div className="lv-set__group" aria-busy>
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="lv-set__row lv-set__row--skeleton" />
+              ))}
+            </div>
+          ) : items.length === 0 ? (
+            <div className="lv-set__empty">
+              <span className="lv-set__empty-icon" aria-hidden>
+                <Bell strokeWidth={1.6} />
+              </span>
+              <p className="lv-set__group-title">{failed ? t("lvNotifUnavailable") : t("lvNotifEmpty")}</p>
+              {!failed && <p className="lv-set__hint">{t("lvNotifEmptyBody")}</p>}
+            </div>
+          ) : (
+            <ul className="lv-set__group lv-set__list">
+              {items.map((item) => {
+                const Icon = iconFor(item.type)
+                const at = Date.parse(item.sentAt ?? item.createdAt)
+                return (
+                  <li key={item.id}>
+                    <Link href={item.href} className="lv-set__row">
+                      <span className="lv-set__icon" aria-hidden>
+                        <Icon strokeWidth={1.8} />
+                      </span>
+                      <span className="lv-set__text">
+                        <span className="lv-set__label lv-set__label--wrap">
+                          {formatNotificationMessage(item, t)}
+                        </span>
+                        {Number.isFinite(at) && (
+                          <span className="lv-set__hint">{formatChatThreadPreviewTime(at, locale)}</span>
+                        )}
+                      </span>
+                      <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
                     </Link>
-                  ) : (
-                    <article className={cn("p9-notif-card flex gap-3 items-start", n.unread && "p9-notif-card--unread")}>
-                      {inner}
-                    </article>
-                  )}
-                </motion.li>
-              )
-            })}
-          </ul>
-        )}
+                  </li>
+                )
+              })}
+            </ul>
+          )}
+        </div>
       </div>
     </main>
   )

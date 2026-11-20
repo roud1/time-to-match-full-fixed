@@ -2,16 +2,16 @@
 
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
-import { Compass, Heart, MapPin, MessageCircle, User } from "lucide-react"
+import { Compass, Flame, Heart, MapPin, MessageCircle, User } from "lucide-react"
 import { Logo } from "@/client/components/logo"
 import { cn } from "@/client/lib/utils"
 import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 import type { AppTab } from "@/client/components/app/bottom-nav"
 
 const ITEMS: { tab: AppTab; icon: typeof Compass; labelKey: TranslationKey }[] = [
-  { tab: "discover", icon: Compass, labelKey: "tabDiscover" },
+  { tab: "discover", icon: Flame, labelKey: "appNavDiscover" },
   { tab: "likes", icon: Heart, labelKey: "tabLikes" },
-  { tab: "chat", icon: MessageCircle, labelKey: "tabChat" },
+  { tab: "chat", icon: MessageCircle, labelKey: "appNavChats" },
   { tab: "map", icon: MapPin, labelKey: "tabMap" },
 ]
 
@@ -29,7 +29,7 @@ export function DesktopAppNav() {
 
   return (
     <aside className="ttm-desktop-nav" aria-label="App navigation">
-      <Link href="/" className="mb-4 opacity-90 hover:opacity-100 transition-opacity" aria-label="Time to Match">
+      <Link href="/" className="mb-4 opacity-90 hover:opacity-100 transition-opacity" aria-label="Luvia">
         <Logo variant="icon" size="sm" />
       </Link>
       {ITEMS.map(({ tab: id, icon: Icon, labelKey }) => {

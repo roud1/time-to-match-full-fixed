@@ -80,7 +80,9 @@ export async function fetchSubscriptionSummary(): Promise<SubscriptionApiRespons
   return demoSubscriptionFallback()
 }
 
-export async function startPremiumCheckout(plan: "premium" | "vip" = "premium"): Promise<{ url?: string; demo?: boolean }> {
+export async function startPremiumCheckout(
+  plan: "premium" | "vip" = "premium"
+): Promise<{ url?: string; demo?: boolean; unavailable?: boolean }> {
   const mode = await getAppMode().catch(() => "production" as const)
   try {
     const res = await fetch("/api/subscription/checkout", {
@@ -91,10 +93,12 @@ export async function startPremiumCheckout(plan: "premium" | "vip" = "premium"):
     })
     const data = (await res.json()) as { url?: string; message?: string; configured?: boolean }
     if (data.url) return { url: data.url }
-    if (mode === "demo" || data.configured === false) {
+    // Local demo (no database) may simulate Premium; a real server without payments must not grant it for free.
+    if (mode === "demo") {
       setDemoPremium(true)
       return { demo: true }
     }
+    if (data.configured === false) return { unavailable: true }
   } catch {
     if (mode === "demo") {
       setDemoPremium(true)
@@ -122,7 +126,8 @@ export async function activateProfileBoost(): Promise<BoostApiResponse & { demo?
     if ("url" in data && data.url) {
       return { activated: false, url: data.url }
     }
-    if (mode === "demo" || !res.ok) {
+    // Only the local demo (no database) simulates a boost; a failed server request must not show a fake one.
+    if (mode === "demo") {
       const until = Date.now() + 30 * 60 * 1000
       localStorage.setItem(DEMO_BOOST_KEY, String(until))
       return {

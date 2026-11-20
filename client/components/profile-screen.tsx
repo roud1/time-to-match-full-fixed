@@ -50,7 +50,6 @@ import { getProfileTimeLeft } from "@/client/lib/user-profile"
 import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { AppProfileHome } from "@/client/components/profile/app-profile-home"
 import { VibeCloudPicker, IntentionDeck, MoodOrbit } from "@/client/components/profile/identity-pickers"
-import { ProfileVoiceIntro } from "@/client/components/profile/profile-voice-intro"
 import { OwnTrustCenter } from "@/client/components/trust/own-trust-center"
 import { ConnectionsHubCard } from "@/client/components/profile/connections-hub-card"
 import { ProfileLifePresence } from "@/client/components/profile/profile-life-presence"
@@ -348,24 +347,7 @@ export function ProfileScreen() {
     !editing && section === "profile" ? (
       <div className="ttm-profile-freeze-adjacent">
         <ConnectionsHubCard className="ttm-profile-freeze-adjacent__item" />
-        <ProfileVoiceIntro
-          className="ttm-profile-freeze-adjacent__item"
-          seed={profile.email.length * 997 + profile.name.length}
-          recorded={profile.voiceIntroRecorded ?? false}
-          onRecordedChange={(v) => {
-            const next = updateUserProfile({ voiceIntroRecorded: v })
-            if (next) {
-              setProfile(next)
-              setForm(profileToForm(next))
-            }
-          }}
-          title={t("profileVoiceIntroTitle")}
-          subtitle={t("profileVoiceIntroSub")}
-          voiceHint={t("chatVoiceHint")}
-          voiceDemo={t("chatVoiceDemo")}
-          voiceDuration={t("chatVoiceDuration")}
-          markReady={t("profileVoiceMarkReady")}
-        />
+        {/* Voice intro removed: it only drew a fake waveform, nothing was recorded or played. */}
       </div>
     ) : null
 
@@ -615,17 +597,6 @@ export function ProfileScreen() {
             </div>
           </div>
 
-          <ProfileVoiceIntro
-            seed={profile.email.length * 997 + profile.name.length}
-            recorded={form.voiceIntroRecorded}
-            onRecordedChange={(v) => setForm((prev) => (prev ? { ...prev, voiceIntroRecorded: v } : prev))}
-            title={t("profileVoiceIntroTitle")}
-            subtitle={t("profileVoiceIntroSub")}
-            voiceHint={t("chatVoiceHint")}
-            voiceDemo={t("chatVoiceDemo")}
-            voiceDuration={t("chatVoiceDuration")}
-            markReady={t("profileVoiceMarkReady")}
-          />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-2 sm:col-span-2">

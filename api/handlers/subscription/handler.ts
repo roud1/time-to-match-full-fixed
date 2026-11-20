@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { getServerEnv } from "@/config/env"
 import { requireAuth } from "@/server/auth/require-auth"
 import { jsonError, jsonOk, withCors } from "@/server/http"
-import { billingMode, isStripeConfigured } from "@/server/billing/config"
+import { BILLING_PLANS, billingMode, isStripeConfigured } from "@/server/billing/config"
 import { getSubscriptionSummary, serializeSubscription } from "@/server/monetization"
 
 export const runtime = "nodejs"
@@ -37,6 +37,14 @@ export async function GET(request: Request) {
     jsonOk({
       mode: billingMode(),
       configured: isStripeConfigured(),
+      // Real checkout prices (the same values Stripe Checkout charges); null while payments are not set up.
+      prices: isStripeConfigured()
+        ? {
+            // Checkout creates a monthly subscription without a trial (api/handlers/subscription/checkout).
+            premium: { amountCents: BILLING_PLANS.premium.unitAmountCents, currency: BILLING_PLANS.premium.currency, interval: "month" },
+            vip: { amountCents: BILLING_PLANS.vip.unitAmountCents, currency: BILLING_PLANS.vip.currency, interval: "month" },
+          }
+        : null,
       subscription: serializeSubscription(summary.subscription),
       limits: {
         ...summary.limits,

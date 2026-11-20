@@ -14,12 +14,12 @@ export const BILLING_PLANS: Record<
   { label: string; unitAmountCents: number; currency: string }
 > = {
   premium: {
-    label: "Time to Match Premium",
+    label: "Luvia Premium",
     unitAmountCents: centsFromEnv("STRIPE_PREMIUM_CENTS", 1499),
     currency: "usd",
   },
   vip: {
-    label: "Time to Match VIP",
+    label: "Luvia VIP",
     unitAmountCents: centsFromEnv("STRIPE_VIP_CENTS", 2999),
     currency: "usd",
   },

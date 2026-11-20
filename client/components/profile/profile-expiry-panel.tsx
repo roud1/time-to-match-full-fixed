@@ -6,15 +6,10 @@ import { CountdownTimer } from "@/client/components/ui/countdown-timer"
 import { EmptyState } from "@/client/components/ui/empty-state"
 import { OnboardingHint } from "@/client/components/ui/onboarding-hint"
 import { PremiumButton } from "@/client/components/ui/premium-button"
-import { ProfileExtensionCard } from "@/client/components/profile/profile-extension-card"
 import { useI18n } from "@/client/lib/i18n"
-import {
-  extendProfile24Hours,
-  getProfileTimeLeft,
-  getUserProfile,
-  isProfileExpired,
-  type StoredUserProfile,
-} from "@/client/lib/user-profile"
+import { useUser } from "@/client/hooks/use-user"
+import { recordProfileActivity } from "@/client/lib/profile-life-store"
+import { getProfileTimeLeft, getUserProfile, type StoredUserProfile } from "@/client/lib/user-profile"
 import { cn } from "@/client/lib/utils"
 
 type ProfileExpiryPanelProps = {
@@ -23,31 +18,23 @@ type ProfileExpiryPanelProps = {
   className?: string
 }
 
-export function ProfileExpiryPanel({
-  profile,
-  onProfileUpdate,
-  className,
-}: ProfileExpiryPanelProps) {
+/**
+ * Time left in the feed. The server is the source of truth (users.profile_expires_at, 72 h, renewed for free by any
+ * activity — server/profile-life/service.ts). The old paid "+24 h" card was a client-only simulation and is gone.
+ */
+export function ProfileExpiryPanel({ profile, onProfileUpdate, className }: ProfileExpiryPanelProps) {
   const { t } = useI18n()
-  const [endsAtIso, setEndsAtIso] = useState(() =>
-    new Date(getProfileTimeLeft(profile).endsAt).toISOString()
-  )
+  const { user: meUser, refetch } = useUser()
+  const serverEndsAt = meUser?.profileExpiresAt ?? null
+  const [now, setNow] = useState(() => Date.now())
+  const endsAtIso = serverEndsAt ?? new Date(getProfileTimeLeft(profile).endsAt).toISOString()
 
   useEffect(() => {
-    const sync = () => {
-      const p = profile
-      setEndsAtIso(new Date(getProfileTimeLeft(p).endsAt).toISOString())
-    }
-    sync()
-    const id = window.setInterval(sync, 1000)
-    window.addEventListener("ttm-user-profile-changed", sync)
-    return () => {
-      clearInterval(id)
-      window.removeEventListener("ttm-user-profile-changed", sync)
-    }
-  }, [profile])
+    const id = window.setInterval(() => setNow(Date.now()), 1000)
+    return () => window.clearInterval(id)
+  }, [])
 
-  const expired = isProfileExpired(profile)
+  const expired = new Date(endsAtIso).getTime() <= now
 
   if (expired) {
     return (
@@ -55,18 +42,19 @@ export function ProfileExpiryPanel({
         <EmptyState
           icon={Clock}
           title={t("profileExpiredEmptyTitle")}
-          description={t("profileExpiredEmptyBody")}
+          description={t("lvExpiredBody")}
           action={
             <PremiumButton
               type="button"
               className="min-h-[44px] px-6"
               onClick={() => {
-                extendProfile24Hours()
+                recordProfileActivity()
+                window.setTimeout(() => void refetch(), 800)
                 const updated = getUserProfile()
                 if (updated) onProfileUpdate(updated)
               }}
             >
-              {t("profileExpiredEmptyCta")}
+              {t("lvRevive")}
             </PremiumButton>
           }
         />
@@ -84,7 +72,6 @@ export function ProfileExpiryPanel({
         <CountdownTimer expiresAt={endsAtIso} context="profile" compact />
       </div>
       <OnboardingHint hintId="profileExpiry" message={t("onboardingProfileExpiry")} />
-      <ProfileExtensionCard profile={profile} onProfileUpdate={onProfileUpdate} expired={false} />
     </div>
   )
 }

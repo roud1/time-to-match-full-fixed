@@ -87,3 +87,21 @@ html[data-lv] .ttm-app-likes-link .ttm-notify-badge {
   top: -0.2rem;
   right: -0.2rem;
 }
+
+/* Desktop side navigation (website ≥1024px): Luvia surfaces, pink active item. */
+html[data-lv] .ttm-desktop-nav {
+  border-right: 1px solid var(--lv-border) !important;
+  background: var(--lv-bg) !important;
+}
+
+html[data-lv] .ttm-desktop-nav__item {
+  color: var(--lv-text-2) !important;
+  border-radius: 14px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-lv] .ttm-desktop-nav__item--active {
+  background: var(--lv-surface-raised) !important;
+  color: var(--lv-pink) !important;
+}

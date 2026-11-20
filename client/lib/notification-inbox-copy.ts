@@ -27,6 +27,9 @@ export function formatNotificationMessage(
     return t(key)
   }
   const name = item.peerName ?? t("expiryNotifMatchFallback")
+  if (item.type === "new_match") return t("lvNotifNewMatch").replace("{name}", name)
+  if (item.type === "someone_liked_you") return t("lvNotifLiked")
+  if (item.type === "achievement_unlocked") return t("lvNotifAchievement")
   const key = matchNotifKey(item.leadHours)
   if (key === "expiryNotifMatch") {
     return t(key).replace("{hours}", hours).replace("{name}", name)

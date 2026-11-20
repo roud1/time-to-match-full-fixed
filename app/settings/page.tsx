@@ -1,26 +1,35 @@
 "use client"
 
+import "./settings-luvia.css"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { motion } from "motion/react"
+import { useRouter } from "next/navigation"
+import { Bell, ChevronRight, KeyRound, LogOut, Share2, Trash2, UserRound } from "lucide-react"
 import { Navbar } from "@/client/components/navbar"
-import { CinematicButton } from "@/client/components/ui/cinematic-button"
 import { useI18n } from "@/client/lib/i18n"
 import { cn } from "@/client/lib/utils"
 import { PushNotificationSettings } from "@/client/components/pwa/push-notification-settings"
 import { SettingsBlockedList } from "@/client/components/settings/settings-blocked-list"
 import { SettingsSubscriptionCard } from "@/client/components/settings/settings-subscription-card"
-import { CinematicInviteFlow } from "@/client/components/network/cinematic-invite-flow"
 import { pushConnectionSync } from "@/client/lib/connection-sync-client"
-import { getUserProfile, getAgeFromBirthdate } from "@/client/lib/user-profile"
+import { clearSession, getAgeFromBirthdate, getUserProfile } from "@/client/lib/user-profile"
 import { getProfilePhotos } from "@/client/lib/profile-photos"
+import { logoutOnServer } from "@/client/lib/auth/client"
+import { getCityLabel } from "@/client/lib/cities"
 
 type Section = "account" | "security" | "privacy" | "notifications"
 
 export default function SettingsPage() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
+  const router = useRouter()
   const [section, setSection] = useState<Section>("account")
-  const [saved, setSaved] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [password, setPassword] = useState("")
+  const [deleting, setDeleting] = useState(false)
+  const [deleteError, setDeleteError] = useState<string | null>(null)
+  // Local profile cache is client-only: read it after mount (no hydration mismatch).
+  const [localProfile, setLocalProfile] = useState<ReturnType<typeof getUserProfile>>(null)
 
   // Deep link from the app profile: /settings?section=privacy | notifications | security
   useEffect(() => {
@@ -29,10 +38,10 @@ export default function SettingsPage() {
       setSection(requested)
     }
   }, [])
-  const [localProfile, setLocalProfile] = useState(() => getUserProfile())
 
   useEffect(() => {
     const sync = () => setLocalProfile(getUserProfile())
+    sync()
     window.addEventListener("ttm-auth-changed", sync)
     window.addEventListener("ttm-user-profile-changed", sync)
     return () => {
@@ -41,6 +50,11 @@ export default function SettingsPage() {
     }
   }, [])
 
+  // Narrow phones scroll the tab row: keep the active tab in view (also for deep links).
+  useEffect(() => {
+    document.querySelector(".lv-set__tabs .is-active")?.scrollIntoView({ block: "nearest", inline: "nearest" })
+  }, [section])
+
   const nav: { id: Section; label: string }[] = [
     { id: "account", label: t("settingsAccount") },
     { id: "security", label: t("settingsSecurity") },
@@ -48,156 +62,238 @@ export default function SettingsPage() {
     { id: "notifications", label: t("settingsNotifications") },
   ]
 
-  const bodyKey =
-    section === "account"
-      ? "settingsAccountBody"
-      : section === "security"
-        ? "settingsSecurityBody"
-        : section === "privacy"
-          ? "settingsPrivacyBody"
-          : "settingsNotificationsBody"
+  const handleLogout = () => {
+    void logoutOnServer()
+    clearSession()
+    router.push("/")
+  }
+
+  const handleInvite = async () => {
+    const url = `${window.location.origin}/`
+    const text = t("lvSetInviteMessage")
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Luvia", text, url })
+        return
+      } catch {
+        /* cancelled or unsupported — fall back to copying */
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 2000)
+    } catch {
+      /* clipboard blocked */
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!password || deleting) return
+    setDeleting(true)
+    setDeleteError(null)
+    try {
+      const res = await fetch("/api/me", {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      })
+      if (res.ok) {
+        clearSession()
+        router.replace("/")
+        return
+      }
+      setDeleteError(res.status === 403 ? t("lvSetDeleteWrongPassword") : t("lvSetDeleteError"))
+    } catch {
+      setDeleteError(t("lvSetDeleteError"))
+    }
+    setDeleting(false)
+  }
+
+  const photoCount = localProfile ? getProfilePhotos(localProfile).length : 0
+  const city = localProfile?.customCity ?? (localProfile?.cityId ? getCityLabel(localProfile.cityId, locale) : null)
 
   return (
-    <main className="min-h-screen bg-transparent ttm-brand-universe">
+    <main className="lv-set-page">
       <Navbar />
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-28 pb-20 flex flex-col md:flex-row gap-8">
-        <nav className="ttm-settings-tabs flex md:flex-col gap-2 md:min-w-[180px] p-1 rounded-2xl ttm-brand-glass h-fit" aria-label="Settings">
+      <div className="lv-set">
+        <h1 className="lv-set__title">{t("settingsTitle")}</h1>
+
+        <nav className="lv-set__tabs" aria-label={t("settingsTitle")}>
           {nav.map((item) => (
             <button
               key={item.id}
               type="button"
               onClick={() => setSection(item.id)}
               aria-current={section === item.id ? "page" : undefined}
-              className={cn(
-                "flex-1 md:flex-none py-2.5 px-4 rounded-xl text-xs font-extralight transition-colors",
-                section === item.id
-                  ? "bg-indigo-500/15 text-indigo-100/95"
-                  : "text-white/45 hover:text-white/70"
-              )}
+              className={cn("lv-set__tab", section === item.id && "is-active")}
             >
               {item.label}
             </button>
           ))}
-          <Link
-            href="/notifications"
-            className="md:mt-3 py-2.5 px-4 text-xs font-extralight text-indigo-200/80 hover:text-indigo-100 text-center md:text-left"
-          >
-            {t("navNotifications")} →
-          </Link>
         </nav>
 
-        <motion.div
-          key={section}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="ttm-brand-glass flex-1 rounded-[1.75rem] p-6 md:p-8 space-y-6"
-        >
-          <div>
-            <h1 className="ttm-brand-gradient-text text-2xl font-extralight tracking-tight">{t("settingsTitle")}</h1>
-            <p className="ttm-type-muted text-sm mt-2 leading-relaxed">{t(bodyKey)}</p>
-          </div>
+        <div className="lv-set__body">
+          {section === "account" && (
+            <>
+              <SettingsSubscriptionCard />
 
-          {section === "notifications" ? (
-            <div className="space-y-4 max-w-md">
-              <PushNotificationSettings />
-              <Link
-                href="/notifications"
-                className="block rounded-2xl border border-indigo-400/20 bg-indigo-500/10 px-4 py-4 text-sm font-extralight text-indigo-100/90 hover:border-indigo-400/35 transition-colors"
-              >
-                {t("settingsNotificationsLink")}
-              </Link>
-              <button
-                type="button"
-                onClick={() => void pushConnectionSync()}
-                className="text-xs text-indigo-200/70 hover:text-indigo-100 font-light"
-              >
-                {t("settingsSyncNow")}
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4 max-w-md">
-              {section === "privacy" && (
-                <>
-                  <label className="flex items-center justify-between ttm-brand-glass rounded-2xl px-4 py-3 cursor-pointer">
-                    <span className="text-sm font-light text-white/70">{t("settingsPrivacyToggle")}</span>
-                    <input type="checkbox" className="accent-indigo-400" defaultChecked />
-                  </label>
-                  <div>
-                    <p className="p9-register-step-label mb-3">{t("trustBlockedListTitle")}</p>
-                    <SettingsBlockedList />
-                  </div>
-                </>
-              )}
-              {section === "security" && (
-                <p className="text-xs text-white/40 font-light">{t("settingsSecurityHint")}</p>
-              )}
-              {section === "account" && (
-                <>
-                  <SettingsSubscriptionCard />
-                  <CinematicInviteFlow />
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-3">
-                    <p className="p9-register-step-label">{t("profileDetailsTitle")}</p>
-                    <p className="text-sm font-light text-white/70">
-                      {localProfile?.name ?? "—"}
-                      {localProfile?.birthdate && (
-                        <span className="text-white/45">
-                          {" "}
-                          · {getAgeFromBirthdate(localProfile.birthdate)} {t("profileYears")}
-                        </span>
-                      )}
-                    </p>
-                    {localProfile?.bio ? (
-                      <p className="text-xs font-light text-white/50 line-clamp-3">{localProfile.bio}</p>
-                    ) : null}
-                    {(localProfile?.customCity || localProfile?.cityId) && (
-                      <p className="text-xs font-light text-white/45">
-                        {localProfile.customCity ?? localProfile.cityId}
-                        {localProfile.latitude != null && localProfile.longitude != null && (
-                          <span className="tabular-nums">
-                            {" "}
-                            ({localProfile.latitude.toFixed(2)}, {localProfile.longitude.toFixed(2)})
-                          </span>
-                        )}
+              <section className="lv-set__group" aria-label={t("lvSetProfile")}>
+                <Link href="/profile?edit=1" className="lv-set__row">
+                  <span className="lv-set__icon" aria-hidden>
+                    <UserRound strokeWidth={1.8} />
+                  </span>
+                  <span className="lv-set__text">
+                    <span className="lv-set__label">
+                      {localProfile?.name ?? t("lvSetProfile")}
+                      {localProfile?.birthdate ? `, ${getAgeFromBirthdate(localProfile.birthdate)}` : ""}
+                    </span>
+                    <span className="lv-set__hint">
+                      {[city, photoCount > 0 ? t("lvSetPhotos").replace("{n}", String(photoCount)) : null]
+                        .filter(Boolean)
+                        .join(" · ") || t("lvSetEditProfile")}
+                    </span>
+                  </span>
+                  <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
+                </Link>
+                <button type="button" className="lv-set__row" onClick={() => void handleInvite()}>
+                  <span className="lv-set__icon" aria-hidden>
+                    <Share2 strokeWidth={1.8} />
+                  </span>
+                  <span className="lv-set__text">
+                    <span className="lv-set__label">{t("lvSetInvite")}</span>
+                    <span className="lv-set__hint" aria-live="polite">
+                      {copied ? t("netInviteCopied") : t("lvSetInviteBody")}
+                    </span>
+                  </span>
+                  <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
+                </button>
+              </section>
+
+              <section className="lv-set__group">
+                <button type="button" className="lv-set__row" onClick={handleLogout}>
+                  <span className="lv-set__icon" aria-hidden>
+                    <LogOut strokeWidth={1.8} />
+                  </span>
+                  <span className="lv-set__text">
+                    <span className="lv-set__label">{t("profileLogout")}</span>
+                    <span className="lv-set__hint">{t("lvSetSessionBody")}</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="lv-set__row lv-set__row--danger"
+                  onClick={() => {
+                    setDeleteOpen(true)
+                    setDeleteError(null)
+                    setPassword("")
+                  }}
+                  aria-expanded={deleteOpen}
+                >
+                  <span className="lv-set__icon" aria-hidden>
+                    <Trash2 strokeWidth={1.8} />
+                  </span>
+                  <span className="lv-set__text">
+                    <span className="lv-set__label">{t("lvSetDelete")}</span>
+                  </span>
+                </button>
+                {deleteOpen && (
+                  <form
+                    className="lv-set__delete"
+                    onSubmit={(e) => {
+                      e.preventDefault()
+                      void handleDelete()
+                    }}
+                  >
+                    <p className="lv-set__delete-body">{t("lvSetDeleteBody")}</p>
+                    <label className="lv-set__field">
+                      <span>{t("lvSetDeletePassword")}</span>
+                      <input
+                        type="password"
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoFocus
+                      />
+                    </label>
+                    {deleteError && (
+                      <p className="lv-set__error" role="alert">
+                        {deleteError}
                       </p>
                     )}
-                    {getProfilePhotos(localProfile ?? {}).length > 0 && (
-                      <p className="text-xs text-indigo-200/70 font-light">
-                        {getProfilePhotos(localProfile ?? {}).length} photo(s)
-                      </p>
-                    )}
-                    <Link
-                      href="/profile?edit=1"
-                      className="inline-block text-xs text-indigo-200/80 hover:text-indigo-100 font-light"
-                    >
-                      {t("profileEdit")} →
-                    </Link>
-                  </div>
-                  <label className="block">
-                    <span className="p9-register-step-label block mb-2">{t("settingsDisplayName")}</span>
-                    <input
-                      type="text"
-                      disabled
-                      value={localProfile?.name ?? ""}
-                      className="w-full rounded-2xl bg-white/[0.04] border border-white/10 px-4 py-3 text-white/50 font-light outline-none"
-                      placeholder="—"
-                    />
-                  </label>
-                </>
-              )}
-            </div>
+                    <div className="lv-set__delete-actions">
+                      <button type="button" className="lv-set__btn" onClick={() => setDeleteOpen(false)}>
+                        {t("lvCancel")}
+                      </button>
+                      <button
+                        type="submit"
+                        className="lv-set__btn lv-set__btn--danger"
+                        disabled={!password || deleting}
+                      >
+                        {deleting ? "…" : t("lvSetDeleteConfirm")}
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </section>
+            </>
           )}
 
-          <CinematicButton
-            variant="primary"
-            className="w-full max-w-xs min-h-[48px]"
-            onClick={() => {
-              setSaved(true)
-              setTimeout(() => setSaved(false), 2000)
-            }}
-          >
-            {saved ? t("settingsSaved") : t("settingsSave")}
-          </CinematicButton>
-        </motion.div>
+          {section === "security" && (
+            <section className="lv-set__group">
+              <Link href="/forgot-password" className="lv-set__row">
+                <span className="lv-set__icon" aria-hidden>
+                  <KeyRound strokeWidth={1.8} />
+                </span>
+                <span className="lv-set__text">
+                  <span className="lv-set__label">{t("lvSetChangePassword")}</span>
+                  <span className="lv-set__hint">{t("lvSetChangePasswordBody")}</span>
+                </span>
+                <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
+              </Link>
+              <button type="button" className="lv-set__row" onClick={handleLogout}>
+                <span className="lv-set__icon" aria-hidden>
+                  <LogOut strokeWidth={1.8} />
+                </span>
+                <span className="lv-set__text">
+                  <span className="lv-set__label">{t("profileLogout")}</span>
+                  <span className="lv-set__hint">{t("lvSetSessionBody")}</span>
+                </span>
+              </button>
+            </section>
+          )}
+
+          {section === "privacy" && (
+            <section className="lv-set__group lv-set__group--pad">
+              <p className="lv-set__group-title">{t("trustBlockedListTitle")}</p>
+              <SettingsBlockedList />
+            </section>
+          )}
+
+          {section === "notifications" && (
+            <>
+              <section className="lv-set__group lv-set__group--pad">
+                <p className="lv-set__hint">{t("lvSetNotificationsBody")}</p>
+                <PushNotificationSettings />
+              </section>
+              <section className="lv-set__group">
+                <Link href="/notifications" className="lv-set__row">
+                  <span className="lv-set__icon" aria-hidden>
+                    <Bell strokeWidth={1.8} />
+                  </span>
+                  <span className="lv-set__text">
+                    <span className="lv-set__label">{t("navNotifications")}</span>
+                  </span>
+                  <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
+                </Link>
+              </section>
+              <button type="button" onClick={() => void pushConnectionSync()} className="lv-set__link">
+                {t("settingsSyncNow")}
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </main>
   )
