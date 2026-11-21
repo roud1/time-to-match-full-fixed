@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"
-import { CinematicButton } from "@/client/components/ui/cinematic-button"
 import { DatingOnboardingVisual } from "@/client/components/dating/dating-onboarding-visual"
 import { cn } from "@/client/lib/utils"
+import { ArrowRight } from "lucide-react"
+import "@/client/components/onboarding-luvia.css"
 
 import type { TranslationKey } from "@/client/lib/i18n"
 
@@ -28,10 +29,10 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
   const slide = SLIDES[step]
 
   return (
-    <div className={cn("ttm-dating-onboarding w-full max-w-lg mx-auto", className)}>
-      <div className="ttm-dating-onboarding__glow" />
-      <div className="relative px-5 pt-8 pb-8 md:px-10 md:pt-10 md:pb-10 min-h-[380px] flex flex-col">
-        <div className="ttm-dating-onboarding__progress flex gap-1.5 mb-6">
+    <div className={cn("ttm-dating-onboarding lv-onboard w-full max-w-lg mx-auto", className)}>
+      <div className="relative flex flex-col lv-onboard__inner">
+        <div className="lv-onboard__top">
+        <div className="ttm-dating-onboarding__progress lv-onboard__bars flex gap-1.5">
           {SLIDES.map((_, i) => (
             <div key={i} className="flex-1 h-1 rounded-full overflow-hidden">
               <motion.div
@@ -42,6 +43,10 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
               />
             </div>
           ))}
+        </div>
+          <button type="button" onClick={onComplete} className="lv-onboard__skip">
+            {t("onboardSkip")}
+          </button>
         </div>
 
         <AnimatePresence mode="wait">
@@ -55,35 +60,23 @@ export function OnboardingFlow({ onComplete, className }: OnboardingFlowProps) {
           >
             <DatingOnboardingVisual variant={slide.visual} />
 
-            <span className="ttm-badge-brand mb-4">{t("onboardEyebrow")}</span>
-            <span className="p9-register-step-label mb-3 block">
-              {step + 1} / {SLIDES.length}
-            </span>
-            <h2 className="ttm-dating-onboarding__title text-balance mb-4 leading-[1.12]">
+            <h2 className="ttm-dating-onboarding__title lv-onboard__title text-balance">
               {t(slide.title)}
             </h2>
-            <p className="text-sm sm:text-base text-white/55 font-light leading-relaxed max-w-md">
+            <p className="lv-onboard__sub">
               {t(slide.sub)}
             </p>
           </motion.div>
         </AnimatePresence>
 
-        <div className="mt-auto pt-8 flex flex-col gap-3">
-          {!isLast ? (
-            <CinematicButton variant="primary" className="w-full min-h-[52px]" onClick={() => setStep((s) => s + 1)}>
-              {t("onboardContinue")}
-            </CinematicButton>
-          ) : (
-            <CinematicButton variant="primary" className="w-full min-h-[52px]" onClick={onComplete}>
-              {t("onboardStart")}
-            </CinematicButton>
-          )}
+        <div className="lv-onboard__actions">
           <button
             type="button"
-            onClick={onComplete}
-            className="w-full py-3 text-sm font-light text-white/45 hover:text-white/75 transition-colors touch-manipulation"
+            className="lv-onboard__cta"
+            onClick={isLast ? onComplete : () => setStep((s) => s + 1)}
           >
-            {t("onboardSkip")}
+            <span>{isLast ? t("onboardStart") : t("onboardContinue")}</span>
+            <ArrowRight aria-hidden />
           </button>
         </div>
       </div>

@@ -11,7 +11,7 @@ const AppShell = dynamic(() => import("@/client/components/app/app-shell").then(
 })
 
 export const metadata = {
-  title: "Лента — Time to Match",
+  title: "Лента — Luvia",
   description: "Свайпы, лайки, чаты и карта людей рядом.",
 }
 

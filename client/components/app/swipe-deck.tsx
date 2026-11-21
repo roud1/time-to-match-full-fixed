@@ -22,11 +22,11 @@ import { Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/client/components/ui/button"
 import { useTopCardSwipe } from "@/client/hooks/use-top-card-swipe"
-import { SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
+import { ADS_ENABLED, SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
 import { cn } from "@/client/lib/utils"
 import { postDiscoverRewind } from "@/client/lib/discover/api"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
-import { Heart, X } from "lucide-react"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
+import { Heart, RotateCcw, Star, X } from "lucide-react"
 
 const STACK_VISIBLE = 3
 
@@ -116,7 +116,7 @@ export function SwipeDeck({
   const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
   const reduceMotion = useReducedMotion()
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   const [matchedProfile, setMatchedProfile] = useState<SwipeProfile | null>(null)
   const [firstMatchMode, setFirstMatchMode] = useState(false)
   const [detailProfile, setDetailProfile] = useState<SwipeProfile | null>(null)
@@ -187,7 +187,7 @@ export function SwipeDeck({
         if (!adUser || !isPremiumActive(adUser)) {
           setSwipeCount((c) => {
             const next = c + 1
-            if (next % AD_EVERY === 0) setShowAd(true)
+            if (ADS_ENABLED && next % AD_EVERY === 0) setShowAd(true)
             return next
           })
         }
@@ -368,13 +368,11 @@ export function SwipeDeck({
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         gap: 16, padding: 20,
-        background: "rgba(6,5,9,0.97)",
+        background: "var(--lv-bg, #0d0a17)",
         borderRadius: "inherit",
       }}
     >
-      <span style={{ fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(245,245,247,0.35)" }}>
-        Реклама
-      </span>
+      <span style={{ fontSize: 12, color: "var(--lv-text-3, #8d82a0)" }}>{t("lvAdLabel")}</span>
       <div style={{ width: "100%", maxWidth: "20rem" }}>
         <SwipeAdBanner />
       </div>
@@ -384,27 +382,38 @@ export function SwipeDeck({
         style={{
           minWidth: 160, minHeight: 48,
           padding: "12px 32px",
-          background: "linear-gradient(135deg,#f72585,#b5179e,#7209b7)",
+          background: "var(--lv-gradient, linear-gradient(105deg,#f35ca8,#9b4dff))",
           color: "#fff", fontWeight: 600, fontSize: 15,
           border: "none", borderRadius: 9999, cursor: "pointer",
-          boxShadow: "0 4px 20px rgba(247,37,133,0.35)",
+          boxShadow: "var(--lv-shadow-cta, none)",
         }}
-        aria-label="Закрыть рекламу и продолжить"
       >
-        Продолжить
+        {t("lvContinue")}
       </button>
     </div>
   ) : null
 
   // App only: pass / hourglass (super like) / like, as in the app mockup.
+  // Luvia 2.0 (reference): rewind · pass · like (main) · super like. Rewind and super like are Premium (upgrade sheet otherwise).
   const appActionButtons = (
     <div className="ttm-app-feed-actions">
       <motion.button
         type="button"
         whileTap={{ scale: 0.9 }}
+        disabled={!canRewind}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={rewind}
+        aria-label={t("lvRewind")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--small ttm-app-feed-actions__btn--rewind"
+      >
+        <RotateCcw aria-hidden strokeWidth={2} />
+      </motion.button>
+      <motion.button
+        type="button"
+        whileTap={{ scale: 0.9 }}
         disabled={!current}
         onClick={() => void flyOff("left")}
-        aria-label={t("nope")}
+        aria-label={t("lvPassAria")}
         className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--nope"
       >
         <X aria-hidden strokeWidth={2.2} />
@@ -414,31 +423,22 @@ export function SwipeDeck({
         whileTap={{ scale: 0.9 }}
         disabled={!current}
         onPointerDown={(e) => e.stopPropagation()}
-        onClick={superLike}
-        aria-label={t("swipeSuperLikeAria")}
-        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--super"
+        onClick={() => void flyOff("right")}
+        aria-label={t("lvLikeAria")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--like"
       >
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-          <path
-            d="M6 3h12M6 21h12M7.5 3c0 5 4.5 6.5 4.5 9s-4.5 4-4.5 9M16.5 3c0 5-4.5 6.5-4.5 9s4.5 4 4.5 9"
-            stroke="currentColor"
-            strokeWidth="1.9"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path d="M9.5 18.6c1.2-1.5 3.8-1.5 5 0l.5 1.4H9z" fill="currentColor" />
-        </svg>
+        <Heart aria-hidden fill="currentColor" strokeWidth={0} />
       </motion.button>
       <motion.button
         type="button"
         whileTap={{ scale: 0.9 }}
         disabled={!current}
         onPointerDown={(e) => e.stopPropagation()}
-        onClick={() => void flyOff("right")}
-        aria-label={t("like")}
-        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--like"
+        onClick={superLike}
+        aria-label={t("swipeSuperLikeAria")}
+        className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--small ttm-app-feed-actions__btn--super"
       >
-        <Heart aria-hidden fill="currentColor" strokeWidth={0} />
+        <Star aria-hidden fill="currentColor" strokeWidth={0} />
       </motion.button>
     </div>
   )
@@ -467,7 +467,7 @@ export function SwipeDeck({
         whileTap={{ scale: 0.9 }}
         disabled={!current}
         onClick={() => void flyOff("left")}
-        aria-label={t("nope")}
+        aria-label={t("lvPassAria")}
         className={cn(
           "ttm-swipe-action-btn ttm-swipe-action-btn--nope h-[3.25rem] w-[3.25rem] sm:h-[58px] sm:w-[58px] lg:h-16 lg:w-16 rounded-full flex items-center justify-center touch-manipulation",
           !current && "opacity-40 pointer-events-none"
@@ -501,7 +501,7 @@ export function SwipeDeck({
         disabled={!current}
         onPointerDown={(e) => e.stopPropagation()}
         onClick={() => void flyOff("right")}
-        aria-label={t("like")}
+        aria-label={t("lvLikeAria")}
         className={cn(
           "ttm-swipe-action-btn ttm-swipe-action-btn--like h-[3.5rem] w-[3.5rem] sm:h-16 sm:w-16 lg:h-[4.25rem] lg:w-[4.25rem] rounded-full flex items-center justify-center touch-manipulation",
           !current && "opacity-40 pointer-events-none"

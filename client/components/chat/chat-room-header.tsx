@@ -138,16 +138,18 @@ export function ChatRoomHeader({
                   <span className="ttm-chat-room-header__age">, {profile.age}</span>
                 )}
               </p>
-              {(profile.location || profile.distance) && (
-                <p className="ttm-chat-room-header__city">
-                  {profile.location}
-                  {profile.location && profile.distance ? (
-                    <span className="ttm-chat-room-header__distance"> · {profile.distance}</span>
-                  ) : (
-                    profile.distance
-                  )}
-                </p>
-              )}
+              {(() => {
+                // Server matches carry "—" placeholders for unknown city / distance: show only real values.
+                const city = profile.location && profile.location !== "—" ? profile.location : ""
+                const dist = profile.distance && profile.distance !== "—" ? profile.distance : ""
+                if (!city && !dist) return null
+                return (
+                  <p className="ttm-chat-room-header__city">
+                    {city}
+                    {city && dist ? <span className="ttm-chat-room-header__distance"> · {dist}</span> : dist}
+                  </p>
+                )
+              })()}
             </div>
           </button>
         </div>

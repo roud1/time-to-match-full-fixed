@@ -64,7 +64,7 @@ export default function OgImage() {
             background: "linear-gradient(135deg,#f72585,#b5179e,#7209b7)",
             backgroundClip: "text",
             color: "transparent",
-          }}>Time to Match</span>
+          }}>Luvia</span>
         </div>
 
         {/* Main headline */}

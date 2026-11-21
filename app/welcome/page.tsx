@@ -3,7 +3,7 @@ import { AuthShell } from "@/client/components/auth-shell"
 import { WelcomeScreen } from "@/client/components/welcome-screen"
 
 export const metadata = {
-  title: "Добро пожаловать — Time to Match",
+  title: "Добро пожаловать — Luvia",
   description: "Ваш профиль готов. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
 }
 

@@ -10,8 +10,8 @@ import { getActivityCounts } from "@/client/lib/activity-metrics"
 import { tapScaleSoft } from "@/client/lib/motion-system"
 import { BrandIcon, type BrandIconName } from "@/client/components/brand/brand-icon"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
-import { Heart, Map as MapIcon, MessageCircle, User } from "lucide-react"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
+import { Flame, MapPin, MessageCircle, User } from "lucide-react"
 import "@/client/components/app/app-dock.css"
 
 export type AppTab = "discover" | "likes" | "chat" | "map"
@@ -34,9 +34,9 @@ const NAV_ITEMS: NavItem[] = [
 ]
 
 /** App only: four tabs as in the app mockup (likes open from the heart in the header). */
-const APP_NAV_ITEMS: Array<{ id: BottomNavId; href: string; labelKey: TranslationKey; Icon: typeof Heart }> = [
-  { id: "discover", href: "/app", labelKey: "appNavDiscover", Icon: Heart },
-  { id: "map", href: "/app?tab=map", labelKey: "tabMap", Icon: MapIcon },
+const APP_NAV_ITEMS: Array<{ id: BottomNavId; href: string; labelKey: TranslationKey; Icon: typeof Flame }> = [
+  { id: "discover", href: "/app", labelKey: "appNavDiscover", Icon: Flame },
+  { id: "map", href: "/app?tab=map", labelKey: "tabMap", Icon: MapPin },
   { id: "chat", href: "/app?tab=chat", labelKey: "appNavChats", Icon: MessageCircle },
   { id: "profile", href: "/profile", labelKey: "tabProfile", Icon: User },
 ]
@@ -60,7 +60,7 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
   const reduce = useReducedMotion()
   const [likesBadge, setLikesBadge] = useState(0)
   const [chatBadge, setChatBadge] = useState(0)
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
 
   useEffect(() => {
     const c = getActivityCounts(locale, location.position)
@@ -81,12 +81,17 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
                 href={href}
                 className={cn("ttm-app-dock__tab", isActive && "is-active")}
                 aria-current={isActive ? "page" : undefined}
+                aria-label={t(labelKey)}
               >
                 <span className="ttm-app-dock__icon">
-                  <Icon aria-hidden strokeWidth={isActive ? 2 : 1.6} />
+                  <Icon
+                    aria-hidden
+                    strokeWidth={isActive ? 2 : 1.7}
+                    fill={isActive && id === "discover" ? "currentColor" : "none"}
+                  />
                   {id === "chat" && <NotifyBadge count={chatBadge} />}
                 </span>
-                <span className="ttm-app-dock__label">{t(labelKey)}</span>
+                <span className="lv-sr-only">{t(labelKey)}</span>
               </Link>
             )
           })}

@@ -43,7 +43,7 @@ import {
 } from "@/client/components/product/identity-product-pickers"
 import { MIN_ENERGY_TAGS } from "@/client/lib/profile-identity"
 import { AppAuthField } from "@/client/components/auth/app-auth-field"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import "@/client/components/auth/app-register.css"
 
 type Gender = "male" | "female" | "other"
@@ -90,7 +90,7 @@ export function RegisterForm() {
   const { t, locale, location } = useI18n()
   const router = useRouter()
   const reduce = useReducedMotion()
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   const [step, setStep] = useState<(typeof STEPS)[number]>(1)
   const [errors, setErrors] = useState<FormErrors>({})
   const [photos, setPhotos] = useState<string[]>([])

@@ -2,7 +2,7 @@ import { RegisterPageExperience } from "@/client/components/auth/register-page-e
 import { AuthShell } from "@/client/components/auth-shell"
 
 export const metadata = {
-  title: "Регистрация — Time to Match",
+  title: "Регистрация — Luvia",
   description: "Создайте профиль и начните поиск пары с мэтчами на 24 часа",
 }
 

@@ -20,26 +20,22 @@ export function ProfileTabs({ active, onChange, premiumActive }: ProfileTabsProp
   ]
 
   return (
-    <div className="glass mb-4 flex rounded-2xl border border-foreground/10 p-1">
+    <div className="lv-set__tabs lv-set__tabs--two mb-4" role="tablist">
       {tabs.map((tab) => {
         const isActive = active === tab.id
         return (
           <button
             key={tab.id}
             type="button"
+            role="tab"
+            aria-selected={isActive}
             onClick={() => onChange(tab.id)}
-            className={cn(
-              "relative flex-1 rounded-xl py-2.5 text-sm font-light tracking-wide transition-colors",
-              isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground/80"
-            )}
+            className={cn("lv-set__tab", isActive && "is-active")}
           >
-            {isActive && (
-              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-white/20 to-white/20 border border-white/12" />
-            )}
             <span className="relative flex items-center justify-center gap-1.5">
               {tab.id === "premium" && (
                 <svg
-                  className={cn("h-3.5 w-3.5", isActive ? "text-amber-300" : "text-amber-500/70")}
+                  className="h-3.5 w-3.5"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   aria-hidden
@@ -49,7 +45,7 @@ export function ProfileTabs({ active, onChange, premiumActive }: ProfileTabsProp
               )}
               {tab.label}
               {tab.id === "premium" && premiumActive && (
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-400" aria-hidden />
+                <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
               )}
             </span>
           </button>

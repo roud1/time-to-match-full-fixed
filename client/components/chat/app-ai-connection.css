@@ -1,8 +1,8 @@
-/* AI Connection of the native app / installed PWA (html[data-ttm-app] only — website unchanged).
+/* AI Connection of the native app / installed PWA (html[data-lv] only — website unchanged).
    Class names avoid "card" / "glass" / "header" (legacy global rules target those substrings). */
 
 /* Button in the conversation header (the header actions block is app-only). */
-html[data-ttm-app] .ttm-chat-room-header__ai {
+html[data-lv] .ttm-chat-room-header__ai {
   display: grid;
   place-items: center;
   width: 2.5rem;
@@ -11,12 +11,12 @@ html[data-ttm-app] .ttm-chat-room-header__ai {
   border: 1px solid rgba(233, 213, 255, 0.45);
   border-radius: 12px;
   background: linear-gradient(135deg, rgba(192, 132, 252, 0.35), rgba(124, 58, 237, 0.35));
-  box-shadow: 0 0 14px rgba(168, 85, 247, 0.4);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   touch-action: manipulation;
 }
 
-html[data-ttm-app] .ttm-app-ai {
+html[data-lv] .ttm-app-ai {
   position: fixed;
   inset: 0;
   z-index: 90;
@@ -24,13 +24,13 @@ html[data-ttm-app] .ttm-app-ai {
   flex-direction: column;
   padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 1.25rem calc(env(safe-area-inset-bottom, 0px) + 1rem);
   overflow-y: auto;
-  color: #f5f3ff;
+  color: var(--lv-text);
   background:
     radial-gradient(70% 45% at 50% 30%, rgba(124, 58, 237, 0.3), transparent 70%),
     #07030e;
 }
 
-html[data-ttm-app] .ttm-app-ai[role="dialog"] {
+html[data-lv] .ttm-app-ai[role="dialog"] {
   border: 0 !important;
   border-radius: 0 !important;
   background:
@@ -38,20 +38,20 @@ html[data-ttm-app] .ttm-app-ai[role="dialog"] {
     #07030e !important;
 }
 
-html[data-ttm-app] .ttm-app-ai__top {
+html[data-lv] .ttm-app-ai__top {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__back,
-html[data-ttm-app] .ttm-app-ai__spacer {
+html[data-lv] .ttm-app-ai__back,
+html[data-lv] .ttm-app-ai__spacer {
   width: 2.75rem;
   height: 2.75rem;
   flex-shrink: 0;
 }
 
-html[data-ttm-app] .ttm-app-ai__back {
+html[data-lv] .ttm-app-ai__back {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -62,17 +62,17 @@ html[data-ttm-app] .ttm-app-ai__back {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__back svg {
+html[data-lv] .ttm-app-ai__back svg {
   width: 1.6rem;
   height: 1.6rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__heading {
+html[data-lv] .ttm-app-ai__heading {
   flex: 1;
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-app-ai__heading h1 {
+html[data-lv] .ttm-app-ai__heading h1 {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -83,7 +83,7 @@ html[data-ttm-app] .ttm-app-ai__heading h1 {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__chip {
+html[data-lv] .ttm-app-ai__chip {
   padding: 0.1rem 0.4rem;
   border-radius: 0.4rem;
   background: rgba(168, 85, 247, 0.35);
@@ -92,32 +92,32 @@ html[data-ttm-app] .ttm-app-ai__chip {
   font-weight: 700;
 }
 
-html[data-ttm-app] .ttm-app-ai__heading p {
+html[data-lv] .ttm-app-ai__heading p {
   margin: 0.25rem 0 0;
   font-size: 0.9rem;
-  color: rgba(237, 233, 254, 0.65);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__ring {
+html[data-lv] .ttm-app-ai__ring {
   position: relative;
   width: min(15rem, 62vw);
   aspect-ratio: 1;
   margin: clamp(1rem, 5dvh, 2.25rem) auto 0;
 }
 
-html[data-ttm-app] .ttm-app-ai__ring svg {
+html[data-lv] .ttm-app-ai__ring svg {
   width: 100%;
   height: 100%;
   overflow: visible;
 }
 
-html[data-ttm-app] .ttm-app-ai__track {
-  fill: rgba(20, 10, 38, 0.65);
-  stroke: rgba(196, 161, 255, 0.18);
+html[data-lv] .ttm-app-ai__track {
+  fill: var(--lv-surface);
+  stroke: var(--lv-border);
   stroke-width: 12;
 }
 
-html[data-ttm-app] .ttm-app-ai__value {
+html[data-lv] .ttm-app-ai__value {
   fill: none;
   stroke: url(#ttm-app-ai-grad);
   stroke-width: 12;
@@ -125,21 +125,21 @@ html[data-ttm-app] .ttm-app-ai__value {
   filter: drop-shadow(0 0 10px rgba(217, 70, 239, 0.7));
 }
 
-html[data-ttm-app] .ttm-app-ai__center {
+html[data-lv] .ttm-app-ai__center {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(237, 233, 254, 0.75);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__center svg {
+html[data-lv] .ttm-app-ai__center svg {
   width: 3rem;
   height: 3rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__pct {
+html[data-lv] .ttm-app-ai__pct {
   font-family: var(--font-sans, inherit);
   font-size: 3.2rem;
   font-weight: 700;
@@ -147,7 +147,7 @@ html[data-ttm-app] .ttm-app-ai__pct {
   font-variant-numeric: tabular-nums;
 }
 
-html[data-ttm-app] .ttm-app-ai__spin {
+html[data-lv] .ttm-app-ai__spin {
   animation: ttm-app-ai-spin 1.2s linear infinite;
 }
 
@@ -157,12 +157,12 @@ html[data-ttm-app] .ttm-app-ai__spin {
   }
 }
 
-html[data-ttm-app] .ttm-app-ai__text {
+html[data-lv] .ttm-app-ai__text {
   margin-top: 1.5rem;
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-app-ai__text h2 {
+html[data-lv] .ttm-app-ai__text h2 {
   margin: 0;
   font-family: var(--font-sans, inherit);
   font-size: 1.45rem;
@@ -170,15 +170,15 @@ html[data-ttm-app] .ttm-app-ai__text h2 {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__text > p {
+html[data-lv] .ttm-app-ai__text > p {
   max-width: 20rem;
   margin: 0.5rem auto 0;
   font-size: 0.98rem;
   line-height: 1.5;
-  color: rgba(237, 233, 254, 0.75);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__text h3 {
+html[data-lv] .ttm-app-ai__text h3 {
   margin: 1.4rem 0 0.6rem;
   font-family: var(--font-sans, inherit);
   font-size: 1.1rem;
@@ -187,7 +187,7 @@ html[data-ttm-app] .ttm-app-ai__text h3 {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__text ul {
+html[data-lv] .ttm-app-ai__text ul {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -197,42 +197,42 @@ html[data-ttm-app] .ttm-app-ai__text ul {
   text-align: left;
 }
 
-html[data-ttm-app] .ttm-app-ai__text li {
+html[data-lv] .ttm-app-ai__text li {
   display: flex;
   align-items: center;
   gap: 0.65rem;
   font-size: 0.98rem;
-  color: rgba(237, 233, 254, 0.88);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__text li svg {
+html[data-lv] .ttm-app-ai__text li svg {
   width: 1.35rem;
   height: 1.35rem;
   flex-shrink: 0;
   padding: 0.2rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #c084fc, #7c3aed);
+  background: var(--lv-gradient);
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-ai__text .ttm-app-ai__note {
+html[data-lv] .ttm-app-ai__text .ttm-app-ai__note {
   margin-top: 1rem;
   font-size: 0.8rem;
-  color: rgba(237, 233, 254, 0.5);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-ai__actions {
+html[data-lv] .ttm-app-ai__actions {
   margin-top: auto;
   padding-top: 1.5rem;
 }
 
-html[data-ttm-app] .ttm-app-ai__primary {
+html[data-lv] .ttm-app-ai__primary {
   width: 100%;
   min-height: 3.5rem;
   border: 1px solid rgba(233, 213, 255, 0.5);
   border-radius: 999px;
-  background: linear-gradient(90deg, #d946ef 0%, #a855f7 55%, #7c3aed 100%);
-  box-shadow: 0 0 24px rgba(192, 38, 211, 0.45);
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;

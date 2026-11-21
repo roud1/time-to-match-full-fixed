@@ -14,7 +14,7 @@ import type { PeerTrustSignals } from "@/client/lib/demo-trust-signals"
 import { PeerTrustChip } from "@/client/components/trust/peer-trust-chip"
 import { VerifiedBadge } from "@/client/components/ui/verified-badge"
 import { cn } from "@/client/lib/utils"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { AppProfileDetail } from "@/client/components/app/app-profile-detail"
 
 type SwipeProfileDetailScreenProps = {
@@ -41,7 +41,7 @@ export function SwipeProfileDetailScreen({
 }: SwipeProfileDetailScreenProps) {
   const { t } = useI18n()
   const reduce = useReducedMotion()
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   const open = profile != null
   const photos = profile ? getSwipeProfilePhotos(profile) : []
 

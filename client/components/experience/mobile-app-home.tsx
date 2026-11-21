@@ -5,20 +5,14 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { ArrowRight, Lock, MapPin, ShieldCheck } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { LanguageSwitcher } from "@/client/components/language-switcher"
 import { useI18n } from "@/client/lib/i18n"
 import { isLoggedIn } from "@/client/lib/user-profile"
 
-const TRUST = [
-  { Icon: ShieldCheck, key: "appHomeTrustSafe" },
-  { Icon: Lock, key: "appHomeTrustModeration" },
-  { Icon: MapPin, key: "appHomeTrustLocation" },
-] as const
-
 /**
- * Start screen of the native app / installed PWA (shown only via html[data-ttm-app], see mobile-app-home.css).
- * One screen, no scrolling: brand, one idea, one action.
+ * Start screen (Luvia 2.0) — website home and native app / installed PWA alike.
+ * One screen, no scrolling: brand, one idea, one action. No feature promises.
  */
 export function MobileAppHome() {
   const { t } = useI18n()
@@ -68,19 +62,11 @@ export function MobileAppHome() {
               <span>{t("appHomeStart")}</span>
               <ArrowRight aria-hidden className="h-5 w-5" />
             </Link>
-            <Link href="/login" className="xp-mobile-home__login">
-              {t("ttmXpNavLogin")}
-            </Link>
+            <p className="xp-mobile-home__login">
+              <span>{t("regHasAccount")}</span> <Link href="/login">{t("regSignIn")}</Link>
+            </p>
           </>
         )}
-        <ul className="xp-mobile-home__trust">
-          {TRUST.map(({ Icon, key }) => (
-            <li key={key}>
-              <Icon aria-hidden className="h-6 w-6" strokeWidth={1.5} />
-              <span>{t(key)}</span>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   )

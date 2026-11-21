@@ -1,0 +1,383 @@
+/* Luvia Premium (Luvia 2.0): real checkout price only, no fake trials. */
+.lv-prem {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--lv-text, #faf7ff);
+}
+
+.lv-prem--sheet {
+  max-height: min(78dvh, 640px);
+  overflow-y: auto;
+  padding: 1.25rem 1.25rem 2rem;
+}
+
+.lv-prem__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--lv-radius-card, 24px);
+  background:
+    radial-gradient(80% 60% at 50% 0%, rgba(155, 77, 255, 0.25), transparent 70%),
+    var(--lv-surface, #171222);
+  text-align: center;
+}
+
+.lv-prem__crown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  margin-bottom: 0.85rem;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  box-shadow: var(--lv-shadow-cta, none);
+  color: #fff;
+}
+
+.lv-prem__crown svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.lv-prem__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.lv-prem__subtitle {
+  max-width: 22rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-prem__status {
+  margin: 1rem 0 0;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--lv-border-strong, rgba(255, 255, 255, 0.18));
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-prem__status span {
+  color: var(--lv-pink, #f35ca8);
+  font-weight: 600;
+}
+
+.lv-prem__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--lv-radius-control, 16px);
+  background: var(--lv-surface-raised, #241b31);
+  text-align: left;
+}
+
+.lv-prem__toggle-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--lv-text, #faf7ff);
+}
+
+.lv-prem__toggle-hint {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-prem__features {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0.25rem 1rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--lv-radius-card, 24px);
+  background: var(--lv-surface, #171222);
+  list-style: none;
+}
+
+.lv-prem__features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.lv-prem__features li + li {
+  border-top: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+}
+
+.lv-prem__check {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-top: 0.05rem;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  color: #fff;
+}
+
+.lv-prem__check svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.lv-prem__buy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--lv-radius-card, 24px);
+  background: var(--lv-surface, #171222);
+  text-align: center;
+}
+
+.lv-prem__price {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.lv-prem__price span {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-prem__note {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-prem__note--small {
+  font-size: 0.75rem;
+  color: var(--lv-text-3, #8d82a0);
+}
+
+.lv-prem__cta {
+  width: 100%;
+  min-height: 3.4rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  box-shadow: var(--lv-shadow-cta, none);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.lv-prem__cta:disabled {
+  opacity: 0.6;
+}
+
+.lv-prem__cta:focus-visible {
+  outline: 2px solid var(--lv-focus, #f35ca8);
+  outline-offset: 3px;
+}
+
+/* Match freezes dialog */
+html[data-lv] .lv-freeze[role="dialog"] {
+  gap: 1rem;
+  padding: 1.5rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1)) !important;
+  border-radius: var(--lv-radius-card, 24px) !important;
+  background: var(--lv-surface, #171222) !important;
+  backdrop-filter: none !important;
+  color: var(--lv-text, #faf7ff);
+}
+
+.lv-freeze__head {
+  align-items: center;
+  text-align: center;
+}
+
+.lv-freeze__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-bottom: 0.5rem;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  color: #fff;
+}
+
+.lv-freeze__icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lv-freeze__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--lv-text, #faf7ff);
+}
+
+.lv-freeze__body {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-freeze__stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--lv-radius-control, 16px);
+  background: var(--lv-surface-raised, #241b31);
+}
+
+.lv-freeze__stats > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.lv-freeze__stats dt {
+  font-size: 0.9rem;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-freeze__stats dd {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.lv-freeze__stats dd.lv-freeze__free {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--lv-pink, #f35ca8);
+}
+
+.lv-freeze__packs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lv-freeze__pack {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 1rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--lv-radius-control, 16px);
+  background: var(--lv-surface-raised, #241b31);
+  color: var(--lv-text, #faf7ff);
+  font-size: 0.95rem;
+}
+
+.lv-freeze__pack-cta {
+  color: var(--lv-pink, #f35ca8);
+  font-weight: 600;
+}
+
+.lv-freeze__note {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  text-align: center;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+/* Paywall dialog / upgrade sheet */
+html[data-lv] .lv-paywall[role="dialog"] {
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1)) !important;
+  border-radius: var(--lv-radius-card, 24px) !important;
+  background: var(--lv-bg, #0d0a17) !important;
+  backdrop-filter: none !important;
+  box-shadow: var(--lv-shadow-raised, none) !important;
+  color: var(--lv-text, #faf7ff);
+}
+
+html[data-lv] .lv-paywall--sheet[role="dialog"] {
+  border-bottom: 0 !important;
+  border-radius: 28px 28px 0 0 !important;
+}
+
+.lv-paywall__grabber {
+  width: 2.75rem;
+  height: 0.3rem;
+  margin: 0.6rem auto 0;
+  border-radius: 999px;
+  background: var(--lv-border-strong, rgba(255, 255, 255, 0.18));
+}
+
+.lv-paywall__head {
+  padding: 1rem 1.25rem 0;
+  text-align: left;
+}
+
+.lv-paywall__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--lv-text, #faf7ff);
+}
+
+.lv-paywall__hint {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-paywall .lv-prem--sheet {
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.lv-paywall .lv-paywall__head {
+  padding-right: 3.5rem;
+}
+
+html[data-lv] .lv-paywall > button.absolute,
+html[data-lv] .lv-freeze > button.absolute {
+  top: 0.85rem;
+  right: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0 !important;
+  border-radius: 999px;
+  background: var(--lv-surface-raised, #241b31) !important;
+  color: var(--lv-text, #faf7ff);
+  opacity: 1;
+  box-shadow: none !important;
+}
+
+html[data-lv] .lv-paywall > button.absolute:focus-visible,
+html[data-lv] .lv-freeze > button.absolute:focus-visible {
+  outline: 2px solid var(--lv-focus, #f35ca8);
+  outline-offset: 2px;
+}

@@ -29,14 +29,8 @@ export function TextReveal({
   const inView = useInView(ref as React.RefObject<Element>, { once: true, margin: "-80px" })
   const words = text.split(" ")
 
-  if (reduce) {
-    return (
-      <Tag ref={ref as React.RefObject<HTMLHeadingElement>} className={className}>
-        {text}
-      </Tag>
-    )
-  }
-
+  // Same markup on the server and the client (useReducedMotion is unknown during SSR, so a
+  // different tree for "reduce" broke hydration); reduced motion simply skips the animation.
   return (
     <Tag
       ref={ref as React.RefObject<HTMLHeadingElement>}
@@ -47,7 +41,7 @@ export function TextReveal({
         <span key={i} className="inline-block overflow-hidden mr-[0.25em]">
           <motion.span
             className="inline-block"
-            initial={{ y: "110%", opacity: 0 }}
+            initial={reduce ? false : { y: "110%", opacity: 0 }}
             animate={inView ? { y: 0, opacity: 1 } : {}}
             transition={{
               delay: delay + i * stagger,

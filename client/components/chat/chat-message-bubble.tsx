@@ -140,6 +140,7 @@ export function ChatMessageBubble({
           )}
         >
           <p className="whitespace-pre-wrap break-words select-none">{msg.text}</p>
+          <span className="ttm-chat-bubble__time tabular-nums">{time}</span>
           {reaction && (
             <span className="absolute -bottom-2 -right-1 text-lg drop-shadow-md pointer-events-none" aria-hidden>
               {reaction}
@@ -166,10 +167,7 @@ export function ChatMessageBubble({
         )}
       </div>
 
-      <div className={cn("flex items-center gap-2 px-1", isMe ? "flex-row-reverse" : "flex-row")}>
-        <span className="text-[10px] text-muted-foreground/80 font-light tabular-nums">{time}</span>
-        {isMe && showOwnReceipt && <ReadReceipt state={receiptState} labels={labels} />}
-      </div>
+      {/* Read receipts are not shown: the server does not track read state (the old ticks flipped to "read" on a timer). */}
 
       <AnimatePresence>
         {showReactions && (

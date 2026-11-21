@@ -3,9 +3,9 @@ import { test, expect } from "@playwright/test"
 test.describe("Landing", () => {
   test("homepage loads with logo and CTA", async ({ page }) => {
     await page.goto("/")
-    await expect(page).toHaveTitle(/Time to Match/i)
+    await expect(page).toHaveTitle(/Luvia/i)
 
-    const logo = page.getByRole("img", { name: "Time to Match" })
+    const logo = page.getByRole("img", { name: "Luvia" })
     await expect(logo.first()).toBeVisible()
 
     const cta = page.getByRole("link", { name: /start matching|начать|register|регистрация/i }).first()

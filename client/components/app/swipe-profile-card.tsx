@@ -13,7 +13,7 @@ import { cn } from "@/client/lib/utils"
 import { demoPeerPresence } from "@/client/lib/profile-life"
 import { getTimerMoodCardClass, getTimerMoodFromMs, parseTimeLeftToMs } from "@/client/lib/profile-timer-mood"
 import { AppFeedCard } from "@/client/components/app/app-feed-card"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 
 export type SwipeCardLabels = {
   like: string
@@ -69,7 +69,7 @@ export function SwipeProfileCard({
   onSwipeRight,
   stackLayout = "stack",
 }: SwipeProfileCardProps) {
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   const photos = getSwipeProfilePhotos(profile)
   const depth = stackIndex
   const compatibility = computeDiscoverCompatibility(profile)

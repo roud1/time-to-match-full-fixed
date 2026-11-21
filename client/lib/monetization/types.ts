@@ -23,6 +23,11 @@ export type UserSubscriptionInfo = {
 export type SubscriptionApiResponse = {
   mode: "demo" | "live"
   configured: boolean
+  /** Real checkout prices from the server (Stripe config); null when payments are not set up. */
+  prices?: {
+    premium: { amountCents: number; currency: string; interval: "month" }
+    vip: { amountCents: number; currency: string; interval: "month" }
+  } | null
   subscription: Omit<UserSubscriptionInfo, "limits" | "boost">
   limits: UserSubscriptionInfo["limits"]
   boost: UserSubscriptionInfo["boost"]

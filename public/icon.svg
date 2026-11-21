@@ -1,29 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-label="Time to Match">
-  <rect width="512" height="512" rx="112" fill="#0B0F14"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-label="Luvia">
   <defs>
-    <linearGradient id="ttm-app-grad" x1="96" y1="64" x2="416" y2="448" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FF2D55"/>
-      <stop offset="0.45" stop-color="#A855F7"/>
-      <stop offset="1" stop-color="#3B82F6"/>
-    </linearGradient>
-    <filter id="ttm-app-glow" x="-40%" y="-40%" width="180%" height="180%">
-      <feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="#FF2D55" flood-opacity="0.45"/>
-      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="#A855F7" flood-opacity="0.3"/>
-      <feDropShadow dx="0" dy="0" stdDeviation="28" flood-color="#3B82F6" flood-opacity="0.2"/>
-    </filter>
+    <radialGradient id="lv-bg" cx="50%" cy="45%" r="65%"><stop stop-color="#3a1a5c"/><stop offset="1" stop-color="#0d0a17"/></radialGradient>
+    <linearGradient id="fl" x1="60" y1="40" x2="370" y2="490" gradientUnits="userSpaceOnUse"><stop stop-color="#E08CFF"/><stop offset="1" stop-color="#9A3CFF"/></linearGradient>
+    <linearGradient id="fr" x1="680" y1="30" x2="310" y2="480" gradientUnits="userSpaceOnUse"><stop stop-color="#F0C4FF"/><stop offset="1" stop-color="#B66CFF"/></linearGradient>
   </defs>
-  <g transform="translate(96 72) scale(4)" filter="url(#ttm-app-glow)">
-    <rect x="32" y="2" width="16" height="6" rx="3" fill="url(#ttm-app-grad)"/>
-    <path d="M40 8V14" stroke="url(#ttm-app-grad)" stroke-width="2.5" stroke-linecap="round"/>
-    <path
-      d="M40 76C18 58 10 46 10 34C10 22 18 14 28 14C33 14 37 17 40 22C43 17 47 14 52 14C62 14 70 22 70 34C70 46 62 58 40 76Z"
-      stroke="url(#ttm-app-grad)"
-      stroke-width="3"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    />
-    <path d="M40 42V32" stroke="url(#ttm-app-grad)" stroke-width="2.5" stroke-linecap="round"/>
-    <path d="M40 42H54" stroke="url(#ttm-app-grad)" stroke-width="2.5" stroke-linecap="round"/>
-    <circle cx="40" cy="42" r="2.5" fill="url(#ttm-app-grad)"/>
+  <rect width="512" height="512" rx="112" fill="url(#lv-bg)"/>
+  <g transform="translate(72 127) scale(0.5)">
+    <path fill="url(#fl)" d="M372 488C250 400 60 300 52 170C46 80 120 28 200 30C290 32 360 70 404 112C340 82 262 72 204 100C152 126 140 200 170 280C210 380 310 450 372 488Z"/>
+    <path fill="url(#fr)" d="M318 478C262 400 262 290 330 200C400 100 480 34 570 28C650 24 690 90 682 160C676 240 640 300 600 350C556 410 470 470 372 490C460 458 540 400 572 330C590 280 574 222 520 202C460 182 400 220 360 280C322 340 302 410 318 478Z"/>
   </g>
 </svg>

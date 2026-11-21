@@ -1,5 +1,11 @@
 "use client"
 
+import "./app-mode.css"
+import "./luvia-tokens.css"
+// Loaded from the root layout: in production builds the CSS of portal screens (match) was split into a chunk /app never requested.
+import "@/client/components/app/match-celebration-luvia.css"
+import "@/client/components/premium/premium-luvia.css"
+import "@/app/settings/settings-luvia.css"
 import { useEffect } from "react"
 import { applyTheme } from "@/client/lib/theme"
 

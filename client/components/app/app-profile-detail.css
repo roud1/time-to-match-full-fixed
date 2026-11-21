@@ -1,16 +1,16 @@
-/* Full profile ("Карточка профиля") of the native app / installed PWA — html[data-ttm-app] only.
+/* Full profile ("Карточка профиля") of the native app / installed PWA — html[data-lv] only.
    Class names avoid "card" / "glass" / "header" (legacy global rules target those substrings). */
 
-html[data-ttm-app] .ttm-app-profile {
+html[data-lv] .ttm-app-profile {
   position: fixed;
   inset: 0;
   display: flex;
   flex-direction: column;
   background: #08040f;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-profile__scroll {
+html[data-lv] .ttm-app-profile__scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -19,14 +19,14 @@ html[data-ttm-app] .ttm-app-profile__scroll {
   padding-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px));
 }
 
-html[data-ttm-app] .ttm-app-profile__photo {
+html[data-lv] .ttm-app-profile__photo {
   position: relative;
   width: 100%;
   height: min(62dvh, 34rem);
   background: #140a24;
 }
 
-html[data-ttm-app] .ttm-app-profile__photo-fade {
+html[data-lv] .ttm-app-profile__photo-fade {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -36,7 +36,7 @@ html[data-ttm-app] .ttm-app-profile__photo-fade {
     linear-gradient(to top, #08040f 0%, rgba(8, 4, 15, 0.6) 18%, rgba(8, 4, 15, 0) 42%);
 }
 
-html[data-ttm-app] .ttm-app-profile__bars {
+html[data-lv] .ttm-app-profile__bars {
   position: absolute;
   top: calc(env(safe-area-inset-top, 0px) + 0.4rem);
   right: 1rem;
@@ -46,18 +46,18 @@ html[data-ttm-app] .ttm-app-profile__bars {
   gap: 0.3rem;
 }
 
-html[data-ttm-app] .ttm-app-profile__bars span {
+html[data-lv] .ttm-app-profile__bars span {
   flex: 1;
   height: 3px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.35);
 }
 
-html[data-ttm-app] .ttm-app-profile__bars span.is-active {
+html[data-lv] .ttm-app-profile__bars span.is-active {
   background: #fff;
 }
 
-html[data-ttm-app] .ttm-app-profile__tap {
+html[data-lv] .ttm-app-profile__tap {
   position: absolute;
   top: 18%;
   bottom: 18%;
@@ -68,15 +68,15 @@ html[data-ttm-app] .ttm-app-profile__tap {
   -webkit-tap-highlight-color: transparent;
 }
 
-html[data-ttm-app] .ttm-app-profile__tap--prev {
+html[data-lv] .ttm-app-profile__tap--prev {
   left: 0;
 }
 
-html[data-ttm-app] .ttm-app-profile__tap--next {
+html[data-lv] .ttm-app-profile__tap--next {
   right: 0;
 }
 
-html[data-ttm-app] .ttm-app-profile__top {
+html[data-lv] .ttm-app-profile__top {
   position: absolute;
   top: calc(env(safe-area-inset-top, 0px) + 1rem);
   right: 1rem;
@@ -87,11 +87,11 @@ html[data-ttm-app] .ttm-app-profile__top {
   pointer-events: none;
 }
 
-html[data-ttm-app] .ttm-app-profile__top > * {
+html[data-lv] .ttm-app-profile__top > * {
   pointer-events: auto;
 }
 
-html[data-ttm-app] .ttm-app-profile__round {
+html[data-lv] .ttm-app-profile__round {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -105,32 +105,32 @@ html[data-ttm-app] .ttm-app-profile__round {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-profile__round svg {
+html[data-lv] .ttm-app-profile__round svg {
   width: 1.3rem;
   height: 1.3rem;
 }
 
-html[data-ttm-app] .ttm-app-profile__round--big {
+html[data-lv] .ttm-app-profile__round--big {
   width: 3.5rem;
   height: 3.5rem;
   flex-shrink: 0;
-  border-color: rgba(196, 161, 255, 0.28);
-  background: rgba(20, 10, 38, 0.85);
+  border-color: var(--lv-border);
+  background: var(--lv-surface);
 }
 
-html[data-ttm-app] .ttm-app-profile__round--big svg {
+html[data-lv] .ttm-app-profile__round--big svg {
   width: 1.55rem;
   height: 1.55rem;
 }
 
-html[data-ttm-app] .ttm-app-profile__body {
+html[data-lv] .ttm-app-profile__body {
   position: relative;
   z-index: 2;
   margin-top: -4.5rem;
   padding: 0 1.25rem;
 }
 
-html[data-ttm-app] .ttm-app-profile__demo {
+html[data-lv] .ttm-app-profile__demo {
   display: inline-block;
   margin-bottom: 0.5rem;
   padding: 0.25rem 0.65rem;
@@ -141,7 +141,7 @@ html[data-ttm-app] .ttm-app-profile__demo {
   color: rgba(255, 255, 255, 0.85);
 }
 
-html[data-ttm-app] .ttm-app-profile__name {
+html[data-lv] .ttm-app-profile__name {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -153,26 +153,26 @@ html[data-ttm-app] .ttm-app-profile__name {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-profile__place {
+html[data-lv] .ttm-app-profile__place {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   margin: 0.5rem 0 0;
   font-size: 1rem;
-  color: rgba(237, 233, 254, 0.85);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-profile__place svg {
+html[data-lv] .ttm-app-profile__place svg {
   width: 1.1rem;
   height: 1.1rem;
-  color: #c4a1ff;
+  color: var(--lv-pink);
 }
 
-html[data-ttm-app] .ttm-app-profile__section {
+html[data-lv] .ttm-app-profile__section {
   margin-top: 1.4rem;
 }
 
-html[data-ttm-app] .ttm-app-profile__section h3 {
+html[data-lv] .ttm-app-profile__section h3 {
   margin: 0 0 0.6rem;
   font-family: var(--font-sans, inherit);
   font-size: 1.1rem;
@@ -180,7 +180,7 @@ html[data-ttm-app] .ttm-app-profile__section h3 {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-profile__chips {
+html[data-lv] .ttm-app-profile__chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -189,24 +189,24 @@ html[data-ttm-app] .ttm-app-profile__chips {
   list-style: none;
 }
 
-html[data-ttm-app] .ttm-app-profile__chips li {
+html[data-lv] .ttm-app-profile__chips li {
   padding: 0.45rem 0.9rem;
-  border: 1px solid rgba(196, 161, 255, 0.3);
+  border: 1px solid var(--lv-border-strong);
   border-radius: 999px;
   background: rgba(76, 29, 149, 0.28);
   font-size: 0.92rem;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-profile__about {
+html[data-lv] .ttm-app-profile__about {
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
-  color: rgba(237, 233, 254, 0.85);
+  color: var(--lv-text-2);
   white-space: pre-line;
 }
 
-html[data-ttm-app] .ttm-app-profile__actions {
+html[data-lv] .ttm-app-profile__actions {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -219,7 +219,7 @@ html[data-ttm-app] .ttm-app-profile__actions {
   background: linear-gradient(to top, #08040f 65%, rgba(8, 4, 15, 0));
 }
 
-html[data-ttm-app] .ttm-app-profile__primary {
+html[data-lv] .ttm-app-profile__primary {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,20 +228,20 @@ html[data-ttm-app] .ttm-app-profile__primary {
   min-height: 3.5rem;
   border: 1px solid rgba(233, 213, 255, 0.5);
   border-radius: 999px;
-  background: linear-gradient(90deg, #d946ef 0%, #a855f7 55%, #7c3aed 100%);
-  box-shadow: 0 0 24px rgba(192, 38, 211, 0.45);
+  background: var(--lv-gradient);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
   font-size: 1.05rem;
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-profile__primary svg {
+html[data-lv] .ttm-app-profile__primary svg {
   width: 1.3rem;
   height: 1.3rem;
 }
 
 /* Legacy global [role="dialog"] rule makes dialogs translucent, framed and rounded — not this full-screen page. */
-html[data-ttm-app] .ttm-app-profile[role="dialog"] {
+html[data-lv] .ttm-app-profile[role="dialog"] {
   border: 0 !important;
   border-radius: 0 !important;
   background: #08040f !important;

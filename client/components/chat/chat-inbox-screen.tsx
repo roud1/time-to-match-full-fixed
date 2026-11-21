@@ -12,7 +12,7 @@ import { EmptyState } from "@/client/components/ui/empty-state"
 import { MessageCircle } from "lucide-react"
 import { PremiumButton } from "@/client/components/ui/premium-button"
 import { cn } from "@/client/lib/utils"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { AppChatsList } from "@/client/components/chat/app-chats-list"
 
 export function ChatThreadSkeleton({ rows = 5 }: { rows?: number }) {
@@ -73,11 +73,13 @@ export function ChatInboxScreen({
   onlineByUserId?: Record<string, boolean>
 }) {
   const isSidebar = variant === "sidebar"
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
 
-  if (inApp && !isSidebar) {
+  if (inApp) {
     return (
       <AppChatsList
+        compact={isSidebar}
+        activeProfileId={activeProfileId}
         threads={threads}
         profilesByThread={profilesByThread}
         pulseThread={pulseThread}

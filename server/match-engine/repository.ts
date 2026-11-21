@@ -253,7 +253,7 @@ export async function sendMatchMessage(input: {
       WHERE l.id = ${input.likeId}
         AND l.from_user = ${input.senderId}
         AND l.is_match = true
-      FOR UPDATE
+      FOR UPDATE OF l
     `
     const like = likeRows[0]
     if (!like?.match_id) return { ok: false, code: "not_found" } as const

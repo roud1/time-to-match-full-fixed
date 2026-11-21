@@ -13,13 +13,11 @@ import {
   type StoredUserProfile,
 } from "@/client/lib/user-profile"
 import { markWelcomeSeen } from "@/client/lib/welcome-seen"
-import { WelcomeProgressSteps } from "@/client/components/welcome/welcome-progress-steps"
-import { computeProfileStrength } from "@/client/lib/profile-completion"
-import { CinematicButton } from "@/client/components/ui/cinematic-button"
-import { CinematicCard } from "@/client/components/ui/cinematic-card"
 import { Input } from "@/client/components/ui/input"
 import { Label } from "@/client/components/ui/label"
 import { cn } from "@/client/lib/utils"
+import { ArrowRight } from "lucide-react"
+import "@/client/components/onboarding-luvia.css"
 
 const SLIDES_DONE_KEY = "ttm-onboarding-done"
 const PHASE_INDEX_KEY = "ttm-welcome-phase-index"
@@ -132,90 +130,66 @@ export function WelcomeGuidedFlow({ profile: initialProfile, onComplete, classNa
 
   if (phase === "how-it-works") {
     return (
-      <CinematicCard variant="glass" className={cn("ttm-brand-glass w-full border border-white/10", className)}>
+      <div className={cn("w-full", className)}>
         <OnboardingFlow
           onComplete={() => {
             markSlidesDone()
             finish()
           }}
         />
-      </CinematicCard>
+      </div>
     )
   }
 
-  const stepNum = phaseIndex + 1
-  const totalSteps = phases.length
+  const canContinue = phase === "profile" ? Boolean(name.trim()) && photos.length > 0 : interests.length >= MIN_INTERESTS
 
   return (
-    <CinematicCard variant="glass" className={cn("ttm-brand-glass w-full border border-white/10 p-6 md:p-8", className)}>
-      <WelcomeProgressSteps
-        strength={computeProfileStrength(profile)}
-        activeStep={
-          phase === "profile" || phase === "interests" ? "profile" : phase === "how-it-works" ? "swipe" : "account"
-        }
-        className="mb-6"
-      />
-      <p className="p9-register-step-label mb-2">
-        {stepNum} / {totalSteps}
-      </p>
-
-      {phase === "profile" && (
-        <div className="space-y-5">
-          <div>
-            <h2 className="ttm-brand-gradient-text text-xl font-extralight tracking-tight mb-2">
-              {t("guidedStepProfileTitle")}
-            </h2>
-            <p className="text-sm text-white/50 font-light leading-relaxed">{t("guidedStepProfileSub")}</p>
+    <div className={cn("lv-onboard w-full max-w-lg mx-auto", className)}>
+      <div className="lv-onboard__inner">
+        <div className="lv-onboard__top">
+          <div className="lv-onboard__bars" role="progressbar" aria-valuenow={phaseIndex + 1} aria-valuemin={1} aria-valuemax={phases.length}>
+            {phases.map((p, i) => (
+              <span key={p} className={cn(i <= phaseIndex && "is-done")} />
+            ))}
           </div>
-          <div>
-            <Label className="text-foreground/80 font-light mb-2 block">{t("regName")}</Label>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="rounded-2xl bg-white/[0.04] border-white/10"
-              autoComplete="name"
-            />
-          </div>
-          <ProfilePhotoPicker value={photos} onChange={setPhotos} />
-          <CinematicButton
-            variant="primary"
-            className="w-full min-h-[52px]"
-            disabled={!name.trim() || photos.length === 0}
-            onClick={saveProfileStep}
-          >
-            {t("onboardContinue")}
-          </CinematicButton>
+          <button type="button" onClick={finish} className="lv-onboard__skip">
+            {t("onboardSkip")}
+          </button>
         </div>
-      )}
 
-      {phase === "interests" && (
-        <div className="space-y-5">
-          <div>
-            <h2 className="ttm-brand-gradient-text text-xl font-extralight tracking-tight mb-2">
-              {t("guidedStepInterestsTitle")}
-            </h2>
-            <p className="text-sm text-white/50 font-light leading-relaxed">{t("guidedStepInterestsSub")}</p>
+        {phase === "profile" && (
+          <div className="lv-onboard__body">
+            <h2 className="lv-onboard__title">{t("guidedStepProfileTitle")}</h2>
+            <p className="lv-onboard__sub">{t("guidedStepProfileSub")}</p>
+            <div className="lv-onboard__field">
+              <Label className="lv-onboard__label">{t("regName")}</Label>
+              <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />
+            </div>
+            <ProfilePhotoPicker value={photos} onChange={setPhotos} />
           </div>
-          <InterestPicker value={interests} onChange={setInterests} />
-          <CinematicButton
-            variant="primary"
-            className="w-full min-h-[52px]"
-            disabled={interests.length < MIN_INTERESTS}
-            onClick={saveInterestsStep}
-          >
-            {t("onboardContinue")}
-          </CinematicButton>
-        </div>
-      )}
+        )}
 
-      <button
-        type="button"
-        onClick={finish}
-        className="w-full mt-4 py-3 text-sm font-light text-white/45 hover:text-white/75 transition-colors touch-manipulation"
-      >
-        {t("onboardSkip")}
-      </button>
-    </CinematicCard>
+        {phase === "interests" && (
+          <div className="lv-onboard__body">
+            <h2 className="lv-onboard__title">{t("guidedStepInterestsTitle")}</h2>
+            <p className="lv-onboard__sub">{t("guidedStepInterestsSub")}</p>
+            <InterestPicker value={interests} onChange={setInterests} />
+          </div>
+        )}
+
+        <div className="lv-onboard__actions">
+          <button
+            type="button"
+            className="lv-onboard__cta"
+            disabled={!canContinue}
+            onClick={phase === "profile" ? saveProfileStep : saveInterestsStep}
+          >
+            <span>{t("onboardContinue")}</span>
+            <ArrowRight aria-hidden />
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 

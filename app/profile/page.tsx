@@ -3,7 +3,7 @@ import { ProfilePageShell } from "@/client/components/app/profile-page-shell"
 import { ProfileScreen } from "@/client/components/profile-screen"
 
 export const metadata = {
-  title: "Мой профиль — Time to Match",
+  title: "Мой профиль — Luvia",
   description: "Управление профилем, атмосферой и живыми связями.",
 }
 

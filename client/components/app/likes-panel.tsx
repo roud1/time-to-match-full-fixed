@@ -16,7 +16,7 @@ import { fetchIncomingLikes, incomingLikeToProfileId } from "@/client/lib/likes/
 import { fetchSubscriptionSummary } from "@/client/lib/monetization/api"
 import { CinematicButton } from "@/client/components/ui/cinematic-button"
 import { cn } from "@/client/lib/utils"
-import { useTtmApp } from "@/client/hooks/use-ttm-app"
+import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { useMatches } from "@/client/hooks/use-matches"
 import { AppLikesView } from "@/client/components/app/app-likes-view"
 
@@ -106,7 +106,7 @@ function cnImage(blurred: boolean, grid?: boolean) {
 export function LikesPanel() {
   const { t, locale, location } = useI18n()
   const { openUpgrade } = usePremiumUpgrade()
-  const inApp = useTtmApp()
+  const inApp = useLuviaUi()
   const { data: serverMatches } = useMatches()
   const [likes, setLikes] = useState<SwipeProfile[]>([])
   const [incomingCount, setIncomingCount] = useState(0)

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion, type MotionValue } from "motion/react"
-import { ChevronUp, MapPin, ShieldCheck } from "lucide-react"
+import { Info, MapPin, ShieldCheck } from "lucide-react"
 import { ProfilePhotoImage } from "@/client/components/ui/profile-photo-image"
 import { VerifiedBadge } from "@/client/components/ui/verified-badge"
 import type { SwipeProfile } from "@/client/lib/demo-profiles"
@@ -132,19 +132,27 @@ export function AppFeedCard({
               </span>
             </p>
           )}
-          {about && <p className="ttm-app-swipe__bio">{about}</p>}
+          {profile.interests.length > 0 ? (
+            <ul className="ttm-app-swipe__tags" aria-label={t("profileInterests")}>
+              {profile.interests.slice(0, 3).map((it) => (
+                <li key={it}>{it}</li>
+              ))}
+            </ul>
+          ) : (
+            about && <p className="ttm-app-swipe__bio">{about}</p>
+          )}
         </div>
         {onOpenProfile && (
           <button
             type="button"
             className={cn("ttm-app-swipe__open")}
-            aria-label={t("appFeedOpenProfile")}
+            aria-label={t("lvProfileInfo")}
             onClick={(e) => {
               e.stopPropagation()
               onOpenProfile(safeIndex)
             }}
           >
-            <ChevronUp aria-hidden strokeWidth={1.8} />
+            <Info aria-hidden strokeWidth={1.8} />
           </button>
         )}
       </div>

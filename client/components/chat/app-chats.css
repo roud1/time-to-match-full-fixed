@@ -1,17 +1,17 @@
-/* Chat list of the native app / installed PWA (html[data-ttm-app] only — website unchanged).
+/* Chat list of the native app / installed PWA (html[data-lv] only — website unchanged).
    Class names avoid "card" / "glass" / "header" (legacy global rules target those substrings). */
 
-html[data-ttm-app] .ttm-app-chats {
+html[data-lv] .ttm-app-chats {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
   max-width: 32rem;
   margin-inline: auto;
   padding: 0.5rem 0 1.25rem;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-chats__top {
+html[data-lv] .ttm-app-chats__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,7 +19,7 @@ html[data-ttm-app] .ttm-app-chats__top {
   min-height: 3rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__title {
+html[data-lv] .ttm-app-chats__title {
   margin: 0;
   font-family: var(--font-sans, inherit);
   font-size: 1.9rem;
@@ -27,7 +27,7 @@ html[data-ttm-app] .ttm-app-chats__title {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-chats__icon-btn {
+html[data-lv] .ttm-app-chats__icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -36,34 +36,34 @@ html[data-ttm-app] .ttm-app-chats__icon-btn {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-chats__icon-btn svg {
+html[data-lv] .ttm-app-chats__icon-btn svg {
   width: 1.45rem;
   height: 1.45rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__search {
+html[data-lv] .ttm-app-chats__search {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   flex: 1;
   height: 2.9rem;
   padding: 0 0.4rem 0 0.95rem;
-  border: 1px solid rgba(196, 161, 255, 0.25);
+  border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: rgba(20, 10, 38, 0.7);
+  background: var(--lv-surface);
 }
 
-html[data-ttm-app] .ttm-app-chats__search svg {
+html[data-lv] .ttm-app-chats__search svg {
   width: 1.15rem;
   height: 1.15rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.7);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-chats .ttm-app-chats__search input {
+html[data-lv] .ttm-app-chats .ttm-app-chats__search input {
   flex: 1;
   min-width: 0;
   height: 100%;
@@ -76,7 +76,7 @@ html[data-ttm-app] .ttm-app-chats .ttm-app-chats__search input {
   outline: 0;
 }
 
-html[data-ttm-app] .ttm-app-chats__search button {
+html[data-lv] .ttm-app-chats__search button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -85,10 +85,10 @@ html[data-ttm-app] .ttm-app-chats__search button {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: #f5f3ff;
+  color: var(--lv-text);
 }
 
-html[data-ttm-app] .ttm-app-chats__list {
+html[data-lv] .ttm-app-chats__list {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
@@ -97,7 +97,7 @@ html[data-ttm-app] .ttm-app-chats__list {
   list-style: none;
 }
 
-html[data-ttm-app] .ttm-app-chats__row {
+html[data-lv] .ttm-app-chats__row {
   display: flex;
   align-items: center;
   gap: 0.85rem;
@@ -115,16 +115,16 @@ html[data-ttm-app] .ttm-app-chats__row {
   transition: background 0.15s ease;
 }
 
-html[data-ttm-app] .ttm-app-chats__row:active {
+html[data-lv] .ttm-app-chats__row:active {
   background: rgba(124, 58, 237, 0.14);
 }
 
-html[data-ttm-app] .ttm-app-chats__row.is-unread {
-  border-color: rgba(196, 161, 255, 0.16);
-  background: rgba(20, 10, 38, 0.55);
+html[data-lv] .ttm-app-chats__row.is-unread {
+  border-color: var(--lv-border);
+  background: var(--lv-surface);
 }
 
-html[data-ttm-app] .ttm-app-chats__row--skeleton {
+html[data-lv] .ttm-app-chats__row--skeleton {
   height: 4.6rem;
   background: rgba(255, 255, 255, 0.04);
   animation: ttm-app-chats-pulse 1.4s ease-in-out infinite;
@@ -136,7 +136,7 @@ html[data-ttm-app] .ttm-app-chats__row--skeleton {
   }
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar {
+html[data-lv] .ttm-app-chats__avatar {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -148,23 +148,23 @@ html[data-ttm-app] .ttm-app-chats__avatar {
   border-radius: 999px;
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar img {
+html[data-lv] .ttm-app-chats__avatar img {
   border: 2px solid rgba(216, 180, 254, 0.55);
   border-radius: 999px;
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar--ai {
-  background: radial-gradient(120% 120% at 50% 15%, #c084fc 0%, #7c3aed 100%);
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.55);
+html[data-lv] .ttm-app-chats__avatar--ai {
+  background: radial-gradient(120% 120% at 50% 15%, var(--lv-pink) 0%, #7c3aed 100%);
+  box-shadow: var(--lv-shadow-cta);
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-chats__avatar--ai svg {
+html[data-lv] .ttm-app-chats__avatar--ai svg {
   width: 1.6rem;
   height: 1.6rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__online {
+html[data-lv] .ttm-app-chats__online {
   position: absolute;
   right: 0.1rem;
   bottom: 0.1rem;
@@ -176,7 +176,7 @@ html[data-ttm-app] .ttm-app-chats__online {
   background: #22c55e;
 }
 
-html[data-ttm-app] .ttm-app-chats__text {
+html[data-lv] .ttm-app-chats__text {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
@@ -184,7 +184,7 @@ html[data-ttm-app] .ttm-app-chats__text {
   min-width: 0;
 }
 
-html[data-ttm-app] .ttm-app-chats__name {
+html[data-lv] .ttm-app-chats__name {
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -194,7 +194,7 @@ html[data-ttm-app] .ttm-app-chats__name {
   color: #fff;
 }
 
-html[data-ttm-app] .ttm-app-chats__ai-chip {
+html[data-lv] .ttm-app-chats__ai-chip {
   padding: 0.05rem 0.4rem;
   border-radius: 0.4rem;
   background: rgba(168, 85, 247, 0.3);
@@ -203,19 +203,19 @@ html[data-ttm-app] .ttm-app-chats__ai-chip {
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-chats__preview {
+html[data-lv] .ttm-app-chats__preview {
   overflow: hidden;
   font-size: 0.92rem;
-  color: rgba(237, 233, 254, 0.62);
+  color: var(--lv-text-2);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-html[data-ttm-app] .ttm-app-chats__row.is-unread .ttm-app-chats__preview {
+html[data-lv] .ttm-app-chats__row.is-unread .ttm-app-chats__preview {
   color: rgba(255, 255, 255, 0.9);
 }
 
-html[data-ttm-app] .ttm-app-chats__meta {
+html[data-lv] .ttm-app-chats__meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -225,13 +225,13 @@ html[data-ttm-app] .ttm-app-chats__meta {
   justify-content: center;
 }
 
-html[data-ttm-app] .ttm-app-chats__time {
+html[data-lv] .ttm-app-chats__time {
   font-size: 0.78rem;
-  color: rgba(237, 233, 254, 0.55);
+  color: var(--lv-text-2);
   font-variant-numeric: tabular-nums;
 }
 
-html[data-ttm-app] .ttm-app-chats__count {
+html[data-lv] .ttm-app-chats__count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -239,13 +239,13 @@ html[data-ttm-app] .ttm-app-chats__count {
   height: 1.4rem;
   padding: 0 0.35rem;
   border-radius: 999px;
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: var(--lv-gradient);
   color: #fff;
   font-size: 0.75rem;
   font-weight: 700;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty {
+html[data-lv] .ttm-app-chats__empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -253,66 +253,66 @@ html[data-ttm-app] .ttm-app-chats__empty {
   text-align: center;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-icon {
+html[data-lv] .ttm-app-chats__empty-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 3.6rem;
   height: 3.6rem;
   margin-bottom: 0.9rem;
-  border: 1px solid rgba(196, 161, 255, 0.25);
+  border: 1px solid var(--lv-border);
   border-radius: 999px;
-  background: rgba(20, 10, 38, 0.7);
-  color: #d8b4fe;
+  background: var(--lv-surface);
+  color: var(--lv-pink);
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-icon svg {
+html[data-lv] .ttm-app-chats__empty-icon svg {
   width: 1.6rem;
   height: 1.6rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-title {
+html[data-lv] .ttm-app-chats__empty-title {
   margin: 0;
   font-size: 1.15rem;
   font-weight: 600;
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-body {
+html[data-lv] .ttm-app-chats__empty-body {
   max-width: 18rem;
   margin: 0.4rem 0 1rem;
   font-size: 0.92rem;
   line-height: 1.45;
-  color: rgba(237, 233, 254, 0.65);
+  color: var(--lv-text-2);
 }
 
-html[data-ttm-app] .ttm-app-chats__empty-cta {
+html[data-lv] .ttm-app-chats__empty-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 3rem;
   padding: 0 1.6rem;
   border-radius: 999px;
-  background: linear-gradient(90deg, #d946ef 0%, #a855f7 55%, #7c3aed 100%);
+  background: var(--lv-gradient);
   color: #fff;
   font-weight: 600;
   text-decoration: none;
 }
 
-html[data-ttm-app] .ttm-app-chats__premium {
+html[data-lv] .ttm-app-chats__premium {
   display: flex;
   align-items: center;
   gap: 0.85rem;
   width: 100%;
   margin-top: 0.4rem;
   padding: 0.9rem 1rem;
-  border: 1px solid rgba(196, 161, 255, 0.3);
+  border: 1px solid var(--lv-border-strong);
   border-radius: 1.3rem;
-  background: linear-gradient(135deg, rgba(91, 33, 182, 0.5), rgba(20, 10, 38, 0.8));
-  color: #f5f3ff;
+  background: linear-gradient(135deg, rgba(91, 33, 182, 0.5), var(--lv-surface));
+  color: var(--lv-text);
   text-align: left;
 }
 
-html[data-ttm-app] .ttm-app-chats__crown {
+html[data-lv] .ttm-app-chats__crown {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -324,35 +324,164 @@ html[data-ttm-app] .ttm-app-chats__crown {
   color: #fbbf24;
 }
 
-html[data-ttm-app] .ttm-app-chats__crown svg {
+html[data-lv] .ttm-app-chats__crown svg {
   width: 1.5rem;
   height: 1.5rem;
 }
 
-html[data-ttm-app] .ttm-app-chats__premium-text {
+html[data-lv] .ttm-app-chats__premium-text {
   flex: 1;
   min-width: 0;
   font-size: 0.92rem;
   line-height: 1.35;
 }
 
-html[data-ttm-app] .ttm-app-chats__premium > svg {
+html[data-lv] .ttm-app-chats__premium > svg {
   width: 1.25rem;
   height: 1.25rem;
   flex-shrink: 0;
-  color: rgba(237, 233, 254, 0.6);
+  color: var(--lv-text-2);
 }
 
 /* ── Conversation screen inside the app: Luvia violet instead of the old pink ── */
-html[data-ttm-app] .ttm-chat-room,
-html[data-ttm-app] .ttm-chat-area {
-  --rose: #b66cff;
+html[data-lv] .ttm-chat-room,
+html[data-lv] .ttm-chat-area {
+  --rose: var(--lv-purple);
   --rose-whisper: rgba(182, 108, 255, 0.08);
   --rose-border: rgba(182, 108, 255, 0.28);
   --rose-glow: rgba(168, 85, 247, 0.4);
-  --gradient: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #7c3aed 100%);
-  --saas-cta-gradient: linear-gradient(135deg, #c084fc 0%, #7c3aed 100%);
+  --gradient: linear-gradient(135deg, var(--lv-pink) 0%, #a855f7 50%, #7c3aed 100%);
+  --saas-cta-gradient: linear-gradient(135deg, var(--lv-pink) 0%, #7c3aed 100%);
   --shadow-rose: 0 8px 32px rgba(168, 85, 247, 0.3), 0 2px 8px rgba(168, 85, 247, 0.2);
   --ring: rgba(168, 85, 247, 0.45);
   --ttm-glow-sync-soft: rgba(168, 85, 247, 0.15);
+}
+
+/* ── Conversation (Luvia 2.0, reference screen 5) ───────────────────────────── */
+
+/* Full-bleed solid background (no inset dark card). */
+html[data-lv] .ttm-chat-immersive,
+html[data-lv] .ttm-chat-room,
+html[data-lv] .ttm-chat-area,
+html[data-lv] .ttm-chat-area__body {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--lv-bg) !important;
+  box-shadow: none !important;
+}
+
+html[data-lv] .ttm-chat-immersive {
+  padding-inline: 0 !important;
+}
+
+html[data-lv] .ttm-chat-area__header {
+  border-bottom: 1px solid var(--lv-border) !important;
+  background: var(--lv-bg) !important;
+}
+
+html[data-lv] .ttm-chat-room-header__name {
+  font-family: var(--font-sans, inherit);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+html[data-lv] .ttm-chat-room-header__age {
+  font-weight: 400;
+  color: var(--lv-text-2);
+}
+
+/* Decorative "one message and the flame comes back" strip. */
+html[data-lv] .ttm-chat-reconnect {
+  display: none !important;
+}
+
+/* Bubbles: incoming = raised surface, outgoing = brand gradient; time inside, bottom-right. */
+html[data-lv] .ttm-chat-bubble {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 0.6rem;
+  padding: 0.6rem 0.85rem 0.45rem !important;
+  border: 0 !important;
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+  box-shadow: none !important;
+}
+
+html[data-lv] .ttm-chat-bubble--them {
+  border-radius: 18px 18px 18px 6px !important;
+  background: var(--lv-surface-raised) !important;
+  color: var(--lv-text) !important;
+}
+
+html[data-lv] .ttm-chat-bubble--me {
+  border-radius: 18px 18px 6px 18px !important;
+  background: linear-gradient(105deg, #b04ef0, #8a46f5) !important;
+  color: #fff !important;
+}
+
+html[data-lv] .ttm-chat-bubble__time {
+  margin-left: auto;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Composer: one pill field + round gradient send button. */
+html[data-lv] .ttm-chat-area__footer,
+html[data-lv] .ttm-chat-composer-wrap {
+  border-top: 1px solid var(--lv-border) !important;
+  background: var(--lv-bg) !important;
+}
+
+html[data-lv] .ttm-chat-composer__row {
+  align-items: center;
+  gap: 0.6rem;
+}
+
+html[data-lv] .ttm-chat-composer__input {
+  min-height: 2.9rem !important;
+  padding: 0.7rem 1.1rem !important;
+  border: 1px solid var(--lv-border) !important;
+  border-radius: 999px !important;
+  background: var(--lv-surface) !important;
+  color: var(--lv-text) !important;
+  font-size: 1rem !important;
+}
+
+html[data-lv] .ttm-chat-send {
+  width: 2.9rem !important;
+  height: 2.9rem !important;
+  border: 0 !important;
+  background: var(--lv-gradient) !important;
+  box-shadow: none !important;
+}
+
+/* Starter suggestions ("Не знаешь, с чего начать?") in Luvia surfaces. */
+html[data-lv] .ttm-chat-room button[class*="bg-[var(--bg-primary)]"] {
+  border-color: var(--lv-border) !important;
+  background: var(--lv-surface-raised) !important;
+  box-shadow: none !important;
+}
+
+html[data-lv] .ttm-chat-room div[class*="bg-[var(--bg-secondary)]"] {
+  border-color: var(--lv-border) !important;
+  background: var(--lv-surface) !important;
+  box-shadow: none !important;
+}
+
+/* Desktop: list column next to the open conversation. */
+html[data-lv] .ttm-app-chats--compact {
+  max-width: none;
+  padding: 0.75rem 0.75rem 1rem;
+}
+
+html[data-lv] .ttm-app-chats--compact .ttm-app-chats__title {
+  font-size: 1.5rem;
+}
+
+html[data-lv] .ttm-app-chats__row.is-active {
+  border-color: var(--lv-border-strong);
+  background: var(--lv-surface-raised);
 }

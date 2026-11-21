@@ -25,6 +25,15 @@ export async function POST(request: Request) {
     )
   }
 
+  // Packs are not charged anywhere yet, so a production server must not hand them out for free.
+  // Local development / testing can opt in explicitly.
+  if (process.env.NODE_ENV === "production" && process.env.ALLOW_UNPAID_FREEZE_PACKS !== "1") {
+    return withCors(
+      request,
+      jsonError(503, { error: "payments_unavailable", message: "Freeze packs cannot be purchased yet" })
+    )
+  }
+
   const session = await getSessionFromRequest()
   if (!session) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))

@@ -74,7 +74,7 @@ export async function POST(request: Request) {
         price_data: {
           currency: BOOST_CURRENCY,
           unit_amount: BOOST_PRICE_CENTS,
-          product_data: { name: "Time to Match Profile Boost" },
+          product_data: { name: "Luvia Profile Boost" },
         },
       },
     ],
