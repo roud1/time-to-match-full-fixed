@@ -5,6 +5,8 @@ html[data-lv] .ttm-app-map {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
   height: 100%;
   min-height: calc(100dvh - var(--ttm-header-height, 3rem) - var(--ttm-dock-height) - 1.5rem);
   max-width: 32rem;

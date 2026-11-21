@@ -154,6 +154,9 @@ html[data-lv] .ttm-auth-shell:has(.lv-onboard) .ttm-auth-shell__main {
 }
 
 html[data-lv] .ttm-auth-shell:has(.lv-onboard) .ttm-auth-shell__content-wrap {
+  /* The sticky "Continue" bar sticks to the scrollport edge minus this padding; without it the bar
+     sits on the very bottom and its own padding keeps the button above the home indicator. */
+  padding-bottom: 0 !important;
   justify-self: center;
   width: 100%;
   max-width: 34rem;
