@@ -2,7 +2,7 @@ import { LoginPageExperience } from "@/client/components/auth/login-page-experie
 import { AuthShell } from "@/client/components/auth-shell"
 
 export const metadata = {
-  title: "Вход — Time to Match",
+  title: "Вход — Luvia",
   description: "Войдите в аккаунт и продолжите поиск пары",
 }
 

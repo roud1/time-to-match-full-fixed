@@ -4,9 +4,9 @@ const base = (process.env.APP_URL || "https://time-to-match-web.onrender.com").r
 
 module.exports = {
   appId: "com.timetomatch.app",
-  appName: "Time to Match",
+  appName: "Luvia",
   webDir: "www",
-  backgroundColor: "#0B0F14",
+  backgroundColor: "#0d0a17",
   server: {
     url: `${base}/`,
     cleartext: false,

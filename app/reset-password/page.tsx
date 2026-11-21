@@ -3,7 +3,7 @@ import { ResetPasswordForm } from "@/client/components/reset-password-form"
 import { AuthShell } from "@/client/components/auth-shell"
 
 export const metadata = {
-  title: "Новый пароль — Time to Match",
+  title: "Новый пароль — Luvia",
   description: "Установите новый пароль",
 }
 

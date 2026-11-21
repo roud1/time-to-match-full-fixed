@@ -1729,7 +1729,7 @@
   "appChatsSearch": "Rechercher par nom",
   "appChatsNothingFound": "Personne trouvé",
   "appChatsSayHi": "Écrivez en premier",
-  "appChatsPremium": "Premium : prolongation prioritaire du minuteur",
+  "appChatsPremium": "Premium : voyez qui vous a liké",
   "appMapEmptyTitle": "Personne à proximité pour l'instant",
   "appMapEmptyBody": "Ici apparaîtront les personnes qui partagent leur position et correspondent à vos filtres",
   "appMapNoLocationTitle": "Position requise",
@@ -1807,5 +1807,9 @@
   "lvFreezeDemoNote": "Mode démo local : aucun paiement réel.",
   "lvBoostPaidTitle": "Paiement effectué",
   "lvBoostPaidBody": "Votre boost s'active d'ici une minute : votre profil apparaîtra plus souvent.",
-  "lvPremSubtitle": "Plus de likes, plus d'attention et une seconde chance pour chaque swipe."
+  "lvPremSubtitle": "Plus de likes, plus d'attention et une seconde chance pour chaque swipe.",
+  "lvAdLabel": "Publicité",
+  "lvContinue": "Continuer",
+  "lvPassAria": "Passer",
+  "lvLikeAria": "J'aime"
 }

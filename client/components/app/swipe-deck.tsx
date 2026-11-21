@@ -22,7 +22,7 @@ import { Sparkles } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/client/components/ui/button"
 import { useTopCardSwipe } from "@/client/hooks/use-top-card-swipe"
-import { SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
+import { ADS_ENABLED, SwipeAdBanner } from "@/client/components/ads/swipe-ad-banner"
 import { cn } from "@/client/lib/utils"
 import { postDiscoverRewind } from "@/client/lib/discover/api"
 import { useLuviaUi } from "@/client/hooks/use-ttm-app"
@@ -187,7 +187,7 @@ export function SwipeDeck({
         if (!adUser || !isPremiumActive(adUser)) {
           setSwipeCount((c) => {
             const next = c + 1
-            if (next % AD_EVERY === 0) setShowAd(true)
+            if (ADS_ENABLED && next % AD_EVERY === 0) setShowAd(true)
             return next
           })
         }
@@ -368,13 +368,11 @@ export function SwipeDeck({
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         gap: 16, padding: 20,
-        background: "rgba(6,5,9,0.97)",
+        background: "var(--lv-bg, #0d0a17)",
         borderRadius: "inherit",
       }}
     >
-      <span style={{ fontSize: 11, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(245,245,247,0.35)" }}>
-        Реклама
-      </span>
+      <span style={{ fontSize: 12, color: "var(--lv-text-3, #8d82a0)" }}>{t("lvAdLabel")}</span>
       <div style={{ width: "100%", maxWidth: "20rem" }}>
         <SwipeAdBanner />
       </div>
@@ -384,14 +382,13 @@ export function SwipeDeck({
         style={{
           minWidth: 160, minHeight: 48,
           padding: "12px 32px",
-          background: "linear-gradient(135deg,#f72585,#b5179e,#7209b7)",
+          background: "var(--lv-gradient, linear-gradient(105deg,#f35ca8,#9b4dff))",
           color: "#fff", fontWeight: 600, fontSize: 15,
           border: "none", borderRadius: 9999, cursor: "pointer",
-          boxShadow: "0 4px 20px rgba(247,37,133,0.35)",
+          boxShadow: "var(--lv-shadow-cta, none)",
         }}
-        aria-label="Закрыть рекламу и продолжить"
       >
-        Продолжить
+        {t("lvContinue")}
       </button>
     </div>
   ) : null
@@ -416,7 +413,7 @@ export function SwipeDeck({
         whileTap={{ scale: 0.9 }}
         disabled={!current}
         onClick={() => void flyOff("left")}
-        aria-label={t("nope")}
+        aria-label={t("lvPassAria")}
         className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--nope"
       >
         <X aria-hidden strokeWidth={2.2} />
@@ -427,7 +424,7 @@ export function SwipeDeck({
         disabled={!current}
         onPointerDown={(e) => e.stopPropagation()}
         onClick={() => void flyOff("right")}
-        aria-label={t("like")}
+        aria-label={t("lvLikeAria")}
         className="ttm-app-feed-actions__btn ttm-app-feed-actions__btn--like"
       >
         <Heart aria-hidden fill="currentColor" strokeWidth={0} />
@@ -470,7 +467,7 @@ export function SwipeDeck({
         whileTap={{ scale: 0.9 }}
         disabled={!current}
         onClick={() => void flyOff("left")}
-        aria-label={t("nope")}
+        aria-label={t("lvPassAria")}
         className={cn(
           "ttm-swipe-action-btn ttm-swipe-action-btn--nope h-[3.25rem] w-[3.25rem] sm:h-[58px] sm:w-[58px] lg:h-16 lg:w-16 rounded-full flex items-center justify-center touch-manipulation",
           !current && "opacity-40 pointer-events-none"
@@ -504,7 +501,7 @@ export function SwipeDeck({
         disabled={!current}
         onPointerDown={(e) => e.stopPropagation()}
         onClick={() => void flyOff("right")}
-        aria-label={t("like")}
+        aria-label={t("lvLikeAria")}
         className={cn(
           "ttm-swipe-action-btn ttm-swipe-action-btn--like h-[3.5rem] w-[3.5rem] sm:h-16 sm:w-16 lg:h-[4.25rem] lg:w-[4.25rem] rounded-full flex items-center justify-center touch-manipulation",
           !current && "opacity-40 pointer-events-none"

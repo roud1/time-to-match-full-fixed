@@ -239,7 +239,7 @@ export function AppChatsList({
         </ul>
       )}
 
-      <button type="button" className="ttm-app-chats__premium" onClick={() => openUpgrade("likes")}>
+      <button type="button" className="ttm-app-chats__premium" onClick={() => openUpgrade("likedYou")}>
         <span className="ttm-app-chats__crown" aria-hidden>
           <Crown strokeWidth={1.8} />
         </span>

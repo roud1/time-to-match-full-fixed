@@ -1753,7 +1753,7 @@
   "appChatsSearch": "Поиск по имени",
   "appChatsNothingFound": "Никого не нашли",
   "appChatsSayHi": "Напишите первым",
-  "appChatsPremium": "Premium: приоритетное продление таймера связи",
+  "appChatsPremium": "Premium: узнайте, кто вас лайкнул",
   "appMapEmptyTitle": "Рядом пока никого",
   "appMapEmptyBody": "Здесь появятся люди, которые включили геолокацию и подходят под ваши фильтры",
   "appMapNoLocationTitle": "Нужна геолокация",
@@ -1831,5 +1831,9 @@
   "lvFreezeDemoNote": "Локальный демо-режим: покупка без оплаты.",
   "lvBoostPaidTitle": "Оплата прошла",
   "lvBoostPaidBody": "Буст включится в течение минуты — ваша анкета будет чаще появляться в ленте.",
-  "lvPremSubtitle": "Больше лайков, больше внимания и второй шанс для каждого свайпа."
+  "lvPremSubtitle": "Больше лайков, больше внимания и второй шанс для каждого свайпа.",
+  "lvAdLabel": "Реклама",
+  "lvContinue": "Продолжить",
+  "lvPassAria": "Пропустить",
+  "lvLikeAria": "Нравится"
 }

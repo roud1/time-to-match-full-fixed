@@ -20,6 +20,9 @@ const PUBLISHER_ID = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID
 const SLOT_ID      = process.env.NEXT_PUBLIC_ADSENSE_SLOT_ID
 const IS_DEV       = process.env.NODE_ENV !== "production"
 
+/** The swipe interstitial is shown only when a real ad unit is configured (never an empty "Ad" screen). */
+export const ADS_ENABLED = Boolean(PUBLISHER_ID && SLOT_ID)
+
 type SwipeAdBannerProps = {
   className?: string
 }

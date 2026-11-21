@@ -23,22 +23,22 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  applicationName: "Time to Match",
+  applicationName: "Luvia",
   title: {
-    default: "Time to Match — Мэтч живёт 24 часа",
-    template: "%s · Time to Match",
+    default: "Luvia — Мэтч живёт 24 часа",
+    template: "%s · Luvia",
   },
   description:
     "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
-  keywords: ["знакомства", "dating", "премиум", "24 часа", "Time to Match", "match", "отношения"],
-  authors: [{ name: "Time to Match" }],
-  creator: "Time to Match",
+  keywords: ["знакомства", "dating", "премиум", "24 часа", "Luvia", "match", "отношения"],
+  authors: [{ name: "Luvia" }],
+  creator: "Luvia",
   openGraph: {
     type: "website",
     locale: "ru_RU",
     url: siteUrl,
-    siteName: "Time to Match",
-    title: "Time to Match — Мэтч живёт 24 часа",
+    siteName: "Luvia",
+    title: "Luvia — Мэтч живёт 24 часа",
     description:
       "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
     images: [
@@ -46,13 +46,13 @@ export const metadata: Metadata = {
         url: "/brand/ttm-logo-full.png",
         width: 1200,
         height: 630,
-        alt: "Time to Match",
+        alt: "Luvia",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Time to Match — Мэтч живёт 24 часа",
+    title: "Luvia — Мэтч живёт 24 часа",
     description:
       "Премиальное приложение для знакомств. У каждого мэтча — 24 часа, чтобы зажечь диалог.",
     images: ["/brand/ttm-logo-full.png"],
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Time to Match",
+    title: "Luvia",
   },
   formatDetection: {
     telephone: false,
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0B0F14",
+  themeColor: "#0d0a17",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
