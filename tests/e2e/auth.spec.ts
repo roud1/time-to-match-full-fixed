@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test"
 import {
   createTestUser,
   loginViaUi,
+  markEmailVerified,
   registerUserViaApi,
 } from "./helpers/test-user"
 
@@ -50,6 +51,8 @@ test.describe("Production auth @db", () => {
   test("logs in via the login form", async ({ page }) => {
     const user = createTestUser("login")
     await registerUserViaApi(page.request, user)
+    // Login requires a verified email; CI has no mailbox, so verify in the test DB.
+    await markEmailVerified(user.email)
 
     await page.context().clearCookies()
     await loginViaUi(page, user)
@@ -59,6 +62,8 @@ test.describe("Production auth @db", () => {
   test("authenticated user can open the discover app", async ({ page }) => {
     const user = createTestUser("app")
     await registerUserViaApi(page.request, user)
+    // Login requires a verified email; CI has no mailbox, so verify in the test DB.
+    await markEmailVerified(user.email)
 
     await page.context().clearCookies()
     await loginViaUi(page, user)
@@ -158,15 +163,17 @@ test.describe("GDPR DELETE /api/me @db", () => {
     const userA = createTestUser("gdpr-a")
     const userB = createTestUser("gdpr-b")
 
+    // Register B first: the request context keeps the session of the LAST sign-up,
+    // and the DELETE below must run as A.
+    await request.post("/api/v1/auth/register", {
+      data: { email: userB.email, password: userB.password, name: userB.name },
+    })
+
     const regA = await request.post("/api/v1/auth/register", {
       data: { email: userA.email, password: userA.password, name: userA.name },
     })
     expect(regA.ok()).toBeTruthy()
     const { user: dbA } = (await regA.json()) as { user: { id: string } }
-
-    await request.post("/api/v1/auth/register", {
-      data: { email: userB.email, password: userB.password, name: userB.name },
-    })
 
     // 2. Verify emails (mark as verified via API or check if demo allows skip)
     // In CI with DB: registration sets email_verified=false.

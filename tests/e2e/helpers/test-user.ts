@@ -55,3 +55,19 @@ export async function loginViaUi(page: Page, user: TestUser): Promise<void> {
     .click()
   await page.waitForURL(/\/(app|welcome)/, { timeout: 20_000 })
 }
+
+/**
+ * Marks the account as email-verified directly in the test database (CI has no mailbox).
+ * Needs DATABASE_URL in the test runner environment (set in the CI e2e step).
+ */
+export async function markEmailVerified(email: string): Promise<void> {
+  const url = process.env.DATABASE_URL
+  if (!url) throw new Error("DATABASE_URL is required to verify test users")
+  const { default: postgres } = await import("postgres")
+  const sql = postgres(url, { max: 1 })
+  try {
+    await sql`UPDATE users SET email_verified = true WHERE email_normalized = ${email.trim().toLowerCase()}`
+  } finally {
+    await sql.end()
+  }
+}
