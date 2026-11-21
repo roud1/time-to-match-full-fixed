@@ -9,36 +9,31 @@ import type { SubscriptionApiResponse } from "@/client/lib/monetization/types"
 import { getAppMode } from "@/client/lib/auth/client"
 import {
   activatePremium,
-  getPremiumTimeLeft,
   isPremiumActive,
   type StoredUserProfile,
 } from "@/client/lib/user-profile"
-import { getInvisibleMode, setInvisibleMode } from "@/client/lib/premium-preferences"
 import { cn } from "@/client/lib/utils"
-import { Switch } from "@/client/components/ui/switch"
-import { Label } from "@/client/components/ui/label"
 import { Check, Crown } from "lucide-react"
 import "./premium-luvia.css"
 
+// Only what the server actually grants to Premium (likes limit, incoming likes, rewind, boost, super likes).
 const FEATURE_KEYS = [
+  "lvPremUnlimitedLikes",
+  "premiumFeatureLikes",
   "premiumFeatureRewind",
   "premiumFeatureBoost",
-  "premiumFeatureLikes",
-  "premiumFeatureInvisible",
-  "premiumFeatureTimer",
-  "premiumFeaturePriority",
-  "premiumFeatureReconnect",
+  "lvPremSuperLike",
 ] as const
 
 export function PremiumMembershipLuxury({
   profile,
   variant,
   onProfileUpdate,
-  showInvisibleControl,
 }: {
   profile: StoredUserProfile
   variant: "page" | "sheet"
   onProfileUpdate: (next: StoredUserProfile) => void
+  /** @deprecated The local-only "invisible mode" was removed (the server never honoured it). */
   showInvisibleControl?: boolean
 }) {
   const { t, locale } = useI18n()
@@ -57,28 +52,21 @@ export function PremiumMembershipLuxury({
     ? new Intl.NumberFormat(locale, { style: "currency", currency: plan.currency.toUpperCase() }).format(plan.amountCents / 100)
     : null
   const billingReady = Boolean(plan) || localDemo
-  const [active, setActive] = useState(() => isPremiumActive(profile))
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, remaining: 0 })
-  const [invisible, setInvisible] = useState(false)
-
+  const [localActive, setLocalActive] = useState(() => isPremiumActive(profile))
   useEffect(() => {
-    setActive(isPremiumActive(profile))
+    setLocalActive(isPremiumActive(profile))
   }, [profile])
-
-  useEffect(() => {
-    if (!profile.premiumUntil || !active) return
-    const tick = () => setTimeLeft(getPremiumTimeLeft(profile.premiumUntil!))
-    tick()
-    const id = setInterval(tick, 60_000)
-    return () => clearInterval(id)
-  }, [profile.premiumUntil, active])
-
-  useEffect(() => {
-    setInvisible(getInvisibleMode())
-    const fn = () => setInvisible(getInvisibleMode())
-    window.addEventListener("ttm-premium-preferences-changed", fn)
-    return () => window.removeEventListener("ttm-premium-preferences-changed", fn)
-  }, [])
+  // The server subscription decides; the local flag only matters in the offline demo.
+  const active = !localDemo && summary ? summary.subscription.isPremium : localActive
+  const setActive = setLocalActive
+  const activeEndRaw = summary?.subscription.currentPeriodEnd ?? summary?.subscription.premiumUntil ?? null
+  const activeEnd = activeEndRaw ? Date.parse(activeEndRaw) : (profile.premiumUntil ?? NaN)
+  const activeUntilLabel = Number.isFinite(activeEnd)
+    ? t("lvPremActiveUntil").replace(
+        "{date}",
+        new Date(activeEnd).toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" })
+      )
+    : t("premiumActiveBadge")
 
   const handleActivate = async () => {
     if (starting) return
@@ -104,10 +92,6 @@ export function PremiumMembershipLuxury({
     }
   }
 
-  const timeLeftLabel = t("premiumTimeLeft")
-    .replace("{days}", String(timeLeft.days))
-    .replace("{hours}", String(timeLeft.hours))
-
   return (
     <div className={cn("lv-prem", variant === "sheet" && "lv-prem--sheet")}>
       <motion.section
@@ -119,32 +103,10 @@ export function PremiumMembershipLuxury({
           <Crown strokeWidth={1.8} />
         </span>
         <h2 className="lv-prem__title">{t("premiumLuxTitle")}</h2>
-        <p className="lv-prem__subtitle">{t("premiumLuxSubtitle")}</p>
+        <p className="lv-prem__subtitle">{t("lvPremSubtitle")}</p>
 
-        {active && profile.premiumUntil ? (
-          <p className="lv-prem__status">
-            <span>{t("premiumActiveBadge")}</span> · {timeLeftLabel}
-          </p>
-        ) : null}
+        {active ? <p className="lv-prem__status">{activeUntilLabel}</p> : null}
 
-        {active && showInvisibleControl && (
-          <div className="lv-prem__toggle">
-            <div className="min-w-0">
-              <Label htmlFor="invisible-mode" className="lv-prem__toggle-label">
-                {t("premiumInvisibleLabel")}
-              </Label>
-              <p className="lv-prem__toggle-hint">{t("premiumInvisibleHint")}</p>
-            </div>
-            <Switch
-              id="invisible-mode"
-              checked={invisible}
-              onCheckedChange={(v) => {
-                setInvisible(v)
-                setInvisibleMode(v)
-              }}
-            />
-          </div>
-        )}
       </motion.section>
 
       <ul className="lv-prem__features" aria-label={t("premiumComparePlus")}>

@@ -358,3 +358,63 @@ html[data-ttm-app] .lv-set {
   height: 1.75rem;
 }
 
+
+/* Billing result pages */
+.lv-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.lv-result .lv-set__title {
+  margin: 0.5rem 0 0;
+}
+
+.lv-result__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  color: #fff;
+}
+
+.lv-result__icon--muted {
+  background: var(--lv-surface-raised, #241b31);
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-result__icon svg {
+  width: 2.2rem;
+  height: 2.2rem;
+}
+
+.lv-result__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 22rem;
+  min-height: 3.4rem;
+  margin-top: 0.75rem;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  box-shadow: var(--lv-shadow-cta, none);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.lv-result .lv-set__hint {
+  max-width: 22rem;
+  font-size: 0.95rem;
+}
+
+.lv-result .lv-set__link {
+  align-self: center;
+}

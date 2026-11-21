@@ -77,7 +77,7 @@ export function SettingsSubscriptionCard() {
           </p>
           {!active && (
             <Link
-              href="/#pricing"
+              href="/profile?tab=premium"
               className="inline-block text-xs text-indigo-200/80 hover:text-indigo-100 font-light"
             >
               {t("settingsSubscriptionManage")} →

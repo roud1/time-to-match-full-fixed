@@ -47,6 +47,7 @@ import { useDesktopAppNav } from "@/client/hooks/use-desktop-app-nav"
 import { isEmotionalOsEnabled } from "@/client/lib/feature-flags"
 import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { Heart } from "lucide-react"
+import { fetchSubscriptionSummary } from "@/client/lib/monetization/api"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
 import { getActivityCounts } from "@/client/lib/activity-metrics"
 
@@ -108,6 +109,8 @@ export function AppShell() {
 
       setReady(true)
       recordProfileActivity()
+      // Mirror the server subscription into the local cache that paywalls read.
+      void fetchSubscriptionSummary()
     }
 
     void init()
