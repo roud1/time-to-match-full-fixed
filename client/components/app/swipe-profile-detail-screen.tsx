@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { localizeInterestName } from "@/client/lib/interest-labels"
 import { createPortal } from "react-dom"
 import Image from "next/image"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
@@ -39,7 +40,7 @@ export function SwipeProfileDetailScreen({
   onNope,
   onOpenSafety,
 }: SwipeProfileDetailScreenProps) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const reduce = useReducedMotion()
   const inApp = useLuviaUi()
   const open = profile != null
@@ -222,7 +223,7 @@ export function SwipeProfileDetailScreen({
                   )}
                   {profile.interests.map((interest) => (
                     <span
-                      key={interest}
+                      key={localizeInterestName(interest, locale)}
                       className="px-2.5 py-1 rounded-full text-xs font-light bg-white/[0.06] text-white/85 border border-white/10"
                     >
                       {interest}
