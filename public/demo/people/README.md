@@ -1,13 +1,13 @@
 # Photos of the test profiles
 
-`scripts/db-seed-demo.mjs` uses these files for the 12 test profiles (`*@demo.timetomatch.local`).
+`scripts/db-seed-demo.mjs` uses these files for the 20 test profiles (`*@demo.timetomatch.local`).
 If a file is missing, the profile keeps its placeholder `/demo/avatar-N.svg`.
 
 **Only AI-generated faces of people who do not exist, or photos of people who agreed to it.**
 Never use photos of real people taken from the internet.
 
 Main photo: `demo-N.webp` (or `.jpg` / `.jpeg` / `.png`). Optional extra photos: `demo-N-2.*`, `demo-N-3.*`.
-Portrait 3:4, at least 900×1200, under ~250 KB each (webp recommended).
+Current files: AI-generated portraits supplied by the owner (301×250). Better: portrait 3:4, at least 900×1200, under ~250 KB each (webp recommended).
 
 | N  | Name     | Gender | Age | City            |
 |----|----------|--------|-----|-----------------|
@@ -23,6 +23,14 @@ Portrait 3:4, at least 900×1200, under ~250 KB each (webp recommended).
 | 10 | Павел    | male   | 25  | Нижний Новгород |
 | 11 | Виктория | female | 23  | Ростов-на-Дону  |
 | 12 | Артём    | male   | 34  | Москва          |
+| 13 | Полина   | female | 25  | Казань          |
+| 14 | Никита   | male   | 26  | Санкт-Петербург |
+| 15 | Ксения   | female | 27  | Москва          |
+| 16 | Максим   | male   | 29  | Екатеринбург    |
+| 17 | Дарья    | female | 24  | Сочи            |
+| 18 | Егор     | male   | 31  | Новосибирск     |
+| 19 | Алиса    | female | 28  | Нижний Новгород |
+| 20 | Роман    | male   | 32  | Краснодар       |
 
 Photos are applied on the next deploy (the seed runs during the Render build) or locally with
 `SEED_DEMO_PROFILES=1 node scripts/db-seed-demo.mjs`.

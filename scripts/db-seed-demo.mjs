@@ -4,7 +4,7 @@
  * "likes" can be tested. Runs only when SEED_DEMO_PROFILES=1 (otherwise exits 0).
  * Idempotent: safe to run on every deploy.
  *
- *  - 12 demo users (emails *@demo.timetomatch.local, cannot log in)
+ *  - 20 demo users (emails *@demo.timetomatch.local, cannot log in)
  *  - the first 4 demo users have already liked every real user, so liking them
  *    back should produce a match and a "someone liked you" entry
  *
@@ -41,6 +41,14 @@ const DEMO = [
   { n: "Павел", g: "male", age: 25, city: "Нижний Новгород", bio: "Музыкант. Играю на гитаре и пишу песни для близких.", i: [2, 8, 6, 12] },
   { n: "Виктория", g: "female", age: 23, city: "Ростов-на-Дону", bio: "Фитнес-тренер. Люблю активный отдых и тёплое море.", i: [17, 13, 5, 3] },
   { n: "Артём", g: "male", age: 34, city: "Москва", bio: "Инженер, путешествую по России на машине, люблю подкасты.", i: [14, 25, 5, 11] },
+  { n: "Полина", g: "female", age: 25, city: "Казань", bio: "Маркетолог. Выходные провожу на природе, люблю закаты и чай с травами.", i: [9, 4, 12, 19] },
+  { n: "Никита", g: "male", age: 26, city: "Санкт-Петербург", bio: "Архитектор, катаюсь на велосипеде и коллекционирую пластинки.", i: [10, 18, 3, 6] },
+  { n: "Ксения", g: "female", age: 27, city: "Москва", bio: "Пишу тексты, хожу на стендап и знаю лучшие кофейни района.", i: [4, 16, 20, 1] },
+  { n: "Максим", g: "male", age: 29, city: "Екатеринбург", bio: "Тренер по скалолазанию. Горы, походы и костёр под гитару.", i: [3, 9, 22, 8] },
+  { n: "Дарья", g: "female", age: 24, city: "Сочи", bio: "Фотограф. Море, путешествия и спонтанные поездки на выходные.", i: [5, 2, 13, 15] },
+  { n: "Егор", g: "male", age: 31, city: "Новосибирск", bio: "Программист и любитель настолок. Зимой — лыжи, летом — Алтай.", i: [24, 7, 11, 9] },
+  { n: "Алиса", g: "female", age: 28, city: "Нижний Новгород", bio: "Работаю в IT, учу испанский и мечтаю о Барселоне.", i: [26, 5, 17, 21] },
+  { n: "Роман", g: "male", age: 32, city: "Краснодар", bio: "Шеф-повар. Готовлю для друзей, люблю рынки и вино.", i: [16, 20, 1, 12] },
 ]
 
 // Photos of the test profiles: public/demo/people/demo-<N>.(jpg|jpeg|png|webp), extra ones demo-<N>-2, demo-<N>-3.
