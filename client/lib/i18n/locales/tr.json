@@ -1850,5 +1850,7 @@
   "discoverGateNeedPhoto": "En az bir fotoğraf ekle",
   "discoverGateNeedGender": "Cinsiyetini belirt",
   "discoverGateNeedCity": "Şehrini belirt",
-  "discoverGateCta": "Profili tamamla"
+  "discoverGateCta": "Profili tamamla",
+  "lvSetExport": "Verilerimi indir",
+  "lvSetExportBody": "Tüm verilerinin tek dosyada bir kopyası (JSON)"
 }

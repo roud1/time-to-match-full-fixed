@@ -1850,5 +1850,7 @@
   "resetPasswordSubmit": "Save password",
   "resetPasswordSaving": "Saving...",
   "resetPasswordInvalidLink": "The link is invalid or has expired.",
-  "resetPasswordError": "Couldn't update the password."
+  "resetPasswordError": "Couldn't update the password.",
+  "lvSetExport": "Download my data",
+  "lvSetExportBody": "A copy of all your data in one file (JSON)"
 }

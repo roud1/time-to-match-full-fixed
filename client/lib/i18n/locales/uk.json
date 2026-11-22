@@ -1850,5 +1850,7 @@
   "discoverGateNeedPhoto": "Додайте хоча б одне фото",
   "discoverGateNeedGender": "Вкажіть стать",
   "discoverGateNeedCity": "Вкажіть місто",
-  "discoverGateCta": "Заповнити профіль"
+  "discoverGateCta": "Заповнити профіль",
+  "lvSetExport": "Завантажити мої дані",
+  "lvSetExportBody": "Копія всіх ваших даних в одному файлі (JSON)"
 }

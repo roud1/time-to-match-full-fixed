@@ -1850,5 +1850,7 @@
   "discoverGateNeedPhoto": "Füge mindestens ein Foto hinzu",
   "discoverGateNeedGender": "Gib dein Geschlecht an",
   "discoverGateNeedCity": "Gib deine Stadt an",
-  "discoverGateCta": "Profil vervollständigen"
+  "discoverGateCta": "Profil vervollständigen",
+  "lvSetExport": "Meine Daten herunterladen",
+  "lvSetExportBody": "Eine Kopie all deiner Daten in einer Datei (JSON)"
 }
