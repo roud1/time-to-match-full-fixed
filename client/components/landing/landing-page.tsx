@@ -79,7 +79,7 @@ export function LandingPage() {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="ttm-container ttm-nav__inner">
-          <Link href="/" aria-label="Time to Match home">
+          <Link href="/" aria-label="Luvia home">
             <Logo variant="wordmark" size="sm" theme="dark" />
           </Link>
 
@@ -122,7 +122,7 @@ export function LandingPage() {
       <footer className="ttm-footer">
         <div className="ttm-container ttm-footer__inner">
           <p className="ttm-footer__copy">
-            © {new Date().getFullYear()} Time to Match. {t("ttmLandingFooterRights")}
+            © {new Date().getFullYear()} Luvia. {t("ttmLandingFooterRights")}
           </p>
           <div className="ttm-footer__links">
             <Link href="/login" className="ttm-footer__link">

@@ -21,7 +21,7 @@ export function getOpenRouterClient(): OpenAI {
       baseURL: process.env.OPENROUTER_BASE_URL?.trim() || OPENROUTER_BASE_URL,
       defaultHeaders: {
         "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL?.trim() || "https://timetomatch.app",
-        "X-Title": "Time to Match",
+        "X-Title": "Luvia",
       },
     })
   }

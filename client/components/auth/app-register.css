@@ -236,3 +236,10 @@ html[data-lv] .ttm-app-reg .ttm-reg-actions {
 html[data-lv] .ttm-app-reg .ttm-app-login__signup {
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
 }
+
+/* Links to the Terms / Privacy Policy the user agrees to at sign-up. */
+.lv-legal-link {
+  color: var(--lv-pink, #f35ca8);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

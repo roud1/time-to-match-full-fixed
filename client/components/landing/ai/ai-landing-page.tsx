@@ -27,7 +27,7 @@ export function AiLandingPage() {
       <AiUrgencySection />
       <AiFinalCtaSection />
       <footer className="ttm-ai-footer">
-        <p>© {new Date().getFullYear()} Time to Match · AI Connection Engine</p>
+        <p>© {new Date().getFullYear()} Luvia · AI Connection Engine</p>
       </footer>
     </main>
   )

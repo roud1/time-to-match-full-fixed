@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     const resetUrl = `${baseUrl.replace(/\/$/, "")}/reset-password?token=${encodeURIComponent(token)}`
     const sent = await sendEmail(
       row.email,
-      "Reset your Time to Match password",
+      "Reset your Luvia password",
       `<p>Hi ${row.name},</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 1 hour.</p>`
     )
     log.info("auth_forgot_ok", { userId: row.id, emailSent: sent })
