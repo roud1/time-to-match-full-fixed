@@ -28,7 +28,7 @@ export function DesktopAppNav() {
   if (!onApp && !onProfile) return null
 
   return (
-    <aside className="ttm-desktop-nav" aria-label="App navigation">
+    <nav className="ttm-desktop-nav" aria-label="App navigation">
       <Link href="/" className="mb-4 opacity-90 hover:opacity-100 transition-opacity" aria-label="Luvia">
         <Logo variant="icon" size="sm" />
       </Link>
@@ -55,6 +55,6 @@ export function DesktopAppNav() {
         <User className="w-5 h-5" strokeWidth={1.5} />
         <span>{t("tabProfile")}</span>
       </Link>
-    </aside>
+    </nav>
   )
 }
