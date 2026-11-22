@@ -1,7 +1,8 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { PulseCharacter } from "@/client/components/landing/pulse-character"
+import "./app-chats.css"
+import { Sparkles } from "lucide-react"
 import { ChatArea } from "@/client/components/chat/chat-area"
 import { ChatFooter } from "@/client/components/chat/chat-footer"
 import { ChatMessageList } from "@/client/components/chat/chat-message-list"
@@ -108,12 +109,13 @@ export function PulseChatRoom({
               </button>
             ) : null}
             <div className="flex items-center gap-3 min-w-0 flex-1">
-              <div className="relative shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-gradient-to-br from-orange-500/20 to-violet-600/30 border border-white/10">
-                <PulseCharacter size="mini" />
+              {/* Same mark as the Luvia AI row in the chat list. */}
+              <div className="ttm-luvia-ai-mark" aria-hidden>
+                <Sparkles strokeWidth={1.8} />
               </div>
               <div className="min-w-0">
-                <p className="font-extralight text-base text-white/95 truncate">{profile.name}</p>
-                <p className="text-[11px] text-violet-200/70 font-light truncate">{t("pulseAiOnline")}</p>
+                <p className="ttm-luvia-ai-name truncate">{profile.name}</p>
+                <p className="ttm-luvia-ai-status truncate">{t("pulseAiOnline")}</p>
               </div>
             </div>
           </header>

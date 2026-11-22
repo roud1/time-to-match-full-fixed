@@ -485,3 +485,34 @@ html[data-lv] .ttm-app-chats__row.is-active {
   border-color: var(--lv-border-strong);
   background: var(--lv-surface-raised);
 }
+
+/* Luvia AI conversation header: same gradient mark as in the chat list. */
+.ttm-luvia-ai-mark {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: radial-gradient(120% 120% at 50% 15%, var(--lv-pink, #f35ca8) 0%, #7c3aed 100%);
+  color: #fff;
+}
+
+.ttm-luvia-ai-mark svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.ttm-luvia-ai-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--lv-text, #faf7ff);
+}
+
+.ttm-luvia-ai-status {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--lv-text-2, #b9afc5);
+}
