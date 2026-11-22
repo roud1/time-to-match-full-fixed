@@ -28,27 +28,29 @@ if (!url) {
 }
 
 const DOMAIN = "demo.timetomatch.local"
+// European test profiles (owner's market). Odd numbers are women, even numbers men, matching the
+// portraits in public/demo/people. Bios are in English so they read fine in every app language.
 const DEMO = [
-  { n: "Анна", g: "female", age: 24, city: "Москва", bio: "Люблю кофе, долгие прогулки и книги. Ищу человека для спонтанных поездок.", i: [12, 4, 5, 18] },
-  { n: "Дмитрий", g: "male", age: 28, city: "Санкт-Петербург", bio: "Разработчик, готовлю пасту и хожу в горы по выходным.", i: [7, 5, 3, 24] },
-  { n: "Елена", g: "female", age: 26, city: "Екатеринбург", bio: "Дизайнер. Обожаю выставки, винил и тёплые вечера на балконе.", i: [10, 2, 18, 21] },
-  { n: "Иван", g: "male", age: 30, city: "Казань", bio: "Строю свой бизнес, люблю бег по утрам и хорошее кино.", i: [26, 1, 24, 14] },
-  { n: "Мария", g: "female", age: 22, city: "Новосибирск", bio: "Учусь, занимаюсь йогой и мечтаю увидеть океан.", i: [15, 5, 13, 23] },
-  { n: "Алексей", g: "male", age: 33, city: "Москва", bio: "Фотографирую города, собираю плейлисты и ищу компанию на концерты.", i: [18, 2, 5, 25] },
-  { n: "Ольга", g: "female", age: 29, city: "Санкт-Петербург", bio: "Работаю в театре, люблю вино и разговоры до утра.", i: [21, 20, 4, 10] },
-  { n: "Сергей", g: "male", age: 27, city: "Краснодар", bio: "Сёрфинг летом, сноуборд зимой. Ищу того, кто не боится волн.", i: [22, 3, 5, 9] },
-  { n: "Наталья", g: "female", age: 31, city: "Москва", bio: "Врач с чувством юмора. Бег, кулинария и хорошие сериалы.", i: [26, 7, 1, 16] },
-  { n: "Павел", g: "male", age: 25, city: "Нижний Новгород", bio: "Музыкант. Играю на гитаре и пишу песни для близких.", i: [2, 8, 6, 12] },
-  { n: "Виктория", g: "female", age: 23, city: "Ростов-на-Дону", bio: "Фитнес-тренер. Люблю активный отдых и тёплое море.", i: [17, 13, 5, 3] },
-  { n: "Артём", g: "male", age: 34, city: "Москва", bio: "Инженер, путешествую по России на машине, люблю подкасты.", i: [14, 25, 5, 11] },
-  { n: "Полина", g: "female", age: 25, city: "Казань", bio: "Маркетолог. Выходные провожу на природе, люблю закаты и чай с травами.", i: [9, 4, 12, 19] },
-  { n: "Никита", g: "male", age: 26, city: "Санкт-Петербург", bio: "Архитектор, катаюсь на велосипеде и коллекционирую пластинки.", i: [10, 18, 3, 6] },
-  { n: "Ксения", g: "female", age: 27, city: "Москва", bio: "Пишу тексты, хожу на стендап и знаю лучшие кофейни района.", i: [4, 16, 20, 1] },
-  { n: "Максим", g: "male", age: 29, city: "Екатеринбург", bio: "Тренер по скалолазанию. Горы, походы и костёр под гитару.", i: [3, 9, 22, 8] },
-  { n: "Дарья", g: "female", age: 24, city: "Сочи", bio: "Фотограф. Море, путешествия и спонтанные поездки на выходные.", i: [5, 2, 13, 15] },
-  { n: "Егор", g: "male", age: 31, city: "Новосибирск", bio: "Программист и любитель настолок. Зимой — лыжи, летом — Алтай.", i: [24, 7, 11, 9] },
-  { n: "Алиса", g: "female", age: 28, city: "Нижний Новгород", bio: "Работаю в IT, учу испанский и мечтаю о Барселоне.", i: [26, 5, 17, 21] },
-  { n: "Роман", g: "male", age: 32, city: "Краснодар", bio: "Шеф-повар. Готовлю для друзей, люблю рынки и вино.", i: [16, 20, 1, 12] },
+  { n: "Anna", g: "female", age: 24, city: "Berlin", bio: "Coffee, long walks and good books. Looking for someone up for spontaneous trips.", i: [12, 4, 5, 18] },
+  { n: "Lukas", g: "male", age: 28, city: "Munich", bio: "Software developer. I cook pasta and spend weekends in the mountains.", i: [7, 5, 3, 24] },
+  { n: "Camille", g: "female", age: 26, city: "Paris", bio: "Designer. Exhibitions, vinyl and warm evenings on the balcony.", i: [10, 2, 18, 21] },
+  { n: "Marco", g: "male", age: 30, city: "Milan", bio: "Building my own business. Morning runs and a good film in the evening.", i: [26, 1, 24, 14] },
+  { n: "Lucía", g: "female", age: 22, city: "Madrid", bio: "Student, yoga every morning and dreaming of seeing the ocean.", i: [15, 5, 13, 23] },
+  { n: "Jakub", g: "male", age: 33, city: "Warsaw", bio: "I photograph cities, make playlists and look for company for concerts.", i: [18, 2, 5, 25] },
+  { n: "Sofia", g: "female", age: 29, city: "Rome", bio: "I work in theatre. Wine and conversations until sunrise.", i: [21, 20, 4, 10] },
+  { n: "Tom", g: "male", age: 27, city: "Amsterdam", bio: "Surfing in summer, snowboarding in winter. Not afraid of waves?", i: [22, 3, 5, 9] },
+  { n: "Elena", g: "female", age: 31, city: "Vienna", bio: "Doctor with a sense of humour. Running, cooking and good series.", i: [26, 7, 1, 16] },
+  { n: "Pablo", g: "male", age: 25, city: "Barcelona", bio: "Musician. I play guitar and write songs for the people I love.", i: [2, 8, 6, 12] },
+  { n: "Zofia", g: "female", age: 23, city: "Kraków", bio: "Fitness coach. Active weekends and warm seas.", i: [17, 13, 5, 3] },
+  { n: "Julien", g: "male", age: 34, city: "Lyon", bio: "Engineer. Road trips across Europe and lots of podcasts.", i: [14, 25, 5, 11] },
+  { n: "Emma", g: "female", age: 25, city: "Hamburg", bio: "Marketing by day, nature and sunsets at the weekend.", i: [9, 4, 12, 19] },
+  { n: "Matteo", g: "male", age: 26, city: "Florence", bio: "Architect. I cycle everywhere and collect records.", i: [10, 18, 3, 6] },
+  { n: "Chloé", g: "female", age: 27, city: "Brussels", bio: "I write for a living, love stand-up and know every good café in town.", i: [4, 16, 20, 1] },
+  { n: "Jonas", g: "male", age: 29, city: "Zurich", bio: "Climbing coach. Mountains, hiking and a campfire with a guitar.", i: [3, 9, 22, 8] },
+  { n: "Inês", g: "female", age: 24, city: "Lisbon", bio: "Photographer. The sea, travel and last-minute weekend trips.", i: [5, 2, 13, 15] },
+  { n: "Tomasz", g: "male", age: 31, city: "Wrocław", bio: "Developer and board-game fan. Skiing in winter, lakes in summer.", i: [24, 7, 11, 9] },
+  { n: "Alice", g: "female", age: 28, city: "Prague", bio: "Working in tech, learning Spanish and dreaming of Barcelona.", i: [26, 5, 17, 21] },
+  { n: "Luca", g: "male", age: 32, city: "Bologna", bio: "Chef. I cook for friends and love markets and wine.", i: [16, 20, 1, 12] },
 ]
 
 // Photos of the test profiles: public/demo/people/demo-<N>.(jpg|jpeg|png|webp), extra ones demo-<N>-2, demo-<N>-3.
