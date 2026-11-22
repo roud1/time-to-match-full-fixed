@@ -20,6 +20,8 @@ import {
   type Locale,
   LOCALE_FALLBACK,
   isLocale,
+  DEFAULT_LOCALE,
+  detectLocale,
   localeNames,
   localeShortNames,
   localeToBcp47,
@@ -42,6 +44,7 @@ export {
   localeToBcp47,
   isLocale,
   DEFAULT_LOCALE,
+  detectLocale,
 } from "@/client/lib/i18n/config"
 
 export type TranslationKey = keyof typeof ruMessages
@@ -115,16 +118,40 @@ interface I18nContextType {
 
 const I18nContext = createContext<I18nContextType | null>(null)
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("ru")
+export function I18nProvider({
+  children,
+  initialLocale = DEFAULT_LOCALE,
+}: {
+  children: ReactNode
+  /** Resolved on the server (choice cookie or Accept-Language), so the first paint is in that language. */
+  initialLocale?: Locale
+}) {
+  const [locale, setLocale] = useState<Locale>(initialLocale)
 
   useEffect(() => {
-    const saved = localStorage.getItem("locale")
-    if (saved && isLocale(saved)) setLocale(saved)
+    let saved: string | null = null
+    try {
+      saved = localStorage.getItem("locale")
+    } catch {
+      /* storage blocked */
+    }
+    if (saved && isLocale(saved)) {
+      setLocale(saved)
+      return
+    }
+    // No explicit choice yet: follow the device language (beats the later location-based suggestion).
+    const detected = detectLocale(typeof navigator !== "undefined" ? navigator.languages : [])
+    setLocale(detected)
+    try {
+      localStorage.setItem("locale", detected)
+    } catch {
+      /* storage blocked */
+    }
+    document.cookie = `ttm-locale=${detected};path=/;max-age=31536000;SameSite=Lax`
   }, [])
 
   useEffect(() => {
-    document.documentElement.lang = localeToBcp47(locale).split("-")[0] ?? "ru"
+    document.documentElement.lang = localeToBcp47(locale).split("-")[0] ?? DEFAULT_LOCALE
   }, [locale])
 
   const localeDict = useMemo(() => buildLocaleDict(locale), [locale])

@@ -7,6 +7,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { I18nProvider } from "@/client/lib/i18n"
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/client/lib/i18n/config"
 import { QueryProvider } from "@/client/components/providers/query-provider"
 import { SiteBackground } from "@/client/components/site-background"
 import { MobileScreenTransition } from "@/client/components/mobile/mobile-screen-transition"
@@ -97,8 +98,7 @@ export default async function RootLayout({
   // Read locale from middleware-forwarded header (set from ttm-locale cookie)
   const headersList = await headers()
   const localeHeader = headersList.get("x-locale")
-  const VALID_LOCALES = ["ru", "uk", "en", "de", "es", "pl", "fr", "it", "tr"]
-  const lang = localeHeader && VALID_LOCALES.includes(localeHeader) ? localeHeader : "ru"
+  const lang: Locale = localeHeader && isLocale(localeHeader) ? localeHeader : DEFAULT_LOCALE
 
   return (
     <html lang={lang} suppressHydrationWarning className="bg-transparent" data-lv="1">
@@ -118,7 +118,7 @@ export default async function RootLayout({
       >
         <ThemeProvider>
           <AppModeSync />
-          <I18nProvider>
+          <I18nProvider initialLocale={lang}>
             <QueryProvider>
               <AchievementProvider>
                 <ServiceWorkerRegister />
