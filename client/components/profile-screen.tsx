@@ -7,7 +7,10 @@ import { useReducedMotion } from "motion/react"
 import { useI18n, type Locale, type TranslationKey } from "@/client/lib/i18n"
 import { localeToBcp47 } from "@/client/lib/i18n/config"
 import { CUSTOM_CITY_ID, type CitySelectValue } from "@/client/lib/cities"
-import { getInterestLabel, MIN_INTERESTS, type InterestId } from "@/client/lib/interests"
+import { getInterestLabel, INTERESTS, MAX_INTERESTS, MIN_INTERESTS, type InterestId } from "@/client/lib/interests"
+import { fetchInterests } from "@/client/lib/discover/api"
+import { interestIdsFromSlugs } from "@/client/lib/discover/interest-overlap"
+import type { Interest } from "@/client/lib/interests/types"
 import { MIN_VIBES, MIN_ENERGY_TAGS } from "@/client/lib/profile-identity"
 import {
   EnergyTagPicker,
@@ -169,6 +172,9 @@ export function ProfileScreen() {
   const section: ProfileSection = tabParam === "premium" ? "premium" : "profile"
   const [profile, setProfile] = useState<StoredUserProfile | null>(null)
   const [editing, setEditing] = useState(false)
+  // Server interest catalog: the icon picker (local ids = slugs) is the single interests UI;
+  // it is mapped to server interest ids on save, like at registration.
+  const [interestCatalog, setInterestCatalog] = useState<Interest[]>([])
   const [savedFlash, setSavedFlash] = useState(false)
   const [form, setForm] = useState<EditForm | null>(null)
   const [statsTick, setStatsTick] = useState(0)
@@ -252,6 +258,43 @@ export function ProfileScreen() {
     router.replace(url, { scroll: false })
   }
 
+  useEffect(() => {
+    if (editing && interestCatalog.length === 0) void fetchInterests().then(setInterestCatalog)
+  }, [editing, interestCatalog.length])
+
+  // Interests chosen earlier only on the server (old second list) prefill the icon picker,
+  // otherwise it showed 0/8 and "Save" stayed disabled.
+  useEffect(() => {
+    if (!editing || interestCatalog.length === 0) return
+    // Opened straight in edit mode (/profile?edit=1) the form may not have the server ids yet.
+    const serverIds = meUser?.interestIds ?? []
+    setForm((prev) => {
+      if (!prev) return prev
+      const dbIds = prev.dbInterestIds.length > 0 ? prev.dbInterestIds : serverIds
+      if (prev.interests.length > 0 || dbIds.length === 0) {
+        return dbIds === prev.dbInterestIds ? prev : { ...prev, dbInterestIds: dbIds }
+      }
+      const local = new Set<string>(INTERESTS.map((i) => i.id))
+      const fromServer = interestCatalog
+        .filter((c) => dbIds.includes(c.id) && c.slug && local.has(c.slug))
+        .map((c) => c.slug as InterestId)
+        .slice(0, MAX_INTERESTS)
+      return { ...prev, dbInterestIds: dbIds, interests: fromServer.length > 0 ? fromServer : prev.interests }
+    })
+  }, [editing, interestCatalog, meUser?.interestIds])
+
+  /** Picker selection as server ids, keeping server-only interests the picker cannot show. */
+  const resolveDbInterestIds = (selected: InterestId[], current: number[]): number[] => {
+    if (interestCatalog.length === 0) return current
+    const local = new Set<string>(INTERESTS.map((i) => i.id))
+    const mapped = interestIdsFromSlugs(selected, interestCatalog)
+    const serverOnly = current.filter((id) => {
+      const item = interestCatalog.find((c) => c.id === id)
+      return Boolean(item && !(item.slug && local.has(item.slug)))
+    })
+    return [...new Set([...mapped, ...serverOnly])]
+  }
+
   const handleSave = () => {
     if (!profile || !form) return
     if (form.interests.length < MIN_INTERESTS) return
@@ -279,7 +322,7 @@ export function ProfileScreen() {
       ageMax: form.ageMax,
       latitude: form.latitude,
       longitude: form.longitude,
-      dbInterestIds: form.dbInterestIds,
+      dbInterestIds: resolveDbInterestIds(form.interests, form.dbInterestIds),
       ...(isManual
         ? { customCity: form.customCity.trim(), cityId: undefined }
         : {
@@ -465,8 +508,8 @@ export function ProfileScreen() {
   )
 
   const profileDetailsCard = (
-    <div className="ttm-profile-section-card p-6 md:p-8 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.35)]">
-      <div className="flex items-center justify-between mb-6 gap-3">
+    <div className="ttm-profile-section-card lv-edit__form p-6 md:p-8 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.35)]">
+      <div className="flex items-center justify-between mb-6 gap-3 lv-edit__head">
         <div>
           <h2 className="text-lg font-extralight tracking-tight">{t("profileDetailsTitle")}</h2>
           <p className="text-xs text-muted-foreground font-light mt-1">{t("profilePageSubtitle")}</p>
@@ -532,6 +575,7 @@ export function ProfileScreen() {
             latitude={form.latitude}
             longitude={form.longitude}
             dbInterestIds={form.dbInterestIds}
+            showInterests={false}
             onChange={(patch) => setForm((prev) => (prev ? { ...prev, ...patch } : prev))}
           />
 
@@ -615,7 +659,17 @@ export function ProfileScreen() {
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2">
+          <div className="lv-edit__bar">
+            {saveDisabled && (
+              <p className="lv-edit__need" role="status">
+                {!form.bio.trim()
+                  ? t("lvEditNeedBio")
+                  : form.interests.length < MIN_INTERESTS
+                    ? t("lvEditNeedInterests")
+                    : t("lvEditNeedTags")}
+              </p>
+            )}
+            <div className="flex gap-3 pt-2 lv-edit__actions">
             <button
               type="button"
               onClick={handleCancel}
@@ -631,6 +685,7 @@ export function ProfileScreen() {
             >
               {t("profileSave")}
             </button>
+            </div>
           </div>
         </div>
       ) : (
@@ -698,6 +753,17 @@ export function ProfileScreen() {
       )}
     </div>
   )
+
+  // App: editing is its own calm screen (form only; no tabs, stats or achievements around it).
+  if (inApp && section === "profile" && editing) {
+    return (
+      <div className="lv-edit">
+        <h1 className="lv-edit__title">{t("appMeEdit")}</h1>
+        {profileDetailsCard}
+        <PhotoVerificationBlock />
+      </div>
+    )
+  }
 
   if (inApp && section === "profile" && !editing) {
     return (

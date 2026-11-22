@@ -1823,5 +1823,8 @@
   "lvAboutAiTitle": "Luvia AI",
   "lvAboutAiBody": "Schlägt eine erste Nachricht vor und hilft, das Gespräch am Laufen zu halten. Ein Assistent, kein Teilnehmer deiner Chats.",
   "lvAboutPrivacyTitle": "Deine Daten",
-  "lvAboutPrivacyBody": "Wir verkaufen keine Daten und geben sie nicht an Werbetreibende weiter. Details in der Datenschutzerklärung."
+  "lvAboutPrivacyBody": "Wir verkaufen keine Daten und geben sie nicht an Werbetreibende weiter. Details in der Datenschutzerklärung.",
+  "lvEditNeedBio": "Schreib ein paar Worte über dich, um zu speichern.",
+  "lvEditNeedInterests": "Wähle mindestens 3 Interessen, um zu speichern.",
+  "lvEditNeedTags": "Wähle zum Speichern in jedem begonnenen Block die Mindestanzahl an Optionen."
 }

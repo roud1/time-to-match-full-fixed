@@ -1823,5 +1823,8 @@
   "lvAboutAiTitle": "Luvia AI",
   "lvAboutAiBody": "Podpowie pierwszą wiadomość i pomoże podtrzymać rozmowę. To asystent, a nie uczestnik Twoich czatów.",
   "lvAboutPrivacyTitle": "Twoje dane",
-  "lvAboutPrivacyBody": "Nie sprzedajemy danych ani nie przekazujemy ich reklamodawcom. Szczegóły w polityce prywatności."
+  "lvAboutPrivacyBody": "Nie sprzedajemy danych ani nie przekazujemy ich reklamodawcom. Szczegóły w polityce prywatności.",
+  "lvEditNeedBio": "Aby zapisać, dodaj kilka słów o sobie.",
+  "lvEditNeedInterests": "Aby zapisać, wybierz co najmniej 3 zainteresowania.",
+  "lvEditNeedTags": "Aby zapisać, wybierz minimalną liczbę opcji w każdym rozpoczętym bloku."
 }

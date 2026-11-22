@@ -1823,5 +1823,8 @@
   "lvAboutAiTitle": "Luvia AI",
   "lvAboutAiBody": "İlk mesajı önerir ve sohbeti sürdürmene yardım eder. Bir asistandır, sohbetlerinin katılımcısı değildir.",
   "lvAboutPrivacyTitle": "Verilerin",
-  "lvAboutPrivacyBody": "Verilerini satmıyor, reklamcılarla paylaşmıyoruz. Ayrıntılar gizlilik politikasında."
+  "lvAboutPrivacyBody": "Verilerini satmıyor, reklamcılarla paylaşmıyoruz. Ayrıntılar gizlilik politikasında.",
+  "lvEditNeedBio": "Kaydetmek için kendin hakkında birkaç kelime ekle.",
+  "lvEditNeedInterests": "Kaydetmek için en az 3 ilgi alanı seç.",
+  "lvEditNeedTags": "Kaydetmek için başladığın her blokta en az gereken sayıda seçenek seç."
 }

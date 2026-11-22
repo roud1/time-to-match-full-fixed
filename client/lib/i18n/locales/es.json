@@ -1823,5 +1823,8 @@
   "lvAboutAiTitle": "Luvia AI",
   "lvAboutAiBody": "Sugiere un primer mensaje y ayuda a mantener la conversación. Es un asistente, no participa en tus chats.",
   "lvAboutPrivacyTitle": "Tus datos",
-  "lvAboutPrivacyBody": "No vendemos tus datos ni los compartimos con anunciantes. Detalles en la política de privacidad."
+  "lvAboutPrivacyBody": "No vendemos tus datos ni los compartimos con anunciantes. Detalles en la política de privacidad.",
+  "lvEditNeedBio": "Añade unas palabras sobre ti para guardar.",
+  "lvEditNeedInterests": "Elige al menos 3 intereses para guardar.",
+  "lvEditNeedTags": "Para guardar, elige el mínimo de opciones en cada bloque que empezaste."
 }
