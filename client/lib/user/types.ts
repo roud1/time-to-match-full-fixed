@@ -17,6 +17,10 @@ export type User = {
   gender?: "male" | "female" | null
   /** Who the user wants to see (registration "Ищу"). */
   lookingFor?: "men" | "women" | "all" | null
+  /** Both chat partners must opt in before a chat transcript is sent to the AI provider. */
+  aiInsightsConsent?: boolean
+  /** When the user gave explicit consent to process gender / "looking for" (GDPR Art. 9). */
+  sensitiveDataConsentAt?: string | null
   ageMin?: number | null
   ageMax?: number | null
   latitude?: number | null

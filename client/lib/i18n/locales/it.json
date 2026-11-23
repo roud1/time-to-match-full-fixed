@@ -1852,5 +1852,12 @@
   "discoverGateNeedCity": "Indica la tua città",
   "discoverGateCta": "Completa profilo",
   "lvSetExport": "Scarica i miei dati",
-  "lvSetExportBody": "Una copia di tutti i tuoi dati in un unico file (JSON)"
+  "lvSetExportBody": "Una copia di tutti i tuoi dati in un unico file (JSON)",
+  "regSensitiveConsent": "Acconsento che Luvia usi il mio genere e chi cerco per propormi dei match. Questo può rivelare il mio orientamento sessuale. Posso revocare il consenso in qualsiasi momento eliminando l'account.",
+  "regErrorSensitive": "Senza questo consenso i match non possono funzionare",
+  "lvConsentGateTitle": "Ci serve il tuo consenso",
+  "lvConsentGateAgree": "Acconsento",
+  "lvConsentGateDecline": "Non acconsento: elimina l'account nelle impostazioni",
+  "lvAiConsentTitle": "Consigli IA nelle chat",
+  "lvAiConsentBody": "La chat del match viene inviata al nostro fornitore di IA per darti consigli sulla vostra intesa. Funziona solo se lo attivate entrambi."
 }

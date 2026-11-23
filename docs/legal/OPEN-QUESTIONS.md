@@ -22,11 +22,15 @@ they replace the pages `/privacy` and `/terms`, these points need an answer (and
     weekly cleanup job; see "Data retention" below.
 
 ## Decisions
-13. **AI connection insights.** When AI is configured, the server sends the **chat transcript of both people**
+13. ✅ **Done (opt-in for both):** Settings → Privacy → "AI tips in chats". The transcript is sent to the AI
+    provider only when both people turned it on; otherwise insights are computed locally.
+    Original note — **AI connection insights.** When AI is configured, the server sends the **chat transcript of both people**
     to the AI provider to compute "connection" insights. Under the GDPR this needs a clear legal basis and,
     because it includes the other person's messages, it is safest to make it **opt-in for both users** — or
     to switch it off for EU launch. Luvia AI (the assistant chat) only sends what the user writes to it.
-14. **Sensitive data.** Gender + "looking for" can reveal sexual orientation (Art. 9 GDPR). The draft relies on
+14. ✅ **Done:** a separate required checkbox at sign-up stores `profile.sensitiveDataConsentAt`; existing
+    accounts are asked once when they open the app (agree, or go to Settings to delete the account).
+    Original note — **Sensitive data.** Gender + "looking for" can reveal sexual orientation (Art. 9 GDPR). The draft relies on
     explicit consent at sign-up — the registration checkbox should then say so explicitly (separate
     checkbox: "I agree that Luvia processes my gender and who I'm looking for to match me").
 15. **Retention.** How long to keep chat messages of expired matches, and when to delete inactive

@@ -47,6 +47,7 @@ import { useDesktopAppNav } from "@/client/hooks/use-desktop-app-nav"
 import { isEmotionalOsEnabled } from "@/client/lib/feature-flags"
 import { useLuviaUi } from "@/client/hooks/use-ttm-app"
 import { Heart } from "lucide-react"
+import { SensitiveConsentGate } from "@/client/components/app/sensitive-consent-gate"
 import { fetchSubscriptionSummary } from "@/client/lib/monetization/api"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
 import { getActivityCounts } from "@/client/lib/activity-metrics"
@@ -62,6 +63,7 @@ export function AppShell() {
   const tab: AppTab =
     tabParam === "likes" || tabParam === "chat" || tabParam === "map" ? tabParam : "discover"
   const [ready, setReady] = useState(false)
+  const [needsSensitiveConsent, setNeedsSensitiveConsent] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const isDesktopNav = useDesktopAppNav()
   const inApp = useLuviaUi()
@@ -108,6 +110,8 @@ export function AppShell() {
       }
 
       setReady(true)
+      // Server accounts without the explicit Art. 9 consent (created before it existed) are asked once.
+      if (me.id !== "local" && !me.sensitiveDataConsentAt) setNeedsSensitiveConsent(true)
       recordProfileActivity()
       // Mirror the server subscription into the local cache that paywalls read.
       void fetchSubscriptionSummary()
@@ -296,6 +300,7 @@ export function AppShell() {
           </main>
 
           {showDock && <BottomNavBar />}
+          {needsSensitiveConsent && <SensitiveConsentGate onDone={() => setNeedsSensitiveConsent(false)} />}
         </EmotionalWorldRoot>
         {emotionalOs ? <EvolutionEventCelebration /> : null}
         <ConnectionExtensionToastStack />

@@ -1852,5 +1852,12 @@
   "discoverGateNeedCity": "Podaj miasto",
   "discoverGateCta": "Uzupełnij profil",
   "lvSetExport": "Pobierz moje dane",
-  "lvSetExportBody": "Kopia wszystkich Twoich danych w jednym pliku (JSON)"
+  "lvSetExportBody": "Kopia wszystkich Twoich danych w jednym pliku (JSON)",
+  "regSensitiveConsent": "Zgadzam się, aby Luvia wykorzystywała moją płeć i to, kogo szukam, do proponowania dopasowań. Może to ujawniać moją orientację seksualną. Zgodę mogę wycofać w każdej chwili, usuwając konto.",
+  "regErrorSensitive": "Bez tej zgody dopasowywanie nie działa",
+  "lvConsentGateTitle": "Potrzebujemy Twojej zgody",
+  "lvConsentGateAgree": "Zgadzam się",
+  "lvConsentGateDecline": "Nie zgadzam się — usuń konto w ustawieniach",
+  "lvAiConsentTitle": "Podpowiedzi AI w czatach",
+  "lvAiConsentBody": "Czat z dopasowaniem jest wysyłany do naszego dostawcy AI, aby dawać wskazówki o waszej relacji. Działa tylko, gdy oboje to włączycie."
 }

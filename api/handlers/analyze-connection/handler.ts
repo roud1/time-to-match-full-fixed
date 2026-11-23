@@ -39,7 +39,9 @@ export async function POST(request: Request) {
     return withCors(request, jsonFromZodError(preview.error))
   }
 
-  const result = await analyzeConnectionOnServer(body)
+  // Anonymous endpoint without a verifiable match: never sends the transcript to the AI provider
+  // (it contains the other person's messages and anyone could relay text through our key).
+  const result = await analyzeConnectionOnServer(body, { externalAi: false })
   if (!result.ok) {
     return withCors(request, jsonError(400, { error: result.error, message: "Invalid request" }))
   }
@@ -49,7 +51,7 @@ export async function POST(request: Request) {
     jsonOk({
       ...result.data,
       configured: isOpenRouterConfigured(),
-      provider: isOpenRouterConfigured() ? "openrouter" : "local",
+      provider: "local",
     })
   )
 }
