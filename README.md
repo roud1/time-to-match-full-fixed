@@ -120,7 +120,7 @@ Cron routes (protected by `CRON_SECRET`):
 
 - `POST /api/v1/cron/expire-matches` — every minute
 - `POST /api/v1/cron/notify` — every 15 minutes (email + push expiry alerts)
-- `POST /api/v1/cron/cleanup` — weekly DB cleanup (expired profiles/messages)
+- `POST /api/v1/cron/cleanup` — weekly DB cleanup (expired conversation messages; accounts are never deleted here)
 
 ## Notifications
 
