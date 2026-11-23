@@ -19,13 +19,13 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      name: "Time to Match",
+      name: "Luvia",
       url: siteUrl,
       logo: `${siteUrl}/brand/ttm-logo-full.png`,
     },
     {
       "@type": "WebApplication",
-      name: "Time to Match",
+      name: "Luvia",
       url: siteUrl,
       applicationCategory: "LifestyleApplication",
       operatingSystem: "Web",

@@ -45,7 +45,7 @@ export async function sendEmail(to: string, subject: string, html: string): Prom
   if (smtp) {
     const from = process.env.SMTP_FROM?.trim() || process.env.SMTP_USER!.trim()
     try {
-      await smtp.sendMail({ from: `Time to Match <${from}>`, to, subject, html })
+      await smtp.sendMail({ from: `Luvia <${from}>`, to, subject, html })
       log.info("email_sent", { to, subject, via: "smtp" })
       return true
     } catch (e) {

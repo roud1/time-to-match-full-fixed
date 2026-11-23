@@ -1,82 +1,80 @@
 "use client"
 
-import { motion } from "motion/react"
+import "../settings/settings-luvia.css"
 import Link from "next/link"
+import { ChevronRight, FileText, HelpCircle, Lock, Shield, Sparkles, Timer } from "lucide-react"
 import { Navbar } from "@/client/components/navbar"
-import { Footer } from "@/client/components/footer"
-import { TtmButton } from "@/client/components/ds/ttm-button"
+import { Logo } from "@/client/components/logo"
 import { useI18n } from "@/client/lib/i18n"
-import { Shield, Sparkles, Timer, Users } from "lucide-react"
 
-const VALUES = [
-  { icon: Sparkles, titleKey: "aboutValueQuality" as const, bodyKey: "aboutValueQualityBody" as const },
-  { icon: Timer, titleKey: "aboutValueAlgo" as const, bodyKey: "aboutValueAlgoBody" as const },
-  { icon: Shield, titleKey: "aboutValueSafety" as const, bodyKey: "aboutValueSafetyBody" as const },
-  { icon: Users, titleKey: "aboutValueMeet" as const, bodyKey: "aboutValueMeetBody" as const },
+/** Only what the product actually does (see docs/LUVIA_2_DEPLOY.md). */
+const FACTS = [
+  { icon: Timer, titleKey: "lvAbout24Title" as const, bodyKey: "lvAbout24Body" as const },
+  { icon: Shield, titleKey: "lvAboutSafetyTitle" as const, bodyKey: "lvAboutSafetyBody" as const },
+  { icon: Sparkles, titleKey: "lvAboutAiTitle" as const, bodyKey: "lvAboutAiBody" as const },
+  { icon: Lock, titleKey: "lvAboutPrivacyTitle" as const, bodyKey: "lvAboutPrivacyBody" as const },
 ]
 
 export default function AboutPage() {
   const { t } = useI18n()
 
   return (
-    <main className="min-h-screen bg-transparent">
+    <main className="lv-set-page">
       <Navbar />
-      <section className="pt-32 pb-20 px-6 max-w-3xl mx-auto text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="ttm-overline mb-4"
-        >
-          Time to Match
-        </motion.p>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.08 }}
-          className="ttm-h1 mb-6"
-        >
-          {t("aboutHeroTitle")}
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.14 }}
-          className="ttm-body text-lg max-w-xl mx-auto"
-        >
-          {t("aboutHeroBody")}
-        </motion.p>
-      </section>
+      <div className="lv-set">
+        <div className="lv-about__hero">
+          <Logo variant="full" size="md" />
+          <h1 className="lv-set__title">{t("lvAboutTitle")}</h1>
+          <p className="lv-set__hint">{t("lvAboutBody")}</p>
+        </div>
 
-      <section className="max-w-2xl mx-auto px-6 pb-24 space-y-16">
-        {VALUES.map((v, i) => (
-          <motion.article
-            key={v.titleKey}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ delay: i * 0.06, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="flex gap-5 items-start"
-          >
-            <div className="shrink-0 w-12 h-12 rounded-2xl ttm-glass flex items-center justify-center text-[var(--ttm-warm)]">
-              <v.icon className="w-5 h-5" strokeWidth={1.5} />
-            </div>
-            <div>
-              <h2 className="text-lg font-medium text-[var(--ttm-text)] mb-2">{t(v.titleKey)}</h2>
-              <p className="ttm-body">{t(v.bodyKey)}</p>
-            </div>
-          </motion.article>
-        ))}
-      </section>
+        <div className="lv-set__body">
+          <ul className="lv-set__group lv-set__list">
+            {FACTS.map(({ icon: Icon, titleKey, bodyKey }) => (
+              <li key={titleKey} className="lv-set__row lv-about__fact">
+                <span className="lv-set__icon" aria-hidden>
+                  <Icon strokeWidth={1.8} />
+                </span>
+                <span className="lv-set__text">
+                  <span className="lv-set__label lv-set__label--wrap">{t(titleKey)}</span>
+                  <span className="lv-set__hint">{t(bodyKey)}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
 
-      <section className="text-center pb-28 px-6">
-        <TtmButton href="/register">{t("heroCtaPrimary")}</TtmButton>
-        <p className="mt-6">
-          <Link href="/" className="text-sm text-[var(--ttm-text-muted)] hover:text-[var(--ttm-warm)]">
-            ← {t("learnMore")}
-          </Link>
-        </p>
-      </section>
-      <Footer />
+          <section className="lv-set__group">
+            <Link href="/terms" className="lv-set__row">
+              <span className="lv-set__icon" aria-hidden>
+                <FileText strokeWidth={1.8} />
+              </span>
+              <span className="lv-set__text">
+                <span className="lv-set__label lv-set__label--wrap">{t("lvTerms")}</span>
+              </span>
+              <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
+            </Link>
+            <Link href="/privacy" className="lv-set__row">
+              <span className="lv-set__icon" aria-hidden>
+                <Lock strokeWidth={1.8} />
+              </span>
+              <span className="lv-set__text">
+                <span className="lv-set__label lv-set__label--wrap">{t("lvPrivacyPolicy")}</span>
+              </span>
+              <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
+            </Link>
+            <a href="mailto:support@timetomatch.app" className="lv-set__row">
+              <span className="lv-set__icon" aria-hidden>
+                <HelpCircle strokeWidth={1.8} />
+              </span>
+              <span className="lv-set__text">
+                <span className="lv-set__label">{t("appMeSupport")}</span>
+                <span className="lv-set__hint">support@timetomatch.app</span>
+              </span>
+              <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
+            </a>
+          </section>
+        </div>
+      </div>
     </main>
   )
 }

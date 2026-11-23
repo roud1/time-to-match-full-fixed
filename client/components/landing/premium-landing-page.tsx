@@ -18,7 +18,7 @@ export function PremiumLandingPage() {
       <PremiumCardsSection />
       <PremiumFinalCtaSection />
       <footer className="ttm-premium-footer">
-        <p>© {new Date().getFullYear()} Time to Match</p>
+        <p>© {new Date().getFullYear()} Luvia</p>
       </footer>
     </main>
   )

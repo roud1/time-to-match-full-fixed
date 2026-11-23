@@ -6,6 +6,7 @@ import "./luvia-tokens.css"
 import "@/client/components/app/match-celebration-luvia.css"
 import "@/client/components/premium/premium-luvia.css"
 import "@/app/settings/settings-luvia.css"
+import "@/client/components/profile/profile-edit-luvia.css"
 import { useEffect } from "react"
 import { applyTheme } from "@/client/lib/theme"
 

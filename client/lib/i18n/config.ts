@@ -1,7 +1,8 @@
 export const LOCALES = ["ru", "uk", "en", "de", "es", "pl", "fr", "it", "tr"] as const
 export type Locale = (typeof LOCALES)[number]
 
-export const DEFAULT_LOCALE: Locale = "ru"
+/** Fallback when the device language is not supported (European audience: English). */
+export const DEFAULT_LOCALE: Locale = "en"
 
 export const localeNames: Record<Locale, string> = {
   ru: "Русский",
@@ -71,4 +72,32 @@ export function localeFromCountryCode(code: string | undefined): Locale | null {
   if (upper === "IT") return "it"
   if (upper === "TR") return "tr"
   return "en"
+}
+
+/**
+ * First supported locale from the device / browser language list (e.g. navigator.languages or the
+ * Accept-Language header), by primary subtag: "de-AT" -> "de", "uk-UA" -> "uk". Fallback: English.
+ */
+export function detectLocale(languages: readonly string[] | null | undefined): Locale {
+  for (const raw of languages ?? []) {
+    const primary = raw.trim().toLowerCase().split(/[-_;]/)[0] ?? ""
+    if (isLocale(primary)) return primary
+  }
+  return DEFAULT_LOCALE
+}
+
+/** Accept-Language header -> ordered language tags (q-values respected). */
+export function parseAcceptLanguage(header: string | null | undefined): string[] {
+  if (!header) return []
+  return header
+    .split(",")
+    .map((part, index) => {
+      const [tag, ...params] = part.trim().split(";")
+      const q = params.map((p) => p.trim()).find((p) => p.startsWith("q="))
+      const weight = q ? Number(q.slice(2)) : 1
+      return { tag: tag ?? "", weight: Number.isFinite(weight) ? weight : 0, index }
+    })
+    .filter((x) => x.tag && x.weight > 0)
+    .sort((a, b) => b.weight - a.weight || a.index - b.index)
+    .map((x) => x.tag)
 }

@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
 
   const ok = await sendWebPush(user.push_subscription, {
-    title: "Time to Match",
+    title: "Luvia",
     body: "Тестовое push-уведомление — всё работает.",
     url: `${origin.replace(/\/$/, "")}/app`,
     tag: "ttm-test-push",

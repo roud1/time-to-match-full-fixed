@@ -222,7 +222,7 @@ export function AppShell() {
                     <Image src="/brand/luvia/logo.svg" alt="Luvia" width={719} height={200} priority unoptimized />
                   </Link>
                 ) : (
-                  <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile" aria-label="Time to Match">
+                  <Link href="/" className="flex items-center gap-2 group min-w-0 ttm-tactile" aria-label="Luvia">
                     <Logo variant="full" size="sm" className="hidden sm:inline-flex" />
                     <Logo variant="icon" size="sm" className="sm:hidden" />
                   </Link>

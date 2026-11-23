@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { detectLocale, isLocale, parseAcceptLanguage } from "@/client/lib/i18n/config"
 import type { NextRequest } from "next/server"
 import {
   isProtectedAppPath,
@@ -114,14 +115,18 @@ export async function middleware(request: NextRequest) {
     return unauthorizedApiResponse(request)
   }
 
-  const res = NextResponse.next()
-  applySecurityHeaders(res, request)
-
-  // Forward locale cookie as x-locale header so layout.tsx can set lang attr
+  // Locale for server rendering (html lang + first paint): the user's choice (ttm-locale cookie),
+  // otherwise the browser / device language. Passed as a REQUEST header so layout.tsx can read it.
   const localeCookie = request.cookies.get("ttm-locale")?.value
-  if (localeCookie) {
-    res.headers.set("x-locale", localeCookie)
-  }
+  const locale =
+    localeCookie && isLocale(localeCookie)
+      ? localeCookie
+      : detectLocale(parseAcceptLanguage(request.headers.get("accept-language")))
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("x-locale", locale)
+
+  const res = NextResponse.next({ request: { headers: requestHeaders } })
+  applySecurityHeaders(res, request)
 
   return res
 }
