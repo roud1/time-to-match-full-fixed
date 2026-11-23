@@ -1,5 +1,5 @@
 /**
- * AI Connection Engine — invisible emotional intelligence for Time to Match.
+ * AI Connection Engine — invisible emotional intelligence for Luvia.
  * Not a chatbot. Analyzes relationships and drives UI atmosphere.
  */
 

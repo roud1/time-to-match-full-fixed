@@ -1,6 +1,7 @@
 "use client"
 
 import "./app-profile-detail.css"
+import { localizeInterestName } from "@/client/lib/interest-labels"
 import { useEffect, useState } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import { ArrowLeft, Heart, MapPin, MessageCircle, MoreHorizontal, X } from "lucide-react"
@@ -35,7 +36,7 @@ export function AppProfileDetail({
   onNope,
   onOpenSafety,
 }: AppProfileDetailProps) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const reduce = useReducedMotion()
   const photos = getSwipeProfilePhotos(profile)
   const [index, setIndex] = useState(Math.min(initialPhotoIndex, Math.max(photos.length - 1, 0)))
@@ -113,7 +114,7 @@ export function AppProfileDetail({
               <h3>{t("profileInterests")}</h3>
               <ul className="ttm-app-profile__chips">
                 {profile.interests.map((it) => (
-                  <li key={it}>{it}</li>
+                  <li key={it}>{localizeInterestName(it, locale)}</li>
                 ))}
               </ul>
             </section>

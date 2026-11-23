@@ -589,8 +589,13 @@ export function RegisterForm() {
                   />
                   <label htmlFor="terms" className="ttm-type-muted leading-relaxed cursor-pointer">
                     {t("regAgreeTerms")}{" "}
-                    <span className="text-white/60 hover:underline">{t("regTerms")}</span> {t("regAnd")}{" "}
-                    <span className="text-white/60 hover:underline">{t("regPrivacy")}</span>
+                    <a href="/terms" target="_blank" rel="noopener" className="lv-legal-link">
+                      {t("regTerms")}
+                    </a>{" "}
+                    {t("regAnd")}{" "}
+                    <a href="/privacy" target="_blank" rel="noopener" className="lv-legal-link">
+                      {t("regPrivacy")}
+                    </a>
                   </label>
                 </div>
                 {errors.agreeTerms && (

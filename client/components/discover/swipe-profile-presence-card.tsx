@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { localizeInterestName } from "@/client/lib/interest-labels"
 import { ProfilePhotoImage } from "@/client/components/ui/profile-photo-image"
 import { motion, useReducedMotion, type MotionValue } from "motion/react"
 import type { SwipeProfile } from "@/client/lib/demo-profiles"
@@ -37,7 +38,7 @@ export function SwipeProfilePresenceCard({
   onOpenSafety,
   className,
 }: SwipeProfilePresenceCardProps) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const reduce = useReducedMotion()
   const photos = getSwipeProfilePhotos(profile)
   const [photoIndex, setPhotoIndex] = useState(0)
@@ -155,7 +156,7 @@ export function SwipeProfilePresenceCard({
           <div className="flex flex-wrap gap-1.5 mb-3">
             {profile.interests.map((interest) => (
               <span key={interest} className="swipe-profile-presence__chip">
-                {interest}
+                {localizeInterestName(interest, locale)}
               </span>
             ))}
           </div>

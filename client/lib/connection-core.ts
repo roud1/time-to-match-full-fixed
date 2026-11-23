@@ -1,5 +1,5 @@
 /**
- * Connection Core — emotional relationship engine for Time to Match.
+ * Connection Core — emotional relationship engine for Luvia.
  * Single entry point for sync, chemistry, bond, and connection energy.
  */
 

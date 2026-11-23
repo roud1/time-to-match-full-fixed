@@ -19,6 +19,11 @@ type ProfileDatingFieldsProps = {
   latitude?: number | null
   longitude?: number | null
   dbInterestIds: number[]
+  /**
+   * false: the parent edits interests (icon picker) and saves them itself; this block neither shows
+   * the server list nor writes interests (it would write stale ids on the save event).
+   */
+  showInterests?: boolean
   onChange: (patch: {
     purpose?: DatingPurpose
     maxDistance?: number
@@ -40,6 +45,7 @@ export function ProfileDatingFields({
   latitude,
   longitude,
   dbInterestIds,
+  showInterests = true,
   onChange,
 }: ProfileDatingFieldsProps) {
   const { t } = useI18n()
@@ -47,8 +53,8 @@ export function ProfileDatingFields({
   const [locating, setLocating] = useState(false)
 
   useEffect(() => {
-    void fetchInterests().then(setCatalog)
-  }, [])
+    if (showInterests) void fetchInterests().then(setCatalog)
+  }, [showInterests])
 
   const purposeLabel = (p: DatingPurpose) => t(`datingPurpose_${p}` as "datingPurpose_serious")
 
@@ -100,7 +106,7 @@ export function ProfileDatingFields({
             ? { gender: gender === "other" ? "other" : gender }
             : undefined,
       }),
-      dbInterestIds.length ? saveUserInterests(dbInterestIds) : saveUserInterests([]),
+      showInterests ? saveUserInterests(dbInterestIds) : Promise.resolve(true),
     ])
   }
 
@@ -116,6 +122,7 @@ export function ProfileDatingFields({
     <div className="space-y-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <p className="text-xs text-white/50 font-light">{t("profileDatingSectionLead")}</p>
 
+      {showInterests && (
       <div className="space-y-2">
         <Label className="text-foreground/80 font-light">{t("profileInterests")}</Label>
         {catalog.length > 0 ? (
@@ -144,6 +151,7 @@ export function ProfileDatingFields({
           <p className="text-xs text-muted-foreground font-light">{t("profileInterestsCatalogEmpty")}</p>
         )}
       </div>
+      )}
 
       <div className="space-y-2">
         <Label className="text-foreground/80 font-light">{t("datingPurposeLabel")}</Label>

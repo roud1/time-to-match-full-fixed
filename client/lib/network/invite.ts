@@ -27,7 +27,7 @@ export function buildInvitePayload(baseUrl?: string): InvitePayload {
     (typeof window !== "undefined" ? window.location.origin : "https://timetomatch.app")
   const code = getOrCreateInviteCode()
   const url = `${origin}/welcome?invite=${code}`
-  const message = `Time to Match — a living emotional space for real connection.\nJoin my world: ${url}`
+  const message = `Luvia — a living emotional space for real connection.\nJoin my world: ${url}`
   return { code, url, message }
 }
 
@@ -46,7 +46,7 @@ export async function shareInviteNative(): Promise<boolean> {
   if (typeof navigator === "undefined" || !navigator.share) return false
   try {
     await navigator.share({
-      title: "Time to Match",
+      title: "Luvia",
       text: payload.message,
       url: payload.url,
     })

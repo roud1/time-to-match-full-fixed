@@ -17,7 +17,7 @@ const BASE = (content: string) => `
             background:linear-gradient(135deg,#f72585,#b5179e,#7209b7);
             -webkit-background-clip:text;-webkit-text-fill-color:transparent;
             background-clip:text;color:transparent;">
-            Time to Match
+            Luvia
           </span>
         </td></tr>
         <!-- Card -->
@@ -28,7 +28,7 @@ const BASE = (content: string) => `
         <!-- Footer -->
         <tr><td style="padding:24px 0 0;text-align:center;
           font-size:11px;color:rgba(245,245,247,0.28);line-height:1.6;">
-          You received this email because you signed up for Time to Match.<br>
+          You received this email because you signed up for Luvia.<br>
           If you didn't create an account, you can safely ignore this email.
         </td></tr>
       </table>
@@ -68,10 +68,10 @@ export function emailVerifyTemplate(opts: {
   verifyUrl: string
 }): { subject: string; html: string } {
   return {
-    subject: "Confirm your Time to Match email",
+    subject: "Confirm your Luvia email",
     html: BASE(`
       ${H1("Confirm your email")}
-      ${P(`Hi ${opts.name}, welcome to Time to Match.`)}
+      ${P(`Hi ${opts.name}, welcome to Luvia.`)}
       ${P("Click the button below to verify your email address and activate your account. The link expires in 24 hours.")}
       ${BTN(opts.verifyUrl, "Confirm email")}
       ${SMALL(`Or copy this link: <a href="${opts.verifyUrl}" style="color:rgba(247,37,133,0.8);">${opts.verifyUrl}</a>`)}
@@ -84,7 +84,7 @@ export function passwordResetTemplate(opts: {
   resetUrl: string
 }): { subject: string; html: string } {
   return {
-    subject: "Reset your Time to Match password",
+    subject: "Reset your Luvia password",
     html: BASE(`
       ${H1("Reset your password")}
       ${P(`Hi ${opts.name}, we received a request to reset your password.`)}

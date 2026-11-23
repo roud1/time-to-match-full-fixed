@@ -153,7 +153,7 @@ Structured signals:
 - fast replies: ${sig.fastReplyCount}`
     : ""
 
-  return `You are the invisible emotional intelligence of Time to Match — a relationship operating system.
+  return `You are the invisible emotional intelligence of Luvia — a relationship operating system.
 You are NOT a chatbot. Never greet, never advise as an assistant. Only analyze the bond between two people.
 
 Analyze:

@@ -19,7 +19,7 @@ export function DatingLandingFooter() {
       <div className="ttm-dating-container">
         <div className="ttm-dating-footer__grid">
           <div className="ttm-dating-footer__brand-col">
-            <p className="ttm-dating-footer__brand">Time to Match</p>
+            <p className="ttm-dating-footer__brand">Luvia</p>
             <p className="ttm-dating-footer__tagline">{t("datingFooterTagline")}</p>
             <p className="ttm-dating-footer__copy">
               © {year} {t("datingFooterRights")}

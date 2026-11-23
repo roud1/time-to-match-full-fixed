@@ -4,7 +4,7 @@ import "./settings-luvia.css"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Bell, ChevronRight, KeyRound, LogOut, Share2, Trash2, UserRound } from "lucide-react"
+import { Bell, ChevronRight, Download, KeyRound, LogOut, Share2, Trash2, UserRound } from "lucide-react"
 import { Navbar } from "@/client/components/navbar"
 import { useI18n } from "@/client/lib/i18n"
 import { cn } from "@/client/lib/utils"
@@ -172,6 +172,16 @@ export default function SettingsPage() {
               </section>
 
               <section className="lv-set__group">
+                {/* GDPR: right of access / data portability */}
+                <a href="/api/me/export" download className="lv-set__row">
+                  <span className="lv-set__icon" aria-hidden>
+                    <Download strokeWidth={1.8} />
+                  </span>
+                  <span className="lv-set__text">
+                    <span className="lv-set__label">{t("lvSetExport")}</span>
+                    <span className="lv-set__hint">{t("lvSetExportBody")}</span>
+                  </span>
+                </a>
                 <button type="button" className="lv-set__row" onClick={handleLogout}>
                   <span className="lv-set__icon" aria-hidden>
                     <LogOut strokeWidth={1.8} />

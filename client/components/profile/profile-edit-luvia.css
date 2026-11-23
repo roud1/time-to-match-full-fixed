@@ -1,0 +1,152 @@
+/* Profile editing in the app (Luvia 2.0): one calm form, sticky Cancel / Save above the tab bar.
+   Class names avoid "card" / "glass" / "header" (legacy global rules target those substrings). */
+
+.lv-edit {
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 0.25rem 0 1rem;
+  color: var(--lv-text, #faf7ff);
+}
+
+.lv-edit__title {
+  margin: 0 0 1.25rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+html[data-lv] .lv-edit .lv-edit__form {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.lv-edit .lv-edit__head {
+  display: none;
+}
+
+/* Field labels */
+.lv-edit label,
+.lv-edit .lv-edit__form > div > div > span {
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  color: var(--lv-text, #faf7ff) !important;
+}
+
+/* Grouped blocks (matching parameters, "about you" pickers) as Luvia surfaces */
+html[data-lv] .lv-edit .lv-edit__form .rounded-2xl.border {
+  border-color: var(--lv-border, rgba(255, 255, 255, 0.1)) !important;
+  border-radius: var(--lv-radius-card, 24px) !important;
+  background: var(--lv-surface, #171222) !important;
+}
+
+/* Inputs */
+html[data-lv] .lv-edit textarea,
+html[data-lv] .lv-edit select,
+html[data-lv] .lv-edit input[type="text"],
+html[data-lv] .lv-edit input[type="number"],
+html[data-lv] .lv-edit input:not([type]) {
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--lv-border-strong, rgba(255, 255, 255, 0.18)) !important;
+  border-radius: var(--lv-radius-control, 16px) !important;
+  background: var(--lv-bg, #0d0a17) !important;
+  color: var(--lv-text, #faf7ff) !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+
+html[data-lv] .lv-edit textarea:focus,
+html[data-lv] .lv-edit select:focus,
+html[data-lv] .lv-edit input:focus {
+  outline: none;
+  border-color: var(--lv-pink, #f35ca8) !important;
+}
+
+.lv-edit input[type="range"] {
+  accent-color: var(--lv-pink, #f35ca8);
+}
+
+/* Muted helper texts */
+.lv-edit .text-white\/50,
+.lv-edit .text-muted-foreground {
+  color: var(--lv-text-2, #b9afc5) !important;
+}
+
+.lv-edit__need {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--lv-pink, #f35ca8);
+}
+
+/* Cancel / Save (and what is missing) stay reachable above the tab bar while scrolling the long form.
+   Fixed, not sticky: an ancestor of the profile page clips overflow, which disables sticky. */
+.lv-edit {
+  padding-bottom: 9rem;
+}
+
+.lv-edit .lv-edit__bar {
+  position: fixed;
+  left: 50%;
+  bottom: var(--ttm-dock-height, 0px);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: min(100%, 34rem);
+  padding: 1rem 1rem 0.75rem;
+  background: linear-gradient(to top, var(--lv-bg, #0d0a17) 80%, rgba(13, 10, 23, 0));
+  transform: translateX(-50%);
+}
+
+.lv-edit .lv-edit__actions {
+  padding-top: 0 !important;
+}
+
+.lv-edit .lv-edit__actions button {
+  min-height: 52px;
+  border-radius: 999px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.lv-edit .lv-edit__actions button:first-child {
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1)) !important;
+  background: var(--lv-surface, #171222) !important;
+  color: var(--lv-text, #faf7ff) !important;
+}
+
+.lv-edit .lv-edit__actions button:last-child {
+  border: 0 !important;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff)) !important;
+  box-shadow: var(--lv-shadow-cta, none);
+  color: #fff !important;
+}
+
+.lv-edit .lv-edit__actions button:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+/* Photo verification under the form */
+.lv-edit > :last-child {
+  margin-top: 1.25rem;
+}
+
+/* Desktop (left navigation, no bottom tab bar): the buttons simply end the form. */
+.ttm-with-desktop-nav .lv-edit {
+  padding-bottom: 2rem;
+}
+
+.ttm-with-desktop-nav .lv-edit .lv-edit__bar {
+  position: static;
+  width: auto;
+  padding: 1rem 0 0;
+  background: none;
+  transform: none;
+}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { localizeInterestName } from "@/client/lib/interest-labels"
 import { motion, type MotionValue } from "motion/react"
 import { Info, MapPin, ShieldCheck } from "lucide-react"
 import { ProfilePhotoImage } from "@/client/components/ui/profile-photo-image"
@@ -36,7 +37,7 @@ export function AppFeedCard({
   onOpenSafety,
   onOpenProfile,
 }: AppFeedCardProps) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const photos = getSwipeProfilePhotos(profile)
   const [photoIndex, setPhotoIndex] = useState(0)
   const about = getProfileDisplayAbout(profile)
@@ -135,7 +136,7 @@ export function AppFeedCard({
           {profile.interests.length > 0 ? (
             <ul className="ttm-app-swipe__tags" aria-label={t("profileInterests")}>
               {profile.interests.slice(0, 3).map((it) => (
-                <li key={it}>{it}</li>
+                <li key={it}>{localizeInterestName(it, locale)}</li>
               ))}
             </ul>
           ) : (

@@ -38,7 +38,7 @@ export function DatingLandingHero() {
       <div className="ttm-dating-container ttm-dating-hero__grid">
         <div className="ttm-dating-hero__copy">
           <motion.p className="ttm-dating-hero__eyebrow" {...fade(0)}>
-            Time to Match
+            Luvia
           </motion.p>
 
           <motion.h1 id="dating-hero-title" className="ttm-dating-hero__title" {...fade(0.08)}>

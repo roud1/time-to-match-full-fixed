@@ -1,5 +1,6 @@
 import type { Locale } from "@/client/lib/i18n/config"
 import { pickLocalized } from "@/client/lib/i18n/pick-localized"
+import { INTEREST_LABELS, interestLabelBySlug } from "@/client/lib/interest-labels"
 
 export const INTERESTS = [
   { id: "travel", ru: "Путешествия", uk: "Подорожі", en: "Travel" },
@@ -30,6 +31,8 @@ export const MIN_INTERESTS = 3
 export const MAX_INTERESTS = 8
 
 export function getInterestLabel(id: InterestId, locale: Locale): string {
+  // All app languages (INTERESTS itself only carries ru / uk / en).
+  if (INTEREST_LABELS[id]) return interestLabelBySlug(id, locale)
   const item = INTERESTS.find((i) => i.id === id)
   if (!item) return id
   return pickLocalized(locale, item)

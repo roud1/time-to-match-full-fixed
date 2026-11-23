@@ -8,7 +8,7 @@ test.describe("Landing", () => {
     const logo = page.getByRole("img", { name: "Luvia" })
     await expect(logo.first()).toBeVisible()
 
-    const cta = page.getByRole("link", { name: /start matching|начать|register|регистрация/i }).first()
+    const cta = page.getByRole("link", { name: /^start$|start matching|начать|register|регистрация|sign up/i }).first()
     await expect(cta).toBeVisible()
     await cta.click()
     await expect(page).toHaveURL(/\/(register|login)/)
