@@ -24,11 +24,45 @@ export function checkRateLimitInMemory(
   return { ok: true }
 }
 
+/**
+ * Headers set by the edge proxy that a client cannot forge (the proxy overwrites them).
+ * Render sits behind Cloudflare, which sets CF-Connecting-IP / True-Client-IP. Elsewhere they are
+ * trusted only when TRUST_CLOUDFLARE_IP_HEADERS=1, because without Cloudflare a client could send them.
+ */
+const CLOUDFLARE_IP_HEADERS = ["cf-connecting-ip", "true-client-ip"] as const
+
+function trustsCloudflareHeaders(): boolean {
+  return process.env.RENDER === "true" || process.env.TRUST_CLOUDFLARE_IP_HEADERS === "1"
+}
+
+/**
+ * Client IP for rate limiting.
+ *
+ * X-Forwarded-For alone is not trustworthy: the client can send its own value, and proxies such as
+ * Render's only append to it, so its first entry is attacker-controlled (rate limits could be
+ * bypassed by changing it on every request). Order:
+ *  1. CLIENT_IP_HEADER (explicit override, e.g. "fly-client-ip"),
+ *  2. Cloudflare headers when running behind Cloudflare (Render),
+ *  3. the first X-Forwarded-For entry, then X-Real-IP (previous behaviour, for local/other hosts).
+ */
 export function getClientIp(request: Request): string {
+  const custom = process.env.CLIENT_IP_HEADER?.trim().toLowerCase()
+  if (custom) {
+    const v = request.headers.get(custom)?.split(",")[0]?.trim()
+    if (v) return v
+  }
+
+  if (trustsCloudflareHeaders()) {
+    for (const h of CLOUDFLARE_IP_HEADERS) {
+      const v = request.headers.get(h)?.trim()
+      if (v) return v
+    }
+  }
+
   const fwd = request.headers.get("x-forwarded-for")
   if (fwd) {
     const first = fwd.split(",")[0]?.trim()
     if (first) return first
   }
-  return request.headers.get("x-real-ip") || "unknown"
+  return request.headers.get("x-real-ip")?.trim() || "unknown"
 }
