@@ -233,8 +233,14 @@ async function analyzeWithOpenRouter(body: AnalyzeConnectionBody): Promise<AICon
   return payloadToAnalysis(parsed, "openrouter")
 }
 
+/**
+ * `externalAi`: the transcript may be sent to the AI provider. Only true when BOTH chat partners
+ * opted in (GDPR: the transcript contains the other person's messages). Otherwise the analysis is
+ * computed locally and nothing leaves the server.
+ */
 export async function analyzeConnectionOnServer(
-  input: unknown
+  input: unknown,
+  opts: { externalAi?: boolean } = {}
 ): Promise<{ ok: true; data: AIConnectionAnalysis } | { ok: false; error: string }> {
   const parsed = analyzeConnectionBodySchema.safeParse(input)
   if (!parsed.success) {
@@ -243,7 +249,7 @@ export async function analyzeConnectionOnServer(
 
   const body = parsed.data
 
-  if (!isOpenRouterConfigured()) {
+  if (!opts.externalAi || !isOpenRouterConfigured()) {
     return { ok: true, data: localAnalysis(body) }
   }
 

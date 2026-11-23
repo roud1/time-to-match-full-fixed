@@ -10,6 +10,7 @@ import { useI18n } from "@/client/lib/i18n"
 import { cn } from "@/client/lib/utils"
 import { PushNotificationSettings } from "@/client/components/pwa/push-notification-settings"
 import { SettingsBlockedList } from "@/client/components/settings/settings-blocked-list"
+import { AiInsightsConsent } from "@/client/components/settings/ai-insights-consent"
 import { SettingsSubscriptionCard } from "@/client/components/settings/settings-subscription-card"
 import { pushConnectionSync } from "@/client/lib/connection-sync-client"
 import { clearSession, getAgeFromBirthdate, getUserProfile } from "@/client/lib/user-profile"
@@ -275,10 +276,15 @@ export default function SettingsPage() {
           )}
 
           {section === "privacy" && (
-            <section className="lv-set__group lv-set__group--pad">
-              <p className="lv-set__group-title">{t("trustBlockedListTitle")}</p>
-              <SettingsBlockedList />
-            </section>
+            <>
+              <section className="lv-set__group">
+                <AiInsightsConsent />
+              </section>
+              <section className="lv-set__group lv-set__group--pad">
+                <p className="lv-set__group-title">{t("trustBlockedListTitle")}</p>
+                <SettingsBlockedList />
+              </section>
+            </>
           )}
 
           {section === "notifications" && (

@@ -1852,5 +1852,12 @@
   "resetPasswordInvalidLink": "The link is invalid or has expired.",
   "resetPasswordError": "Couldn't update the password.",
   "lvSetExport": "Download my data",
-  "lvSetExportBody": "A copy of all your data in one file (JSON)"
+  "lvSetExportBody": "A copy of all your data in one file (JSON)",
+  "regSensitiveConsent": "I agree that Luvia uses my gender and who I'm looking for to suggest matches. This may reveal my sexual orientation. I can withdraw at any time by deleting my account.",
+  "regErrorSensitive": "Matching can't work without this consent",
+  "lvConsentGateTitle": "We need your consent",
+  "lvConsentGateAgree": "I agree",
+  "lvConsentGateDecline": "I don't agree — delete my account in Settings",
+  "lvAiConsentTitle": "AI tips in chats",
+  "lvAiConsentBody": "Your match chat is sent to our AI provider to give tips about your connection. Only works when both of you turn it on."
 }

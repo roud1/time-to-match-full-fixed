@@ -2,6 +2,7 @@ import type { AIConnectionAnalysis } from "@/client/lib/ai-connection-engine/typ
 import { analyzeConnectionOnServer } from "@/server/connection-ai-service"
 import { buildAnalyzeRequestFromServerMessages } from "@/server/connection-ai-request"
 import { log } from "@/server/log"
+import { bothConsentToAiInsights } from "@/server/ai-consent"
 import { getMatchDetailForUser } from "@/server/match-engine/repository"
 import {
   claimPendingAiAnalysisJobs,
@@ -44,7 +45,8 @@ async function processJob(job: DbAiAnalysisJobRow): Promise<void> {
     return
   }
 
-  const result = await analyzeConnectionOnServer(body)
+  const externalAi = await bothConsentToAiInsights(job.triggered_by, like.to_user)
+  const result = await analyzeConnectionOnServer(body, { externalAi })
   if (!result.ok) {
     await failAiAnalysisJob(job.id, result.error)
     await clearConnectionAnalyzing(job.match_id)

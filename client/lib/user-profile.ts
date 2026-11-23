@@ -69,6 +69,10 @@ export type StoredUserProfile = {
   maxDistance?: number
   /** DB interest ids (catalog) */
   dbInterestIds?: number[]
+  /** Opt-in: chat transcripts may be sent to the AI provider for connection insights (both users). */
+  aiInsightsConsent?: boolean
+  /** ISO time of explicit consent to process gender / "looking for" (GDPR Art. 9). */
+  sensitiveDataConsentAt?: string
 }
 
 type StoredCredentials = {

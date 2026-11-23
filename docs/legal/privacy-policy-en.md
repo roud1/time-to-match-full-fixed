@@ -65,7 +65,8 @@ deleting your account.
 | Creating and running your account, showing your profile to others, matching, chat | account, profile, likes, matches, messages | Contract (Art. 6(1)(b)); explicit consent for sensitive data (Art. 9(2)(a)) |
 | Showing people nearby and distances | location | Consent (Art. 6(1)(a)) — you can turn it off |
 | Ranking the feed and match suggestions | usage data, scores | Legitimate interest in a useful feed (Art. 6(1)(f)) |
-| Luvia AI assistant and connection insights | messages you send to Luvia AI; **CHECK**: chat transcripts used for connection insights | Consent (Art. 6(1)(a)) — **see OPEN-QUESTIONS** |
+| Luvia AI assistant | messages you send to Luvia AI | Consent (Art. 6(1)(a)) — you choose to write to it |
+| AI connection tips in chats | the chat transcript of a match | Consent of **both** people (Art. 6(1)(a)) — Settings → Privacy → "AI tips in chats", off by default; without it tips are computed on our server only |
 | Safety: moderation, reports, blocks, fraud and abuse prevention, photo verification | reports, logs, verification selfies | Legitimate interest (Art. 6(1)(f)); legal obligations |
 | Emails about your account (verification, password reset) and push notifications you turned on | email, push subscription | Contract; consent for push |
 | Payments and subscriptions | subscription status | Contract; legal obligations (tax, accounting) |

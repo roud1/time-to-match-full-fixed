@@ -69,6 +69,8 @@ type FormData = {
   promptFavorite: string
   bio: string
   agreeTerms: boolean
+  /** GDPR Art. 9: explicit consent to process gender / "looking for" (may reveal orientation). */
+  agreeSensitive: boolean
 }
 
 type FormErrors = Partial<
@@ -116,6 +118,7 @@ export function RegisterForm() {
     promptFavorite: "",
     bio: "",
     agreeTerms: false,
+    agreeSensitive: false,
   })
 
   useEffect(() => {
@@ -182,6 +185,7 @@ export function RegisterForm() {
     if (s === 4) {
       if (!form.bio.trim()) next.bio = t("regErrorRequired")
       if (!form.agreeTerms) next.agreeTerms = t("regErrorTerms")
+      if (!form.agreeSensitive) next.agreeSensitive = t("regErrorSensitive")
     }
 
     setErrors(next)
@@ -215,6 +219,7 @@ export function RegisterForm() {
       ...(form.promptFavorite.trim() ? { promptFavorite: form.promptFavorite.trim() } : {}),
       ...(photos.length > 0 ? { photoUrls: photos } : {}),
       registeredAt: Date.now(),
+      sensitiveDataConsentAt: new Date().toISOString(),
       ...(isManual
         ? { customCity: form.customCity.trim() }
         : { cityId: form.cityId as Exclude<CitySelectValue, "" | typeof CUSTOM_CITY_ID> }),
@@ -600,6 +605,19 @@ export function RegisterForm() {
                 </div>
                 {errors.agreeTerms && (
                   <p className="text-xs text-red-400/95 font-light -mt-2">{errors.agreeTerms}</p>
+                )}
+                <div className="flex items-start gap-3 pt-1">
+                  <Checkbox
+                    id="sensitive-consent"
+                    checked={form.agreeSensitive}
+                    onCheckedChange={(checked) => update("agreeSensitive", checked === true)}
+                  />
+                  <label htmlFor="sensitive-consent" className="ttm-type-muted leading-relaxed cursor-pointer">
+                    {t("regSensitiveConsent")}
+                  </label>
+                </div>
+                {errors.agreeSensitive && (
+                  <p className="text-xs text-red-400/95 font-light -mt-2">{errors.agreeSensitive}</p>
                 )}
               </>
             )}

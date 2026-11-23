@@ -69,6 +69,10 @@ export async function GET(request: Request) {
         profileExpiresAt: user.profile_expires_at?.toISOString() ?? null,
         purpose: user.purpose ?? null,
         gender: user.gender ?? null,
+        // GDPR consents stored in the profile JSON
+        aiInsightsConsent: user.profile?.aiInsightsConsent === true,
+        sensitiveDataConsentAt:
+          typeof user.profile?.sensitiveDataConsentAt === "string" ? user.profile.sensitiveDataConsentAt : null,
         lookingFor:
           user.profile?.lookingFor === "men" ||
           user.profile?.lookingFor === "women" ||

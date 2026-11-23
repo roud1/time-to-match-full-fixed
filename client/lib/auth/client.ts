@@ -183,6 +183,7 @@ export async function syncRegistrationProfile(profile: StoredUserProfile): Promi
       connectionPref: profile.connectionPref,
       promptFavorite: profile.promptFavorite,
       photoUrls: profile.photoUrls,
+      ...(profile.sensitiveDataConsentAt ? { sensitiveDataConsentAt: profile.sensitiveDataConsentAt } : {}),
     },
   })
 

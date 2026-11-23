@@ -1852,5 +1852,12 @@
   "discoverGateNeedCity": "Şehrini belirt",
   "discoverGateCta": "Profili tamamla",
   "lvSetExport": "Verilerimi indir",
-  "lvSetExportBody": "Tüm verilerinin tek dosyada bir kopyası (JSON)"
+  "lvSetExportBody": "Tüm verilerinin tek dosyada bir kopyası (JSON)",
+  "regSensitiveConsent": "Luvia'nın bana eşleşme önermek için cinsiyetimi ve kimi aradığımı kullanmasını kabul ediyorum. Bu, cinsel yönelimimi gösterebilir. Hesabımı silerek onayımı istediğim zaman geri çekebilirim.",
+  "regErrorSensitive": "Bu onay olmadan eşleştirme çalışamaz",
+  "lvConsentGateTitle": "Onayına ihtiyacımız var",
+  "lvConsentGateAgree": "Kabul ediyorum",
+  "lvConsentGateDecline": "Kabul etmiyorum — hesabımı ayarlardan sil",
+  "lvAiConsentTitle": "Sohbetlerde yapay zekâ ipuçları",
+  "lvAiConsentBody": "Eşleşme sohbetin, bağınız hakkında ipuçları vermesi için yapay zekâ sağlayıcımıza gönderilir. Yalnızca ikiniz de açtığınızda çalışır."
 }

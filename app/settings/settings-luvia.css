@@ -441,3 +441,136 @@ html[data-ttm-app] .lv-set {
 .lv-about__fact {
   align-items: flex-start;
 }
+
+/* Consent switches */
+.lv-consent {
+  cursor: pointer;
+}
+
+.lv-consent input[role="switch"] {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.6rem;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--lv-surface-raised, #241b31);
+  border: 1px solid var(--lv-border-strong, rgba(255, 255, 255, 0.18));
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  transition: background 0.2s ease;
+}
+
+.lv-consent input[role="switch"]::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(1.6rem - 6px);
+  height: calc(1.6rem - 6px);
+  border-radius: 999px;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+html[data-lv] .lv-set .lv-consent input[role="switch"]:checked {
+  border-color: transparent !important;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff)) !important;
+}
+
+.lv-consent input[role="switch"]:checked::after {
+  transform: translateX(1.15rem);
+}
+
+.lv-consent input[role="switch"]:focus-visible {
+  outline: 2px solid var(--lv-focus, #f35ca8);
+  outline-offset: 2px;
+}
+
+/* One-time explicit consent (GDPR Art. 9) for accounts created before it was asked at sign-up */
+.lv-consent-gate,
+html[data-lv] .lv-consent-gate[role="dialog"] {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1rem, env(safe-area-inset-top, 0px)) 1.25rem max(1rem, env(safe-area-inset-bottom, 0px));
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(13, 10, 23, 0.94) !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.lv-consent-gate__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  max-width: 24rem;
+  padding: 1.75rem 1.25rem 1.25rem;
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--lv-radius-card, 24px);
+  background: var(--lv-surface, #171222);
+  color: var(--lv-text, #faf7ff);
+  text-align: center;
+}
+
+.lv-consent-gate__box h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.lv-consent-gate__box p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--lv-text-2, #b9afc5);
+}
+
+.lv-consent-gate__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  color: #fff;
+}
+
+.lv-consent-gate__icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lv-consent-gate__agree {
+  width: 100%;
+  min-height: 3.25rem;
+  margin-top: 0.35rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  box-shadow: var(--lv-shadow-cta, none);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.lv-consent-gate__decline {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.88rem;
+  color: var(--lv-text-2, #b9afc5);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lv-consent-gate__error {
+  color: #ff6b8b !important;
+}
