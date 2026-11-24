@@ -1,6 +1,6 @@
 # Luvia — "Feel first. See later." Audit and technical plan
 
-Status of this document: Phase 1 done (audit, architecture, database and API foundation).
+Status of this document: Phases 1–3 done (backend, screens, progressive reveal).
 Every later phase updates the "Status" column below.
 
 ## 1. Audit of the current project (November 2026)
@@ -69,8 +69,8 @@ Every state change increments `rooms.version`; clients poll with `since=<version
 | Phase | Scope | Status |
 |---|---|---|
 | 1 | Audit, architecture, migration `030_blind_dates.sql`, domain + API for queue, matchmaking, rooms, server timers, messages, reveal consent state, decisions → existing match, leave/report/block, Playwright API tests | **done** (API only, tested locally; not deployed) |
-| 2 | Blind Date UI: start screen, search/waiting, room (chat, timer, progress), reconnection | planned |
-| 3 | Progressive Reveal: server-rendered blurred derivatives (`sharp`), mutual consent UI, animations | planned |
+| 2 | Blind Date UI: start screen, search/waiting, room (chat, timer, progress), reconnection | **done** (`/app/blind-date`, mask tab in the bottom bar; 9 languages; checked at 320/375/390/430 px) |
+| 3 | Progressive Reveal: server-rendered blurred derivatives (`sharp`), mutual consent UI, animations | **done** for 25/50/75/100 % (`GET /rooms/:id/photo`); chat alone reaches 75 %, 100 % needs a shared game (Phase 4) |
 | 4 | Game engine (registry of game definitions, synchronized moves, stored results) + 6 games + Compatibility Challenges | planned |
 | 5 | AI Connection: provider interface (OpenRouter + local), consent, rate limits, cache, cost tracking, Connection Report | planned |
 | 6 | Integration: match chat continuation, notifications, history of dates | planned |
@@ -87,6 +87,8 @@ outsiders get 404; report + block closes the room, stores the report and the blo
 never re-matched; leaving ends the date for both; consent and 18+ are required; simultaneous joins
 create exactly one room. Test users are deleted after the run.
 
-Not covered yet: the UI (Phase 2), photo rendering (Phase 3), games (Phase 4), AI (Phase 5), load testing.
+Phases 2–3 add: photo endpoint (403 without mutual consent, degraded JPEG instead of the original, 404 for outsiders) and a browser test of the real page (start → search → room → messages via polling → leave).
+
+Not covered yet: games (Phase 4), AI (Phase 5), load testing.
 
 Premium hooks (no paywall now): daily free blind-date limit (`BLIND_DATE_FREE_DAILY`, default 10), extended report, extra game packs — checked through `isPremium()`; reveal and the basic date stay free.

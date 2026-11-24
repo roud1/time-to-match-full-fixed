@@ -18,7 +18,7 @@ html[data-lv] .ttm-app-dock {
 
 html[data-lv] .ttm-app-dock__inner {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   max-width: 32rem;
   height: 3.9rem;
   margin-inline: auto;

@@ -11,11 +11,11 @@ import { tapScaleSoft } from "@/client/lib/motion-system"
 import { BrandIcon, type BrandIconName } from "@/client/components/brand/brand-icon"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
 import { useLuviaUi } from "@/client/hooks/use-ttm-app"
-import { Flame, MapPin, MessageCircle, User } from "lucide-react"
+import { Flame, MapPin, MessageCircle, User, VenetianMask } from "lucide-react"
 import "@/client/components/app/app-dock.css"
 
 export type AppTab = "discover" | "likes" | "chat" | "map"
-export type BottomNavId = AppTab | "profile"
+export type BottomNavId = AppTab | "profile" | "blind"
 
 type NavItem = {
   id: BottomNavId
@@ -33,9 +33,10 @@ const NAV_ITEMS: NavItem[] = [
   { id: "profile", href: "/profile", labelKey: "tabProfile", icon: "profile" },
 ]
 
-/** App only: four tabs as in the app mockup (likes open from the heart in the header). */
+/** App only: five tabs as in the app mockup (likes open from the heart in the header). */
 const APP_NAV_ITEMS: Array<{ id: BottomNavId; href: string; labelKey: TranslationKey; Icon: typeof Flame }> = [
   { id: "discover", href: "/app", labelKey: "appNavDiscover", Icon: Flame },
+  { id: "blind", href: "/app/blind-date", labelKey: "bdNav", Icon: VenetianMask },
   { id: "map", href: "/app?tab=map", labelKey: "tabMap", Icon: MapPin },
   { id: "chat", href: "/app?tab=chat", labelKey: "appNavChats", Icon: MessageCircle },
   { id: "profile", href: "/profile", labelKey: "tabProfile", Icon: User },
@@ -43,6 +44,7 @@ const APP_NAV_ITEMS: Array<{ id: BottomNavId; href: string; labelKey: Translatio
 
 function isTabActive(id: BottomNavId, pathname: string, tabParam: string | null): boolean {
   if (id === "profile") return pathname === "/profile" || pathname.startsWith("/profile/")
+  if (id === "blind") return pathname === "/app/blind-date"
   if (pathname !== "/app") return false
   if (id === "discover") return !tabParam || tabParam === "discover"
   return tabParam === id

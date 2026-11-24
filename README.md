@@ -145,7 +145,7 @@ Without these env vars, the cron still runs but skips unconfigured channels (log
 ## Blind Date ("Feel first. See later.") — in development
 
 Ten-minute anonymous dates between two compatible people. Plan and phase status: [`docs/BLIND_DATE_PLAN.md`](docs/BLIND_DATE_PLAN.md).
-Phase 1 (backend) is implemented; the screens come in Phase 2, so nothing is visible in the app yet.
+Phases 1–3 are implemented: backend, the screens at `/app/blind-date` (mask icon in the bottom bar) and the progressive photo reveal.
 
 - Tables: migration `database/migrations/030_blind_dates.sql` (additive only).
 - Domain: `server/blind-date/rules.ts` (pure rules: timers, progress, reveal stages, message checks) and `server/blind-date/service.ts` (eligibility, queue + matchmaking, rooms, decisions).
@@ -154,7 +154,8 @@ Phase 1 (backend) is implemented; the screens come in Phase 2, so nothing is vis
   - `POST /api/blind-date/queue` `{ lang, languages? }` — join or keep waiting (poll every few seconds); `DELETE` — stop searching
   - `GET /api/blind-date/rooms/:id?since=<version>` — room snapshot (first name, age, common interests, progress, messages); `{ unchanged: true }` when nothing changed
   - `POST /api/blind-date/rooms/:id/messages` `{ body }` — links, e-mails, phone numbers and messenger handles are rejected (`422 contact_details`)
-  - `POST /api/blind-date/rooms/:id/reveal` `{ consent }` — mutual reveal consent (photos are never sent before both agree; image rendering is Phase 3)
+  - `POST /api/blind-date/rooms/:id/reveal` `{ consent }` — mutual reveal consent
+  - `GET /api/blind-date/rooms/:id/photo` — the other person's main photo rendered on the server for the unlocked stage (25 / 50 / 75 % are rebuilt from a tiny downscale + blur, so the detail is not in the bytes; 403 without mutual consent). The original URL is never sent.
   - `POST /api/blind-date/rooms/:id/decision` `{ decision: "continue" | "pass" }` — after the date; both Continue → normal match with the 24 h timer
   - `POST /api/blind-date/rooms/:id/leave`, `POST /api/blind-date/rooms/:id/report` `{ reason, comment?, block? }`
 - Rules: 18+ (birth date), explicit consent to sensitive data, mutual gender / age / distance preferences, a shared language, no blocked pairs, no pairs that already liked/passed each other, the same pair at most once per 30 days, one open room per person (advisory lock + unique indexes). Timers are computed on the server; `/api/v1/cron/tick` also closes expired rooms.

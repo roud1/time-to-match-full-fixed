@@ -48,9 +48,10 @@ export function connectionProgress(input: {
   messagesB: number
   gamesCompleted: number
 }): number {
-  const mutualMessages = Math.min(input.messagesA, input.messagesB, 10)
-  const fromMessages = mutualMessages * 6 // up to 60
-  const fromGames = Math.min(input.gamesCompleted, 2) * 20 // up to 40
+  // Chat alone can reach 75 % (15 messages from each person); the last stage needs a shared game.
+  const mutualMessages = Math.min(input.messagesA, input.messagesB, 15)
+  const fromMessages = mutualMessages * 5 // up to 75
+  const fromGames = Math.min(input.gamesCompleted, 2) * 15 // up to 30
   return Math.max(0, Math.min(100, fromMessages + fromGames))
 }
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
-import { Compass, Flame, Heart, MapPin, MessageCircle, User } from "lucide-react"
+import { Compass, Flame, Heart, MapPin, MessageCircle, User, VenetianMask } from "lucide-react"
 import { Logo } from "@/client/components/logo"
 import { cn } from "@/client/lib/utils"
 import { useI18n, type TranslationKey } from "@/client/lib/i18n"
@@ -46,6 +46,10 @@ export function DesktopAppNav() {
           </Link>
         )
       })}
+      <Link href="/app/blind-date" className="ttm-desktop-nav__item">
+        <VenetianMask className="w-5 h-5" strokeWidth={1.5} />
+        <span>{t("bdNav")}</span>
+      </Link>
       <div className="flex-1" aria-hidden />
       <Link
         href="/profile"
