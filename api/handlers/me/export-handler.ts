@@ -101,6 +101,13 @@ async function collect(sql: Sql, uid: string) {
           CASE WHEN user_a = ${uid} THEN decision_a ELSE decision_b END AS my_decision, match_id
         FROM blind_date_rooms WHERE user_a = ${uid} OR user_b = ${uid} ORDER BY started_at`
     ),
+    blindDateGames: await section("blindDateGames", () =>
+      sql`
+        SELECT g.room_id, g.game_key, g.status, g.result, g.created_at, g.completed_at,
+          CASE WHEN r.user_a = ${uid} THEN 'a' ELSE 'b' END AS my_side, g.state->'records' AS answers
+        FROM blind_date_game_sessions g JOIN blind_date_rooms r ON r.id = g.room_id
+        WHERE r.user_a = ${uid} OR r.user_b = ${uid} ORDER BY g.created_at`
+    ),
     blindDateMessagesSent: await section("blindDateMessagesSent", () =>
       sql`SELECT room_id, body, created_at FROM blind_date_messages WHERE sender_id = ${uid} ORDER BY created_at`
     ),

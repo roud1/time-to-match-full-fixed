@@ -368,6 +368,21 @@ test.describe("Blind Date @db", () => {
       await b.request.post(`/api/blind-date/rooms/${join.roomId}/messages`, { data: { body: "Hi Lena" } })
       await expect(page.locator(".bd-msg:not(.bd-msg--mine)")).toHaveText("Hi Lena", { timeout: 10_000 })
 
+      // Games tab: start This or That, both answer, the shared result appears.
+      await page.getByRole("tab").nth(1).click()
+      await page.locator(".bd-gitem").first().click()
+      await expect(page.locator(".bd-round")).toBeVisible()
+      await page.locator(".bd-option").first().click()
+      await expect(page.locator(".bd-round__wait")).toBeVisible()
+      const snapB = await (await b.request.get(`/api/blind-date/rooms/${join.roomId}`)).json()
+      await b.request.post(`/api/blind-date/rooms/${join.roomId}/games/answer`, {
+        data: { sessionId: snapB.game.id, round: 0, answer: { choice: 0 } },
+      })
+      await expect(page.locator(".bd-last--match")).toBeVisible({ timeout: 10_000 })
+      await expect(page.locator(".bd-play__step")).toHaveText("2 / 5")
+      await page.locator(".bd-play__end").click()
+      await expect(page.locator(".bd-summary")).toBeVisible({ timeout: 10_000 })
+
       // Leaving from the menu shows the result screen.
       await page.locator(".bd-room-head .bd-icon-btn").click()
       await page.locator(".bd-sheet__item").first().click()
@@ -375,6 +390,86 @@ test.describe("Blind Date @db", () => {
       await expect(page.locator(".bd-result")).toBeVisible()
     } finally {
       await b.request.dispose()
+    }
+  })
+
+  test("games: synchronized rounds, hidden answers, progress, one game at a time", async () => {
+    const a = await newUser("bd-a", "female", "men")
+    const b = await newUser("bd-b", "male", "women")
+    const stranger = await newUser("bd-x", "female", "women")
+    try {
+      await a.request.post("/api/blind-date/queue", { data: { lang: "en" } })
+      const { roomId } = await (await b.request.post("/api/blind-date/queue", { data: { lang: "en" } })).json()
+      const base = `/api/blind-date/rooms/${roomId}/games`
+
+      expect((await a.request.post(base, { data: { game: "nope" } })).status()).toBe(400)
+      const started = await (await a.request.post(base, { data: { game: "this_or_that" } })).json()
+      expect(started.game).toMatchObject({ key: "this_or_that", status: "active", current: 0, total: 5 })
+      const sessionId = started.game.id as string
+      // Only one game at a time; outsiders cannot touch it.
+      expect((await b.request.post(base, { data: { game: "spark" } })).status()).toBe(409)
+      expect((await stranger.request.post(`${base}/answer`, { data: { sessionId, round: 0, answer: { choice: 0 } } })).status()).toBe(404)
+
+      const answer = (ctx: typeof a, round: number, choice: number) =>
+        ctx.request.post(`${base}/answer`, { data: { sessionId, round, answer: { choice } } })
+
+      expect((await answer(a, 0, 1)).status()).toBe(200)
+      // B sees that A answered but not the answer.
+      const viewB = await (await b.request.get(`/api/blind-date/rooms/${roomId}`)).json()
+      expect(viewB.game.round).toMatchObject({ index: 0, peerAnswered: true, mine: null, theirs: null })
+      expect((await answer(a, 0, 0)).status()).toBe(409) // already answered
+      expect((await answer(b, 0, 1)).status()).toBe(200)
+      const afterRound = await (await a.request.get(`/api/blind-date/rooms/${roomId}`)).json()
+      expect(afterRound.game.current).toBe(1)
+      expect(afterRound.game.history[0]).toMatchObject({ matched: true, theirs: { choice: 1 } })
+
+      // Skip one, play the rest.
+      expect((await b.request.post(`${base}/skip`, { data: { sessionId, round: 1 } })).status()).toBe(200)
+      for (const round of [2, 3, 4]) {
+        await answer(a, round, 0)
+        await answer(b, round, round === 4 ? 1 : 0)
+      }
+      const done = await (await a.request.get(`/api/blind-date/rooms/${roomId}`)).json()
+      expect(done.game).toMatchObject({ status: "completed", result: { answered: 4, comparable: 4, matches: 3 } })
+      expect(done.gamesPlayed).toHaveLength(1)
+      expect(done.progress).toBe(15) // one shared game, no messages yet
+
+      // Two truths: B never receives the lie index while guessing.
+      const tt = await (await b.request.post(base, { data: { game: "two_truths" } })).json()
+      const ttId = tt.game.id as string
+      await a.request.post(`${base}/answer`, {
+        data: { sessionId: ttId, round: 0, answer: { statements: ["I swim", "I sing", "I fly"], lie: 2 } },
+      })
+      const guessView = await (await b.request.get(`/api/blind-date/rooms/${roomId}`)).json()
+      expect(guessView.game.round.statements).toEqual(["I swim", "I sing", "I fly"])
+      expect(JSON.stringify(guessView.game)).not.toContain('"lie"')
+      await b.request.post(`${base}/answer`, { data: { sessionId: ttId, round: 0, answer: { guess: 2 } } })
+      // Ending early still counts when a round was played by both.
+      const ended = await (await a.request.post(`${base}/end`, { data: { sessionId: ttId } })).json()
+      expect(ended.game).toMatchObject({ status: "completed", result: { answered: 1, matches: 1 } })
+      expect(ended.progress).toBe(30)
+
+      // Spark: a round that ran out is skipped by the server even if nobody acts.
+      const sp = await (await a.request.post(base, { data: { game: "spark" } })).json()
+      await withDb(
+        (sql) => sql`UPDATE blind_date_game_sessions
+          SET state = jsonb_set(state, '{roundStartedAt}', to_jsonb(to_char((now() - interval '16 seconds') AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')))
+          WHERE id = ${sp.game.id}`
+      )
+      const ticked = await (await a.request.get(`/api/blind-date/rooms/${roomId}?since=${sp.version}`)).json()
+      expect(ticked.game.current).toBe(1)
+      expect(ticked.game.history[0].skipped).toBe(true)
+
+      // Games stop with the date.
+      await endDateNow(roomId)
+      const deciding = await (await a.request.get(`/api/blind-date/rooms/${roomId}`)).json()
+      expect(deciding.phase).toBe("deciding")
+      expect(deciding.game.status).toBe("abandoned")
+      expect((await a.request.post(base, { data: { game: "this_or_that" } })).status()).toBe(409)
+    } finally {
+      await a.request.dispose()
+      await b.request.dispose()
+      await stranger.request.dispose()
     }
   })
 })

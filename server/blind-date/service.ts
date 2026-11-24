@@ -275,6 +275,18 @@ async function loadRoom(roomId: string): Promise<RoomRow | null> {
   return row ?? null
 }
 
+export function roomSide(room: RoomRow, userId: string): "a" | "b" | null {
+  return side(room, userId)
+}
+
+/** Games only run during the date itself. */
+async function abandonActiveGames(roomId: string): Promise<void> {
+  await db()`
+    UPDATE blind_date_game_sessions SET status = 'abandoned', completed_at = now()
+    WHERE room_id = ${roomId} AND status = 'active'
+  `
+}
+
 function side(room: RoomRow, userId: string): "a" | "b" | null {
   if (room.user_a === userId) return "a"
   if (room.user_b === userId) return "b"
@@ -294,6 +306,7 @@ async function closeRoom(
     RETURNING ${db().unsafe(ROOM_COLUMNS)}
   `
   if (row) {
+    await abandonActiveGames(room.id)
     void trackServerEvent(`blind_date_closed`, {
       userId: closedBy ?? room.user_a,
       properties: { roomId: room.id, reason, minutes: Math.round((Date.now() - room.started_at.getTime()) / 60000) },
@@ -319,6 +332,7 @@ export async function advanceRoom(room: RoomRow, now = new Date()): Promise<Room
       WHERE id = ${room.id} AND status = 'active'
       RETURNING ${db().unsafe(ROOM_COLUMNS)}
     `
+    if (row) await abandonActiveGames(room.id)
     return row ?? (await loadRoom(room.id)) ?? room
   }
 
@@ -388,6 +402,9 @@ export type RoomSnapshot = {
     decision: Decision | null
   }
   messages: { id: string; mine: boolean; body: string; at: string }[]
+  /** Active game, or the last finished one (null before the first game). */
+  game: import("@/server/blind-date/games/engine").GameView | null
+  gamesPlayed: { key: string; category: string | null; result: import("@/server/blind-date/games/engine").GameResult | null }[]
   outcome: null | { reason: CloseReason; matchId: string | null; leftByMe: boolean }
 }
 
@@ -433,6 +450,8 @@ export async function buildSnapshot(room: RoomRow, userId: string): Promise<Room
     WHERE room_id = ${room.id} ORDER BY id DESC LIMIT 200
   `
   const { progress, revealStage } = await revealState(room)
+  const { gamesForSnapshot } = await import("@/server/blind-date/games/service")
+  const games = await gamesForSnapshot(room.id, mySide)
 
   const myDecision = mySide === "a" ? room.decision_a : room.decision_b
   const peerDecision = mySide === "a" ? room.decision_b : room.decision_a
@@ -461,6 +480,8 @@ export async function buildSnapshot(room: RoomRow, userId: string): Promise<Room
     messages: messages
       .reverse()
       .map((m) => ({ id: m.id, mine: m.sender_id === userId, body: m.body, at: m.created_at.toISOString() })),
+    game: games.game,
+    gamesPlayed: games.played,
     outcome:
       room.status === "closed"
         ? {
@@ -477,7 +498,7 @@ export async function buildSnapshot(room: RoomRow, userId: string): Promise<Room
 
 export type ActionError = "not_found" | "closed" | "wrong_phase" | "rate_limited" | "invalid" | "contact_details" | "too_long" | "empty"
 
-async function bump(roomId: string): Promise<void> {
+export async function bump(roomId: string): Promise<void> {
   await db()`UPDATE blind_date_rooms SET version = version + 1, updated_at = now() WHERE id = ${roomId}`
 }
 

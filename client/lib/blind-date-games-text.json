@@ -1,0 +1,3044 @@
+{
+ "ru": {
+  "games": {
+   "this_or_that": {
+    "title": "Это или то",
+    "desc": "Пять быстрых выборов. Где вы совпадаете?"
+   },
+   "mind_reader": {
+    "title": "Чтение мыслей",
+    "desc": "Ответьте о себе и угадайте, что выбрал(а) собеседник."
+   },
+   "two_truths": {
+    "title": "Две правды и ложь",
+    "desc": "Напишите три факта о себе, один из них ложный. Угадает ли собеседник?"
+   },
+   "without_masks": {
+    "title": "Без масок",
+    "desc": "Два честных вопроса. Ответы откроются, когда напишете оба."
+   },
+   "perfect_date": {
+    "title": "Наше идеальное свидание",
+    "desc": "Соберите вместе идеальное первое свидание."
+   },
+   "spark": {
+    "title": "Искра",
+    "desc": "Пять молниеносных выборов, 15 секунд на каждый."
+   },
+   "compat": {
+    "title": "Проверка совместимости",
+    "desc": "Выберите тему и сравните взгляды."
+   }
+  },
+  "categories": {
+   "values": "Ценности",
+   "lifestyle": "Образ жизни",
+   "communication": "Общение",
+   "future": "Будущее"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Идеальные выходные",
+    "o": [
+     "Горы",
+     "Море"
+    ]
+   },
+   "tot2": {
+    "q": "Утро начинается с…",
+    "o": [
+     "Кофе",
+     "Чая"
+    ]
+   },
+   "tot3": {
+    "q": "Вечер дома",
+    "o": [
+     "Кино",
+     "Настольные игры"
+    ]
+   },
+   "tot4": {
+    "q": "Как вы путешествуете?",
+    "o": [
+     "По плану",
+     "Импровизация"
+    ]
+   },
+   "tot5": {
+    "q": "Вы скорее…",
+    "o": [
+     "Сова",
+     "Жаворонок"
+    ]
+   },
+   "tot6": {
+    "q": "Питомцы",
+    "o": [
+     "Кошки",
+     "Собаки"
+    ]
+   },
+   "tot7": {
+    "q": "Еда",
+    "o": [
+     "Готовить дома",
+     "Новые рестораны"
+    ]
+   },
+   "sp1": {
+    "q": "Написать или позвонить?",
+    "o": [
+     "Написать",
+     "Позвонить"
+    ]
+   },
+   "sp2": {
+    "q": "Город или природа?",
+    "o": [
+     "Город",
+     "Природа"
+    ]
+   },
+   "sp3": {
+    "q": "Сладкое или солёное?",
+    "o": [
+     "Сладкое",
+     "Солёное"
+    ]
+   },
+   "sp4": {
+    "q": "Танцевать или смотреть?",
+    "o": [
+     "Танцевать",
+     "Смотреть"
+    ]
+   },
+   "sp5": {
+    "q": "Рассвет или закат?",
+    "o": [
+     "Рассвет",
+     "Закат"
+    ]
+   },
+   "sp6": {
+    "q": "Книги или подкасты?",
+    "o": [
+     "Книги",
+     "Подкасты"
+    ]
+   },
+   "sp7": {
+    "q": "Сюрприз или план?",
+    "o": [
+     "Сюрприз",
+     "План"
+    ]
+   },
+   "mr1": {
+    "q": "Как вы восстанавливаетесь после долгой недели?",
+    "o": [
+     "Один дома",
+     "С друзьями",
+     "Спорт"
+    ]
+   },
+   "mr2": {
+    "q": "Идеальный отпуск",
+    "o": [
+     "Изучать город",
+     "Пляж и отдых",
+     "Приключения на природе"
+    ]
+   },
+   "mr3": {
+    "q": "В компании вы обычно…",
+    "o": [
+     "Рассказчик",
+     "Слушатель",
+     "Организатор"
+    ]
+   },
+   "mr4": {
+    "q": "Что важнее всего в первом сообщении?",
+    "o": [
+     "Юмор",
+     "Честность",
+     "Любопытство"
+    ]
+   },
+   "mr5": {
+    "q": "Ваши отношения с планами",
+    "o": [
+     "Я их составляю",
+     "Я им следую",
+     "Я их меняю"
+    ]
+   },
+   "wm1": {
+    "q": "Чем вы гордитесь, но редко об этом говорите?",
+    "o": []
+   },
+   "wm2": {
+    "q": "Что вас недавно очень рассмешило?",
+    "o": []
+   },
+   "wm3": {
+    "q": "Как для вас выглядит хороший день?",
+    "o": []
+   },
+   "wm4": {
+    "q": "Насчёт чего вы изменили мнение за последние годы?",
+    "o": []
+   },
+   "wm5": {
+    "q": "Какая мелочь даёт вам почувствовать заботу?",
+    "o": []
+   },
+   "wm6": {
+    "q": "Что бы вы сделали со свободным годом?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Где?",
+    "o": [
+     "Уютное кафе",
+     "Прогулка в парке",
+     "Музей или галерея",
+     "Бар на крыше"
+    ]
+   },
+   "pd2": {
+    "q": "Когда?",
+    "o": [
+     "Утром",
+     "Днём",
+     "Вечером",
+     "Поздней ночью"
+    ]
+   },
+   "pd3": {
+    "q": "Что едим?",
+    "o": [
+     "Стритфуд",
+     "Что-то сладкое",
+     "Ужин с вином",
+     "Пикник"
+    ]
+   },
+   "pd4": {
+    "q": "Настроение",
+    "o": [
+     "Спокойный глубокий разговор",
+     "Весело и игриво",
+     "Маленькое приключение",
+     "Спонтанно"
+    ]
+   },
+   "cv1": {
+    "q": "Что важнее всего в партнёре?",
+    "o": [
+     "Доброта",
+     "Амбиции",
+     "Чувство юмора"
+    ]
+   },
+   "cv2": {
+    "q": "Неприятная правда в мелочах",
+    "o": [
+     "Говорю всегда",
+     "Зависит от ситуации",
+     "Лучше сохранить мир"
+    ]
+   },
+   "cv3": {
+    "q": "Свободное время лучше всего…",
+    "o": [
+     "Развиваясь",
+     "С близкими",
+     "Отдыхая"
+    ]
+   },
+   "cl1": {
+    "q": "Ваш ритм дня",
+    "o": [
+     "Рано и по расписанию",
+     "Гибко",
+     "Поздно и спонтанно"
+    ]
+   },
+   "cl2": {
+    "q": "Дом — это…",
+    "o": [
+     "Порядок и тишина",
+     "Уютный творческий беспорядок",
+     "Полный гостей"
+    ]
+   },
+   "cl3": {
+    "q": "Спорт в вашей жизни",
+    "o": [
+     "Каждый день",
+     "Иногда",
+     "Редко"
+    ]
+   },
+   "cc1": {
+    "q": "Когда что-то беспокоит",
+    "o": [
+     "Говорю сразу",
+     "Сначала обдумываю",
+     "Жду, пока пройдёт"
+    ]
+   },
+   "cc2": {
+    "q": "Как часто любите переписываться?",
+    "o": [
+     "Весь день",
+     "Несколько раз в день",
+     "Когда есть что сказать"
+    ]
+   },
+   "cc3": {
+    "q": "После ссоры вам нужно…",
+    "o": [
+     "Всё обсудить",
+     "Побыть одному",
+     "Обнять и забыть"
+    ]
+   },
+   "cf1": {
+    "q": "Через пять лет вы видите себя…",
+    "o": [
+     "В том же городе",
+     "Где-то в новом месте",
+     "Куда занесёт жизнь"
+    ]
+   },
+   "cf2": {
+    "q": "Дети",
+    "o": [
+     "Хочу",
+     "Пока не знаю",
+     "Не хочу"
+    ]
+   },
+   "cf3": {
+    "q": "Жить вместе",
+    "o": [
+     "Через несколько месяцев",
+     "Через год или больше",
+     "Не приоритет"
+    ]
+   },
+   "tt": {
+    "q": "Две правды и ложь",
+    "o": []
+   }
+  }
+ },
+ "uk": {
+  "games": {
+   "this_or_that": {
+    "title": "Це чи те",
+    "desc": "П'ять швидких виборів. Де ви збігаєтеся?"
+   },
+   "mind_reader": {
+    "title": "Читання думок",
+    "desc": "Дайте відповідь про себе й вгадайте, що обрав(ла) співрозмовник."
+   },
+   "two_truths": {
+    "title": "Дві правди й брехня",
+    "desc": "Напишіть три факти про себе, один із них хибний. Чи вгадає співрозмовник?"
+   },
+   "without_masks": {
+    "title": "Без масок",
+    "desc": "Два чесні питання. Відповіді відкриються, коли напишете обоє."
+   },
+   "perfect_date": {
+    "title": "Наше ідеальне побачення",
+    "desc": "Зберіть разом ідеальне перше побачення."
+   },
+   "spark": {
+    "title": "Іскра",
+    "desc": "П'ять блискавичних виборів, 15 секунд на кожен."
+   },
+   "compat": {
+    "title": "Перевірка сумісності",
+    "desc": "Оберіть тему й порівняйте погляди."
+   }
+  },
+  "categories": {
+   "values": "Цінності",
+   "lifestyle": "Спосіб життя",
+   "communication": "Спілкування",
+   "future": "Майбутнє"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Ідеальні вихідні",
+    "o": [
+     "Гори",
+     "Море"
+    ]
+   },
+   "tot2": {
+    "q": "Ранок починається з…",
+    "o": [
+     "Кави",
+     "Чаю"
+    ]
+   },
+   "tot3": {
+    "q": "Вечір удома",
+    "o": [
+     "Кіно",
+     "Настільні ігри"
+    ]
+   },
+   "tot4": {
+    "q": "Як ви подорожуєте?",
+    "o": [
+     "За планом",
+     "Імпровізація"
+    ]
+   },
+   "tot5": {
+    "q": "Ви радше…",
+    "o": [
+     "Сова",
+     "Жайворонок"
+    ]
+   },
+   "tot6": {
+    "q": "Улюбленці",
+    "o": [
+     "Коти",
+     "Собаки"
+    ]
+   },
+   "tot7": {
+    "q": "Їжа",
+    "o": [
+     "Готувати вдома",
+     "Нові ресторани"
+    ]
+   },
+   "sp1": {
+    "q": "Написати чи подзвонити?",
+    "o": [
+     "Написати",
+     "Подзвонити"
+    ]
+   },
+   "sp2": {
+    "q": "Місто чи природа?",
+    "o": [
+     "Місто",
+     "Природа"
+    ]
+   },
+   "sp3": {
+    "q": "Солодке чи солоне?",
+    "o": [
+     "Солодке",
+     "Солоне"
+    ]
+   },
+   "sp4": {
+    "q": "Танцювати чи дивитися?",
+    "o": [
+     "Танцювати",
+     "Дивитися"
+    ]
+   },
+   "sp5": {
+    "q": "Світанок чи захід?",
+    "o": [
+     "Світанок",
+     "Захід"
+    ]
+   },
+   "sp6": {
+    "q": "Книжки чи подкасти?",
+    "o": [
+     "Книжки",
+     "Подкасти"
+    ]
+   },
+   "sp7": {
+    "q": "Сюрприз чи план?",
+    "o": [
+     "Сюрприз",
+     "План"
+    ]
+   },
+   "mr1": {
+    "q": "Як ви відновлюєтеся після довгого тижня?",
+    "o": [
+     "Сам удома",
+     "З друзями",
+     "Спорт"
+    ]
+   },
+   "mr2": {
+    "q": "Ідеальна відпустка",
+    "o": [
+     "Досліджувати місто",
+     "Пляж і відпочинок",
+     "Пригоди на природі"
+    ]
+   },
+   "mr3": {
+    "q": "У компанії ви зазвичай…",
+    "o": [
+     "Оповідач",
+     "Слухач",
+     "Організатор"
+    ]
+   },
+   "mr4": {
+    "q": "Що найважливіше в першому повідомленні?",
+    "o": [
+     "Гумор",
+     "Чесність",
+     "Цікавість"
+    ]
+   },
+   "mr5": {
+    "q": "Ваші стосунки з планами",
+    "o": [
+     "Я їх складаю",
+     "Я їх дотримуюся",
+     "Я їх змінюю"
+    ]
+   },
+   "wm1": {
+    "q": "Чим ви пишаєтеся, але рідко про це говорите?",
+    "o": []
+   },
+   "wm2": {
+    "q": "Що вас нещодавно дуже розсмішило?",
+    "o": []
+   },
+   "wm3": {
+    "q": "Як для вас виглядає гарний день?",
+    "o": []
+   },
+   "wm4": {
+    "q": "Щодо чого ви змінили думку за останні роки?",
+    "o": []
+   },
+   "wm5": {
+    "q": "Яка дрібниця дає вам відчути турботу?",
+    "o": []
+   },
+   "wm6": {
+    "q": "Що б ви зробили з вільним роком?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Де?",
+    "o": [
+     "Затишне кафе",
+     "Прогулянка в парку",
+     "Музей чи галерея",
+     "Бар на даху"
+    ]
+   },
+   "pd2": {
+    "q": "Коли?",
+    "o": [
+     "Вранці",
+     "Удень",
+     "Увечері",
+     "Пізно вночі"
+    ]
+   },
+   "pd3": {
+    "q": "Що їмо?",
+    "o": [
+     "Стрітфуд",
+     "Щось солодке",
+     "Вечеря з вином",
+     "Пікнік"
+    ]
+   },
+   "pd4": {
+    "q": "Настрій",
+    "o": [
+     "Спокійна глибока розмова",
+     "Весело й грайливо",
+     "Маленька пригода",
+     "Спонтанно"
+    ]
+   },
+   "cv1": {
+    "q": "Що найважливіше в партнері?",
+    "o": [
+     "Доброта",
+     "Амбіції",
+     "Почуття гумору"
+    ]
+   },
+   "cv2": {
+    "q": "Неприємна правда в дрібницях",
+    "o": [
+     "Кажу завжди",
+     "Залежить від ситуації",
+     "Краще зберегти мир"
+    ]
+   },
+   "cv3": {
+    "q": "Вільний час найкраще…",
+    "o": [
+     "Розвиваючись",
+     "З близькими",
+     "Відпочиваючи"
+    ]
+   },
+   "cl1": {
+    "q": "Ваш ритм дня",
+    "o": [
+     "Рано й за розкладом",
+     "Гнучко",
+     "Пізно й спонтанно"
+    ]
+   },
+   "cl2": {
+    "q": "Дім — це…",
+    "o": [
+     "Порядок і тиша",
+     "Затишний творчий безлад",
+     "Повний гостей"
+    ]
+   },
+   "cl3": {
+    "q": "Спорт у вашому житті",
+    "o": [
+     "Щодня",
+     "Іноді",
+     "Рідко"
+    ]
+   },
+   "cc1": {
+    "q": "Коли щось турбує",
+    "o": [
+     "Кажу одразу",
+     "Спершу обмірковую",
+     "Чекаю, поки мине"
+    ]
+   },
+   "cc2": {
+    "q": "Як часто любите листуватися?",
+    "o": [
+     "Цілий день",
+     "Кілька разів на день",
+     "Коли є що сказати"
+    ]
+   },
+   "cc3": {
+    "q": "Після сварки вам потрібно…",
+    "o": [
+     "Усе обговорити",
+     "Побути на самоті",
+     "Обійняти й забути"
+    ]
+   },
+   "cf1": {
+    "q": "Через п'ять років ви бачите себе…",
+    "o": [
+     "У тому ж місті",
+     "Десь у новому місці",
+     "Куди занесе життя"
+    ]
+   },
+   "cf2": {
+    "q": "Діти",
+    "o": [
+     "Хочу",
+     "Поки не знаю",
+     "Не хочу"
+    ]
+   },
+   "cf3": {
+    "q": "Жити разом",
+    "o": [
+     "Через кілька місяців",
+     "Через рік чи більше",
+     "Не пріоритет"
+    ]
+   },
+   "tt": {
+    "q": "Дві правди й брехня",
+    "o": []
+   }
+  }
+ },
+ "en": {
+  "games": {
+   "this_or_that": {
+    "title": "This or That",
+    "desc": "Five quick choices. Where do you match?"
+   },
+   "mind_reader": {
+    "title": "Mind Reader",
+    "desc": "Answer about yourself and guess what they chose."
+   },
+   "two_truths": {
+    "title": "Two Truths and a Lie",
+    "desc": "Write three facts about yourself, one is false. Can they spot it?"
+   },
+   "without_masks": {
+    "title": "Without Masks",
+    "desc": "Two honest questions. Answers open when you both write."
+   },
+   "perfect_date": {
+    "title": "Our Perfect Date",
+    "desc": "Build your ideal first date together."
+   },
+   "spark": {
+    "title": "Spark",
+    "desc": "Five rapid choices, 15 seconds each."
+   },
+   "compat": {
+    "title": "Compatibility Challenge",
+    "desc": "Pick a topic and compare your views."
+   }
+  },
+  "categories": {
+   "values": "Values",
+   "lifestyle": "Lifestyle",
+   "communication": "Communication",
+   "future": "Future"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Perfect weekend",
+    "o": [
+     "Mountains",
+     "Seaside"
+    ]
+   },
+   "tot2": {
+    "q": "Morning starts with…",
+    "o": [
+     "Coffee",
+     "Tea"
+    ]
+   },
+   "tot3": {
+    "q": "Evening in",
+    "o": [
+     "Movie night",
+     "Board games"
+    ]
+   },
+   "tot4": {
+    "q": "How do you travel?",
+    "o": [
+     "With a plan",
+     "Improvising"
+    ]
+   },
+   "tot5": {
+    "q": "You are more of a…",
+    "o": [
+     "Night owl",
+     "Early bird"
+    ]
+   },
+   "tot6": {
+    "q": "Pets",
+    "o": [
+     "Cats",
+     "Dogs"
+    ]
+   },
+   "tot7": {
+    "q": "Food",
+    "o": [
+     "Cooking at home",
+     "New restaurants"
+    ]
+   },
+   "sp1": {
+    "q": "Text or call?",
+    "o": [
+     "Text",
+     "Call"
+    ]
+   },
+   "sp2": {
+    "q": "City or nature?",
+    "o": [
+     "City",
+     "Nature"
+    ]
+   },
+   "sp3": {
+    "q": "Sweet or salty?",
+    "o": [
+     "Sweet",
+     "Salty"
+    ]
+   },
+   "sp4": {
+    "q": "Dance or watch?",
+    "o": [
+     "Dance",
+     "Watch"
+    ]
+   },
+   "sp5": {
+    "q": "Sunrise or sunset?",
+    "o": [
+     "Sunrise",
+     "Sunset"
+    ]
+   },
+   "sp6": {
+    "q": "Books or podcasts?",
+    "o": [
+     "Books",
+     "Podcasts"
+    ]
+   },
+   "sp7": {
+    "q": "Surprise or plan?",
+    "o": [
+     "Surprise",
+     "Plan"
+    ]
+   },
+   "mr1": {
+    "q": "How do you recharge after a long week?",
+    "o": [
+     "Alone at home",
+     "With friends",
+     "Doing sport"
+    ]
+   },
+   "mr2": {
+    "q": "Ideal vacation",
+    "o": [
+     "Exploring a city",
+     "Beach and rest",
+     "Adventure in nature"
+    ]
+   },
+   "mr3": {
+    "q": "In a group you are usually…",
+    "o": [
+     "The one who talks",
+     "The one who listens",
+     "The organiser"
+    ]
+   },
+   "mr4": {
+    "q": "What matters most in a first message?",
+    "o": [
+     "Humour",
+     "Honesty",
+     "Curiosity"
+    ]
+   },
+   "mr5": {
+    "q": "You and plans",
+    "o": [
+     "I make them",
+     "I follow them",
+     "I change them"
+    ]
+   },
+   "wm1": {
+    "q": "What are you proud of but rarely talk about?",
+    "o": []
+   },
+   "wm2": {
+    "q": "What made you laugh really hard recently?",
+    "o": []
+   },
+   "wm3": {
+    "q": "What does a good day look like for you?",
+    "o": []
+   },
+   "wm4": {
+    "q": "What did you change your mind about in recent years?",
+    "o": []
+   },
+   "wm5": {
+    "q": "What small thing makes you feel cared for?",
+    "o": []
+   },
+   "wm6": {
+    "q": "What would you do with a free year?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Where?",
+    "o": [
+     "Cosy café",
+     "Walk in a park",
+     "Museum or gallery",
+     "Rooftop bar"
+    ]
+   },
+   "pd2": {
+    "q": "When?",
+    "o": [
+     "Morning",
+     "Afternoon",
+     "Evening",
+     "Late night"
+    ]
+   },
+   "pd3": {
+    "q": "What do we eat?",
+    "o": [
+     "Street food",
+     "Something sweet",
+     "Dinner with wine",
+     "A picnic"
+    ]
+   },
+   "pd4": {
+    "q": "The mood",
+    "o": [
+     "Calm, deep talk",
+     "Fun and playful",
+     "A little adventure",
+     "Spontaneous"
+    ]
+   },
+   "cv1": {
+    "q": "What matters most in a partner?",
+    "o": [
+     "Kindness",
+     "Ambition",
+     "Sense of humour"
+    ]
+   },
+   "cv2": {
+    "q": "An uncomfortable truth about small things",
+    "o": [
+     "I always say it",
+     "Depends on the situation",
+     "Better keep the peace"
+    ]
+   },
+   "cv3": {
+    "q": "Free time is best spent…",
+    "o": [
+     "Growing and learning",
+     "With loved ones",
+     "Resting"
+    ]
+   },
+   "cl1": {
+    "q": "Your daily rhythm",
+    "o": [
+     "Early and structured",
+     "Flexible",
+     "Late and spontaneous"
+    ]
+   },
+   "cl2": {
+    "q": "Home is…",
+    "o": [
+     "Tidy and calm",
+     "Cosy, lived-in",
+     "Full of guests"
+    ]
+   },
+   "cl3": {
+    "q": "Sport in your life",
+    "o": [
+     "Every day",
+     "Sometimes",
+     "Rarely"
+    ]
+   },
+   "cc1": {
+    "q": "When something bothers you",
+    "o": [
+     "I say it right away",
+     "I think first, then talk",
+     "I wait for it to pass"
+    ]
+   },
+   "cc2": {
+    "q": "How often do you like to text?",
+    "o": [
+     "All day",
+     "A few times a day",
+     "When there's something to say"
+    ]
+   },
+   "cc3": {
+    "q": "After an argument you need…",
+    "o": [
+     "To talk it through",
+     "Some time alone",
+     "A hug and move on"
+    ]
+   },
+   "cf1": {
+    "q": "In five years you see yourself…",
+    "o": [
+     "In the same city",
+     "Somewhere new",
+     "Wherever life takes me"
+    ]
+   },
+   "cf2": {
+    "q": "Kids",
+    "o": [
+     "I want them",
+     "Not sure yet",
+     "I don't want them"
+    ]
+   },
+   "cf3": {
+    "q": "Living together",
+    "o": [
+     "After a few months",
+     "After a year or more",
+     "Not a priority"
+    ]
+   },
+   "tt": {
+    "q": "Two truths and a lie",
+    "o": []
+   }
+  }
+ },
+ "de": {
+  "games": {
+   "this_or_that": {
+    "title": "Dies oder das",
+    "desc": "Fünf schnelle Entscheidungen. Wo passt ihr zusammen?"
+   },
+   "mind_reader": {
+    "title": "Gedankenleser",
+    "desc": "Antworte über dich und errate, was die andere Person gewählt hat."
+   },
+   "two_truths": {
+    "title": "Zwei Wahrheiten, eine Lüge",
+    "desc": "Schreib drei Fakten über dich, einer ist falsch. Findet die andere Person ihn?"
+   },
+   "without_masks": {
+    "title": "Ohne Masken",
+    "desc": "Zwei ehrliche Fragen. Die Antworten erscheinen, wenn ihr beide geschrieben habt."
+   },
+   "perfect_date": {
+    "title": "Unser perfektes Date",
+    "desc": "Stellt gemeinsam euer ideales erstes Date zusammen."
+   },
+   "spark": {
+    "title": "Funke",
+    "desc": "Fünf blitzschnelle Entscheidungen, je 15 Sekunden."
+   },
+   "compat": {
+    "title": "Kompatibilitäts-Check",
+    "desc": "Wähle ein Thema und vergleicht eure Ansichten."
+   }
+  },
+  "categories": {
+   "values": "Werte",
+   "lifestyle": "Lebensstil",
+   "communication": "Kommunikation",
+   "future": "Zukunft"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Perfektes Wochenende",
+    "o": [
+     "Berge",
+     "Meer"
+    ]
+   },
+   "tot2": {
+    "q": "Der Morgen beginnt mit…",
+    "o": [
+     "Kaffee",
+     "Tee"
+    ]
+   },
+   "tot3": {
+    "q": "Abend zu Hause",
+    "o": [
+     "Filmabend",
+     "Brettspiele"
+    ]
+   },
+   "tot4": {
+    "q": "Wie reist du?",
+    "o": [
+     "Mit Plan",
+     "Spontan"
+    ]
+   },
+   "tot5": {
+    "q": "Du bist eher…",
+    "o": [
+     "Nachteule",
+     "Frühaufsteher"
+    ]
+   },
+   "tot6": {
+    "q": "Haustiere",
+    "o": [
+     "Katzen",
+     "Hunde"
+    ]
+   },
+   "tot7": {
+    "q": "Essen",
+    "o": [
+     "Zu Hause kochen",
+     "Neue Restaurants"
+    ]
+   },
+   "sp1": {
+    "q": "Schreiben oder anrufen?",
+    "o": [
+     "Schreiben",
+     "Anrufen"
+    ]
+   },
+   "sp2": {
+    "q": "Stadt oder Natur?",
+    "o": [
+     "Stadt",
+     "Natur"
+    ]
+   },
+   "sp3": {
+    "q": "Süß oder salzig?",
+    "o": [
+     "Süß",
+     "Salzig"
+    ]
+   },
+   "sp4": {
+    "q": "Tanzen oder zuschauen?",
+    "o": [
+     "Tanzen",
+     "Zuschauen"
+    ]
+   },
+   "sp5": {
+    "q": "Sonnenaufgang oder -untergang?",
+    "o": [
+     "Aufgang",
+     "Untergang"
+    ]
+   },
+   "sp6": {
+    "q": "Bücher oder Podcasts?",
+    "o": [
+     "Bücher",
+     "Podcasts"
+    ]
+   },
+   "sp7": {
+    "q": "Überraschung oder Plan?",
+    "o": [
+     "Überraschung",
+     "Plan"
+    ]
+   },
+   "mr1": {
+    "q": "Wie tankst du nach einer langen Woche auf?",
+    "o": [
+     "Allein zu Hause",
+     "Mit Freunden",
+     "Beim Sport"
+    ]
+   },
+   "mr2": {
+    "q": "Idealer Urlaub",
+    "o": [
+     "Eine Stadt erkunden",
+     "Strand und Ruhe",
+     "Abenteuer in der Natur"
+    ]
+   },
+   "mr3": {
+    "q": "In einer Gruppe bist du meistens…",
+    "o": [
+     "Wer erzählt",
+     "Wer zuhört",
+     "Wer organisiert"
+    ]
+   },
+   "mr4": {
+    "q": "Was zählt in der ersten Nachricht am meisten?",
+    "o": [
+     "Humor",
+     "Ehrlichkeit",
+     "Neugier"
+    ]
+   },
+   "mr5": {
+    "q": "Du und Pläne",
+    "o": [
+     "Ich mache sie",
+     "Ich halte mich daran",
+     "Ich ändere sie"
+    ]
+   },
+   "wm1": {
+    "q": "Worauf bist du stolz, sprichst aber selten darüber?",
+    "o": []
+   },
+   "wm2": {
+    "q": "Worüber hast du zuletzt richtig gelacht?",
+    "o": []
+   },
+   "wm3": {
+    "q": "Wie sieht für dich ein guter Tag aus?",
+    "o": []
+   },
+   "wm4": {
+    "q": "Worüber hast du in den letzten Jahren deine Meinung geändert?",
+    "o": []
+   },
+   "wm5": {
+    "q": "Welche Kleinigkeit gibt dir das Gefühl, umsorgt zu sein?",
+    "o": []
+   },
+   "wm6": {
+    "q": "Was würdest du mit einem freien Jahr machen?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Wo?",
+    "o": [
+     "Gemütliches Café",
+     "Spaziergang im Park",
+     "Museum oder Galerie",
+     "Rooftop-Bar"
+    ]
+   },
+   "pd2": {
+    "q": "Wann?",
+    "o": [
+     "Morgens",
+     "Nachmittags",
+     "Abends",
+     "Spät in der Nacht"
+    ]
+   },
+   "pd3": {
+    "q": "Was essen wir?",
+    "o": [
+     "Streetfood",
+     "Etwas Süßes",
+     "Abendessen mit Wein",
+     "Ein Picknick"
+    ]
+   },
+   "pd4": {
+    "q": "Die Stimmung",
+    "o": [
+     "Ruhig und tiefgründig",
+     "Lustig und verspielt",
+     "Ein kleines Abenteuer",
+     "Spontan"
+    ]
+   },
+   "cv1": {
+    "q": "Was ist dir bei einem Partner am wichtigsten?",
+    "o": [
+     "Freundlichkeit",
+     "Ehrgeiz",
+     "Humor"
+    ]
+   },
+   "cv2": {
+    "q": "Eine unangenehme Wahrheit bei Kleinigkeiten",
+    "o": [
+     "Ich sage sie immer",
+     "Kommt darauf an",
+     "Lieber Frieden bewahren"
+    ]
+   },
+   "cv3": {
+    "q": "Freizeit verbringt man am besten…",
+    "o": [
+     "Lernend",
+     "Mit Liebsten",
+     "Erholend"
+    ]
+   },
+   "cl1": {
+    "q": "Dein Tagesrhythmus",
+    "o": [
+     "Früh und strukturiert",
+     "Flexibel",
+     "Spät und spontan"
+    ]
+   },
+   "cl2": {
+    "q": "Zuhause ist…",
+    "o": [
+     "Ordentlich und ruhig",
+     "Gemütlich und bewohnt",
+     "Voller Gäste"
+    ]
+   },
+   "cl3": {
+    "q": "Sport in deinem Leben",
+    "o": [
+     "Jeden Tag",
+     "Manchmal",
+     "Selten"
+    ]
+   },
+   "cc1": {
+    "q": "Wenn dich etwas stört",
+    "o": [
+     "Ich sage es sofort",
+     "Erst denken, dann reden",
+     "Ich warte, bis es vorbei ist"
+    ]
+   },
+   "cc2": {
+    "q": "Wie oft schreibst du gern?",
+    "o": [
+     "Den ganzen Tag",
+     "Ein paar Mal am Tag",
+     "Wenn es etwas zu sagen gibt"
+    ]
+   },
+   "cc3": {
+    "q": "Nach einem Streit brauchst du…",
+    "o": [
+     "Darüber reden",
+     "Zeit für mich",
+     "Eine Umarmung und weiter"
+    ]
+   },
+   "cf1": {
+    "q": "In fünf Jahren siehst du dich…",
+    "o": [
+     "In derselben Stadt",
+     "Woanders",
+     "Wo das Leben mich hinführt"
+    ]
+   },
+   "cf2": {
+    "q": "Kinder",
+    "o": [
+     "Ich möchte welche",
+     "Weiß ich noch nicht",
+     "Ich möchte keine"
+    ]
+   },
+   "cf3": {
+    "q": "Zusammenziehen",
+    "o": [
+     "Nach ein paar Monaten",
+     "Nach einem Jahr oder später",
+     "Keine Priorität"
+    ]
+   },
+   "tt": {
+    "q": "Zwei Wahrheiten, eine Lüge",
+    "o": []
+   }
+  }
+ },
+ "es": {
+  "games": {
+   "this_or_that": {
+    "title": "Esto o aquello",
+    "desc": "Cinco elecciones rápidas. ¿En qué coincidís?"
+   },
+   "mind_reader": {
+    "title": "Lector de mentes",
+    "desc": "Responde sobre ti y adivina qué eligió la otra persona."
+   },
+   "two_truths": {
+    "title": "Dos verdades y una mentira",
+    "desc": "Escribe tres datos sobre ti, uno es falso. ¿Lo descubrirá?"
+   },
+   "without_masks": {
+    "title": "Sin máscaras",
+    "desc": "Dos preguntas sinceras. Las respuestas se abren cuando escribís los dos."
+   },
+   "perfect_date": {
+    "title": "Nuestra cita perfecta",
+    "desc": "Diseñad juntos vuestra primera cita ideal."
+   },
+   "spark": {
+    "title": "Chispa",
+    "desc": "Cinco elecciones rapidísimas, 15 segundos cada una."
+   },
+   "compat": {
+    "title": "Reto de compatibilidad",
+    "desc": "Elige un tema y comparad vuestras opiniones."
+   }
+  },
+  "categories": {
+   "values": "Valores",
+   "lifestyle": "Estilo de vida",
+   "communication": "Comunicación",
+   "future": "Futuro"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Fin de semana perfecto",
+    "o": [
+     "Montaña",
+     "Playa"
+    ]
+   },
+   "tot2": {
+    "q": "La mañana empieza con…",
+    "o": [
+     "Café",
+     "Té"
+    ]
+   },
+   "tot3": {
+    "q": "Noche en casa",
+    "o": [
+     "Peli",
+     "Juegos de mesa"
+    ]
+   },
+   "tot4": {
+    "q": "¿Cómo viajas?",
+    "o": [
+     "Con un plan",
+     "Improvisando"
+    ]
+   },
+   "tot5": {
+    "q": "Eres más bien…",
+    "o": [
+     "Búho",
+     "Madrugador"
+    ]
+   },
+   "tot6": {
+    "q": "Mascotas",
+    "o": [
+     "Gatos",
+     "Perros"
+    ]
+   },
+   "tot7": {
+    "q": "Comida",
+    "o": [
+     "Cocinar en casa",
+     "Restaurantes nuevos"
+    ]
+   },
+   "sp1": {
+    "q": "¿Mensaje o llamada?",
+    "o": [
+     "Mensaje",
+     "Llamada"
+    ]
+   },
+   "sp2": {
+    "q": "¿Ciudad o naturaleza?",
+    "o": [
+     "Ciudad",
+     "Naturaleza"
+    ]
+   },
+   "sp3": {
+    "q": "¿Dulce o salado?",
+    "o": [
+     "Dulce",
+     "Salado"
+    ]
+   },
+   "sp4": {
+    "q": "¿Bailar o mirar?",
+    "o": [
+     "Bailar",
+     "Mirar"
+    ]
+   },
+   "sp5": {
+    "q": "¿Amanecer o atardecer?",
+    "o": [
+     "Amanecer",
+     "Atardecer"
+    ]
+   },
+   "sp6": {
+    "q": "¿Libros o pódcasts?",
+    "o": [
+     "Libros",
+     "Pódcasts"
+    ]
+   },
+   "sp7": {
+    "q": "¿Sorpresa o plan?",
+    "o": [
+     "Sorpresa",
+     "Plan"
+    ]
+   },
+   "mr1": {
+    "q": "¿Cómo recargas pilas tras una semana larga?",
+    "o": [
+     "Solo en casa",
+     "Con amigos",
+     "Haciendo deporte"
+    ]
+   },
+   "mr2": {
+    "q": "Vacaciones ideales",
+    "o": [
+     "Explorar una ciudad",
+     "Playa y descanso",
+     "Aventura en la naturaleza"
+    ]
+   },
+   "mr3": {
+    "q": "En grupo sueles ser…",
+    "o": [
+     "Quien habla",
+     "Quien escucha",
+     "Quien organiza"
+    ]
+   },
+   "mr4": {
+    "q": "¿Qué importa más en un primer mensaje?",
+    "o": [
+     "Humor",
+     "Sinceridad",
+     "Curiosidad"
+    ]
+   },
+   "mr5": {
+    "q": "Tú y los planes",
+    "o": [
+     "Los hago yo",
+     "Los sigo",
+     "Los cambio"
+    ]
+   },
+   "wm1": {
+    "q": "¿De qué estás orgulloso/a pero casi nunca hablas?",
+    "o": []
+   },
+   "wm2": {
+    "q": "¿Qué te hizo reír mucho hace poco?",
+    "o": []
+   },
+   "wm3": {
+    "q": "¿Cómo es para ti un buen día?",
+    "o": []
+   },
+   "wm4": {
+    "q": "¿Sobre qué has cambiado de opinión en los últimos años?",
+    "o": []
+   },
+   "wm5": {
+    "q": "¿Qué pequeño detalle te hace sentir cuidado/a?",
+    "o": []
+   },
+   "wm6": {
+    "q": "¿Qué harías con un año libre?",
+    "o": []
+   },
+   "pd1": {
+    "q": "¿Dónde?",
+    "o": [
+     "Café acogedor",
+     "Paseo por el parque",
+     "Museo o galería",
+     "Terraza en la azotea"
+    ]
+   },
+   "pd2": {
+    "q": "¿Cuándo?",
+    "o": [
+     "Por la mañana",
+     "Por la tarde",
+     "Por la noche",
+     "De madrugada"
+    ]
+   },
+   "pd3": {
+    "q": "¿Qué comemos?",
+    "o": [
+     "Comida callejera",
+     "Algo dulce",
+     "Cena con vino",
+     "Un pícnic"
+    ]
+   },
+   "pd4": {
+    "q": "El ambiente",
+    "o": [
+     "Tranquilo y profundo",
+     "Divertido y juguetón",
+     "Una pequeña aventura",
+     "Espontáneo"
+    ]
+   },
+   "cv1": {
+    "q": "¿Qué es lo más importante en una pareja?",
+    "o": [
+     "Amabilidad",
+     "Ambición",
+     "Sentido del humor"
+    ]
+   },
+   "cv2": {
+    "q": "Una verdad incómoda sobre cosas pequeñas",
+    "o": [
+     "Siempre la digo",
+     "Depende de la situación",
+     "Mejor mantener la paz"
+    ]
+   },
+   "cv3": {
+    "q": "El tiempo libre se aprovecha mejor…",
+    "o": [
+     "Aprendiendo",
+     "Con los seres queridos",
+     "Descansando"
+    ]
+   },
+   "cl1": {
+    "q": "Tu ritmo diario",
+    "o": [
+     "Temprano y organizado",
+     "Flexible",
+     "Tarde y espontáneo"
+    ]
+   },
+   "cl2": {
+    "q": "El hogar es…",
+    "o": [
+     "Ordenado y tranquilo",
+     "Acogedor y vivido",
+     "Lleno de invitados"
+    ]
+   },
+   "cl3": {
+    "q": "El deporte en tu vida",
+    "o": [
+     "Cada día",
+     "A veces",
+     "Rara vez"
+    ]
+   },
+   "cc1": {
+    "q": "Cuando algo te molesta",
+    "o": [
+     "Lo digo enseguida",
+     "Primero pienso, luego hablo",
+     "Espero a que pase"
+    ]
+   },
+   "cc2": {
+    "q": "¿Con qué frecuencia te gusta escribir?",
+    "o": [
+     "Todo el día",
+     "Varias veces al día",
+     "Cuando hay algo que decir"
+    ]
+   },
+   "cc3": {
+    "q": "Después de una discusión necesitas…",
+    "o": [
+     "Hablarlo",
+     "Tiempo a solas",
+     "Un abrazo y seguir"
+    ]
+   },
+   "cf1": {
+    "q": "Dentro de cinco años te ves…",
+    "o": [
+     "En la misma ciudad",
+     "En otro lugar",
+     "Donde me lleve la vida"
+    ]
+   },
+   "cf2": {
+    "q": "Hijos",
+    "o": [
+     "Quiero",
+     "Aún no lo sé",
+     "No quiero"
+    ]
+   },
+   "cf3": {
+    "q": "Vivir juntos",
+    "o": [
+     "Tras unos meses",
+     "Tras un año o más",
+     "No es prioridad"
+    ]
+   },
+   "tt": {
+    "q": "Dos verdades y una mentira",
+    "o": []
+   }
+  }
+ },
+ "pl": {
+  "games": {
+   "this_or_that": {
+    "title": "To czy tamto",
+    "desc": "Pięć szybkich wyborów. Gdzie się zgadzacie?"
+   },
+   "mind_reader": {
+    "title": "Czytanie w myślach",
+    "desc": "Odpowiedz o sobie i zgadnij, co wybrała druga osoba."
+   },
+   "two_truths": {
+    "title": "Dwie prawdy i kłamstwo",
+    "desc": "Napisz trzy fakty o sobie, jeden jest fałszywy. Czy druga osoba go znajdzie?"
+   },
+   "without_masks": {
+    "title": "Bez masek",
+    "desc": "Dwa szczere pytania. Odpowiedzi odsłonią się, gdy napiszecie oboje."
+   },
+   "perfect_date": {
+    "title": "Nasza idealna randka",
+    "desc": "Złóżcie razem idealną pierwszą randkę."
+   },
+   "spark": {
+    "title": "Iskra",
+    "desc": "Pięć błyskawicznych wyborów, po 15 sekund."
+   },
+   "compat": {
+    "title": "Test zgodności",
+    "desc": "Wybierz temat i porównajcie poglądy."
+   }
+  },
+  "categories": {
+   "values": "Wartości",
+   "lifestyle": "Styl życia",
+   "communication": "Komunikacja",
+   "future": "Przyszłość"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Idealny weekend",
+    "o": [
+     "Góry",
+     "Morze"
+    ]
+   },
+   "tot2": {
+    "q": "Poranek zaczyna się od…",
+    "o": [
+     "Kawy",
+     "Herbaty"
+    ]
+   },
+   "tot3": {
+    "q": "Wieczór w domu",
+    "o": [
+     "Film",
+     "Planszówki"
+    ]
+   },
+   "tot4": {
+    "q": "Jak podróżujesz?",
+    "o": [
+     "Według planu",
+     "Spontanicznie"
+    ]
+   },
+   "tot5": {
+    "q": "Jesteś raczej…",
+    "o": [
+     "Sowa",
+     "Skowronek"
+    ]
+   },
+   "tot6": {
+    "q": "Zwierzaki",
+    "o": [
+     "Koty",
+     "Psy"
+    ]
+   },
+   "tot7": {
+    "q": "Jedzenie",
+    "o": [
+     "Gotować w domu",
+     "Nowe restauracje"
+    ]
+   },
+   "sp1": {
+    "q": "Napisać czy zadzwonić?",
+    "o": [
+     "Napisać",
+     "Zadzwonić"
+    ]
+   },
+   "sp2": {
+    "q": "Miasto czy natura?",
+    "o": [
+     "Miasto",
+     "Natura"
+    ]
+   },
+   "sp3": {
+    "q": "Słodkie czy słone?",
+    "o": [
+     "Słodkie",
+     "Słone"
+    ]
+   },
+   "sp4": {
+    "q": "Tańczyć czy patrzeć?",
+    "o": [
+     "Tańczyć",
+     "Patrzeć"
+    ]
+   },
+   "sp5": {
+    "q": "Wschód czy zachód słońca?",
+    "o": [
+     "Wschód",
+     "Zachód"
+    ]
+   },
+   "sp6": {
+    "q": "Książki czy podcasty?",
+    "o": [
+     "Książki",
+     "Podcasty"
+    ]
+   },
+   "sp7": {
+    "q": "Niespodzianka czy plan?",
+    "o": [
+     "Niespodzianka",
+     "Plan"
+    ]
+   },
+   "mr1": {
+    "q": "Jak odpoczywasz po długim tygodniu?",
+    "o": [
+     "Sam w domu",
+     "Z przyjaciółmi",
+     "Sport"
+    ]
+   },
+   "mr2": {
+    "q": "Idealny urlop",
+    "o": [
+     "Zwiedzanie miasta",
+     "Plaża i odpoczynek",
+     "Przygoda na łonie natury"
+    ]
+   },
+   "mr3": {
+    "q": "W grupie zwykle jesteś…",
+    "o": [
+     "Tym, kto mówi",
+     "Tym, kto słucha",
+     "Organizatorem"
+    ]
+   },
+   "mr4": {
+    "q": "Co jest najważniejsze w pierwszej wiadomości?",
+    "o": [
+     "Humor",
+     "Szczerość",
+     "Ciekawość"
+    ]
+   },
+   "mr5": {
+    "q": "Ty i plany",
+    "o": [
+     "Robię je",
+     "Trzymam się ich",
+     "Zmieniam je"
+    ]
+   },
+   "wm1": {
+    "q": "Z czego jesteś dumny(-a), ale rzadko o tym mówisz?",
+    "o": []
+   },
+   "wm2": {
+    "q": "Co ostatnio bardzo Cię rozśmieszyło?",
+    "o": []
+   },
+   "wm3": {
+    "q": "Jak wygląda dla Ciebie dobry dzień?",
+    "o": []
+   },
+   "wm4": {
+    "q": "Co do czego zmieniłeś(-aś) zdanie w ostatnich latach?",
+    "o": []
+   },
+   "wm5": {
+    "q": "Jaki drobiazg sprawia, że czujesz troskę?",
+    "o": []
+   },
+   "wm6": {
+    "q": "Co zrobił(a)byś z wolnym rokiem?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Gdzie?",
+    "o": [
+     "Przytulna kawiarnia",
+     "Spacer w parku",
+     "Muzeum lub galeria",
+     "Bar na dachu"
+    ]
+   },
+   "pd2": {
+    "q": "Kiedy?",
+    "o": [
+     "Rano",
+     "Po południu",
+     "Wieczorem",
+     "Późną nocą"
+    ]
+   },
+   "pd3": {
+    "q": "Co jemy?",
+    "o": [
+     "Street food",
+     "Coś słodkiego",
+     "Kolacja z winem",
+     "Piknik"
+    ]
+   },
+   "pd4": {
+    "q": "Nastrój",
+    "o": [
+     "Spokojna, głęboka rozmowa",
+     "Wesoło i zabawnie",
+     "Mała przygoda",
+     "Spontanicznie"
+    ]
+   },
+   "cv1": {
+    "q": "Co jest najważniejsze w partnerze?",
+    "o": [
+     "Dobroć",
+     "Ambicja",
+     "Poczucie humoru"
+    ]
+   },
+   "cv2": {
+    "q": "Niewygodna prawda w drobiazgach",
+    "o": [
+     "Zawsze mówię",
+     "Zależy od sytuacji",
+     "Lepiej zachować spokój"
+    ]
+   },
+   "cv3": {
+    "q": "Wolny czas najlepiej spędzać…",
+    "o": [
+     "Rozwijając się",
+     "Z bliskimi",
+     "Odpoczywając"
+    ]
+   },
+   "cl1": {
+    "q": "Twój rytm dnia",
+    "o": [
+     "Wcześnie i według planu",
+     "Elastycznie",
+     "Późno i spontanicznie"
+    ]
+   },
+   "cl2": {
+    "q": "Dom to…",
+    "o": [
+     "Porządek i spokój",
+     "Przytulny artystyczny nieład",
+     "Pełen gości"
+    ]
+   },
+   "cl3": {
+    "q": "Sport w Twoim życiu",
+    "o": [
+     "Codziennie",
+     "Czasami",
+     "Rzadko"
+    ]
+   },
+   "cc1": {
+    "q": "Gdy coś Cię niepokoi",
+    "o": [
+     "Mówię od razu",
+     "Najpierw przemyślę",
+     "Czekam, aż minie"
+    ]
+   },
+   "cc2": {
+    "q": "Jak często lubisz pisać?",
+    "o": [
+     "Cały dzień",
+     "Kilka razy dziennie",
+     "Gdy jest coś do powiedzenia"
+    ]
+   },
+   "cc3": {
+    "q": "Po kłótni potrzebujesz…",
+    "o": [
+     "Wszystko omówić",
+     "Czas w samotności",
+     "Przytulić i zapomnieć"
+    ]
+   },
+   "cf1": {
+    "q": "Za pięć lat widzisz się…",
+    "o": [
+     "W tym samym mieście",
+     "Gdzieś w nowym miejscu",
+     "Tam, gdzie poniesie życie"
+    ]
+   },
+   "cf2": {
+    "q": "Dzieci",
+    "o": [
+     "Chcę",
+     "Jeszcze nie wiem",
+     "Nie chcę"
+    ]
+   },
+   "cf3": {
+    "q": "Wspólne mieszkanie",
+    "o": [
+     "Po kilku miesiącach",
+     "Po roku lub dłużej",
+     "Nie jest priorytetem"
+    ]
+   },
+   "tt": {
+    "q": "Dwie prawdy i kłamstwo",
+    "o": []
+   }
+  }
+ },
+ "fr": {
+  "games": {
+   "this_or_that": {
+    "title": "Ceci ou cela",
+    "desc": "Cinq choix rapides. Où êtes-vous d'accord ?"
+   },
+   "mind_reader": {
+    "title": "Lecteur de pensées",
+    "desc": "Répondez pour vous et devinez ce que l'autre a choisi."
+   },
+   "two_truths": {
+    "title": "Deux vérités, un mensonge",
+    "desc": "Écrivez trois faits sur vous, dont un faux. L'autre le trouvera-t-il ?"
+   },
+   "without_masks": {
+    "title": "Sans masque",
+    "desc": "Deux questions sincères. Les réponses s'ouvrent quand vous avez écrit tous les deux."
+   },
+   "perfect_date": {
+    "title": "Notre rendez-vous parfait",
+    "desc": "Composez ensemble votre premier rendez-vous idéal."
+   },
+   "spark": {
+    "title": "Étincelle",
+    "desc": "Cinq choix éclair, 15 secondes chacun."
+   },
+   "compat": {
+    "title": "Défi de compatibilité",
+    "desc": "Choisissez un thème et comparez vos points de vue."
+   }
+  },
+  "categories": {
+   "values": "Valeurs",
+   "lifestyle": "Mode de vie",
+   "communication": "Communication",
+   "future": "Avenir"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Week-end parfait",
+    "o": [
+     "Montagne",
+     "Mer"
+    ]
+   },
+   "tot2": {
+    "q": "Le matin commence par…",
+    "o": [
+     "Café",
+     "Thé"
+    ]
+   },
+   "tot3": {
+    "q": "Soirée à la maison",
+    "o": [
+     "Film",
+     "Jeux de société"
+    ]
+   },
+   "tot4": {
+    "q": "Comment voyagez-vous ?",
+    "o": [
+     "Avec un plan",
+     "En improvisant"
+    ]
+   },
+   "tot5": {
+    "q": "Vous êtes plutôt…",
+    "o": [
+     "Oiseau de nuit",
+     "Lève-tôt"
+    ]
+   },
+   "tot6": {
+    "q": "Animaux",
+    "o": [
+     "Chats",
+     "Chiens"
+    ]
+   },
+   "tot7": {
+    "q": "Nourriture",
+    "o": [
+     "Cuisiner à la maison",
+     "Nouveaux restaurants"
+    ]
+   },
+   "sp1": {
+    "q": "Écrire ou appeler ?",
+    "o": [
+     "Écrire",
+     "Appeler"
+    ]
+   },
+   "sp2": {
+    "q": "Ville ou nature ?",
+    "o": [
+     "Ville",
+     "Nature"
+    ]
+   },
+   "sp3": {
+    "q": "Sucré ou salé ?",
+    "o": [
+     "Sucré",
+     "Salé"
+    ]
+   },
+   "sp4": {
+    "q": "Danser ou regarder ?",
+    "o": [
+     "Danser",
+     "Regarder"
+    ]
+   },
+   "sp5": {
+    "q": "Lever ou coucher de soleil ?",
+    "o": [
+     "Lever",
+     "Coucher"
+    ]
+   },
+   "sp6": {
+    "q": "Livres ou podcasts ?",
+    "o": [
+     "Livres",
+     "Podcasts"
+    ]
+   },
+   "sp7": {
+    "q": "Surprise ou plan ?",
+    "o": [
+     "Surprise",
+     "Plan"
+    ]
+   },
+   "mr1": {
+    "q": "Comment vous ressourcez-vous après une longue semaine ?",
+    "o": [
+     "Seul à la maison",
+     "Avec des amis",
+     "En faisant du sport"
+    ]
+   },
+   "mr2": {
+    "q": "Vacances idéales",
+    "o": [
+     "Explorer une ville",
+     "Plage et repos",
+     "Aventure dans la nature"
+    ]
+   },
+   "mr3": {
+    "q": "En groupe, vous êtes plutôt…",
+    "o": [
+     "Celui qui parle",
+     "Celui qui écoute",
+     "L'organisateur"
+    ]
+   },
+   "mr4": {
+    "q": "Qu'est-ce qui compte le plus dans un premier message ?",
+    "o": [
+     "L'humour",
+     "L'honnêteté",
+     "La curiosité"
+    ]
+   },
+   "mr5": {
+    "q": "Vous et les plans",
+    "o": [
+     "Je les fais",
+     "Je les suis",
+     "Je les change"
+    ]
+   },
+   "wm1": {
+    "q": "De quoi êtes-vous fier·e sans en parler souvent ?",
+    "o": []
+   },
+   "wm2": {
+    "q": "Qu'est-ce qui vous a fait vraiment rire récemment ?",
+    "o": []
+   },
+   "wm3": {
+    "q": "À quoi ressemble une bonne journée pour vous ?",
+    "o": []
+   },
+   "wm4": {
+    "q": "Sur quoi avez-vous changé d'avis ces dernières années ?",
+    "o": []
+   },
+   "wm5": {
+    "q": "Quel petit geste vous fait sentir qu'on prend soin de vous ?",
+    "o": []
+   },
+   "wm6": {
+    "q": "Que feriez-vous d'une année libre ?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Où ?",
+    "o": [
+     "Café cosy",
+     "Balade au parc",
+     "Musée ou galerie",
+     "Bar en rooftop"
+    ]
+   },
+   "pd2": {
+    "q": "Quand ?",
+    "o": [
+     "Le matin",
+     "L'après-midi",
+     "Le soir",
+     "Tard dans la nuit"
+    ]
+   },
+   "pd3": {
+    "q": "Qu'est-ce qu'on mange ?",
+    "o": [
+     "Street food",
+     "Quelque chose de sucré",
+     "Dîner avec du vin",
+     "Un pique-nique"
+    ]
+   },
+   "pd4": {
+    "q": "L'ambiance",
+    "o": [
+     "Calme et profond",
+     "Drôle et joueur",
+     "Une petite aventure",
+     "Spontané"
+    ]
+   },
+   "cv1": {
+    "q": "Qu'est-ce qui compte le plus chez un partenaire ?",
+    "o": [
+     "La gentillesse",
+     "L'ambition",
+     "L'humour"
+    ]
+   },
+   "cv2": {
+    "q": "Une vérité gênante sur des détails",
+    "o": [
+     "Je la dis toujours",
+     "Ça dépend",
+     "Mieux vaut préserver la paix"
+    ]
+   },
+   "cv3": {
+    "q": "Le temps libre, c'est mieux…",
+    "o": [
+     "En apprenant",
+     "Avec ses proches",
+     "En se reposant"
+    ]
+   },
+   "cl1": {
+    "q": "Votre rythme quotidien",
+    "o": [
+     "Tôt et structuré",
+     "Flexible",
+     "Tard et spontané"
+    ]
+   },
+   "cl2": {
+    "q": "La maison, c'est…",
+    "o": [
+     "Rangé et calme",
+     "Cosy et vivant",
+     "Plein d'invités"
+    ]
+   },
+   "cl3": {
+    "q": "Le sport dans votre vie",
+    "o": [
+     "Tous les jours",
+     "Parfois",
+     "Rarement"
+    ]
+   },
+   "cc1": {
+    "q": "Quand quelque chose vous dérange",
+    "o": [
+     "Je le dis tout de suite",
+     "Je réfléchis d'abord",
+     "J'attends que ça passe"
+    ]
+   },
+   "cc2": {
+    "q": "À quelle fréquence aimez-vous écrire ?",
+    "o": [
+     "Toute la journée",
+     "Quelques fois par jour",
+     "Quand il y a quelque chose à dire"
+    ]
+   },
+   "cc3": {
+    "q": "Après une dispute, il vous faut…",
+    "o": [
+     "En parler",
+     "Du temps seul·e",
+     "Un câlin et on passe à autre chose"
+    ]
+   },
+   "cf1": {
+    "q": "Dans cinq ans, vous vous voyez…",
+    "o": [
+     "Dans la même ville",
+     "Ailleurs",
+     "Là où la vie m'emmène"
+    ]
+   },
+   "cf2": {
+    "q": "Enfants",
+    "o": [
+     "J'en veux",
+     "Je ne sais pas encore",
+     "Je n'en veux pas"
+    ]
+   },
+   "cf3": {
+    "q": "Vivre ensemble",
+    "o": [
+     "Après quelques mois",
+     "Après un an ou plus",
+     "Pas une priorité"
+    ]
+   },
+   "tt": {
+    "q": "Deux vérités, un mensonge",
+    "o": []
+   }
+  }
+ },
+ "it": {
+  "games": {
+   "this_or_that": {
+    "title": "Questo o quello",
+    "desc": "Cinque scelte veloci. Dove coincidete?"
+   },
+   "mind_reader": {
+    "title": "Leggi nel pensiero",
+    "desc": "Rispondi su di te e indovina cosa ha scelto l'altra persona."
+   },
+   "two_truths": {
+    "title": "Due verità e una bugia",
+    "desc": "Scrivi tre fatti su di te, uno è falso. L'altra persona lo scoprirà?"
+   },
+   "without_masks": {
+    "title": "Senza maschere",
+    "desc": "Due domande sincere. Le risposte si aprono quando avete scritto entrambi."
+   },
+   "perfect_date": {
+    "title": "Il nostro appuntamento perfetto",
+    "desc": "Costruite insieme il vostro primo appuntamento ideale."
+   },
+   "spark": {
+    "title": "Scintilla",
+    "desc": "Cinque scelte lampo, 15 secondi ciascuna."
+   },
+   "compat": {
+    "title": "Sfida di compatibilità",
+    "desc": "Scegli un tema e confrontate le vostre idee."
+   }
+  },
+  "categories": {
+   "values": "Valori",
+   "lifestyle": "Stile di vita",
+   "communication": "Comunicazione",
+   "future": "Futuro"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Weekend perfetto",
+    "o": [
+     "Montagna",
+     "Mare"
+    ]
+   },
+   "tot2": {
+    "q": "La mattina inizia con…",
+    "o": [
+     "Caffè",
+     "Tè"
+    ]
+   },
+   "tot3": {
+    "q": "Serata in casa",
+    "o": [
+     "Film",
+     "Giochi da tavolo"
+    ]
+   },
+   "tot4": {
+    "q": "Come viaggi?",
+    "o": [
+     "Con un piano",
+     "Improvvisando"
+    ]
+   },
+   "tot5": {
+    "q": "Sei più…",
+    "o": [
+     "Gufo",
+     "Allodola"
+    ]
+   },
+   "tot6": {
+    "q": "Animali",
+    "o": [
+     "Gatti",
+     "Cani"
+    ]
+   },
+   "tot7": {
+    "q": "Cibo",
+    "o": [
+     "Cucinare a casa",
+     "Ristoranti nuovi"
+    ]
+   },
+   "sp1": {
+    "q": "Messaggio o chiamata?",
+    "o": [
+     "Messaggio",
+     "Chiamata"
+    ]
+   },
+   "sp2": {
+    "q": "Città o natura?",
+    "o": [
+     "Città",
+     "Natura"
+    ]
+   },
+   "sp3": {
+    "q": "Dolce o salato?",
+    "o": [
+     "Dolce",
+     "Salato"
+    ]
+   },
+   "sp4": {
+    "q": "Ballare o guardare?",
+    "o": [
+     "Ballare",
+     "Guardare"
+    ]
+   },
+   "sp5": {
+    "q": "Alba o tramonto?",
+    "o": [
+     "Alba",
+     "Tramonto"
+    ]
+   },
+   "sp6": {
+    "q": "Libri o podcast?",
+    "o": [
+     "Libri",
+     "Podcast"
+    ]
+   },
+   "sp7": {
+    "q": "Sorpresa o piano?",
+    "o": [
+     "Sorpresa",
+     "Piano"
+    ]
+   },
+   "mr1": {
+    "q": "Come ricarichi le energie dopo una settimana lunga?",
+    "o": [
+     "Da solo a casa",
+     "Con gli amici",
+     "Facendo sport"
+    ]
+   },
+   "mr2": {
+    "q": "Vacanza ideale",
+    "o": [
+     "Esplorare una città",
+     "Spiaggia e relax",
+     "Avventura nella natura"
+    ]
+   },
+   "mr3": {
+    "q": "In gruppo di solito sei…",
+    "o": [
+     "Chi parla",
+     "Chi ascolta",
+     "Chi organizza"
+    ]
+   },
+   "mr4": {
+    "q": "Cosa conta di più in un primo messaggio?",
+    "o": [
+     "L'umorismo",
+     "L'onestà",
+     "La curiosità"
+    ]
+   },
+   "mr5": {
+    "q": "Tu e i piani",
+    "o": [
+     "Li faccio io",
+     "Li seguo",
+     "Li cambio"
+    ]
+   },
+   "wm1": {
+    "q": "Di cosa sei orgoglioso/a ma ne parli di rado?",
+    "o": []
+   },
+   "wm2": {
+    "q": "Cosa ti ha fatto ridere tanto di recente?",
+    "o": []
+   },
+   "wm3": {
+    "q": "Com'è per te una bella giornata?",
+    "o": []
+   },
+   "wm4": {
+    "q": "Su cosa hai cambiato idea negli ultimi anni?",
+    "o": []
+   },
+   "wm5": {
+    "q": "Quale piccola cosa ti fa sentire curato/a?",
+    "o": []
+   },
+   "wm6": {
+    "q": "Cosa faresti con un anno libero?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Dove?",
+    "o": [
+     "Caffè accogliente",
+     "Passeggiata al parco",
+     "Museo o galleria",
+     "Bar sul tetto"
+    ]
+   },
+   "pd2": {
+    "q": "Quando?",
+    "o": [
+     "Di mattina",
+     "Di pomeriggio",
+     "Di sera",
+     "A tarda notte"
+    ]
+   },
+   "pd3": {
+    "q": "Cosa mangiamo?",
+    "o": [
+     "Street food",
+     "Qualcosa di dolce",
+     "Cena con vino",
+     "Un picnic"
+    ]
+   },
+   "pd4": {
+    "q": "L'atmosfera",
+    "o": [
+     "Calma e profonda",
+     "Divertente e giocosa",
+     "Una piccola avventura",
+     "Spontanea"
+    ]
+   },
+   "cv1": {
+    "q": "Cosa conta di più in un partner?",
+    "o": [
+     "La gentilezza",
+     "L'ambizione",
+     "Il senso dell'umorismo"
+    ]
+   },
+   "cv2": {
+    "q": "Una verità scomoda su piccole cose",
+    "o": [
+     "La dico sempre",
+     "Dipende dalla situazione",
+     "Meglio mantenere la pace"
+    ]
+   },
+   "cv3": {
+    "q": "Il tempo libero è meglio…",
+    "o": [
+     "Imparando",
+     "Con le persone care",
+     "Riposando"
+    ]
+   },
+   "cl1": {
+    "q": "Il tuo ritmo quotidiano",
+    "o": [
+     "Presto e organizzato",
+     "Flessibile",
+     "Tardi e spontaneo"
+    ]
+   },
+   "cl2": {
+    "q": "La casa è…",
+    "o": [
+     "Ordinata e tranquilla",
+     "Accogliente e vissuta",
+     "Piena di ospiti"
+    ]
+   },
+   "cl3": {
+    "q": "Lo sport nella tua vita",
+    "o": [
+     "Ogni giorno",
+     "A volte",
+     "Raramente"
+    ]
+   },
+   "cc1": {
+    "q": "Quando qualcosa ti disturba",
+    "o": [
+     "Lo dico subito",
+     "Prima ci penso",
+     "Aspetto che passi"
+    ]
+   },
+   "cc2": {
+    "q": "Quanto spesso ti piace scrivere?",
+    "o": [
+     "Tutto il giorno",
+     "Qualche volta al giorno",
+     "Quando c'è qualcosa da dire"
+    ]
+   },
+   "cc3": {
+    "q": "Dopo una lite hai bisogno di…",
+    "o": [
+     "Parlarne",
+     "Un po' di tempo da solo/a",
+     "Un abbraccio e andare avanti"
+    ]
+   },
+   "cf1": {
+    "q": "Tra cinque anni ti vedi…",
+    "o": [
+     "Nella stessa città",
+     "Da qualche parte di nuovo",
+     "Dove mi porta la vita"
+    ]
+   },
+   "cf2": {
+    "q": "Figli",
+    "o": [
+     "Li voglio",
+     "Non lo so ancora",
+     "Non li voglio"
+    ]
+   },
+   "cf3": {
+    "q": "Vivere insieme",
+    "o": [
+     "Dopo qualche mese",
+     "Dopo un anno o più",
+     "Non è una priorità"
+    ]
+   },
+   "tt": {
+    "q": "Due verità e una bugia",
+    "o": []
+   }
+  }
+ },
+ "tr": {
+  "games": {
+   "this_or_that": {
+    "title": "Bu mu şu mu",
+    "desc": "Beş hızlı seçim. Nerede uyuşuyorsunuz?"
+   },
+   "mind_reader": {
+    "title": "Akıl okuyucu",
+    "desc": "Kendinle ilgili cevap ver ve karşındakinin ne seçtiğini tahmin et."
+   },
+   "two_truths": {
+    "title": "İki doğru bir yalan",
+    "desc": "Kendin hakkında üç şey yaz, biri yalan. Karşındaki bulabilecek mi?"
+   },
+   "without_masks": {
+    "title": "Maskesiz",
+    "desc": "İki dürüst soru. Cevaplar ikiniz de yazınca açılır."
+   },
+   "perfect_date": {
+    "title": "Mükemmel randevumuz",
+    "desc": "İdeal ilk randevunuzu birlikte oluşturun."
+   },
+   "spark": {
+    "title": "Kıvılcım",
+    "desc": "Beş şimşek seçim, her biri 15 saniye."
+   },
+   "compat": {
+    "title": "Uyum testi",
+    "desc": "Bir konu seç ve görüşlerinizi karşılaştırın."
+   }
+  },
+  "categories": {
+   "values": "Değerler",
+   "lifestyle": "Yaşam tarzı",
+   "communication": "İletişim",
+   "future": "Gelecek"
+  },
+  "prompts": {
+   "tot1": {
+    "q": "Mükemmel hafta sonu",
+    "o": [
+     "Dağlar",
+     "Deniz"
+    ]
+   },
+   "tot2": {
+    "q": "Sabah şununla başlar…",
+    "o": [
+     "Kahve",
+     "Çay"
+    ]
+   },
+   "tot3": {
+    "q": "Evde akşam",
+    "o": [
+     "Film gecesi",
+     "Kutu oyunları"
+    ]
+   },
+   "tot4": {
+    "q": "Nasıl seyahat edersin?",
+    "o": [
+     "Planlı",
+     "Doğaçlama"
+    ]
+   },
+   "tot5": {
+    "q": "Sen daha çok…",
+    "o": [
+     "Gece kuşu",
+     "Erkenci"
+    ]
+   },
+   "tot6": {
+    "q": "Evcil hayvan",
+    "o": [
+     "Kedi",
+     "Köpek"
+    ]
+   },
+   "tot7": {
+    "q": "Yemek",
+    "o": [
+     "Evde yemek yapmak",
+     "Yeni restoranlar"
+    ]
+   },
+   "sp1": {
+    "q": "Mesaj mı arama mı?",
+    "o": [
+     "Mesaj",
+     "Arama"
+    ]
+   },
+   "sp2": {
+    "q": "Şehir mi doğa mı?",
+    "o": [
+     "Şehir",
+     "Doğa"
+    ]
+   },
+   "sp3": {
+    "q": "Tatlı mı tuzlu mu?",
+    "o": [
+     "Tatlı",
+     "Tuzlu"
+    ]
+   },
+   "sp4": {
+    "q": "Dans mı izlemek mi?",
+    "o": [
+     "Dans",
+     "İzlemek"
+    ]
+   },
+   "sp5": {
+    "q": "Gün doğumu mu batımı mı?",
+    "o": [
+     "Gün doğumu",
+     "Gün batımı"
+    ]
+   },
+   "sp6": {
+    "q": "Kitap mı podcast mi?",
+    "o": [
+     "Kitap",
+     "Podcast"
+    ]
+   },
+   "sp7": {
+    "q": "Sürpriz mi plan mı?",
+    "o": [
+     "Sürpriz",
+     "Plan"
+    ]
+   },
+   "mr1": {
+    "q": "Uzun bir haftadan sonra nasıl dinlenirsin?",
+    "o": [
+     "Evde yalnız",
+     "Arkadaşlarla",
+     "Spor yaparak"
+    ]
+   },
+   "mr2": {
+    "q": "İdeal tatil",
+    "o": [
+     "Bir şehri keşfetmek",
+     "Plaj ve dinlenme",
+     "Doğada macera"
+    ]
+   },
+   "mr3": {
+    "q": "Bir grupta genelde…",
+    "o": [
+     "Konuşan kişiyim",
+     "Dinleyen kişiyim",
+     "Organize eden kişiyim"
+    ]
+   },
+   "mr4": {
+    "q": "İlk mesajda en önemli şey nedir?",
+    "o": [
+     "Mizah",
+     "Dürüstlük",
+     "Merak"
+    ]
+   },
+   "mr5": {
+    "q": "Sen ve planlar",
+    "o": [
+     "Ben yaparım",
+     "Uyarım",
+     "Değiştiririm"
+    ]
+   },
+   "wm1": {
+    "q": "Gurur duyduğun ama nadiren bahsettiğin şey ne?",
+    "o": []
+   },
+   "wm2": {
+    "q": "Son zamanlarda seni en çok ne güldürdü?",
+    "o": []
+   },
+   "wm3": {
+    "q": "Senin için iyi bir gün nasıl olur?",
+    "o": []
+   },
+   "wm4": {
+    "q": "Son yıllarda hangi konuda fikrini değiştirdin?",
+    "o": []
+   },
+   "wm5": {
+    "q": "Hangi küçük şey sana değer verildiğini hissettirir?",
+    "o": []
+   },
+   "wm6": {
+    "q": "Boş bir yılın olsa ne yapardın?",
+    "o": []
+   },
+   "pd1": {
+    "q": "Nerede?",
+    "o": [
+     "Şirin bir kafe",
+     "Parkta yürüyüş",
+     "Müze ya da galeri",
+     "Çatı barı"
+    ]
+   },
+   "pd2": {
+    "q": "Ne zaman?",
+    "o": [
+     "Sabah",
+     "Öğleden sonra",
+     "Akşam",
+     "Gece geç saatte"
+    ]
+   },
+   "pd3": {
+    "q": "Ne yiyoruz?",
+    "o": [
+     "Sokak lezzetleri",
+     "Tatlı bir şey",
+     "Şaraplı akşam yemeği",
+     "Piknik"
+    ]
+   },
+   "pd4": {
+    "q": "Ruh hali",
+    "o": [
+     "Sakin, derin sohbet",
+     "Eğlenceli ve oyuncu",
+     "Küçük bir macera",
+     "Spontane"
+    ]
+   },
+   "cv1": {
+    "q": "Bir partnerde en önemli şey nedir?",
+    "o": [
+     "İyilik",
+     "Hırs",
+     "Espri anlayışı"
+    ]
+   },
+   "cv2": {
+    "q": "Küçük şeylerde rahatsız edici bir gerçek",
+    "o": [
+     "Her zaman söylerim",
+     "Duruma bağlı",
+     "Huzuru korumak daha iyi"
+    ]
+   },
+   "cv3": {
+    "q": "Boş zaman en iyi şöyle geçer…",
+    "o": [
+     "Gelişerek",
+     "Sevdiklerimle",
+     "Dinlenerek"
+    ]
+   },
+   "cl1": {
+    "q": "Günlük ritmin",
+    "o": [
+     "Erken ve düzenli",
+     "Esnek",
+     "Geç ve spontane"
+    ]
+   },
+   "cl2": {
+    "q": "Ev demek…",
+    "o": [
+     "Düzenli ve sakin",
+     "Rahat ve yaşanmış",
+     "Misafir dolu"
+    ]
+   },
+   "cl3": {
+    "q": "Hayatında spor",
+    "o": [
+     "Her gün",
+     "Bazen",
+     "Nadiren"
+    ]
+   },
+   "cc1": {
+    "q": "Bir şey seni rahatsız ettiğinde",
+    "o": [
+     "Hemen söylerim",
+     "Önce düşünürüm",
+     "Geçmesini beklerim"
+    ]
+   },
+   "cc2": {
+    "q": "Ne sıklıkla mesajlaşmayı seversin?",
+    "o": [
+     "Gün boyu",
+     "Günde birkaç kez",
+     "Söyleyecek bir şey olunca"
+    ]
+   },
+   "cc3": {
+    "q": "Bir tartışmadan sonra ihtiyacın olan…",
+    "o": [
+     "Konuşmak",
+     "Biraz yalnız kalmak",
+     "Sarılmak ve geçmek"
+    ]
+   },
+   "cf1": {
+    "q": "Beş yıl sonra kendini görüyorsun…",
+    "o": [
+     "Aynı şehirde",
+     "Yeni bir yerde",
+     "Hayat nereye götürürse"
+    ]
+   },
+   "cf2": {
+    "q": "Çocuk",
+    "o": [
+     "İstiyorum",
+     "Henüz bilmiyorum",
+     "İstemiyorum"
+    ]
+   },
+   "cf3": {
+    "q": "Birlikte yaşamak",
+    "o": [
+     "Birkaç ay sonra",
+     "Bir yıl ya da daha sonra",
+     "Öncelik değil"
+    ]
+   },
+   "tt": {
+    "q": "İki doğru bir yalan",
+    "o": []
+   }
+  }
+ }
+}
