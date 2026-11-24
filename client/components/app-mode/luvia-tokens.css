@@ -67,11 +67,25 @@ html[data-lv] .lv-sr-only {
 /* Typography: system / native font everywhere (the legacy theme used Georgia for headings and a
    monospace face for timers). Timers keep fixed-width digits.
    [data-theme] raises specificity above the theme's html[data-theme="dark"] token block. */
+/* Explicit native sans-serif per platform: SF on Apple, Segoe on Windows, Roboto on every Android.
+   Naming Roboto keeps the Android app sans-serif even when the phone's system font (Samsung /
+   Xiaomi "font style") is set to a serif face, which "system-ui" / "sans-serif" would follow.
+   (The old stack also referenced --font-onest / --font-landing-body, which are never defined.) */
 html[data-lv],
 html[data-lv][data-theme] {
-  --font-display: var(--font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif);
-  --saas-font-display: var(--font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif);
-  --font-mono: var(--font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif);
+  --lv-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Noto Sans",
+    "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-body: var(--lv-font);
+  --saas-font-body: var(--lv-font);
+  --font-sans: var(--lv-font);
+  --font-display: var(--lv-font);
+  --saas-font-display: var(--lv-font);
+  --font-mono: var(--lv-font);
+  font-family: var(--lv-font);
+}
+
+html[data-lv] body {
+  font-family: var(--lv-font);
 }
 
 html[data-lv] [class*="countdown"],

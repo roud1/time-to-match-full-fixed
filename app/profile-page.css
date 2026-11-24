@@ -52,13 +52,13 @@
   flex-shrink: 0;
 }
 
+/* The page itself scrolls. This element used to be overflow-y:auto + overscroll-behavior:contain
+   without a fixed height: it never scrolled itself and "contain" stopped touch scrolling from
+   reaching the page, so long screens (profile editing) could not be scrolled on phones. */
 .ttm-profile-page__main {
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
+  overflow-x: clip;
   padding-bottom: calc(var(--ttm-dock-height, 5rem) + 0.75rem);
 }
 
