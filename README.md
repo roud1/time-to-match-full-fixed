@@ -145,7 +145,7 @@ Without these env vars, the cron still runs but skips unconfigured channels (log
 ## Blind Date ("Feel first. See later.") — in development
 
 Ten-minute anonymous dates between two compatible people. Plan and phase status: [`docs/BLIND_DATE_PLAN.md`](docs/BLIND_DATE_PLAN.md).
-Phases 1–3 are implemented: backend, the screens at `/app/blind-date` (mask icon in the bottom bar) and the progressive photo reveal.
+Phases 1–4 are implemented: backend, the screens at `/app/blind-date` (mask icon in the bottom bar), the progressive photo reveal and the mini-games (Chat | Games tabs in the room).
 
 - Tables: migration `database/migrations/030_blind_dates.sql` (additive only).
 - Domain: `server/blind-date/rules.ts` (pure rules: timers, progress, reveal stages, message checks) and `server/blind-date/service.ts` (eligibility, queue + matchmaking, rooms, decisions).
@@ -158,6 +158,8 @@ Phases 1–3 are implemented: backend, the screens at `/app/blind-date` (mask ic
   - `GET /api/blind-date/rooms/:id/photo` — the other person's main photo rendered on the server for the unlocked stage (25 / 50 / 75 % are rebuilt from a tiny downscale + blur, so the detail is not in the bytes; 403 without mutual consent). The original URL is never sent.
   - `POST /api/blind-date/rooms/:id/decision` `{ decision: "continue" | "pass" }` — after the date; both Continue → normal match with the 24 h timer
   - `POST /api/blind-date/rooms/:id/leave`, `POST /api/blind-date/rooms/:id/report` `{ reason, comment?, block? }`
+  - Games: `POST /api/blind-date/rooms/:id/games` `{ game, category? }`, `…/games/answer` `{ sessionId, round, answer }`, `…/games/skip` `{ sessionId, round }`, `…/games/end` `{ sessionId }` — the room snapshot carries the game state (`game`, `gamesPlayed`)
+- Progress: up to 75 % from mutual messages, +15 % per finished game; 100 % needs a shared game.
 - Rules: 18+ (birth date), explicit consent to sensitive data, mutual gender / age / distance preferences, a shared language, no blocked pairs, no pairs that already liked/passed each other, the same pair at most once per 30 days, one open room per person (advisory lock + unique indexes). Timers are computed on the server; `/api/v1/cron/tick` also closes expired rooms.
 - Free daily limit: `BLIND_DATE_FREE_DAILY` (default 10); Premium users are not limited. No payment is required.
 - Tests: `tests/e2e/blind-date.spec.ts` (two real users against Postgres).

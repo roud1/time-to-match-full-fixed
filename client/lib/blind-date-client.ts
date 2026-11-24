@@ -1,4 +1,8 @@
 import { authFetch } from "@/client/lib/auth/fetch"
+import type { GameKey } from "@/server/blind-date/games/catalog"
+import type { Answer, GameResult, GameView } from "@/server/blind-date/games/engine"
+
+export type { Answer as GameAnswer, GameResult, GameView }
 
 export type BlindDecision = "continue" | "pass"
 export type BlindPhase = "active" | "deciding" | "closed"
@@ -35,6 +39,8 @@ export type BlindRoom = {
     decision: BlindDecision | null
   }
   messages: { id: string; mine: boolean; body: string; at: string }[]
+  game: GameView | null
+  gamesPlayed: { key: GameKey; category: string | null; result: GameResult | null }[]
   outcome: null | { reason: BlindCloseReason; matchId: string | null; leftByMe: boolean }
 }
 
@@ -72,5 +78,12 @@ export const blindDateApi = {
   leave: (id: string) => call<BlindRoom>(`/api/blind-date/rooms/${id}/leave`, post()),
   report: (id: string, reason: string, block: boolean, comment?: string) =>
     call<{ ok: true }>(`/api/blind-date/rooms/${id}/report`, post({ reason, block, comment })),
+  startGame: (id: string, game: GameKey, category?: string) =>
+    call<BlindRoom>(`/api/blind-date/rooms/${id}/games`, post({ game, category })),
+  answer: (id: string, sessionId: string, round: number, answer: Answer) =>
+    call<BlindRoom>(`/api/blind-date/rooms/${id}/games/answer`, post({ sessionId, round, answer })),
+  skipRound: (id: string, sessionId: string, round: number) =>
+    call<BlindRoom>(`/api/blind-date/rooms/${id}/games/skip`, post({ sessionId, round })),
+  endGame: (id: string, sessionId: string) => call<BlindRoom>(`/api/blind-date/rooms/${id}/games/end`, post({ sessionId })),
   photoUrl: (id: string, stage: number) => `/api/blind-date/rooms/${id}/photo?stage=${stage}`,
 }

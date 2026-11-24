@@ -30,8 +30,12 @@ export async function getRoom(request: Request, ctx: Ctx) {
   const id = await roomId(ctx)
   if (!id) return actionError(request, "not_found")
   try {
-    const room = await getRoomForUser(id, g.userId)
+    let room = await getRoomForUser(id, g.userId)
     if (!room) return actionError(request, "not_found")
+    if (room.status === "active") {
+      const { tickActiveGame } = await import("@/server/blind-date/games/service")
+      if (await tickActiveGame(id)) room = (await getRoomForUser(id, g.userId)) ?? room
+    }
     const since = Number(new URL(request.url).searchParams.get("since"))
     if (Number.isFinite(since) && since > 0 && since === room.version && room.status === "active") {
       return cors(request, jsonOk({ unchanged: true, version: room.version, serverNow: new Date().toISOString() }))
@@ -173,5 +177,116 @@ export async function getRoomPhoto(request: Request, ctx: Ctx) {
     })
   } catch (err) {
     return internalError(request, "photo", err)
+  }
+}
+
+// ───────────────────────── games ─────────────────────────
+
+const GAME_ERROR_STATUS: Record<string, number> = {
+  not_found: 404,
+  room_not_active: 409,
+  game_active: 409,
+  premium_required: 402,
+  wrong_round: 409,
+  already_answered: 409,
+  not_your_turn: 409,
+  invalid_answer: 400,
+  contact_details: 422,
+  too_long: 422,
+  empty: 422,
+}
+
+function gameError(request: Request, code: string) {
+  return cors(request, jsonError(GAME_ERROR_STATUS[code] ?? 400, { error: code }))
+}
+
+const startGameSchema = z.object({ game: z.string().max(40), category: z.string().max(40).optional() })
+
+/** POST /api/blind-date/rooms/:id/games — start a game for both (one at a time). */
+export async function postStartGame(request: Request, ctx: Ctx) {
+  const g = await guard(request, { name: "game-start", max: 20, windowMs: 60_000 })
+  if (!g.ok) return g.response
+  const id = await roomId(ctx)
+  if (!id) return actionError(request, "not_found")
+  const parsed = startGameSchema.safeParse(await readJson(request))
+  const { isGameKey } = await import("@/server/blind-date/games/catalog")
+  if (!parsed.success || !isGameKey(parsed.data.game)) return gameError(request, "invalid_answer")
+  try {
+    const { startGame } = await import("@/server/blind-date/games/service")
+    const r = await startGame(id, g.userId, parsed.data.game, parsed.data.category)
+    if (!r.ok) return gameError(request, r.code)
+    return snapshotResponse(request, id, g.userId)
+  } catch (err) {
+    return internalError(request, "game-start", err)
+  }
+}
+
+const answerSchema = z.object({
+  sessionId: z.string().uuid(),
+  round: z.number().int().min(0).max(50),
+  answer: z
+    .object({
+      choice: z.number().int().optional(),
+      guess: z.number().int().optional(),
+      text: z.string().max(2000).optional(),
+      statements: z.array(z.string().max(2000)).max(3).optional(),
+      lie: z.number().int().optional(),
+    })
+    .strict(),
+})
+
+/** POST /api/blind-date/rooms/:id/games/answer */
+export async function postGameAnswer(request: Request, ctx: Ctx) {
+  const g = await guard(request, { name: "game-answer", max: 60, windowMs: 60_000 })
+  if (!g.ok) return g.response
+  const id = await roomId(ctx)
+  if (!id) return actionError(request, "not_found")
+  const parsed = answerSchema.safeParse(await readJson(request))
+  if (!parsed.success) return gameError(request, "invalid_answer")
+  try {
+    const { answerRound } = await import("@/server/blind-date/games/service")
+    const r = await answerRound(id, g.userId, parsed.data.sessionId, parsed.data.round, parsed.data.answer)
+    if (!r.ok) return gameError(request, r.code)
+    return snapshotResponse(request, id, g.userId)
+  } catch (err) {
+    return internalError(request, "game-answer", err)
+  }
+}
+
+const sessionSchema = z.object({ sessionId: z.string().uuid(), round: z.number().int().min(0).max(50).optional() })
+
+/** POST /api/blind-date/rooms/:id/games/skip — skip the current question (both move on). */
+export async function postGameSkip(request: Request, ctx: Ctx) {
+  const g = await guard(request, { name: "game-skip", max: 30, windowMs: 60_000 })
+  if (!g.ok) return g.response
+  const id = await roomId(ctx)
+  if (!id) return actionError(request, "not_found")
+  const parsed = sessionSchema.safeParse(await readJson(request))
+  if (!parsed.success || parsed.data.round === undefined) return gameError(request, "invalid_answer")
+  try {
+    const { skipGameRound } = await import("@/server/blind-date/games/service")
+    const r = await skipGameRound(id, g.userId, parsed.data.sessionId, parsed.data.round)
+    if (!r.ok) return gameError(request, r.code)
+    return snapshotResponse(request, id, g.userId)
+  } catch (err) {
+    return internalError(request, "game-skip", err)
+  }
+}
+
+/** POST /api/blind-date/rooms/:id/games/end — stop the game early. */
+export async function postGameEnd(request: Request, ctx: Ctx) {
+  const g = await guard(request, { name: "game-end", max: 20, windowMs: 60_000 })
+  if (!g.ok) return g.response
+  const id = await roomId(ctx)
+  if (!id) return actionError(request, "not_found")
+  const parsed = sessionSchema.safeParse(await readJson(request))
+  if (!parsed.success) return gameError(request, "invalid_answer")
+  try {
+    const { abandonGame } = await import("@/server/blind-date/games/service")
+    const r = await abandonGame(id, g.userId, parsed.data.sessionId)
+    if (!r.ok) return gameError(request, r.code)
+    return snapshotResponse(request, id, g.userId)
+  } catch (err) {
+    return internalError(request, "game-end", err)
   }
 }

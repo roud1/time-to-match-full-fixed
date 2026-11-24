@@ -1,6 +1,6 @@
 # Luvia — "Feel first. See later." Audit and technical plan
 
-Status of this document: Phases 1–3 done (backend, screens, progressive reveal).
+Status of this document: Phases 1–4 done (backend, screens, progressive reveal, games).
 Every later phase updates the "Status" column below.
 
 ## 1. Audit of the current project (November 2026)
@@ -71,7 +71,7 @@ Every state change increments `rooms.version`; clients poll with `since=<version
 | 1 | Audit, architecture, migration `030_blind_dates.sql`, domain + API for queue, matchmaking, rooms, server timers, messages, reveal consent state, decisions → existing match, leave/report/block, Playwright API tests | **done** (API only, tested locally; not deployed) |
 | 2 | Blind Date UI: start screen, search/waiting, room (chat, timer, progress), reconnection | **done** (`/app/blind-date`, mask tab in the bottom bar; 9 languages; checked at 320/375/390/430 px) |
 | 3 | Progressive Reveal: server-rendered blurred derivatives (`sharp`), mutual consent UI, animations | **done** for 25/50/75/100 % (`GET /rooms/:id/photo`); chat alone reaches 75 %, 100 % needs a shared game (Phase 4) |
-| 4 | Game engine (registry of game definitions, synchronized moves, stored results) + 6 games + Compatibility Challenges | planned |
+| 4 | Game engine (registry of game definitions, synchronized moves, stored results) + 6 games + Compatibility Challenges | **done**: `server/blind-date/games/{catalog,engine,service}.ts`; This or That, Mind Reader, Two Truths and a Lie, Without Masks, Our Perfect Date, Spark (15 s rounds), Compatibility Challenge (4 topics); texts in 9 languages |
 | 5 | AI Connection: provider interface (OpenRouter + local), consent, rate limits, cache, cost tracking, Connection Report | planned |
 | 6 | Integration: match chat continuation, notifications, history of dates | planned |
 | 7 | Design polish, animations, haptics, all screens on phones and desktop | planned |
@@ -89,6 +89,16 @@ create exactly one room. Test users are deleted after the run.
 
 Phases 2–3 add: photo endpoint (403 without mutual consent, degraded JPEG instead of the original, 404 for outsiders) and a browser test of the real page (start → search → room → messages via polling → leave).
 
-Not covered yet: games (Phase 4), AI (Phase 5), load testing.
+Phase 4 adds: pure engine tests (`tests/e2e/blind-date-games-engine.spec.ts`: hidden answers, scoring, two-truths lie never sent to the guesser, moderation of free text, Spark timeouts, texts for every prompt in all 9 languages) and API + browser tests for games (one game at a time, outsiders 404, skip, ending early, Spark timeout noticed by polling, games stop with the date, progress +15 % per finished game).
+
+### Game engine
+- A game is a list of rounds built from the catalog; round kinds: `choice`, `predict`, `open`, `two_truths`.
+- Rounds are synchronous: the next one starts when both answered, someone skipped, or a timed round ran out.
+- The other person's answer to the current round is never in the snapshot; finished rounds are revealed to both.
+- Session rows (`blind_date_game_sessions`) hold the state; every change runs in a transaction with the row locked and bumps the room version.
+- New game = an entry in `catalog.ts` + texts in `client/lib/blind-date-games-text.json` (the engine test fails if a text is missing).
+- Results are a game, not a diagnosis: the summary says so in every language.
+
+Not covered yet: AI (Phase 5), load testing.
 
 Premium hooks (no paywall now): daily free blind-date limit (`BLIND_DATE_FREE_DAILY`, default 10), extended report, extra game packs — checked through `isPremium()`; reveal and the basic date stay free.

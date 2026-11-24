@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   ArrowLeft,
   Clock,
+  Dices,
   Eye,
   EyeOff,
   Flag,
@@ -23,6 +24,7 @@ import {
 import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 import { interestLabelBySlug } from "@/client/lib/interest-labels"
 import { blindDateApi, type BlindRoom, type BlindState } from "@/client/lib/blind-date-client"
+import { BlindGames } from "@/client/components/blind-date/blind-date-games"
 
 type View = "loading" | "intro" | "searching" | "room"
 
@@ -365,6 +367,18 @@ function BlindRoomView(props: {
   const [sheet, setSheet] = useState<null | "menu" | "leave" | "report" | "photo">(null)
   const listRef = useRef<HTMLDivElement>(null)
   const peerName = room.peer.name
+  const [tab, setTab] = useState<"chat" | "games">("chat")
+  const [seenMessages, setSeenMessages] = useState(room.messages.length)
+  const activeGameId = room.game?.status === "active" ? room.game.id : null
+  const [seenGameId, setSeenGameId] = useState<string | null>(activeGameId)
+
+  // A game started by either person opens the games tab once.
+  if (activeGameId && activeGameId !== seenGameId) {
+    setSeenGameId(activeGameId)
+    setTab("games")
+  }
+  if (tab === "chat" && seenMessages !== room.messages.length) setSeenMessages(room.messages.length)
+  const unread = tab === "games" ? Math.max(0, room.messages.length - seenMessages) : 0
 
   const endsAt = Date.parse(room.endsAt)
   const decideUntil = Date.parse(room.decideUntil)
@@ -382,7 +396,7 @@ function BlindRoomView(props: {
   useEffect(() => {
     const el = listRef.current
     if (el) el.scrollTop = el.scrollHeight
-  }, [room.messages.length])
+  }, [room.messages.length, tab])
 
   const errorText = (code: string) => {
     const key = `bdErr_${code}` as TranslationKey
@@ -458,7 +472,7 @@ function BlindRoomView(props: {
         </button>
       </header>
 
-      <section className="bd-panel">
+      <section className={`bd-panel${tab === "games" && room.phase === "active" ? " bd-panel--compact" : ""}`}>
         <div className="bd-progress">
           <div className="bd-progress__row">
             <span>{t("bdProgress")}</span>
@@ -470,7 +484,7 @@ function BlindRoomView(props: {
               <i key={s} style={{ left: `${s}%` }} className={room.progress >= s ? "is-on" : undefined} />
             ))}
           </div>
-          {room.messages.length < 4 && <p className="bd-progress__hint">{t("bdProgressHint")}</p>}
+          {room.messages.length < 4 && room.gamesPlayed.length === 0 && <p className="bd-progress__hint">{t("bdProgressHint")}</p>}
         </div>
 
         <RevealControl room={room} onToggle={() => void toggleReveal()} />
@@ -488,6 +502,26 @@ function BlindRoomView(props: {
         </div>
       </section>
 
+      {room.phase === "active" && (
+        <div className="bd-tabs" role="tablist">
+          <button type="button" role="tab" aria-selected={tab === "chat"} className={tab === "chat" ? "is-on" : undefined} onClick={() => setTab("chat")}>
+            <MessageCircle aria-hidden />
+            {t("bdTabChat")}
+            {unread > 0 && <span className="bd-tabs__badge">{unread}</span>}
+          </button>
+          <button type="button" role="tab" aria-selected={tab === "games"} className={tab === "games" ? "is-on" : undefined} onClick={() => setTab("games")}>
+            <Dices aria-hidden />
+            {t("bdTabGames")}
+            {activeGameId && tab !== "games" && <span className="bd-tabs__dot" aria-hidden />}
+          </button>
+        </div>
+      )}
+
+      {room.phase === "active" && tab === "games" ? (
+        <div className="bd-games-wrap">
+          <BlindGames room={room} now={now} onRoom={onRoom} onError={(code) => setError(errorText(code))} />
+        </div>
+      ) : (
       <div className="bd-messages" ref={listRef} aria-live="polite">
         {room.messages.length === 0 ? (
           <p className="bd-messages__empty">{t("bdEmptyChat")}</p>
@@ -499,6 +533,7 @@ function BlindRoomView(props: {
           ))
         )}
       </div>
+      )}
 
       <footer className="bd-foot">
         {props.offline && <p className="bd-warn">{t("bdConnectionLost")}</p>}
@@ -507,7 +542,7 @@ function BlindRoomView(props: {
             {props.error}
           </p>
         )}
-        {room.phase === "active" ? (
+        {room.phase === "active" && tab === "games" ? null : room.phase === "active" ? (
           <form
             className="bd-composer"
             onSubmit={(e) => {
