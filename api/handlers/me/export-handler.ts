@@ -93,6 +93,17 @@ async function collect(sql: Sql, uid: string) {
     messagesSentInConversations: await section("messagesSentInConversations", () =>
       sql`SELECT conversation_id, body, created_at FROM messages WHERE sender_id = ${uid} ORDER BY created_at`
     ),
+    blindDates: await section("blindDates", () =>
+      sql`
+        SELECT id, CASE WHEN user_a = ${uid} THEN user_b ELSE user_a END AS other_user,
+          status, started_at, closed_at, close_reason,
+          CASE WHEN user_a = ${uid} THEN reveal_consent_a ELSE reveal_consent_b END AS my_reveal_consent,
+          CASE WHEN user_a = ${uid} THEN decision_a ELSE decision_b END AS my_decision, match_id
+        FROM blind_date_rooms WHERE user_a = ${uid} OR user_b = ${uid} ORDER BY started_at`
+    ),
+    blindDateMessagesSent: await section("blindDateMessagesSent", () =>
+      sql`SELECT room_id, body, created_at FROM blind_date_messages WHERE sender_id = ${uid} ORDER BY created_at`
+    ),
     blocks: await section("blocks", () =>
       sql`SELECT blocked_id, created_at FROM user_blocks WHERE blocker_id = ${uid} ORDER BY created_at`
     ),
