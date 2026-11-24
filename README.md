@@ -142,6 +142,25 @@ Without these env vars, the cron still runs but skips unconfigured channels (log
 - Reports are stored in the `reports` table for admin review
 - **Admin UI** — open [`/admin`](http://localhost:3000/admin), enter your `ADMIN_API_KEY` (stored in `sessionStorage` for the tab only; never bundled in client code)
 
+## Blind Date ("Feel first. See later.") — in development
+
+Ten-minute anonymous dates between two compatible people. Plan and phase status: [`docs/BLIND_DATE_PLAN.md`](docs/BLIND_DATE_PLAN.md).
+Phase 1 (backend) is implemented; the screens come in Phase 2, so nothing is visible in the app yet.
+
+- Tables: migration `database/migrations/030_blind_dates.sql` (additive only).
+- Domain: `server/blind-date/rules.ts` (pure rules: timers, progress, reveal stages, message checks) and `server/blind-date/service.ts` (eligibility, queue + matchmaking, rooms, decisions).
+- API (signed in; rate limited per user):
+  - `GET /api/blind-date/state` — queue / open room (reconnection) and eligibility
+  - `POST /api/blind-date/queue` `{ lang, languages? }` — join or keep waiting (poll every few seconds); `DELETE` — stop searching
+  - `GET /api/blind-date/rooms/:id?since=<version>` — room snapshot (first name, age, common interests, progress, messages); `{ unchanged: true }` when nothing changed
+  - `POST /api/blind-date/rooms/:id/messages` `{ body }` — links, e-mails, phone numbers and messenger handles are rejected (`422 contact_details`)
+  - `POST /api/blind-date/rooms/:id/reveal` `{ consent }` — mutual reveal consent (photos are never sent before both agree; image rendering is Phase 3)
+  - `POST /api/blind-date/rooms/:id/decision` `{ decision: "continue" | "pass" }` — after the date; both Continue → normal match with the 24 h timer
+  - `POST /api/blind-date/rooms/:id/leave`, `POST /api/blind-date/rooms/:id/report` `{ reason, comment?, block? }`
+- Rules: 18+ (birth date), explicit consent to sensitive data, mutual gender / age / distance preferences, a shared language, no blocked pairs, no pairs that already liked/passed each other, the same pair at most once per 30 days, one open room per person (advisory lock + unique indexes). Timers are computed on the server; `/api/v1/cron/tick` also closes expired rooms.
+- Free daily limit: `BLIND_DATE_FREE_DAILY` (default 10); Premium users are not limited. No payment is required.
+- Tests: `tests/e2e/blind-date.spec.ts` (two real users against Postgres).
+
 ## Analytics funnel
 
 Client events fire to `POST /api/v1/analytics/event` via `trackEvent()` (server logs + Vercel Analytics in production):

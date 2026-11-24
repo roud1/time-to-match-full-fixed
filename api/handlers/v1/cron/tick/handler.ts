@@ -5,17 +5,27 @@ import { log } from "@/server/log"
 import { GET as expireMatches } from "@/api/handlers/v1/cron/expire-matches/handler"
 import { GET as aiAnalysis } from "@/api/handlers/v1/cron/ai-analysis/handler"
 import { GET as notify } from "@/api/handlers/v1/cron/notify/handler"
+import { sweepBlindDates } from "@/server/blind-date/service"
 
 export const runtime = "nodejs"
 
 /**
  * One endpoint for an external scheduler (e.g. cron-job.org, every 5 minutes) instead of three jobs:
- * runs expire-matches, ai-analysis and notify in sequence. Same CRON_SECRET auth as the others.
+ * runs expire-matches, ai-analysis, notify and the blind-date sweep in sequence. Same CRON_SECRET auth as the others.
  */
 const JOBS: Array<[string, (request: Request) => Promise<Response>]> = [
   ["expire-matches", expireMatches],
   ["ai-analysis", aiAnalysis],
   ["notify", notify],
+  [
+    "blind-dates",
+    async () => {
+      // Closes rooms whose time ran out and drops abandoned queue entries.
+      const r = await sweepBlindDates()
+      log.info("cron_blind_dates", r)
+      return new Response(null, { status: 204 })
+    },
+  ],
 ]
 
 async function handleTick(request: Request) {
