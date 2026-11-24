@@ -137,13 +137,33 @@ test.describe("Blind Date @db", () => {
       const snapB = await (await b.request.get(`/api/blind-date/rooms/${roomId}`)).json()
       expect(snapB.messages).toHaveLength(6)
       expect(snapB.messages.filter((m: { mine: boolean }) => m.mine)).toHaveLength(3)
-      expect(snapB.progress).toBe(18)
+      expect(snapB.progress).toBe(15)
       expect(snapB.unlockedStage).toBe(0)
 
       // Reveal needs consent from both: one consent alone shows nothing.
       const r1 = await (await a.request.post(`/api/blind-date/rooms/${roomId}/reveal`, { data: { consent: true } })).json()
       expect(r1.me.revealConsent).toBe(true)
       expect(r1.revealStage).toBe(0)
+      expect((await a.request.get(`/api/blind-date/rooms/${roomId}/photo`)).status()).toBe(403)
+
+      // Both consent + enough mutual messages (5 each = 25 %) → a degraded copy of B's photo.
+      await withDb((sql) => sql`UPDATE users SET profile = profile || '{"photoUrls":["/demo/people/demo-4.jpg"]}'::jsonb WHERE id = ${b.user.id}`)
+      await b.request.post(`/api/blind-date/rooms/${roomId}/reveal`, { data: { consent: true } })
+      for (let i = 3; i < 5; i++) {
+        await a.request.post(`/api/blind-date/rooms/${roomId}/messages`, { data: { body: `More ${i} from A` } })
+        await b.request.post(`/api/blind-date/rooms/${roomId}/messages`, { data: { body: `More ${i} from B` } })
+      }
+      const revealed = await (await a.request.get(`/api/blind-date/rooms/${roomId}`)).json()
+      expect(revealed.revealStage).toBe(25)
+      expect(JSON.stringify(revealed)).not.toContain("demo-4")
+      const photo = await a.request.get(`/api/blind-date/rooms/${roomId}/photo`)
+      expect(photo.status()).toBe(200)
+      expect(photo.headers()["content-type"]).toBe("image/jpeg")
+      expect(photo.headers()["x-reveal-stage"]).toBe("25")
+      const original = await a.request.get("/demo/people/demo-4.jpg")
+      expect(Buffer.compare(await photo.body(), await original.body())).not.toBe(0)
+      // A has no photo: B gets 404, never a placeholder or someone else's image.
+      expect((await b.request.get(`/api/blind-date/rooms/${roomId}/photo`)).status()).toBe(404)
 
       // Deciding is only possible after the date.
       const early = await a.request.post(`/api/blind-date/rooms/${roomId}/decision`, { data: { decision: "continue" } })
@@ -223,6 +243,7 @@ test.describe("Blind Date @db", () => {
 
       // Someone outside the room cannot read or act on it.
       expect((await stranger.request.get(`/api/blind-date/rooms/${roomId}`)).status()).toBe(404)
+      expect((await stranger.request.get(`/api/blind-date/rooms/${roomId}/photo`)).status()).toBe(404)
       expect((await stranger.request.post(`/api/blind-date/rooms/${roomId}/messages`, { data: { body: "hey" } })).status()).toBe(404)
 
       // A joining twice does not create a second room.
@@ -318,6 +339,41 @@ test.describe("Blind Date @db", () => {
       expect(rooms[0].n).toBe(1)
     } finally {
       await a.request.dispose()
+      await b.request.dispose()
+    }
+  })
+
+  test("UI: start screen → search → room → message", async ({ page }) => {
+    const user = await registerUserViaApi(page.request, { ...createTestUser("bd-ui"), name: "Lena Tester" })
+    createdUserIds.push(user.id)
+    await prepareUser(user, { gender: "female", lookingFor: "men" })
+    const b = await newUser("bd-b", "male", "women")
+    try {
+      await page.goto("/app/blind-date")
+      const start = page.locator(".bd-intro .bd-btn--primary")
+      await expect(start).toBeEnabled()
+      await start.click()
+      await expect(page.locator(".bd-search")).toBeVisible()
+
+      const join = await (await b.request.post("/api/blind-date/queue", { data: { lang: "en" } })).json()
+      expect(join.state).toBe("matched")
+
+      await expect(page.locator(".bd-room-head__name")).toContainText("Marco", { timeout: 15_000 })
+      await expect(page.locator(".bd-timer")).toBeVisible()
+      await page.locator(".bd-composer input").fill("Hi Marco!")
+      await page.locator(".bd-send").click()
+      await expect(page.locator(".bd-msg--mine")).toHaveText("Hi Marco!")
+
+      // The peer's message arrives through polling.
+      await b.request.post(`/api/blind-date/rooms/${join.roomId}/messages`, { data: { body: "Hi Lena" } })
+      await expect(page.locator(".bd-msg:not(.bd-msg--mine)")).toHaveText("Hi Lena", { timeout: 10_000 })
+
+      // Leaving from the menu shows the result screen.
+      await page.locator(".bd-room-head .bd-icon-btn").click()
+      await page.locator(".bd-sheet__item").first().click()
+      await page.locator(".bd-sheet .bd-btn--primary").click()
+      await expect(page.locator(".bd-result")).toBeVisible()
+    } finally {
       await b.request.dispose()
     }
   })

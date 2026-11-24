@@ -5,10 +5,13 @@ import {
   decide,
   getRoomForUser,
   leaveRoom,
+  peerOf,
+  revealState,
   postMessage,
   reportFromRoom,
   setRevealConsent,
 } from "@/server/blind-date/service"
+import { loadPhotoBytes, primaryPhotoRef, renderRevealImage } from "@/server/blind-date/photo"
 import { actionError, cors, guard, internalError, isUuid, options, readJson } from "./shared"
 
 export { options as OPTIONS }
@@ -136,5 +139,39 @@ export async function postReport(request: Request, ctx: Ctx) {
     return cors(request, jsonOk({ ok: true }))
   } catch (err) {
     return internalError(request, "report", err)
+  }
+}
+
+/**
+ * GET /api/blind-date/rooms/:id/photo — the peer's main photo rendered for the current mutual
+ * reveal stage. 403 while the stage is 0 (no mutual consent or not enough shared progress).
+ * After the room closed the photo is only available to a matched pair.
+ */
+export async function getRoomPhoto(request: Request, ctx: Ctx) {
+  const g = await guard(request, { name: "photo", max: 60, windowMs: 60_000 })
+  if (!g.ok) return g.response
+  const id = await roomId(ctx)
+  if (!id) return actionError(request, "not_found")
+  try {
+    const room = await getRoomForUser(id, g.userId)
+    if (!room) return actionError(request, "not_found")
+    if (room.status === "closed" && room.close_reason !== "matched") return cors(request, jsonError(403, { error: "not_revealed" }))
+    const { revealStage } = await revealState(room)
+    if (revealStage === 0) return cors(request, jsonError(403, { error: "not_revealed" }))
+    const peerId = peerOf(room, g.userId)
+    const ref = peerId ? await primaryPhotoRef(peerId) : null
+    const bytes = ref ? await loadPhotoBytes(ref) : null
+    if (!bytes) return cors(request, jsonError(404, { error: "no_photo" }))
+    const image = await renderRevealImage(bytes, revealStage)
+    return new Response(new Uint8Array(image), {
+      status: 200,
+      headers: {
+        "Content-Type": "image/jpeg",
+        "Cache-Control": "private, no-store",
+        "X-Reveal-Stage": String(revealStage),
+      },
+    })
+  } catch (err) {
+    return internalError(request, "photo", err)
   }
 }

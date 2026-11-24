@@ -391,6 +391,28 @@ export type RoomSnapshot = {
   outcome: null | { reason: CloseReason; matchId: string | null; leftByMe: boolean }
 }
 
+/** Shared progress and the reveal stage both people may see right now (stored as reveal_level). */
+export async function revealState(room: RoomRow): Promise<{ progress: number; revealStage: RevealStage }> {
+  const sql = db()
+  const [counts] = await sql<{ a: number; b: number; games: number }[]>`
+    SELECT
+      (SELECT count(*)::int FROM blind_date_messages WHERE room_id = ${room.id} AND sender_id = ${room.user_a}) AS a,
+      (SELECT count(*)::int FROM blind_date_messages WHERE room_id = ${room.id} AND sender_id = ${room.user_b}) AS b,
+      (SELECT count(*)::int FROM blind_date_game_sessions WHERE room_id = ${room.id} AND status = 'completed') AS games
+  `
+  const progress = connectionProgress({ messagesA: counts.a, messagesB: counts.b, gamesCompleted: counts.games })
+  const revealStage = visibleRevealStage({ consentA: room.reveal_consent_a, consentB: room.reveal_consent_b, progress })
+  if (revealStage > room.reveal_level) {
+    await sql`UPDATE blind_date_rooms SET reveal_level = ${revealStage} WHERE id = ${room.id} AND reveal_level < ${revealStage}`
+  }
+  return { progress, revealStage }
+}
+
+export function peerOf(room: RoomRow, userId: string): string | null {
+  const s = side(room, userId)
+  return s === "a" ? room.user_b : s === "b" ? room.user_a : null
+}
+
 export async function buildSnapshot(room: RoomRow, userId: string): Promise<RoomSnapshot> {
   const sql = db()
   const mySide = side(room, userId) as "a" | "b"
@@ -410,17 +432,7 @@ export async function buildSnapshot(room: RoomRow, userId: string): Promise<Room
     SELECT id::text, sender_id, body, created_at FROM blind_date_messages
     WHERE room_id = ${room.id} ORDER BY id DESC LIMIT 200
   `
-  const [counts] = await sql<{ a: number; b: number; games: number }[]>`
-    SELECT
-      (SELECT count(*)::int FROM blind_date_messages WHERE room_id = ${room.id} AND sender_id = ${room.user_a}) AS a,
-      (SELECT count(*)::int FROM blind_date_messages WHERE room_id = ${room.id} AND sender_id = ${room.user_b}) AS b,
-      (SELECT count(*)::int FROM blind_date_game_sessions WHERE room_id = ${room.id} AND status = 'completed') AS games
-  `
-  const progress = connectionProgress({ messagesA: counts.a, messagesB: counts.b, gamesCompleted: counts.games })
-  const revealStage = visibleRevealStage({ consentA: room.reveal_consent_a, consentB: room.reveal_consent_b, progress })
-  if (revealStage > room.reveal_level) {
-    await sql`UPDATE blind_date_rooms SET reveal_level = ${revealStage} WHERE id = ${room.id} AND reveal_level < ${revealStage}`
-  }
+  const { progress, revealStage } = await revealState(room)
 
   const myDecision = mySide === "a" ? room.decision_a : room.decision_b
   const peerDecision = mySide === "a" ? room.decision_b : room.decision_a
