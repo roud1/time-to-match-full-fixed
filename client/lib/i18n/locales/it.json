@@ -1993,5 +1993,9 @@
   "bdReportAiUnavailable": "L'IA non è disponibile ora: ecco il resoconto standard.",
   "bdReportDisclaimer": "Sono osservazioni sulla vostra conversazione, non una valutazione della personalità né una previsione sulla relazione.",
   "pushNativeEnable": "Attiva le notifiche",
-  "pushNativeDenied": "Le notifiche sono bloccate nelle impostazioni del telefono. Apri Impostazioni → App → Luvia → Notifiche e attivale."
+  "pushNativeDenied": "Le notifiche sono bloccate nelle impostazioni del telefono. Apri Impostazioni → App → Luvia → Notifiche e attivale.",
+  "lvSetAppearance": "Aspetto",
+  "lvThemeLight": "Chiaro",
+  "lvThemeDark": "Scuro",
+  "lvThemeSystem": "Sistema"
 }

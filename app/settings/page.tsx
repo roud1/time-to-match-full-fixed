@@ -12,6 +12,7 @@ import { PushNotificationSettings } from "@/client/components/pwa/push-notificat
 import { SettingsBlockedList } from "@/client/components/settings/settings-blocked-list"
 import { AiInsightsConsent } from "@/client/components/settings/ai-insights-consent"
 import { SettingsSubscriptionCard } from "@/client/components/settings/settings-subscription-card"
+import { AppearanceSettings } from "@/client/components/settings/appearance-settings"
 import { pushConnectionSync } from "@/client/lib/connection-sync-client"
 import { clearSession, getAgeFromBirthdate, getUserProfile } from "@/client/lib/user-profile"
 import { getProfilePhotos } from "@/client/lib/profile-photos"
@@ -171,6 +172,8 @@ export default function SettingsPage() {
                   <ChevronRight className="lv-set__chevron" aria-hidden strokeWidth={1.8} />
                 </button>
               </section>
+
+              <AppearanceSettings />
 
               <section className="lv-set__group">
                 {/* GDPR: right of access / data portability */}

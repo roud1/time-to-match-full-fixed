@@ -1,0 +1,176 @@
+/* Luvia light theme — html[data-lv-theme="light"] (Settings → Appearance).
+   1. Tokens: every component built on --lv-* follows automatically.
+   2. Tailwind: text-white / bg-white/[x] / border-white/x read --color-white, so pointing it at the
+      ink colour flips hundreds of utilities while keeping their opacity.
+   3. Surfaces written with literal colours in CSS are overridden below, screen by screen. */
+
+html[data-lv][data-lv-theme="light"] {
+  --lv-bg: #f7f4fb;
+  --lv-surface: #ffffff;
+  --lv-surface-raised: #f1ebf7;
+  --lv-text: #1d1528;
+  --lv-text-2: #5d526b;
+  --lv-text-3: #857a93;
+  --lv-pink: #e4458f;
+  --lv-purple: #8a3ff0;
+  --lv-border: rgba(29, 21, 40, 0.1);
+  --lv-border-strong: rgba(29, 21, 40, 0.18);
+  --lv-shadow-cta: 0 10px 22px -12px rgba(228, 69, 143, 0.55);
+  --lv-shadow-raised: 0 14px 32px -20px rgba(60, 30, 90, 0.28);
+  --lv-focus: 0 0 0 3px rgba(228, 69, 143, 0.35);
+
+  /* Legacy design-system base (redesign-dark.css): most older aliases are built on these. */
+  --void: #f7f4fb;
+  --surface-1: #ffffff;
+  --surface-2: #f3eef8;
+  --surface-3: #ebe3f3;
+  --ink: #1d1528;
+  --ink-mid: rgba(29, 21, 40, 0.64);
+  --ink-low: rgba(29, 21, 40, 0.44);
+  --ink-faint: rgba(29, 21, 40, 0.14);
+  --glass: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(29, 21, 40, 0.09);
+  --input: rgba(29, 21, 40, 0.04);
+  --bg-header: rgba(247, 244, 251, 0.94);
+  --glass-strong: rgba(255, 255, 255, 0.96);
+  --saas-bg-deep: #efe9f6;
+  --ttm-brand-deep: #efe9f6;
+  --ttm-brand-line-strong: rgba(29, 21, 40, 0.14);
+  --ttm-glass-bg-strong: rgba(255, 255, 255, 0.96);
+  --ttm-glass-highlight: rgba(255, 255, 255, 0.6);
+  --app-bg-soft: #efe9f6;
+  --app-surface: rgba(29, 21, 40, 0.03);
+  --app-surface-strong: rgba(29, 21, 40, 0.06);
+  --app-glass: rgba(255, 255, 255, 0.9);
+  --app-glass-strong: rgba(255, 255, 255, 0.97);
+  --shadow-card: 0 1px 2px rgba(60, 30, 90, 0.06), 0 14px 34px -22px rgba(60, 30, 90, 0.3);
+  --shadow-float: 0 1px 2px rgba(60, 30, 90, 0.06), 0 22px 48px -26px rgba(60, 30, 90, 0.35);
+  --ttm-depth-1: 0 0 0 1px var(--glass-border), 0 12px 30px -20px rgba(60, 30, 90, 0.3);
+  --ttm-depth-2: 0 0 0 1px var(--glass-border), 0 18px 40px -24px rgba(60, 30, 90, 0.32);
+  --ttm-depth-float: 0 0 0 1px var(--glass-border), 0 24px 52px -28px rgba(60, 30, 90, 0.35);
+
+  /* Tailwind white / black utilities → ink / paper. */
+  --color-white: #1d1528;
+  --color-black: #ffffff;
+
+  color-scheme: light;
+  color: var(--lv-text);
+  background-color: var(--lv-bg) !important;
+}
+
+html[data-lv][data-lv-theme="light"] body {
+  color: var(--lv-text);
+}
+
+html[data-lv][data-lv-theme="light"] body::before {
+  background-color: var(--lv-bg) !important;
+  background-image:
+    radial-gradient(90% 45% at 50% -8%, rgba(155, 77, 255, 0.1), transparent 70%),
+    radial-gradient(70% 40% at 100% 105%, rgba(243, 92, 168, 0.08), transparent 70%) !important;
+}
+
+html[data-lv][data-lv-theme="light"] .ttm-floating-header {
+  background: rgba(247, 244, 251, 0.94) !important;
+}
+
+/* Text on brand gradients / photos stays white. */
+html[data-lv][data-lv-theme="light"] :is(.bd-btn--primary, .bd-send, .bd-option.is-picked, .bd-msg--mine, .lv-seg__opt.is-on, .bd-tabs button.is-on) {
+  color: #fff;
+}
+
+html[data-lv][data-lv-theme="light"] .xp-root {
+  --xp-base: #f7f4fb;
+  --xp-surface-1: #ffffff;
+  --xp-surface-2: #f3eef8;
+  --xp-surface-3: #ebe3f3;
+  --xp-text: #1d1528;
+  --xp-text-muted: rgba(29, 21, 40, 0.62);
+  --xp-text-dim: rgba(29, 21, 40, 0.42);
+  --xp-glass: rgba(255, 255, 255, 0.9);
+  --xp-glass-border: rgba(29, 21, 40, 0.09);
+}
+
+/* Wordmark with dark letters (the default logo has white "Luvia"). */
+html[data-lv][data-lv-theme="light"] img[src="/brand/luvia/logo.svg"] {
+  content: url("/brand/luvia/logo-light.svg");
+}
+
+/* Photos, photo scrims and brand-gradient buttons keep white text and icons. */
+html[data-lv][data-lv-theme="light"] :is(
+  .ttm-app-swipe,
+  .ttm-app-likes__stack,
+  .ttm-app-likes__badge,
+  .ttm-app-likes__btn--primary,
+  .ttm-app-feed-actions__btn--like,
+  .ttm-app-feed-actions__btn--super,
+  .ttm-app-likes__crown,
+  .ttm-app-chats__premium,
+  .ttm-app-likes__premium,
+  .bd-msg--mine,
+  .bd-btn--primary
+) {
+  --color-white: #ffffff;
+  --color-black: #000000;
+}
+html[data-lv][data-lv-theme="light"] :is(.ttm-app-swipe, .ttm-app-feed-actions__btn--like, .ttm-app-feed-actions__btn--super) {
+  color: #fff;
+}
+
+/* Settings → Appearance: three labels fit on narrow phones. */
+html[data-lv] .lv-seg__opt {
+  font-size: 13px;
+  gap: 4px;
+}
+@media (max-width: 400px) {
+  html[data-lv] .lv-seg__opt svg {
+    display: none;
+  }
+}
+
+/* Chat: conversation starters, cooling hint, AI chip, sign-out label. */
+html[data-lv][data-lv-theme="light"] .ttm-chat-room button.max-w-\[14rem\] {
+  color: var(--lv-text) !important;
+  background: #fff !important;
+}
+html[data-lv][data-lv-theme="light"] .ttm-chat-room-header .ttm-countdown-timer__digits {
+  color: #0f7a3e !important;
+}
+html[data-lv][data-lv-theme="light"] .ttm-cooling-banner__text {
+  color: var(--lv-text-2);
+}
+html[data-lv][data-lv-theme="light"] .ttm-app-chats__ai-chip {
+  color: var(--lv-purple);
+  background: rgba(138, 63, 240, 0.12);
+}
+html[data-lv][data-lv-theme="light"] .ttm-app-me__row--logout .ttm-app-me__row-label {
+  color: #d0306f;
+}
+
+/* The "cooling connection" filter dims the chat; on the light theme it turns everything grey. */
+html[data-lv][data-lv-theme="light"] .ttm-chat-room {
+  filter: none !important;
+}
+
+/* Legacy global rule paints every dialog near-black (!important); light dialogs instead. */
+html[data-lv][data-lv-theme="light"] :is([role="dialog"], [data-radix-dialog-content]) {
+  background: #ffffff !important;
+  color: var(--lv-text) !important;
+  border-color: var(--lv-border) !important;
+}
+/* Full-screen profile view: page background behind the info, photo fades into it. */
+html[data-lv][data-lv-theme="light"] .ttm-app-profile__photo-fade {
+  background:
+    linear-gradient(to bottom, rgba(8, 4, 15, 0.45) 0%, rgba(8, 4, 15, 0) 22%),
+    linear-gradient(to top, var(--lv-bg) 0%, rgba(247, 244, 251, 0.6) 18%, rgba(247, 244, 251, 0) 42%);
+}
+
+/* Legacy global field style (white 3.5 % fill, white hairline, !important): light version.
+   Specificity (0,0,2) — just above the legacy element rule, below any component's own field style. */
+:where(html[data-lv][data-lv-theme="light"]) body :is(input, textarea, select) {
+  background: #ffffff !important;
+  border: 1px solid var(--lv-border-strong) !important;
+  color: var(--lv-text) !important;
+}
+:where(html[data-lv][data-lv-theme="light"]) body :is(input, textarea)::placeholder {
+  color: var(--lv-text-3) !important;
+}

@@ -1,6 +1,8 @@
 import "@/client/components/app-mode/app-mode.css"
 import { AppModeSync } from "@/client/components/app-mode/app-mode-sync"
 import { AndroidBackHandler } from "@/client/components/app-mode/android-back-handler"
+import { LvThemeSync } from "@/client/components/app-mode/lv-theme-sync"
+import { lvThemeInitScript } from "@/client/lib/lv-theme"
 import type { Metadata, Viewport } from "next"
 import { headers } from "next/headers"
 import { fontBody, fontDisplay, fontLandingBody } from "@/client/lib/fonts"
@@ -113,6 +115,8 @@ export default async function RootLayout({
           }}
         />
         <ThemeScript />
+        {/* Must run after the apple status-bar meta is in <head> (Next renders metadata above). */}
+        <script dangerouslySetInnerHTML={{ __html: lvThemeInitScript }} />
         <AdSenseScript />
       </head>
       <body
@@ -121,6 +125,7 @@ export default async function RootLayout({
         <ThemeProvider>
           <AppModeSync />
           <AndroidBackHandler />
+          <LvThemeSync />
           <I18nProvider initialLocale={lang}>
             <QueryProvider>
               <AchievementProvider>

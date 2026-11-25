@@ -574,3 +574,39 @@ html[data-lv] .lv-consent-gate[role="dialog"] {
 .lv-consent-gate__error {
   color: #ff6b8b !important;
 }
+
+/* Appearance: segmented light / dark / system. */
+.lv-seg {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 10px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--lv-surface-raised, #241b31);
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+}
+.lv-seg__opt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--lv-text-2, #b9afc5);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.lv-seg__opt svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.lv-seg__opt.is-on {
+  color: #fff;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+}

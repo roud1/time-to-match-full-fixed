@@ -1993,5 +1993,9 @@
   "bdReportAiUnavailable": "KI ist gerade nicht verfügbar – hier der Standardbericht.",
   "bdReportDisclaimer": "Das sind Beobachtungen zu eurem Gespräch, keine Persönlichkeitsbewertung und keine Beziehungsprognose.",
   "pushNativeEnable": "Benachrichtigungen einschalten",
-  "pushNativeDenied": "Benachrichtigungen sind in den Telefoneinstellungen blockiert. Öffne Einstellungen → Apps → Luvia → Benachrichtigungen und schalte sie ein."
+  "pushNativeDenied": "Benachrichtigungen sind in den Telefoneinstellungen blockiert. Öffne Einstellungen → Apps → Luvia → Benachrichtigungen und schalte sie ein.",
+  "lvSetAppearance": "Darstellung",
+  "lvThemeLight": "Hell",
+  "lvThemeDark": "Dunkel",
+  "lvThemeSystem": "System"
 }
