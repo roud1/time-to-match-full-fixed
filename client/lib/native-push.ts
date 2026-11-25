@@ -5,35 +5,30 @@
  */
 
 import { currentUiLocale } from "@/client/lib/push-subscribe-client"
+import { addNativeListener, callNative, nativeBridge } from "@/client/lib/capacitor-bridge"
 
 type PermissionState = "prompt" | "prompt-with-rationale" | "granted" | "denied"
-type PushPlugin = {
-  checkPermissions: () => Promise<{ receive: PermissionState }>
-  requestPermissions: () => Promise<{ receive: PermissionState }>
-  register: () => Promise<void>
-  createChannel?: (c: { id: string; name: string; importance: number; visibility?: number }) => Promise<void>
-  addListener: (event: string, cb: (data: unknown) => void) => Promise<{ remove: () => Promise<void> }> | { remove: () => Promise<void> }
-}
 
-function plugin(): PushPlugin | null {
-  if (typeof window === "undefined") return null
-  if (!/TTMPush/.test(navigator.userAgent)) return null
-  const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean; Plugins?: { PushNotifications?: PushPlugin } } })
-    .Capacitor
-  if (!cap?.isNativePlatform?.()) return null
-  return cap.Plugins?.PushNotifications ?? null
+const PLUGIN = "PushNotifications"
+
+/** True in an APK built with Firebase config and the push plugin. */
+function available(): boolean {
+  if (typeof window === "undefined" || !/TTMPush/.test(navigator.userAgent)) return false
+  const cap = nativeBridge()
+  if (!cap) return false
+  return cap.isPluginAvailable ? cap.isPluginAvailable(PLUGIN) || Boolean(cap.nativePromise) : Boolean(cap.nativePromise)
 }
 
 export function isNativePushAvailable(): boolean {
-  return plugin() !== null
+  return available()
 }
 
 let listenersReady = false
 
-async function ensureListeners(p: PushPlugin): Promise<void> {
+function ensureListeners(): void {
   if (listenersReady) return
   listenersReady = true
-  await p.addListener("registration", (data) => {
+  addNativeListener(PLUGIN, "registration", (data) => {
     const token = (data as { value?: string })?.value
     if (!token) return
     try {
@@ -49,7 +44,7 @@ async function ensureListeners(p: PushPlugin): Promise<void> {
     }).catch(() => null)
   })
   // Tapping a notification opens the chat / likes it points to.
-  await p.addListener("pushNotificationActionPerformed", (action) => {
+  addNativeListener(PLUGIN, "pushNotificationActionPerformed", (action) => {
     const url = (action as { notification?: { data?: { url?: string } } })?.notification?.data?.url
     if (url && url.startsWith("/")) window.location.assign(url)
   })
@@ -57,15 +52,16 @@ async function ensureListeners(p: PushPlugin): Promise<void> {
 
 /** Registers the device when permission is (or becomes) granted. `ask` shows the system dialog. */
 export async function syncNativePush(opts: { ask: boolean }): Promise<PermissionState | "unavailable"> {
-  const p = plugin()
-  if (!p) return "unavailable"
+  if (!available()) return "unavailable"
   try {
-    let { receive } = await p.checkPermissions()
-    if (receive !== "granted" && receive !== "denied" && opts.ask) receive = (await p.requestPermissions()).receive
+    let { receive } = await callNative<{ receive: PermissionState }>(PLUGIN, "checkPermissions")
+    if (receive !== "granted" && receive !== "denied" && opts.ask) {
+      receive = (await callNative<{ receive: PermissionState }>(PLUGIN, "requestPermissions")).receive
+    }
     if (receive !== "granted") return receive
-    await p.createChannel?.({ id: "luvia_default", name: "Luvia", importance: 4, visibility: 1 }).catch(() => null)
-    await ensureListeners(p)
-    await p.register()
+    await callNative(PLUGIN, "createChannel", { id: "luvia_default", name: "Luvia", importance: 4, visibility: 1 }).catch(() => null)
+    ensureListeners()
+    await callNative(PLUGIN, "register")
     return "granted"
   } catch {
     return "unavailable"
