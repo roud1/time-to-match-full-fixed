@@ -95,7 +95,7 @@
   "bondInboxBadge": "Aktif diyalog (+{hours}h)",
   "bondLabel": "Bağ",
   "bondLevelLabel": "İletişim: seviye {level}",
-  "bondMessagesUntilProlong": "Yenilemeden önce {count} daha fazla mesaj var",
+  "bondMessagesUntilProlong": "Uzatmaya kalan mesaj: {count}",
   "bondMeterAria": "Maçın uzatılmasından önce iletişim ilerlemesi",
   "bondNewConnection": "Yeni bağlantı",
   "bondProlongCelebration": "✨ Maç 6 saat uzatıldı!",

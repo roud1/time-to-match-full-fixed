@@ -95,7 +95,7 @@
   "bondInboxBadge": "Aktiver Dialog (+{hours}h)",
   "bondLabel": "Verbindung",
   "bondLevelLabel": "Kommunikation: Ebene {level}",
-  "bondMessagesUntilProlong": "{count} weitere Nachrichten vor der Verlängerung",
+  "bondMessagesUntilProlong": "Nachrichten bis zur Verlängerung: {count}",
   "bondMeterAria": "Kommunikationsfortschritt vor der Spielverlängerung",
   "bondNewConnection": "Neue Verbindung",
   "bondProlongCelebration": "✨ Das Match wurde um 6 Stunden verlängert!",

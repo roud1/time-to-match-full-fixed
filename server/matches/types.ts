@@ -16,6 +16,10 @@ export type MatchDto = {
   id: string
   peerUserId: string
   peerName: string | null
+  /** Peer's main photo; null while a blind-date match has not fully revealed it. */
+  peerPhoto?: string | null
+  /** Peer's age from the birth date (null if unknown). */
+  peerAge?: number | null
   expiresAt: string
   isFrozen: boolean
   isExpired: boolean

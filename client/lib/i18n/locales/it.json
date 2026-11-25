@@ -95,7 +95,7 @@
   "bondInboxBadge": "Dialogo attivo (+{hours}h)",
   "bondLabel": "Connessione",
   "bondLevelLabel": "Comunicazione: livello {level}",
-  "bondMessagesUntilProlong": "{count} altri messaggi prima del rinnovo",
+  "bondMessagesUntilProlong": "Messaggi prima del rinnovo: {count}",
   "bondMeterAria": "Avanzamento della comunicazione prima dell'estensione della partita",
   "bondNewConnection": "Nuova connessione",
   "bondProlongCelebration": "✨ La partita è stata prolungata di 6 ore!",

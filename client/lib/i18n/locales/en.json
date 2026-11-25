@@ -979,7 +979,7 @@
   "matchFreezeExtraStub": "Coming soon - more frosts in Premium",
   "bondLevelLabel": "Connection: level {level}",
   "bondNewConnection": "New connection",
-  "bondMessagesUntilProlong": "{count} more messages until extension",
+  "bondMessagesUntilProlong": "Messages until extension: {count}",
   "bondProlongCelebration": "✨ Match extended for 6 hours!",
   "bondGrowingLabel": "The connection is growing",
   "bondMeterAria": "Communication progress before match extension",

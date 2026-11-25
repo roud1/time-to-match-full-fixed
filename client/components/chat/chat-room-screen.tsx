@@ -11,26 +11,13 @@ import { SwipeProfileDetailScreen } from "@/client/components/app/swipe-profile-
 import { useChatScrollEnd } from "@/client/hooks/use-chat-scroll-end"
 import { useI18n } from "@/client/lib/i18n"
 import { useEmotionalRealityExpansion } from "@/client/hooks/use-emotional-reality-expansion"
-import { PresenceProximityLayer } from "@/client/components/reality-expansion/presence-proximity-layer"
-import { RelationshipNarrativeWhisper } from "@/client/components/reality-expansion/relationship-narrative-whisper"
-import { ReflectionV2Whisper } from "@/client/components/emotional-consciousness/reflection-v2-whisper"
-import { SpaceEvolutionLayer } from "@/client/components/emotional-consciousness/space-evolution-layer"
-import { SilenceField } from "@/client/components/emotional-consciousness/silence-field"
-import { TensionVeil } from "@/client/components/emotional-consciousness/tension-veil"
 import { getPeerTrustSignals } from "@/client/lib/demo-trust-signals"
 import { isEmotionallyReachable, resolveEmotionalPresence } from "@/client/lib/chat-presence"
 import { useEmotionalPresenceSystem } from "@/client/hooks/use-emotional-presence-system"
-import { EmotionalPresenceShell } from "@/client/components/presence/emotional-presence-shell"
-import { SilentPresencePulse } from "@/client/components/presence/silent-presence-pulse"
-import { PresenceInsightWhisper } from "@/client/components/presence/presence-insight-whisper"
-import { ConnectionPulseLayer } from "@/client/components/world/connection-pulse-layer"
 import { emitWorldPulse } from "@/client/lib/world"
 import { buildConnectionCopy } from "@/client/lib/connection-copy"
 import { buildSyncCopy } from "@/client/lib/sync-copy"
 import { useConnectionLive } from "@/client/hooks/use-connection-live"
-import { ConnectionHeader } from "@/client/components/sync/connection-header"
-import { AmbientChatBackground } from "@/client/components/chat/connection/ambient-chat-background"
-import { EmotionalInsightCard } from "@/client/components/chat/connection/emotional-insight-card"
 import { deriveChatExperience } from "@/client/lib/chat-emotional-experience"
 import { pickAIInsight } from "@/client/lib/ai-connection-engine"
 import { extractAIConnectionSignals } from "@/client/lib/ai-connection-engine"
@@ -38,32 +25,15 @@ import { getConnection } from "@/client/lib/connection-store"
 import { useConnectionAnalysis } from "@/client/hooks/use-connection-analysis"
 import { usePersistedConnectionScore } from "@/client/hooks/use-persisted-connection-score"
 import { useRelationshipEcosystem } from "@/client/hooks/use-relationship-ecosystem"
-import { SharedSyncSpace } from "@/client/components/ecosystem/shared-sync-space"
-import { IntelligentSpaceLayer } from "@/client/components/intelligence/intelligent-space-layer"
 import { useConnectionIntelligence } from "@/client/hooks/use-connection-intelligence"
 import { useEmotionalCompanion } from "@/client/hooks/use-emotional-companion"
-import { CompanionSilentLayer } from "@/client/components/companion/companion-silent-layer"
-import { CompanionPresenceStrip } from "@/client/components/companion/companion-presence-strip"
-import { CompanionMomentHalo } from "@/client/components/companion/companion-moment-halo"
 import { useEmotionalReality } from "@/client/hooks/use-emotional-reality"
-import { RelationshipRealitySpace } from "@/client/components/reality/relationship-reality-space"
 import { useEmotionalTime } from "@/client/hooks/use-emotional-time"
-import { TemporalAtmosphereLayer } from "@/client/components/time/temporal-atmosphere-layer"
-import { RelationshipTimeStateRibbon } from "@/client/components/time/relationship-time-state-ribbon"
-import { ConnectionRhythmStrip } from "@/client/components/time/connection-rhythm-strip"
-import { TimeMemoryWhisper } from "@/client/components/time/time-memory-whisper"
-import { OfflinePresenceGlow } from "@/client/components/time/offline-presence-glow"
-import { RelationshipEcologyStrip } from "@/client/components/ecosystem/relationship-ecology-strip"
-import { ConnectionAura } from "@/client/components/relationship/connection-aura"
-import { MemoryCard } from "@/client/components/relationship/memory-card"
 import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
 import { SafetyHubDialog } from "@/client/components/trust/safety-hub-dialog"
-import { RelationshipStateBadge } from "@/client/components/growth/relationship-state-badge"
-import { RelationshipInsightPanel } from "@/client/components/growth/relationship-insight-panel"
 import { EmotionalShareCard } from "@/client/components/network/emotional-share-card"
 import { detectEvolutionEvents, persistEvolutionEvents } from "@/client/lib/network"
 import { analyzeRelationshipEcology } from "@/client/lib/ecosystem"
-import { CinematicMemoryArchive } from "@/client/components/growth/cinematic-memory-archive"
 import {
   buildSyncShareMoment,
   deriveLiveRelationshipState,
@@ -413,7 +383,7 @@ export function ChatRoomScreen({
       beforeComposer={
         showIcebreakers && onSendText ? (
           <IcebreakerPanel
-            variant={isEmbedded ? "compact" : "default"}
+            variant="compact"
             onPick={(text) => {
               onSendText(text)
               setIcebreakerDismissed(true)
@@ -462,174 +432,8 @@ export function ChatRoomScreen({
     </>
   )
 
-  const fullChatBody = connectionView ? (
-        <TemporalAtmosphereLayer time={emotionalTime} className="flex flex-col flex-1 min-h-0">
-        <EmotionalPresenceShell system={presenceSystem} className="flex flex-col flex-1 min-h-0">
-        <CompanionSilentLayer companion={companion} className="flex flex-col flex-1 min-h-0">
-        <IntelligentSpaceLayer intelligence={intelligence} className="flex flex-col flex-1 min-h-0">
-        <SharedSyncSpace
-          ecology={ecology}
-          stageProgress={stageProgress}
-          className="flex-1 min-h-0"
-          sidebar={
-            <>
-              <ConnectionHeader
-                view={connectionView}
-                messages={thread.messages}
-                copy={{ ...connectionCopy, ...syncCopy }}
-                showTyping={showTyping}
-                hasUnread={hasUnread}
-                justSent={justSent}
-                syncSurge={syncSurge}
-                analysisBundle={connectionAnalysis}
-                relationshipIdentity={identity}
-                relationshipAura={aura}
-                relationshipMoments={moments}
-              />
-              {ecology && <RelationshipEcologyStrip ecology={ecology} />}
-              {companion && (
-                <details className="shrink-0 px-3 py-1.5 border-b border-white/[0.06] group md:border-b-0">
-                  <summary className="text-[9px] uppercase tracking-[0.16em] text-white/35 font-extralight cursor-pointer list-none">
-                    {t("chatInsightLabel")}
-                  </summary>
-                  <div className="space-y-2 pt-2 pb-1">
-                    <CompanionPresenceStrip profileId={profile.id} companion={companion} />
-                    {emotionalTime && (
-                      <>
-                        <RelationshipTimeStateRibbon state={emotionalTime.timeState} />
-                        <ConnectionRhythmStrip rhythm={emotionalTime.rhythm} />
-                      </>
-                    )}
-                    {emotionalTime?.memories[0] && (
-                      <TimeMemoryWhisper memory={emotionalTime.memories[0]} />
-                    )}
-                    {presenceSystem?.insight && (
-                      <PresenceInsightWhisper
-                        profileId={profile.id}
-                        insight={presenceSystem.insight}
-                      />
-                    )}
-                  </div>
-                </details>
-              )}
-            </>
-          }
-        >
-        <RelationshipRealitySpace reality={reality} surge={syncSurge} className="flex-1 min-h-0">
-          <SilenceField
-            silence={realityExpansion.consciousness.silence}
-            className="ec-silence-field--chat"
-          />
-          <TensionVeil
-            tension={realityExpansion.consciousness.tension}
-            className="ec-tension-veil--chat"
-          />
-          {realityExpansion.consciousness.space && (
-            <SpaceEvolutionLayer
-              space={realityExpansion.consciousness.space}
-              className="ec-space-evolution--chat"
-            />
-          )}
-          <PresenceProximityLayer immersion={realityExpansion.presence} />
-          {realityExpansion.consciousness.reflection?.scope === "connection" ? (
-            <ReflectionV2Whisper
-              reflection={realityExpansion.consciousness.reflection}
-              profileId={profile.id}
-              className="shrink-0 px-4 py-2"
-            />
-          ) : (
-            realityExpansion.narrative?.scope === "connection" && (
-              <RelationshipNarrativeWhisper
-                narrative={realityExpansion.narrative}
-                profileId={profile.id}
-                className="shrink-0 px-4 py-2"
-              />
-            )
-          )}
-          <ChatFadingBanners
-            expiresAt={matchExpiry?.expiresAt}
-            lastMessageAt={lastMsg?.at}
-          />
-          <ChatMessagesPane
-            scrollRef={scrollRef}
-            className={cn(syncMetrics && "ttm-chat-emotional-space")}
-            innerClassName="md:max-w-2xl lg:max-w-none"
-            overlay={
-              <>
-                {emotionalTime && <OfflinePresenceGlow presence={emotionalTime.offline} />}
-                <ConnectionPulseLayer syncMetrics={syncMetrics} surge={syncSurge} className="p16-pulse-bridge" />
-                {syncMetrics && aura && (
-                  <>
-                    <ConnectionAura aura={aura} />
-                    <AmbientChatBackground experience={experience} syncMetrics={syncMetrics} />
-                  </>
-                )}
-              </>
-            }
-            before={
-              <>
-                {presenceSystem && <SilentPresencePulse silent={presenceSystem.silent} className="mb-3" />}
-                {companion?.moment && <CompanionMomentHalo moment={companion.moment} className="mb-3" />}
-                {identity && moments.length > 0 && (
-                  <div className="mb-4 grid gap-2">
-                    {moments
-                      .filter((m) => m.reached && m.importance >= 0.85)
-                      .slice(-1)
-                      .map((m) => (
-                        <MemoryCard key={m.id} moment={m} locale={locale} featured />
-                      ))}
-                  </div>
-                )}
-                {(scrollInsight || displayAiLoading) && (
-                  <div className="mb-4">
-                    <EmotionalInsightCard
-                      insight={scrollInsight ?? ""}
-                      loading={displayAiLoading && !scrollInsight}
-                    />
-                  </div>
-                )}
-              </>
-            }
-            after={
-              <>
-                {typingBlock}
-                <CinematicMemoryArchive profileId={profile.id} limit={3} className="mt-6" />
-              </>
-            }
-          >
-            {messageList}
-          </ChatMessagesPane>
-        </RelationshipRealitySpace>
-        </SharedSyncSpace>
-        </IntelligentSpaceLayer>
-        </CompanionSilentLayer>
-        </EmotionalPresenceShell>
-        </TemporalAtmosphereLayer>
-      ) : (
-        <>
-          <div className="ttm-chat-reconnect shrink-0 px-4 py-3 border-b border-white/10 bg-[#050506]">
-            <p className="text-[10px] text-center text-white/40 font-extralight">{labels.reconnect}</p>
-          </div>
-          {connectionRecord && (
-            <div className="shrink-0 px-4 py-2 border-b border-white/[0.06]">
-              <RelationshipInsightPanel messages={thread.messages} record={connectionRecord} />
-            </div>
-          )}
-          <ChatMessagesPane scrollRef={scrollRef} after={typingBlock}>
-            {messageList}
-          </ChatMessagesPane>
-        </>
-      )
-
   return (
     <>
-    {matchExpiry && !isEmbedded && (
-      <MatchUrgencySnackbar
-        expiresAt={matchExpiry.expiresAt}
-        profileId={profile.id}
-        urgencySignal={matchExpiry.flashKey}
-      />
-    )}
     <div
       className={cn(
         "ttm-chat-room p10-chat-atmosphere flex flex-col w-full h-full min-h-0 ttm-gpu-layer",
@@ -746,7 +550,7 @@ export function ChatRoomScreen({
             reduceMotion={reduce}
           />
         }
-        body={isEmbedded ? embeddedChatBody : fullChatBody}
+        body={embeddedChatBody}
         footer={chatFooter}
       />
 

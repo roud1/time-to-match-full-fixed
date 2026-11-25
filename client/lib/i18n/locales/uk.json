@@ -95,7 +95,7 @@
   "bondInboxBadge": "Активний діалог (+{hours}h)",
   "bondLabel": "Зв'язок",
   "bondLevelLabel": "Зв'язок: рівень {level}",
-  "bondMessagesUntilProlong": "Ще {count} повідомлень до продовження",
+  "bondMessagesUntilProlong": "Повідомлень до продовження: {count}",
   "bondMeterAria": "Прогрес зв'язку до продовження метчу",
   "bondNewConnection": "Новий зв'язок",
   "bondProlongCelebration": "✨ Метч продовжено на 6 годин!",
