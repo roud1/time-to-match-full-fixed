@@ -23,6 +23,8 @@ const PUBLIC_API_EXACT = new Set([
   "/api/v1/auth/resend-verification",
   "/api/billing/webhook",
   "/api/realtime/auth",
+  // Public VAPID key for push subscriptions (not a secret; every browser receives it).
+  "/api/push/config",
 ])
 
 const PUBLIC_API_PREFIXES = ["/api/v1/cron/", "/api/admin/session"] as const
