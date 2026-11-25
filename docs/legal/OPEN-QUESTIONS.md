@@ -47,3 +47,11 @@ they replace the pages `/privacy` and `/terms`, these points need an answer (and
   PR: the job no longer deletes accounts.
 - The current `/privacy` page says expired match conversations are deleted after 24 hours and names
   Sentry/Stripe/Pusher; the code does not delete match messages on expiry, and the service list differs.
+
+## Blind dates (added with the Blind Date feature)
+
+- **Retention of blind dates without a match** — rooms, anonymous messages, game answers and date reports are
+  currently kept until the account is deleted. Decide a shorter period (for example 30 days after the date) and
+  we add a cleanup job.
+- **AI date reports** use the same "AI tips" consent as match chats (both people must turn it on). Confirm
+  this wording is acceptable or whether a separate consent for blind dates is wanted.

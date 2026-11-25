@@ -129,6 +129,8 @@ jobs:
           NEXT_PUBLIC_APP_URL: ${{ env.CI_APP_URL }}
           # The whole suite signs up ~15 users from one IP; production limits stay unchanged.
           AUTH_RATE_LIMIT_MULTIPLIER: "20"
+          # Deterministic AI provider for the Connection Report tests (never used on Render).
+          AI_TEST_PROVIDER: "1"
 
       - name: Wait for /api/ready (production)
         run: node scripts/wait-ready.mjs

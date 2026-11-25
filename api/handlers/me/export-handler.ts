@@ -108,6 +108,12 @@ async function collect(sql: Sql, uid: string) {
         FROM blind_date_game_sessions g JOIN blind_date_rooms r ON r.id = g.room_id
         WHERE r.user_a = ${uid} OR r.user_b = ${uid} ORDER BY g.created_at`
     ),
+    blindDateConnectionReports: await section("blindDateConnectionReports", () =>
+      sql`SELECT room_id, source, report, created_at FROM blind_date_connection_reports WHERE user_id = ${uid} ORDER BY created_at`
+    ),
+    aiUsage: await section("aiUsage", () =>
+      sql`SELECT feature, provider, model, input_tokens, output_tokens, cached, created_at FROM ai_usage WHERE user_id = ${uid} ORDER BY created_at`
+    ),
     blindDateMessagesSent: await section("blindDateMessagesSent", () =>
       sql`SELECT room_id, body, created_at FROM blind_date_messages WHERE sender_id = ${uid} ORDER BY created_at`
     ),

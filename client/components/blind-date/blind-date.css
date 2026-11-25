@@ -1286,3 +1286,127 @@
     padding: 14px 12px;
   }
 }
+
+/* ── connection report ── */
+.bd-report-btn {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 92, 168, 0.4);
+  background: rgba(243, 92, 168, 0.1);
+  color: #ffc1de;
+  font-size: 13px;
+  font-weight: 600;
+}
+.bd-report-btn svg {
+  width: 15px;
+  height: 15px;
+}
+.bd-sheet:has(.bd-insight) {
+  max-height: 88dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.bd-insight {
+  display: grid;
+  gap: 14px;
+}
+.bd-insight section {
+  display: grid;
+  gap: 8px;
+}
+.bd-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.bd-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 13px;
+  color: var(--lv-text-2, #b9afc5);
+}
+.bd-stats svg {
+  width: 14px;
+  height: 14px;
+  color: var(--lv-pink, #f35ca8);
+}
+.bd-report-ai {
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(243, 92, 168, 0.14), rgba(155, 77, 255, 0.14));
+  border: 1px solid rgba(243, 92, 168, 0.3);
+}
+.bd-report-ai__label {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lv-pink, #f35ca8);
+}
+.bd-report-ai__label svg {
+  width: 14px;
+  height: 14px;
+}
+.bd-report-ai__summary {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.bd-report__h {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--lv-text, #faf7ff);
+}
+.bd-report__h svg {
+  width: 15px;
+  height: 15px;
+  color: #ffd27a;
+}
+.bd-report__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--lv-text-2, #b9afc5);
+}
+.bd-report__list b {
+  color: var(--lv-text, #faf7ff);
+}
+.bd-report__list--starters li {
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--lv-text, #faf7ff);
+}
+.bd-report__note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #ffe2a8;
+}
+.bd-report__link {
+  color: var(--lv-pink, #f35ca8);
+  font-weight: 600;
+  text-decoration: underline;
+}
