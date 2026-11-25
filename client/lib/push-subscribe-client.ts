@@ -52,3 +52,21 @@ export function currentUiLocale(): string | undefined {
     return undefined
   }
 }
+
+let vapidKeyPromise: Promise<string | null> | null = null
+
+/** Public VAPID key: build-time variable if present, otherwise from the server at runtime. */
+export function getVapidPublicKeyClient(): Promise<string | null> {
+  const built = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+  if (built) return Promise.resolve(built)
+  if (!vapidKeyPromise) {
+    vapidKeyPromise = fetch("/api/push/config", { credentials: "include" })
+      .then((r) => (r.ok ? (r.json() as Promise<{ vapidPublicKey: string | null }>) : null))
+      .then((d) => d?.vapidPublicKey || null)
+      .catch(() => null)
+    void vapidKeyPromise.then((k) => {
+      if (!k) vapidKeyPromise = null // retry later (e.g. after sign-in)
+    })
+  }
+  return vapidKeyPromise
+}
