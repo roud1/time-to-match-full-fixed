@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 719 200" fill="none">
+  <title>Luvia</title>
+  <defs>
+    <linearGradient id="lv-l" x1="70" y1="60" x2="360" y2="470" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F2C2FF"/>
+      <stop offset="0.38" stop-color="#D08CFF"/>
+      <stop offset="1" stop-color="#8E3BEA"/>
+    </linearGradient>
+    <linearGradient id="lv-r" x1="660" y1="40" x2="300" y2="460" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F6D4FF"/>
+      <stop offset="0.35" stop-color="#D597FF"/>
+      <stop offset="0.75" stop-color="#B66CFF"/>
+      <stop offset="1" stop-color="#9A3CFF"/>
+    </linearGradient>
+    <radialGradient id="lv-shade" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(500 250) rotate(-30) scale(190 120)">
+      <stop offset="0.35" stop-color="#4B1590" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#4B1590" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g transform="translate(-12.00 -4.00) scale(0.4)">
+  <!-- left ribbon -->
+  <path fill="url(#lv-l)" d="M372 488C250 400 60 300 52 170C46 80 120 28 200 30C290 32 360 70 404 112C340 82 262 72 204 100C152 126 140 200 170 280C210 380 310 450 372 488Z"/>
+  <!-- right ribbon: wide lobe ending in a tail that crosses into the point -->
+  <path fill="url(#lv-r)" d="M318 478C262 400 262 290 330 200C400 100 480 34 570 28C650 24 690 90 682 160C676 240 640 300 600 350C556 410 470 470 372 490C460 458 540 400 572 330C590 280 574 222 520 202C460 182 400 220 360 280C322 340 302 410 318 478Z"/>
+  <path fill="url(#lv-shade)" d="M318 478C262 400 262 290 330 200C400 100 480 34 570 28C650 24 690 90 682 160C676 240 640 300 600 350C556 410 470 470 372 490C460 458 540 400 572 330C590 280 574 222 520 202C460 182 400 220 360 280C322 340 302 410 318 478Z"/>
+  </g>
+  <path fill="#1D1528" transform="translate(304.40 162.00) scale(0.083221)" d="M124 0H1079V-229H388V-1490H124Z M1593.52 21C1739.52 21 1846.52 -43 1918.52 -162V0H2166.52V-1056H1913.52V-459C1913.52 -279 1815.52 -200 1682.52 -200C1547.52 -200 1469.52 -281 1469.52 -436V-1056H1217.52V-396C1217.52 -125 1372.52 21 1593.52 21Z M2673.04 0H2949.04L3346.04 -1056H3082.04L2892.04 -506C2865.04 -423 2840.04 -339 2815.04 -256C2789.04 -339 2763.04 -423 2736.04 -506L2543.04 -1056H2276.04Z M3455.56 0H3707.56V-1056H3455.56Z M4233.08 17C4405.08 17 4494.08 -55 4544.08 -149H4548.08V0H4796.08V-720C4796.08 -940 4633.08 -1077 4358.08 -1077C4082.08 -1077 3910.08 -938 3898.08 -728H4141.08C4148.08 -817 4230.08 -881 4353.08 -881C4474.08 -881 4546.08 -817 4546.08 -727V-719C4546.08 -647 4479.08 -644 4283.08 -622C4065.08 -599 3868.08 -540 3868.08 -300C3868.08 -89 4023.08 17 4233.08 17ZM4295.08 -170C4185.08 -170 4114.08 -219 4114.08 -302C4114.08 -398 4206.08 -437 4314.08 -453C4418.08 -469 4516.08 -485 4547.08 -505V-391C4547.08 -268 4460.08 -170 4295.08 -170Z"/>
+  <circle cx="602.46" cy="46.00" r="13" fill="#E08CFF"/>
+</svg>

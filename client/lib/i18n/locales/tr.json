@@ -1993,5 +1993,9 @@
   "bdReportAiUnavailable": "Yapay zekâ şu an kullanılamıyor — standart rapor gösteriliyor.",
   "bdReportDisclaimer": "Bunlar sohbetinizle ilgili gözlemler; kişilik değerlendirmesi ya da ilişki tahmini değil.",
   "pushNativeEnable": "Bildirimleri aç",
-  "pushNativeDenied": "Bildirimler telefon ayarlarında engellenmiş. Ayarlar → Uygulamalar → Luvia → Bildirimler bölümünden açın."
+  "pushNativeDenied": "Bildirimler telefon ayarlarında engellenmiş. Ayarlar → Uygulamalar → Luvia → Bildirimler bölümünden açın.",
+  "lvSetAppearance": "Görünüm",
+  "lvThemeLight": "Açık",
+  "lvThemeDark": "Koyu",
+  "lvThemeSystem": "Sistem"
 }
