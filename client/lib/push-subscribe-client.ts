@@ -27,7 +27,7 @@ export async function postPushSubscription(subscription: PushSubscriptionJson): 
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(subscription),
+      body: JSON.stringify({ ...subscription, locale: currentUiLocale() }),
     })
     return res.ok
   } catch {
@@ -41,5 +41,14 @@ export async function sendTestPush(): Promise<boolean> {
     return res.ok
   } catch {
     return false
+  }
+}
+
+/** The app language (saved by the i18n provider), so push texts match the UI. */
+export function currentUiLocale(): string | undefined {
+  try {
+    return localStorage.getItem("locale") ?? document.documentElement.lang ?? undefined
+  } catch {
+    return undefined
   }
 }

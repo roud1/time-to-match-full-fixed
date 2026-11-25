@@ -101,6 +101,16 @@ export async function POST(request: Request, context: RouteContext) {
 
   void publishMessageEvent({ matchId: trimmedId, userId: session.sub })
 
+  // Instant push to the other person (throttled per conversation, no message text).
+  if (sent.match.peerUserId) {
+    const { pushNewMessage } = await import("@/server/push/notify")
+    void pushNewMessage({
+      recipientId: sent.match.peerUserId,
+      senderId: session.sub,
+      matchKey: canonicalId?.match_id ?? trimmedId,
+    }).catch(() => null)
+  }
+
   const gamification = await checkAndGrantAchievements(session.sub, {
     event: "message_sent",
     matchId: trimmedId,

@@ -1991,5 +1991,7 @@
   "bdReportAiShort": "Rozmowa była za krótka na notatki AI.",
   "bdReportAiLimit": "Dzisiejszy limit AI wyczerpany — pokazujemy zwykły raport.",
   "bdReportAiUnavailable": "AI jest teraz niedostępne — pokazujemy zwykły raport.",
-  "bdReportDisclaimer": "To obserwacje dotyczące rozmowy, a nie ocena osobowości ani prognoza związku."
+  "bdReportDisclaimer": "To obserwacje dotyczące rozmowy, a nie ocena osobowości ani prognoza związku.",
+  "pushNativeEnable": "Włącz powiadomienia",
+  "pushNativeDenied": "Powiadomienia są zablokowane w ustawieniach telefonu. Otwórz Ustawienia → Aplikacje → Luvia → Powiadomienia i je włącz."
 }

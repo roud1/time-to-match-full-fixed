@@ -201,6 +201,19 @@ export async function scheduleNewMatchNotifications(userA: string, userB: string
     ON CONFLICT DO NOTHING
     RETURNING id
   `
+  // Delivered instantly as push (both people), then marked sent so the scheduled job does not repeat it.
+  const ids = [...insertedA, ...insertedB].map((r) => r.id)
+  if (ids.length > 0) {
+    const { pushToUser } = await import("@/server/push/notify")
+    const names = await db<{ id: string; name: string | null }[]>`SELECT id, name FROM users WHERE id IN (${userA}, ${userB})`
+    const nameOf = (id: string) => names.find((n) => n.id === id)?.name ?? null
+    await db`UPDATE notifications SET sent = true, sent_at = now() WHERE id = ANY(${ids}::uuid[])`
+    // Sent in the background: the request that created the match does not wait for push servers.
+    void Promise.allSettled([
+      insertedA.length ? pushToUser({ userId: userA, kind: "match", peerUserId: userB, peerName: nameOf(userB) }) : null,
+      insertedB.length ? pushToUser({ userId: userB, kind: "match", peerUserId: userA, peerName: nameOf(userA) }) : null,
+    ])
+  }
   return insertedA.length + insertedB.length
 }
 
@@ -217,7 +230,12 @@ export async function scheduleSomeoneLikedYouNotification(
     ON CONFLICT DO NOTHING
     RETURNING id
   `
-  return inserted.length > 0
+  if (inserted.length === 0) return false
+  // Instant push (no name: who liked you is a Premium feature); the inbox row stays for the app.
+  const { pushToUser } = await import("@/server/push/notify")
+  await db`UPDATE notifications SET sent = true, sent_at = now() WHERE id = ${inserted[0].id}`
+  void pushToUser({ userId: recipientUserId, kind: "like", peerUserId: null, peerName: null }).catch(() => null)
+  return true
 }
 
 export async function fetchPendingForDelivery(limit = 200): Promise<PendingNotificationRow[]> {
