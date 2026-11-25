@@ -154,14 +154,8 @@ export function ChatRoomHeader({
           </button>
         </div>
 
-        {/* App only (shown via html[data-ttm-app]): match timer + burger that opens the SYNC panel. */}
+        {/* App only (html[data-lv]): AI + burger that opens the SYNC panel. */}
         <div className="ttm-chat-room-header__app-actions">
-          <ChatMatchExpiryBar
-            profileId={profile.id}
-            compact
-            variant="header"
-            className="ttm-chat-room-header__expiry-inline"
-          />
           <button
             type="button"
             className="ttm-chat-room-header__ai"
@@ -179,6 +173,17 @@ export function ChatRoomHeader({
           >
             {menuOpen ? <CloseIcon className="h-5 w-5" aria-hidden /> : <MenuIcon className="h-5 w-5" aria-hidden />}
           </button>
+        </div>
+
+        {/* App only: the match timer and "freeze" get their own row under the name (they used to
+            float over the back button and the avatar). */}
+        <div className="ttm-chat-room-header__expiry-row">
+          <ChatMatchExpiryBar
+            profileId={profile.id}
+            compact
+            variant="header"
+            className="ttm-chat-room-header__expiry-inline"
+          />
         </div>
 
         <div className="ttm-chat-room-header__rail">

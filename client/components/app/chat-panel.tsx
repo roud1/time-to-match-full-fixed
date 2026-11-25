@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useI18n } from "@/client/lib/i18n"
 import {
@@ -89,15 +89,28 @@ export function ChatPanel() {
   const activeId = useMemo(() => parseWithParam(withParam), [withParam])
   const isPulseActive = activeId != null && isPulseProfileId(activeId)
 
+  // Opening a conversation adds a history entry, so the system Back button (Android app, browser)
+  // returns to the chat list instead of leaving the app; the in-app back arrow goes back the same way.
+  const openedWithPush = useRef(false)
   const setActiveChat = useCallback(
     (id: number | null) => {
       if (id == null) {
+        if (openedWithPush.current) {
+          openedWithPush.current = false
+          router.back()
+          return
+        }
         router.replace("/app?tab=chat")
+        return
+      }
+      if (activeId == null) {
+        openedWithPush.current = true
+        router.push(`/app?tab=chat&with=${id}`)
         return
       }
       router.replace(`/app?tab=chat&with=${id}`)
     },
-    [router]
+    [router, activeId]
   )
 
   const refreshPulse = useCallback(() => {

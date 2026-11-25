@@ -37,12 +37,13 @@ export function profileFromServerMatch(match: MatchDto): SwipeProfile {
   return {
     id: profileId,
     name: match.peerName?.trim() || "Match",
-    age: 25,
+    // 0 = unknown: the header then shows the name only (no invented age).
+    age: match.peerAge ?? 0,
     gender: "female",
     location: "—",
     distance: "—",
-    image: "/placeholder.svg",
-    images: ["/placeholder.svg"],
+    image: match.peerPhoto || "/placeholder.svg",
+    images: [match.peerPhoto || "/placeholder.svg"],
     timeLeft: "—",
     bio: "",
     interests: [],

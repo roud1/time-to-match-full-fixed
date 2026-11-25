@@ -189,8 +189,17 @@ test.describe("Blind Date @db", () => {
       expect(dB.peer.decision).toBe("continue")
 
       // The existing match list now contains the pair (24 h timer, chat).
-      const matches = (await (await a.request.get("/api/matches")).json()) as { matches: Array<{ peerUserId: string }> }
-      expect(matches.matches.some((m) => m.peerUserId === b.user.id)).toBeTruthy()
+      const matches = (await (await a.request.get("/api/matches")).json()) as {
+        matches: Array<{ peerUserId: string; peerAge?: number | null; peerPhoto?: string | null }>
+      }
+      const fromDate = matches.matches.find((m) => m.peerUserId === b.user.id)
+      expect(fromDate).toBeTruthy()
+      // Real age in the chat header; the photo stays hidden until the date's reveal reached 100 %.
+      expect(fromDate!.peerAge).toBe(77)
+      expect(fromDate!.peerPhoto).toBeNull()
+      await withDb((sql) => sql`UPDATE blind_date_rooms SET reveal_level = 100 WHERE id = ${roomId}`)
+      const revealedList = (await (await a.request.get("/api/matches")).json()) as typeof matches
+      expect(revealedList.matches.find((m) => m.peerUserId === b.user.id)?.peerPhoto).toBe("/demo/people/demo-4.jpg")
 
       // GDPR export contains the date and the user's own messages.
       const exportA = await (await a.request.get("/api/me/export")).text()

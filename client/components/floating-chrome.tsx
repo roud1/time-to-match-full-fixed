@@ -17,7 +17,7 @@ function FloatingChromeInner() {
   const chatThreadOpen = isApp && searchParams.get("with") != null
   const aboveDock = isApp && !chatThreadOpen
   // Full-screen blind date (composer and decision buttons at the bottom): no floating chrome there.
-  if (pathname === "/app/blind-date") return null
+  if (pathname === "/app/blind-date" || chatThreadOpen) return null
 
   return (
     <div

@@ -589,15 +589,26 @@ html[data-lv] .ttm-chat-room-header__app-actions {
   gap: 0.4rem;
 }
 
-/* Name block leaves room for the burger (and for the timer chip when a match timer exists). */
+/* Name block leaves room for the AI button and the burger in the top-right corner. */
 html[data-lv] .ttm-chat-room-header__lead {
   flex: 1 1 100%;
   min-width: 0;
-  padding-right: 3.25rem;
+  padding-right: 6.25rem;
 }
 
-html[data-lv] .ttm-chat-room-header:has(.ttm-match-expiry-bar--header) .ttm-chat-room-header__lead {
-  padding-right: 9.5rem;
+/* Match timer + freeze: a full-width row under the name (app only). */
+.ttm-chat-room-header__expiry-row {
+  display: none;
+}
+
+html[data-lv] .ttm-chat-room-header__expiry-row {
+  display: flex;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+html[data-lv] .ttm-chat-room-header__expiry-row:empty {
+  display: none;
 }
 
 html[data-lv] .ttm-chat-room-header__burger {
@@ -626,8 +637,13 @@ html[data-lv] .ttm-chat-room-header__toolbar .ttm-chat-room-header__expiry {
 }
 
 html[data-lv] .ttm-chat-room-header__expiry-inline {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 0;
+}
+
+html[data-lv] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header {
+  width: 100%;
+  justify-content: space-between;
 }
 
 html[data-lv] .ttm-chat-room-header__expiry-inline .ttm-match-expiry-bar--header {
@@ -708,4 +724,60 @@ html[data-lv] .ttm-theme-toggle {
 html[data-lv]:has(.ttm-app-dock) .ttm-floating-chrome,
 html[data-lv]:has(.ttm-auth-shell) .ttm-floating-chrome {
   display: none !important;
+}
+
+/* Compact timer row in the chat header: one slim line (timer left, freeze right). */
+html[data-lv] .ttm-chat-room-header__expiry-row {
+  margin-top: 0.35rem;
+}
+html[data-lv] .ttm-chat-room-header__expiry-row .ttm-match-expiry-bar--header {
+  min-height: 0;
+  height: auto;
+  padding: 0.2rem 0.25rem 0.2rem 0.75rem !important;
+  border-radius: 999px;
+}
+html[data-lv] .ttm-chat-room-header__expiry-row .ttm-match-expiry-bar--header button {
+  min-height: 2rem !important;
+  height: 2rem;
+  padding-block: 0;
+  font-size: 0.75rem !important;
+}
+
+/* The freeze button never pushes past the right edge. */
+html[data-lv] .ttm-chat-room-header__expiry-row .ttm-match-expiry-bar--header {
+  overflow: hidden;
+}
+html[data-lv] .ttm-chat-room-header__expiry-row .ttm-match-expiry-bar--header button {
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Narrow phones (iPhone SE, 320–360 px): smaller corner buttons so the name fits. */
+@media (max-width: 360px) {
+  html[data-lv] .ttm-chat-room-header__app-actions {
+    gap: 0.3rem;
+    right: 0.4rem;
+  }
+  html[data-lv] .ttm-chat-room-header__app-actions > button {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+  }
+  html[data-lv] .ttm-chat-room-header__lead {
+    padding-right: 5rem;
+  }
+  html[data-lv] .ttm-chat-room-header__profile {
+    gap: 0.5rem;
+    padding-inline: 0 0.25rem;
+  }
+  html[data-lv] .ttm-chat-room-header__profile > .relative {
+    transform: scale(0.85);
+    transform-origin: left center;
+    margin-right: -0.45rem;
+  }
+  html[data-lv] .ttm-chat-room-header__name {
+    font-size: 1rem;
+  }
 }

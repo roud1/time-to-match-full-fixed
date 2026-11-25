@@ -58,7 +58,9 @@ export async function findMatchByIdForUser(
   const db = getDb()
   if (!db) return null
 
-  const rows = await db<(DbLikeWithBond & { peer_name: string | null })[]>`
+  const rows = await db<
+    (DbLikeWithBond & { peer_name: string | null; peer_photo: string | null; peer_age: number | null })[]
+  >`
     SELECT
       l.id,
       l.from_user,
@@ -73,7 +75,16 @@ export async function findMatchByIdForUser(
       ms.prolong_count AS stat_prolong_count,
       ms.last_prolonged_at AS stat_last_prolonged_at,
       m.status AS engine_status,
-      peer.name AS peer_name
+      peer.name AS peer_name,
+      -- A match that came from a blind date shows the photo only once the reveal reached 100 %.
+      CASE WHEN EXISTS (
+        SELECT 1 FROM blind_date_rooms r WHERE r.match_id = l.match_id AND r.reveal_level < 100
+      ) THEN NULL
+      ELSE COALESCE(peer.profile->'photoUrls'->>0, peer.profile->>'photoUrl',
+        (SELECT p.url FROM user_photos p WHERE p.user_id = peer.id ORDER BY p.is_primary DESC, p.position ASC LIMIT 1))
+      END AS peer_photo,
+      date_part('year', age(COALESCE(peer.birth_date,
+        CASE WHEN peer.profile->>'birthdate' ~ '^\d{4}-\d{2}-\d{2}' THEN substr(peer.profile->>'birthdate', 1, 10)::date END)))::int AS peer_age
     FROM likes l
     LEFT JOIN users peer ON peer.id = l.to_user
     LEFT JOIN match_stats ms ON ms.match_id = l.id
@@ -94,7 +105,9 @@ export async function findLikeByEngineMatchIdForUser(
   const db = getDb()
   if (!db) return null
 
-  const rows = await db<(DbLikeWithBond & { peer_name: string | null })[]>`
+  const rows = await db<
+    (DbLikeWithBond & { peer_name: string | null; peer_photo: string | null; peer_age: number | null })[]
+  >`
     SELECT
       l.id,
       l.from_user,
@@ -109,7 +122,16 @@ export async function findLikeByEngineMatchIdForUser(
       ms.prolong_count AS stat_prolong_count,
       ms.last_prolonged_at AS stat_last_prolonged_at,
       m.status AS engine_status,
-      peer.name AS peer_name
+      peer.name AS peer_name,
+      -- A match that came from a blind date shows the photo only once the reveal reached 100 %.
+      CASE WHEN EXISTS (
+        SELECT 1 FROM blind_date_rooms r WHERE r.match_id = l.match_id AND r.reveal_level < 100
+      ) THEN NULL
+      ELSE COALESCE(peer.profile->'photoUrls'->>0, peer.profile->>'photoUrl',
+        (SELECT p.url FROM user_photos p WHERE p.user_id = peer.id ORDER BY p.is_primary DESC, p.position ASC LIMIT 1))
+      END AS peer_photo,
+      date_part('year', age(COALESCE(peer.birth_date,
+        CASE WHEN peer.profile->>'birthdate' ~ '^\d{4}-\d{2}-\d{2}' THEN substr(peer.profile->>'birthdate', 1, 10)::date END)))::int AS peer_age
     FROM likes l
     LEFT JOIN users peer ON peer.id = l.to_user
     LEFT JOIN match_stats ms ON ms.match_id = l.id
@@ -126,7 +148,9 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
   const db = getDb()
   if (!db) return []
 
-  const rows = await db<(DbLikeWithBond & { peer_name: string | null })[]>`
+  const rows = await db<
+    (DbLikeWithBond & { peer_name: string | null; peer_photo: string | null; peer_age: number | null })[]
+  >`
     SELECT
       l.id,
       l.from_user,
@@ -141,7 +165,16 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
       ms.prolong_count AS stat_prolong_count,
       ms.last_prolonged_at AS stat_last_prolonged_at,
       m.status AS engine_status,
-      peer.name AS peer_name
+      peer.name AS peer_name,
+      -- A match that came from a blind date shows the photo only once the reveal reached 100 %.
+      CASE WHEN EXISTS (
+        SELECT 1 FROM blind_date_rooms r WHERE r.match_id = l.match_id AND r.reveal_level < 100
+      ) THEN NULL
+      ELSE COALESCE(peer.profile->'photoUrls'->>0, peer.profile->>'photoUrl',
+        (SELECT p.url FROM user_photos p WHERE p.user_id = peer.id ORDER BY p.is_primary DESC, p.position ASC LIMIT 1))
+      END AS peer_photo,
+      date_part('year', age(COALESCE(peer.birth_date,
+        CASE WHEN peer.profile->>'birthdate' ~ '^\d{4}-\d{2}-\d{2}' THEN substr(peer.profile->>'birthdate', 1, 10)::date END)))::int AS peer_age
     FROM likes l
     LEFT JOIN users peer ON peer.id = l.to_user
     LEFT JOIN match_stats ms ON ms.match_id = l.id
@@ -154,7 +187,12 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
     ORDER BY l.expires_at ASC
   `
 
-  return rows.map((r) => rowToMatch(r, r.peer_name))
+  return rows.map((r) => ({
+    ...rowToMatch(r, r.peer_name),
+    // Very large inline (data:) photos are left out of the list response.
+    peerPhoto: r.peer_photo && r.peer_photo.length <= 400_000 ? r.peer_photo : null,
+    peerAge: r.peer_age != null && r.peer_age >= 18 && r.peer_age < 120 ? r.peer_age : null,
+  }))
 }
 
 export async function createMutualMatchLikes(input: {

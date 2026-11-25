@@ -1003,7 +1003,7 @@
   "bondLevelLabel": "Связь: уровень {level}",
   "bondNewConnection": "Новая связь",
   "bondGrowingLabel": "Связь растёт",
-  "bondMessagesUntilProlong": "Ещё {count} сообщений до продления",
+  "bondMessagesUntilProlong": "Сообщений до продления: {count}",
   "bondProlongCelebration": "✨ Мэтч продлён на 6 часов!",
   "bondMeterAria": "Прогресс связи до продления мэтча",
   "bondProlongToast": "Общение продлило мэтч на {hours} часов!",

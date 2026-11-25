@@ -1,5 +1,6 @@
 import "@/client/components/app-mode/app-mode.css"
 import { AppModeSync } from "@/client/components/app-mode/app-mode-sync"
+import { AndroidBackHandler } from "@/client/components/app-mode/android-back-handler"
 import type { Metadata, Viewport } from "next"
 import { headers } from "next/headers"
 import { fontBody, fontDisplay, fontLandingBody } from "@/client/lib/fonts"
@@ -118,6 +119,7 @@ export default async function RootLayout({
       >
         <ThemeProvider>
           <AppModeSync />
+          <AndroidBackHandler />
           <I18nProvider initialLocale={lang}>
             <QueryProvider>
               <AchievementProvider>
