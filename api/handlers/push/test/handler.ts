@@ -31,26 +31,31 @@ export async function POST(request: Request) {
   }
 
   const user = await findUserById(session.sub)
-  if (!user?.push_subscription) {
-    return withCors(
-      request,
-      jsonError(400, { error: "no_subscription", message: "Save a push subscription first" })
-    )
-  }
-
   const origin =
     process.env.NEXT_PUBLIC_APP_URL ??
     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
-
-  const ok = await sendWebPush(user.push_subscription, {
+  const payload = {
     title: "Luvia",
     body: "Тестовое push-уведомление — всё работает.",
-    url: `${origin.replace(/\/$/, "")}/app`,
+    url: "/app",
     tag: "ttm-test-push",
-  })
+  }
 
-  if (!ok) {
-    return withCors(request, jsonError(500, { error: "send_failed", message: "Push delivery failed" }))
+  // Android app (Firebase) and browser / iPhone home-screen app (web push).
+  const { sendFcmToUser } = await import("@/server/push/fcm")
+  const native = await sendFcmToUser(session.sub, payload)
+  const web = user?.push_subscription
+    ? await sendWebPush(user.push_subscription, { ...payload, url: `${origin.replace(/\/$/, "")}/app` })
+    : false
+
+  if (!web && native === 0) {
+    return withCors(
+      request,
+      jsonError(user?.push_subscription ? 500 : 400, {
+        error: user?.push_subscription ? "send_failed" : "no_subscription",
+        message: "No notification was delivered",
+      })
+    )
   }
 
   return withCors(request, jsonOk({ success: true }))

@@ -11,8 +11,50 @@ import { usePushSubscription } from "@/client/hooks/use-push-subscription"
 import { sendTestPush } from "@/client/lib/push-subscribe-client"
 import { trackProductEvent } from "@/client/lib/analytics-client"
 import { cn } from "@/client/lib/utils"
+import { isNativePushAvailable, syncNativePush } from "@/client/lib/native-push"
+
+/** Android app: notifications go through the phone's system (Firebase), not the browser. */
+function NativePushSettings() {
+  const { t } = useI18n()
+  const [state, setState] = useState<string>("checking")
+
+  useEffect(() => {
+    void syncNativePush({ ask: false }).then(setState)
+  }, [])
+
+  const enable = async () => setState(await syncNativePush({ ask: true }))
+  const test = async () => {
+    const ok = await sendTestPush()
+    if (!ok) window.alert(t("pushTestFailed"))
+  }
+
+  return (
+    <div className="space-y-3">
+      <p className="text-sm font-extralight text-white/85">{t("pushToggleLabel")}</p>
+      <p className={cn("text-[11px] font-light uppercase tracking-wider", state === "granted" ? "text-emerald-400/70" : "text-white/40")}>
+        {state === "granted" ? t("pushStatusOn") : t("pushStatusOff")}
+      </p>
+      {state === "denied" && <p className="text-xs text-white/50 font-light leading-relaxed">{t("pushNativeDenied")}</p>}
+      {state !== "granted" && state !== "denied" && state !== "checking" && (
+        <button type="button" onClick={() => void enable()} className="text-sm text-pink-200 font-medium">
+          {t("pushNativeEnable")}
+        </button>
+      )}
+      {state === "granted" && (
+        <button type="button" onClick={() => void test()} className="text-xs text-indigo-200/80 font-light">
+          {t("pushTestCta")}
+        </button>
+      )}
+    </div>
+  )
+}
 
 export function PushNotificationSettings() {
+  if (typeof window !== "undefined" && isNativePushAvailable()) return <NativePushSettings />
+  return <WebPushNotificationSettings />
+}
+
+function WebPushNotificationSettings() {
   const { t } = useI18n()
   const [supported, setSupported] = useState(false)
   const [enabled, setEnabled] = useState(false)

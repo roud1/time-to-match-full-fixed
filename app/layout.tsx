@@ -14,6 +14,7 @@ import { SiteBackground } from "@/client/components/site-background"
 import { MobileScreenTransition } from "@/client/components/mobile/mobile-screen-transition"
 import { ServiceWorkerRegister } from "@/client/components/pwa/service-worker-register"
 import { PushSubscriptionBootstrap } from "@/client/components/pwa/push-subscription-bootstrap"
+import { NativePushBootstrap } from "@/client/components/pwa/native-push-bootstrap"
 import { FloatingChrome } from "@/client/components/floating-chrome"
 import { ThemeProvider } from "@/client/components/theme/theme-provider"
 import { ThemeScript } from "@/client/components/theme/theme-script"
@@ -125,6 +126,7 @@ export default async function RootLayout({
               <AchievementProvider>
                 <ServiceWorkerRegister />
                 <PushSubscriptionBootstrap />
+                <NativePushBootstrap />
                 <SiteBackground />
                 <MobileScreenTransition>
                   <div className="relative z-0 min-h-screen">{children}</div>

@@ -1991,5 +1991,7 @@
   "bdReportAiShort": "The conversation was too short for AI notes.",
   "bdReportAiLimit": "Today's AI limit is reached — showing the standard report.",
   "bdReportAiUnavailable": "AI is not available right now — showing the standard report.",
-  "bdReportDisclaimer": "These are notes about your conversation, not an assessment of anyone's personality or a prediction about the relationship."
+  "bdReportDisclaimer": "These are notes about your conversation, not an assessment of anyone's personality or a prediction about the relationship.",
+  "pushNativeEnable": "Turn on notifications",
+  "pushNativeDenied": "Notifications are blocked in your phone settings. Open Settings → Apps → Luvia → Notifications and turn them on."
 }

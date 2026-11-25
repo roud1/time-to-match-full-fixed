@@ -96,7 +96,7 @@ disabled, or this section and a consent banner must be added before enabling it.
 | Upstash, Inc. | rate limiting (abuse prevention) | **CHECK** whether enabled |
 | Functional Software, Inc. (Sentry) | error monitoring | **CHECK** whether enabled |
 | [Payment provider: Paddle / Stripe / …] | payments | [to be added when payments launch] |
-| Apple, Google, Mozilla push services | delivering push notifications you enabled | global |
+| Apple, Google, Mozilla push services; Google Firebase Cloud Messaging (Android app) | delivering push notifications you enabled (likes, matches, new messages — never the message text) | global |
 | OpenStreetMap Foundation (Nominatim) | turning coordinates into a city name | EU/UK |
 
 - **Authorities**, when the law requires it, or to protect users' safety.

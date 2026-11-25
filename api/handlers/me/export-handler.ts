@@ -117,6 +117,9 @@ async function collect(sql: Sql, uid: string) {
     blindDateMessagesSent: await section("blindDateMessagesSent", () =>
       sql`SELECT room_id, body, created_at FROM blind_date_messages WHERE sender_id = ${uid} ORDER BY created_at`
     ),
+    notificationDevices: await section("notificationDevices", () =>
+      sql`SELECT platform, locale, created_at, last_seen_at FROM push_devices WHERE user_id = ${uid} ORDER BY created_at`
+    ),
     blocks: await section("blocks", () =>
       sql`SELECT blocked_id, created_at FROM user_blocks WHERE blocker_id = ${uid} ORDER BY created_at`
     ),

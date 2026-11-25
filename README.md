@@ -124,14 +124,15 @@ Cron routes (protected by `CRON_SECRET`):
 
 ## Notifications
 
-Expiry and new-match notifications are handled by `/api/v1/cron/notify`:
+**Instant** (sent the moment it happens, no cron involved):
+- someone liked you (no name — who liked you is a Premium feature), new match (both people), new chat message (no message text; at most one push per conversation every 3 minutes — `push_throttle`).
+- Texts in the 9 app languages (`server/push/push-copy.ts`), language taken from the device / browser that registered.
+- Channels (`server/push/notify.ts`):
+  1. **Web Push** — browsers and the iPhone home-screen app (iOS 16.4+). Requires `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` and `NEXT_PUBLIC_VAPID_PUBLIC_KEY` (same public key, needed **at build time**). Users turn it on in Settings → Notifications.
+  2. **Android app (Firebase Cloud Messaging)** — requires `FIREBASE_SERVICE_ACCOUNT` on the server (service-account JSON, raw or base64) and the `GOOGLE_SERVICES_JSON` repository secret for the APK build. The app asks for permission once after sign-in; tokens are stored in `push_devices` (`POST/DELETE /api/push/device`). Without the secret the APK is built exactly as before.
+- Setup steps for the owner: [`docs/NOTIFICATIONS_SETUP.md`](docs/NOTIFICATIONS_SETUP.md).
 
-1. **Email** — requires `RESEND_API_KEY` + `RESEND_FROM_EMAIL` (match expiry + new match)
-2. **Web Push** — requires `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, and user push subscriptions
-
-New matches enqueue immediate `new_match` notifications for both users when a mutual like occurs (production DB).
-
-Without these env vars, the cron still runs but skips unconfigured channels (logged, not fatal). Demo mode without keys is a no-op.
+**Scheduled** (`/api/v1/cron/notify`): match / profile expiry reminders by web push and email (`RESEND_API_KEY` + `RESEND_FROM_EMAIL`). Without keys the channels are skipped (logged, not fatal).
 
 ## Moderation
 

@@ -14,6 +14,8 @@ const subscriptionSchema = z.object({
     p256dh: z.string().min(1),
     auth: z.string().min(1),
   }),
+  /** UI language, used for the push texts. */
+  locale: z.string().max(10).optional(),
 })
 
 export async function OPTIONS(request: Request) {
@@ -46,7 +48,12 @@ export async function POST(request: Request) {
     return withCors(request, jsonFromZodError(parsed.error))
   }
 
-  const ok = await savePushSubscription(session.sub, parsed.data)
+  const { locale, ...subscription } = parsed.data
+  const ok = await savePushSubscription(session.sub, subscription)
+  if (ok && locale) {
+    const { savePushLocale } = await import("@/server/push/devices")
+    await savePushLocale(session.sub, locale)
+  }
   if (!ok) {
     return withCors(request, jsonError(500, { error: "internal_error", message: "Could not save subscription" }))
   }
