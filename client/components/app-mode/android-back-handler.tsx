@@ -2,18 +2,7 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-
-type BackButtonEvent = { canGoBack: boolean }
-type CapacitorAppPlugin = {
-  addListener: (event: "backButton", cb: (e: BackButtonEvent) => void) => Promise<{ remove: () => Promise<void> }> | { remove: () => Promise<void> }
-  minimizeApp?: () => Promise<void>
-  exitApp?: () => Promise<void>
-}
-type CapacitorGlobal = {
-  isNativePlatform?: () => boolean
-  getPlatform?: () => string
-  Plugins?: { App?: CapacitorAppPlugin }
-}
+import { addNativeListener, callNative, nativeBridge } from "@/client/lib/capacitor-bridge"
 
 /** A dialog, sheet or menu that is open and visible right now. */
 function openOverlay(): HTMLElement | null {
@@ -28,11 +17,7 @@ function openOverlay(): HTMLElement | null {
 
 function closeOverlay(el: HTMLElement): void {
   // Our own sheets close when their backdrop is tapped.
-  if (el.classList.contains("bd-sheet-backdrop")) {
-    el.click()
-    return
-  }
-  const backdrop = el.closest<HTMLElement>(".bd-sheet-backdrop")
+  const backdrop = el.classList.contains("bd-sheet-backdrop") ? el : el.closest<HTMLElement>(".bd-sheet-backdrop")
   if (backdrop) {
     backdrop.click()
     return
@@ -46,21 +31,17 @@ function closeOverlay(el: HTMLElement): void {
 /**
  * Android app (Capacitor shell): the system Back button / back swipe.
  * Without a listener Capacitor closes the app as soon as the page has no history, which is what
- * users hit from most screens. Order: close an open dialog → go back in history → return to the
- * feed → minimise the app on the feed (never kill it).
+ * users hit from most screens. With a "backButton" listener registered, Capacitor's App plugin
+ * leaves Back to us. Order: close an open dialog → go back in history → return to the feed →
+ * minimise the app on the feed (never kill it).
  */
 export function AndroidBackHandler() {
   const router = useRouter()
 
   useEffect(() => {
-    const cap = (window as unknown as { Capacitor?: CapacitorGlobal }).Capacitor
-    const app = cap?.Plugins?.App
-    const native = cap?.isNativePlatform?.() ?? cap?.getPlatform?.() === "android"
-    if (!native || !app?.addListener) return
-
-    let removed = false
-    let remove: (() => Promise<void>) | null = null
-    const result = app.addListener("backButton", ({ canGoBack }) => {
+    if (!nativeBridge()) return
+    const listener = addNativeListener("App", "backButton", (data) => {
+      const canGoBack = Boolean((data as { canGoBack?: boolean } | null)?.canGoBack)
       const overlay = openOverlay()
       if (overlay) {
         closeOverlay(overlay)
@@ -70,20 +51,16 @@ export function AndroidBackHandler() {
         window.history.back()
         return
       }
-      const atFeed = window.location.pathname === "/app" && !window.location.search
-      if (!atFeed && window.location.pathname !== "/" && window.location.pathname !== "/welcome") {
+      const path = window.location.pathname
+      const atFeed = path === "/app" && !window.location.search
+      if (!atFeed && path !== "/" && path !== "/welcome" && path !== "/login") {
         router.replace("/app")
         return
       }
-      if (app.minimizeApp) void app.minimizeApp()
-    })
-    void Promise.resolve(result).then((handle) => {
-      if (removed) void handle.remove()
-      else remove = handle.remove
+      void callNative("App", "minimizeApp").catch(() => null)
     })
     return () => {
-      removed = true
-      if (remove) void remove()
+      void listener?.remove()
     }
   }, [router])
 
