@@ -1,6 +1,8 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
+import { getVapidPublicKeyClient } from "@/client/lib/push-subscribe-client"
 import {
   getPushEnabled,
   isPushSupported,
@@ -16,7 +18,10 @@ type PushPromptBannerProps = {
 /** Minimal push permission prompt — shown after first match when VAPID is configured. */
 export function PushPromptBanner({ className, onDismiss }: PushPromptBannerProps) {
   const { t } = useI18n()
-  const vapidConfigured = Boolean(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY)
+  const [vapidConfigured, setVapidConfigured] = useState(Boolean(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY))
+  useEffect(() => {
+    void getVapidPublicKeyClient().then((k) => setVapidConfigured(Boolean(k)))
+  }, [])
   const supported = isPushSupported() && vapidConfigured
 
   const { enablePush } = usePushSubscription(false)

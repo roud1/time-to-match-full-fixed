@@ -7,12 +7,11 @@ import {
   requestPushPermission,
 } from "@/client/lib/push-notifications"
 import {
+  getVapidPublicKeyClient,
   postPushSubscription,
   subscriptionToJson,
   urlBase64ToUint8Array,
 } from "@/client/lib/push-subscribe-client"
-
-const VAPID_PUBLIC = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
 
 /**
  * Registers SW, requests permission when enabled, and syncs subscription to the server.
@@ -23,8 +22,10 @@ export function usePushSubscription(enabled: boolean) {
   const syncSubscription = useCallback(async (opts?: { force?: boolean }) => {
     const force = opts?.force === true
     if (!force && !enabled) return
-    if (!isPushSupported() || !VAPID_PUBLIC || syncing.current) return
+    if (!isPushSupported() || syncing.current) return
     if (Notification.permission !== "granted") return
+    const vapidPublic = await getVapidPublicKeyClient()
+    if (!vapidPublic) return
 
     syncing.current = true
     try {
@@ -35,7 +36,7 @@ export function usePushSubscription(enabled: boolean) {
       if (!sub) {
         sub = await reg.pushManager.subscribe({
           userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC),
+          applicationServerKey: urlBase64ToUint8Array(vapidPublic),
         })
       }
 
