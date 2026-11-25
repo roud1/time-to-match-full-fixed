@@ -472,4 +472,67 @@ test.describe("Blind Date @db", () => {
       await stranger.request.dispose()
     }
   })
+
+  test("connection report: local without consent, AI only with both consents, filtered and cached", async () => {
+    const a = await newUser("bd-a", "female", "men")
+    const b = await newUser("bd-b", "male", "women")
+    const c = await newUser("bd-a", "female", "men")
+    const d = await newUser("bd-b", "male", "women")
+    try {
+      // ── Pair 1: nobody consented to AI ──
+      await a.request.post("/api/blind-date/queue", { data: { lang: "en" } })
+      const { roomId } = await (await b.request.post("/api/blind-date/queue", { data: { lang: "en" } })).json()
+      const insights = (ctx: typeof a, id: string) => ctx.request.get(`/api/blind-date/rooms/${id}/insights?lang=en`)
+      expect((await insights(a, roomId)).status()).toBe(409) // not ready during the date
+      for (let i = 0; i < 3; i++) {
+        await a.request.post(`/api/blind-date/rooms/${roomId}/messages`, { data: { body: `Secret detail ${i} from A` } })
+        await b.request.post(`/api/blind-date/rooms/${roomId}/messages`, { data: { body: `Reply ${i} from B` } })
+      }
+      const game = await (await a.request.post(`/api/blind-date/rooms/${roomId}/games`, { data: { game: "perfect_date" } })).json()
+      for (let r = 0; r < 4; r++) {
+        await a.request.post(`/api/blind-date/rooms/${roomId}/games/answer`, { data: { sessionId: game.game.id, round: r, answer: { choice: 0 } } })
+        await b.request.post(`/api/blind-date/rooms/${roomId}/games/answer`, { data: { sessionId: game.game.id, round: r, answer: { choice: r < 2 ? 0 : 1 } } })
+      }
+      await endDateNow(roomId)
+      const local = await (await insights(a, roomId)).json()
+      expect(local).toMatchObject({ source: "local", aiStatus: "no_consent", myAiConsent: false, ai: null, messages: { mine: 3, theirs: 3 } })
+      expect(local.sameAnswers).toEqual([
+        { prompt: "pd1", option: 0 },
+        { prompt: "pd2", option: 0 },
+      ])
+      expect(local.starters).toHaveLength(3)
+      expect(JSON.stringify(local)).not.toContain("Secret detail") // the local report never quotes messages
+      const usage1 = await withDb((sql) => sql`SELECT count(*)::int AS n FROM ai_usage WHERE user_id IN (${a.user.id}, ${b.user.id})`)
+      expect(usage1[0].n).toBe(0) // AI was never called
+      // Outsiders cannot read it.
+      expect((await insights(c, roomId)).status()).toBe(404)
+
+      // ── Pair 2: both consented ──
+      await withDb((sql) => sql`UPDATE users SET profile = profile || '{"aiInsightsConsent": true}'::jsonb WHERE id IN (${c.user.id}, ${d.user.id})`)
+      await c.request.post("/api/blind-date/queue", { data: { lang: "en" } })
+      const room2 = (await (await d.request.post("/api/blind-date/queue", { data: { lang: "en" } })).json()).roomId
+      expect(room2).toBeTruthy()
+      for (let i = 0; i < 3; i++) {
+        await c.request.post(`/api/blind-date/rooms/${room2}/messages`, { data: { body: `Hello ${i}` } })
+        await d.request.post(`/api/blind-date/rooms/${room2}/messages`, { data: { body: `Hi ${i}` } })
+      }
+      await endDateNow(room2)
+      const res = await (await insights(c, room2)).json()
+      if (res.aiStatus === "unavailable") {
+        test.info().annotations.push({ type: "note", description: "AI_TEST_PROVIDER is not enabled on the server; AI path not checked" })
+      } else {
+        expect(res).toMatchObject({ source: "ai", aiStatus: "ok", myAiConsent: true })
+        expect(res.ai.summary).toBe("Test summary (6 lines).") // the provider received the 6 messages
+        expect(res.ai.themes).toEqual(["travel", "books"]) // "40% compatible" removed
+        expect(res.ai.starters).toEqual(["What was the best trip you ever took?"]) // the "diagnosis" removed
+        // Cached: same report again, one AI call recorded.
+        const again = await (await insights(c, room2)).json()
+        expect(again.createdAt).toBe(res.createdAt)
+        const usage2 = await withDb((sql) => sql`SELECT count(*)::int AS n, max(provider) AS p FROM ai_usage WHERE user_id = ${c.user.id}`)
+        expect(usage2[0]).toMatchObject({ n: 1, p: "test" })
+      }
+    } finally {
+      for (const u of [a, b, c, d]) await u.request.dispose()
+    }
+  })
 })

@@ -25,6 +25,7 @@ import { useI18n, type TranslationKey } from "@/client/lib/i18n"
 import { interestLabelBySlug } from "@/client/lib/interest-labels"
 import { blindDateApi, type BlindRoom, type BlindState } from "@/client/lib/blind-date-client"
 import { BlindGames } from "@/client/components/blind-date/blind-date-games"
+import { BlindReport } from "@/client/components/blind-date/blind-date-report"
 
 type View = "loading" | "intro" | "searching" | "room"
 
@@ -364,7 +365,7 @@ function BlindRoomView(props: {
   const { room, now, onRoom, setError } = props
   const [draft, setDraft] = useState("")
   const [sending, setSending] = useState(false)
-  const [sheet, setSheet] = useState<null | "menu" | "leave" | "report" | "photo">(null)
+  const [sheet, setSheet] = useState<null | "menu" | "leave" | "report" | "photo" | "insights">(null)
   const listRef = useRef<HTMLDivElement>(null)
   const peerName = room.peer.name
   const [tab, setTab] = useState<"chat" | "games">("chat")
@@ -564,6 +565,10 @@ function BlindRoomView(props: {
           </form>
         ) : (
           <div className="bd-decide">
+            <button type="button" className="bd-report-btn" onClick={() => setSheet("insights")}>
+              <Sparkles aria-hidden />
+              {t("bdReportOpen")}
+            </button>
             {room.me.decision ? (
               <p className="bd-decide__wait">{fill(t("bdDecidedWaiting"), { name: peerName })}</p>
             ) : (
@@ -615,6 +620,7 @@ function BlindRoomView(props: {
                 </button>
               </>
             )}
+            {sheet === "insights" && <BlindReport roomId={room.id} peerName={peerName} onClose={() => setSheet(null)} />}
             {sheet === "photo" && (
               <figure className="bd-photo">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -720,6 +726,7 @@ function ReportForm({ roomId, onDone }: { roomId: string; onDone: (reported: boo
 
 function BlindResult({ room, onNewDate }: { room: BlindRoom; onNewDate: () => void }) {
   const { t } = useI18n()
+  const [showReport, setShowReport] = useState(false)
   const outcome = room.outcome!
   const name = room.peer.name
   let title: TranslationKey
@@ -765,6 +772,12 @@ function BlindResult({ room, onNewDate }: { room: BlindRoom; onNewDate: () => vo
               {t("bdOpenChats")}
             </Link>
           )}
+          {outcome.reason !== "reported" && (
+            <button type="button" className="bd-btn bd-btn--ghost" onClick={() => setShowReport(true)}>
+              <Sparkles aria-hidden />
+              {t("bdReportOpen")}
+            </button>
+          )}
           <button type="button" className={`bd-btn ${matched ? "bd-btn--ghost" : "bd-btn--primary"}`} onClick={onNewDate}>
             <Sparkles aria-hidden />
             {t("bdNewDate")}
@@ -774,6 +787,13 @@ function BlindResult({ room, onNewDate }: { room: BlindRoom; onNewDate: () => vo
           </Link>
         </div>
       </section>
+      {showReport && (
+        <div className="bd-sheet-backdrop" onClick={() => setShowReport(false)}>
+          <div className="bd-sheet" role="dialog" aria-modal onClick={(e) => e.stopPropagation()}>
+            <BlindReport roomId={room.id} peerName={name} onClose={() => setShowReport(false)} />
+          </div>
+        </div>
+      )}
     </main>
   )
 }

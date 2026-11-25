@@ -290,3 +290,30 @@ export async function postGameEnd(request: Request, ctx: Ctx) {
     return internalError(request, "game-end", err)
   }
 }
+
+// ───────────────────────── connection report ─────────────────────────
+
+/**
+ * GET /api/blind-date/rooms/:id/insights?lang=xx — the Connection Report for me (after the date).
+ * Generated once and cached; AI only with consent from both people.
+ */
+export async function getInsights(request: Request, ctx: Ctx) {
+  const g = await guard(request, { name: "insights", max: 10, windowMs: 60_000 })
+  if (!g.ok) return g.response
+  const id = await roomId(ctx)
+  if (!id) return actionError(request, "not_found")
+  const { SUPPORTED_LANGS } = await import("./shared")
+  const langParam = new URL(request.url).searchParams.get("lang") ?? "en"
+  const lang = (SUPPORTED_LANGS as readonly string[]).includes(langParam) ? langParam : "en"
+  try {
+    const { getConnectionReport } = await import("@/server/blind-date/report")
+    const r = await getConnectionReport(id, g.userId, lang)
+    if (!r.ok) {
+      const status = r.code === "not_found" ? 404 : 409
+      return cors(request, jsonError(status, { error: r.code }))
+    }
+    return cors(request, jsonOk(r.report, { headers: { "Cache-Control": "private, no-store" } }))
+  } catch (err) {
+    return internalError(request, "insights", err)
+  }
+}

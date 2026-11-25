@@ -3,6 +3,8 @@ import type { GameKey } from "@/server/blind-date/games/catalog"
 import type { Answer, GameResult, GameView } from "@/server/blind-date/games/engine"
 
 export type { Answer as GameAnswer, GameResult, GameView }
+export type { ConnectionReport } from "@/server/blind-date/report"
+import type { ConnectionReport } from "@/server/blind-date/report"
 
 export type BlindDecision = "continue" | "pass"
 export type BlindPhase = "active" | "deciding" | "closed"
@@ -85,5 +87,6 @@ export const blindDateApi = {
   skipRound: (id: string, sessionId: string, round: number) =>
     call<BlindRoom>(`/api/blind-date/rooms/${id}/games/skip`, post({ sessionId, round })),
   endGame: (id: string, sessionId: string) => call<BlindRoom>(`/api/blind-date/rooms/${id}/games/end`, post({ sessionId })),
+  insights: (id: string, lang: string) => call<ConnectionReport>(`/api/blind-date/rooms/${id}/insights?lang=${lang}`),
   photoUrl: (id: string, stage: number) => `/api/blind-date/rooms/${id}/photo?stage=${stage}`,
 }

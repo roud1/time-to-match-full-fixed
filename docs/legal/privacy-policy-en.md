@@ -36,6 +36,8 @@ process data of minors. If you believe a minor uses Luvia, contact us and we wil
 - likes and passes you give, super likes, matches and their timers, freezes
 - messages you send and receive in chats
 - conversations with Luvia AI (the in-app assistant)
+- blind dates (if you use them): who you were paired with and when, the anonymous messages you exchanged,
+  your answers in the mini-games, your reveal and continue/pass choices, and the date report shown to you
 - blocks and reports you make
 - photo verification requests (selfie and gesture), if you use verification
 - subscription status, if you buy Premium (payment details are handled by the payment provider — we do not
@@ -66,7 +68,8 @@ deleting your account.
 | Showing people nearby and distances | location | Consent (Art. 6(1)(a)) — you can turn it off |
 | Ranking the feed and match suggestions | usage data, scores | Legitimate interest in a useful feed (Art. 6(1)(f)) |
 | Luvia AI assistant | messages you send to Luvia AI | Consent (Art. 6(1)(a)) — you choose to write to it |
-| AI connection tips in chats | the chat transcript of a match | Consent of **both** people (Art. 6(1)(a)) — Settings → Privacy → "AI tips in chats", off by default; without it tips are computed on our server only |
+| AI connection tips in chats and blind date reports | the chat transcript of a match or of a blind date (names replaced by "Me" / "Them") | Consent of **both** people (Art. 6(1)(a)) — Settings → Privacy → "AI tips in chats and dates", off by default; without it tips and reports are computed on our server only, from facts such as message counts and game answers |
+| Blind dates: pairing, 10-minute anonymous chat, mini-games, progressive photo reveal | profile data used for matching (age, gender and who you look for, language, distance, interests), messages and game answers in the date | Contract (Art. 6(1)(b)); explicit consent for sensitive data (Art. 9(2)(a)). Your photo is shown to the other person only after **both** agreed, and only as a blurred copy rendered by our server until the last stage |
 | Safety: moderation, reports, blocks, fraud and abuse prevention, photo verification | reports, logs, verification selfies | Legitimate interest (Art. 6(1)(f)); legal obligations |
 | Emails about your account (verification, password reset) and push notifications you turned on | email, push subscription | Contract; consent for push |
 | Payments and subscriptions | subscription status | Contract; legal obligations (tax, accounting) |
@@ -117,6 +120,8 @@ significant effect on you. You can see these scores in your data export (section
 - **Matches:** a match lasts 24 hours unless someone writes or uses a freeze. **CHECK** how long chat
   messages of expired matches are kept: [retention period].
 - **Inactive accounts:** [policy — e.g. deleted after 24 months of inactivity, with an email warning first].
+- **Blind dates:** rooms, messages, game answers and date reports are deleted with your account. **CHECK**:
+  retention for dates that did not lead to a match — [period, e.g. 30 days].
 - **Reports and safety records:** up to [12] months after the case is closed, or longer if required by law.
 - **Logs:** up to [30] days.
 - **Payment records:** as long as tax and accounting laws require (usually up to 10 years).

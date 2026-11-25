@@ -1,6 +1,6 @@
 # Luvia — "Feel first. See later." Audit and technical plan
 
-Status of this document: Phases 1–4 done (backend, screens, progressive reveal, games).
+Status of this document: Phases 1–5 done (backend, screens, progressive reveal, games, Connection Report).
 Every later phase updates the "Status" column below.
 
 ## 1. Audit of the current project (November 2026)
@@ -72,7 +72,7 @@ Every state change increments `rooms.version`; clients poll with `since=<version
 | 2 | Blind Date UI: start screen, search/waiting, room (chat, timer, progress), reconnection | **done** (`/app/blind-date`, mask tab in the bottom bar; 9 languages; checked at 320/375/390/430 px) |
 | 3 | Progressive Reveal: server-rendered blurred derivatives (`sharp`), mutual consent UI, animations | **done** for 25/50/75/100 % (`GET /rooms/:id/photo`); chat alone reaches 75 %, 100 % needs a shared game (Phase 4) |
 | 4 | Game engine (registry of game definitions, synchronized moves, stored results) + 6 games + Compatibility Challenges | **done**: `server/blind-date/games/{catalog,engine,service}.ts`; This or That, Mind Reader, Two Truths and a Lie, Without Masks, Our Perfect Date, Spark (15 s rounds), Compatibility Challenge (4 topics); texts in 9 languages |
-| 5 | AI Connection: provider interface (OpenRouter + local), consent, rate limits, cache, cost tracking, Connection Report | planned |
+| 5 | AI Connection: provider interface (OpenRouter + local), consent, rate limits, cache, cost tracking, Connection Report | **done**: `server/ai/provider.ts` (provider interface, OpenRouter, test provider, daily limits, `ai_usage`), `server/blind-date/report.ts` (local report + AI notes with consent of both, validation and filter, cached in `blind_date_connection_reports`) |
 | 6 | Integration: match chat continuation, notifications, history of dates | planned |
 | 7 | Design polish, animations, haptics, all screens on phones and desktop | planned |
 | 8 | Security review, retention, admin metrics, analytics dashboard, full test pass, publishing checklist | planned |
@@ -99,6 +99,13 @@ Phase 4 adds: pure engine tests (`tests/e2e/blind-date-games-engine.spec.ts`: hi
 - New game = an entry in `catalog.ts` + texts in `client/lib/blind-date-games-text.json` (the engine test fails if a text is missing).
 - Results are a game, not a diagnosis: the summary says so in every language.
 
-Not covered yet: AI (Phase 5), load testing.
+### Connection Report (Phase 5)
+- Local part, always and free: minutes, message counts, shared progress, shared interests, same answers in games, game scores, conversation starters built from them. It never reads message content.
+- AI part: only when **both** people turned on "AI tips" (`profile.aiInsightsConsent`, Settings → Privacy) — otherwise the conversation is never sent. The prompt uses "Me" / "Them" instead of names, at most 80 messages of 300 characters. The reply must be JSON (`summary`, `themes`, `starters`), is validated with zod and filtered: anything with percentages, diagnoses or personality labels is removed. Any failure, timeout (20 s) or limit falls back to the local report, with the reason shown.
+- Limits: `AI_DAILY_LIMIT_PER_USER` (5) and `AI_DAILY_LIMIT_GLOBAL` (500) per 24 h; every call (also failed ones) is recorded in `ai_usage` without text.
+- Cached once per person and room; included in the GDPR export; deleted with the account.
+- Tests: no consent → local report and zero AI calls; both consents → test provider receives exactly the 6 messages, filtered output, cached, one call recorded; outsiders 404; not available during the date.
+
+Not covered yet: load testing.
 
 Premium hooks (no paywall now): daily free blind-date limit (`BLIND_DATE_FREE_DAILY`, default 10), extended report, extra game packs — checked through `isPremium()`; reveal and the basic date stay free.
