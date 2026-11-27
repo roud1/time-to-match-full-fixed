@@ -18,6 +18,8 @@ export class SuperLikeLimitError extends Error {
 }
 
 async function superLikeDailyLimit(userId: string): Promise<number> {
+  const { isAdminUser } = await import("@/server/auth/admin")
+  if (await isAdminUser(userId)) return 999 // admin accounts: no daily cap
   if (await isVip(userId)) return VIP_SUPER_LIKES_PER_DAY
   if (await isPremium(userId)) return PREMIUM_SUPER_LIKES_PER_DAY
   return 0

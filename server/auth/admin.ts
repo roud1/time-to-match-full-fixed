@@ -39,16 +39,25 @@ function adminEmails(): Set<string> {
  */
 export async function isAdminAccount(): Promise<boolean> {
   const session = await getSessionFromRequest().catch(() => null)
+  return session ? isAdminUser(session.sub) : false
+}
+
+/** Admin check by user id (no request needed): role 'admin' or a verified ADMIN_EMAILS address. */
+export async function isAdminUser(userId: string): Promise<boolean> {
   const db = getDb()
-  if (!session || !db) return false
-  const [u] = await db<{ email: string; role: string; email_verified: boolean }[]>`
-    SELECT email, role, email_verified FROM users WHERE id = ${session.sub}
-  `
-  if (!u) return false
-  if (u.role === "admin") return true
-  if (u.email_verified && adminEmails().has(u.email.trim().toLowerCase())) {
-    await db`UPDATE users SET role = 'admin' WHERE id = ${session.sub}`
-    return true
+  if (!db || !userId) return false
+  try {
+    const [u] = await db<{ email: string; role: string; email_verified: boolean }[]>`
+      SELECT email, role, email_verified FROM users WHERE id = ${userId}
+    `
+    if (!u) return false
+    if (u.role === "admin") return true
+    if (u.email_verified && adminEmails().has(u.email.trim().toLowerCase())) {
+      await db`UPDATE users SET role = 'admin' WHERE id = ${userId}`
+      return true
+    }
+  } catch {
+    /* treat as not admin */
   }
   return false
 }

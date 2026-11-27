@@ -30,12 +30,19 @@ test.describe("Admin account @db", () => {
     try {
       await markEmailVerified(user.email)
       expect(await (await ctx.get("/api/admin/session")).json()).toEqual({ admin: false })
+      const before = await (await ctx.get("/api/subscription")).json()
+      expect(before.subscription.isPremium).toBe(false)
       expect((await ctx.get("/api/admin/reports")).ok()).toBe(false)
 
       await withDb((sql) => sql`UPDATE users SET role = 'admin' WHERE id = ${user.id}`)
       expect(await (await ctx.get("/api/admin/session")).json()).toEqual({ admin: true })
       const reports = await ctx.get("/api/admin/reports")
       expect(reports.status()).toBe(200)
+
+      // Every paid feature, without a subscription: VIP tier and no like limit.
+      const sub = await (await ctx.get("/api/subscription")).json()
+      expect(sub.subscription).toMatchObject({ isPremium: true, tier: "vip" })
+      expect(sub.limits.unlimited).toBe(true)
     } finally {
       await withDb((sql) => sql`DELETE FROM users WHERE id = ${user.id}`)
       await ctx.dispose()

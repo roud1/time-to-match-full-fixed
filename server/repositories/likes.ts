@@ -658,6 +658,14 @@ export async function freezeMatchForUser(
   if (!wallet) return { ok: false, code: "not_found" }
 
   const peerId = like.to_user
+  // Admin accounts: freezes are always free.
+  const { isAdminUser } = await import("@/server/auth/admin")
+  if (await isAdminUser(userId)) {
+    await extendMatchExpiry(db, userId, peerId, !like.is_frozen)
+    const frozen = await findMatchByIdForUser(matchId, userId)
+    if (!frozen) return { ok: false, code: "not_found" }
+    return { ok: true, match: rowToMatch(frozen, frozen.peer_name), usedPaid: false }
+  }
   const freeAvailable = !like.is_frozen && hasFreeFreezeAvailable(wallet.last_freeze_at)
 
   if (freeAvailable) {

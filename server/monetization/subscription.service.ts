@@ -16,6 +16,19 @@ function isTierPremium(tier: SubscriptionTier): boolean {
 
 export async function getSubscription(userId: string): Promise<UserSubscription> {
   const row = await getUserSubscription(userId)
+  // Admin accounts have every paid feature, without a subscription.
+  const { isAdminUser } = await import("@/server/auth/admin")
+  if (await isAdminUser(userId)) {
+    return {
+      tier: "vip",
+      status: "active" as SubscriptionStatus,
+      isPremium: true,
+      stripeCustomerId: row?.stripe_customer_id ?? null,
+      stripeSubscriptionId: row?.stripe_subscription_id ?? null,
+      currentPeriodEnd: null,
+      premiumUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    }
+  }
   const premiumUntil = (await getPremiumUntil(userId)) ?? row?.current_period_end ?? null
   const tier = normalizeTier(row?.plan)
   const status = (row?.status ?? "none") as SubscriptionStatus
