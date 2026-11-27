@@ -781,3 +781,27 @@ html[data-lv] .ttm-chat-room-header__expiry-row .ttm-match-expiry-bar--header bu
     font-size: 1rem;
   }
 }
+
+/* ── Performance: decorative ambient layers ───────────────────────────────────
+   The older design kept ~25 endless background animations running (particles, "waves",
+   drifting orbs, veils) — most at 0 size or 5–15 % opacity, invisible in the Luvia design,
+   yet recalculated every frame. On phones that cost smooth scrolling and battery.
+   Luvia drops the invisible layers and keeps the three background glows still. */
+html[data-lv] .eo-network-layer,
+html[data-lv] .ec-silence-field,
+html[data-lv] .ec-tension-veil,
+html[data-lv] .ec-realism-veil,
+html[data-lv] .world-live-field,
+html[data-lv] .p16-world-ambient,
+html[data-lv] .p17-time-ambient,
+html[data-lv] .eco-world-field,
+html[data-lv] .er-soul-field,
+html[data-lv] .er-weather-layer,
+html[data-lv] .discover-ambient {
+  display: none !important;
+}
+
+html[data-lv] .ttm-dating-parallax__blob,
+html[data-lv] .ttm-dating-parallax__blob * {
+  animation: none !important;
+}
