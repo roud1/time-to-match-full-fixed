@@ -1997,5 +1997,7 @@
   "lvSetAppearance": "Darstellung",
   "lvThemeLight": "Hell",
   "lvThemeDark": "Dunkel",
-  "lvThemeSystem": "System"
+  "lvThemeSystem": "System",
+  "bdSearchNobody": "Gerade sucht sonst niemand. Bleib auf diesem Bildschirm – sobald jemand Passendes sucht, wirst du verbunden.",
+  "bdSearchOthersNoFit": "Gerade suchen {n} weitere Personen, aber eure Einstellungen passen nicht zusammen. Prüfe im Profil, wen du suchst und den Altersbereich, und schalte „Ich kann auch auf Englisch schreiben“ ein."
 }

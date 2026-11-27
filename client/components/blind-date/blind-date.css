@@ -1410,3 +1410,9 @@
   font-weight: 600;
   text-decoration: underline;
 }
+
+.bd-search__hint {
+  max-width: 34ch;
+  line-height: 1.45;
+  margin-bottom: 12px;
+}

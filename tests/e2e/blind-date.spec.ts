@@ -544,4 +544,32 @@ test.describe("Blind Date @db", () => {
       for (const u of [a, b, c, d]) await u.request.dispose()
     }
   })
+
+  test("people who already matched in the feed and live far apart are still paired", async () => {
+    const a = await newUser("bd-a", "female", "men")
+    const b = await newUser("bd-b", "male", "women")
+    const c = await newUser("bd-a", "female", "women") // looks for women: cannot fit b
+    try {
+      // Mutual like in the feed (= an existing match) and 1,200 km apart with a 50 km radius.
+      await a.request.post("/api/discover/like", { data: { targetUserId: b.user.id } })
+      await b.request.post("/api/discover/like", { data: { targetUserId: a.user.id } })
+      await withDb(
+        (sql) => sql`UPDATE users SET latitude = CASE WHEN id = ${a.user.id} THEN 50.45 ELSE 52.52 END,
+          longitude = CASE WHEN id = ${a.user.id} THEN 30.52 ELSE 13.40 END, max_distance = 50
+          WHERE id IN (${a.user.id}, ${b.user.id})`
+      )
+      // Someone incompatible is searching: the waiting count tells the user people are there.
+      await c.request.post("/api/blind-date/queue", { data: { lang: "en" } })
+      const waiting = await (await b.request.post("/api/blind-date/queue", { data: { lang: "en" } })).json()
+      expect(waiting).toMatchObject({ state: "searching", waitingNow: 1 })
+      await c.request.delete("/api/blind-date/queue")
+
+      const joinA = await (await a.request.post("/api/blind-date/queue", { data: { lang: "en" } })).json()
+      expect(joinA.state).toBe("matched")
+    } finally {
+      await a.request.dispose()
+      await b.request.dispose()
+      await c.request.dispose()
+    }
+  })
 })

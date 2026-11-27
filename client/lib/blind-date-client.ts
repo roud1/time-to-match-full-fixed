@@ -68,7 +68,10 @@ const post = (body?: unknown): RequestInit => ({ method: "POST", body: body === 
 export const blindDateApi = {
   state: () => call<BlindState>("/api/blind-date/state"),
   join: (lang: string, languages: string[]) =>
-    call<{ state: "matched"; roomId: string } | { state: "searching"; since: string }>("/api/blind-date/queue", post({ lang, languages })),
+    call<{ state: "matched"; roomId: string } | { state: "searching"; since: string; waitingNow: number }>(
+      "/api/blind-date/queue",
+      post({ lang, languages })
+    ),
   cancel: () => call<{ state: "idle" }>("/api/blind-date/queue", { method: "DELETE" }),
   room: (id: string, since?: number) =>
     call<BlindRoom | { unchanged: true; version: number; serverNow: string }>(
