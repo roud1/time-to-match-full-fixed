@@ -15,5 +15,12 @@ export function useChatScrollEnd(messageCount: number, threadId: number | null) 
     scrollToEnd("auto")
   }, [messageCount, threadId, scrollToEnd])
 
+  // The keyboard opened (iPhone): keep the newest message right above the composer.
+  useEffect(() => {
+    const onKb = () => scrollToEnd("auto")
+    window.addEventListener("ttm-keyboard-open", onKb)
+    return () => window.removeEventListener("ttm-keyboard-open", onKb)
+  }, [scrollToEnd])
+
   return { ref, scrollToEnd }
 }

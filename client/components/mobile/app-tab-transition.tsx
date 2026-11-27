@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import type { AppTab } from "@/client/components/app/bottom-nav"
 import { tabCrossfade, springSoft, transitionCinematic } from "@/client/lib/motion-system"
+import { useKeyboardViewport } from "@/client/hooks/use-keyboard-viewport"
 
 type AppTabTransitionProps = {
   tab: AppTab
@@ -40,6 +41,7 @@ export function ChatThreadTransition({
   children: React.ReactNode
 }) {
   const reduce = useReducedMotion()
+  useKeyboardViewport(open)
 
   return (
     <AnimatePresence mode="wait">
