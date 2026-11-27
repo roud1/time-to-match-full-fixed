@@ -79,6 +79,15 @@ export function CountdownTimer({
     .replace("{date}", tooltipDate)
     .replace("{time}", tooltipTime)
 
+  // Matches that never expire (admin accounts) show infinity instead of a huge countdown.
+  if (remainingMs > 365 * 24 * 60 * 60 * 1000) {
+    return (
+      <span className={cn("ttm-countdown-timer inline-flex items-center tabular-nums", compact ? "text-[10px]" : "text-xs", className)} role="timer">
+        <span className="ttm-countdown-timer__digits inline-block">∞</span>
+      </span>
+    )
+  }
+
   return (
     <span
       title={tooltip}

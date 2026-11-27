@@ -13,6 +13,7 @@ import { formatChatThreadPreviewTime } from "@/client/lib/format-chat-time"
 import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
 import { VerifiedBadge } from "@/client/components/ui/verified-badge"
 import { usePremiumUpgrade } from "@/client/components/premium/premium-upgrade-context"
+import { ExpiredMatches } from "@/client/components/chat/expired-matches"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -238,6 +239,8 @@ export function AppChatsList({
           )}
         </ul>
       )}
+
+      <ExpiredMatches />
 
       <button type="button" className="ttm-app-chats__premium" onClick={() => openUpgrade("likedYou")}>
         <span className="ttm-app-chats__crown" aria-hidden>

@@ -1998,6 +1998,13 @@
   "lvThemeLight": "Hell",
   "lvThemeDark": "Dunkel",
   "lvThemeSystem": "System",
+  "lvSetAdmin": "Admin-Bereich",
+  "lvSetAdminHint": "Meldungen und Fotoprüfung",
+  "expiredTitle": "Abgelaufene Matches",
+  "expiredHint": "Die Zeit ist abgelaufen, aber ihr könnt das Gespräch für weitere 24 Stunden zurückholen. Die Nachrichten bleiben erhalten.",
+  "expiredAt": "Abgelaufen {time}",
+  "expiredRestore": "Zurückholen",
+  "expiredRestoreFailed": "Das Match konnte nicht zurückgeholt werden. Vielleicht wurde das Konto gelöscht.",
   "bdSearchNobody": "Gerade sucht sonst niemand. Bleib auf diesem Bildschirm – sobald jemand Passendes sucht, wirst du verbunden.",
   "bdSearchOthersNoFit": "Gerade suchen {n} weitere Personen, aber eure Einstellungen passen nicht zusammen. Prüfe im Profil, wen du suchst und den Altersbereich, und schalte „Ich kann auch auf Englisch schreiben“ ein."
 }

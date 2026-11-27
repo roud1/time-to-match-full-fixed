@@ -4,7 +4,7 @@
  * person (who liked you is a Premium feature in the app).
  */
 
-export type PushKind = "like" | "match" | "message"
+export type PushKind = "like" | "match" | "message" | "restored"
 
 const LANGS = ["ru", "uk", "en", "de", "es", "pl", "fr", "it", "tr"] as const
 export type PushLang = (typeof LANGS)[number]
@@ -14,46 +14,55 @@ const TEXT: Record<PushLang, Record<PushKind, { title: string; body: string }>> 
     like: { title: "Вам поставили лайк ❤️", body: "Кто-то заинтересовался вами. Загляните в Luvia." },
     match: { title: "Новый мэтч с {name}!", body: "У вас 24 часа, чтобы начать разговор." },
     message: { title: "{name}", body: "Новое сообщение" },
+    restored: { title: "{name} вернул(а) ваш мэтч", body: "У вас снова 24 часа — продолжите разговор." },
   },
   uk: {
     like: { title: "Вам поставили лайк ❤️", body: "Хтось зацікавився вами. Загляньте в Luvia." },
     match: { title: "Новий метч з {name}!", body: "У вас 24 години, щоб почати розмову." },
     message: { title: "{name}", body: "Нове повідомлення" },
+    restored: { title: "{name} повернув(ла) ваш метч", body: "У вас знову 24 години — продовжте розмову." },
   },
   en: {
     like: { title: "Someone liked you ❤️", body: "Someone is interested in you. Open Luvia to see more." },
     match: { title: "New match with {name}!", body: "You have 24 hours to start the conversation." },
     message: { title: "{name}", body: "New message" },
+    restored: { title: "{name} brought your match back", body: "You have 24 hours again — continue the conversation." },
   },
   de: {
     like: { title: "Jemand mag dich ❤️", body: "Jemand interessiert sich für dich. Schau in Luvia vorbei." },
     match: { title: "Neues Match mit {name}!", body: "Ihr habt 24 Stunden, um das Gespräch zu beginnen." },
     message: { title: "{name}", body: "Neue Nachricht" },
+    restored: { title: "{name} hat euer Match zurückgeholt", body: "Ihr habt wieder 24 Stunden – setzt das Gespräch fort." },
   },
   es: {
     like: { title: "Le gustas a alguien ❤️", body: "Alguien está interesado en ti. Abre Luvia." },
     match: { title: "¡Nuevo match con {name}!", body: "Tenéis 24 horas para empezar a hablar." },
     message: { title: "{name}", body: "Nuevo mensaje" },
+    restored: { title: "{name} ha recuperado vuestro match", body: "Volvéis a tener 24 horas: seguid hablando." },
   },
   pl: {
     like: { title: "Ktoś Cię polubił ❤️", body: "Ktoś się Tobą zainteresował. Zajrzyj do Luvia." },
     match: { title: "Nowa para z {name}!", body: "Macie 24 godziny, żeby zacząć rozmowę." },
     message: { title: "{name}", body: "Nowa wiadomość" },
+    restored: { title: "{name} przywrócił(a) waszą parę", body: "Znów macie 24 godziny — kontynuujcie rozmowę." },
   },
   fr: {
     like: { title: "Quelqu'un vous a liké ❤️", body: "Quelqu'un s'intéresse à vous. Ouvrez Luvia." },
     match: { title: "Nouveau match avec {name} !", body: "Vous avez 24 heures pour lancer la conversation." },
     message: { title: "{name}", body: "Nouveau message" },
+    restored: { title: "{name} a ramené votre match", body: "Vous avez de nouveau 24 heures : reprenez la conversation." },
   },
   it: {
     like: { title: "Piaci a qualcuno ❤️", body: "Qualcuno è interessato a te. Apri Luvia." },
     match: { title: "Nuovo match con {name}!", body: "Avete 24 ore per iniziare a parlare." },
     message: { title: "{name}", body: "Nuovo messaggio" },
+    restored: { title: "{name} ha ripristinato il vostro match", body: "Avete di nuovo 24 ore: continuate a parlare." },
   },
   tr: {
     like: { title: "Biri seni beğendi ❤️", body: "Biri seninle ilgileniyor. Luvia'yı aç." },
     match: { title: "{name} ile yeni eşleşme!", body: "Sohbete başlamak için 24 saatiniz var." },
     message: { title: "{name}", body: "Yeni mesaj" },
+    restored: { title: "{name} eşleşmenizi geri getirdi", body: "Yine 24 saatiniz var — sohbete devam edin." },
   },
 }
 

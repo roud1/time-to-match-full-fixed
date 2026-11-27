@@ -516,3 +516,97 @@ html[data-lv] .ttm-app-chats__row.is-active {
   font-size: 0.8rem;
   color: var(--lv-text-2, #b9afc5);
 }
+
+/* Chats → expired matches with "Restore". */
+.ttm-app-expired {
+  margin: 18px 0 8px;
+  padding: 14px;
+  border-radius: 20px;
+  background: var(--lv-surface, #171222);
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+}
+.ttm-app-expired__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--lv-text, #faf7ff);
+}
+.ttm-app-expired__hint {
+  margin: 4px 0 10px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--lv-text-2, #b9afc5);
+}
+.ttm-app-expired__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.ttm-app-expired__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ttm-app-expired__avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--lv-surface-raised, #241b31);
+  color: var(--lv-text-2, #b9afc5);
+  font-weight: 700;
+  filter: grayscale(0.6);
+}
+.ttm-app-expired__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ttm-app-expired__text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+}
+.ttm-app-expired__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--lv-text, #faf7ff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ttm-app-expired__meta {
+  font-size: 12px;
+  color: var(--lv-text-3, #8d82a0);
+}
+.ttm-app-expired__btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+  font-size: 13px;
+  font-weight: 600;
+}
+.ttm-app-expired__btn svg {
+  width: 15px;
+  height: 15px;
+}
+.ttm-app-expired__btn:disabled {
+  opacity: 0.6;
+}
+.ttm-app-expired__error {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: #ff8fb8;
+}

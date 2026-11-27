@@ -1998,6 +1998,13 @@
   "lvThemeLight": "Light",
   "lvThemeDark": "Dark",
   "lvThemeSystem": "System",
+  "lvSetAdmin": "Admin panel",
+  "lvSetAdminHint": "Reports and photo verification",
+  "expiredTitle": "Expired matches",
+  "expiredHint": "Time ran out, but you can bring the conversation back for another 24 hours. Your messages are kept.",
+  "expiredAt": "Expired {time}",
+  "expiredRestore": "Restore",
+  "expiredRestoreFailed": "Could not restore this match. The other person may have deleted their account.",
   "bdSearchNobody": "Nobody else is searching right now. Stay on this screen — you'll be connected as soon as someone who fits starts searching.",
   "bdSearchOthersNoFit": "{n} other people are searching, but your settings don't fit each other. Check who you're looking for and your age range in your profile, and turn on \"I can also chat in English\"."
 }

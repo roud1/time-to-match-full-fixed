@@ -108,7 +108,10 @@ export async function aiBudgetAvailable(userId: string, feature: string): Promis
     FROM ai_usage
     WHERE feature = ${feature} AND created_at > now() - interval '24 hours' AND NOT cached
   `
-  return row.mine < perUser && row.all < global
+  if (row.all >= global) return false // app-wide cost cap applies to everyone
+  if (row.mine < perUser) return true
+  const { isAdminUser } = await import("@/server/auth/admin")
+  return isAdminUser(userId) // admin accounts: no per-user daily limit
 }
 
 export async function recordAiUsage(input: {

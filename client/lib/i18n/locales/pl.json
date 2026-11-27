@@ -1998,6 +1998,13 @@
   "lvThemeLight": "Jasny",
   "lvThemeDark": "Ciemny",
   "lvThemeSystem": "Systemowy",
+  "lvSetAdmin": "Panel administratora",
+  "lvSetAdminHint": "Zgłoszenia i weryfikacja zdjęć",
+  "expiredTitle": "Wygasłe pary",
+  "expiredHint": "Czas minął, ale możesz przywrócić rozmowę na kolejne 24 godziny. Wiadomości zostaną zachowane.",
+  "expiredAt": "Wygasła {time}",
+  "expiredRestore": "Przywróć",
+  "expiredRestoreFailed": "Nie udało się przywrócić pary. Możliwe, że druga osoba usunęła konto.",
   "bdSearchNobody": "Teraz nikt inny nie szuka randki. Zostań na tym ekranie — połączymy Cię, gdy ktoś pasujący zacznie szukać.",
   "bdSearchOthersNoFit": "Szuka jeszcze: {n}, ale wasze ustawienia do siebie nie pasują. Sprawdź w profilu, kogo szukasz i przedział wieku, oraz włącz „Mogę też rozmawiać po angielsku”."
 }
