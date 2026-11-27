@@ -610,3 +610,24 @@ html[data-lv] .ttm-app-chats__row.is-active {
   font-size: 12.5px;
   color: #ff8fb8;
 }
+
+/* ── Chat room and the iPhone keyboard / home indicator ─────────────────────── */
+
+/* .ttm-chat-immersive already keeps the home-indicator inset; the composer must not add it again
+   (it did: twice the inset of empty space under the message field). */
+.ttm-chat-immersive .ttm-chat-composer__inner.safe-area-pb {
+  padding-bottom: 0.6rem;
+}
+
+/* Keyboard open: the room fills exactly the visible area (useKeyboardViewport), the composer sits
+   right above the keys and the header stays on screen. The inset is under the keyboard then. */
+html[data-kb] .ttm-chat-immersive {
+  inset: auto 0 auto 0;
+  top: var(--kb-vt, 0px);
+  height: var(--kb-vh, 100%);
+  padding-bottom: 0;
+}
+/* While typing, the conversation gets the space (conversation starters return when the keyboard closes). */
+html[data-kb] .ttm-chat-immersive .ttm-chat-icebreakers {
+  display: none;
+}
