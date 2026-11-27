@@ -336,6 +336,10 @@ html[data-bd-kb] .bd--room .bd-panel,
 html[data-bd-kb] .bd--room .bd-tabs {
   display: none;
 }
+/* The home-indicator inset is under the keyboard then: keep the composer right above the keys. */
+html[data-bd-kb] .bd--room .bd-foot {
+  padding-bottom: 6px;
+}
 
 .bd-room-head {
   display: flex;
