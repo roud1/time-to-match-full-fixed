@@ -1997,5 +1997,7 @@
   "lvSetAppearance": "Appearance",
   "lvThemeLight": "Light",
   "lvThemeDark": "Dark",
-  "lvThemeSystem": "System"
+  "lvThemeSystem": "System",
+  "lvSetAdmin": "Admin panel",
+  "lvSetAdminHint": "Reports and photo verification"
 }

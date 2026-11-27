@@ -13,6 +13,7 @@ import { SettingsBlockedList } from "@/client/components/settings/settings-block
 import { AiInsightsConsent } from "@/client/components/settings/ai-insights-consent"
 import { SettingsSubscriptionCard } from "@/client/components/settings/settings-subscription-card"
 import { AppearanceSettings } from "@/client/components/settings/appearance-settings"
+import { AdminLink } from "@/client/components/settings/admin-link"
 import { pushConnectionSync } from "@/client/lib/connection-sync-client"
 import { clearSession, getAgeFromBirthdate, getUserProfile } from "@/client/lib/user-profile"
 import { getProfilePhotos } from "@/client/lib/profile-photos"
@@ -174,6 +175,7 @@ export default function SettingsPage() {
               </section>
 
               <AppearanceSettings />
+              <AdminLink />
 
               <section className="lv-set__group">
                 {/* GDPR: right of access / data portability */}

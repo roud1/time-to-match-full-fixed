@@ -1997,5 +1997,7 @@
   "lvSetAppearance": "Оформлення",
   "lvThemeLight": "Світла",
   "lvThemeDark": "Темна",
-  "lvThemeSystem": "Як у системі"
+  "lvThemeSystem": "Як у системі",
+  "lvSetAdmin": "Адмін-панель",
+  "lvSetAdminHint": "Скарги та перевірка фото"
 }

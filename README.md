@@ -147,6 +147,7 @@ Settings → Appearance: light, dark (default) or system. Stored per device (`lo
 - **Unmatch** — `POST /api/matches/:id/unmatch` — expire match without blocking (chat safety menu)
 - **Admin** — `GET /api/admin/reports` and `PUT /api/admin/verification/:id` with `x-admin-key` when `ADMIN_API_KEY` is set
 - Reports are stored in the `reports` table for admin review
+- **Admin accounts** — signed-in users with `users.role = 'admin'`, or with a **verified** email listed in `ADMIN_EMAILS` (comma separated; the role is then saved), open `/admin` and the admin API without a key. Settings shows an "Admin panel" row to them.
 - **Admin UI** — open [`/admin`](http://localhost:3000/admin), enter your `ADMIN_API_KEY` (stored in `sessionStorage` for the tab only; never bundled in client code)
 
 ## Blind Date ("Feel first. See later.") — in development

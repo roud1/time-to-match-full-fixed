@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { adminNotConfigured } from "@/server/auth/admin"
+import { adminNotConfigured, isAdminRequestAsync } from "@/server/auth/admin"
 import {
   ADMIN_SESSION_COOKIE,
   adminSessionCookieOptions,
@@ -18,9 +18,14 @@ export async function OPTIONS(request: Request) {
   return withCors(request, new NextResponse(null, { status: 204 }))
 }
 
+/** GET /api/admin/session — { admin } for the current visitor (key cookie or admin account). */
+export async function GET(request: Request) {
+  return withCors(request, jsonOk({ admin: await isAdminRequestAsync(request) }))
+}
+
 /** POST /api/admin/session — validate ADMIN_API_KEY and set HttpOnly admin cookie */
 export async function POST(request: Request) {
-  if (adminNotConfigured()) {
+  if (adminNotConfigured() || !process.env.ADMIN_API_KEY) {
     return withCors(
       request,
       jsonError(503, { error: "admin_not_configured", message: "ADMIN_API_KEY not set" })
