@@ -65,6 +65,7 @@ export function BlindDatePage() {
   const [room, setRoom] = useState<BlindRoom | null>(null)
   const [roomId, setRoomId] = useState<string | null>(null)
   const [searchSince, setSearchSince] = useState<number | null>(null)
+  const [waitingNow, setWaitingNow] = useState<number | null>(null)
   const [alsoEnglish, setAlsoEnglish] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [offline, setOffline] = useState(false)
@@ -126,6 +127,7 @@ export function BlindDatePage() {
       setView("room")
     } else {
       setSearchSince((s) => s ?? Date.parse(data.since))
+      setWaitingNow(data.waitingNow)
       setView("searching")
     }
   }, [locale, languages])
@@ -234,6 +236,11 @@ export function BlindDatePage() {
           <p className="bd-sub">{t("bdSearchingHint")}</p>
           {searchSince !== null && (
             <p className="bd-meta">{fill(t("bdSearchingWaited"), { time: mmss(now - searchSince) })}</p>
+          )}
+          {waitingNow !== null && searchSince !== null && now - searchSince > 15_000 && (
+            <p className="bd-meta bd-search__hint">
+              {waitingNow > 0 ? fill(t("bdSearchOthersNoFit"), { n: waitingNow }) : t("bdSearchNobody")}
+            </p>
           )}
           {offline && <p className="bd-warn">{t("bdConnectionLost")}</p>}
           <button type="button" className="bd-btn bd-btn--ghost" onClick={() => void cancelSearch()}>

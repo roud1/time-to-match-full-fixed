@@ -1997,5 +1997,7 @@
   "lvSetAppearance": "Görünüm",
   "lvThemeLight": "Açık",
   "lvThemeDark": "Koyu",
-  "lvThemeSystem": "Sistem"
+  "lvThemeSystem": "Sistem",
+  "bdSearchNobody": "Şu an başka kimse aramıyor. Bu ekranda kal — uygun biri aramaya başlar başlamaz bağlanacaksın.",
+  "bdSearchOthersNoFit": "Şu an {n} kişi daha arıyor ama ayarlarınız birbirine uymuyor. Profilinde kimi aradığını ve yaş aralığını kontrol et, \"İngilizce de konuşabilirim\" seçeneğini aç."
 }

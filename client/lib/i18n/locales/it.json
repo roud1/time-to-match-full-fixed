@@ -1997,5 +1997,7 @@
   "lvSetAppearance": "Aspetto",
   "lvThemeLight": "Chiaro",
   "lvThemeDark": "Scuro",
-  "lvThemeSystem": "Sistema"
+  "lvThemeSystem": "Sistema",
+  "bdSearchNobody": "In questo momento nessun altro sta cercando. Resta su questa schermata: verrai collegato appena qualcuno compatibile inizierà a cercare.",
+  "bdSearchOthersNoFit": "Stanno cercando altre {n} persone, ma le vostre impostazioni non coincidono. Controlla nel profilo chi cerchi e la fascia d'età, e attiva «Posso parlare anche in inglese»."
 }

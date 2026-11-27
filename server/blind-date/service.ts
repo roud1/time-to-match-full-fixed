@@ -15,7 +15,7 @@ import { blockUserPair, mapReportReasonKey } from "@/server/repositories/moderat
 import {
   DECISION_WINDOW_MS,
   QUEUE_STALE_MS,
-  REMATCH_COOLDOWN_DAYS,
+  rematchCooldownDays,
   ROOM_DURATION_MS,
   ageFrom,
   checkMessage,
@@ -178,18 +178,18 @@ async function pickCandidate(sql: Sql, userId: string): Promise<{ id: string; co
         AND (c.lang = me.lang OR c.languages && me.languages)
         -- safety and history
         AND NOT EXISTS (SELECT 1 FROM user_blocks b WHERE (b.blocker_id = me.id AND b.blocked_id = c.id) OR (b.blocker_id = c.id AND b.blocked_id = me.id))
-        AND NOT EXISTS (SELECT 1 FROM likes l WHERE (l.from_user = me.id AND l.to_user = c.id) OR (l.from_user = c.id AND l.to_user = me.id))
         AND NOT EXISTS (SELECT 1 FROM discover_passes p WHERE (p.from_user = me.id AND p.to_user = c.id) OR (p.from_user = c.id AND p.to_user = me.id))
         AND NOT EXISTS (
           SELECT 1 FROM blind_date_rooms r
           WHERE ((r.user_a = me.id AND r.user_b = c.id) OR (r.user_a = c.id AND r.user_b = me.id))
-            AND r.started_at > now() - (${REMATCH_COOLDOWN_DAYS} || ' days')::interval)
+            AND r.started_at > now() - (${rematchCooldownDays()} || ' days')::interval)
         AND NOT EXISTS (SELECT 1 FROM blind_date_rooms r WHERE (r.user_a = c.id OR r.user_b = c.id) AND r.status <> 'closed')
     )
     SELECT id, common, distance_km
     FROM scored
-    WHERE distance_km IS NULL OR distance_km <= LEAST(my_max, their_max)
-    ORDER BY (common * 10 + CASE WHEN same_purpose THEN 15 ELSE 0 END
+    -- Distance only ranks: people within both search radii come first, everyone else after.
+    ORDER BY (CASE WHEN distance_km IS NULL OR distance_km <= LEAST(my_max, their_max) THEN 100 ELSE 0 END
+              + common * 10 + CASE WHEN same_purpose THEN 15 ELSE 0 END
               - COALESCE(LEAST(distance_km, 100), 50) / 5) DESC, joined_at ASC
     LIMIT 1
   `
@@ -212,7 +212,7 @@ function distanceBucket(km: number | null): string {
 export async function joinOrPoll(
   userId: string,
   opts: { lang: string; languages: string[] }
-): Promise<{ state: "matched"; roomId: string } | { state: "searching"; since: string }> {
+): Promise<{ state: "matched"; roomId: string } | { state: "searching"; since: string; waitingNow: number }> {
   const sql = db()
   const result = await sql.begin(async (tx) => {
     await tx`SELECT pg_advisory_xact_lock(${MATCHMAKING_LOCK})`
@@ -233,7 +233,15 @@ export async function joinOrPoll(
     `
 
     const cand = await pickCandidate(tx as unknown as Sql, userId)
-    if (!cand) return { state: "searching" as const, since: q.joined_at.toISOString() }
+    if (!cand) {
+      // How many other people are searching right now (no identities): tells "nobody is online"
+      // apart from "people are searching but the settings do not fit".
+      const [w] = await tx<{ n: number }[]>`
+        SELECT count(*)::int AS n FROM blind_date_queue
+        WHERE user_id <> ${userId} AND last_seen_at > now() - (${QUEUE_STALE_MS / 1000} || ' seconds')::interval
+      `
+      return { state: "searching" as const, since: q.joined_at.toISOString(), waitingNow: w.n }
+    }
 
     const now = new Date()
     const endsAt = new Date(now.getTime() + ROOM_DURATION_MS)

@@ -8,8 +8,13 @@ export const ROOM_DURATION_MS = 10 * 60 * 1000
 export const DECISION_WINDOW_MS = 2 * 60 * 1000
 /** A queue entry is considered gone if the client stopped polling for this long. */
 export const QUEUE_STALE_MS = 45 * 1000
-/** Pairs that already had a date are not matched again for this long. */
-export const REMATCH_COOLDOWN_DAYS = 30
+/** Pairs that already had a date are not matched again for this long (BLIND_DATE_REMATCH_DAYS). */
+export const DEFAULT_REMATCH_COOLDOWN_DAYS = 1
+
+export function rematchCooldownDays(): number {
+  const n = Number(process.env.BLIND_DATE_REMATCH_DAYS)
+  return Number.isFinite(n) && n >= 0 ? n : DEFAULT_REMATCH_COOLDOWN_DAYS
+}
 /** Free blind dates per day (Premium hook: more or unlimited). */
 export const DEFAULT_FREE_DAILY_DATES = 10
 
