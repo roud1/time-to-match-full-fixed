@@ -2004,5 +2004,7 @@
   "expiredHint": "Il tempo è scaduto, ma puoi riportare la conversazione per altre 24 ore. I messaggi restano.",
   "expiredAt": "Scaduto {time}",
   "expiredRestore": "Ripristina",
-  "expiredRestoreFailed": "Impossibile ripristinare il match. Forse l'altra persona ha eliminato l'account."
+  "expiredRestoreFailed": "Impossibile ripristinare il match. Forse l'altra persona ha eliminato l'account.",
+  "bdSearchNobody": "In questo momento nessun altro sta cercando. Resta su questa schermata: verrai collegato appena qualcuno compatibile inizierà a cercare.",
+  "bdSearchOthersNoFit": "Stanno cercando altre {n} persone, ma le vostre impostazioni non coincidono. Controlla nel profilo chi cerchi e la fascia d'età, e attiva «Posso parlare anche in inglese»."
 }

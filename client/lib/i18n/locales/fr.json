@@ -2004,5 +2004,7 @@
   "expiredHint": "Le temps est écoulé, mais vous pouvez relancer la conversation pour 24 heures de plus. Les messages sont conservés.",
   "expiredAt": "Expiré {time}",
   "expiredRestore": "Restaurer",
-  "expiredRestoreFailed": "Impossible de restaurer ce match. L'autre personne a peut-être supprimé son compte."
+  "expiredRestoreFailed": "Impossible de restaurer ce match. L'autre personne a peut-être supprimé son compte.",
+  "bdSearchNobody": "Personne d'autre ne cherche en ce moment. Restez sur cet écran : vous serez mis en relation dès qu'une personne compatible cherchera.",
+  "bdSearchOthersNoFit": "{n} autres personnes cherchent, mais vos réglages ne correspondent pas. Vérifiez dans votre profil qui vous cherchez et la tranche d'âge, et activez « Je peux aussi parler anglais »."
 }

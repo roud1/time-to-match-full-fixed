@@ -109,3 +109,12 @@ Phase 4 adds: pure engine tests (`tests/e2e/blind-date-games-engine.spec.ts`: hi
 Not covered yet: load testing.
 
 Premium hooks (no paywall now): daily free blind-date limit (`BLIND_DATE_FREE_DAILY`, default 10), extended report, extra game packs — checked through `isPremium()`; reveal and the basic date stay free.
+
+### Matching rules (updated after the first real users)
+Two real testers who had already matched in the feed and lived in different cities were never paired:
+the rules excluded any pair with a previous like and used distance as a hard filter. With a small user base
+that leaves nobody to meet. Now:
+- excluded: blocks, a pass in the feed from either side, an open room, the same pair within `BLIND_DATE_REMATCH_DAYS` (default 1);
+- hard rules kept: 18+, consent, gender ↔ looking-for both ways, age ranges both ways, a shared language;
+- distance and purpose / interests only rank candidates.
+- The search screen shows how many other people are searching, so "nobody online" and "settings do not fit" can be told apart.
