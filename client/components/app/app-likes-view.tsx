@@ -67,7 +67,8 @@ export function AppLikesView({ likes, count, premium, freshMatch, onLikeBack, on
 
       {freshMatch ? (
         <section className="ttm-app-likes__hero">
-          <PhotoStack photos={photos} blurred={!premium} />
+          {/* The person you matched with — not the people who liked you. */}
+          <PhotoStack photos={freshMatch.peerPhoto ? [freshMatch.peerPhoto] : []} blurred={false} />
           <h2 className="ttm-app-likes__hero-title">{t("appLikesMutualTitle")}</h2>
           <p className="ttm-app-likes__hero-body">
             {freshMatch.peerName

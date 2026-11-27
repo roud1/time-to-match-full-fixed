@@ -321,9 +321,20 @@
 
 /* ── room ── */
 .bd--room {
-  height: 100dvh;
+  /* Pinned to the visible area (see BlindRoom: --bd-vh / --bd-vt follow the iOS keyboard). */
+  position: fixed;
+  top: var(--bd-vt, 0px);
+  left: 0;
+  right: 0;
+  height: var(--bd-vh, 100dvh);
   min-height: 0;
   padding-bottom: 0;
+}
+
+/* While the keyboard is open only the chat stays (the panel would take half the screen). */
+html[data-bd-kb] .bd--room .bd-panel,
+html[data-bd-kb] .bd--room .bd-tabs {
+  display: none;
 }
 
 .bd-room-head {

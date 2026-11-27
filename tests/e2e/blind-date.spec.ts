@@ -6,7 +6,7 @@ import { createTestUser, markEmailVerified, registerUserViaApi, type RegisteredU
  * eligibility, matchmaking into one room, anonymous snapshot, message moderation,
  * hidden peer decision, mutual Continue → existing match, leave, report + block.
  *
- * Time travel (ending the 10-minute date early) is done directly in the test database,
+ * Time travel (ending the 30-minute date early) is done directly in the test database,
  * like `markEmailVerified`, so the suite stays fast.
  */
 
@@ -114,6 +114,8 @@ test.describe("Blind Date @db", () => {
       expect(snapA.peer.name).toBe("Marco")
       expect(snapA.peer.age).toBe(77)
       expect(snapA.revealStage).toBe(0)
+      // The date lasts 30 minutes.
+      expect(Date.parse(snapA.endsAt) - Date.parse(snapA.startedAt)).toBe(30 * 60 * 1000)
       const raw = JSON.stringify(snapA)
       expect(raw).not.toContain(b.user.email)
       expect(raw).not.toMatch(/https?:\/\/|data:image|photo/i)
