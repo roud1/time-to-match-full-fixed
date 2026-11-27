@@ -1999,5 +1999,10 @@
   "lvThemeDark": "Scuro",
   "lvThemeSystem": "Sistema",
   "lvSetAdmin": "Pannello di amministrazione",
-  "lvSetAdminHint": "Segnalazioni e verifica foto"
+  "lvSetAdminHint": "Segnalazioni e verifica foto",
+  "expiredTitle": "Match scaduti",
+  "expiredHint": "Il tempo è scaduto, ma puoi riportare la conversazione per altre 24 ore. I messaggi restano.",
+  "expiredAt": "Scaduto {time}",
+  "expiredRestore": "Ripristina",
+  "expiredRestoreFailed": "Impossibile ripristinare il match. Forse l'altra persona ha eliminato l'account."
 }

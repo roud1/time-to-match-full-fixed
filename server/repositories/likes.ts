@@ -148,6 +148,10 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
   const db = getDb()
   if (!db) return []
 
+  // Admin accounts: open matches never run out.
+  const { keepAdminMatchesAlive } = await import("@/server/matches/restore")
+  await keepAdminMatchesAlive(userId).catch(() => null)
+
   const rows = await db<
     (DbLikeWithBond & { peer_name: string | null; peer_photo: string | null; peer_age: number | null })[]
   >`
@@ -203,8 +207,10 @@ export async function createMutualMatchLikes(input: {
   const db = getDb()
   if (!db) return
 
-  const { userA, userB, expiresAt } = input
-  const createdAt = new Date(expiresAt.getTime() - 24 * 60 * 60 * 1000)
+  const { userA, userB } = input
+  const { adminMatchExpiry } = await import("@/server/matches/restore")
+  const expiresAt = (await adminMatchExpiry(userA, userB).catch(() => null)) ?? input.expiresAt
+  const createdAt = new Date(input.expiresAt.getTime() - 24 * 60 * 60 * 1000)
 
   // ── Atomic core: both likes + match row ──────────────────────────────────
   // Uses a single transaction so a partial failure (e.g. crash between the

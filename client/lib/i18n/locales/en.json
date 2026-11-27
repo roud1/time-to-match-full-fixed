@@ -1999,5 +1999,10 @@
   "lvThemeDark": "Dark",
   "lvThemeSystem": "System",
   "lvSetAdmin": "Admin panel",
-  "lvSetAdminHint": "Reports and photo verification"
+  "lvSetAdminHint": "Reports and photo verification",
+  "expiredTitle": "Expired matches",
+  "expiredHint": "Time ran out, but you can bring the conversation back for another 24 hours. Your messages are kept.",
+  "expiredAt": "Expired {time}",
+  "expiredRestore": "Restore",
+  "expiredRestoreFailed": "Could not restore this match. The other person may have deleted their account."
 }

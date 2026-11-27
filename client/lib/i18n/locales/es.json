@@ -1999,5 +1999,10 @@
   "lvThemeDark": "Oscuro",
   "lvThemeSystem": "Sistema",
   "lvSetAdmin": "Panel de administración",
-  "lvSetAdminHint": "Denuncias y verificación de fotos"
+  "lvSetAdminHint": "Denuncias y verificación de fotos",
+  "expiredTitle": "Matches caducados",
+  "expiredHint": "Se acabó el tiempo, pero puedes recuperar la conversación otras 24 horas. Los mensajes se conservan.",
+  "expiredAt": "Caducó {time}",
+  "expiredRestore": "Recuperar",
+  "expiredRestoreFailed": "No se pudo recuperar el match. Puede que la otra persona haya eliminado su cuenta."
 }

@@ -1999,5 +1999,10 @@
   "lvThemeDark": "Тёмная",
   "lvThemeSystem": "Как в системе",
   "lvSetAdmin": "Админ-панель",
-  "lvSetAdminHint": "Жалобы и проверка фото"
+  "lvSetAdminHint": "Жалобы и проверка фото",
+  "expiredTitle": "Сгоревшие мэтчи",
+  "expiredHint": "Время вышло, но разговор можно вернуть ещё на 24 часа. Переписка сохранится.",
+  "expiredAt": "Сгорел {time}",
+  "expiredRestore": "Вернуть",
+  "expiredRestoreFailed": "Не удалось вернуть мэтч. Возможно, собеседник удалил аккаунт."
 }

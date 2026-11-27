@@ -1999,5 +1999,10 @@
   "lvThemeDark": "Koyu",
   "lvThemeSystem": "Sistem",
   "lvSetAdmin": "Yönetici paneli",
-  "lvSetAdminHint": "Şikâyetler ve fotoğraf doğrulama"
+  "lvSetAdminHint": "Şikâyetler ve fotoğraf doğrulama",
+  "expiredTitle": "Süresi dolan eşleşmeler",
+  "expiredHint": "Süre doldu ama sohbeti 24 saat daha geri getirebilirsin. Mesajlar korunur.",
+  "expiredAt": "Süresi doldu: {time}",
+  "expiredRestore": "Geri getir",
+  "expiredRestoreFailed": "Eşleşme geri getirilemedi. Karşı taraf hesabını silmiş olabilir."
 }

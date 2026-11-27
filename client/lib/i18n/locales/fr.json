@@ -1999,5 +1999,10 @@
   "lvThemeDark": "Sombre",
   "lvThemeSystem": "Système",
   "lvSetAdmin": "Panneau d'administration",
-  "lvSetAdminHint": "Signalements et vérification des photos"
+  "lvSetAdminHint": "Signalements et vérification des photos",
+  "expiredTitle": "Matchs expirés",
+  "expiredHint": "Le temps est écoulé, mais vous pouvez relancer la conversation pour 24 heures de plus. Les messages sont conservés.",
+  "expiredAt": "Expiré {time}",
+  "expiredRestore": "Restaurer",
+  "expiredRestoreFailed": "Impossible de restaurer ce match. L'autre personne a peut-être supprimé son compte."
 }

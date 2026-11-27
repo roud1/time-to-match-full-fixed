@@ -340,6 +340,10 @@ export async function expireDueMatches(): Promise<ExpireMatchesResult> {
     FROM matches
     WHERE status <> 'expired'
       AND expires_at <= ${now}
+      -- admin accounts' matches never expire
+      AND NOT EXISTS (
+        SELECT 1 FROM users u WHERE u.id IN (matches.user1_id, matches.user2_id) AND u.role = 'admin'
+      )
     FOR UPDATE SKIP LOCKED
   `
 

@@ -1999,5 +1999,10 @@
   "lvThemeDark": "Ciemny",
   "lvThemeSystem": "Systemowy",
   "lvSetAdmin": "Panel administratora",
-  "lvSetAdminHint": "Zgłoszenia i weryfikacja zdjęć"
+  "lvSetAdminHint": "Zgłoszenia i weryfikacja zdjęć",
+  "expiredTitle": "Wygasłe pary",
+  "expiredHint": "Czas minął, ale możesz przywrócić rozmowę na kolejne 24 godziny. Wiadomości zostaną zachowane.",
+  "expiredAt": "Wygasła {time}",
+  "expiredRestore": "Przywróć",
+  "expiredRestoreFailed": "Nie udało się przywrócić pary. Możliwe, że druga osoba usunęła konto."
 }
