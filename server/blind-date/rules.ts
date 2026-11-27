@@ -3,7 +3,7 @@
  */
 
 /** Length of the date itself. */
-export const ROOM_DURATION_MS = 10 * 60 * 1000
+export const ROOM_DURATION_MS = 30 * 60 * 1000
 /** After the date: time each person has to choose Continue / Pass. */
 export const DECISION_WINDOW_MS = 2 * 60 * 1000
 /** A queue entry is considered gone if the client stopped polling for this long. */

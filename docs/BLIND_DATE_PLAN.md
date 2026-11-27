@@ -44,7 +44,7 @@ client (Web / PWA / Android shell)
   │                                    ──> /api/blind-date/rooms/:id/games/*       (Phase 4)
   └─ existing match chat (after mutual Continue)
 server/blind-date/
-  ├─ rules.ts        pure rules: constants (10 min room, 2 min decision window, reveal stages),
+  ├─ rules.ts        pure rules: constants (30 min room, 2 min decision window, reveal stages),
   │                  phase from timestamps, mutual progress, visible reveal stage, outcome,
   │                  message checks (length, links / e-mails / phones / messenger handles), age
   └─ service.ts      eligibility (18+, Art. 9 consent, not blocked, daily limit with Premium hook),
@@ -57,7 +57,7 @@ database/migrations/030_blind_dates.sql
 ```
 
 **Room phase machine** (computed from timestamps, persisted when it changes):
-`active` (10 min) → `deciding` (decision window, 2 min) → `closed` (reason: `matched`, `no_match`, `left`, `reported`, `timeout`).
+`active` (30 min) → `deciding` (decision window, 2 min) → `closed` (reason: `matched`, `no_match`, `left`, `reported`, `timeout`).
 Every state change increments `rooms.version`; clients poll with `since=<version>`.
 
 **Concurrency**: joining runs in a transaction guarded by `pg_advisory_xact_lock` so two users cannot be paired twice; partial unique indexes guarantee at most one open room per user; queue rows are unique per user.

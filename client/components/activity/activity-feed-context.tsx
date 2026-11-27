@@ -100,7 +100,25 @@ export function ActivityFeedProvider({ children }: { children: React.ReactNode }
     return () => window.removeEventListener("ttm-open-activity-hub", onOpenHub)
   }, [])
 
-  const counts = useMemo(() => getActivityCounts(locale, location.position), [locale, location.position, tick])
+  // Likes badge: the server's count of people who liked me (the local store only holds demo/old data).
+  const [serverLikes, setServerLikes] = useState<number | null>(null)
+  useEffect(() => {
+    let alive = true
+    fetch("/api/likes/incoming", { credentials: "include", cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { count?: number } | null) => {
+        if (alive && d && typeof d.count === "number") setServerLikes(d.count)
+      })
+      .catch(() => null)
+    return () => {
+      alive = false
+    }
+  }, [tick])
+
+  const counts = useMemo(() => {
+    const local = getActivityCounts(locale, location.position)
+    return serverLikes === null ? local : { ...local, likesUnread: serverLikes }
+  }, [locale, location.position, tick, serverLikes])
 
   const threads = useMemo(() => getChats(locale, location.position), [locale, location.position, tick])
 

@@ -72,6 +72,8 @@ export function BlindDatePage() {
   const [now, setNow] = useState(() => Date.now())
   const [clockOffset, setClockOffset] = useState(0)
   const version = useRef(0)
+  const roomIdRef = useRef<string | null>(null)
+  const polling = useRef(false)
 
   const languages = useMemo(() => (alsoEnglish && locale !== "en" ? ["en"] : []), [alsoEnglish, locale])
 
@@ -153,6 +155,10 @@ export function BlindDatePage() {
   // ── room polling ──
   const applyRoom = useCallback((next: BlindRoom) => {
     setClockOffset(Date.parse(next.serverNow) - Date.now())
+    // Responses can arrive out of order on a slow network (a poll sent before my message can land
+    // after the send response). Never go back to an older snapshot of the same room.
+    if (next.id === roomIdRef.current && next.version < version.current) return
+    roomIdRef.current = next.id
     version.current = next.version
     setRoom((prev) => {
       if (prev && prev.outcome === null && next.outcome?.reason === "matched") vibrate([40, 60, 40, 60, 80])
@@ -161,8 +167,11 @@ export function BlindDatePage() {
   }, [])
 
   const pollRoom = useCallback(async () => {
-    if (!roomId) return
-    const res = await blindDateApi.room(roomId, version.current || undefined)
+    if (!roomId || polling.current) return
+    polling.current = true
+    const res = await blindDateApi.room(roomId, version.current || undefined).finally(() => {
+      polling.current = false
+    })
     if (!res.ok) {
       if (res.status === 404) {
         setRoomId(null)
@@ -405,6 +414,34 @@ function BlindRoomView(props: {
     const el = listRef.current
     if (el) el.scrollTop = el.scrollHeight
   }, [room.messages.length, tab])
+
+  // iPhone: the on-screen keyboard does not shrink 100dvh — the page is pushed up, the header and
+  // the newest messages go out of view. Size the room to the visible area instead.
+  useEffect(() => {
+    const vv = window.visualViewport
+    if (!vv) return
+    const root = document.documentElement
+    let fullHeight = vv.height
+    const fit = () => {
+      fullHeight = Math.max(fullHeight, vv.height)
+      root.style.setProperty("--bd-vh", `${vv.height}px`)
+      root.style.setProperty("--bd-vt", `${vv.offsetTop}px`)
+      // Keyboard open (visible area much smaller than before): keep only the chat.
+      root.toggleAttribute("data-bd-kb", vv.height < fullHeight * 0.75)
+      const el = listRef.current
+      if (el) el.scrollTop = el.scrollHeight
+    }
+    fit()
+    vv.addEventListener("resize", fit)
+    vv.addEventListener("scroll", fit)
+    return () => {
+      vv.removeEventListener("resize", fit)
+      vv.removeEventListener("scroll", fit)
+      root.style.removeProperty("--bd-vh")
+      root.style.removeProperty("--bd-vt")
+      root.removeAttribute("data-bd-kb")
+    }
+  }, [])
 
   const errorText = (code: string) => {
     const key = `bdErr_${code}` as TranslationKey

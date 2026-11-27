@@ -11,7 +11,7 @@ import { LikesPanel } from "@/client/components/app/likes-panel"
 import { ChatPanel } from "@/client/components/app/chat-panel"
 import { MapPanel } from "@/client/components/app/map-panel"
 import { Logo } from "@/client/components/logo"
-import { ActivityFeedProvider } from "@/client/components/activity/activity-feed-context"
+import { ActivityFeedProvider, useActivityFeed } from "@/client/components/activity/activity-feed-context"
 import { ActivityAppChrome } from "@/client/components/activity/activity-app-chrome"
 import { LevelBadge } from "@/client/components/gamification/level-badge"
 import { useUser } from "@/client/hooks/use-user"
@@ -50,7 +50,6 @@ import { Heart } from "lucide-react"
 import { SensitiveConsentGate } from "@/client/components/app/sensitive-consent-gate"
 import { fetchSubscriptionSummary } from "@/client/lib/monetization/api"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
-import { getActivityCounts } from "@/client/lib/activity-metrics"
 
 const PAGE_MAX_WIDE = "max-w-[min(1200px,100%)]"
 const PAGE_MAX_NARROW = "max-w-lg"
@@ -313,11 +312,8 @@ export function AppShell() {
 
 /** App only: the likes screen is not a tab in the app — it opens from this heart (with the unread count). */
 function AppLikesLink() {
-  const { t, locale, location } = useI18n()
-  const [count, setCount] = useState(0)
-  useEffect(() => {
-    setCount(getActivityCounts(locale, location.position).likesUnread)
-  }, [locale, location.position])
+  const { t } = useI18n()
+  const count = useActivityFeed().counts.likesUnread
   return (
     <Link href="/app?tab=likes" className="ttm-app-likes-link" aria-label={t("tabLikes")}>
       <Heart aria-hidden strokeWidth={1.8} />
