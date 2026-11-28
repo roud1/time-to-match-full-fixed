@@ -12,8 +12,8 @@
   --lvh-accent: #19e6a0;
   --lvh-text: #f5f5f5;
   --lvh-muted: #a6aaa8;
-  --u: clamp(0.62px, min(calc(100vw / 390), calc(100vh / 844)), 1.1px);
-  --u: clamp(0.62px, min(calc(100vw / 390), calc(100dvh / 844)), 1.1px);
+  --u: clamp(0.5px, min(calc(100vw / 390), calc(100vh / 844)), 1.1px);
+  --u: clamp(0.5px, min(calc(100vw / 390), calc(100dvh / 844)), 1.1px);
   position: relative;
   z-index: 10;
   box-sizing: border-box;
@@ -27,7 +27,8 @@
   /* Exactly one screen (the visible height, Safari toolbars included). */
   height: 100vh;
   height: 100dvh;
-  overflow-y: auto;
+  /* Never scrolls: on very small screens secondary parts step out instead (see media queries). */
+  overflow: hidden;
   overscroll-behavior: none;
   margin: 0 auto;
   padding: max(calc(20 * var(--u)), env(safe-area-inset-top)) max(calc(20 * var(--u)), env(safe-area-inset-right))
@@ -123,7 +124,7 @@
 .hero {
   position: relative;
   flex: 1 1 0;
-  min-height: calc(150 * var(--u));
+  min-height: calc(120 * var(--u));
   max-height: calc(300 * var(--u));
   margin-top: calc(14 * var(--u));
   margin: 0 calc(-1 * max(calc(20 * var(--u)), env(safe-area-inset-left)));
@@ -284,6 +285,69 @@
 @media (max-height: 640px) {
   .lang {
     transform: scale(0.76);
+  }
+}
+
+/* Short screens (small/old phones, split screen): the picture steps out first… */
+@media (max-height: 540px) {
+  .hero {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: none;
+    margin-top: calc(16 * var(--u));
+  }
+  .heroImage,
+  .hero::after {
+    display: none;
+  }
+  .brand {
+    margin-top: 0;
+  }
+}
+
+/* …then the three facts and the subtitle (phones held sideways). */
+@media (max-height: 430px) {
+  .features,
+  .intro p {
+    display: none;
+  }
+  .lang {
+    transform: scale(0.7);
+  }
+}
+
+/* Landscape phones: logo + headline on the left, timer + actions on the right. */
+@media (max-height: 430px) and (min-width: 560px) {
+  .page {
+    max-width: 760px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    align-content: center;
+    column-gap: 32px;
+    row-gap: 12px;
+  }
+  .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .intro {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 8px;
+  }
+  .hero {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+  }
+  .actions {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+  :global(html[data-lv]) body .intro h1 {
+    font-size: 24px !important;
   }
 }
 
