@@ -2016,5 +2016,13 @@
   "adminVerifyProfile": "Profilfoto",
   "adminVerifyGesture": "Geste",
   "adminVerifyApprove": "Bestätigen",
-  "adminVerifyReject": "Ablehnen"
+  "adminVerifyReject": "Ablehnen",
+  "lvHomeHeadline": "Jede Begegnung hat",
+  "lvHomeHeadlineAccent": "ihre eigene Zeit.",
+  "lvHomeSubtitle": "Kennenlernen. Schreiben. Nutze die 24 Stunden.",
+  "lvHomeTimerLabel": "Zeit, das Gespräch zu beginnen",
+  "lvHomeFeatFast": "Schneller Start",
+  "lvHomeFeatMatch": "Kluge Auswahl",
+  "lvHomeFeatSafe": "Sicherheit",
+  "lvHomeCta": "Jetzt kennenlernen"
 }

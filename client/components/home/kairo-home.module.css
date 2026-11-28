@@ -1,0 +1,271 @@
+/* Kairo start page — palette: bg #090B0A, accent #19E6A0, text #F5F5F5, secondary #A6AAA8. */
+
+.page {
+  --lvh-bg: #090b0a;
+  --lvh-accent: #19e6a0;
+  --lvh-text: #f5f5f5;
+  --lvh-muted: #a6aaa8;
+  position: relative;
+  z-index: 10;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.6svh, 22px);
+  width: 100%;
+  max-width: 520px;
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+    max(18px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  overflow-x: clip;
+  background: var(--lvh-bg);
+  color: var(--lvh-text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The same colour around the page on wide screens and behind overscroll. */
+:global(html):has(.page),
+:global(html):has(.page) body {
+  background: #090b0a !important;
+  overflow-x: hidden;
+}
+
+.lang {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  z-index: 3;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: clamp(14px, 3svh, 30px);
+  font-size: clamp(26px, 7.4vw, 30px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.brand img {
+  width: clamp(28px, 8vw, 34px);
+  height: auto;
+}
+
+.intro h1 {
+  margin: 0 auto;
+  max-width: 13em;
+  font-size: clamp(27px, 8.4vw, 40px);
+  font-weight: 500;
+  line-height: 1.13;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.intro em {
+  font-style: normal;
+  font-weight: 650;
+  color: var(--lvh-accent);
+}
+
+.intro p {
+  margin: 12px 0 0;
+  font-size: clamp(14px, 4vw, 16px);
+  color: var(--lvh-muted);
+}
+
+/* Picture: fills the free height; the timer card sits over its lower part. */
+.hero {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: clamp(210px, 40svh, 520px);
+  margin: 0 calc(-1 * max(20px, env(safe-area-inset-left)));
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  isolation: isolate;
+}
+
+.heroImage {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #090b0a 0%, transparent 10%, transparent 62%, #090b0a 100%);
+  pointer-events: none;
+}
+
+.timer {
+  display: grid;
+  gap: 4px;
+  width: min(100% - 48px, 360px);
+  padding: 14px 18px 13px;
+  border: 1px solid rgba(25, 230, 160, 0.32);
+  border-radius: 18px;
+  background: rgba(14, 22, 19, 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.timer strong {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--lvh-accent);
+  font-size: clamp(28px, 8.6vw, 36px);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.timer strong svg {
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.timer span {
+  font-size: clamp(13px, 3.7vw, 15px);
+  color: #c4cac7;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.features li {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 8px;
+  padding: 2px 4px;
+  font-size: clamp(12px, 3.6vw, 15px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--lvh-text);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.features li + li {
+  border-left: 1px solid #252b28;
+}
+
+.features svg {
+  width: 26px;
+  height: 26px;
+  color: var(--lvh-text);
+}
+
+.actions {
+  margin-top: auto;
+  display: grid;
+  gap: 14px;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 0 22px;
+  border-radius: 999px;
+  background: var(--lvh-accent);
+  color: #06110c;
+  font-size: clamp(16px, 4.6vw, 18px);
+  font-weight: 700;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.cta svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cta:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .cta:hover {
+    filter: brightness(1.06);
+  }
+}
+
+.actions p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--lvh-muted);
+}
+
+.actions p a {
+  margin-left: 4px;
+  color: var(--lvh-accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.page a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+/* Narrow phones: the language switcher sits above the logo row instead of over it. */
+@media (max-width: 380px) {
+  .brand {
+    margin-top: 46px;
+  }
+}
+
+/* Very small phones (320 px wide / short screens). */
+@media (max-height: 640px) {
+  .page {
+    gap: 12px;
+  }
+  .hero {
+    min-height: 200px;
+  }
+}
+
+@media (min-width: 521px) {
+  /* Wider than the picture: fade its left/right edges into the page colour (no visible box). */
+  .heroImage {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%);
+  }
+}
+
+@media (min-width: 700px) {
+  .page {
+    min-height: max(100svh, 860px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    transition: none;
+  }
+}
+
+/* The page has its own language switcher; hide the floating one on this screen. */
+:global(html):has(.page) :global(.ttm-floating-chrome) {
+  display: none !important;
+}

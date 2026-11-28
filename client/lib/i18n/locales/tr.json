@@ -2016,5 +2016,13 @@
   "adminVerifyProfile": "Profil fotoğrafı",
   "adminVerifyGesture": "Hareket",
   "adminVerifyApprove": "Onayla",
-  "adminVerifyReject": "Reddet"
+  "adminVerifyReject": "Reddet",
+  "lvHomeHeadline": "Her buluşmanın",
+  "lvHomeHeadlineAccent": "kendi zamanı var.",
+  "lvHomeSubtitle": "Tanış. Konuş. 24 saatte yetiş.",
+  "lvHomeTimerLabel": "Sohbete başlamak için süre",
+  "lvHomeFeatFast": "Hızlı başlangıç",
+  "lvHomeFeatMatch": "Akıllı eşleşme",
+  "lvHomeFeatSafe": "Güvenlik",
+  "lvHomeCta": "Tanışmaya başla"
 }

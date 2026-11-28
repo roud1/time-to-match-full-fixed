@@ -2016,5 +2016,13 @@
   "adminVerifyProfile": "Profile photo",
   "adminVerifyGesture": "Gesture",
   "adminVerifyApprove": "Approve",
-  "adminVerifyReject": "Reject"
+  "adminVerifyReject": "Reject",
+  "lvHomeHeadline": "Every connection has",
+  "lvHomeHeadlineAccent": "its own time.",
+  "lvHomeSubtitle": "Meet. Talk. Make it count in 24 hours.",
+  "lvHomeTimerLabel": "Time to start the conversation",
+  "lvHomeFeatFast": "Quick start",
+  "lvHomeFeatMatch": "Smart matching",
+  "lvHomeFeatSafe": "Safety",
+  "lvHomeCta": "Start meeting people"
 }
