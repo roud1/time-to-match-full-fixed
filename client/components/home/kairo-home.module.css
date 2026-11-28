@@ -99,7 +99,7 @@
 :global(html[data-lv]) body .intro h1 {
   margin: 0 auto;
   max-width: 13em;
-  font-size: max(23px, calc(30 * var(--u))) !important;
+  font-size: max(21px, calc(27 * var(--u))) !important;
   font-weight: 300 !important;
   line-height: 1.18;
   letter-spacing: -0.02em !important;
@@ -114,7 +114,7 @@
 
 .intro p {
   margin: calc(8 * var(--u)) 0 0;
-  font-size: max(13px, calc(14.5 * var(--u)));
+  font-size: max(12px, calc(13.5 * var(--u)));
   font-weight: 300;
   letter-spacing: 0.01em;
   color: var(--lvh-muted);
@@ -168,7 +168,7 @@
   justify-content: center;
   gap: calc(10 * var(--u));
   color: var(--lvh-accent);
-  font-size: max(26px, calc(36 * var(--u))) !important;
+  font-size: max(24px, calc(33 * var(--u))) !important;
   font-weight: 200 !important;
   letter-spacing: 0.02em !important;
   font-variant-numeric: tabular-nums;
@@ -182,7 +182,7 @@
 
 .timer span {
   white-space: nowrap;
-  font-size: max(12px, calc(13 * var(--u)));
+  font-size: max(11.5px, calc(12.5 * var(--u)));
   font-weight: 300;
   color: #c4cac7;
 }
@@ -201,7 +201,7 @@
   align-content: start;
   gap: calc(6 * var(--u));
   padding: calc(2 * var(--u)) 4px;
-  font-size: max(12px, calc(13 * var(--u)));
+  font-size: max(11px, calc(12 * var(--u)));
   line-height: 1.25;
   letter-spacing: -0.005em;
   color: var(--lvh-text);
@@ -235,7 +235,7 @@
   border-radius: 999px;
   background: var(--lvh-accent);
   color: #06110c;
-  font-size: max(15px, calc(16 * var(--u))) !important;
+  font-size: max(14px, calc(15 * var(--u))) !important;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.15s ease, filter 0.15s ease;
@@ -258,7 +258,7 @@
 
 .actions p {
   margin: 0;
-  font-size: max(12px, calc(13.5 * var(--u)));
+  font-size: max(11.5px, calc(12.5 * var(--u)));
   color: var(--lvh-muted);
 }
 
@@ -347,7 +347,7 @@
     margin-top: 0;
   }
   :global(html[data-lv]) body .intro h1 {
-    font-size: 24px !important;
+    font-size: 22px !important;
   }
 }
 
