@@ -42,9 +42,15 @@ export function KairoHome() {
       </div>
 
       <header className={styles.brand}>
-        {/* eslint-disable-next-line @next/next/no-img-element -- tiny static SVG mark */}
-        <img src="/kairo/logo.svg" alt="" width={34} height={34} />
-        <span>Kairo</span>
+        <Image
+          src="/kairo/kairo-logo.webp"
+          alt="Kairo"
+          width={660}
+          height={268}
+          priority
+          sizes="(max-width: 380px) 200px, 240px"
+          className={styles.logo}
+        />
       </header>
 
       <section className={styles.intro}>
@@ -65,7 +71,7 @@ export function KairoHome() {
         />
         <div className={styles.timer} role="img" aria-label={`24:00:00 — ${t("lvHomeTimerLabel")}`}>
           <strong>
-            <Timer aria-hidden strokeWidth={2} />
+            <Timer aria-hidden strokeWidth={1.5} />
             24:00:00
           </strong>
           <span>{t("lvHomeTimerLabel")}</span>
@@ -75,7 +81,7 @@ export function KairoHome() {
       <ul className={styles.features}>
         {features.map(({ Icon, label }) => (
           <li key={label}>
-            <Icon aria-hidden strokeWidth={1.6} />
+            <Icon aria-hidden strokeWidth={1.3} />
             <span>{label}</span>
           </li>
         ))}
@@ -84,12 +90,12 @@ export function KairoHome() {
       <footer className={styles.actions}>
         {loggedIn ? (
           <Link className={styles.cta} href="/app">
-            {t("navApp")} <ArrowRight aria-hidden />
+            {t("navApp")} <ArrowRight aria-hidden strokeWidth={1.8} />
           </Link>
         ) : (
           <>
             <Link className={styles.cta} href="/register">
-              {t("lvHomeCta")} <ArrowRight aria-hidden />
+              {t("lvHomeCta")} <ArrowRight aria-hidden strokeWidth={1.8} />
             </Link>
             <p>
               {t("regHasAccount")} <Link href="/login">{t("regSignIn")}</Link>
