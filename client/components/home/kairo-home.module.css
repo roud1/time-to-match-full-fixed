@@ -135,19 +135,14 @@
   isolation: isolate;
 }
 
-.heroImage {
-  z-index: -2;
-  object-fit: cover;
-  object-position: center 34%;
-}
-
-.hero::after {
-  content: "";
+.heroCanvas {
   position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(180deg, #090b0a 0%, transparent 10%, transparent 62%, #090b0a 100%);
-  pointer-events: none;
+  /* The scene sits above the timer card (which overlaps the bottom of this area). */
+  inset: 0 0 calc(64 * var(--u)) 0;
+  z-index: -2;
+  width: 100%;
+  height: calc(100% - 64 * var(--u));
+  display: block;
 }
 
 .timer {
@@ -296,8 +291,7 @@
     max-height: none;
     margin-top: calc(16 * var(--u));
   }
-  .heroImage,
-  .hero::after {
+  .heroCanvas {
     display: none;
   }
   .brand {
@@ -348,14 +342,6 @@
   }
   :global(html[data-lv]) body .intro h1 {
     font-size: 22px !important;
-  }
-}
-
-@media (min-width: 521px) {
-  /* Wider than the picture: fade its left/right edges into the page colour (no visible box). */
-  .heroImage {
-    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%);
-    mask-image: linear-gradient(90deg, transparent 0, #000 14%, #000 86%, transparent 100%);
   }
 }
 

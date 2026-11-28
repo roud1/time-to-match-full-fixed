@@ -2,6 +2,7 @@
 
 import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
+import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { ArrowRight, ShieldCheck, Timer, Users, Zap } from "lucide-react"
@@ -10,9 +11,12 @@ import { useI18n } from "@/client/lib/i18n"
 import { isLoggedIn } from "@/client/lib/user-profile"
 import styles from "./kairo-home.module.css"
 
+// The animation (and its ~45 KB of point data) loads after the page is shown.
+const ParticleScene = dynamic(() => import("./particle-scene").then((m) => m.ParticleScene), { ssr: false })
+
 /**
  * Public start page (Kairo) — website, installed PWA and the native app alike.
- * Layout follows the home reference: brand, headline, hero picture with the 24-hour timer
+ * Layout follows the home reference: brand, headline, particle animation with the 24-hour timer
  * as an illustration of the match mechanic (static, nothing counts down here), three facts, CTA.
  */
 export function KairoHome() {
@@ -61,14 +65,7 @@ export function KairoHome() {
       </section>
 
       <div className={styles.hero}>
-        <Image
-          src="/kairo/hero.webp"
-          alt=""
-          fill
-          priority
-          sizes="(max-width: 520px) 100vw, 520px"
-          className={styles.heroImage}
-        />
+        <ParticleScene className={styles.heroCanvas} />
         <div className={styles.timer} role="img" aria-label={`24:00:00 — ${t("lvHomeTimerLabel")}`}>
           <strong className="kr-timer">
             <Timer aria-hidden strokeWidth={1.5} />
