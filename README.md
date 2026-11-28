@@ -122,6 +122,16 @@ Cron routes (protected by `CRON_SECRET`):
 - `POST /api/v1/cron/notify` — every 15 minutes (email + push expiry alerts)
 - `POST /api/v1/cron/cleanup` — weekly DB cleanup (expired conversation messages; accounts are never deleted here)
 
+## Typography (Kairo)
+
+One system for every screen, in [`app/typography.css`](app/typography.css):
+
+- **Manrope Variable** (SIL OFL), self-hosted in `public/fonts/manrope`, split by script with `unicode-range` (latin, latin-ext, cyrillic, cyrillic-ext, greek, vietnamese); latin + cyrillic are preloaded in `app/layout.tsx`. Missing glyphs fall back to the platform UI font.
+- The `@font-face` offers only weights **200–500** and `font-synthesis: none` is set, so no screen can render Bold/ExtraBold/Black (old `font-weight: 700` rules show as 500). No italics in the interface.
+- Tokens: `--kr-font`, weights `--kr-w-*`, sizes `--kr-fs-display` (200, 32–36), `--kr-fs-title` (300, 26–28), `--kr-fs-subtitle` (300, 20–22), `--kr-fs-name` (24–28), `--kr-fs-body` (300, 15–16, line-height 1.5), `--kr-fs-chat` (16), `--kr-fs-timer` (200, 36–48), `--kr-fs-button` (400, 16), `--kr-fs-input` (300, 16), `--kr-fs-nav` (400, 11–12), `--kr-fs-small` (400, 12–14); letter-spacing 0.01–0.02em.
+- Colours (dark theme): text `#F5F5F5`, secondary `#A6AAA8`, accent `#19E6A0`, background `#090B0A`.
+- All older font tokens (`--font-sans`, `--lv-font`, `--dt-font-*`, …) point to the same family; the handwritten "Kairo" exists only in the logo image.
+
 ## Appearance (light / dark)
 
 Settings → Appearance: light, dark (default) or system. Stored per device (`localStorage["lv-theme"]`) and applied before the first paint as `html[data-lv-theme]` (`client/lib/lv-theme.ts`).

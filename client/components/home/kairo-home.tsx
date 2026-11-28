@@ -54,7 +54,7 @@ export function KairoHome() {
       </header>
 
       <section className={styles.intro}>
-        <h1 id="lv-home-title">
+        <h1 id="lv-home-title" className="kr-display">
           {t("lvHomeHeadline")} <em>{t("lvHomeHeadlineAccent")}</em>
         </h1>
         <p>{t("lvHomeSubtitle")}</p>
@@ -70,7 +70,7 @@ export function KairoHome() {
           className={styles.heroImage}
         />
         <div className={styles.timer} role="img" aria-label={`24:00:00 — ${t("lvHomeTimerLabel")}`}>
-          <strong>
+          <strong className="kr-timer">
             <Timer aria-hidden strokeWidth={1.5} />
             24:00:00
           </strong>
