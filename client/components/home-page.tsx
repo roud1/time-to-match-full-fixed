@@ -1,5 +1,5 @@
-import { ExperiencePage } from "@/client/components/experience/experience-page"
+import { KairoHome } from "@/client/components/home/kairo-home"
 
 export function HomePage() {
-  return <ExperiencePage />
+  return <KairoHome />
 }

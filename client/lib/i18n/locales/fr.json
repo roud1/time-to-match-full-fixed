@@ -2016,5 +2016,13 @@
   "adminVerifyProfile": "Photo de profil",
   "adminVerifyGesture": "Geste",
   "adminVerifyApprove": "Approuver",
-  "adminVerifyReject": "Refuser"
+  "adminVerifyReject": "Refuser",
+  "lvHomeHeadline": "Chaque rencontre a",
+  "lvHomeHeadlineAccent": "son moment.",
+  "lvHomeSubtitle": "Rencontre. Échange. Profite des 24 heures.",
+  "lvHomeTimerLabel": "Le temps d’engager la conversation",
+  "lvHomeFeatFast": "Démarrage rapide",
+  "lvHomeFeatMatch": "Sélection intelligente",
+  "lvHomeFeatSafe": "Sécurité",
+  "lvHomeCta": "Commencer les rencontres"
 }

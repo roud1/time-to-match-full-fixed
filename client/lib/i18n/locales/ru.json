@@ -2016,5 +2016,13 @@
   "adminVerifyProfile": "Фото профиля",
   "adminVerifyGesture": "Жест",
   "adminVerifyApprove": "Подтвердить",
-  "adminVerifyReject": "Отклонить"
+  "adminVerifyReject": "Отклонить",
+  "lvHomeHeadline": "У каждой встречи есть",
+  "lvHomeHeadlineAccent": "своё время.",
+  "lvHomeSubtitle": "Знакомься. Общайся. Успей за 24 часа.",
+  "lvHomeTimerLabel": "Время, чтобы начать общение",
+  "lvHomeFeatFast": "Быстрый старт",
+  "lvHomeFeatMatch": "Умный подбор",
+  "lvHomeFeatSafe": "Безопасность",
+  "lvHomeCta": "Начать знакомство"
 }

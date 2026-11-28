@@ -2016,5 +2016,13 @@
   "adminVerifyProfile": "Foto profilo",
   "adminVerifyGesture": "Gesto",
   "adminVerifyApprove": "Approva",
-  "adminVerifyReject": "Rifiuta"
+  "adminVerifyReject": "Rifiuta",
+  "lvHomeHeadline": "Ogni incontro ha",
+  "lvHomeHeadlineAccent": "il suo tempo.",
+  "lvHomeSubtitle": "Conosci. Chatta. Sfrutta le 24 ore.",
+  "lvHomeTimerLabel": "Il tempo per iniziare a parlare",
+  "lvHomeFeatFast": "Avvio rapido",
+  "lvHomeFeatMatch": "Abbinamento intelligente",
+  "lvHomeFeatSafe": "Sicurezza",
+  "lvHomeCta": "Inizia a conoscere"
 }

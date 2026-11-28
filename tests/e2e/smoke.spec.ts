@@ -1,17 +1,19 @@
 import { test, expect } from "@playwright/test"
 
 test.describe("Landing", () => {
-  test("homepage loads with logo and CTA", async ({ page }) => {
+  test("homepage (Kairo): brand, CTA to register, sign-in link, no horizontal scroll at 320 px", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 568 })
     await page.goto("/")
-    await expect(page).toHaveTitle(/Luvia/i)
+    await expect(page).toHaveTitle(/Kairo/i)
+    await expect(page.getByText("Kairo", { exact: true }).first()).toBeVisible()
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    await expect(page.locator('img[src*="hero"], img[srcset*="hero"]').first()).toBeVisible()
+    await expect(page.locator('a[href="/login"]').first()).toBeVisible()
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+    expect(overflow).toBe(0)
 
-    const logo = page.getByRole("img", { name: "Luvia" })
-    await expect(logo.first()).toBeVisible()
-
-    const cta = page.getByRole("link", { name: /^start$|start matching|начать|register|регистрация|sign up/i }).first()
-    await expect(cta).toBeVisible()
-    await cta.click()
-    await expect(page).toHaveURL(/\/(register|login)/)
+    await page.locator('main a[href="/register"]').first().click()
+    await expect(page).toHaveURL(/\/register/)
   })
 })
 
