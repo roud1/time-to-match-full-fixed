@@ -1,139 +1,108 @@
 /* Kairo start page — palette: bg #090B0A, accent #19E6A0, text #F5F5F5, secondary #A6AAA8.
-   Typeface: Manrope (SIL OFL, self-hosted in public/kairo/fonts), light weights for a calm, premium look. */
+   Typeface and weights come from the global Kairo typography (app/typography.css).
 
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-latin-300-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-latin-400-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-latin-500-normal.woff2") format("woff2");
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-latin-ext-300-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-latin-ext-400-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-latin-ext-500-normal.woff2") format("woff2");
-  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-cyrillic-300-normal.woff2") format("woff2");
-  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-cyrillic-400-normal.woff2") format("woff2");
-  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
-}
-@font-face {
-  font-family: "Kairo Manrope";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/kairo/fonts/manrope-cyrillic-500-normal.woff2") format("woff2");
-  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
-}
-
+   Proportional layout: every size is written in "design pixels" of the 390 × 844 reference
+   (`calc(N * var(--u))`). One design pixel follows the smaller of the screen's width and height
+   ratio, so on a short or narrow screen everything shrinks together instead of the picture alone
+   (e.g. iPhone SE ≈ 0.67, iPhone 13 in Safari ≈ 0.79, full-height phones ≈ 1). Text never goes
+   below a readable minimum. */
 
 .page {
   --lvh-bg: #090b0a;
   --lvh-accent: #19e6a0;
   --lvh-text: #f5f5f5;
   --lvh-muted: #a6aaa8;
+  --u: clamp(0.5px, min(calc(100vw / 390), calc(100vh / 844)), 1.1px);
+  --u: clamp(0.5px, min(calc(100vw / 390), calc(100dvh / 844)), 1.1px);
   position: relative;
   z-index: 10;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: clamp(14px, 2.6svh, 22px);
+  /* Compact stack centred in the screen: extra height becomes even margins, not bigger parts. */
+  justify-content: center;
+  gap: 0;
   width: 100%;
   max-width: 520px;
-  min-height: 100svh;
+  /* Exactly one screen (the visible height, Safari toolbars included). */
+  height: 100vh;
+  height: 100dvh;
+  /* Never scrolls: on very small screens secondary parts step out instead (see media queries). */
+  overflow: hidden;
+  overscroll-behavior: none;
   margin: 0 auto;
-  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
-    max(18px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+  padding: max(calc(20 * var(--u)), env(safe-area-inset-top)) max(calc(20 * var(--u)), env(safe-area-inset-right))
+    max(calc(18 * var(--u)), env(safe-area-inset-bottom)) max(calc(20 * var(--u)), env(safe-area-inset-left));
   overflow-x: clip;
   background: var(--lvh-bg);
   color: var(--lvh-text);
-  font-family: "Kairo Manrope", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+  font-family: var(--kr-font);
   font-weight: 300;
   text-align: center;
   -webkit-font-smoothing: antialiased;
 }
 
-/* The same colour around the page on wide screens and behind overscroll. */
+/* The same colour around the page on wide screens; no page scroll and no iOS bounce here. */
 :global(html):has(.page),
 :global(html):has(.page) body {
   background: #090b0a !important;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .lang {
   position: absolute;
-  top: max(14px, env(safe-area-inset-top));
-  right: max(12px, env(safe-area-inset-right));
+  top: calc(max(calc(10 * var(--u)), env(safe-area-inset-top)) + 6px);
+  right: max(calc(14 * var(--u)), env(safe-area-inset-right));
   z-index: 3;
+  transform: scale(0.86);
+  transform-origin: top right;
+}
+
+/* The shared switcher takes its colours from the light/dark theme; this screen is always dark. */
+.lang :global(.ttm-lang-switcher) > div > button {
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #f5f5f5 !important;
+  box-shadow: none !important;
+}
+.lang [role="listbox"] {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: #121514 !important;
+}
+.lang [role="option"],
+.lang [role="option"] span {
+  color: #f5f5f5 !important;
+}
+.lang [role="option"][aria-selected="true"] {
+  color: var(--lvh-accent) !important;
 }
 
 .brand {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: clamp(6px, 1.6svh, 18px);
+  margin-top: calc(10 * var(--u));
 }
 
 .logo {
-  width: clamp(190px, 58vw, 240px);
+  width: max(132px, calc(168 * var(--u)));
   height: auto;
 }
 
-.intro h1 {
+.intro {
+  margin-top: calc(18 * var(--u));
+}
+
+/* Sizes below beat the global type scale on purpose (this screen scales as a whole). */
+:global(html[data-lv]) body .intro h1 {
   margin: 0 auto;
   max-width: 13em;
-  font-size: clamp(28px, 8.6vw, 40px);
-  font-weight: 300;
-  line-height: 1.14;
-  letter-spacing: -0.025em;
+  font-size: max(21px, calc(27 * var(--u))) !important;
+  font-weight: 300 !important;
+  line-height: 1.18;
+  letter-spacing: -0.02em !important;
   text-wrap: balance;
 }
 
@@ -144,8 +113,8 @@
 }
 
 .intro p {
-  margin: 12px 0 0;
-  font-size: clamp(14px, 4vw, 16px);
+  margin: calc(8 * var(--u)) 0 0;
+  font-size: max(12px, calc(13.5 * var(--u)));
   font-weight: 300;
   letter-spacing: 0.01em;
   color: var(--lvh-muted);
@@ -154,20 +123,22 @@
 /* Picture: fills the free height; the timer card sits over its lower part. */
 .hero {
   position: relative;
-  flex: 1 1 auto;
-  min-height: clamp(200px, 37svh, 520px);
-  margin: 0 calc(-1 * max(20px, env(safe-area-inset-left)));
+  flex: 1 1 0;
+  min-height: calc(120 * var(--u));
+  max-height: calc(300 * var(--u));
+  margin-top: calc(14 * var(--u));
+  margin: 0 calc(-1 * max(calc(20 * var(--u)), env(safe-area-inset-left)));
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 6px;
+  padding-bottom: calc(6 * var(--u));
   isolation: isolate;
 }
 
 .heroImage {
   z-index: -2;
   object-fit: cover;
-  object-position: center 22%;
+  object-position: center 34%;
 }
 
 .hero::after {
@@ -181,36 +152,37 @@
 
 .timer {
   display: grid;
-  gap: 4px;
-  width: min(100% - 48px, 360px);
-  padding: 14px 18px 13px;
-  border: 1px solid rgba(25, 230, 160, 0.32);
-  border-radius: 18px;
+  gap: calc(3 * var(--u));
+  width: min(100% - 32px, max(248px, calc(286 * var(--u))));
+  padding: calc(11 * var(--u)) calc(16 * var(--u)) calc(10 * var(--u));
+  border: 1px solid rgba(25, 230, 160, 0.28);
+  border-radius: calc(16 * var(--u));
   background: rgba(14, 22, 19, 0.82);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
-.timer strong {
+:global(html[data-lv]) body .timer strong {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: calc(10 * var(--u));
   color: var(--lvh-accent);
-  font-size: clamp(28px, 8.6vw, 36px);
-  font-weight: 300;
-  letter-spacing: 0.01em;
+  font-size: max(24px, calc(33 * var(--u))) !important;
+  font-weight: 200 !important;
+  letter-spacing: 0.02em !important;
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
 
 .timer strong svg {
-  width: 0.9em;
-  height: 0.9em;
+  width: 0.8em;
+  height: 0.8em;
 }
 
 .timer span {
-  font-size: clamp(13px, 3.7vw, 15px);
+  white-space: nowrap;
+  font-size: max(11.5px, calc(12.5 * var(--u)));
   font-weight: 300;
   color: #c4cac7;
 }
@@ -218,7 +190,7 @@
 .features {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 0;
+  margin: calc(20 * var(--u)) 0 0;
   padding: 0;
   list-style: none;
 }
@@ -227,11 +199,11 @@
   display: grid;
   justify-items: center;
   align-content: start;
-  gap: 8px;
-  padding: 2px 4px;
-  font-size: clamp(12px, 3.6vw, 15px);
+  gap: calc(6 * var(--u));
+  padding: calc(2 * var(--u)) 4px;
+  font-size: max(11px, calc(12 * var(--u)));
   line-height: 1.25;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
   color: var(--lvh-text);
   overflow-wrap: break-word;
   hyphens: auto;
@@ -242,38 +214,36 @@
 }
 
 .features svg {
-  width: 26px;
-  height: 26px;
+  width: calc(21 * var(--u));
+  height: calc(21 * var(--u));
   color: var(--lvh-text);
 }
 
 .actions {
-  margin-top: auto;
+  margin-top: calc(22 * var(--u));
   display: grid;
-  gap: 14px;
+  gap: calc(12 * var(--u));
 }
 
-.cta {
+:global(html[data-lv]) body .cta {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  min-height: 56px;
-  padding: 0 22px;
+  gap: calc(12 * var(--u));
+  min-height: max(44px, calc(52 * var(--u)));
+  padding: 0 calc(22 * var(--u));
   border-radius: 999px;
   background: var(--lvh-accent);
   color: #06110c;
-  font-size: clamp(16px, 4.6vw, 18px);
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  font-size: max(14px, calc(15 * var(--u))) !important;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .cta svg {
-  width: 22px;
-  height: 22px;
+  width: calc(20 * var(--u));
+  height: calc(20 * var(--u));
 }
 
 .cta:active {
@@ -288,7 +258,7 @@
 
 .actions p {
   margin: 0;
-  font-size: 14px;
+  font-size: max(11.5px, calc(12.5 * var(--u)));
   color: var(--lvh-muted);
 }
 
@@ -307,17 +277,77 @@
 /* Narrow phones: the language switcher sits above the logo row instead of over it. */
 @media (max-width: 380px) {
   .brand {
-    margin-top: 40px;
+    margin-top: calc(40 * var(--u));
   }
 }
 
-/* Very small phones (320 px wide / short screens). */
+/* The (shared) language switcher has fixed sizes: scale it down with short screens. */
 @media (max-height: 640px) {
+  .lang {
+    transform: scale(0.76);
+  }
+}
+
+/* Short screens (small/old phones, split screen): the picture steps out first… */
+@media (max-height: 540px) {
+  .hero {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: none;
+    margin-top: calc(16 * var(--u));
+  }
+  .heroImage,
+  .hero::after {
+    display: none;
+  }
+  .brand {
+    margin-top: 0;
+  }
+}
+
+/* …then the three facts and the subtitle (phones held sideways). */
+@media (max-height: 430px) {
+  .features,
+  .intro p {
+    display: none;
+  }
+  .lang {
+    transform: scale(0.7);
+  }
+}
+
+/* Landscape phones: logo + headline on the left, timer + actions on the right. */
+@media (max-height: 430px) and (min-width: 560px) {
   .page {
-    gap: 12px;
+    max-width: 760px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    align-content: center;
+    column-gap: 32px;
+    row-gap: 12px;
+  }
+  .brand {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .intro {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 8px;
   }
   .hero {
-    min-height: 200px;
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+  }
+  .actions {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0;
+  }
+  :global(html[data-lv]) body .intro h1 {
+    font-size: 22px !important;
   }
 }
 
@@ -329,14 +359,8 @@
   }
 }
 
-@media (min-width: 700px) {
-  .page {
-    min-height: max(100svh, 860px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .cta {
+  :global(html[data-lv]) body .cta {
     transition: none;
   }
 }

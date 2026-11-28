@@ -1,0 +1,306 @@
+/*
+ * Kairo typography — one system for every screen.
+ *
+ * Manrope Variable (SIL OFL), self-hosted (public/fonts/manrope), split by script with
+ * unicode-range so a phone downloads only what its language needs (latin + cyrillic preloaded).
+ * Characters Manrope lacks fall back to the platform UI font (SF / Roboto / Segoe / Noto).
+ *
+ * Scale (mobile → wide):
+ *   display (main headlines)  ExtraLight 200   32–36 px
+ *   title (page titles)       Light 300        26–28 px
+ *   subtitle                  Light 300        20–22 px
+ *   name (people)             Light 300        24–28 px
+ *   body / chat / inputs      Light 300        15–16 px, line-height 1.5
+ *   timer                     ExtraLight 200   36–48 px
+ *   buttons                   Regular 400      16 px
+ *   bottom navigation         Regular 400      11–12 px
+ *   secondary                 Regular 400      12–14 px
+ * No Bold / ExtraBold / Black and no italics in the interface (the handwritten Kairo is the
+ * logo image only).
+ */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  /* Variable font (200–800) offered only as 200–500: any bold request renders at most Medium. */
+  font-weight: 200 500;
+  font-display: swap;
+  src: url("/fonts/manrope/manrope-latin-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/manrope/manrope-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  /* Variable font (200–800) offered only as 200–500: any bold request renders at most Medium. */
+  font-weight: 200 500;
+  font-display: swap;
+  src: url("/fonts/manrope/manrope-latin-ext-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/manrope/manrope-latin-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  /* Variable font (200–800) offered only as 200–500: any bold request renders at most Medium. */
+  font-weight: 200 500;
+  font-display: swap;
+  src: url("/fonts/manrope/manrope-cyrillic-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/manrope/manrope-cyrillic-wght-normal.woff2") format("woff2");
+  unicode-range: U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  /* Variable font (200–800) offered only as 200–500: any bold request renders at most Medium. */
+  font-weight: 200 500;
+  font-display: swap;
+  src: url("/fonts/manrope/manrope-cyrillic-ext-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/manrope/manrope-cyrillic-ext-wght-normal.woff2") format("woff2");
+  unicode-range: U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  /* Variable font (200–800) offered only as 200–500: any bold request renders at most Medium. */
+  font-weight: 200 500;
+  font-display: swap;
+  src: url("/fonts/manrope/manrope-greek-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/manrope/manrope-greek-wght-normal.woff2") format("woff2");
+  unicode-range: U+0370-0377,U+037A-037F,U+0384-038A,U+038C,U+038E-03A1,U+03A3-03FF;
+}
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  /* Variable font (200–800) offered only as 200–500: any bold request renders at most Medium. */
+  font-weight: 200 500;
+  font-display: swap;
+  src: url("/fonts/manrope/manrope-vietnamese-wght-normal.woff2") format("woff2-variations"),
+    url("/fonts/manrope/manrope-vietnamese-wght-normal.woff2") format("woff2");
+  unicode-range: U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB;
+}
+
+:root {
+  --kr-font: "Manrope", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
+    "Helvetica Neue", Arial, sans-serif;
+  --kr-w-xlight: 200;
+  --kr-w-light: 300;
+  --kr-w-regular: 400;
+  --kr-w-medium: 500;
+  --kr-fs-display: clamp(32px, 9vw, 36px);
+  --kr-fs-title: clamp(26px, 7.2vw, 28px);
+  --kr-fs-subtitle: clamp(20px, 5.6vw, 22px);
+  --kr-fs-name: clamp(24px, 7vw, 28px);
+  --kr-fs-body: clamp(15px, 4.1vw, 16px);
+  --kr-fs-chat: 16px;
+  --kr-fs-timer: clamp(36px, 11vw, 48px);
+  --kr-fs-button: 16px;
+  --kr-fs-input: 16px;
+  --kr-fs-nav: clamp(11px, 3vw, 12px);
+  --kr-fs-small: clamp(12px, 3.5vw, 14px);
+  --kr-lh-body: 1.5;
+  --kr-lh-title: 1.2;
+  --kr-tracking: 0.012em;
+  --kr-tracking-title: 0.005em;
+  --kr-text: #f5f5f5;
+  --kr-text-2: #a6aaa8;
+  --kr-accent: #19e6a0;
+  --kr-bg: #090b0a;
+
+  /* Every older font token of the project points to the same family. */
+  --font-sans: var(--kr-font);
+  --font-body: var(--kr-font);
+  --font-display: var(--kr-font);
+  --font-onest: var(--kr-font);
+  --font-landing-body: var(--kr-font);
+  --font-landing-display: var(--kr-font);
+  --lv-font: var(--kr-font);
+  --dt-font-body: var(--kr-font);
+  --dt-font-display: var(--kr-font);
+  --app-font-body: var(--kr-font);
+  --app-font-display: var(--kr-font);
+  --saas-font-body: var(--kr-font);
+  --saas-font-display: var(--kr-font);
+  --xp-font-body: var(--kr-font);
+  --xp-font-display: var(--kr-font);
+  --pl-font: var(--kr-font);
+  --ai-font: var(--kr-font);
+}
+
+/* Dark theme (the default): Kairo text colours and background. */
+html[data-lv]:not([data-lv-theme="light"]) {
+  --lv-bg: #090b0a;
+  --lv-surface: #121514;
+  --lv-surface-raised: #1a1e1c;
+  --lv-text: #f5f5f5;
+  --lv-text-2: #a6aaa8;
+  --lv-text-3: #8e9390;
+  --lv-border: rgba(255, 255, 255, 0.09);
+  --lv-border-strong: rgba(255, 255, 255, 0.16);
+}
+
+html,
+body {
+  font-synthesis: none;
+}
+
+html[data-lv] body {
+  font-family: var(--kr-font);
+  font-weight: var(--kr-w-light);
+  font-size: var(--kr-fs-body);
+  line-height: var(--kr-lh-body);
+  letter-spacing: var(--kr-tracking);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* One family everywhere (local font-family rules and inline styles included). */
+html[data-lv] body *:not(code):not(pre):not(kbd):not(samp) {
+  font-family: var(--kr-font) !important;
+}
+
+html[data-lv] :is(code, pre, kbd, samp) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+}
+
+/* No italics in the interface. */
+html[data-lv] body :is(em, i, cite, dfn, address, .italic) {
+  font-style: normal !important;
+}
+
+/* No heavy weights (the font face also caps them at 500). */
+html[data-lv] body :is(b, strong, th, dt, .font-semibold, .font-bold, .font-extrabold, .font-black) {
+  font-weight: var(--kr-w-medium) !important;
+}
+html[data-lv] body :is(.font-medium) {
+  font-weight: var(--kr-w-regular) !important;
+}
+
+/* Headings: light, airy, never massive. */
+html[data-lv] body :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: var(--kr-w-light) !important;
+  letter-spacing: var(--kr-tracking-title) !important;
+  line-height: var(--kr-lh-title);
+  text-wrap: balance;
+}
+html[data-lv] body h1 {
+  font-size: var(--kr-fs-title) !important;
+}
+html[data-lv] body h2 {
+  font-size: var(--kr-fs-subtitle) !important;
+}
+html[data-lv] body :is(h3, h4) {
+  font-size: clamp(17px, 4.6vw, 18px) !important;
+}
+html[data-lv] body :is(h5, h6) {
+  font-size: var(--kr-fs-body) !important;
+}
+
+/* Main headlines (hero screens). */
+html[data-lv] body :is(h1.kr-display, .bd-title--hero, .xp-mobile-home__title) {
+  font-size: var(--kr-fs-display) !important;
+  font-weight: var(--kr-w-xlight) !important;
+  line-height: 1.15;
+}
+
+/* People's names (profile header, chat header, cards, celebration). */
+html[data-lv] body :is(
+    .ttm-app-me__name,
+    .ttm-app-detail__name,
+    .ttm-app-swipe__name,
+    .ttm-chat-room-header__name,
+    .ttm-match-celebration__name,
+    .lv-profile__name
+  ) {
+  font-weight: var(--kr-w-light) !important;
+  letter-spacing: var(--kr-tracking-title) !important;
+}
+html[data-lv] body :is(.ttm-app-me__name, .ttm-app-detail__name, .ttm-app-swipe__name, .lv-profile__name) {
+  font-size: var(--kr-fs-name) !important;
+}
+
+/* Body text sizes inside the app. */
+html[data-lv] body :is(p, li, dd, label, td) {
+  line-height: var(--kr-lh-body);
+}
+
+/* Chat messages. */
+html[data-lv] body .ttm-chat-bubble,
+html[data-lv] body .ttm-chat-bubble p,
+html[data-lv] body .bd-msg {
+  font-size: var(--kr-fs-chat) !important;
+  font-weight: var(--kr-w-light) !important;
+  line-height: var(--kr-lh-body) !important;
+}
+
+/* Timers: extra light, tabular digits. */
+html[data-lv] body :is(
+    .ttm-countdown-timer__digits,
+    .ttm-timer-block__value,
+    .ttm-welcome-match-timer__value,
+    .ttm-dating-onboarding__clock-value,
+    .ttm-hero__countdown-num,
+    .bd-timer,
+    .kr-timer
+  ) {
+  font-weight: var(--kr-w-xlight) !important;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em !important;
+}
+html[data-lv] body :is(.ttm-timer-block__value, .ttm-welcome-match-timer__value, .kr-timer) {
+  font-size: var(--kr-fs-timer) !important;
+}
+
+/* Buttons: Regular. Primary actions 16 px. */
+html[data-lv] body :is(button, [role="button"], input[type="submit"], input[type="button"]),
+html[data-lv] body a:is([class*="cta"], [class*="__btn"], [class*="-btn"], [class*="button"]) {
+  font-weight: var(--kr-w-regular) !important;
+  letter-spacing: var(--kr-tracking) !important;
+}
+html[data-lv] body :is(
+    [class*="cta"],
+    [class*="__primary"],
+    [class*="btn--primary"],
+    .ttm-app-likes__btn,
+    .lv-consent-gate__agree,
+    .bd-btn
+  ) {
+  font-size: var(--kr-fs-button) !important;
+}
+
+/* Form fields: Light 16 px (16 px also stops iOS Safari zooming in on focus). */
+html[data-lv] body :is(input, textarea, select) {
+  font-weight: var(--kr-w-light) !important;
+  font-size: var(--kr-fs-input) !important;
+  line-height: var(--kr-lh-body);
+  letter-spacing: var(--kr-tracking);
+}
+
+/* Bottom navigation labels. */
+html[data-lv] body :is(.ttm-app-dock__label, .ttm-dock-tab__label) {
+  font-size: var(--kr-fs-nav) !important;
+  font-weight: var(--kr-w-regular) !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Secondary text. */
+html[data-lv] body :is(small, .text-xs, .text-sm, [class*="__hint"], [class*="__meta"], [class*="__time"], [class*="__sub"]) {
+  font-weight: var(--kr-w-regular);
+}
+html[data-lv] body :is(.text-xs, .text-sm, small) {
+  letter-spacing: 0.015em;
+}
+
+/* Toasts / notifications (sonner) and dialogs follow the same system. */
+html[data-lv] body :is([data-sonner-toast], [role="dialog"], [role="alertdialog"]) {
+  font-weight: var(--kr-w-light);
+  line-height: var(--kr-lh-body);
+}
+html[data-lv] body [data-sonner-toast] [data-title] {
+  font-weight: var(--kr-w-regular) !important;
+}
+
+/* A little more air between stacked blocks of text. */
+html[data-lv] body :is(p + p) {
+  margin-top: 0.6em;
+}

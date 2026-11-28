@@ -11,6 +11,7 @@ import { fontBody, fontDisplay, fontLandingBody } from "@/client/lib/fonts"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
+import "./typography.css"
 import { I18nProvider } from "@/client/lib/i18n"
 import { getLocaleMessages } from "@/client/lib/i18n/messages-server"
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/client/lib/i18n/config"
@@ -111,6 +112,9 @@ export default async function RootLayout({
     <html lang={lang} suppressHydrationWarning className="bg-transparent" data-lv="1">
       <head>
         <meta name="color-scheme" content="light dark" />
+        {/* Kairo typeface: the two subsets almost every screen needs (others load on demand). */}
+        <link rel="preload" href="/fonts/manrope/manrope-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/manrope/manrope-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script
           dangerouslySetInnerHTML={{
             __html:
