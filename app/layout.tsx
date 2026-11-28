@@ -10,6 +10,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 import { I18nProvider } from "@/client/lib/i18n"
+import { getLocaleMessages } from "@/client/lib/i18n/messages-server"
 import { DEFAULT_LOCALE, isLocale, type Locale } from "@/client/lib/i18n/config"
 import { QueryProvider } from "@/client/components/providers/query-provider"
 import { SiteBackground } from "@/client/components/site-background"
@@ -126,7 +127,7 @@ export default async function RootLayout({
           <AppModeSync />
           <AndroidBackHandler />
           <LvThemeSync />
-          <I18nProvider initialLocale={lang}>
+          <I18nProvider initialLocale={lang} initialMessages={getLocaleMessages(lang)}>
             <QueryProvider>
               <AchievementProvider>
                 <ServiceWorkerRegister />
