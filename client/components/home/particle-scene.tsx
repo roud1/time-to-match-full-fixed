@@ -1,14 +1,17 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import { FACES_APART, FACES_TOGETHER, KAIRO_MARK, PARTICLE_COUNT } from "./particles-data"
+import { useEffect, useRef, type RefObject } from "react"
+import { FACES_APART, KAIRO_MARK, PARTICLE_COUNT } from "./particles-data"
 
 /**
- * Home-page animation: emerald particles drift, gather into two profiles that move together,
- * glow at the kiss, re-form into the Kairo heart-hourglass and scatter again — under two slowly
- * rotating light arcs. Canvas 2D, one loop (~10 s), pauses when hidden or off-screen, draws fewer
- * particles on a device that cannot keep up; with
- * "reduce motion" a single still frame (the Kairo mark) is drawn.
+ * Home-page animation (full screen, behind the content): emerald particles drift across the
+ * whole start screen, stream into two profiles, the profiles glide towards each other and meet
+ * in a slow kiss with a warm glow, then re-form into the Kairo heart-hourglass and scatter
+ * across the screen again. Two light arcs rotate around the scene.
+ *
+ * The scene is centred on `anchorRef` (the free area between headline and timer card).
+ * Canvas 2D; pauses when hidden; draws fewer particles on a device that cannot keep up;
+ * with "reduce motion" a single still frame (the mark) is drawn.
  */
 
 type Pt = { x: number; y: number; b: number }
@@ -26,25 +29,36 @@ function decode(b64: string): Pt[] {
   return out
 }
 
-// Timeline (seconds): scatter → faces apart → faces together → kiss → mark → scatter.
-const KEYS = [
-  { t: 0, set: 0 },
-  { t: 1.4, set: 0 },
-  { t: 3.2, set: 1 },
-  { t: 4.0, set: 1 },
-  { t: 5.4, set: 2 },
-  { t: 6.4, set: 2 },
-  { t: 7.8, set: 3 },
-  { t: 9.6, set: 3 },
-  { t: 10.8, set: 0 },
-] as const
-const LOOP = 10.8
-const KISS = { at: 5.5, from: 4.9, to: 6.6 }
-const MARK_GLOW = { from: 7.6, to: 10.2 }
+/* Timeline (seconds). States: S = scattered over the screen, F = faces, M = Kairo mark. */
+const T = {
+  gatherFrom: 1.4,
+  gatherTo: 3.6,
+  approachFrom: 3.6,
+  approachTo: 6.6, // the faces glide together (one smooth ease-in-out)
+  kissFrom: 5.9,
+  kissPeak: 6.9,
+  kissTo: 8.0,
+  markFrom: 7.6,
+  markTo: 9.2,
+  scatterFrom: 10.6,
+  scatterTo: 12.4,
+  loop: 12.8,
+}
+/** How far each face glides towards the other (scene units): the profiles just meet. */
+const APPROACH = 0.152
 
-const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
+const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
+const smooth = (t: number) => t * t * (3 - 2 * t)
+const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v)
+const range = (t: number, a: number, b: number) => clamp01((t - a) / (b - a))
 
-export function ParticleScene({ className }: { className?: string }) {
+export function ParticleScene({
+  className,
+  anchorRef,
+}: {
+  className?: string
+  anchorRef: RefObject<HTMLElement | null>
+}) {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -53,33 +67,42 @@ export function ParticleScene({ className }: { className?: string }) {
     const ctx = canvas.getContext("2d", { alpha: true })
     if (!ctx) return
 
-    const apart = decode(FACES_APART)
-    const together = decode(FACES_TOGETHER)
+    const faces = decode(FACES_APART)
     const mark = decode(KAIRO_MARK)
     const n = PARTICLE_COUNT
 
-    // Deterministic per-particle randomness.
     let seed = 7
     const rnd = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646
 
-    // Set 0 = scattered cloud, 1 = faces apart, 2 = faces together, 3 = the Kairo mark (smaller, centred).
-    const scatter: Pt[] = Array.from({ length: n }, () => {
-      const a = rnd() * Math.PI * 2
-      const r = 0.25 + Math.pow(rnd(), 0.7) * 0.75
-      return { x: Math.cos(a) * r, y: Math.sin(a) * r * 0.85, b: 0.25 + rnd() * 0.45 }
-    })
-    const markScaled: Pt[] = mark.map((p) => ({ x: p.x * 0.42, y: p.y * 0.42 - 0.02, b: 0.55 + p.b * 0.45 }))
-    const sets: Pt[][] = [scatter, apart, together, markScaled]
-    const delay = Float32Array.from({ length: n }, () => rnd() * 0.45)
+    // Scattered state: anywhere on the screen (fractions of the viewport), dim.
+    const sx = Float32Array.from({ length: n }, () => rnd())
+    const sy = Float32Array.from({ length: n }, () => rnd())
+    const sb = Float32Array.from({ length: n }, () => 0.22 + rnd() * 0.45)
+    // The man's profile is the left part of the face cloud, the woman's the right part.
+    const side = Int8Array.from(faces, (p) => (p.x < -0.02 ? -1 : 1))
+    // Where the lips meet: between the two profile tips (nose / lips band), after the approach.
+    let tipMan = -1
+    let tipWoman = 1
+    let tipY = 0
+    for (let i = 0; i < n; i++) {
+      const p = faces[i]
+      if (p.y < -0.05 || p.y > 0.35) continue
+      if (side[i] < 0 && p.x > tipMan) {
+        tipMan = p.x
+        tipY = p.y
+      }
+      if (side[i] > 0 && p.x < tipWoman) tipWoman = p.x
+    }
+    const kissAt = { x: (tipMan + tipWoman) / 2, y: tipY + 0.07 }
+    const markPts = mark.map((p) => ({ x: p.x * 0.42, y: p.y * 0.42 - 0.02, b: 0.55 + p.b * 0.45 }))
+    const delay = Float32Array.from({ length: n }, () => rnd())
     const phase = Float32Array.from({ length: n }, () => rnd() * Math.PI * 2)
-    const speed = Float32Array.from({ length: n }, () => 0.4 + rnd() * 0.9)
+    const speed = Float32Array.from({ length: n }, () => 0.35 + rnd() * 0.8)
     const size = Float32Array.from({ length: n }, () => 0.7 + Math.pow(rnd(), 4) * 1.1)
-    // Positions of the current frame (computed once, then drawn in brightness bands).
     const px = new Float32Array(n)
     const py = new Float32Array(n)
     const pb = new Float32Array(n)
 
-    // Pre-rendered soft dot for the brightest particles (cheaper than shadows).
     const sprite = document.createElement("canvas")
     sprite.width = sprite.height = 32
     const sctx = sprite.getContext("2d")!
@@ -93,6 +116,10 @@ export function ParticleScene({ className }: { className?: string }) {
     let w = 0
     let h = 0
     let dpr = 1
+    // Scene centre and radius in canvas pixels (from the anchor element).
+    let cx = 0
+    let cy = 0
+    let R = 0
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, 2)
       const r = canvas.getBoundingClientRect()
@@ -100,35 +127,33 @@ export function ParticleScene({ className }: { className?: string }) {
       h = Math.max(1, Math.round(r.height))
       canvas.width = Math.round(w * dpr)
       canvas.height = Math.round(h * dpr)
+      const a = anchorRef.current?.getBoundingClientRect()
+      if (a && a.width > 0 && a.height > 0) {
+        cx = a.left - r.left + a.width / 2
+        cy = a.top - r.top + a.height / 2
+        R = Math.min(a.width, a.height) / 2
+      } else {
+        cx = w / 2
+        cy = h / 2
+        R = Math.min(w, h) / 3
+      }
     }
     resize()
 
-    const segment = (t: number) => {
-      for (let k = 0; k < KEYS.length - 1; k++) {
-        if (t >= KEYS[k].t && t < KEYS[k + 1].t) return k
-      }
-      return KEYS.length - 2
-    }
-
-    // Adaptive quality: a device that cannot keep up draws every 2nd / 3rd particle.
     let stride = 1
     const draw = (time: number) => {
-      const t = time % LOOP
+      const t = time % T.loop
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.clearRect(0, 0, w, h)
-      const side = Math.min(w, h)
-      const cx = w / 2
-      const cy = h / 2
-      const R = side / 2
+      const scale = R * 0.92
+      const sideLen = R * 2
 
-      // Rotating arcs (behind the particles).
-      const rot = (time / 14) * Math.PI * 2
+      // Arcs around the scene.
+      const rot = (time / 16) * Math.PI * 2
       ctx.lineCap = "round"
-      for (const [start, len] of [
-        [-0.25, 0.9],
-        [Math.PI - 0.25, 0.9],
-      ] as const) {
+      for (const start of [-0.25, Math.PI - 0.25]) {
         const a0 = start + rot
+        const len = 0.9
         const g = ctx.createLinearGradient(
           cx + Math.cos(a0) * R * 0.9,
           cy + Math.sin(a0) * R * 0.9,
@@ -136,47 +161,63 @@ export function ParticleScene({ className }: { className?: string }) {
           cy + Math.sin(a0 + len) * R * 0.9
         )
         g.addColorStop(0, "rgba(25,230,160,0)")
-        g.addColorStop(0.6, "rgba(25,230,160,0.55)")
-        g.addColorStop(1, "rgba(200,255,235,0.95)")
+        g.addColorStop(0.6, "rgba(25,230,160,0.5)")
+        g.addColorStop(1, "rgba(200,255,235,0.9)")
         ctx.strokeStyle = g
-        ctx.lineWidth = Math.max(1.5, side * 0.008)
+        ctx.lineWidth = Math.max(1.5, sideLen * 0.008)
         ctx.shadowColor = "rgba(25,230,160,0.8)"
-        ctx.shadowBlur = side * 0.04
+        ctx.shadowBlur = sideLen * 0.04
         ctx.beginPath()
         ctx.arc(cx, cy, R * 0.9, a0, a0 + len)
         ctx.stroke()
       }
       ctx.shadowBlur = 0
 
-      // Particles.
-      const k = segment(t)
-      const k0 = KEYS[k]
-      const k1 = KEYS[k + 1]
-      const from = sets[k0.set]
-      const to = sets[k1.set]
-      const span = k1.t - k0.t
-      const moving = k0.set !== k1.set
-      const scale = R * 0.92
-      const local = moving ? (t - k0.t) / span : 1
+      // Phase weights.
+      const approach = easeInOut(range(t, T.approachFrom, T.approachTo))
+      const toMark = range(t, T.markFrom, T.markTo)
+      const toScatter = range(t, T.scatterFrom, T.scatterTo)
+      const gather = range(t, T.gatherFrom, T.gatherTo)
+
       for (let i = 0; i < n; i += stride) {
-        const p = moving ? ease(Math.min(1, Math.max(0, (local - delay[i] * 0.6) / (1 - 0.45 * 0.6)))) : 1
-        const a = from[i]
-        const b = to[i]
-        // Drift: strong while scattered, a faint shimmer while a shape holds.
-        const scattered = (k0.set === 0 ? 1 - p : 0) + (k1.set === 0 ? p : 0)
-        const loose = 0.06 + 0.94 * scattered
+        // Faces: two rigid profiles gliding towards each other.
+        const f = faces[i]
+        let x = f.x - side[i] * APPROACH * approach
+        let y = f.y
+        let b = f.b
+        // Per-particle staggered morphs (gather, mark, scatter).
+        const d = delay[i] * 0.45
+        const g = easeInOut(clamp01((gather - d) / (1 - 0.45)))
+        const m = easeInOut(clamp01((toMark - d) / (1 - 0.45)))
+        const sc = easeInOut(clamp01((toScatter - d) / (1 - 0.45)))
+        const mp = markPts[i]
+        x += (mp.x - x) * m
+        y += (mp.y - y) * m
+        b += (mp.b - b) * m
+        // Scene → screen pixels.
+        let X = cx + x * scale
+        let Y = cy + y * scale
+        // Scattered over the whole screen (before gathering / after scattering).
+        const scattered = t < T.gatherTo ? 1 - g : sc
         const wob = phase[i] + time * speed[i]
-        px[i] = cx + (a.x + (b.x - a.x) * p + Math.sin(wob) * 0.02 * loose) * scale
-        py[i] = cy + (a.y + (b.y - a.y) * p + Math.cos(wob * 1.3) * 0.02 * loose) * scale
-        pb[i] = a.b + (b.b - a.b) * p
+        const sX = sx[i] * w + Math.sin(wob) * 14
+        const sY = sy[i] * h + Math.cos(wob * 1.3) * 14
+        X += (sX - X) * scattered
+        Y += (sY - Y) * scattered
+        b += (sb[i] - b) * scattered
+        // A faint shimmer while a shape holds.
+        X += Math.sin(wob) * 0.6
+        Y += Math.cos(wob * 1.3) * 0.6
+        px[i] = X
+        py[i] = Y
+        pb[i] = b
       }
+
       ctx.globalCompositeOperation = "lighter"
-      // Most particles are tiny squares drawn in three brightness bands (few state changes);
-      // only the brightest few get the soft glow sprite.
-      const unit = side / 380
+      const unit = sideLen / 380
       for (let band = 0; band < 3; band++) {
         ctx.fillStyle = band === 2 ? "#c8ffe9" : "#19e6a0"
-        ctx.globalAlpha = band === 0 ? 0.45 : band === 1 ? 0.8 : 0.9
+        ctx.globalAlpha = band === 0 ? 0.42 : band === 1 ? 0.78 : 0.9
         for (let i = 0; i < n; i += stride) {
           const bb = pb[i] < 0.33 ? 0 : pb[i] < 0.72 ? 1 : 2
           if (bb !== band) continue
@@ -192,37 +233,41 @@ export function ParticleScene({ className }: { className?: string }) {
       }
       ctx.globalAlpha = 1
 
-      // Kiss glow and the mark's halo.
+      // Kiss: a soft glow that swells where the lips meet, then fades.
       const glow = (x: number, y: number, r: number, alpha: number) => {
-        if (alpha <= 0) return
-        const g = ctx.createRadialGradient(x, y, 0, x, y, r)
-        g.addColorStop(0, `rgba(190,255,230,${0.9 * alpha})`)
-        g.addColorStop(0.3, `rgba(25,230,160,${0.45 * alpha})`)
-        g.addColorStop(1, "rgba(25,230,160,0)")
-        ctx.fillStyle = g
+        if (alpha <= 0.001) return
+        const gr = ctx.createRadialGradient(x, y, 0, x, y, r)
+        gr.addColorStop(0, `rgba(200,255,232,${0.85 * alpha})`)
+        gr.addColorStop(0.3, `rgba(25,230,160,${0.42 * alpha})`)
+        gr.addColorStop(1, "rgba(25,230,160,0)")
+        ctx.fillStyle = gr
         ctx.fillRect(x - r, y - r, r * 2, r * 2)
       }
-      const bell = (from: number, at: number, to: number) =>
-        t < from || t > to ? 0 : t < at ? (t - from) / (at - from) : 1 - (t - at) / (to - at)
-      glow(cx - 0.06 * scale, cy + 0.36 * scale, side * 0.15, bell(KISS.from, KISS.at, KISS.to))
-      glow(cx, cy, side * 0.3, 0.35 * bell(MARK_GLOW.from, (MARK_GLOW.from + MARK_GLOW.to) / 2, MARK_GLOW.to))
+      const kiss =
+        t < T.kissFrom || t > T.kissTo
+          ? 0
+          : t < T.kissPeak
+            ? smooth(range(t, T.kissFrom, T.kissPeak))
+            : 1 - smooth(range(t, T.kissPeak, T.kissTo))
+      glow(cx + kissAt.x * scale, cy + kissAt.y * scale, sideLen * 0.12, kiss)
+      const markGlow = Math.min(range(t, T.markFrom + 0.8, T.markTo + 0.4), 1 - range(t, T.scatterFrom - 0.6, T.scatterFrom + 0.6))
+      glow(cx, cy, sideLen * 0.3, 0.32 * markGlow)
       ctx.globalCompositeOperation = "source-over"
     }
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const onResize = () => {
+      resize()
+      if (reduce) draw(9.8)
+    }
+    window.addEventListener("resize", onResize)
     if (reduce) {
-      draw(8.6)
-      const onResize = () => {
-        resize()
-        draw(8.6)
-      }
-      window.addEventListener("resize", onResize)
+      draw(9.8)
       return () => window.removeEventListener("resize", onResize)
     }
 
     let raf = 0
     let running = false
-    let visible = true
     let last = performance.now()
     let clock = 0
     let frameMs = 16
@@ -240,7 +285,7 @@ export function ParticleScene({ className }: { className?: string }) {
       raf = requestAnimationFrame(loop)
     }
     const start = () => {
-      if (running || document.hidden || !visible) return
+      if (running || document.hidden) return
       running = true
       last = performance.now()
       raf = requestAnimationFrame(loop)
@@ -249,25 +294,19 @@ export function ParticleScene({ className }: { className?: string }) {
       running = false
       cancelAnimationFrame(raf)
     }
-    const io = new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting
-      if (visible) start()
-      else stop()
-    })
-    io.observe(canvas)
     const onVis = () => (document.hidden ? stop() : start())
     document.addEventListener("visibilitychange", onVis)
-    const onResize = () => resize()
-    window.addEventListener("resize", onResize)
+    // Layout can settle after fonts/images: re-measure the anchor once more.
+    const settle = window.setTimeout(resize, 400)
     draw(0)
     start()
     return () => {
       stop()
-      io.disconnect()
+      window.clearTimeout(settle)
       document.removeEventListener("visibilitychange", onVis)
       window.removeEventListener("resize", onResize)
     }
-  }, [])
+  }, [anchorRef])
 
   return <canvas ref={ref} className={className} aria-hidden />
 }

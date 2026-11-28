@@ -4,7 +4,7 @@ import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import dynamic from "next/dynamic"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { ArrowRight, ShieldCheck, Timer, Users, Zap } from "lucide-react"
 import { LanguageSwitcher } from "@/client/components/language-switcher"
 import { useI18n } from "@/client/lib/i18n"
@@ -23,6 +23,7 @@ export function KairoHome() {
   const { t } = useI18n()
   const router = useRouter()
   const [loggedIn, setLoggedIn] = useState(false)
+  const heroRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const logged = isLoggedIn()
@@ -41,6 +42,8 @@ export function KairoHome() {
 
   return (
     <main className={styles.page} aria-labelledby="lv-home-title">
+      {/* Full-screen particles behind the content; the scene centres on the hero area. */}
+      <ParticleScene className={styles.scene} anchorRef={heroRef} />
       <div className={styles.lang}>
         <LanguageSwitcher embedded />
       </div>
@@ -65,7 +68,7 @@ export function KairoHome() {
       </section>
 
       <div className={styles.hero}>
-        <ParticleScene className={styles.heroCanvas} />
+        <div className={styles.stage} ref={heroRef} />
         <div className={styles.timer} role="img" aria-label={`24:00:00 — ${t("lvHomeTimerLabel")}`}>
           <strong className="kr-timer">
             <Timer aria-hidden strokeWidth={1.5} />
