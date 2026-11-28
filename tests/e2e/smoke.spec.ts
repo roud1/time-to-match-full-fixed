@@ -7,7 +7,7 @@ test.describe("Landing", () => {
     await expect(page).toHaveTitle(/Kairo/i)
     await expect(page.getByRole("img", { name: "Kairo" }).first()).toBeVisible()
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
-    await expect(page.locator('img[src*="hero"], img[srcset*="hero"]').first()).toBeVisible()
+    await expect(page.locator("main canvas")).toBeVisible()
     await expect(page.locator('a[href="/login"]').first()).toBeVisible()
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
     expect(overflow).toBe(0)
