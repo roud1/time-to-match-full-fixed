@@ -41,6 +41,11 @@ const nextConfig = {
   serverExternalPackages: ["postgres", "bcryptjs"],
   experimental: {
     optimizePackageImports: ["lucide-react"],
+    // Every page is dynamic (the root layout reads the locale header), so by default the client
+    // router re-requests a screen on each tap and re-prefetches every dock link after each
+    // navigation. Screens load their data from the API themselves, so reusing the router's copy
+    // for 30 s only skips those repeat round trips to the (small) server.
+    staleTimes: { dynamic: 30 },
   },
   images: {
     formats: ["image/avif", "image/webp"],

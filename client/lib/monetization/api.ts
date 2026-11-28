@@ -1,4 +1,5 @@
 import { getAppMode } from "@/client/lib/auth/client"
+import { shareInflight } from "@/client/lib/inflight"
 import { activatePremium, getUserProfile, updateUserProfile } from "@/client/lib/user-profile"
 import type { BoostApiResponse, SubscriptionApiResponse, UserSubscriptionInfo } from "@/client/lib/monetization/types"
 
@@ -82,7 +83,11 @@ function syncLocalPremium(data: SubscriptionApiResponse): void {
   if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("ttm-user-profile-changed"))
 }
 
-export async function fetchSubscriptionSummary(): Promise<SubscriptionApiResponse> {
+export function fetchSubscriptionSummary(): Promise<SubscriptionApiResponse> {
+  return shareInflight("subscription", fetchSubscriptionSummaryOnce)
+}
+
+async function fetchSubscriptionSummaryOnce(): Promise<SubscriptionApiResponse> {
   const mode = await getAppMode().catch(() => "production" as const)
   try {
     const res = await fetch("/api/subscription", { credentials: "include", cache: "no-store" })

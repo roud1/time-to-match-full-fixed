@@ -48,7 +48,7 @@ export function ProfileExpiryPanel({ profile, onProfileUpdate, className }: Prof
               type="button"
               className="min-h-[44px] px-6"
               onClick={() => {
-                recordProfileActivity()
+                recordProfileActivity({ force: true })
                 window.setTimeout(() => void refetch(), 800)
                 const updated = getUserProfile()
                 if (updated) onProfileUpdate(updated)

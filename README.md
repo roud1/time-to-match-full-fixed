@@ -210,6 +210,16 @@ Webhook events handled: `checkout.session.completed`, `customer.subscription.upd
 
 Key images use `next/image` with lazy loading below the fold. Heavy app shell is dynamically imported on `/app`.
 
+**Request budget (the free Render instance has 0.1 CPU, so every extra request queues):**
+
+- Identical concurrent calls share one request (`client/lib/inflight.ts`): `/api/me`, `/api/subscription`, `/api/likes/incoming`, and the `/api/ready` mode check (cached for 10 min per tab).
+- `/api/me` starts in parallel with the mode check instead of after it.
+- Back on the feed within 5 min, the app shell renders at once from the last confirmed session and re-checks `/api/me` in the background (`getRecentMe`).
+- The client router keeps dynamic screens for 30 s (`experimental.staleTimes.dynamic` in `next.config.mjs`), so tab switches stop re-requesting and re-prefetching every dock link.
+- Profile activity is synced to the server at most once a minute (explicit "extend/revive" bypasses it).
+- Regression test: `tests/e2e/app-requests.spec.ts`.
+- Keep-alive: an external pinger (e.g. cron-job.org) calls `GET /api/health` every 5 min so the free instance does not sleep.
+
 **Lighthouse targets (mobile, production build on 4G):**
 
 | Metric | Target |
