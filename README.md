@@ -218,6 +218,11 @@ Key images use `next/image` with lazy loading below the fold. Heavy app shell is
 - The client router keeps dynamic screens for 30 s (`experimental.staleTimes.dynamic` in `next.config.mjs`), so tab switches stop re-requesting and re-prefetching every dock link.
 - Profile activity is synced to the server at most once a minute (explicit "extend/revive" bypasses it).
 - Regression test: `tests/e2e/app-requests.spec.ts`.
+
+**Download budget:**
+
+- Translations: the server passes only the page language (merged with its fallbacks) to `I18nProvider` (`client/lib/i18n/messages-server.ts`). Another language is downloaded on demand as its own chunk (`client/lib/i18n/messages.ts`). Previously all 9 languages (~320 KB gzipped) were in one chunk that changed with every text edit. Test: `tests/e2e/i18n-lazy.spec.ts`.
+- Sentry in the browser is downloaded only when `NEXT_PUBLIC_SENTRY_DSN` is set at build time (`instrumentation-client.ts`). Server-side Sentry still uses `SENTRY_DSN`.
 - Keep-alive: an external pinger (e.g. cron-job.org) calls `GET /api/health` every 5 min so the free instance does not sleep.
 
 **Lighthouse targets (mobile, production build on 4G):**

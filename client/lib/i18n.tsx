@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useEffect,
+  useRef,
   useMemo,
   useCallback,
   type ReactNode,
@@ -18,7 +19,6 @@ import {
 } from "@/client/lib/geo"
 import {
   type Locale,
-  LOCALE_FALLBACK,
   isLocale,
   DEFAULT_LOCALE,
   detectLocale,
@@ -26,17 +26,15 @@ import {
   localeShortNames,
   localeToBcp47,
 } from "@/client/lib/i18n/config"
-import enMessages from "@/client/lib/i18n/locales/en.json"
-import ukMessages from "@/client/lib/i18n/locales/uk.json"
-import deMessages from "@/client/lib/i18n/locales/de.json"
-import esMessages from "@/client/lib/i18n/locales/es.json"
-import plMessages from "@/client/lib/i18n/locales/pl.json"
-import frMessages from "@/client/lib/i18n/locales/fr.json"
-import itMessages from "@/client/lib/i18n/locales/it.json"
-import trMessages from "@/client/lib/i18n/locales/tr.json"
-import ruMessages from "@/client/lib/i18n/locales/ru.json"
+import {
+  loadLocaleMessages,
+  rememberLocaleMessages,
+  type LocaleMessages,
+  type TranslationKey,
+} from "@/client/lib/i18n/messages"
 
 export type { Locale } from "@/client/lib/i18n/config"
+export type { TranslationKey, LocaleMessages } from "@/client/lib/i18n/messages"
 export {
   LOCALES,
   localeNames,
@@ -47,41 +45,12 @@ export {
   detectLocale,
 } from "@/client/lib/i18n/config"
 
-export type TranslationKey = keyof typeof ruMessages
-type LocaleMessages = typeof ruMessages
-type ProfileTranslation = (typeof ruMessages.profiles)[number]
-
-const JSON_LOCALES: Partial<Record<Locale, LocaleMessages>> = {
-  ru: ruMessages as unknown as LocaleMessages,
-  en: enMessages as unknown as LocaleMessages,
-  uk: ukMessages as unknown as LocaleMessages,
-  de: deMessages as unknown as LocaleMessages,
-  es: esMessages as unknown as LocaleMessages,
-  pl: plMessages as unknown as LocaleMessages,
-  fr: frMessages as unknown as LocaleMessages,
-  it: itMessages as unknown as LocaleMessages,
-  tr: trMessages as unknown as LocaleMessages,
-}
-
-function getLocalePack(loc: Locale): LocaleMessages | undefined {
-  return JSON_LOCALES[loc]
-}
-
-export function buildLocaleDict(locale: Locale): LocaleMessages {
-  const chain = [...LOCALE_FALLBACK[locale]].reverse()
-  let merged: Record<string, unknown> = {}
-  for (const loc of chain) {
-    const pack = getLocalePack(loc)
-    if (pack) merged = { ...merged, ...pack }
-  }
-  return merged as LocaleMessages
-}
+type ProfileTranslation = LocaleMessages["profiles"][number]
 
 const PROFILE_AGES = [25, 28, 27, 26] as const
 const PROFILE_TIMERS = ["23:45:12", "47:22:08", "12:15:33", "68:30:45"] as const
 
-export function buildProfileCards(locale: Locale, userPosition?: GeoPosition | null) {
-  const dict = buildLocaleDict(locale)
+export function buildProfileCards(dict: LocaleMessages, locale: Locale, userPosition?: GeoPosition | null) {
   return dict.profiles.map((profile, index) => {
     const distance =
       userPosition != null
@@ -121,12 +90,33 @@ const I18nContext = createContext<I18nContextType | null>(null)
 export function I18nProvider({
   children,
   initialLocale = DEFAULT_LOCALE,
+  initialMessages,
 }: {
   children: ReactNode
   /** Resolved on the server (choice cookie or Accept-Language), so the first paint is in that language. */
   initialLocale?: Locale
+  /** The merged dictionary for `initialLocale`, sent by the server so no language bundle blocks the first paint. */
+  initialMessages: LocaleMessages
 }) {
-  const [locale, setLocale] = useState<Locale>(initialLocale)
+  // Locale and dictionary always change together: a new language is shown once its pack has loaded.
+  const [state, setState] = useState<{ locale: Locale; dict: LocaleMessages }>(() => {
+    rememberLocaleMessages(initialLocale, initialMessages)
+    return { locale: initialLocale, dict: initialMessages }
+  })
+  const { locale, dict: localeDict } = state
+  const wanted = useRef<Locale>(initialLocale)
+
+  const setLocale = useCallback((next: Locale) => {
+    wanted.current = next
+    void loadLocaleMessages(next).then(
+      (dict) => {
+        if (wanted.current === next) setState((prev) => (prev.locale === next ? prev : { locale: next, dict }))
+      },
+      () => {
+        /* offline: keep the current language */
+      }
+    )
+  }, [])
 
   useEffect(() => {
     let saved: string | null = null
@@ -137,6 +127,8 @@ export function I18nProvider({
     }
     if (saved && isLocale(saved)) {
       setLocale(saved)
+      // Keep the cookie in step so the server renders (and sends) this language next time.
+      document.cookie = `ttm-locale=${saved};path=/;max-age=31536000;SameSite=Lax`
       return
     }
     // No explicit choice yet: follow the device language (beats the later location-based suggestion).
@@ -148,22 +140,24 @@ export function I18nProvider({
       /* storage blocked */
     }
     document.cookie = `ttm-locale=${detected};path=/;max-age=31536000;SameSite=Lax`
-  }, [])
+  }, [setLocale])
 
   useEffect(() => {
     document.documentElement.lang = localeToBcp47(locale).split("-")[0] ?? DEFAULT_LOCALE
   }, [locale])
 
-  const localeDict = useMemo(() => buildLocaleDict(locale), [locale])
-
   const handleSetLocale = useCallback((newLocale: Locale) => {
     setLocale(newLocale)
-    localStorage.setItem("locale", newLocale)
+    try {
+      localStorage.setItem("locale", newLocale)
+    } catch {
+      /* storage blocked */
+    }
     // Write cookie so server components (layout lang attr) can read the locale
     if (typeof document !== "undefined") {
       document.cookie = `ttm-locale=${newLocale};path=/;max-age=31536000;SameSite=Lax`
     }
-  }, [])
+  }, [setLocale])
 
   const {
     status: locationStatus,
@@ -181,7 +175,10 @@ export function I18nProvider({
     [localeDict]
   )
 
-  const profileCards = useMemo(() => buildProfileCards(locale, userPosition), [locale, userPosition])
+  const profileCards = useMemo(
+    () => buildProfileCards(localeDict, locale, userPosition),
+    [localeDict, locale, userPosition]
+  )
 
   const location = useMemo(
     () => ({
