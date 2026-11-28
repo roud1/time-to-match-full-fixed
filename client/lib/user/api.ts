@@ -14,6 +14,7 @@ import {
 } from "@/client/lib/user/local-freeze-wallet"
 import { getFreezePackage } from "@/client/lib/freeze-packages"
 import { getAppMode } from "@/client/lib/auth/client"
+import { shareInflight } from "@/client/lib/inflight"
 import { syncDemoSessionCookie } from "@/client/lib/user-profile"
 
 function syncLocalFromServerUser(user: MeResponse["user"]): void {
@@ -38,8 +39,34 @@ function syncLocalFromServerUser(user: MeResponse["user"]): void {
   if (!isLoggedIn()) setSession(user.email, true)
 }
 
-export async function fetchMe(): Promise<MeResponse["user"] | null> {
-  const mode = await getAppMode().catch(() => "production" as const)
+let lastMe: { user: MeResponse["user"]; at: number } | null = null
+
+/**
+ * The signed-in user from the last successful `/api/me` in this tab, if it is at most `maxAgeMs` old.
+ * Lets screens that remount (e.g. back from the profile to the feed) render at once while
+ * `fetchMe()` re-checks the session in the background.
+ */
+export function getRecentMe(maxAgeMs: number): MeResponse["user"] | null {
+  if (!lastMe || Date.now() - lastMe.at > maxAgeMs) return null
+  // Signed out (or another account) since then: never reuse it.
+  const profile = getUserProfile()
+  if (!isLoggedIn() || !profile || profile.email.toLowerCase() !== lastMe.user.email.toLowerCase()) {
+    return null
+  }
+  return lastMe.user
+}
+
+export function fetchMe(): Promise<MeResponse["user"] | null> {
+  return shareInflight("me", async () => {
+    const user = await fetchMeOnce()
+    lastMe = user && user.id !== "local" ? { user, at: Date.now() } : null
+    return user
+  })
+}
+
+async function fetchMeOnce(): Promise<MeResponse["user"] | null> {
+  // Started in parallel with /api/me: the mode is only needed for the demo fallback below.
+  const modePromise = getAppMode().catch(() => "production" as const)
 
   try {
     const controller = new AbortController()
@@ -59,12 +86,12 @@ export async function fetchMe(): Promise<MeResponse["user"] | null> {
 
     if (res.status === 401) return null
 
-    if (mode === "production") return null
+    if ((await modePromise) === "production") return null
   } catch {
-    if (mode === "production") return null
+    if ((await modePromise) === "production") return null
   }
 
-  if (mode !== "demo") return null
+  if ((await modePromise) !== "demo") return null
   if (!isLoggedIn()) return null
   const profile = getUserProfile()
   if (!profile) return null

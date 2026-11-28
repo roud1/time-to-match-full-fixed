@@ -6,6 +6,7 @@ import type { ActivityBumpKind } from "@/client/lib/activity-notify"
 import { getActivityCounts } from "@/client/lib/activity-metrics"
 import { getChats, getProfileById } from "@/client/lib/social-store"
 import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
+import { fetchIncomingLikes } from "@/client/lib/likes/api"
 import type { ChatThread } from "@/client/lib/social-store"
 
 export type ActivityToast = {
@@ -104,10 +105,9 @@ export function ActivityFeedProvider({ children }: { children: React.ReactNode }
   const [serverLikes, setServerLikes] = useState<number | null>(null)
   useEffect(() => {
     let alive = true
-    fetch("/api/likes/incoming", { credentials: "include", cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { count?: number } | null) => {
-        if (alive && d && typeof d.count === "number") setServerLikes(d.count)
+    fetchIncomingLikes()
+      .then((d) => {
+        if (alive && typeof d.count === "number") setServerLikes(d.count)
       })
       .catch(() => null)
     return () => {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import type { SwipeProfile } from "@/client/lib/demo-profiles"
 import { getDiscoverDeckProfiles, isDiscoverFilteredEmpty } from "@/client/lib/discover-deck"
@@ -50,6 +50,10 @@ export function DiscoverPanel() {
   const [deckEmptyReason, setDeckEmptyReason] = useState<"swiped" | "filters" | null>(null)
   const [deckRefreshing, setDeckRefreshing] = useState(false)
   const [subscription, setSubscription] = useState<SubscriptionApiResponse | null>(null)
+  const justLoadedEmpty = useRef(false)
+  // Profile-life updates fire on every recorded tap; they only re-check the profile gate and must
+  // not reload the deck and subscription from the server each time.
+  const [lifeTick, setLifeTick] = useState(0)
 
   const loadSubscription = useCallback(async () => {
     const summary = await fetchSubscriptionSummary()
@@ -92,6 +96,8 @@ export function DiscoverPanel() {
       setDeckRefreshing(true)
       try {
         const deck = await loadDeck(activeFilters)
+        // The server just said "nobody": the refill effect below must not ask again at once.
+        justLoadedEmpty.current = deck.length === 0
         setProfiles(deck)
         setDeckBooted(true)
       } finally {
@@ -123,7 +129,7 @@ export function DiscoverPanel() {
     ? null
     : (subscription?.limits.remaining ?? null)
   const profileLife = useProfileLife()
-  const profileGate = useMemo(() => assessDiscoverProfileReadiness(user), [user, profileTick])
+  const profileGate = useMemo(() => assessDiscoverProfileReadiness(user), [user, profileTick, lifeTick])
   const displayName = useMemo(() => {
     const name = user?.name?.trim()
     if (!name) return null
@@ -131,7 +137,7 @@ export function DiscoverPanel() {
   }, [user?.name])
 
   useEffect(() => {
-    const bump = () => setProfileTick((x) => x + 1)
+    const bump = () => setLifeTick((x) => x + 1)
     window.addEventListener("ttm-profile-life-updated", bump)
     return () => window.removeEventListener("ttm-profile-life-updated", bump)
   }, [])
@@ -159,6 +165,10 @@ export function DiscoverPanel() {
 
   useEffect(() => {
     if (!hydrated || !deckBooted || profiles.length > 0) return
+    if (justLoadedEmpty.current) {
+      justLoadedEmpty.current = false
+      return
+    }
     void loadDeck().then((deck) => {
       setDeckEmptyReason(
         deck.length === 0

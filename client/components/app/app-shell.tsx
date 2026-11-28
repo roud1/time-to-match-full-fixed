@@ -23,7 +23,7 @@ import { PaywallModal } from "@/client/components/premium/paywall-modal"
 import { PremiumBadgeLink } from "@/client/components/premium/premium-badge"
 import { AppTabTransition } from "@/client/components/mobile/app-tab-transition"
 import { useI18n } from "@/client/lib/i18n"
-import { fetchMe } from "@/client/lib/user/api"
+import { fetchMe, getRecentMe } from "@/client/lib/user/api"
 import { getUserProfile, isLoggedIn, isPremiumActive } from "@/client/lib/user-profile"
 import { cn } from "@/client/lib/utils"
 import { recordProfileActivity } from "@/client/lib/profile-life-store"
@@ -50,6 +50,9 @@ import { Heart } from "lucide-react"
 import { SensitiveConsentGate } from "@/client/components/app/sensitive-consent-gate"
 import { fetchSubscriptionSummary } from "@/client/lib/monetization/api"
 import { NotifyBadge } from "@/client/components/ui/notify-badge"
+
+/** How long a confirmed session lets the feed render before /api/me answers again. */
+const RECENT_ME_MAX_AGE_MS = 5 * 60_000
 
 const PAGE_MAX_WIDE = "max-w-[min(1200px,100%)]"
 const PAGE_MAX_NARROW = "max-w-lg"
@@ -89,7 +92,17 @@ export function AppShell() {
   useEffect(() => {
     let cancelled = false
 
+    /** Fast path: back on the feed within a few minutes, the session was just confirmed. */
+    function showFrom(me: { id: string; sensitiveDataConsentAt?: string | null }) {
+      setReady(true)
+      // Server accounts without the explicit Art. 9 consent (created before it existed) are asked once.
+      if (me.id !== "local" && !me.sensitiveDataConsentAt) setNeedsSensitiveConsent(true)
+    }
+
     async function init() {
+      const recent = getUserProfile() ? getRecentMe(RECENT_ME_MAX_AGE_MS) : null
+      if (recent) showFrom(recent)
+
       const me = await fetchMe()
       if (cancelled) return
 
@@ -108,9 +121,8 @@ export function AppShell() {
         return
       }
 
-      setReady(true)
-      // Server accounts without the explicit Art. 9 consent (created before it existed) are asked once.
-      if (me.id !== "local" && !me.sensitiveDataConsentAt) setNeedsSensitiveConsent(true)
+      showFrom(me)
+      if (me.sensitiveDataConsentAt) setNeedsSensitiveConsent(false)
       recordProfileActivity()
       // Mirror the server subscription into the local cache that paywalls read.
       void fetchSubscriptionSummary()

@@ -38,12 +38,12 @@ export function getLastActiveAt(): number {
   return meta?.lastActiveAt ?? profile?.registeredAt ?? Date.now()
 }
 
-export function recordProfileActivity(): ProfileLifeView {
+export function recordProfileActivity(options: { force?: boolean } = {}): ProfileLifeView {
   const now = Date.now()
   const meta: ProfileLifeMeta = { lastActiveAt: now, revivedAt: now }
   saveMeta(meta)
   dispatch()
-  void syncProfileActivityToServer()
+  void syncProfileActivityToServer(options)
   return computeProfileLife(now, now)
 }
 
@@ -56,7 +56,7 @@ export function getProfileLifeView(now = Date.now()): ProfileLifeView | null {
 
 /** Restore presence after sleep or archive — never deletes profile data. */
 export function reviveProfilePresence(): ProfileLifeView | null {
-  const view = recordProfileActivity()
+  const view = recordProfileActivity({ force: true })
   const profile = getUserProfile()
   if (profile) {
     updateUserProfile({})

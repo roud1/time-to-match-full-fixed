@@ -6,6 +6,7 @@ import {
   saveUserInterests,
   updateUserDiscoveryProfile,
 } from "@/client/lib/discover/api"
+import { shareInflight } from "@/client/lib/inflight"
 import { interestIdsFromSlugs, slugsFromInterestIds } from "@/client/lib/discover/interest-overlap"
 
 export type AppMode = "demo" | "production"
@@ -21,18 +22,43 @@ type AuthResult =
   | { ok: false; status: number; message?: string; demoFallback?: boolean; errorCode?: string }
 
 let cachedMode: { mode: AppMode; at: number } | null = null
+/** The deployment mode never changes while the page is open; re-check rarely. */
+const MODE_TTL_MS = 10 * 60_000
+const MODE_STORAGE_KEY = "ttm-app-mode"
+
+function readStoredMode(): { mode: AppMode; at: number } | null {
+  try {
+    const raw = sessionStorage.getItem(MODE_STORAGE_KEY)
+    if (!raw) return null
+    const v = JSON.parse(raw) as { mode?: string; at?: number }
+    if ((v.mode === "demo" || v.mode === "production") && typeof v.at === "number") {
+      return { mode: v.mode, at: v.at }
+    }
+  } catch {
+    /* storage blocked */
+  }
+  return null
+}
 
 export async function getAppMode(): Promise<AppMode> {
-  if (cachedMode && Date.now() - cachedMode.at < 60_000) return cachedMode.mode
-  try {
-    const res = await fetch("/api/ready", { cache: "no-store" })
-    const data = (await res.json()) as { mode?: string }
-    const mode: AppMode = data.mode === "demo" ? "demo" : "production"
-    cachedMode = { mode, at: Date.now() }
-    return mode
-  } catch {
-    return "demo"
-  }
+  if (!cachedMode && typeof window !== "undefined") cachedMode = readStoredMode()
+  if (cachedMode && Date.now() - cachedMode.at < MODE_TTL_MS) return cachedMode.mode
+  return shareInflight("app-mode", async () => {
+    try {
+      const res = await fetch("/api/ready", { cache: "no-store" })
+      const data = (await res.json()) as { mode?: string }
+      const mode: AppMode = data.mode === "demo" ? "demo" : "production"
+      cachedMode = { mode, at: Date.now() }
+      try {
+        sessionStorage.setItem(MODE_STORAGE_KEY, JSON.stringify(cachedMode))
+      } catch {
+        /* storage blocked */
+      }
+      return mode
+    } catch {
+      return "demo"
+    }
+  })
 }
 
 async function parseAuthResponse(res: Response): Promise<AuthResult> {
