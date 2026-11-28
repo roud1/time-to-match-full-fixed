@@ -51,7 +51,7 @@
   overscroll-behavior: none;
 }
 
-.lang {
+.page > .lang {
   position: absolute;
   top: calc(max(calc(10 * var(--u)), env(safe-area-inset-top)) + 6px);
   right: max(calc(14 * var(--u)), env(safe-area-inset-right));
@@ -135,14 +135,28 @@
   isolation: isolate;
 }
 
-.heroCanvas {
+/* The part of the hero above the timer card: the scene (faces, mark, arcs) is centred here. */
+.stage {
   position: absolute;
-  /* The scene sits above the timer card (which overlaps the bottom of this area). */
   inset: 0 0 calc(64 * var(--u)) 0;
-  z-index: -2;
-  width: 100%;
-  height: calc(100% - 64 * var(--u));
+  pointer-events: none;
+}
+
+/* Particles over the whole screen, behind every part of the page. */
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   display: block;
+  pointer-events: none;
+}
+
+.page > :not(.scene):not(.lang) {
+  position: relative;
+  z-index: 1;
 }
 
 .timer {
@@ -291,7 +305,7 @@
     max-height: none;
     margin-top: calc(16 * var(--u));
   }
-  .heroCanvas {
+  .scene {
     display: none;
   }
   .brand {
