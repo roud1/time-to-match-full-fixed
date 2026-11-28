@@ -16,7 +16,12 @@
   gap: clamp(14px, 2.6svh, 22px);
   width: 100%;
   max-width: 520px;
-  min-height: 100svh;
+  /* Exactly one screen (the visible height, Safari toolbars included); the picture shrinks to fit.
+     Only when the content truly cannot fit (very small phones) does the page scroll inside. */
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: none;
   margin: 0 auto;
   padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
     max(18px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
@@ -33,7 +38,10 @@
 :global(html):has(.page),
 :global(html):has(.page) body {
   background: #090b0a !important;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden;
+  /* No iOS rubber-band bounce on the start screen. */
+  overscroll-behavior: none;
 }
 
 .lang {
@@ -82,8 +90,8 @@
 /* Picture: fills the free height; the timer card sits over its lower part. */
 .hero {
   position: relative;
-  flex: 1 1 auto;
-  min-height: clamp(196px, 35svh, 520px);
+  flex: 1 1 0;
+  min-height: 120px;
   margin: 0 calc(-1 * max(20px, env(safe-area-inset-left)));
   display: flex;
   align-items: flex-end;
@@ -95,7 +103,7 @@
 .heroImage {
   z-index: -2;
   object-fit: cover;
-  object-position: center 22%;
+  object-position: center 34%;
 }
 
 .hero::after {
@@ -242,10 +250,22 @@
 /* Very small phones (320 px wide / short screens). */
 @media (max-height: 640px) {
   .page {
-    gap: 12px;
+    gap: 10px;
   }
   .hero {
-    min-height: 200px;
+    min-height: 96px;
+  }
+  .logo {
+    width: 180px;
+  }
+  .intro p {
+    margin-top: 6px;
+  }
+  .timer {
+    padding: 10px 16px;
+  }
+  :global(html[data-lv]) body .timer strong {
+    font-size: 34px !important;
   }
 }
 
@@ -257,11 +277,6 @@
   }
 }
 
-@media (min-width: 700px) {
-  .page {
-    min-height: max(100svh, 860px);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .cta {
