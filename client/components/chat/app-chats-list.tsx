@@ -2,7 +2,7 @@
 
 import "./app-chats.css"
 import { useMemo, useRef, useState } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import { ChevronRight, Crown, MessageCircle, Search, Sparkles, X } from "lucide-react"
 import type { ChatThread } from "@/client/lib/social-store"
@@ -10,7 +10,7 @@ import type { SwipeProfile } from "@/client/lib/demo-profiles"
 import type { Locale } from "@/client/lib/i18n"
 import { useI18n } from "@/client/lib/i18n"
 import { formatChatThreadPreviewTime } from "@/client/lib/format-chat-time"
-import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
+import { isThreadUnread } from "@/client/lib/chat-thread-seen"
 import { VerifiedBadge } from "@/client/components/ui/verified-badge"
 import { usePremiumUpgrade } from "@/client/components/premium/premium-upgrade-context"
 import { ExpiredMatches } from "@/client/components/chat/expired-matches"
@@ -43,7 +43,7 @@ type AppChatsListProps = {
 /** Messages from the other person after the last one I sent, if the thread is unread. */
 function unreadCount(thread: ChatThread): number {
   const last = thread.messages[thread.messages.length - 1]
-  if (!hasUnreadThread(thread.profileId, thread.updatedAt, last?.from === "them")) return 0
+  if (!isThreadUnread(thread)) return 0
   let n = 0
   for (let i = thread.messages.length - 1; i >= 0; i--) {
     const m = thread.messages[i]

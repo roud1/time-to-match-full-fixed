@@ -1,6 +1,8 @@
 import "@/client/components/app-mode/app-mode.css"
 import { AppModeSync } from "@/client/components/app-mode/app-mode-sync"
 import { AndroidBackHandler } from "@/client/components/app-mode/android-back-handler"
+import { NavHistoryTracker } from "@/client/components/app-mode/nav-history-tracker"
+import { Suspense } from "react"
 import { LvThemeSync } from "@/client/components/app-mode/lv-theme-sync"
 import { lvThemeInitScript } from "@/client/lib/lv-theme"
 import type { Metadata, Viewport } from "next"
@@ -126,6 +128,9 @@ export default async function RootLayout({
         <ThemeProvider>
           <AppModeSync />
           <AndroidBackHandler />
+          <Suspense fallback={null}>
+            <NavHistoryTracker />
+          </Suspense>
           <LvThemeSync />
           <I18nProvider initialLocale={lang} initialMessages={getLocaleMessages(lang)}>
             <QueryProvider>

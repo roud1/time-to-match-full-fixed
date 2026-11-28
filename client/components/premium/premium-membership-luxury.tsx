@@ -60,7 +60,8 @@ export function PremiumMembershipLuxury({
   const active = !localDemo && summary ? summary.subscription.isPremium : localActive
   const setActive = setLocalActive
   const activeEndRaw = summary?.subscription.currentPeriodEnd ?? summary?.subscription.premiumUntil ?? null
-  const activeEnd = activeEndRaw ? Date.parse(activeEndRaw) : (profile.premiumUntil ?? NaN)
+  // With a server answer, no end date means open-ended access (e.g. admin): no made-up date.
+  const activeEnd = activeEndRaw ? Date.parse(activeEndRaw) : summary ? NaN : (profile.premiumUntil ?? NaN)
   const activeUntilLabel = Number.isFinite(activeEnd)
     ? t("lvPremActiveUntil").replace(
         "{date}",

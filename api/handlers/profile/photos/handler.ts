@@ -5,6 +5,7 @@ import { requireAuth } from "@/server/auth/require-auth"
 import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { addPhoto, listPhotos } from "@/server/profile"
 import { MAX_USER_PHOTOS } from "@/server/profile/profile.repository"
+import { toPublicPhotoUrl } from "@/server/photos/public-ref"
 
 export const runtime = "nodejs"
 
@@ -29,7 +30,11 @@ export async function GET(request: Request) {
   const auth = await requireAuth(request)
   if (!auth.ok) return withCors(request, auth.response)
 
-  const photos = await listPhotos(auth.session.sub)
+  const userId = auth.session.sub
+  const photos = (await listPhotos(userId)).map((p) => ({
+    ...p,
+    url: toPublicPhotoUrl(userId, p.position, p.url) ?? p.url,
+  }))
   return withCors(request, jsonOk({ photos }))
 }
 

@@ -224,3 +224,46 @@
     display: flex;
   }
 }
+
+/* Photo verification queue */
+.ttm-admin-verify {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ttm-admin-verify__item {
+  display: grid;
+  gap: 0.6rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.ttm-admin-verify__photos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.ttm-admin-verify__photos figure {
+  margin: 0;
+}
+.ttm-admin-verify__photos img,
+.ttm-admin-verify__none {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+}
+.ttm-admin-verify__photos figcaption,
+.ttm-admin-verify__meta {
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+.ttm-admin-verify__actions {
+  display: flex;
+  gap: 0.6rem;
+}

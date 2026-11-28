@@ -10,6 +10,8 @@ export type PersistedConnectionScore = AIConnectionAnalysis & {
 
 type ConnectionScoreResponse = {
   configured: boolean
+  /** Both people turned on "AI tips"; without it nothing is analysed. */
+  consent?: boolean
   analyzing: boolean
   score: PersistedConnectionScore | null
 }
@@ -21,6 +23,7 @@ export function usePersistedConnectionScore(matchId: string | null | undefined) 
   const [score, setScore] = useState<PersistedConnectionScore | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
   const [configured, setConfigured] = useState(false)
+  const [consent, setConsent] = useState(true)
   const [loading, setLoading] = useState(false)
   const fastPollUntil = useRef(0)
 
@@ -39,6 +42,7 @@ export function usePersistedConnectionScore(matchId: string | null | undefined) 
       if (!res.ok) return null
       const data = (await res.json()) as ConnectionScoreResponse
       setConfigured(data.configured)
+      setConsent(data.consent !== false)
       setAnalyzing(data.analyzing)
       setScore(data.score)
       if (data.analyzing) {
@@ -91,5 +95,5 @@ export function usePersistedConnectionScore(matchId: string | null | undefined) 
     }
   }, [matchId, refresh])
 
-  return { score, analyzing, configured, loading, refresh }
+  return { score, analyzing, configured, consent, loading, refresh }
 }

@@ -188,3 +188,15 @@ html[data-lv] .ttm-app-me__row--logout .ttm-app-me__row-icon,
 html[data-lv] .ttm-app-me__row--logout .ttm-app-me__row-label {
   color: #fca5a5;
 }
+
+/* Text on the purple Premium card: light in both themes (dark grey on purple was unreadable). */
+html[data-lv] .ttm-app-me__premium-body {
+  color: rgba(255, 255, 255, 0.86);
+}
+html[data-lv] .ttm-app-me__premium {
+  background: linear-gradient(135deg, rgba(110, 30, 190, 0.92), rgba(46, 16, 101, 0.95));
+}
+html[data-lv] .ttm-app-me__premium-body {
+  color: #fff;
+  opacity: 0.9;
+}

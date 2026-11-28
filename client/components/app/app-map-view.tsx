@@ -2,7 +2,7 @@
 
 import "./app-map.css"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { ChevronRight, LocateFixed, MapPin, SlidersHorizontal } from "lucide-react"
 import { useI18n } from "@/client/lib/i18n"
 import { fetchDiscoverProfiles, postDiscoverLike, postDiscoverPass } from "@/client/lib/discover/api"

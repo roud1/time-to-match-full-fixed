@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { useState } from "react"
 import { cn } from "@/client/lib/utils"
 

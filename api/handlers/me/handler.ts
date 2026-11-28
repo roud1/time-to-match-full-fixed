@@ -1,3 +1,4 @@
+import { toPublicPhotoUrl } from "@/server/photos/public-ref"
 import { NextResponse } from "next/server"
 import { getServerEnv } from "@/config/env"
 import { getSessionFromRequest } from "@/server/auth/session-request"
@@ -87,7 +88,8 @@ export async function GET(request: Request) {
         bio: fullProfile?.bio ?? null,
         birthDate: fullProfile?.birthDate ?? null,
         age: fullProfile?.age ?? null,
-        photos: fullProfile?.photos ?? [],
+        // Own photos as short /api/photos URLs: inline originals made every app launch download MBs.
+        photos: (fullProfile?.photos ?? []).map((p) => ({ ...p, url: toPublicPhotoUrl(user.id, p.position, p.url) ?? p.url })),
         location: fullProfile?.location ?? null,
         interests,
         interestIds,

@@ -7,6 +7,8 @@ export type SubscriptionInfo = {
   currentPeriodEnd: string | null
   configured: boolean
   mode: "demo" | "live"
+  /** A paid Stripe subscription exists (only those can be managed in the billing portal). */
+  manageable: boolean
 }
 
 export type CheckoutResult =
@@ -23,9 +25,10 @@ export async function fetchSubscription(): Promise<SubscriptionInfo> {
       currentPeriodEnd?: string | null
       configured?: boolean
       mode?: "demo" | "live"
+      manageable?: boolean
     }
     if (!res.ok) {
-      return { plan: "free", status: "none", currentPeriodEnd: null, configured: false, mode: "demo" }
+      return { plan: "free", status: "none", currentPeriodEnd: null, configured: false, mode: "demo", manageable: false }
     }
     return {
       plan: data.plan ?? "free",
@@ -33,9 +36,10 @@ export async function fetchSubscription(): Promise<SubscriptionInfo> {
       currentPeriodEnd: data.currentPeriodEnd ?? null,
       configured: Boolean(data.configured),
       mode: data.mode ?? "demo",
+      manageable: Boolean(data.manageable),
     }
   } catch {
-    return { plan: "free", status: "none", currentPeriodEnd: null, configured: false, mode: "demo" }
+    return { plan: "free", status: "none", currentPeriodEnd: null, configured: false, mode: "demo", manageable: false }
   }
 }
 

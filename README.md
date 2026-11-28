@@ -149,6 +149,17 @@ Settings → Appearance: light, dark (default) or system. Stored per device (`lo
 - Reports are stored in the `reports` table for admin review
 - **Admin accounts** — signed-in users with `users.role = 'admin'`, or with a **verified** email listed in `ADMIN_EMAILS` (comma separated; the role is then saved), open `/admin` and the admin API without a key. Settings shows an "Admin panel" row to them.
 - **Admin UI** — open [`/admin`](http://localhost:3000/admin), enter your `ADMIN_API_KEY` (stored in `sessionStorage` for the tab only; never bundled in client code)
+- **Photo verification** — selfies are resized and stored in `verification_requests.selfie_url` (never under `public/`, which is world-readable and wiped on every Render deploy). Admins review them in `/admin` → "Photo verification" (`GET /api/admin/verification`, image via `GET /api/admin/verification/:id/selfie`, admin-only, `no-store`).
+
+## Privacy of photos, location and conversations
+
+- **Photos of other people** never travel inline in JSON. Without S3/R2 a photo is a data URL in `users.profile.photoUrls`; APIs return `/api/photos/<userId>/<index>?v=<hash>` instead (`server/photos/public-ref.ts`), served resized as WebP by `api/handlers/photos` to signed-in viewers only, not across a block and not before a blind date reached the full reveal. Saving the profile with these URLs restores the stored originals (`restoreOwnPhotoRefs`).
+- **Discover** shows only profiles with at least one photo (the app already asks for one); `/images/no-photo.svg` is the fallback picture (the old `/placeholder-profile.jpg` did not exist and produced empty cards).
+- **Uploads** are downscaled on the phone to 1280 px JPEG before upload (`downscalePhotoFile`).
+- **Location**: other people get a point inside a ~2 km cell with a fixed per-user offset and a whole-km distance (`server/geo/fuzz.ts`); exact coordinates stay on the server and only decide the distance filter.
+- **Luvia AI**: a conversation is analysed (by any engine) only when **both** people turned on AI tips; `GET /api/matches/:id/connection-score` returns `consent` and no score otherwise; turning the setting off deletes stored analyses of the person's conversations.
+- **Unread**: `/api/matches` includes `lastMessageAt` / `lastMessageFromPeer`; the dock badge counts conversations whose newest message is from the other person and newer than the last time it was opened on this device (localStorage).
+- Tests: `photos-privacy`, `ai-consent`, `unread-badge`, `safety-flows`, `match-timer`, `back-navigation`, `subscription-consistency`, `blind-date-intro`.
 
 ## Blind Date ("Feel first. See later.") — in development
 

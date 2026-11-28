@@ -223,3 +223,19 @@ export async function hasPendingAiAnalysisJob(matchId: string): Promise<boolean>
   `
   return Boolean(rows[0]?.exists)
 }
+
+/** Consent withdrawn: remove analyses and pending jobs of every conversation the user is part of. */
+export async function deleteConnectionScoresForUser(userId: string): Promise<void> {
+  const db = getDb()
+  if (!db) return
+  await db`
+    DELETE FROM connection_scores cs
+    USING likes l
+    WHERE cs.match_id = l.id AND (l.from_user = ${userId} OR l.to_user = ${userId})
+  `
+  await db`
+    DELETE FROM ai_analysis_jobs j
+    USING likes l
+    WHERE j.match_id = l.id AND (l.from_user = ${userId} OR l.to_user = ${userId}) AND j.status IN ('pending', 'processing')
+  `
+}

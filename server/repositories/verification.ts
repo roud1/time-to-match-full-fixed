@@ -1,4 +1,6 @@
 import { getDb } from "@/server/db"
+import { selfieEndpoint } from "@/server/verification/upload"
+import { primaryPhotoRefSql, toPublicPhotoUrl } from "@/server/photos/public-ref"
 import type {
   VerificationRequest,
   VerificationRequestStatus,
@@ -21,7 +23,8 @@ function mapRow(row: RequestRow): VerificationRequest {
     id: row.id,
     userId: row.user_id,
     gesture: row.gesture,
-    selfieUrl: row.selfie_url,
+    // Never the stored image itself: an admin-only endpoint serves it.
+    selfieUrl: selfieEndpoint(row.id),
     status: row.status,
     adminNotes: row.admin_notes,
     createdAt: row.created_at.toISOString(),
@@ -126,4 +129,49 @@ export async function reviewVerificationRequest(input: {
   }
 
   return mapRow(row)
+}
+
+export type PendingVerificationItem = {
+  id: string
+  userId: string
+  userName: string | null
+  gesture: string
+  createdAt: string
+  selfieUrl: string
+  /** The profile photo the selfie is compared with (null: no photo). */
+  profilePhotoUrl: string | null
+}
+
+/** Moderation queue: pending photo verifications, oldest first. */
+export async function listPendingVerificationRequests(limit = 50): Promise<PendingVerificationItem[]> {
+  const db = getDb()
+  if (!db) return []
+  const rows = await db<
+    { id: string; user_id: string; name: string | null; gesture: string; created_at: Date; photo_ref: string | null }[]
+  >`
+    SELECT r.id, r.user_id, u.name, r.gesture, r.created_at,
+      ${db.unsafe(primaryPhotoRefSql("u"))} AS photo_ref
+    FROM verification_requests r
+    JOIN users u ON u.id = r.user_id
+    WHERE r.status = 'pending'
+    ORDER BY r.created_at ASC
+    LIMIT ${limit}
+  `
+  return rows.map((r) => ({
+    id: r.id,
+    userId: r.user_id,
+    userName: r.name,
+    gesture: r.gesture,
+    createdAt: r.created_at.toISOString(),
+    selfieUrl: selfieEndpoint(r.id),
+    profilePhotoUrl: toPublicPhotoUrl(r.user_id, 0, r.photo_ref),
+  }))
+}
+
+/** The stored selfie value (data URL, or a legacy /uploads path). */
+export async function findVerificationSelfie(id: string): Promise<string | null> {
+  const db = getDb()
+  if (!db) return null
+  const rows = await db<{ selfie_url: string }[]>`SELECT selfie_url FROM verification_requests WHERE id = ${id} LIMIT 1`
+  return rows[0]?.selfie_url ?? null
 }

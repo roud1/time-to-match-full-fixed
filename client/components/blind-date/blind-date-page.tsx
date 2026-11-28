@@ -1,5 +1,6 @@
 "use client"
 
+import { ROOM_DURATION_MS } from "@/server/blind-date/rules"
 import "./blind-date.css"
 import Link from "next/link"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -28,6 +29,12 @@ import { BlindGames } from "@/client/components/blind-date/blind-date-games"
 import { BlindReport } from "@/client/components/blind-date/blind-date-report"
 
 type View = "loading" | "intro" | "searching" | "room"
+
+/** The date length in the texts always comes from the same rule the server uses. */
+const DATE_MINUTES = Math.round(ROOM_DURATION_MS / 60_000)
+function withMinutes(text: string): string {
+  return text.replace("{minutes}", String(DATE_MINUTES))
+}
 
 const SEARCH_POLL_MS = 3000
 const ROOM_POLL_MS = 2000
@@ -322,7 +329,7 @@ function BlindIntro(props: {
         </div>
         <p className="bd-kicker">{t("bdTagline")}</p>
         <h1 className="bd-title bd-title--hero">{t("bdTitle")}</h1>
-        <p className="bd-sub">{t("bdIntro")}</p>
+        <p className="bd-sub">{withMinutes(t("bdIntro"))}</p>
 
         <ul className="bd-rules">
           {rules.map(({ Icon, key }) => (
@@ -330,7 +337,7 @@ function BlindIntro(props: {
               <span className="bd-rules__icon" aria-hidden>
                 <Icon strokeWidth={1.8} />
               </span>
-              <span>{t(key)}</span>
+              <span>{withMinutes(t(key))}</span>
             </li>
           ))}
         </ul>

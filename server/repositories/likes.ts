@@ -6,6 +6,7 @@ import { findUserById } from "@/server/repositories/users"
 import type { MatchStatus } from "@/server/match-engine/types"
 import type { MatchDto } from "@/server/matches/types"
 import { bondStatsFromRow } from "@/server/repositories/match-stats"
+import { NO_PHOTO_URL, primaryPhotoRefSql, toPublicPhotoUrl } from "@/server/photos/public-ref"
 
 export type DbLikeRow = {
   id: string
@@ -80,8 +81,7 @@ export async function findMatchByIdForUser(
       CASE WHEN EXISTS (
         SELECT 1 FROM blind_date_rooms r WHERE r.match_id = l.match_id AND r.reveal_level < 100
       ) THEN NULL
-      ELSE COALESCE(peer.profile->'photoUrls'->>0, peer.profile->>'photoUrl',
-        (SELECT p.url FROM user_photos p WHERE p.user_id = peer.id ORDER BY p.is_primary DESC, p.position ASC LIMIT 1))
+      ELSE ${db.unsafe(primaryPhotoRefSql("peer"))}
       END AS peer_photo,
       date_part('year', age(COALESCE(peer.birth_date,
         CASE WHEN peer.profile->>'birthdate' ~ '^\d{4}-\d{2}-\d{2}' THEN substr(peer.profile->>'birthdate', 1, 10)::date END)))::int AS peer_age
@@ -127,8 +127,7 @@ export async function findLikeByEngineMatchIdForUser(
       CASE WHEN EXISTS (
         SELECT 1 FROM blind_date_rooms r WHERE r.match_id = l.match_id AND r.reveal_level < 100
       ) THEN NULL
-      ELSE COALESCE(peer.profile->'photoUrls'->>0, peer.profile->>'photoUrl',
-        (SELECT p.url FROM user_photos p WHERE p.user_id = peer.id ORDER BY p.is_primary DESC, p.position ASC LIMIT 1))
+      ELSE ${db.unsafe(primaryPhotoRefSql("peer"))}
       END AS peer_photo,
       date_part('year', age(COALESCE(peer.birth_date,
         CASE WHEN peer.profile->>'birthdate' ~ '^\d{4}-\d{2}-\d{2}' THEN substr(peer.profile->>'birthdate', 1, 10)::date END)))::int AS peer_age
@@ -153,7 +152,13 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
   await keepAdminMatchesAlive(userId).catch(() => null)
 
   const rows = await db<
-    (DbLikeWithBond & { peer_name: string | null; peer_photo: string | null; peer_age: number | null })[]
+    (DbLikeWithBond & {
+      peer_name: string | null
+      peer_photo: string | null
+      peer_age: number | null
+      last_message_at: Date | null
+      last_message_from_peer: boolean
+    })[]
   >`
     SELECT
       l.id,
@@ -174,15 +179,20 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
       CASE WHEN EXISTS (
         SELECT 1 FROM blind_date_rooms r WHERE r.match_id = l.match_id AND r.reveal_level < 100
       ) THEN NULL
-      ELSE COALESCE(peer.profile->'photoUrls'->>0, peer.profile->>'photoUrl',
-        (SELECT p.url FROM user_photos p WHERE p.user_id = peer.id ORDER BY p.is_primary DESC, p.position ASC LIMIT 1))
+      ELSE ${db.unsafe(primaryPhotoRefSql("peer"))}
       END AS peer_photo,
       date_part('year', age(COALESCE(peer.birth_date,
-        CASE WHEN peer.profile->>'birthdate' ~ '^\d{4}-\d{2}-\d{2}' THEN substr(peer.profile->>'birthdate', 1, 10)::date END)))::int AS peer_age
+        CASE WHEN peer.profile->>'birthdate' ~ '^\d{4}-\d{2}-\d{2}' THEN substr(peer.profile->>'birthdate', 1, 10)::date END)))::int AS peer_age,
+      lm.created_at AS last_message_at,
+      (lm.sender_id IS NOT NULL AND lm.sender_id <> ${userId}) AS last_message_from_peer
     FROM likes l
     LEFT JOIN users peer ON peer.id = l.to_user
     LEFT JOIN match_stats ms ON ms.match_id = l.id
     LEFT JOIN matches m ON m.id = l.match_id
+    LEFT JOIN LATERAL (
+      SELECT mm.created_at, mm.sender_id FROM match_messages mm
+      WHERE mm.match_id = l.match_id ORDER BY mm.created_at DESC LIMIT 1
+    ) lm ON true
     WHERE l.from_user = ${userId}
       AND l.is_match = true
       AND l.is_expired = false
@@ -193,9 +203,11 @@ export async function listActiveMatchesForUser(userId: string): Promise<MatchDto
 
   return rows.map((r) => ({
     ...rowToMatch(r, r.peer_name),
-    // Very large inline (data:) photos are left out of the list response.
-    peerPhoto: r.peer_photo && r.peer_photo.length <= 400_000 ? r.peer_photo : null,
+    // Inline (data:) photos are served by /api/photos instead of being embedded in the list.
+    peerPhoto: toPublicPhotoUrl(r.to_user, 0, r.peer_photo),
     peerAge: r.peer_age != null && r.peer_age >= 18 && r.peer_age < 120 ? r.peer_age : null,
+    lastMessageAt: r.last_message_at?.toISOString() ?? null,
+    lastMessageFromPeer: r.last_message_from_peer === true,
   }))
 }
 
@@ -437,13 +449,7 @@ export async function listIncomingLikesForUser(viewerId: string): Promise<Incomi
         if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--
       }
     }
-    const photoUrls = profile.photoUrls
-    const image =
-      Array.isArray(photoUrls) && typeof photoUrls[0] === "string"
-        ? photoUrls[0]
-        : typeof profile.photoUrl === "string"
-          ? profile.photoUrl
-          : "/placeholder-profile.jpg"
+    const image = firstPublicPhoto(row.from_user, profile)
     const location =
       (typeof profile.customCity === "string" && profile.customCity) ||
       (typeof profile.cityId === "string" && profile.cityId) ||
@@ -501,19 +507,19 @@ export async function listIncomingLikeTeasers(
 
   return rows.map((row) => {
     const profile = row.profile ?? {}
-    const photoUrls = profile.photoUrls
-    const image =
-      Array.isArray(photoUrls) && typeof photoUrls[0] === "string"
-        ? photoUrls[0]
-        : typeof profile.photoUrl === "string"
-          ? profile.photoUrl
-          : "/placeholder-profile.jpg"
+    const image = firstPublicPhoto(row.from_user, profile)
     return {
       userId: row.from_user,
       image,
       likedAt: row.created_at.toISOString(),
     }
   })
+}
+
+/** First photo of `userId` as a public URL, or the bundled "no photo" picture. */
+function firstPublicPhoto(userId: string, profile: Record<string, unknown>): string {
+  const urls = Array.isArray(profile.photoUrls) ? profile.photoUrls : []
+  return toPublicPhotoUrl(userId, 0, urls[0] ?? profile.photoUrl) ?? NO_PHOTO_URL
 }
 
 export async function countIncomingLikesForUser(viewerId: string): Promise<number> {

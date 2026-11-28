@@ -4,8 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { useI18n } from "@/client/lib/i18n"
 import type { ActivityBumpKind } from "@/client/lib/activity-notify"
 import { getActivityCounts } from "@/client/lib/activity-metrics"
-import { getChats, getProfileById } from "@/client/lib/social-store"
-import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
+import { getChats, getChatsWithServerSync, getProfileById } from "@/client/lib/social-store"
+import { isThreadUnread } from "@/client/lib/chat-thread-seen"
 import { fetchIncomingLikes } from "@/client/lib/likes/api"
 import type { ChatThread } from "@/client/lib/social-store"
 
@@ -115,22 +115,50 @@ export function ActivityFeedProvider({ children }: { children: React.ReactNode }
     }
   }, [tick])
 
+  // Chats with the server's newest message per match, so the unread badge also counts messages
+  // this device has not loaded yet (refreshed on activity, when the app is shown, and every minute).
+  const [serverThreads, setServerThreads] = useState<ChatThread[] | null>(null)
+  useEffect(() => {
+    let alive = true
+    void getChatsWithServerSync(locale, location.position)
+      .then((next) => {
+        if (alive) setServerThreads(next)
+      })
+      .catch(() => null)
+    return () => {
+      alive = false
+    }
+  }, [locale, location.position, tick])
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (document.visibilityState === "visible") refresh()
+    }, 60_000)
+    return () => window.clearInterval(id)
+  }, [refresh])
+
+  const threads = useMemo(
+    () => serverThreads ?? getChats(locale, location.position),
+    [serverThreads, locale, location.position, tick]
+  )
+
   const counts = useMemo(() => {
     const local = getActivityCounts(locale, location.position)
-    return serverLikes === null ? local : { ...local, likesUnread: serverLikes }
-  }, [locale, location.position, tick, serverLikes])
-
-  const threads = useMemo(() => getChats(locale, location.position), [locale, location.position, tick])
+    const chatsUnread = threads.filter((th) => isThreadUnread(th)).length
+    return {
+      ...local,
+      chatsUnread,
+      likesUnread: serverLikes === null ? local.likesUnread : serverLikes,
+    }
+  }, [locale, location.position, tick, serverLikes, threads])
 
   const reconnectThreads = useMemo(() => {
     return threads.filter((th) => {
       const p = getProfileById(th.profileId, locale, location.position)
       if (!p) return false
-      const last = th.messages[th.messages.length - 1]
       const parts = p.timeLeft.split(":")
       const hours = parts[0] ? parseInt(parts[0], 10) : 99
       const urgent = !Number.isNaN(hours) && hours <= 36
-      return urgent && last?.from === "them" && hasUnreadThread(th.profileId, th.updatedAt, true)
+      return urgent && isThreadUnread(th)
     })
   }, [threads, locale, location.position])
 

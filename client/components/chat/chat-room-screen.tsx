@@ -29,7 +29,7 @@ import { useConnectionIntelligence } from "@/client/hooks/use-connection-intelli
 import { useEmotionalCompanion } from "@/client/hooks/use-emotional-companion"
 import { useEmotionalReality } from "@/client/hooks/use-emotional-reality"
 import { useEmotionalTime } from "@/client/hooks/use-emotional-time"
-import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
+import { isThreadUnread } from "@/client/lib/chat-thread-seen"
 import { SafetyHubDialog } from "@/client/components/trust/safety-hub-dialog"
 import { EmotionalShareCard } from "@/client/components/network/emotional-share-card"
 import { detectEvolutionEvents, persistEvolutionEvents } from "@/client/lib/network"
@@ -154,7 +154,7 @@ export function ChatRoomScreen({
   const connectionCopy = buildConnectionCopy(t)
   const syncCopy = buildSyncCopy(t)
   const lastMsg = thread.messages[thread.messages.length - 1]
-  const hasUnread = hasUnreadThread(thread.profileId, thread.updatedAt, lastMsg?.from === "them")
+  const hasUnread = isThreadUnread(thread)
   const recentActivity = Boolean(justSent || partnerTyping || hasUnread)
   const connectionAnalysis = useConnectionAnalysis(connectionView ?? null, thread.messages, {
     recentActivity,

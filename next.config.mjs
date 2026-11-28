@@ -48,7 +48,8 @@ const nextConfig = {
     staleTimes: { dynamic: 30 },
   },
   images: {
-    formats: ["image/avif", "image/webp"],
+    // WebP only: AVIF encoding costs several times more CPU, too slow on the small free server.
+    formats: ["image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [128, 256, 384],
     remotePatterns: buildRemotePatterns(),

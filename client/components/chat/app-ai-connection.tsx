@@ -2,6 +2,7 @@
 
 import "./app-ai-connection.css"
 import { useEffect } from "react"
+import Link from "next/link"
 import { createPortal } from "react-dom"
 import { motion, useReducedMotion } from "motion/react"
 import { Check, ChevronLeft, Loader2, Sparkles, WifiOff } from "lucide-react"
@@ -26,7 +27,7 @@ type AppAiConnectionProps = {
 export function AppAiConnection({ matchId, peerName, totalMessages, onClose }: AppAiConnectionProps) {
   const { t } = useI18n()
   const reduce = useReducedMotion()
-  const { score, analyzing, configured, loading } = usePersistedConnectionScore(matchId)
+  const { score, analyzing, configured, consent, loading } = usePersistedConnectionScore(matchId)
   const aiScore = score && score.source === "openrouter" ? score : null
 
   useEffect(() => {
@@ -37,8 +38,9 @@ export function AppAiConnection({ matchId, peerName, totalMessages, onClose }: A
 
   const messagesLeft = ANALYSIS_EVERY - (totalMessages % ANALYSIS_EVERY)
 
-  let state: "loading" | "unavailable" | "analyzing" | "ready" | "waiting"
+  let state: "loading" | "unavailable" | "consent" | "analyzing" | "ready" | "waiting"
   if (!matchId) state = "unavailable"
+  else if (!loading && configured && !consent) state = "consent"
   else if (loading && !score && !configured) state = "loading"
   else if (aiScore) state = "ready"
   else if (!configured) state = "unavailable"
@@ -132,6 +134,14 @@ export function AppAiConnection({ matchId, peerName, totalMessages, onClose }: A
           <>
             <h2>{t("appAiUnavailableTitle")}</h2>
             <p>{t("appAiUnavailableBody")}</p>
+          </>
+        ) : state === "consent" ? (
+          <>
+            <h2>{t("appAiConsentTitle")}</h2>
+            <p>{t("appAiConsentBody")}</p>
+            <Link href="/settings?section=privacy" className="ttm-app-ai__link" onClick={onClose}>
+              {t("appAiConsentAction")}
+            </Link>
           </>
         ) : state === "analyzing" || state === "loading" ? (
           <>

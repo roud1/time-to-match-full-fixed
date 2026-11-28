@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { addNativeListener, callNative, nativeBridge } from "@/client/lib/capacitor-bridge"
+import { canGoBackInApp } from "@/client/lib/nav-history"
 
 /** A dialog, sheet or menu that is open and visible right now. */
 function openOverlay(): HTMLElement | null {
@@ -47,7 +48,7 @@ export function AndroidBackHandler() {
         closeOverlay(overlay)
         return
       }
-      if (canGoBack && window.history.length > 1) {
+      if (canGoBack && canGoBackInApp()) {
         window.history.back()
         return
       }

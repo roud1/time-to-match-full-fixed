@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import { motion, useReducedMotion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"

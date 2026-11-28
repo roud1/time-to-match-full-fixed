@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -8,7 +8,7 @@ import { createPortal } from "react-dom"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"
 import { getMatchProfiles, getProfileById } from "@/client/lib/social-store"
-import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
+import { isThreadUnread } from "@/client/lib/chat-thread-seen"
 import type { ChatThread } from "@/client/lib/social-store"
 import { cn } from "@/client/lib/utils"
 export function ActivityHubSheet({
@@ -150,7 +150,7 @@ export function ActivityHubSheet({
                       const p = getProfileById(th.profileId, locale, location.position)
                       if (!p) return null
                       const last = th.messages[th.messages.length - 1]
-                      const unread = hasUnreadThread(th.profileId, th.updatedAt, last?.from === "them")
+                      const unread = isThreadUnread(th)
                       return (
                         <button
                           key={th.profileId}

@@ -4,11 +4,16 @@ import type { CommonInterest } from "@/client/lib/interests/types"
 import type { DiscoverFilters } from "@/client/lib/discover/types"
 import type { CandidateProfile } from "@/server/matching/types"
 import { getInterestIdsByUser, getInterestsForUsers } from "@/server/repositories/interests"
+import { NO_PHOTO_URL, photoRefsArraySql, toPublicPhotoUrls } from "@/server/photos/public-ref"
+import { approximateDistanceKm, approximatePosition } from "@/server/geo/fuzz"
 
 type DiscoverCandidateRow = {
   id: string
   name: string
+  /** users.profile without the (possibly huge) photo data — see photo_refs. */
   profile: Record<string, unknown>
+  /** Stored photo values with data URLs replaced by short markers (server/photos/public-ref). */
+  photo_refs: unknown
   purpose: string | null
   gender: string | null
   latitude: number | null
@@ -49,16 +54,7 @@ function readAge(profile: Record<string, unknown>): number {
   return age >= 18 && age <= 99 ? age : 25
 }
 
-function readPhotos(profile: Record<string, unknown>): string[] {
-  const urls = profile.photoUrls
-  if (Array.isArray(urls)) {
-    const list = urls.filter((u): u is string => typeof u === "string" && u.length > 0)
-    if (list.length) return list
-  }
-  const single = readString(profile.photoUrl)
-  if (single) return [single]
-  return ["/placeholder-profile.jpg"]
-}
+
 
 function readLocation(profile: Record<string, unknown>): string {
   const custom = readString(profile.customCity)
@@ -81,8 +77,7 @@ function commonBetween(
 export function computeProfileCompleteness(profile: Record<string, unknown>, interestCount: number): number {
   let score = 0
   if (readString(profile.bio)) score += 0.35
-  const photos = readPhotos(profile)
-  if (photos.length > 0 && photos[0] !== "/placeholder-profile.jpg") score += 0.35
+  if (profile.hasPhoto === true) score += 0.35
   if (interestCount >= 3) score += 0.3
   else if (interestCount > 0) score += 0.15
   return Math.min(1, score)
@@ -135,7 +130,8 @@ export async function listEligibleCandidates(input: {
     SELECT
       u.id,
       u.name,
-      u.profile,
+      u.profile - 'photoUrls' - 'photoUrl' AS profile,
+      ${db.unsafe(photoRefsArraySql("u"))} AS photo_refs,
       u.purpose,
       u.gender,
       u.latitude,
@@ -151,6 +147,12 @@ export async function listEligibleCandidates(input: {
       AND COALESCE(u.is_blocked, false) = false
       AND u.profile_expires_at IS NOT NULL
       AND u.profile_expires_at > now()
+      -- Only profiles with at least one photo are shown (the app tells people exactly this).
+      AND (
+        (jsonb_typeof(u.profile->'photoUrls') = 'array' AND jsonb_array_length(u.profile->'photoUrls') > 0)
+        OR COALESCE(u.profile->>'photoUrl', '') <> ''
+        OR EXISTS (SELECT 1 FROM user_photos up2 WHERE up2.user_id = u.id)
+      )
       AND (${cursor}::uuid IS NULL OR u.id > ${cursor})
       AND NOT EXISTS (
         SELECT 1 FROM likes l
@@ -252,24 +254,20 @@ export async function buildCandidateProfiles(input: {
     if (minAge != null && age < minAge) continue
     if (maxAge != null && age > maxAge) continue
 
-    let distanceKmVal: number | null = null
-    if (
-      viewerPos &&
-      row.latitude != null &&
-      row.longitude != null &&
-      Number.isFinite(row.latitude) &&
-      Number.isFinite(row.longitude)
-    ) {
-      distanceKmVal = distanceKm(viewerPos, { lat: row.latitude, lng: row.longitude })
-      if (maxDistance != null && distanceKmVal > maxDistance) continue
+    // The real distance only decides the distance filter; what leaves the server is approximate.
+    const approx = approximatePosition(row.id, row.latitude, row.longitude)
+    if (viewerPos && approx && row.latitude != null && row.longitude != null) {
+      const realKm = distanceKm(viewerPos, { lat: row.latitude, lng: row.longitude })
+      if (maxDistance != null && realKm > maxDistance) continue
     }
+    const distanceKmVal = approximateDistanceKm(viewerPos, approx)
 
     const candidateRows = interestByUser.get(row.id) ?? []
     const common = commonBetween(viewerInterestRows, candidateRows)
-    const photos = readPhotos(profile)
+    const photos = toPublicPhotoUrls(row.id, row.photo_refs)
     const bio = readString(profile.bio) ?? ""
     const interestIds = candidateRows.map((r) => r.id)
-    const profileCompleteness = computeProfileCompleteness(profile, interestIds.length)
+    const profileCompleteness = computeProfileCompleteness({ ...profile, hasPhoto: photos.length > 0 }, interestIds.length)
     const activitySignal = computeActivitySignal({
       lastActiveAt: row.last_active_at,
       lastSeenAt: row.last_seen_at,
@@ -287,12 +285,12 @@ export async function buildCandidateProfiles(input: {
       bio,
       location: readLocation(profile),
       distanceKm: distanceKmVal,
-      image: photos[0],
+      image: photos[0] ?? NO_PHOTO_URL,
       images: photos,
       interests: candidateRows.map((r) => r.name),
       interestIds,
-      lat: row.latitude,
-      lng: row.longitude,
+      lat: approx?.lat ?? null,
+      lng: approx?.lng ?? null,
       purpose: row.purpose,
       commonInterests: common.slice(0, 5),
       photoVerified: row.photo_verified ?? false,

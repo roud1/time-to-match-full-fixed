@@ -17,7 +17,7 @@ test.describe("Discover visibility @db", () => {
     await requireProductionDb(request)
   })
 
-  test("two registered users appear in each other's Discover feed", async ({ playwright }) => {
+  test("two registered users with photos appear in each other's Discover feed", async ({ playwright }) => {
     const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000"
     const userA = createTestUser("disc-a")
     const userB = createTestUser("disc-b")
@@ -28,6 +28,17 @@ test.describe("Discover visibility @db", () => {
     try {
       const registeredA = await registerUserViaApi(ctxA, userA)
       const registeredB = await registerUserViaApi(ctxB, userB)
+
+      // Without a photo a profile is not shown in Discover (the app asks people to add one first).
+      const before = (await (await ctxA.get("/api/discover")).json()) as { profiles: Array<{ id: string }> }
+      expect(before.profiles.some((p) => p.id === registeredB.id)).toBeFalsy()
+
+      const { default: postgres } = await import("postgres")
+      const sql = postgres(process.env.DATABASE_URL!, { max: 1 })
+      await sql`UPDATE users SET profile = COALESCE(profile, '{}'::jsonb) || ${sql.json({
+        photoUrls: ["/demo/people/demo-5.jpg"],
+      })} WHERE id IN ${sql([registeredA.id, registeredB.id])}`
+      await sql.end()
 
       const discoverA = await ctxA.get("/api/discover")
       expect(discoverA.ok()).toBeTruthy()

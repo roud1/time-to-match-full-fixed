@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { VerifiedBadge } from "@/client/components/ui/verified-badge"
 import { getCompatibilityTier } from "@/client/lib/discover/compatibility-tier"
 import { cn } from "@/client/lib/utils"

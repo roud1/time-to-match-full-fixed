@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { useState } from "react"
 import { cn } from "@/client/lib/utils"
 
@@ -30,7 +30,7 @@ export function ProfilePhotoImage({
 }: ProfilePhotoImageProps) {
   const [failed, setFailed] = useState(false)
 
-  if (failed) {
+  if (failed || !src) {
     return (
       <div
         className={cn("relative overflow-hidden", className)}

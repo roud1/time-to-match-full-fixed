@@ -2,7 +2,7 @@
 
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet"
 import L from "leaflet"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { useEffect, useMemo } from "react"
 import type { SwipeProfile } from "@/client/lib/demo-profiles"
 import type { GeoPosition } from "@/client/lib/geo"

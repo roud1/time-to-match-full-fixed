@@ -24,6 +24,13 @@ async function processJob(job: DbAiAnalysisJobRow): Promise<void> {
     return
   }
 
+  // No analysis of a conversation at all (not even the local one) unless BOTH people opted in.
+  if (!(await bothConsentToAiInsights(job.triggered_by, like.to_user))) {
+    await failAiAnalysisJob(job.id, "no_consent")
+    await clearConnectionAnalyzing(job.match_id)
+    return
+  }
+
   const detail = await getMatchDetailForUser(job.match_id, job.triggered_by, 40)
   if (!detail || detail.messages.length === 0) {
     await failAiAnalysisJob(job.id, "no_messages")
@@ -45,8 +52,7 @@ async function processJob(job: DbAiAnalysisJobRow): Promise<void> {
     return
   }
 
-  const externalAi = await bothConsentToAiInsights(job.triggered_by, like.to_user)
-  const result = await analyzeConnectionOnServer(body, { externalAi })
+  const result = await analyzeConnectionOnServer(body, { externalAi: true })
   if (!result.ok) {
     await failAiAnalysisJob(job.id, result.error)
     await clearConnectionAnalyzing(job.match_id)

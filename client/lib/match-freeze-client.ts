@@ -1,3 +1,4 @@
+import { shareInflight } from "@/client/lib/inflight"
 import type { FreezeMatchResponse, MatchDto } from "@/server/matches/types"
 
 export type FreezeMatchApiError = {
@@ -5,7 +6,12 @@ export type FreezeMatchApiError = {
   message?: string
 }
 
-export async function fetchActiveMatches(): Promise<MatchDto[]> {
+export function fetchActiveMatches(): Promise<MatchDto[]> {
+  // Shared by the chat list and the unread badge, which ask at the same moment.
+  return shareInflight("active-matches", fetchActiveMatchesOnce)
+}
+
+async function fetchActiveMatchesOnce(): Promise<MatchDto[]> {
   try {
     const res = await fetch("/api/matches", { credentials: "include", cache: "no-store" })
     if (!res.ok) return []

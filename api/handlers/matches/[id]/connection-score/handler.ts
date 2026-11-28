@@ -1,3 +1,4 @@
+import { bothConsentToAiInsights } from "@/server/ai-consent"
 import { NextResponse } from "next/server"
 import { getServerEnv } from "@/config/env"
 import { getSessionFromRequest } from "@/server/auth/session-request"
@@ -50,16 +51,19 @@ export async function GET(request: Request, context: RouteContext) {
     return withCors(request, jsonError(404, { error: "not_found", message: "Match not found" }))
   }
 
-  const [score, analyzing, pending] = await Promise.all([
-    getLatestConnectionScore(likeId),
-    isConnectionAnalyzing(likeId),
-    hasPendingAiAnalysisJob(likeId),
-  ])
+  const consent = await bothConsentToAiInsights(session.sub, like.to_user)
+  const [storedScore, analyzing, pending] = consent
+    ? await Promise.all([getLatestConnectionScore(likeId), isConnectionAnalyzing(likeId), hasPendingAiAnalysisJob(likeId)])
+    : [null, false, false]
+  // Without both people's consent nothing about their conversation is shown.
+  const score = consent ? storedScore : null
 
   return withCors(
     request,
     jsonOk({
       configured: isOpenRouterConfigured(),
+      /** Both people turned on "AI tips" (required before any analysis of the conversation). */
+      consent,
       analyzing: analyzing || pending,
       score: score
         ? {
