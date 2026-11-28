@@ -2,7 +2,7 @@
 
 import "./app-login.css"
 import type { ReactNode } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 
 type AppAuthScreenProps = {
   title: string

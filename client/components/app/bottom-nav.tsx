@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { motion, useReducedMotion } from "motion/react"
 import { cn } from "@/client/lib/utils"
 import { useI18n, type TranslationKey } from "@/client/lib/i18n"
+import { useActivityFeedOptional } from "@/client/components/activity/activity-feed-context"
 import { getActivityCounts } from "@/client/lib/activity-metrics"
 import { tapScaleSoft } from "@/client/lib/motion-system"
 import { BrandIcon, type BrandIconName } from "@/client/components/brand/brand-icon"
@@ -64,11 +65,13 @@ export function BottomNav({ active: activeOverride }: BottomNavProps) {
   const [chatBadge, setChatBadge] = useState(0)
   const inApp = useLuviaUi()
 
+  // Inside the app shell the shared activity feed has the server-backed counts.
+  const feed = useActivityFeedOptional()
   useEffect(() => {
-    const c = getActivityCounts(locale, location.position)
+    const c = feed?.counts ?? getActivityCounts(locale, location.position)
     setLikesBadge(c.likesUnread)
     setChatBadge(c.chatsUnread)
-  }, [locale, location.position, pathname, tabParam])
+  }, [feed?.counts, locale, location.position, pathname, tabParam])
 
   if (inApp) {
     return (

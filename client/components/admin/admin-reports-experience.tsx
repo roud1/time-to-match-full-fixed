@@ -5,6 +5,7 @@ import { useI18n } from "@/client/lib/i18n"
 import type { TranslationKey } from "@/client/lib/i18n"
 import { type AdminReport, type AdminReportsResponse, type ReportReason } from "@/client/lib/admin/types"
 import { CinematicButton } from "@/client/components/ui/cinematic-button"
+import { AdminVerificationQueue } from "@/client/components/admin/admin-verification-queue"
 import { cn } from "@/client/lib/utils"
 import "@/app/admin/admin.css"
 
@@ -329,6 +330,8 @@ export function AdminReportsExperience() {
           </>
         )}
       </section>
+
+      <AdminVerificationQueue />
     </div>
   )
 }

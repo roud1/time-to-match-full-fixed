@@ -42,8 +42,8 @@ export function profileFromServerMatch(match: MatchDto): SwipeProfile {
     gender: "female",
     location: "—",
     distance: "—",
-    image: match.peerPhoto || "/placeholder.svg",
-    images: [match.peerPhoto || "/placeholder.svg"],
+    image: match.peerPhoto || "/images/no-photo.svg",
+    images: [match.peerPhoto || "/images/no-photo.svg"],
     timeLeft: "—",
     bio: "",
     interests: [],
@@ -61,6 +61,16 @@ export function threadsFromServerMatches(
   const serverThreads: ChatThread[] = matches.map((m) => {
     const profileId = discoverIdToNumeric(m.peerUserId)
     const cached = localByProfile.get(profileId)
+    const serverLast = m.lastMessageAt ? Date.parse(m.lastMessageAt) : NaN
+    // The server knows about messages this device has not loaded yet (the unread badge).
+    if (Number.isFinite(serverLast) && serverLast > (cached?.updatedAt ?? 0)) {
+      return {
+        profileId,
+        messages: cached?.messages ?? [],
+        updatedAt: serverLast,
+        lastFromThem: m.lastMessageFromPeer === true,
+      }
+    }
     return {
       profileId,
       messages: cached?.messages ?? [],

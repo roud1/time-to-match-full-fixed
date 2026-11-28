@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import type { SyncMetrics } from "@/client/lib/sync-system"
 import type { RelationshipPersonality } from "@/client/lib/relationship-identity/types"
 import { SyncRing } from "@/client/components/sync/sync-ring"

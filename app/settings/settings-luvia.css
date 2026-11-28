@@ -15,7 +15,8 @@
 
 /* Native shell: the floating back/logo bar sits over the top of the page. */
 html[data-ttm-app] .lv-set {
-  padding-top: calc(env(safe-area-inset-top, 0px) + 4.25rem);
+  /* Below the floating back/logo bar (its height + the safe area), so the title is never covered. */
+  padding-top: calc(env(safe-area-inset-top, 0px) + 5.75rem);
   padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
 }
 
@@ -609,4 +610,9 @@ html[data-lv] .lv-consent-gate[role="dialog"] {
 .lv-seg__opt.is-on {
   color: #fff;
   background: var(--lv-gradient, linear-gradient(105deg, #f35ca8, #9b4dff));
+}
+
+/* Light theme: links in the subscription card in a readable pink. */
+html[data-lv][data-lv-theme="light"] .lv-set-page .text-indigo-200\/80 {
+  color: #b42a6c;
 }

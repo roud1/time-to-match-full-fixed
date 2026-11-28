@@ -8,7 +8,7 @@ import type { SwipeProfile } from "@/client/lib/demo-profiles"
 import { formatChatThreadPreviewTime } from "@/client/lib/format-chat-time"
 import type { Locale } from "@/client/lib/i18n"
 import { useI18n } from "@/client/lib/i18n"
-import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
+import { isThreadUnread } from "@/client/lib/chat-thread-seen"
 import { ChatProfileAvatar } from "@/client/components/chat/chat-profile-avatar"
 import { useConnectionLive } from "@/client/hooks/use-connection-live"
 import { buildConnectionCopy } from "@/client/lib/connection-copy"
@@ -63,7 +63,7 @@ export function ChatInboxThreadRow({
   const { t } = useI18n()
   const [deleteOpen, setDeleteOpen] = useState(false)
   const last = thread.messages[thread.messages.length - 1]
-  const unread = hasUnreadThread(thread.profileId, thread.updatedAt, last?.from === "them")
+  const unread = isThreadUnread(thread)
   const previewTime = formatChatThreadPreviewTime(last?.at ?? thread.updatedAt, locale)
   const connectionView = useConnectionLive(thread.profileId)
   const copy = buildConnectionCopy(t)

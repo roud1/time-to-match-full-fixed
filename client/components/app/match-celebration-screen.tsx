@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { useEffect, useState } from "react"

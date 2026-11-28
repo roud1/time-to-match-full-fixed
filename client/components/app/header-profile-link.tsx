@@ -1,6 +1,6 @@
 "use client"
 
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
 import { User } from "lucide-react"

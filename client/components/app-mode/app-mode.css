@@ -805,3 +805,14 @@ html[data-lv] .ttm-dating-parallax__blob,
 html[data-lv] .ttm-dating-parallax__blob * {
   animation: none !important;
 }
+
+/* Website header bar inside the Luvia app (settings, notifications, info pages): the page colour
+   instead of the grey website glass + shadow, which read as a grey gradient over the top. */
+html[data-lv] .ttm-nav-bar .cin-nav-minimal,
+html[data-lv] .ttm-nav-bar .cin-nav-minimal--scrolled {
+  background: color-mix(in srgb, var(--lv-bg, #0d0a17) 88%, transparent);
+  border: 1px solid var(--lv-border, rgba(255, 255, 255, 0.1));
+  box-shadow: none;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}

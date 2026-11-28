@@ -2,7 +2,7 @@
 
 import "./app-profile-home.css"
 import Link from "next/link"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import {
   Bell,
   ChevronRight,

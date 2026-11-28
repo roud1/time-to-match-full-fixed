@@ -26,7 +26,8 @@ export async function getSubscription(userId: string): Promise<UserSubscription>
       stripeCustomerId: row?.stripe_customer_id ?? null,
       stripeSubscriptionId: row?.stripe_subscription_id ?? null,
       currentPeriodEnd: null,
-      premiumUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+      // No end date: admin access does not expire (shown as "Premium active" everywhere).
+      premiumUntil: null,
     }
   }
   const premiumUntil = (await getPremiumUntil(userId)) ?? row?.current_period_end ?? null

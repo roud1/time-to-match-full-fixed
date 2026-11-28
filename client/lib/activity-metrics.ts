@@ -1,13 +1,10 @@
 import type { Locale } from "@/client/lib/i18n"
 import type { GeoPosition } from "@/client/lib/geo"
-import { hasUnreadThread } from "@/client/lib/chat-thread-seen"
+import { isThreadUnread } from "@/client/lib/chat-thread-seen"
 import { getChats, getUnreadLikesCount, getSocialState } from "@/client/lib/social-store"
 
 export function countUnreadChatThreads(locale: Locale, position: GeoPosition | null): number {
-  return getChats(locale, position).filter((th) => {
-    const last = th.messages[th.messages.length - 1]
-    return hasUnreadThread(th.profileId, th.updatedAt, last?.from === "them")
-  }).length
+  return getChats(locale, position).filter((th) => isThreadUnread(th)).length
 }
 
 export function getActivityCounts(locale: Locale, position: GeoPosition | null) {

@@ -2,7 +2,7 @@
 
 import "./app-login.css"
 import { useId, useState, type FormEvent } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import { Eye, EyeOff, Lock, Mail } from "lucide-react"
 import { useI18n } from "@/client/lib/i18n"

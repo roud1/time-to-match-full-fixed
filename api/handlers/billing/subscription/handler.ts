@@ -3,7 +3,7 @@ import { getSessionFromRequest } from "@/server/auth/session-request"
 import { jsonError, jsonOk, withCors } from "@/server/http"
 import { getServerEnv } from "@/config/env"
 import { billingMode, isStripeConfigured } from "@/server/billing/config"
-import { getUserSubscription } from "@/server/billing/repository"
+import { getSubscription } from "@/server/monetization/subscription.service"
 
 export const runtime = "nodejs"
 
@@ -31,9 +31,11 @@ export async function GET(request: Request) {
     return withCors(request, jsonError(401, { error: "unauthenticated", message: "No session" }))
   }
 
-  const row = await getUserSubscription(session.sub)
-  const active = row && ["active", "trialing"].includes(row.status)
-  const plan = active && (row.plan === "premium" || row.plan === "vip") ? row.plan : "free"
+  // Same source as /api/subscription (Stripe row + granted Premium + admin access), so the profile
+  // and the settings can never disagree about the plan.
+  const sub = await getSubscription(session.sub)
+  const plan = sub.isPremium ? (sub.tier === "vip" ? "vip" : "premium") : "free"
+  const end = sub.currentPeriodEnd ?? sub.premiumUntil
 
   return withCors(
     request,
@@ -41,8 +43,10 @@ export async function GET(request: Request) {
       mode: billingMode(),
       configured: isStripeConfigured(),
       plan,
-      status: row?.status ?? "none",
-      currentPeriodEnd: row?.current_period_end?.toISOString() ?? null,
+      status: sub.isPremium ? (sub.status === "none" ? "active" : sub.status) : sub.status,
+      currentPeriodEnd: sub.isPremium ? (end?.toISOString() ?? null) : null,
+      /** Only a paid Stripe subscription can be managed in the billing portal. */
+      manageable: Boolean(sub.stripeSubscriptionId),
     })
   )
 }

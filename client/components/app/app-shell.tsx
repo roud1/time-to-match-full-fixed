@@ -1,7 +1,7 @@
 "use client"
 
 import { Suspense, useEffect, useMemo, useState } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { BottomNavBar } from "@/client/components/app/bottom-nav-bar"

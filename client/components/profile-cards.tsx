@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useReducedMotion } from "motion/react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { useI18n } from "@/client/lib/i18n"
 import { useHydrated } from "@/client/hooks/use-hydrated"
 import {

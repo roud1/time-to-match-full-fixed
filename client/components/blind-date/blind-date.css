@@ -1431,3 +1431,8 @@ html[data-bd-kb] .bd--room .bd-foot {
   line-height: 1.45;
   margin-bottom: 12px;
 }
+
+/* Light theme: the pink kicker on a pale background is too faint at 12 px. */
+html[data-lv][data-lv-theme="light"] .bd-kicker {
+  color: #b42a6c;
+}

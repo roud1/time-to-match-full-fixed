@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import Link from "next/link"
 import { useI18n } from "@/client/lib/i18n"
 import { getLikedYouProfiles, getSocialState, likeBack } from "@/client/lib/social-store"

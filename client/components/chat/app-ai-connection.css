@@ -237,3 +237,12 @@ html[data-lv] .ttm-app-ai__primary {
   font-size: 1.05rem;
   font-weight: 600;
 }
+
+html[data-lv] .ttm-app-ai__link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--lv-pink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

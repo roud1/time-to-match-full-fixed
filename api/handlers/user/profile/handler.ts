@@ -6,6 +6,8 @@ import { jsonError, jsonFromZodError, jsonOk, withCors } from "@/server/http"
 import { findUserById } from "@/server/repositories/users"
 import { updateUserDiscoveryFields } from "@/server/repositories/discover"
 import { DATING_PURPOSES } from "@/client/lib/interests/types"
+import { restoreOwnPhotoRefs } from "@/server/photos/public-ref"
+import { deleteConnectionScoresForUser } from "@/server/repositories/ai-analysis"
 
 export const runtime = "nodejs"
 
@@ -59,10 +61,12 @@ export async function PUT(request: Request) {
   }
 
   const data = parsed.data
-  const mergedProfile =
-    data.profile !== undefined
-      ? { ...(user.profile ?? {}), ...data.profile }
-      : undefined
+  const stored = user.profile ?? {}
+  const incoming =
+    data.profile !== undefined && "photoUrls" in data.profile
+      ? { ...data.profile, photoUrls: restoreOwnPhotoRefs(user.id, data.profile.photoUrls, stored.photoUrls) }
+      : data.profile
+  const mergedProfile = incoming !== undefined ? { ...stored, ...incoming } : undefined
 
   const ok = await updateUserDiscoveryFields(session.sub, {
     purpose: data.purpose,
@@ -77,6 +81,11 @@ export async function PUT(request: Request) {
 
   if (!ok) {
     return withCors(request, jsonError(500, { error: "internal_error", message: "Could not update profile" }))
+  }
+
+  // Consent to AI analysis withdrawn: delete what was derived from this person's conversations.
+  if (stored.aiInsightsConsent === true && incoming?.aiInsightsConsent === false) {
+    await deleteConnectionScoresForUser(user.id)
   }
 
   return withCors(

@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { localizeInterestName } from "@/client/lib/interest-labels"
 import { createPortal } from "react-dom"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { motion, AnimatePresence, useReducedMotion } from "motion/react"
 import { useI18n } from "@/client/lib/i18n"
 import type { SwipeProfile } from "@/client/lib/demo-profiles"

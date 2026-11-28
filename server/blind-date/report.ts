@@ -10,6 +10,7 @@
  * compatibility percentages. Any failure falls back to the local report.
  */
 
+import { ROOM_DURATION_MS } from "@/server/blind-date/rules"
 import { z } from "zod"
 import { getDb } from "@/server/db"
 import { log } from "@/server/log"
@@ -247,7 +248,7 @@ async function buildReport(room: RoomRow, userId: string, locale: string): Promi
   const language = LANGUAGE_NAMES[locale] ?? "English"
 
   const system = [
-    "You help two adults who just had a 10-minute anonymous text date in a dating app.",
+    `You help two adults who just had a ${Math.round(ROOM_DURATION_MS / 60_000)}-minute anonymous text date in a dating app.`,
     `Write for the person called "Me", in ${language}, warm and short.`,
     "Rules: base everything only on the conversation and game answers given.",
     "Never diagnose or label personality, mental health or attachment styles.",

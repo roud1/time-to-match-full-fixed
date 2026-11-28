@@ -71,8 +71,10 @@ export function SettingsSubscriptionCard() {
             >
               {planLabel(info?.plan ?? "free", t)}
             </span>
-            {active && periodEnd
-              ? t("settingsSubscriptionActive").replace("{date}", periodEnd)
+            {active
+              ? periodEnd
+                ? t("settingsSubscriptionActive").replace("{date}", periodEnd)
+                : t("premiumActiveBadge")
               : t("settingsSubscriptionNone")}
           </p>
           {!active && (
@@ -83,7 +85,7 @@ export function SettingsSubscriptionCard() {
               {t("settingsSubscriptionManage")} →
             </Link>
           )}
-          {active && info?.configured && (
+          {active && info?.configured && info.manageable && (
             <div className="space-y-1">
               <button
                 type="button"

@@ -41,6 +41,8 @@ export type ChatThread = {
   profileId: number
   messages: ChatMessage[]
   updatedAt: number
+  /** From the server's match list: the newest message is from the other person. */
+  lastFromThem?: boolean
 }
 
 type SocialState = {

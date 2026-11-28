@@ -9,6 +9,7 @@
 
 import { getDb } from "@/server/db"
 import { isAdminUser } from "@/server/auth/admin"
+import { primaryPhotoRefSql, toPublicPhotoUrl } from "@/server/photos/public-ref"
 import { isPremium } from "@/server/monetization/subscription.service"
 
 export const RESTORE_WINDOW_DAYS = 30
@@ -38,7 +39,7 @@ async function restorableRows(sql: Sql, userId: string, matchId?: string) {
       CASE WHEN m.user1_id = ${userId} THEN m.user2_id ELSE m.user1_id END AS peer_id,
       peer.name AS peer_name,
       CASE WHEN EXISTS (SELECT 1 FROM blind_date_rooms r WHERE r.match_id = m.id AND r.reveal_level < 100) THEN NULL
-        ELSE COALESCE(peer.profile->'photoUrls'->>0, peer.profile->>'photoUrl') END AS peer_photo,
+        ELSE ${sql.unsafe(primaryPhotoRefSql("peer"))} END AS peer_photo,
       m.expired_at
     FROM matches m
     JOIN users peer ON peer.id = CASE WHEN m.user1_id = ${userId} THEN m.user2_id ELSE m.user1_id END
@@ -67,7 +68,7 @@ export async function listRestorableMatches(userId: string): Promise<RestorableM
     matchId: r.id,
     peerUserId: r.peer_id,
     peerName: r.peer_name,
-    peerPhoto: r.peer_photo && r.peer_photo.length <= 400_000 ? r.peer_photo : null,
+    peerPhoto: toPublicPhotoUrl(r.peer_id, 0, r.peer_photo),
     expiredAt: r.expired_at.toISOString(),
   }))
 }

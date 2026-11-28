@@ -631,3 +631,33 @@ html[data-kb] .ttm-chat-immersive {
 html[data-kb] .ttm-chat-immersive .ttm-chat-icebreakers {
   display: none;
 }
+
+/* ── Readability (WCAG AA): message text, times, placeholder ───────────────────────────────── */
+html[data-lv] .ttm-chat-bubble p {
+  font-weight: 400;
+}
+/* Time on my own (purple) bubble: light in both themes, never dark-on-purple. */
+html[data-lv] .ttm-chat-bubble--me .ttm-chat-bubble__time {
+  color: rgba(255, 255, 255, 0.86) !important;
+}
+html[data-lv] .ttm-chat-bubble--them .ttm-chat-bubble__time {
+  color: var(--lv-text-2) !important;
+}
+html[data-lv] .ttm-chat-composer__input::placeholder {
+  color: var(--lv-text-3);
+  opacity: 1;
+}
+html[data-lv][data-lv-theme="light"] .ttm-app-chats__ai-chip {
+  background: rgba(138, 63, 240, 0.14);
+  color: #5b21b6;
+}
+/* My bubble: the same purple family, a touch deeper so white text and time pass WCAG AA. */
+html[data-lv] .ttm-chat-bubble--me {
+  background: linear-gradient(105deg, #9a3fe0, #7c3aed) !important;
+}
+html[data-lv] .ttm-chat-bubble__time {
+  font-weight: 500;
+}
+html[data-lv] .ttm-chat-bubble--me .ttm-chat-bubble__time {
+  color: rgba(255, 255, 255, 0.92) !important;
+}

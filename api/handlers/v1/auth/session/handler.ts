@@ -1,3 +1,4 @@
+import { toPublicPhotoUrl, toPublicPhotoUrls } from "@/server/photos/public-ref"
 import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { ACCESS_COOKIE_NAME } from "@/server/auth/cookies"
@@ -47,7 +48,13 @@ export async function GET(request: Request) {
         id: user.id,
         email: user.email,
         name: user.name,
-        profile: user.profile,
+        profile: user.profile
+          ? {
+              ...user.profile,
+              photoUrls: toPublicPhotoUrls(user.id, user.profile.photoUrls),
+              photoUrl: toPublicPhotoUrl(user.id, 0, user.profile.photoUrl) ?? undefined,
+            }
+          : user.profile,
         profileExpiresAt: user.profile_expires_at,
         purpose: user.purpose ?? null,
         gender: user.gender ?? null,

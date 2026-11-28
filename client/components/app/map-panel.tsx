@@ -1,7 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { useEffect, useMemo, useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import { buildDemoSwipeProfiles } from "@/client/lib/demo-profiles"

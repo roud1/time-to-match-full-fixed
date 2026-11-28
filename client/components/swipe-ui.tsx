@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useMotionValue, useTransform, animate, type PanInfo } from "motion/react"
-import Image from "next/image"
+import Image from "@/client/components/ui/smart-image"
 import { useEffect, useRef, useState } from "react"
 import { useI18n } from "@/client/lib/i18n"
 import {
