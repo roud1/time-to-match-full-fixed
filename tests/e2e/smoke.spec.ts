@@ -5,7 +5,7 @@ test.describe("Landing", () => {
     await page.setViewportSize({ width: 320, height: 568 })
     await page.goto("/")
     await expect(page).toHaveTitle(/Kairo/i)
-    await expect(page.getByText("Kairo", { exact: true }).first()).toBeVisible()
+    await expect(page.getByRole("img", { name: "Kairo" }).first()).toBeVisible()
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
     await expect(page.locator('img[src*="hero"], img[srcset*="hero"]').first()).toBeVisible()
     await expect(page.locator('a[href="/login"]').first()).toBeVisible()
